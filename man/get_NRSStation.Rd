@@ -2,10 +2,16 @@
 % Please edit documentation in R/utils.R
 \name{get_NRSStation}
 \alias{get_NRSStation}
-\title{Function for importing NRS Station information}
+\title{Import NRS Station information}
 \usage{
 get_NRSStation()
 }
+\value{
+A dataframe with NRS Station information
+}
 \description{
-Function for importing NRS Station information
+Load NRS station information including codes, location, and sampling interval.
+}
+\examples{
+df <- get_NRSStation()
 }
