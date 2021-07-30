@@ -10,8 +10,8 @@ get_raw_plankton()
 A string with location of raw plankton data
 }
 \description{
-Internal function to load the loaction of the raw plankton data files.
+Internal function to load the location of the raw plankton data files.
 }
 \examples{
-NRSStation <- get_NRSStation()
+file_loc <- get_raw_plankton()
 }
