@@ -13,8 +13,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-# planktonr
-
 # planktonr <a href='https://github.com/PlanktonTeam/planktonr'><img src='man/figures/planktonr.png' align="right" height="139" /></a>
 
 <!-- badges: start -->
