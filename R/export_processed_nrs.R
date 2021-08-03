@@ -9,13 +9,14 @@
 
 #' Create all processed data products
 #'
+#' @param outD
+#'
 #' @return
 #' @export
 #'
 #' @examples
-export_processed_nrs <- function(){
+export_processed_nrs <- function(outD){
 
-  outD <- "Output"
 
   #### NRS Phytoplankton ####
 
