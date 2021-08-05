@@ -1,0 +1,5 @@
+url: https://planktonteam.github.io/planktonr
+development:
+  destination:
+  version_label: danger
+  version_tooltip: "The package is in the early stages of development. Not recommended for use at this stage."
