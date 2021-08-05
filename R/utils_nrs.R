@@ -28,7 +28,8 @@ get_NRSStation <- function(){
 #' @importFrom magrittr "%>%"
 get_NRSTrips <- function(){
   NRSSamp <- readr::read_csv(paste0(get_raw_plankton(), "BGC_Trip.csv"), na = "") %>%
-    dplyr::rename(TripCode = TRIP_CODE, Station = STATION, StationCode = STATIONCODE, Latitude = LATITUDE, Longitude = LONGITUDE, SampleDateLocal = SAMPLEDATELOCAL,
+    dplyr::rename(TripCode = TRIP_CODE, Station = STATION, StationCode = STATIONCODE,
+                  Latitude = LATITUDE, Longitude = LONGITUDE, SampleDateLocal = SAMPLEDATELOCAL,
                   Biomass_mgm3 = BIOMASS_MGM3, Secchi_m = SECCHI_M, SampleType = SAMPLETYPE) %>%
     dplyr::filter(PROJECTNAME == "NRS") %>%
     dplyr::mutate(Year = lubridate::year(SampleDateLocal),
@@ -55,9 +56,9 @@ get_NRSRawPhytoPivot <- function(){
   NRSRawP <- dplyr::left_join(get_NRSTrips() %>% dplyr::filter(grepl('P', SampleType)),
                        get_NRSPhytoData(), by = "TripCode") %>%
     dplyr::select(-c(TaxonGroup, Genus, Species, Biovolume_um3L, SPCODE, SampleType)) %>%
-    dplyr::arrange(-desc(TaxonName)) %>%
+    dplyr::arrange(-dplyr::desc(TaxonName)) %>%
     tidyr::pivot_wider(names_from = TaxonName, values_from = Cells_L, values_fill = list(Cells_L = 0)) %>%
-    dplyr::arrange(desc(SampleDateLocal)) %>%
+    dplyr::arrange(dplyr::desc(SampleDateLocal)) %>%
     dplyr::mutate(SampleDateLocal = as.character(SampleDateLocal))
 }
 
