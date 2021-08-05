@@ -104,5 +104,5 @@ export_processed_cpr <- function(outD){
 
   #### Create CPR Indices File ####
   IndicesCPR <- create_indices_cpr()
-  data.table::fwrite(IndicesCPR, file = paste0("Output/",.Platform$file.sep, "CPR_Indices.csv"), row.names = FALSE)
+  data.table::fwrite(IndicesCPR, file = paste0(outD,.Platform$file.sep,"CPR_Indices.csv"), row.names = FALSE)
 }

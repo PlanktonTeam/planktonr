@@ -1,0 +1,2198 @@
+Writing NAMESPACE
+Writing NAMESPACE
+[36m──[39m [36mBuilding[39m [36m─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m [36mplanktonr[39m [36m──[39m
+[38;5;247mSetting env vars:[39m
+• [38;5;247mCFLAGS    : -Wall -pedantic -fdiagnostics-color=always[39m
+• [38;5;247mCXXFLAGS  : -Wall -pedantic -fdiagnostics-color=always[39m
+• [38;5;247mCXX11FLAGS: -Wall -pedantic -fdiagnostics-color=always[39m
+[36m──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m
+     checking for file ‘/Users/jason/GitHub/planktonr/DESCRIPTION’ ...  [32m✓[39m  [38;5;247mchecking for file ‘/Users/jason/GitHub/planktonr/DESCRIPTION’[39m[36m[39m
+  [38;5;247m─[39m[38;5;247m  [39m[38;5;247mpreparing ‘planktonr’:[39m[36m[36m (977ms)[36m[39m
+     checking DESCRIPTION meta-information ...  [32m✓[39m  [38;5;247mchecking DESCRIPTION meta-information[39m[36m[39m
+  [38;5;247m─[39m[38;5;247m  [39m[38;5;247minstalling the package to build vignettes[39m[36m[39m
+     creating vignettes ...  [32m✓[39m  [38;5;247mcreating vignettes[39m[36m[36m (9.6s)[36m[39m
+  [38;5;247m─[39m[38;5;247m  [39m[38;5;247mchecking for LF line-endings in source and make files and shell scripts[39m[36m[39m
+  [38;5;247m─[39m[38;5;247m  [39m[38;5;247mchecking for empty or unneeded directories[39m[36m[39m
+     Omitted ‘LazyData’ from DESCRIPTION
+  [38;5;247m─[39m[38;5;247m  [39m[38;5;247mbuilding ‘planktonr_0.0.0.9000.tar.gz’[39m[36m[39m
+     
+[36m──[39m [36mChecking[39m [36m─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m [36mplanktonr[39m [36m──[39m
+[38;5;247mSetting env vars:[39m
+• [38;5;247m_R_CHECK_CRAN_INCOMING_REMOTE_: FALSE[39m
+• [38;5;247m_R_CHECK_CRAN_INCOMING_       : FALSE[39m
+• [38;5;247m_R_CHECK_FORCE_SUGGESTS_      : FALSE[39m
+• [38;5;247mNOT_CRAN                      : true[39m
+[36m── R CMD check ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m
+  [38;5;247m─[39m[38;5;247m  [39m[38;5;247musing log directory ‘/private/var/folders/lc/fnp83h7j4qn4zzfdgw6cl7rm0000gn/T/RtmpVrjc1K/planktonr.Rcheck’[39m[36m[39m
+[38;5;247m─[39m[38;5;247m  [39m[38;5;247musing R version 4.1.0 (2021-05-18)[39m[36m[39m
+-  [38;5;247m─[39m[38;5;247m  [39m[38;5;247musing platform: x86_64-apple-darwin17.0 (64-bit)[39m[36m[39m
+[38;5;247m─[39m[38;5;247m  [39m[38;5;247musing session charset: UTF-8[39m[36m[39m
+\|/  [38;5;247m─[39m[38;5;247m  [39m[38;5;247musing options ‘--no-manual --as-cran’[39m[36m[36m (424ms)[36m[39m
+-  [32m✓[39m  [38;5;247mchecking for file ‘planktonr/DESCRIPTION’[39m[36m[39m
+[38;5;247m─[39m[38;5;247m  [39m[38;5;247mthis is package ‘planktonr’ version ‘0.0.0.9000’[39m[36m[39m
+[38;5;247m─[39m[38;5;247m  [39m[38;5;247mpackage encoding: UTF-8[39m[36m[39m
+   checking package namespace information ...\  [32m✓[39m  [38;5;247mchecking package namespace information[39m[36m[39m
+   checking package dependencies ...|/-\|/-\|/-\|/-\|/-\|/  [32m✓[39m  [38;5;247mchecking package dependencies[39m[36m[36m (4.5s)[36m[39m
+-  [32m✓[39m  [38;5;247mchecking if this is a source package[39m[36m[39m
+[32m✓[39m  [38;5;247mchecking if there is a namespace[39m[36m[39m
+\     checking for executable files ...|/  [32m✓[39m  [38;5;247mchecking for executable files[39m[36m[36m (381ms)[36m[39m
+-  [32m✓[39m  [38;5;247mchecking for hidden files and directories[39m[36m[39m
+[32m✓[39m  [38;5;247mchecking for portable file names[39m[36m[39m
+   checking for sufficient/correct file permissions ...\  [32m✓[39m  [38;5;247mchecking for sufficient/correct file permissions[39m[36m[39m
+   checking serialization versions ...|  [32m✓[39m  [38;5;247mchecking serialization versions[39m[36m[39m
+/     checking whether package ‘planktonr’ can be installed ...-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/  [32m✓[39m  [38;5;247mchecking whether package ‘planktonr’ can be installed[39m[36m[36m (8.9s)[36m[39m
+-     checking installed package size ...\  [34mN  [39m[34mchecking installed package size[39m[36m[39m
+|       installed size is  6.6Mb
+     sub-directories of 1Mb or more:
+       R   6.2Mb
+/     checking package directory ...-  [32m✓[39m  [38;5;247mchecking package directory[39m[36m[39m
+   checking for future file timestamps ...\|/-  [32m✓[39m  [38;5;247mchecking for future file timestamps[39m[36m[36m (729ms)[36m[39m
+\  [32m✓[39m  [38;5;247mchecking ‘build’ directory[39m[36m[39m
+   checking DESCRIPTION meta-information ...|  [32m✓[39m  [38;5;247mchecking DESCRIPTION meta-information[39m[36m[39m
+  /  [34mN  [39m[34mchecking top-level files[39m[36m[39m
+   Non-standard file/directory found at top level:
+     ‘sink-examp.txt’
+[32m✓[39m  [38;5;247mchecking for left-over files[39m[36m[39m
+   checking index information ...-  [32m✓[39m  [38;5;247mchecking index information[39m[36m[39m
+\     checking package subdirectories ...|  [32m✓[39m  [38;5;247mchecking package subdirectories[39m[36m[39m
+/     checking R files for non-ASCII characters ...-  [32m✓[39m  [38;5;247mchecking R files for non-ASCII characters[39m[36m[39m
+\     checking R files for syntax errors ...|  [32m✓[39m  [38;5;247mchecking R files for syntax errors[39m[36m[39m
+/     checking whether the package can be loaded ...-  [32m✓[39m  [38;5;247mchecking whether the package can be loaded[39m[36m[39m
+\     checking whether the package can be loaded with stated dependencies ...|  [32m✓[39m  [38;5;247mchecking whether the package can be loaded with stated dependencies[39m[36m[39m
+/     checking whether the package can be unloaded cleanly ...-  [32m✓[39m  [38;5;247mchecking whether the package can be unloaded cleanly[39m[36m[39m
+\     checking whether the namespace can be loaded with stated dependencies ...|  [32m✓[39m  [38;5;247mchecking whether the namespace can be loaded with stated dependencies[39m[36m[39m
+/     checking whether the namespace can be unloaded cleanly ...-  [32m✓[39m  [38;5;247mchecking whether the namespace can be unloaded cleanly[39m[36m[39m
+\     checking dependencies in R code ...|/-\|/-\|/-\|/  [32m✓[39m  [38;5;247mchecking dependencies in R code[39m[36m[36m (2.8s)[36m[39m
+-     checking S3 generic/method consistency ...\|/  [32m✓[39m  [38;5;247mchecking S3 generic/method consistency[39m[36m[36m (435ms)[36m[39m
+-     checking replacement functions ...\  [32m✓[39m  [38;5;247mchecking replacement functions[39m[36m[39m
+|     checking foreign function calls .../-\|  [32m✓[39m  [38;5;247mchecking foreign function calls[39m[36m[36m (817ms)[36m[39m
+/     checking R code for possible problems ...-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/  [34mN  [39m[34mchecking R code for possible problems[39m[36m[36m (7.3s)[36m[39m
+-     add_bioregions: no visible binding for global variable ‘Longitude’
+   add_bioregions: no visible binding for global variable ‘Latitude’
+   add_bioregions: no visible binding for global variable ‘REGION’
+   add_bioregions: no visible binding for global variable ‘.’
+   add_bioregions: no visible binding for global variable ‘WATER_TYPE’
+   create_bgc: no visible binding for global variable ‘SampleType’
+   create_bgc: no visible binding for global variable ‘TripCode’
+   create_bgc: no visible binding for global variable ‘Biomass_mgm3’
+   create_bgc: no visible binding for global variable ‘Secchi_m’
+   create_bgc: no visible binding for global variable ‘TRIP_CODE’
+   create_bgc: no visible binding for global variable ‘SAMPLEDEPTH_M’
+   create_bgc: no visible binding for global variable ‘SampleDepth_m’
+   create_bgc: no visible binding for global variable ‘PIGMENTS_FLAG’
+   create_bgc: no visible binding for global variable ‘PIGMENTS_COMMENTS’
+   create_bgc: no visible binding for global variable
+     ‘PROCHLOROCOCCUS_CELLSML’
+   create_bgc: no visible binding for global variable
+     ‘SYNECOCHOCCUS_CELLSML’
+   create_bgc: no visible binding for global variable
+     ‘PICOEUKARYOTES_CELLSML’
+   create_bgc: no visible binding for global variable
+     ‘PROCHLOROCOCCUS_FLAG’
+   create_bgc: no visible binding for global variable
+     ‘Prochlorococcus_cellsml’
+   create_bgc: no visible binding for global variable ‘SYNECOCHOCCUS_FLAG’
+   create_bgc: no visible binding for global variable
+     ‘Synecochoccus_cellsml’
+   create_bgc: no visible binding for global variable
+     ‘PICOEUKARYOTES_FLAG’
+   create_bgc: no visible binding for global variable
+     ‘Picoeukaryotes_cellsml’
+   create_bgc: no visible binding for global variable ‘TSS_MGL’
+   create_bgc: no visible binding for global variable
+     ‘INORGANICFRACTION_MGL’
+   create_bgc: no visible binding for global variable
+     ‘ORGANICFRACTION_MGL’
+   create_bgc: no visible binding for global variable ‘SECCHIDEPTH_M’
+   create_bgc: no visible binding for global variable ‘TSSFLAG’
+create_bgc: no visible binding for global variable ‘TSS\     create_bgc: no visible binding for global variable ‘TSS_mgL’
+   create_bgc: no visible binding for global variable
+     ‘InorganicFraction_mgL’
+   create_bgc: no visible binding for global variable
+     ‘OrganicFraction_mgL’
+   create_bgc: no visible binding for global variable ‘Depth_m’
+   create_bgc: no visible binding for global variable ‘Pressure_dbar’
+   create_bgc: no visible binding for global variable ‘WaterDensity_kgm3’
+   create_bgc: no visible binding for global variable ‘Temperature_degC’
+   create_bgc: no visible binding for global variable ‘Conductivity_Sm’
+   create_bgc: no visible binding for global variable ‘Salinity_psu’
+   create_bgc: no visible binding for global variable ‘Chla_mgm3’
+   create_bgc: no visible binding for global variable ‘Turbidity_NTU’
+   create_indices_cpr: no visible binding for global variable ‘SAMPLE’
+   create_indices_cpr: no visible binding for global variable ‘CHLA’
+   create_indices_cpr: no visible binding for global variable ‘DEPTH_M’
+   create_indices_cpr: no visible binding for global variable ‘SampleType’
+   create_indices_cpr: no visible binding for global variable ‘PCI’
+   create_indices_cpr: no visible binding for global variable
+     ‘Biomass_mgm3’
+   create_indices_cpr: no visible binding for global variable ‘Sample’
+   create_indices_cpr: no visible binding for global variable ‘ZAbund_m3’
+   create_indices_cpr: no visible binding for global variable ‘Copepod’
+   create_indices_cpr: no visible binding for global variable ‘LENGTH_MM’
+   create_indices_cpr: no visible binding for global variable ‘TaxonName’
+   create_indices_cpr: no visible binding for global variable ‘DIET’
+   create_indices_cpr: no visible binding for global variable ‘abunSize’
+   create_indices_cpr: no visible binding for global variable ‘sumdiet’
+   create_indices_cpr: no visible binding for global variable ‘Carnivore’
+   create_indices_cpr: no visible binding for global variable ‘Omnivore’
+   create_indices_cpr: no visible binding for global variable ‘Species’
+   create_indices_cpr: no visible binding for global variable ‘Genus’
+create_indices_cpr: no visible binding for global variable ‘|     create_indices_cpr: no visible binding for global variable ‘TaxonCount’
+   create_indices_cpr: no visible binding for global variable ‘ZCount’
+   create_indices_cpr: no visible binding for global variable
+     ‘NoCopepodSpecies_Sample’
+   create_indices_cpr: no visible binding for global variable ‘TaxonGroup’
+   create_indices_cpr: no visible binding for global variable ‘PAbun_m3’
+   create_indices_cpr: no visible binding for global variable
+     ‘BioVolume_um3m3’
+   create_indices_cpr: no visible binding for global variable ‘BV_Cell’
+   create_indices_cpr: no visible binding for global variable ‘Carbon’
+   create_indices_cpr: no visible binding for global variable ‘Carbon_m3’
+   create_indices_cpr: no visible binding for global variable ‘sumTG’
+   create_indices_cpr: no visible binding for global variable ‘Diatom’
+   create_indices_cpr: no visible binding for global variable
+     ‘Dinoflagellate’
+   create_indices_cpr: no visible binding for global variable ‘Pdata’
+   create_indices_cpr: no visible binding for global variable
+     ‘NoPhytoSpecies_Sample’
+   create_indices_cpr: no visible binding for global variable ‘Diadata’
+   create_indices_cpr: no visible binding for global variable
+     ‘NoDiatomSpecies_Sample’
+   create_indices_cpr: no visible binding for global variable ‘Dinodata’
+   create_indices_cpr: no visible binding for global variable
+     ‘NoDinoSpecies_Sample’
+   create_indices_nrs: no visible binding for global variable ‘SampleType’
+   create_indices_nrs: no visible binding for global variable ‘Station’
+   create_indices_nrs: no visible binding for global variable ‘TripCode’
+   create_indices_nrs: no visible binding for global variable
+     ‘SampleDateLocal’
+   create_indices_nrs: no visible binding for global variable ‘Date’
+   create_indices_nrs: no visible binding for global variable ‘Latitude’
+   create_indices_nrs: no visible binding for global variable ‘Longitude’
+   create_indices_nrs: no visible binding for global variable ‘Depth_m’
+   create_indices_nrs: no visible binding for global variable
+     ‘Temperature_degC’
+   create_indices_nrs: no visible binding for global variable ‘Chla_mgm3’
+create_indice/     create_indices_nrs: no visible binding for global variable
+     ‘Salinity_psu’
+   create_indices_nrs: no visible binding for global variable
+     ‘SampleDepth_m’
+   create_indices_nrs: no visible binding for global variable ‘refd’
+   create_indices_nrs: no visible binding for global variable ‘.’
+   create_indices_nrs: no visible binding for global variable ‘rankrefd’
+   create_indices_nrs: no visible binding for global variable
+     ‘CTDTemperature’
+   create_indices_nrs: no visible binding for global variable ‘temp’
+   create_indices_nrs: no visible binding for global variable ‘ranktemp’
+   create_indices_nrs: no visible binding for global variable
+     ‘CTDSalinity’
+   create_indices_nrs: no visible binding for global variable ‘ranksal’
+   create_indices_nrs: no visible binding for global variable
+     ‘CTDChlF_mgm3’
+   create_indices_nrs: no visible binding for global variable
+     ‘Silicate_umolL’
+   create_indices_nrs: no visible binding for global variable
+     ‘Phosphate_umolL’
+   create_indices_nrs: no visible binding for global variable
+     ‘Ammonium_umolL’
+   create_indices_nrs: no visible binding for global variable
+     ‘Nitrate_umolL’
+   create_indices_nrs: no visible binding for global variable
+     ‘Nitrite_umolL’
+   create_indices_nrs: no visible binding for global variable
+     ‘Oxygen_umolL’
+   create_indices_nrs: no visible binding for global variable ‘DIC_umolkg’
+   create_indices_nrs: no visible binding for global variable
+     ‘TAlkalinity_umolkg’
+   create_indices_nrs: no visible binding for global variable
+     ‘Salinity_PSU’
+   create_indices_nrs: no visible binding for global variable
+     ‘DV_CPHL_A_AND_CPHL_A’
+   create_indices_nrs: no visible binding for global variable ‘ZAbund_m3’
+   create_indices_nrs: no visible binding for global variable ‘Copepod’
+create_indices_nrs: no visible binding for global variable ‘LENGTH-     create_indices_nrs: no visible binding for global variable ‘LENGTH_MM’
+   create_indices_nrs: no visible binding for global variable ‘TaxonName’
+   create_indices_nrs: no visible binding for global variable ‘DIET’
+   create_indices_nrs: no visible binding for global variable ‘abunSize’
+   create_indices_nrs: no visible binding for global variable ‘sumdiet’
+   create_indices_nrs: no visible binding for global variable ‘CO’
+   create_indices_nrs: no visible binding for global variable ‘CC’
+   create_indices_nrs: no visible binding for global variable ‘Species’
+   create_indices_nrs: no visible binding for global variable ‘Genus’
+   create_indices_nrs: no visible binding for global variable ‘TaxonCount’
+   create_indices_nrs: no visible binding for global variable ‘ZCount’
+   create_indices_nrs: no visible binding for global variable
+     ‘NoCopepodSpecies_Sample’
+   create_indices_nrs: no visible binding for global variable ‘TaxonGroup’
+   create_indices_nrs: no visible binding for global variable ‘Cells_L’
+   create_indices_nrs: no visible binding for global variable
+     ‘Biovolume_um3L’
+   create_indices_nrs: no visible binding for global variable ‘BV_Cell’
+   create_indices_nrs: no visible binding for global variable ‘Carbon’
+   create_indices_nrs: no visible binding for global variable ‘Carbon_L’
+   create_indices_nrs: no visible binding for global variable ‘sumTG’
+   create_indices_nrs: no visible binding for global variable ‘Diatom’
+   create_indices_nrs: no visible binding for global variable
+     ‘Dinoflagellate’
+   create_indices_nrs: no visible binding for global variable ‘Pdata’
+   create_indices_nrs: no visible binding for global variable
+     ‘NoPhytoSpecies_Sample’
+   create_indices_nrs: no visible binding for global variable ‘Diadata’
+   create_indices_nrs: no visible binding for global variable
+     ‘NoDiatomSpecies_Sample’
+   create_indices_nrs: no visible binding for global variable ‘Dinodata’
+   create_indices_nrs: no visible binding for global variable
+     ‘NoDinoSpecies_Sample’
+   export_processed_larvalfish: no visible global function definition for
+     ‘getLFCountAll’
+export_processed_larvalfish: no visible\     export_processed_larvalfish: no visible global function definition for
+     ‘getLFCountBGC’
+   export_processed_nrs: no visible global function definition for
+     ‘get_NRSRawPhytoBV’
+   export_processed_nrs: no visible global function definition for
+     ‘get_NRSZooRaw’
+   export_processed_nrs: no visible global function definition for
+     ‘get_NRSZooRawBin’
+   export_processed_nrs: no visible global function definition for
+     ‘get_NRSZooHTG’
+   export_processed_nrs: no visible global function definition for
+     ‘get_NRSZooGenus’
+   export_processed_nrs: no visible global function definition for
+     ‘get_NRSZooSpeciesCopepod’
+   export_processed_nrs: no visible global function definition for
+     ‘get_NRSZooSpeciesNonCopepod’
+   export_processed_nrs: no visible binding for global variable ‘Indices’
+   export_processed_nrs: no visible binding for global variable ‘BGC’
+   get_CPRHTGBV: no visible binding for global variable ‘Sample’
+   get_CPRHTGBV: no visible binding for global variable ‘TaxonGroup’
+   get_CPRHTGBV: no visible binding for global variable ‘BioVolume_um3m3’
+   get_CPRHTGBV: no visible binding for global variable ‘SampleType’
+   get_CPRHTGBV: no visible binding for global variable ‘PCI’
+   get_CPRHTGBV: no visible binding for global variable ‘Biomass_mgm3’
+   get_CPRHTGBV: no visible binding for global variable ‘PBioV_um3m3’
+   get_CPRHTGBV: no visible binding for global variable ‘SampleDateUTC’
+   get_CPRPhytoChangeLog: no visible binding for global variable
+     ‘TAXON_NAME’
+   get_CPRPhytoChangeLog: no visible binding for global variable
+     ‘STARTDATE’
+   get_CPRPhytoChangeLog: no visible binding for global variable
+     ‘PARENT_NAME’
+   get_CPRPhytoCountData: no visible binding for global variable ‘SAMPLE’
+   get_CPRPhytoCountData: no visible binding for global variable
+     ‘TAXON_NAME’
+   get_CPRPhytoCountData: no visible binding for global variable
+     ‘TAXON_GROUP’
+   get_CPRPhytoCountData: no visible binding for global variable ‘GENUS’
+   get_CPRPhytoCountData: no visible binding for global variable ‘SPECIES’
+   get_CPRPhytoCountData: no visible binding for global variable
+     ‘SAMPVOL_M3’
+|     get_CPRPhytoCountData: no visible binding for global variable
+     ‘FOV_COUNT’
+   get_CPRPhytoCountData: no visible binding for global variable
+     ‘BIOVOL_UM3M3’
+   get_CPRPhytoCountData: no visible binding for global variable
+     ‘PHYTO_ABUNDANCE_M3’
+   get_CPRPhytoData: no visible binding for global variable ‘SAMPLE’
+   get_CPRPhytoData: no visible binding for global variable ‘TAXON_NAME’
+   get_CPRPhytoData: no visible binding for global variable ‘TAXON_GROUP’
+   get_CPRPhytoData: no visible binding for global variable ‘GENUS’
+   get_CPRPhytoData: no visible binding for global variable ‘SPECIES’
+   get_CPRPhytoData: no visible binding for global variable
+     ‘PHYTO_ABUNDANCE_M3’
+   get_CPRPhytoData: no visible binding for global variable ‘BIOVOL_UM3M3’
+   get_CPRPhytoData: no visible binding for global variable ‘FOV_COUNT’
+   get_CPRPhytoData: no visible binding for global variable ‘SAMPVOL_M3’
+   get_CPRPhytoGenus: no visible binding for global variable ‘TaxonName’
+   get_CPRPhytoGenus: no visible binding for global variable ‘ParentName’
+   get_CPRPhytoGenus: no visible binding for global variable ‘genus1’
+   get_CPRPhytoGenus: no visible binding for global variable ‘genus2’
+   get_CPRPhytoGenus: no visible binding for global variable ‘same’
+   get_CPRPhytoGenus: no visible binding for global variable ‘SampleType’
+   get_CPRPhytoGenus: no visible binding for global variable ‘PCI’
+   get_CPRPhytoGenus: no visible binding for global variable
+     ‘Biomass_mgm3’
+   get_CPRPhytoGenus: no visible binding for global variable ‘Sample’
+   get_CPRPhytoGenus: no visible binding for global variable ‘Genus’
+   get_CPRPhytoGenus: no visible binding for global variable ‘PAbun_m3’
+   get_CPRPhytoGenus: no visible binding for global variable ‘Latitude’
+   get_CPRPhytoGenus: no visible binding for global variable ‘Longitude’
+   get_CPRPhytoGenus: no visible binding for global variable
+     ‘SampleDateUTC’
+   get_CPRPhytoGenus: no visible binding for global variable ‘Year’
+   get_CPRPhytoGenus: no visible binding for global variable ‘Month’
+get_CPRPhytoGenus: no visible bi/     get_CPRPhytoGenus: no visible binding for global variable ‘Day’
+   get_CPRPhytoGenus: no visible binding for global variable ‘Time_24hr’
+   get_CPRPhytoGenus: no visible binding for global variable ‘StartDate’
+   get_CPRPhytoGenusBV: no visible binding for global variable ‘TaxonName’
+   get_CPRPhytoGenusBV: no visible binding for global variable
+     ‘ParentName’
+   get_CPRPhytoGenusBV: no visible binding for global variable ‘genus1’
+   get_CPRPhytoGenusBV: no visible binding for global variable ‘genus2’
+   get_CPRPhytoGenusBV: no visible binding for global variable ‘same’
+   get_CPRPhytoGenusBV: no visible binding for global variable
+     ‘SampleType’
+   get_CPRPhytoGenusBV: no visible binding for global variable ‘PCI’
+   get_CPRPhytoGenusBV: no visible binding for global variable
+     ‘Biomass_mgm3’
+   get_CPRPhytoGenusBV: no visible binding for global variable ‘Genus’
+   get_CPRPhytoGenusBV: no visible binding for global variable ‘Sample’
+   get_CPRPhytoGenusBV: no visible binding for global variable
+     ‘BioVolume_um3m3’
+   get_CPRPhytoGenusBV: no visible binding for global variable
+     ‘PBioV_um3m3’
+   get_CPRPhytoGenusBV: no visible binding for global variable ‘Latitude’
+   get_CPRPhytoGenusBV: no visible binding for global variable ‘Longitude’
+   get_CPRPhytoGenusBV: no visible binding for global variable
+     ‘SampleDateUTC’
+   get_CPRPhytoGenusBV: no visible binding for global variable ‘Year’
+   get_CPRPhytoGenusBV: no visible binding for global variable ‘Month’
+   get_CPRPhytoGenusBV: no visible binding for global variable ‘Day’
+   get_CPRPhytoGenusBV: no visible binding for global variable ‘Time_24hr’
+   get_CPRPhytoGenusBV: no visible binding for global variable ‘StartDate’
+   get_CPRPhytoHTG: no visible binding for global variable ‘Sample’
+   get_CPRPhytoHTG: no visible binding for global variable ‘TaxonGroup’
+get_CPRPhytoHTG: no visible-     get_CPRPhytoHTG: no visible binding for global variable ‘PAbun_m3’
+   get_CPRPhytoHTG: no visible binding for global variable ‘SampleType’
+   get_CPRPhytoHTG: no visible binding for global variable ‘PCI’
+   get_CPRPhytoHTG: no visible binding for global variable ‘Biomass_mgm3’
+   get_CPRPhytoHTG: no visible binding for global variable ‘SampleDateUTC’
+   get_CPRPhytoRaw: no visible binding for global variable ‘SampleType’
+   get_CPRPhytoRaw: no visible binding for global variable ‘PCI’
+   get_CPRPhytoRaw: no visible binding for global variable ‘Biomass_mgm3’
+   get_CPRPhytoRaw: no visible binding for global variable ‘Sample’
+   get_CPRPhytoRaw: no visible binding for global variable ‘TaxonName’
+   get_CPRPhytoRaw: no visible binding for global variable ‘PAbun_m3’
+   get_CPRPhytoRaw: no visible binding for global variable ‘SampleDateUTC’
+   get_CPRPhytoRawBV: no visible binding for global variable ‘SampleType’
+   get_CPRPhytoRawBV: no visible binding for global variable ‘PCI’
+   get_CPRPhytoRawBV: no visible binding for global variable
+     ‘Biomass_mgm3’
+   get_CPRPhytoRawBV: no visible binding for global variable ‘Sample’
+   get_CPRPhytoRawBV: no visible binding for global variable ‘TaxonName’
+   get_CPRPhytoRawBV: no visible binding for global variable
+     ‘BioVolume_um3m3’
+   get_CPRPhytoRawBV: no visible binding for global variable
+     ‘SampleDateUTC’
+   get_CPRPhytoSpecies: no visible binding for global variable ‘TaxonName’
+   get_CPRPhytoSpecies: no visible binding for global variable
+     ‘ParentName’
+   get_CPRPhytoSpecies: no visible binding for global variable ‘same’
+   get_CPRPhytoSpecies: no visible binding for global variable
+     ‘SampleType’
+   get_CPRPhytoSpecies: no visible binding for global variable ‘PCI’
+   get_CPRPhytoSpecies: no visible binding for global variable
+     ‘Biomass_mgm3’
+   get_CPRPhytoSpecies: no visible binding for global variable ‘Genus’
+   get_CPRPhytoSpecies: no visible binding for global variable ‘Species’
+   get_CPRPhytoSpecies: no visible binding for global variable ‘Sample’
+   get_CPRPhytoSpecies: no visible binding for global variable ‘PAbun_m3’
+g\     get_CPRPhytoSpecies: no visible binding for global variable ‘Latitude’
+   get_CPRPhytoSpecies: no visible binding for global variable ‘Longitude’
+   get_CPRPhytoSpecies: no visible binding for global variable
+     ‘SampleDateUTC’
+   get_CPRPhytoSpecies: no visible binding for global variable ‘Year’
+   get_CPRPhytoSpecies: no visible binding for global variable ‘Month’
+   get_CPRPhytoSpecies: no visible binding for global variable ‘Day’
+   get_CPRPhytoSpecies: no visible binding for global variable ‘Time_24hr’
+   get_CPRPhytoSpecies: no visible binding for global variable ‘StartDate’
+   get_CPRPhytoSpeciesBV: no visible binding for global variable
+     ‘TaxonName’
+   get_CPRPhytoSpeciesBV: no visible binding for global variable
+     ‘ParentName’
+   get_CPRPhytoSpeciesBV: no visible binding for global variable ‘same’
+   get_CPRPhytoSpeciesBV: no visible binding for global variable
+     ‘SampleType’
+   get_CPRPhytoSpeciesBV: no visible binding for global variable ‘PCI’
+   get_CPRPhytoSpeciesBV: no visible binding for global variable
+     ‘Biomass_mgm3’
+   get_CPRPhytoSpeciesBV: no visible binding for global variable ‘Genus’
+   get_CPRPhytoSpeciesBV: no visible binding for global variable ‘Species’
+   get_CPRPhytoSpeciesBV: no visible binding for global variable ‘Sample’
+   get_CPRPhytoSpeciesBV: no visible binding for global variable
+     ‘BioVolume_um3m3’
+   get_CPRPhytoSpeciesBV: no visible binding for global variable
+     ‘PBioV_um3m3’
+   get_CPRPhytoSpeciesBV: no visible binding for global variable
+     ‘Latitude’
+   get_CPRPhytoSpeciesBV: no visible binding for global variable
+     ‘Longitude’
+   get_CPRPhytoSpeciesBV: no visible binding for global variable
+     ‘SampleDateUTC’
+   get_CPRPhytoSpeciesBV: no visible binding for global variable ‘Year’
+   get_CPRPhytoSpeciesBV: no visible binding for global variable ‘Month’
+   get_CPRPhytoSpeciesBV: no visible binding for global variable ‘Day’
+   get_CPRPhytoSpeciesBV: no visible binding for global variable
+     ‘Time_24hr’
+   get_CPRPhytoSpeciesBV: no visible binding for global variable
+     ‘StartDate’
+get_CPRSamps: no visible b|     get_CPRSamps: no visible binding for global variable ‘SAMPLE’
+   get_CPRSamps: no visible binding for global variable ‘LATITUDE’
+   get_CPRSamps: no visible binding for global variable ‘LONGITUDE’
+   get_CPRSamps: no visible binding for global variable ‘SAMPLEDATEUTC’
+   get_CPRSamps: no visible binding for global variable ‘SAMPLETYPE’
+   get_CPRSamps: no visible binding for global variable ‘BIOMASS_MGM3’
+   get_CPRSamps: no visible binding for global variable ‘TRIP_CODE’
+   get_CPRSamps: no visible binding for global variable ‘SampleType’
+   get_CPRSamps: no visible binding for global variable ‘SampleDateUTC’
+   get_CPRSamps: no visible binding for global variable ‘TripCode’
+   get_CPRSamps: no visible binding for global variable ‘Sample’
+   get_CPRSamps: no visible binding for global variable ‘Latitude’
+   get_CPRSamps: no visible binding for global variable ‘Year’
+   get_CPRSamps: no visible binding for global variable ‘Time_24hr’
+   get_CPRSamps: no visible binding for global variable ‘PCI’
+   get_CPRSamps: no visible binding for global variable ‘Biomass_mgm3’
+   get_CPRTrips: no visible binding for global variable ‘TRIP_CODE’
+   get_CPRTrips: no visible binding for global variable ‘STARTLATITUDE’
+   get_CPRTrips: no visible binding for global variable ‘STARTLONGITUDE’
+   get_CPRTrips: no visible binding for global variable
+     ‘STARTSAMPLEDATEUTC’
+   get_CPRTrips: no visible binding for global variable ‘ENDSAMPLEDATEUTC’
+   get_CPRTrips: no visible binding for global variable ‘ENDLATITUDE’
+   get_CPRTrips: no visible binding for global variable ‘ENDLONGITUDE’
+   get_CPRTrips: no visible binding for global variable ‘STARTPORT’
+   get_CPRTrips: no visible binding for global variable ‘ENDPORT’
+   get_CPRTrips: no visible binding for global variable ‘REGION’
+   get_CPRTrips: no visible binding for global variable ‘MILES’
+   get_CPRTrips: no visible binding for global variable ‘VESSEL_NAME’
+   get_CPRTrips: no visible binding for global variable ‘ACKNOWLEDGEMENTS’
+   get_CPRZooChangeLog: no visible binding for global variable
+     ‘TAXON_NAME’
+get_CPRZooChangeLog: no visible bindin/     get_CPRZooChangeLog: no visible binding for global variable ‘STARTDATE’
+   get_CPRZooChangeLog: no visible binding for global variable
+     ‘PARENT_NAME’
+   get_CPRZooCopepod: no visible binding for global variable ‘TaxonName’
+   get_CPRZooCopepod: no visible binding for global variable ‘ParentName’
+   get_CPRZooCopepod: no visible binding for global variable ‘same’
+   get_CPRZooCopepod: no visible binding for global variable ‘SampleType’
+   get_CPRZooCopepod: no visible binding for global variable ‘PCI’
+   get_CPRZooCopepod: no visible binding for global variable
+     ‘Biomass_mgm3’
+   get_CPRZooCopepod: no visible binding for global variable ‘Copepod’
+   get_CPRZooCopepod: no visible binding for global variable ‘Species’
+   get_CPRZooCopepod: no visible binding for global variable ‘Genus’
+   get_CPRZooCopepod: no visible binding for global variable ‘Sample’
+   get_CPRZooCopepod: no visible binding for global variable ‘ZAbund_m3’
+   get_CPRZooCopepod: no visible binding for global variable ‘Latitude’
+   get_CPRZooCopepod: no visible binding for global variable ‘Longitude’
+   get_CPRZooCopepod: no visible binding for global variable
+     ‘SampleDateUTC’
+   get_CPRZooCopepod: no visible binding for global variable ‘Year’
+   get_CPRZooCopepod: no visible binding for global variable ‘Month’
+   get_CPRZooCopepod: no visible binding for global variable ‘Day’
+   get_CPRZooCopepod: no visible binding for global variable ‘Time_24hr’
+   get_CPRZooCopepod: no visible binding for global variable ‘StartDate’
+   get_CPRZooCountData: no visible binding for global variable
+     ‘TAXON_NAME’
+   get_CPRZooCountData: no visible binding for global variable
+     ‘TAXON_GROUP’
+   get_CPRZooCountData: no visible binding for global variable
+     ‘TAXON_GRP01’
+   get_CPRZooCountData: no visible binding for global variable ‘SAMPLE’
+get_CPRZooCountData: no visible bindi-     get_CPRZooCountData: no visible binding for global variable ‘GENUS’
+   get_CPRZooCountData: no visible binding for global variable ‘SPECIES’
+   get_CPRZooCountData: no visible binding for global variable ‘COUNTS’
+   get_CPRZooCountData: no visible binding for global variable
+     ‘SAMPVOL_M3’
+   get_CPRZooCountData: no visible binding for global variable
+     ‘ZOOP_ABUNDANCE_M3’
+   get_CPRZooData: no visible binding for global variable ‘SAMPLE’
+   get_CPRZooData: no visible binding for global variable ‘TAXON_NAME’
+   get_CPRZooData: no visible binding for global variable ‘TAXON_GROUP’
+   get_CPRZooData: no visible binding for global variable ‘TAXON_GRP01’
+   get_CPRZooData: no visible binding for global variable ‘GENUS’
+   get_CPRZooData: no visible binding for global variable ‘SPECIES’
+   get_CPRZooData: no visible binding for global variable
+     ‘ZOOP_ABUNDANCE_M3’
+   get_CPRZooData: no visible binding for global variable ‘COUNTS’
+   get_CPRZooData: no visible binding for global variable ‘SAMPVOL_M3’
+   get_CPRZooGenus: no visible binding for global variable ‘TaxonName’
+   get_CPRZooGenus: no visible binding for global variable ‘ParentName’
+   get_CPRZooGenus: no visible binding for global variable ‘genus1’
+   get_CPRZooGenus: no visible binding for global variable ‘genus2’
+   get_CPRZooGenus: no visible binding for global variable ‘same’
+   get_CPRZooGenus: no visible binding for global variable ‘SampleType’
+   get_CPRZooGenus: no visible binding for global variable ‘PCI’
+   get_CPRZooGenus: no visible binding for global variable ‘Biomass_mgm3’
+   get_CPRZooGenus: no visible binding for global variable ‘Sample’
+   get_CPRZooGenus: no visible binding for global variable ‘Genus’
+   get_CPRZooGenus: no visible binding for global variable ‘ZAbund_m3’
+   get_CPRZooGenus: no visible binding for global variable ‘Latitude’
+   get_CPRZooGenus: no visible binding for global variable ‘Longitude’
+   get_CPRZooGenus: no visible binding for global variable ‘SampleDateUTC’
+   get_CPRZooGenus: no visible binding for global variable ‘Year’
+   get_CPRZooGenus: no visible binding for global variable ‘Month’
+get\     get_CPRZooGenus: no visible binding for global variable ‘Day’
+   get_CPRZooGenus: no visible binding for global variable ‘Time_24hr’
+   get_CPRZooGenus: no visible binding for global variable ‘StartDate’
+   get_CPRZooHTG: no visible binding for global variable ‘Sample’
+   get_CPRZooHTG: no visible binding for global variable ‘TaxonGroup’
+   get_CPRZooHTG: no visible binding for global variable ‘ZAbund_m3’
+   get_CPRZooHTG: no visible binding for global variable ‘SampleType’
+   get_CPRZooHTG: no visible binding for global variable ‘PCI’
+   get_CPRZooHTG: no visible binding for global variable ‘Biomass_mgm3’
+   get_CPRZooHTG: no visible binding for global variable ‘SampleDateUTC’
+   get_CPRZooNonCopepod: no visible binding for global variable
+     ‘TaxonName’
+   get_CPRZooNonCopepod: no visible binding for global variable
+     ‘ParentName’
+   get_CPRZooNonCopepod: no visible binding for global variable ‘same’
+   get_CPRZooNonCopepod: no visible binding for global variable
+     ‘SampleType’
+   get_CPRZooNonCopepod: no visible binding for global variable ‘PCI’
+   get_CPRZooNonCopepod: no visible binding for global variable
+     ‘Biomass_mgm3’
+   get_CPRZooNonCopepod: no visible binding for global variable ‘Copepod’
+   get_CPRZooNonCopepod: no visible binding for global variable ‘Species’
+   get_CPRZooNonCopepod: no visible binding for global variable ‘Genus’
+   get_CPRZooNonCopepod: no visible binding for global variable ‘Sample’
+   get_CPRZooNonCopepod: no visible binding for global variable
+     ‘ZAbund_m3’
+   get_CPRZooNonCopepod: no visible binding for global variable ‘Latitude’
+   get_CPRZooNonCopepod: no visible binding for global variable
+     ‘Longitude’
+   get_CPRZooNonCopepod: no visible binding for global variable
+     ‘SampleDateUTC’
+   get_CPRZooNonCopepod: no visible binding for global variable ‘Year’
+   get_CPRZooNonCopepod: no visible binding for global variable ‘Month’
+   get_CPRZooNonCopepod: no visible binding for global variable ‘Day’
+   get_CPRZooNonCopepod: no visible binding for global variable
+     ‘Time_24hr’
+get_CPRZooNonCopepod: no visible binding f|     get_CPRZooNonCopepod: no visible binding for global variable
+     ‘StartDate’
+   get_CPRZooRaw: no visible binding for global variable ‘SampleType’
+   get_CPRZooRaw: no visible binding for global variable ‘PCI’
+   get_CPRZooRaw: no visible binding for global variable ‘Biomass_mgm3’
+   get_CPRZooRaw: no visible binding for global variable ‘TaxonName’
+   get_CPRZooRaw: no visible binding for global variable ‘ZAbund_m3’
+   get_CPRZooRaw: no visible binding for global variable ‘SampleDateUTC’
+   get_CPRZooRaw: no visible binding for global variable ‘Sample’
+   get_CPRZooRawSS: no visible binding for global variable ‘SampleType’
+   get_CPRZooRawSS: no visible binding for global variable ‘PCI’
+   get_CPRZooRawSS: no visible binding for global variable ‘Biomass_mgm3’
+   get_CPRZooRawSS: no visible binding for global variable ‘Genus’
+   get_CPRZooRawSS: no visible binding for global variable ‘TaxonName’
+   get_CPRZooRawSS: no visible binding for global variable ‘Species’
+   get_CPRZooRawSS: no visible binding for global variable ‘TripCode’
+   get_CPRZooRawSS: no visible binding for global variable ‘Latitude’
+   get_CPRZooRawSS: no visible binding for global variable ‘Longitude’
+   get_CPRZooRawSS: no visible binding for global variable ‘SampleDateUTC’
+   get_CPRZooRawSS: no visible binding for global variable ‘Year’
+   get_CPRZooRawSS: no visible binding for global variable ‘Month’
+   get_CPRZooRawSS: no visible binding for global variable ‘Day’
+   get_CPRZooRawSS: no visible binding for global variable ‘Time_24hr’
+   get_CPRZooRawSS: no visible binding for global variable ‘ZAbund_m3’
+   get_CTD: no visible binding for global variable ‘site_code’
+   get_CTD: no visible binding for global variable ‘time_coverage_start’
+   get_CTD: no visible binding for global variable ‘CPHL’
+   get_CTD: no visible binding for global variable ‘CHLF’
+   get_CTD: no visible binding for global variable ‘LATITUDE’
+   get_CTD: no visible binding for global variable ‘LONGITUDE’
+   get_CTD: no visible binding for global variable ‘DEPTH’
+   get_CTD: no visible binding for global variable ‘PSAL’
+get_CTD: no visible binding for globa/     get_CTD: no visible binding for global variable ‘PSAL_quality_control’
+   get_CTD: no visible binding for global variable ‘TEMP’
+   get_CTD: no visible binding for global variable ‘TEMP_quality_control’
+   get_CTD: no visible binding for global variable ‘DOX2’
+   get_CTD: no visible binding for global variable ‘DOX2_quality_control’
+   get_CTD: no visible binding for global variable ‘CPHL_quality_control’
+   get_CTD: no visible binding for global variable ‘TURB’
+   get_CTD: no visible binding for global variable ‘TURB_quality_control’
+   get_CTD: no visible binding for global variable ‘PRES_REL’
+   get_CTD: no visible binding for global variable ‘CNDC’
+   get_CTD: no visible binding for global variable ‘CNDC_quality_control’
+   get_CTD: no visible binding for global variable ‘DENS’
+   get_CTD: no visible binding for global variable ‘DENS_quality_control’
+   get_CTD: no visible binding for global variable ‘file_id’
+   get_CTD: no visible binding for global variable ‘StationName’
+   get_CTD: no visible binding for global variable ‘TripCode’
+   get_CTD: no visible binding for global variable ‘CastTime_UTC’
+   get_CTD: no visible binding for global variable ‘Latitude’
+   get_CTD: no visible binding for global variable ‘Longitude’
+   get_CTD: no visible binding for global variable ‘Depth_m’
+   get_CTD: no visible binding for global variable ‘Salinity_psu’
+   get_CTD: no visible binding for global variable ‘Salinity_flag’
+   get_CTD: no visible binding for global variable ‘Temperature_degC’
+   get_CTD: no visible binding for global variable ‘Temperature_flag’
+   get_CTD: no visible binding for global variable
+     ‘DissolvedOxygen_umolkg’
+   get_CTD: no visible binding for global variable ‘DissolvedOxygen_flag’
+   get_CTD: no visible binding for global variable ‘Chla_mgm3’
+get_CTD: no visible binding for global variable -     get_CTD: no visible binding for global variable ‘Chla_flag’
+   get_CTD: no visible binding for global variable ‘Turbidity_NTU’
+   get_CTD: no visible binding for global variable ‘Turbidity_flag’
+   get_CTD: no visible binding for global variable ‘Pressure_dbar’
+   get_CTD: no visible binding for global variable ‘Conductivity_Sm’
+   get_CTD: no visible binding for global variable ‘Conductivity_flag’
+   get_CTD: no visible binding for global variable ‘WaterDensity_kgm3’
+   get_CTD: no visible binding for global variable ‘WaterDensity_flag’
+   get_CTD: no visible binding for global variable ‘stations’
+   get_CTD: no visible binding for global variable ‘SampleDateUTC’
+   get_CTD: no visible binding for global variable ‘DateDiff’
+   get_Chemistry: no visible binding for global variable ‘TRIP_CODE’
+   get_Chemistry: no visible binding for global variable ‘SAMPLEDEPTH_M’
+   get_Chemistry: no visible binding for global variable ‘SILICATE_UMOLL’
+   get_Chemistry: no visible binding for global variable ‘NITRATE_UMOLL’
+   get_Chemistry: no visible binding for global variable ‘PHOSPHATE_UMOLL’
+   get_Chemistry: no visible binding for global variable ‘SALINITY_PSU’
+   get_Chemistry: no visible binding for global variable ‘AMMONIUM_UMOLL’
+   get_Chemistry: no visible binding for global variable ‘NITRITE_UMOLL’
+   get_Chemistry: no visible binding for global variable ‘DIC_UMOLKG’
+   get_Chemistry: no visible binding for global variable
+     ‘TALKALINITY_UMOLKG’
+   get_Chemistry: no visible binding for global variable ‘OXYGEN_UMOLL’
+   get_Chemistry: no visible binding for global variable ‘SampleDepth_m’
+   get_Chemistry: no visible binding for global variable ‘SILICATE_FLAG’
+   get_Chemistry: no visible binding for global variable ‘Silicate_umolL’
+   get_Chemistry: no visible binding for global variable ‘PHOSPHATE_FLAG’
+   get_Chemistry: no visible binding for global variable ‘Phosphate_umolL’
+   get_Chemistry: no visible binding for global variable ‘AMMONIUM_FLAG’
+   get_Chemistry: no visible binding for global variable ‘Ammonium_umolL’
+   get_Chemistry: no visible binding for global variable ‘NITRATE_FLAG’
+get_Che\     get_Chemistry: no visible binding for global variable ‘Nitrate_umolL’
+   get_Chemistry: no visible binding for global variable ‘NITRITE_FLAG’
+   get_Chemistry: no visible binding for global variable ‘Nitrite_umolL’
+   get_Chemistry: no visible binding for global variable ‘OXYGEN_FLAG’
+   get_Chemistry: no visible binding for global variable ‘Oxygen_umolL’
+   get_Chemistry: no visible binding for global variable ‘CARBON_FLAG’
+   get_Chemistry: no visible binding for global variable ‘DIC_umolkg’
+   get_Chemistry: no visible binding for global variable ‘ALKALINITY_FLAG’
+   get_Chemistry: no visible binding for global variable
+     ‘TAlkalinity_umolkg’
+   get_Chemistry: no visible binding for global variable ‘SALINITY_FLAG’
+   get_Chemistry: no visible binding for global variable ‘Salinity_PSU’
+   get_Chemistry: no visible binding for global variable ‘TripCode’
+   get_LFCountAll: no visible binding for global variable ‘Comments’
+   get_LFCountAll: no visible binding for global variable ‘ScientificName’
+   get_LFCountAll: no visible binding for global variable ‘SPCode’
+   get_LFCountAll: no visible binding for global variable ‘Header’
+   get_LFCountAll: no visible binding for global variable ‘Taxon_Count’
+   get_LFCountAll: no visible binding for global variable
+     ‘SampleDateLocal’
+   get_LFCountBGC: no visible binding for global variable ‘ProjectName’
+   get_LFCountBGC: no visible binding for global variable ‘Comments’
+   get_LFCountBGC: no visible binding for global variable ‘ScientificName’
+   get_LFCountBGC: no visible binding for global variable ‘SPCode’
+   get_LFCountBGC: no visible binding for global variable ‘Temp_DegC’
+   get_LFCountBGC: no visible binding for global variable ‘Salinity’
+   get_LFCountBGC: no visible binding for global variable ‘Header’
+   get_LFCountBGC: no visible binding for global variable ‘Taxon_Count’
+   get_LFCountBGC: no visible binding for global variable
+     ‘SampleDateLocal’
+   get_LFData: no visible binding for global variable ‘I_SAMPLE_ID’
+   get_LFData: no visible binding for global variable ‘TRIP_CODE’
+get_LFData: no visible |     get_LFData: no visible binding for global variable ‘SCIENTIFICNAME’
+   get_LFData: no visible binding for global variable ‘SPCODE’
+   get_LFData: no visible binding for global variable ‘TAXON_COUNT’
+   get_LFData: no visible binding for global variable ‘COMMENTS’
+   get_LFTrips: no visible binding for global variable ‘I_SAMPLE_ID’
+   get_LFTrips: no visible binding for global variable ‘TRIP_CODE’
+   get_LFTrips: no visible binding for global variable ‘STATIONNAME’
+   get_LFTrips: no visible binding for global variable ‘LATITUDE’
+   get_LFTrips: no visible binding for global variable ‘LONGITUDE’
+   get_LFTrips: no visible binding for global variable ‘SAMPLEDATELOCAL’
+   get_LFTrips: no visible binding for global variable ‘PROJECTNAME’
+   get_LFTrips: no visible binding for global variable ‘VOLUME_M3’
+   get_LFTrips: no visible binding for global variable ‘VESSEL’
+   get_LFTrips: no visible binding for global variable ‘TOWTYPE’
+   get_LFTrips: no visible binding for global variable ‘GEARDEPTH_M’
+   get_LFTrips: no visible binding for global variable ‘GEARMESH_UM’
+   get_LFTrips: no visible binding for global variable ‘BATHYM_M’
+   get_LFTrips: no visible binding for global variable ‘TEMPERATURE_C’
+   get_LFTrips: no visible binding for global variable ‘SALINITY’
+   get_LFTrips: no visible binding for global variable ‘COMMENTS’
+   get_LFTrips: no visible binding for global variable ‘QC_FLAG’
+   get_LFTrips: no visible binding for global variable ‘FLAG_COMMENT’
+   get_LFTrips: no visible binding for global variable ‘SampleDateLocal’
+   get_LFTrips: no visible binding for global variable ‘Latitude’
+   get_LFTrips: no visible binding for global variable ‘Longitude’
+   get_LFTrips: no visible binding for global variable ‘tz’
+   get_LFTrips: no visible binding for global variable ‘i_Sample’
+   get_LFTrips: no visible binding for global variable ‘Year’
+   get_LFTrips: no visible binding for global variable ‘FlagComments’
+   get_NRSPhytoChangeLog: no visible binding for global variable
+     ‘TAXON_NAME’
+   get_NRSPhytoChangeLog: no visible binding for global variable
+     ‘START_DATE’
+get_NRS/     get_NRSPhytoChangeLog: no visible binding for global variable
+     ‘PARENT_NAME’
+   get_NRSPhytoData: no visible binding for global variable ‘TRIP_CODE’
+   get_NRSPhytoData: no visible binding for global variable ‘TAXON_NAME’
+   get_NRSPhytoData: no visible binding for global variable ‘TAXON_GROUP’
+   get_NRSPhytoData: no visible binding for global variable ‘GENUS’
+   get_NRSPhytoData: no visible binding for global variable ‘SPECIES’
+   get_NRSPhytoData: no visible binding for global variable ‘CELL_L’
+   get_NRSPhytoData: no visible binding for global variable
+     ‘BIOVOLUME_UM3L’
+   get_NRSPhytoGenus: no visible binding for global variable
+     ‘Biomass_mgm3’
+   get_NRSPhytoGenus: no visible binding for global variable ‘Secchi_m’
+   get_NRSPhytoGenus: no visible binding for global variable ‘TaxonName’
+   get_NRSPhytoGenus: no visible binding for global variable ‘ParentName’
+   get_NRSPhytoGenus: no visible binding for global variable ‘genus1’
+   get_NRSPhytoGenus: no visible binding for global variable ‘genus2’
+   get_NRSPhytoGenus: no visible binding for global variable ‘same’
+   get_NRSPhytoGenus: no visible binding for global variable ‘Genus’
+   get_NRSPhytoGenus: no visible binding for global variable ‘TripCode’
+   get_NRSPhytoGenus: no visible binding for global variable ‘Cells_L’
+   get_NRSPhytoGenus: no visible binding for global variable ‘SampleType’
+   get_NRSPhytoGenus: no visible binding for global variable ‘Station’
+   get_NRSPhytoGenus: no visible binding for global variable ‘Latitude’
+   get_NRSPhytoGenus: no visible binding for global variable ‘Longitude’
+   get_NRSPhytoGenus: no visible binding for global variable
+     ‘SampleDateLocal’
+   get_NRSPhytoGenus: no visible binding for global variable ‘Year’
+   get_NRSPhytoGenus: no visible binding for global variable ‘Month’
+get-     get_NRSPhytoGenus: no visible binding for global variable ‘Day’
+   get_NRSPhytoGenus: no visible binding for global variable ‘Time_24hr’
+   get_NRSPhytoGenus: no visible binding for global variable ‘StartDate’
+   get_NRSPhytoGenus: no visible global function definition for ‘slice’
+   get_NRSPhytoGenusBV: no visible binding for global variable
+     ‘Biomass_mgm3’
+   get_NRSPhytoGenusBV: no visible binding for global variable ‘Secchi_m’
+   get_NRSPhytoGenusBV: no visible binding for global variable ‘TaxonName’
+   get_NRSPhytoGenusBV: no visible binding for global variable
+     ‘ParentName’
+   get_NRSPhytoGenusBV: no visible binding for global variable ‘genus1’
+   get_NRSPhytoGenusBV: no visible binding for global variable ‘genus2’
+   get_NRSPhytoGenusBV: no visible binding for global variable ‘same’
+   get_NRSPhytoGenusBV: no visible binding for global variable ‘Genus’
+   get_NRSPhytoGenusBV: no visible binding for global variable ‘TripCode’
+   get_NRSPhytoGenusBV: no visible binding for global variable
+     ‘Biovolume_um3L’
+   get_NRSPhytoGenusBV: no visible binding for global variable
+     ‘SampleType’
+   get_NRSPhytoGenusBV: no visible binding for global variable ‘BioV_um3L’
+   get_NRSPhytoGenusBV: no visible binding for global variable ‘Station’
+   get_NRSPhytoGenusBV: no visible binding for global variable ‘Latitude’
+   get_NRSPhytoGenusBV: no visible binding for global variable ‘Longitude’
+   get_NRSPhytoGenusBV: no visible binding for global variable
+     ‘SampleDateLocal’
+   get_NRSPhytoGenusBV: no visible binding for global variable ‘Year’
+   get_NRSPhytoGenusBV: no visible binding for global variable ‘Month’
+   get_NRSPhytoGenusBV: no visible binding for global variable ‘Day’
+   get_NRSPhytoGenusBV: no visible binding for global variable ‘Time_24hr’
+   get_NRSPhytoGenusBV: no visible binding for global variable ‘StartDate’
+   get_NRSPhytoGenusBV: no visible global function definition for ‘slice’
+   get_NRSPhytoHTG: no visible binding for global variable ‘TripCode’
+   get_NRSPhytoHTG: no visible binding for global variable ‘TaxonGroup’
+get_NRSPhytoHTG: no \     get_NRSPhytoHTG: no visible binding for global variable ‘Cells_L’
+   get_NRSPhytoHTG: no visible binding for global variable ‘Biomass_mgm3’
+   get_NRSPhytoHTG: no visible binding for global variable ‘Secchi_m’
+   get_NRSPhytoHTG: no visible binding for global variable ‘SampleType’
+   get_NRSPhytoHTG: no visible binding for global variable
+     ‘SampleDateLocal’
+   get_NRSPhytoHTGBV: no visible binding for global variable ‘TripCode’
+   get_NRSPhytoHTGBV: no visible binding for global variable ‘TaxonGroup’
+   get_NRSPhytoHTGBV: no visible binding for global variable
+     ‘Biovolume_um3L’
+   get_NRSPhytoHTGBV: no visible binding for global variable
+     ‘Biomass_mgm3’
+   get_NRSPhytoHTGBV: no visible binding for global variable ‘Secchi_m’
+   get_NRSPhytoHTGBV: no visible binding for global variable ‘SampleType’
+   get_NRSPhytoHTGBV: no visible binding for global variable ‘BioV_um3L’
+   get_NRSPhytoHTGBV: no visible binding for global variable
+     ‘SampleDateLocal’
+   get_NRSPhytoRaw: no visible binding for global variable ‘Biomass_mgm3’
+   get_NRSPhytoRaw: no visible binding for global variable ‘Secchi_m’
+   get_NRSPhytoRaw: no visible binding for global variable ‘SampleType’
+   get_NRSPhytoRaw: no visible binding for global variable ‘TaxonGroup’
+   get_NRSPhytoRaw: no visible binding for global variable ‘Genus’
+   get_NRSPhytoRaw: no visible binding for global variable ‘Species’
+   get_NRSPhytoRaw: no visible binding for global variable
+     ‘Biovolume_um3L’
+   get_NRSPhytoRaw: no visible binding for global variable ‘SPCODE’
+   get_NRSPhytoRaw: no visible binding for global variable ‘TaxonName’
+   get_NRSPhytoRaw: no visible binding for global variable ‘Cells_L’
+   get_NRSPhytoRaw: no visible binding for global variable
+     ‘SampleDateLocal’
+   get_NRSPhytoRawBV: no visible binding for global variable
+     ‘Biomass_mgm3’
+   get_NRSPhytoRawBV: no visible binding for global variable ‘Secchi_m’
+   get_NRSPhytoRawBV: no visible binding for global variable ‘SampleType’
+   get_NRSPhytoRawBV: no visible binding for global variable ‘TaxonGroup’
+get_NRSPhytoRawBV: no visible binding for global |     get_NRSPhytoRawBV: no visible binding for global variable ‘Genus’
+   get_NRSPhytoRawBV: no visible binding for global variable ‘Species’
+   get_NRSPhytoRawBV: no visible binding for global variable ‘Cells_L’
+   get_NRSPhytoRawBV: no visible binding for global variable ‘SPCODE’
+   get_NRSPhytoRawBV: no visible binding for global variable ‘TaxonName’
+   get_NRSPhytoRawBV: no visible binding for global variable
+     ‘Biovolume_um3L’
+   get_NRSPhytoRawBV: no visible binding for global variable
+     ‘SampleDateLocal’
+   get_NRSPhytoSpecies: no visible binding for global variable
+     ‘Biomass_mgm3’
+   get_NRSPhytoSpecies: no visible binding for global variable ‘Secchi_m’
+   get_NRSPhytoSpecies: no visible binding for global variable ‘TaxonName’
+   get_NRSPhytoSpecies: no visible binding for global variable
+     ‘ParentName’
+   get_NRSPhytoSpecies: no visible binding for global variable ‘same’
+   get_NRSPhytoSpecies: no visible binding for global variable ‘Genus’
+   get_NRSPhytoSpecies: no visible binding for global variable ‘Species’
+   get_NRSPhytoSpecies: no visible binding for global variable ‘TripCode’
+   get_NRSPhytoSpecies: no visible binding for global variable ‘Cells_L’
+   get_NRSPhytoSpecies: no visible binding for global variable
+     ‘SampleType’
+   get_NRSPhytoSpecies: no visible binding for global variable ‘Station’
+   get_NRSPhytoSpecies: no visible binding for global variable ‘Latitude’
+   get_NRSPhytoSpecies: no visible binding for global variable ‘Longitude’
+   get_NRSPhytoSpecies: no visible binding for global variable
+     ‘SampleDateLocal’
+   get_NRSPhytoSpecies: no visible binding for global variable ‘Year’
+   get_NRSPhytoSpecies: no visible binding for global variable ‘Month’
+   get_NRSPhytoSpecies: no visible binding for global variable ‘Day’
+   get_NRSPhytoSpecies: no visible binding for global variable ‘Time_24hr’
+   get_NRSPhytoSpecies: no visible binding for global variable ‘StartDate’
+   get_NRSPhytoSpecies: no visible global function definition for ‘slice’
+   get_NRSPhytoSpeciesBV: no visible binding for global variable
+     ‘Biomass_mgm3’
+get_NRSPhytoSpeciesBV: no visible binding for globa/     get_NRSPhytoSpeciesBV: no visible binding for global variable
+     ‘Secchi_m’
+   get_NRSPhytoSpeciesBV: no visible binding for global variable
+     ‘TaxonName’
+   get_NRSPhytoSpeciesBV: no visible binding for global variable
+     ‘ParentName’
+   get_NRSPhytoSpeciesBV: no visible binding for global variable ‘same’
+   get_NRSPhytoSpeciesBV: no visible binding for global variable ‘Genus’
+   get_NRSPhytoSpeciesBV: no visible binding for global variable ‘Species’
+   get_NRSPhytoSpeciesBV: no visible binding for global variable
+     ‘TripCode’
+   get_NRSPhytoSpeciesBV: no visible binding for global variable
+     ‘Biovolume_um3L’
+   get_NRSPhytoSpeciesBV: no visible binding for global variable
+     ‘SampleType’
+   get_NRSPhytoSpeciesBV: no visible binding for global variable
+     ‘BioV_um3L’
+   get_NRSPhytoSpeciesBV: no visible binding for global variable ‘Station’
+   get_NRSPhytoSpeciesBV: no visible binding for global variable
+     ‘Latitude’
+   get_NRSPhytoSpeciesBV: no visible binding for global variable
+     ‘Longitude’
+   get_NRSPhytoSpeciesBV: no visible binding for global variable
+     ‘SampleDateLocal’
+   get_NRSPhytoSpeciesBV: no visible binding for global variable ‘Year’
+   get_NRSPhytoSpeciesBV: no visible binding for global variable ‘Month’
+   get_NRSPhytoSpeciesBV: no visible binding for global variable ‘Day’
+   get_NRSPhytoSpeciesBV: no visible binding for global variable
+     ‘Time_24hr’
+   get_NRSPhytoSpeciesBV: no visible binding for global variable
+     ‘StartDate’
+   get_NRSPhytoSpeciesBV: no visible binding for global variable ‘Cells_L’
+   get_NRSPhytoSpeciesBV: no visible global function definition for
+     ‘slice’
+   get_NRSPico: no visible binding for global variable ‘TRIP_CODE’
+   get_NRSPico: no visible binding for global variable ‘SAMPLEDEPTH_M’
+   get_NRSPico: no visible binding for global variable ‘REPLICATE’
+get_NRSPico: no visible binding for global variable ‘S-     get_NRSPico: no visible binding for global variable ‘SAMPLEDATELOCAL’
+   get_NRSPico: no visible binding for global variable
+     ‘PROCHLOROCOCCUS_CELLSML’
+   get_NRSPico: no visible binding for global variable
+     ‘PROCHLOROCOCCUS_FLAG’
+   get_NRSPico: no visible binding for global variable
+     ‘SYNECOCHOCCUS_CELLSML’
+   get_NRSPico: no visible binding for global variable
+     ‘SYNECOCHOCCUS_FLAG’
+   get_NRSPico: no visible binding for global variable
+     ‘PICOEUKARYOTES_CELLSML’
+   get_NRSPico: no visible binding for global variable
+     ‘PICOEUKARYOTES_FLAG’
+   get_NRSPigments: no visible binding for global variable ‘TRIP_CODE’
+   get_NRSPigments: no visible binding for global variable ‘SAMPLEDEPTH_M’
+   get_NRSPigments: no visible binding for global variable ‘PIGMENTS_FLAG’
+   get_NRSPigments: no visible binding for global variable
+     ‘PIGMENTS_COMMENTS’
+   get_NRSRawPhytoPivot: no visible binding for global variable
+     ‘SampleType’
+   get_NRSRawPhytoPivot: no visible binding for global variable
+     ‘TaxonGroup’
+   get_NRSRawPhytoPivot: no visible binding for global variable ‘Genus’
+   get_NRSRawPhytoPivot: no visible binding for global variable ‘Species’
+   get_NRSRawPhytoPivot: no visible binding for global variable
+     ‘Biovolume_um3L’
+   get_NRSRawPhytoPivot: no visible binding for global variable ‘SPCODE’
+   get_NRSRawPhytoPivot: no visible binding for global variable
+     ‘TaxonName’
+   get_NRSRawPhytoPivot: no visible binding for global variable ‘Cells_L’
+   get_NRSRawPhytoPivot: no visible binding for global variable
+     ‘SampleDateLocal’
+   get_NRSStation: no visible binding for global variable ‘STATIONNAME’
+   get_NRSStation: no visible binding for global variable ‘LATITUDE’
+   get_NRSStation: no visible binding for global variable ‘LONGITUDE’
+   get_NRSStation: no visible binding for global variable ‘STATIONDEPTH_M’
+   get_NRSStation: no visible binding for global variable ‘PROJECTNAME’
+   get_NRSTrips: no visible binding for global variable ‘TRIP_CODE’
+   get_NRSTrips: no visible binding for global variable ‘STATION’
+   get_NRSTrips: no visible binding for global variable ‘STATIONCODE’
+get_NRSTrips: no visib\     get_NRSTrips: no visible binding for global variable ‘LATITUDE’
+   get_NRSTrips: no visible binding for global variable ‘LONGITUDE’
+   get_NRSTrips: no visible binding for global variable ‘SAMPLEDATELOCAL’
+   get_NRSTrips: no visible binding for global variable ‘BIOMASS_MGM3’
+   get_NRSTrips: no visible binding for global variable ‘SECCHI_M’
+   get_NRSTrips: no visible binding for global variable ‘SAMPLETYPE’
+   get_NRSTrips: no visible binding for global variable ‘PROJECTNAME’
+   get_NRSTrips: no visible binding for global variable ‘SampleDateLocal’
+   get_NRSTrips: no visible binding for global variable ‘Latitude’
+   get_NRSTrips: no visible binding for global variable ‘Longitude’
+   get_NRSTrips: no visible binding for global variable ‘tz’
+   get_NRSTrips: no visible binding for global variable ‘TripCode’
+   get_NRSTrips: no visible binding for global variable ‘Year’
+   get_NRSTrips: no visible binding for global variable ‘SampleDateUTC’
+   get_NRSTrips: no visible binding for global variable ‘Biomass_mgm3’
+   get_NRSTrips: no visible binding for global variable ‘Secchi_m’
+   get_NRSTrips: no visible binding for global variable ‘SampleType’
+   get_NRSZooChangeLog: no visible binding for global variable
+     ‘TAXON_NAME’
+   get_NRSZooChangeLog: no visible binding for global variable
+     ‘START_DATE’
+   get_NRSZooChangeLog: no visible binding for global variable
+     ‘PARENT_NAME’
+   get_NRSZooCount: no visible binding for global variable ‘TAXON_NAME’
+   get_NRSZooCount: no visible binding for global variable ‘TAXON_GROUP’
+   get_NRSZooCount: no visible binding for global variable ‘TAXON_GRP01’
+   get_NRSZooCount: no visible binding for global variable ‘TRIP_CODE’
+   get_NRSZooCount: no visible binding for global variable ‘GENUS’
+   get_NRSZooCount: no visible binding for global variable ‘SPECIES’
+   get_NRSZooCount: no visible binding for global variable ‘COUNTS’
+   get_NRSZooCount: no visible binding for global variable ‘SAMPVOL_L’
+   get_NRSZooData: no visible binding for global variable ‘TRIP_CODE’
+   get_NRSZooData: no visible binding for global variable ‘TAXON_NAME’
+get_NRS|     get_NRSZooData: no visible binding for global variable ‘TAXON_GROUP’
+   get_NRSZooData: no visible binding for global variable ‘TAXON_GRP01’
+   get_NRSZooData: no visible binding for global variable ‘GENUS’
+   get_NRSZooData: no visible binding for global variable ‘SPECIES’
+   get_NRSZooData: no visible binding for global variable
+     ‘ZOOP_ABUNDANCE_M3’
+   Undefined global functions or variables:
+     . ACKNOWLEDGEMENTS ALKALINITY_FLAG AMMONIUM_FLAG AMMONIUM_UMOLL
+     Ammonium_umolL BATHYM_M BGC BIOMASS_MGM3 BIOVOLUME_UM3L BIOVOL_UM3M3
+     BV_Cell BioV_um3L BioVolume_um3m3 Biomass_mgm3 Biovolume_um3L
+     CARBON_FLAG CC CELL_L CHLA CHLF CNDC CNDC_quality_control CO COMMENTS
+     COUNTS CPHL CPHL_quality_control CTDChlF_mgm3 CTDSalinity
+     CTDTemperature Carbon Carbon_L Carbon_m3 Carnivore CastTime_UTC
+     Cells_L Chla_flag Chla_mgm3 Comments Conductivity_Sm
+     Conductivity_flag Copepod DENS DENS_quality_control DEPTH DEPTH_M
+     DIC_UMOLKG DIC_umolkg DIET DOX2 DOX2_quality_control
+     DV_CPHL_A_AND_CPHL_A Date DateDiff Day Depth_m Diadata Diatom
+     Dinodata Dinoflagellate DissolvedOxygen_flag DissolvedOxygen_umolkg
+     ENDLATITUDE ENDLONGITUDE ENDPORT ENDSAMPLEDATEUTC FLAG_COMMENT
+     FOV_COUNT FlagComments GEARDEPTH_M GEARMESH_UM GENUS Genus Header
+     INORGANICFRACTION_MGL I_SAMPLE_ID Indices InorganicFraction_mgL
+     LATITUDE LENGTH_MM LONGITUDE Latitude Longitude MILES Month
+     NITRATE_FLAG NITRATE_UMOLL NITRITE_FLAG NITRITE_UMOLL Nitrate_umolL
+     Nitrite_umolL NoCopepodSpecies_Sample NoDiatomSpecies_Sample
+     NoDinoSpecies_Sample NoPhytoSpecies_Sample ORGANICFRACTION_MGL
+     OXYGEN_FLAG OXYGEN_UMOLL Omnivore OrganicFraction_mgL Oxygen_umolL
+     PARENT_NAME PAbun_m3 PBioV_um3m3 PCI PHOSPHATE_FLAG PHOSPHATE_UMOLL
+     PHYTO_ABUNDANCE_M3 PICOEUKARYOTES_CELLSML PICOEUKARYOTES_FLAG
+     PIGMENTS_COMMENTS PIGMENTS_FLAG PRES_REL PROCHLOROCOCCUS_CELLSML
+     PROCHLOROCOCCUS_FLAG PROJECTNAME PSAL PSAL_quality_control ParentName
+     Pdata Phosphate_umolL Picoeukaryotes_cellsml Pressure_dbar
+   Prochlorococcus_cellsml ProjectName QC_FLAG REGI/       Prochlorococcus_cellsml ProjectName QC_FLAG REGION REPLICATE SALINITY
+     SALINITY_FLAG SALINITY_PSU SAMPLE SAMPLEDATELOCAL SAMPLEDATEUTC
+     SAMPLEDEPTH_M SAMPLETYPE SAMPVOL_L SAMPVOL_M3 SCIENTIFICNAME
+     SECCHIDEPTH_M SECCHI_M SILICATE_FLAG SILICATE_UMOLL SPCODE SPCode
+     SPECIES STARTDATE STARTLATITUDE STARTLONGITUDE STARTPORT
+     STARTSAMPLEDATEUTC START_DATE STATION STATIONCODE STATIONDEPTH_M
+     STATIONNAME SYNECOCHOCCUS_CELLSML SYNECOCHOCCUS_FLAG Salinity
+     Salinity_PSU Salinity_flag Salinity_psu Sample SampleDateLocal
+     SampleDateUTC SampleDepth_m SampleType ScientificName Secchi_m
+     Silicate_umolL Species StartDate Station StationName
+     Synecochoccus_cellsml TALKALINITY_UMOLKG TAXON_COUNT TAXON_GROUP
+     TAXON_GRP01 TAXON_NAME TAlkalinity_umolkg TEMP TEMPERATURE_C
+     TEMP_quality_control TOWTYPE TRIP_CODE TSSFLAG TSS_MGL TSS_mgL TURB
+     TURB_quality_control TaxonCount TaxonGroup TaxonName Taxon_Count
+     Temp_DegC Temperature_degC Temperature_flag Time_24hr TripCode
+     Turbidity_NTU Turbidity_flag VESSEL VESSEL_NAME VOLUME_M3 WATER_TYPE
+     WaterDensity_flag WaterDensity_kgm3 Year ZAbund_m3 ZCount
+     ZOOP_ABUNDANCE_M3 abunSize file_id genus1 genus2 getLFCountAll
+     getLFCountBGC get_NRSRawPhytoBV get_NRSZooGenus get_NRSZooHTG
+     get_NRSZooRaw get_NRSZooRawBin get_NRSZooSpeciesCopepod
+     get_NRSZooSpeciesNonCopepod i_Sample rankrefd ranksal ranktemp refd
+     same site_code slice stations sumTG sumdiet temp time_coverage_start
+     tz
+   checking Rd files ...-\  [34mN  [39m[34mchecking Rd files[39m[36m[39m
+   prepare_Rd: add_bioregions.Rd:12-14: Dropping empty section \value
+   prepare_Rd: add_bioregions.Rd:18-20: Dropping empty section \examples
+   prepare_Rd: create_bgc.Rd:9-11: Dropping empty section \value
+   prepare_Rd: export_processed_cpr.Rd:15-17: Dropping empty section \examples
+   prepare_Rd: export_processed_larvalfish.Rd:15-17: Dropping empty section \examples
+   prepare_Rd: export_processed_nrs.Rd:15-17: Dropping empty section \examples
+   prepare_Rd: get_CPRHTGBV.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_CPRPhytoChangeLog.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_CPRPhytoCountData.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_CPRPhytoData.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_CPRPhytoGenus.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_CPRPhytoGenusBV.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_CPRPhytoHTG.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_CPRPhytoRaw.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_CPRPhytoRawBV.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_CPRPhytoSpecies.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_CPRPhytoSpeciesBV.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_CPRSamps.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_CPRTrips.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_CPRZooChangeLog.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_CPRZooCopepod.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_CPRZooCountData.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_CPRZooData.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_CPRZooGenus.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_CPRZooHTG.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_CPRZooNonCopepod.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_CPRZooRaw.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_CPRZooRawSS.Rd:9-11: Dropping empty section \value
+prepare_Rd: get_LFCountAll.Rd:9-11: Dropping empty sec|     prepare_Rd: get_LFCountAll.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_LFCountBGC.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_LFData.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_LFTrips.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_NRSPhytoGenus.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_NRSPhytoGenusBV.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_NRSPhytoHTG.Rd:11-15: Dropping empty section \value
+   prepare_Rd: get_NRSPhytoHTGBV.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_NRSPhytoRaw.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_NRSPhytoRawBV.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_NRSPhytoSpecies.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_NRSPhytoSpeciesBV.Rd:9-11: Dropping empty section \value
+   prepare_Rd: get_NRSRawPhytoPivot.Rd:9-11: Dropping empty section \value
+/     checking Rd metadata ...-  [32m✓[39m  [38;5;247mchecking Rd metadata[39m[36m[39m
+\     checking Rd line widths ...|  [32m✓[39m  [38;5;247mchecking Rd line widths[39m[36m[39m
+/     checking Rd cross-references ...-  [32m✓[39m  [38;5;247mchecking Rd cross-references[39m[36m[39m
+\     checking for missing documentation entries ...|  [32m✓[39m  [38;5;247mchecking for missing documentation entries[39m[36m[39m
+/     checking for code/documentation mismatches ...-\|/-  [32m✓[39m  [38;5;247mchecking for code/documentation mismatches[39m[36m[36m (950ms)[36m[39m
+\     checking Rd \usage sections ...|/-\  [32m✓[39m  [38;5;247mchecking Rd \usage sections[39m[36m[36m (704ms)[36m[39m
+|     checking Rd contents .../  [32m✓[39m  [38;5;247mchecking Rd contents[39m[36m[39m
+-     checking for unstated dependencies in examples ...\|  [32m✓[39m  [38;5;247mchecking for unstated dependencies in examples[39m[36m[39m
+/     checking R/sysdata.rda ...-\  [32m✓[39m  [38;5;247mchecking R/sysdata.rda[39m[36m[39m
+|     checking installed files from ‘inst/doc’ .../  [32m✓[39m  [38;5;247mchecking installed files from ‘inst/doc’[39m[36m[39m
+-     checking files in ‘vignettes’ ...\  [32m✓[39m  [38;5;247mchecking files in ‘vignettes’[39m[36m[39m
+|     checking examples .../-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|  [31mE  [39m[31mchecking examples[39m[36m[36m (1m 49.2s)[36m[39m
+/     Running examples in ‘planktonr-Ex.R’ failed
+   The error most likely occurred in:
+   
+   > base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+   > ### Name: get_NRSPhytoGenus
+   > ### Title: Get NRS Phytoplankton genus pivoted product - Abundance
+   > ### Aliases: get_NRSPhytoGenus
+   > 
+   > ### ** Examples
+   > 
+   > df <- get_NRSPhytoGenus()
+   
+   ── Column specification ────────────────────────────────────────────────────────
+   cols(
+     PROJECTNAME = col_character(),
+     TRIP_CODE = col_character(),
+     STATION = col_character(),
+     STATIONCODE = col_character(),
+     LONGITUDE = col_double(),
+     LATITUDE = col_double(),
+     SAMPLEDATELOCAL = col_datetime(format = ""),
+     BIOMASS_MGM3 = col_double(),
+     SECCHI_M = col_double(),
+     SAMPLETYPE = col_character()
+   )
+   
+   Warning: Problem with `mutate()` column `tz`.
+   ℹ `tz = lutz::tz_lookup_coords(Latitude, Longitude, method = "fast")`.
+   ℹ Using 'fast' method. This can cause inaccuracies in time zones
+     near boundaries away from populated ares. Use the 'accurate'
+     method if accuracy is more important than speed.
+   
+   ── Column specification ────────────────────────────────────────────────────────
+   cols(
+     TRIP_CODE = col_character(),
+     TAXON_NAME = col_character(),
+     TAXON_GROUP = col_character(),
+     GENUS = col_character(),
+     SPECIES = col_character(),
+     SPCODE = col_double(),
+     CELL_L = col_double(),
+     BIOVOLUME_UM3L = col_double(),
+     CELL_COUNT = col_double(),
+     SAMPVOL_L = col_double(),
+     COMMENTS = col_character()
+   )
+   
+   
+   ── Column specification ────────────────────────────────────────────────────────
+   cols(
+     TAXON_NAME = col_character(),
+     START_DATE = col_date(format = ""),
+     PARENT_NAME = col_character(),
+     TRAINING = col_character(),
+     COMMENTS = col_character()
+   )
+   
+   Error in slice(., 1) : could not find function "slice"
+   Calls: get_NRSPhytoGenus -> %>% -> droplevels
+Execution halted-     Execution halted
+   checking for unstated dependencies in vignettes ...\  [32m✓[39m  [38;5;247mchecking for unstated dependencies in vignettes[39m[36m[39m
+|     checking package vignettes in ‘inst/doc’ .../  [32m✓[39m  [38;5;247mchecking package vignettes in ‘inst/doc’[39m[36m[39m
+-     checking re-building of vignette outputs ...\|/-  [32m✓[39m  [38;5;247mchecking re-building of vignette outputs[39m[36m[36m (779ms)[36m[39m
+\  [32m✓[39m  [38;5;247mchecking for non-standard things in the check directory[39m[36m[39m
+[32m✓[39m  [38;5;247mchecking for detritus in the temp directory[39m[36m[39m
+   
+   See
+     ‘/private/var/folders/lc/fnp83h7j4qn4zzfdgw6cl7rm0000gn/T/RtmpVrjc1K/planktonr.Rcheck/00check.log’
+   for details.
+   
+|/ [36m── R CMD check results ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────── planktonr 0.0.0.9000 ────[39m
+Duration: 2m 21.7s
+
+[31m> checking examples ... ERROR[39m
+  Running examples in ‘planktonr-Ex.R’ failed
+  The error most likely occurred in:
+  
+  > base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+  > ### Name: get_NRSPhytoGenus
+  > ### Title: Get NRS Phytoplankton genus pivoted product - Abundance
+  > ### Aliases: get_NRSPhytoGenus
+  > 
+  > ### ** Examples
+  > 
+  > df <- get_NRSPhytoGenus()
+  
+  ── Column specification ────────────────────────────────────────────────────────
+  cols(
+    PROJECTNAME = col_character(),
+    TRIP_CODE = col_character(),
+    STATION = col_character(),
+    STATIONCODE = col_character(),
+    LONGITUDE = col_double(),
+    LATITUDE = col_double(),
+    SAMPLEDATELOCAL = col_datetime(format = ""),
+    BIOMASS_MGM3 = col_double(),
+    SECCHI_M = col_double(),
+    SAMPLETYPE = col_character()
+  )
+  
+  Warning: Problem with `mutate()` column `tz`.
+  ℹ `tz = lutz::tz_lookup_coords(Latitude, Longitude, method = "fast")`.
+  ℹ Using 'fast' method. This can cause inaccuracies in time zones
+    near boundaries away from populated ares. Use the 'accurate'
+    method if accuracy is more important than speed.
+  
+  ── Column specification ────────────────────────────────────────────────────────
+  cols(
+    TRIP_CODE = col_character(),
+    TAXON_NAME = col_character(),
+    TAXON_GROUP = col_character(),
+    GENUS = col_character(),
+    SPECIES = col_character(),
+    SPCODE = col_double(),
+    CELL_L = col_double(),
+    BIOVOLUME_UM3L = col_double(),
+    CELL_COUNT = col_double(),
+    SAMPVOL_L = col_double(),
+    COMMENTS = col_character()
+  )
+  
+  
+  ── Column specification ────────────────────────────────────────────────────────
+  cols(
+    TAXON_NAME = col_character(),
+    START_DATE = col_date(format = ""),
+    PARENT_NAME = col_character(),
+    TRAINING = col_character(),
+    COMMENTS = col_character()
+  )
+  
+  Error in slice(., 1) : could not find function "slice"
+  Calls: get_NRSPhytoGenus -> %>% -> droplevels
+  Execution halted
+
+[34m> checking installed package size ... NOTE[39m
+    installed size is  6.6Mb
+    sub-directories of 1Mb or more:
+      R   6.2Mb
+
+[34m> checking top-level files ... NOTE[39m
+  Non-standard file/directory found at top level:
+    ‘sink-examp.txt’
+
+[34m> checking R code for possible problems ... NOTE[39m
+  add_bioregions: no visible binding for global variable ‘Longitude’
+  add_bioregions: no visible binding for global variable ‘Latitude’
+  add_bioregions: no visible binding for global variable ‘REGION’
+  add_bioregions: no visible binding for global variable ‘.’
+  add_bioregions: no visible binding for global variable ‘WATER_TYPE’
+  create_bgc: no visible binding for global variable ‘SampleType’
+  create_bgc: no visible binding for global variable ‘TripCode’
+  create_bgc: no visible binding for global variable ‘Biomass_mgm3’
+  create_bgc: no visible binding for global variable ‘Secchi_m’
+  create_bgc: no visible binding for global variable ‘TRIP_CODE’
+  create_bgc: no visible binding for global variable ‘SAMPLEDEPTH_M’
+  create_bgc: no visible binding for global variable ‘SampleDepth_m’
+  create_bgc: no visible binding for global variable ‘PIGMENTS_FLAG’
+  create_bgc: no visible binding for global variable ‘PIGMENTS_COMMENTS’
+  create_bgc: no visible binding for global variable
+    ‘PROCHLOROCOCCUS_CELLSML’
+  create_bgc: no visible binding for global variable
+    ‘SYNECOCHOCCUS_CELLSML’
+  create_bgc: no visible binding for global variable
+    ‘PICOEUKARYOTES_CELLSML’
+  create_bgc: no visible binding for global variable
+    ‘PROCHLOROCOCCUS_FLAG’
+  create_bgc: no visible binding for global variable
+    ‘Prochlorococcus_cellsml’
+  create_bgc: no visible binding for global variable ‘SYNECOCHOCCUS_FLAG’
+  create_bgc: no visible binding for global variable
+    ‘Synecochoccus_cellsml’
+  create_bgc: no visible binding for global variable
+    ‘PICOEUKARYOTES_FLAG’
+  create_bgc: no visible binding for global variable
+    ‘Picoeukaryotes_cellsml’
+  create_bgc: no visible binding for global variable ‘TSS_MGL’
+  create_bgc: no visible binding for global variable
+    ‘INORGANICFRACTION_MGL’
+  create_bgc: no visible binding for global variable
+    ‘ORGANICFRACTION_MGL’
+  create_bgc: no visible binding for global variable ‘SECCHIDEPTH_M’
+  create_bgc: no visible binding for global variable ‘TSSFLAG’
+  create_bgc: no visible binding for global variable ‘TSS_mgL’
+  create_bgc: no visible binding for global variable
+    ‘InorganicFraction_mgL’
+  create_bgc: no visible binding for global variable
+    ‘OrganicFraction_mgL’
+  create_bgc: no visible binding for global variable ‘Depth_m’
+  create_bgc: no visible binding for global variable ‘Pressure_dbar’
+  create_bgc: no visible binding for global variable ‘WaterDensity_kgm3’
+  create_bgc: no visible binding for global variable ‘Temperature_degC’
+  create_bgc: no visible binding for global variable ‘Conductivity_Sm’
+  create_bgc: no visible binding for global variable ‘Salinity_psu’
+  create_bgc: no visible binding for global variable ‘Chla_mgm3’
+  create_bgc: no visible binding for global variable ‘Turbidity_NTU’
+  create_indices_cpr: no visible binding for global variable ‘SAMPLE’
+  create_indices_cpr: no visible binding for global variable ‘CHLA’
+  create_indices_cpr: no visible binding for global variable ‘DEPTH_M’
+  create_indices_cpr: no visible binding for global variable ‘SampleType’
+  create_indices_cpr: no visible binding for global variable ‘PCI’
+  create_indices_cpr: no visible binding for global variable
+    ‘Biomass_mgm3’
+  create_indices_cpr: no visible binding for global variable ‘Sample’
+  create_indices_cpr: no visible binding for global variable ‘ZAbund_m3’
+  create_indices_cpr: no visible binding for global variable ‘Copepod’
+  create_indices_cpr: no visible binding for global variable ‘LENGTH_MM’
+  create_indices_cpr: no visible binding for global variable ‘TaxonName’
+  create_indices_cpr: no visible binding for global variable ‘DIET’
+  create_indices_cpr: no visible binding for global variable ‘abunSize’
+  create_indices_cpr: no visible binding for global variable ‘sumdiet’
+  create_indices_cpr: no visible binding for global variable ‘Carnivore’
+  create_indices_cpr: no visible binding for global variable ‘Omnivore’
+  create_indices_cpr: no visible binding for global variable ‘Species’
+  create_indices_cpr: no visible binding for global variable ‘Genus’
+  create_indices_cpr: no visible binding for global variable ‘TaxonCount’
+  create_indices_cpr: no visible binding for global variable ‘ZCount’
+  create_indices_cpr: no visible binding for global variable
+    ‘NoCopepodSpecies_Sample’
+  create_indices_cpr: no visible binding for global variable ‘TaxonGroup’
+  create_indices_cpr: no visible binding for global variable ‘PAbun_m3’
+  create_indices_cpr: no visible binding for global variable
+    ‘BioVolume_um3m3’
+  create_indices_cpr: no visible binding for global variable ‘BV_Cell’
+  create_indices_cpr: no visible binding for global variable ‘Carbon’
+  create_indices_cpr: no visible binding for global variable ‘Carbon_m3’
+  create_indices_cpr: no visible binding for global variable ‘sumTG’
+  create_indices_cpr: no visible binding for global variable ‘Diatom’
+  create_indices_cpr: no visible binding for global variable
+    ‘Dinoflagellate’
+  create_indices_cpr: no visible binding for global variable ‘Pdata’
+  create_indices_cpr: no visible binding for global variable
+    ‘NoPhytoSpecies_Sample’
+  create_indices_cpr: no visible binding for global variable ‘Diadata’
+  create_indices_cpr: no visible binding for global variable
+    ‘NoDiatomSpecies_Sample’
+  create_indices_cpr: no visible binding for global variable ‘Dinodata’
+  create_indices_cpr: no visible binding for global variable
+    ‘NoDinoSpecies_Sample’
+  create_indices_nrs: no visible binding for global variable ‘SampleType’
+  create_indices_nrs: no visible binding for global variable ‘Station’
+  create_indices_nrs: no visible binding for global variable ‘TripCode’
+  create_indices_nrs: no visible binding for global variable
+    ‘SampleDateLocal’
+  create_indices_nrs: no visible binding for global variable ‘Date’
+  create_indices_nrs: no visible binding for global variable ‘Latitude’
+  create_indices_nrs: no visible binding for global variable ‘Longitude’
+  create_indices_nrs: no visible binding for global variable ‘Depth_m’
+  create_indices_nrs: no visible binding for global variable
+    ‘Temperature_degC’
+  create_indices_nrs: no visible binding for global variable ‘Chla_mgm3’
+  create_indices_nrs: no visible binding for global variable
+    ‘Salinity_psu’
+  create_indices_nrs: no visible binding for global variable
+    ‘SampleDepth_m’
+  create_indices_nrs: no visible binding for global variable ‘refd’
+  create_indices_nrs: no visible binding for global variable ‘.’
+  create_indices_nrs: no visible binding for global variable ‘rankrefd’
+  create_indices_nrs: no visible binding for global variable
+    ‘CTDTemperature’
+  create_indices_nrs: no visible binding for global variable ‘temp’
+  create_indices_nrs: no visible binding for global variable ‘ranktemp’
+  create_indices_nrs: no visible binding for global variable
+    ‘CTDSalinity’
+  create_indices_nrs: no visible binding for global variable ‘ranksal’
+  create_indices_nrs: no visible binding for global variable
+    ‘CTDChlF_mgm3’
+  create_indices_nrs: no visible binding for global variable
+    ‘Silicate_umolL’
+  create_indices_nrs: no visible binding for global variable
+    ‘Phosphate_umolL’
+  create_indices_nrs: no visible binding for global variable
+    ‘Ammonium_umolL’
+  create_indices_nrs: no visible binding for global variable
+    ‘Nitrate_umolL’
+  create_indices_nrs: no visible binding for global variable
+    ‘Nitrite_umolL’
+  create_indices_nrs: no visible binding for global variable
+    ‘Oxygen_umolL’
+  create_indices_nrs: no visible binding for global variable ‘DIC_umolkg’
+  create_indices_nrs: no visible binding for global variable
+    ‘TAlkalinity_umolkg’
+  create_indices_nrs: no visible binding for global variable
+    ‘Salinity_PSU’
+  create_indices_nrs: no visible binding for global variable
+    ‘DV_CPHL_A_AND_CPHL_A’
+  create_indices_nrs: no visible binding for global variable ‘ZAbund_m3’
+  create_indices_nrs: no visible binding for global variable ‘Copepod’
+  create_indices_nrs: no visible binding for global variable ‘LENGTH_MM’
+  create_indices_nrs: no visible binding for global variable ‘TaxonName’
+  create_indices_nrs: no visible binding for global variable ‘DIET’
+  create_indices_nrs: no visible binding for global variable ‘abunSize’
+  create_indices_nrs: no visible binding for global variable ‘sumdiet’
+  create_indices_nrs: no visible binding for global variable ‘CO’
+  create_indices_nrs: no visible binding for global variable ‘CC’
+  create_indices_nrs: no visible binding for global variable ‘Species’
+  create_indices_nrs: no visible binding for global variable ‘Genus’
+  create_indices_nrs: no visible binding for global variable ‘TaxonCount’
+  create_indices_nrs: no visible binding for global variable ‘ZCount’
+  create_indices_nrs: no visible binding for global variable
+    ‘NoCopepodSpecies_Sample’
+  create_indices_nrs: no visible binding for global variable ‘TaxonGroup’
+  create_indices_nrs: no visible binding for global variable ‘Cells_L’
+  create_indices_nrs: no visible binding for global variable
+    ‘Biovolume_um3L’
+  create_indices_nrs: no visible binding for global variable ‘BV_Cell’
+  create_indices_nrs: no visible binding for global variable ‘Carbon’
+  create_indices_nrs: no visible binding for global variable ‘Carbon_L’
+  create_indices_nrs: no visible binding for global variable ‘sumTG’
+  create_indices_nrs: no visible binding for global variable ‘Diatom’
+  create_indices_nrs: no visible binding for global variable
+    ‘Dinoflagellate’
+  create_indices_nrs: no visible binding for global variable ‘Pdata’
+  create_indices_nrs: no visible binding for global variable
+    ‘NoPhytoSpecies_Sample’
+  create_indices_nrs: no visible binding for global variable ‘Diadata’
+  create_indices_nrs: no visible binding for global variable
+    ‘NoDiatomSpecies_Sample’
+  create_indices_nrs: no visible binding for global variable ‘Dinodata’
+  create_indices_nrs: no visible binding for global variable
+    ‘NoDinoSpecies_Sample’
+  export_processed_larvalfish: no visible global function definition for
+    ‘getLFCountAll’
+  export_processed_larvalfish: no visible global function definition for
+    ‘getLFCountBGC’
+  export_processed_nrs: no visible global function definition for
+    ‘get_NRSRawPhytoBV’
+  export_processed_nrs: no visible global function definition for
+    ‘get_NRSZooRaw’
+  export_processed_nrs: no visible global function definition for
+    ‘get_NRSZooRawBin’
+  export_processed_nrs: no visible global function definition for
+    ‘get_NRSZooHTG’
+  export_processed_nrs: no visible global function definition for
+    ‘get_NRSZooGenus’
+  export_processed_nrs: no visible global function definition for
+    ‘get_NRSZooSpeciesCopepod’
+  export_processed_nrs: no visible global function definition for
+    ‘get_NRSZooSpeciesNonCopepod’
+  export_processed_nrs: no visible binding for global variable ‘Indices’
+  export_processed_nrs: no visible binding for global variable ‘BGC’
+  get_CPRHTGBV: no visible binding for global variable ‘Sample’
+  get_CPRHTGBV: no visible binding for global variable ‘TaxonGroup’
+  get_CPRHTGBV: no visible binding for global variable ‘BioVolume_um3m3’
+  get_CPRHTGBV: no visible binding for global variable ‘SampleType’
+  get_CPRHTGBV: no visible binding for global variable ‘PCI’
+  get_CPRHTGBV: no visible binding for global variable ‘Biomass_mgm3’
+  get_CPRHTGBV: no visible binding for global variable ‘PBioV_um3m3’
+  get_CPRHTGBV: no visible binding for global variable ‘SampleDateUTC’
+  get_CPRPhytoChangeLog: no visible binding for global variable
+    ‘TAXON_NAME’
+  get_CPRPhytoChangeLog: no visible binding for global variable
+    ‘STARTDATE’
+  get_CPRPhytoChangeLog: no visible binding for global variable
+    ‘PARENT_NAME’
+  get_CPRPhytoCountData: no visible binding for global variable ‘SAMPLE’
+  get_CPRPhytoCountData: no visible binding for global variable
+    ‘TAXON_NAME’
+  get_CPRPhytoCountData: no visible binding for global variable
+    ‘TAXON_GROUP’
+  get_CPRPhytoCountData: no visible binding for global variable ‘GENUS’
+  get_CPRPhytoCountData: no visible binding for global variable ‘SPECIES’
+  get_CPRPhytoCountData: no visible binding for global variable
+    ‘SAMPVOL_M3’
+  get_CPRPhytoCountData: no visible binding for global variable
+    ‘FOV_COUNT’
+  get_CPRPhytoCountData: no visible binding for global variable
+    ‘BIOVOL_UM3M3’
+  get_CPRPhytoCountData: no visible binding for global variable
+    ‘PHYTO_ABUNDANCE_M3’
+  get_CPRPhytoData: no visible binding for global variable ‘SAMPLE’
+  get_CPRPhytoData: no visible binding for global variable ‘TAXON_NAME’
+  get_CPRPhytoData: no visible binding for global variable ‘TAXON_GROUP’
+  get_CPRPhytoData: no visible binding for global variable ‘GENUS’
+  get_CPRPhytoData: no visible binding for global variable ‘SPECIES’
+  get_CPRPhytoData: no visible binding for global variable
+    ‘PHYTO_ABUNDANCE_M3’
+  get_CPRPhytoData: no visible binding for global variable ‘BIOVOL_UM3M3’
+  get_CPRPhytoData: no visible binding for global variable ‘FOV_COUNT’
+  get_CPRPhytoData: no visible binding for global variable ‘SAMPVOL_M3’
+  get_CPRPhytoGenus: no visible binding for global variable ‘TaxonName’
+  get_CPRPhytoGenus: no visible binding for global variable ‘ParentName’
+  get_CPRPhytoGenus: no visible binding for global variable ‘genus1’
+  get_CPRPhytoGenus: no visible binding for global variable ‘genus2’
+  get_CPRPhytoGenus: no visible binding for global variable ‘same’
+  get_CPRPhytoGenus: no visible binding for global variable ‘SampleType’
+  get_CPRPhytoGenus: no visible binding for global variable ‘PCI’
+  get_CPRPhytoGenus: no visible binding for global variable
+    ‘Biomass_mgm3’
+  get_CPRPhytoGenus: no visible binding for global variable ‘Sample’
+  get_CPRPhytoGenus: no visible binding for global variable ‘Genus’
+  get_CPRPhytoGenus: no visible binding for global variable ‘PAbun_m3’
+  get_CPRPhytoGenus: no visible binding for global variable ‘Latitude’
+  get_CPRPhytoGenus: no visible binding for global variable ‘Longitude’
+  get_CPRPhytoGenus: no visible binding for global variable
+    ‘SampleDateUTC’
+  get_CPRPhytoGenus: no visible binding for global variable ‘Year’
+  get_CPRPhytoGenus: no visible binding for global variable ‘Month’
+  get_CPRPhytoGenus: no visible binding for global variable ‘Day’
+  get_CPRPhytoGenus: no visible binding for global variable ‘Time_24hr’
+  get_CPRPhytoGenus: no visible binding for global variable ‘StartDate’
+  get_CPRPhytoGenusBV: no visible binding for global variable ‘TaxonName’
+  get_CPRPhytoGenusBV: no visible binding for global variable
+    ‘ParentName’
+  get_CPRPhytoGenusBV: no visible binding for global variable ‘genus1’
+  get_CPRPhytoGenusBV: no visible binding for global variable ‘genus2’
+  get_CPRPhytoGenusBV: no visible binding for global variable ‘same’
+  get_CPRPhytoGenusBV: no visible binding for global variable
+    ‘SampleType’
+  get_CPRPhytoGenusBV: no visible binding for global variable ‘PCI’
+  get_CPRPhytoGenusBV: no visible binding for global variable
+    ‘Biomass_mgm3’
+  get_CPRPhytoGenusBV: no visible binding for global variable ‘Genus’
+  get_CPRPhytoGenusBV: no visible binding for global variable ‘Sample’
+  get_CPRPhytoGenusBV: no visible binding for global variable
+    ‘BioVolume_um3m3’
+  get_CPRPhytoGenusBV: no visible binding for global variable
+    ‘PBioV_um3m3’
+  get_CPRPhytoGenusBV: no visible binding for global variable ‘Latitude’
+  get_CPRPhytoGenusBV: no visible binding for global variable ‘Longitude’
+  get_CPRPhytoGenusBV: no visible binding for global variable
+    ‘SampleDateUTC’
+  get_CPRPhytoGenusBV: no visible binding for global variable ‘Year’
+  get_CPRPhytoGenusBV: no visible binding for global variable ‘Month’
+  get_CPRPhytoGenusBV: no visible binding for global variable ‘Day’
+  get_CPRPhytoGenusBV: no visible binding for global variable ‘Time_24hr’
+  get_CPRPhytoGenusBV: no visible binding for global variable ‘StartDate’
+  get_CPRPhytoHTG: no visible binding for global variable ‘Sample’
+  get_CPRPhytoHTG: no visible binding for global variable ‘TaxonGroup’
+  get_CPRPhytoHTG: no visible binding for global variable ‘PAbun_m3’
+  get_CPRPhytoHTG: no visible binding for global variable ‘SampleType’
+  get_CPRPhytoHTG: no visible binding for global variable ‘PCI’
+  get_CPRPhytoHTG: no visible binding for global variable ‘Biomass_mgm3’
+  get_CPRPhytoHTG: no visible binding for global variable ‘SampleDateUTC’
+  get_CPRPhytoRaw: no visible binding for global variable ‘SampleType’
+  get_CPRPhytoRaw: no visible binding for global variable ‘PCI’
+  get_CPRPhytoRaw: no visible binding for global variable ‘Biomass_mgm3’
+  get_CPRPhytoRaw: no visible binding for global variable ‘Sample’
+  get_CPRPhytoRaw: no visible binding for global variable ‘TaxonName’
+  get_CPRPhytoRaw: no visible binding for global variable ‘PAbun_m3’
+  get_CPRPhytoRaw: no visible binding for global variable ‘SampleDateUTC’
+  get_CPRPhytoRawBV: no visible binding for global variable ‘SampleType’
+  get_CPRPhytoRawBV: no visible binding for global variable ‘PCI’
+  get_CPRPhytoRawBV: no visible binding for global variable
+    ‘Biomass_mgm3’
+  get_CPRPhytoRawBV: no visible binding for global variable ‘Sample’
+  get_CPRPhytoRawBV: no visible binding for global variable ‘TaxonName’
+  get_CPRPhytoRawBV: no visible binding for global variable
+    ‘BioVolume_um3m3’
+  get_CPRPhytoRawBV: no visible binding for global variable
+    ‘SampleDateUTC’
+  get_CPRPhytoSpecies: no visible binding for global variable ‘TaxonName’
+  get_CPRPhytoSpecies: no visible binding for global variable
+    ‘ParentName’
+  get_CPRPhytoSpecies: no visible binding for global variable ‘same’
+  get_CPRPhytoSpecies: no visible binding for global variable
+    ‘SampleType’
+  get_CPRPhytoSpecies: no visible binding for global variable ‘PCI’
+  get_CPRPhytoSpecies: no visible binding for global variable
+    ‘Biomass_mgm3’
+  get_CPRPhytoSpecies: no visible binding for global variable ‘Genus’
+  get_CPRPhytoSpecies: no visible binding for global variable ‘Species’
+  get_CPRPhytoSpecies: no visible binding for global variable ‘Sample’
+  get_CPRPhytoSpecies: no visible binding for global variable ‘PAbun_m3’
+  get_CPRPhytoSpecies: no visible binding for global variable ‘Latitude’
+  get_CPRPhytoSpecies: no visible binding for global variable ‘Longitude’
+  get_CPRPhytoSpecies: no visible binding for global variable
+    ‘SampleDateUTC’
+  get_CPRPhytoSpecies: no visible binding for global variable ‘Year’
+  get_CPRPhytoSpecies: no visible binding for global variable ‘Month’
+  get_CPRPhytoSpecies: no visible binding for global variable ‘Day’
+  get_CPRPhytoSpecies: no visible binding for global variable ‘Time_24hr’
+  get_CPRPhytoSpecies: no visible binding for global variable ‘StartDate’
+  get_CPRPhytoSpeciesBV: no visible binding for global variable
+    ‘TaxonName’
+  get_CPRPhytoSpeciesBV: no visible binding for global variable
+    ‘ParentName’
+  get_CPRPhytoSpeciesBV: no visible binding for global variable ‘same’
+  get_CPRPhytoSpeciesBV: no visible binding for global variable
+    ‘SampleType’
+  get_CPRPhytoSpeciesBV: no visible binding for global variable ‘PCI’
+  get_CPRPhytoSpeciesBV: no visible binding for global variable
+    ‘Biomass_mgm3’
+  get_CPRPhytoSpeciesBV: no visible binding for global variable ‘Genus’
+  get_CPRPhytoSpeciesBV: no visible binding for global variable ‘Species’
+  get_CPRPhytoSpeciesBV: no visible binding for global variable ‘Sample’
+  get_CPRPhytoSpeciesBV: no visible binding for global variable
+    ‘BioVolume_um3m3’
+  get_CPRPhytoSpeciesBV: no visible binding for global variable
+    ‘PBioV_um3m3’
+  get_CPRPhytoSpeciesBV: no visible binding for global variable
+    ‘Latitude’
+  get_CPRPhytoSpeciesBV: no visible binding for global variable
+    ‘Longitude’
+  get_CPRPhytoSpeciesBV: no visible binding for global variable
+    ‘SampleDateUTC’
+  get_CPRPhytoSpeciesBV: no visible binding for global variable ‘Year’
+  get_CPRPhytoSpeciesBV: no visible binding for global variable ‘Month’
+  get_CPRPhytoSpeciesBV: no visible binding for global variable ‘Day’
+  get_CPRPhytoSpeciesBV: no visible binding for global variable
+    ‘Time_24hr’
+  get_CPRPhytoSpeciesBV: no visible binding for global variable
+    ‘StartDate’
+  get_CPRSamps: no visible binding for global variable ‘SAMPLE’
+  get_CPRSamps: no visible binding for global variable ‘LATITUDE’
+  get_CPRSamps: no visible binding for global variable ‘LONGITUDE’
+  get_CPRSamps: no visible binding for global variable ‘SAMPLEDATEUTC’
+  get_CPRSamps: no visible binding for global variable ‘SAMPLETYPE’
+  get_CPRSamps: no visible binding for global variable ‘BIOMASS_MGM3’
+  get_CPRSamps: no visible binding for global variable ‘TRIP_CODE’
+  get_CPRSamps: no visible binding for global variable ‘SampleType’
+  get_CPRSamps: no visible binding for global variable ‘SampleDateUTC’
+  get_CPRSamps: no visible binding for global variable ‘TripCode’
+  get_CPRSamps: no visible binding for global variable ‘Sample’
+  get_CPRSamps: no visible binding for global variable ‘Latitude’
+  get_CPRSamps: no visible binding for global variable ‘Year’
+  get_CPRSamps: no visible binding for global variable ‘Time_24hr’
+  get_CPRSamps: no visible binding for global variable ‘PCI’
+  get_CPRSamps: no visible binding for global variable ‘Biomass_mgm3’
+  get_CPRTrips: no visible binding for global variable ‘TRIP_CODE’
+  get_CPRTrips: no visible binding for global variable ‘STARTLATITUDE’
+  get_CPRTrips: no visible binding for global variable ‘STARTLONGITUDE’
+  get_CPRTrips: no visible binding for global variable
+    ‘STARTSAMPLEDATEUTC’
+  get_CPRTrips: no visible binding for global variable ‘ENDSAMPLEDATEUTC’
+  get_CPRTrips: no visible binding for global variable ‘ENDLATITUDE’
+  get_CPRTrips: no visible binding for global variable ‘ENDLONGITUDE’
+  get_CPRTrips: no visible binding for global variable ‘STARTPORT’
+  get_CPRTrips: no visible binding for global variable ‘ENDPORT’
+  get_CPRTrips: no visible binding for global variable ‘REGION’
+  get_CPRTrips: no visible binding for global variable ‘MILES’
+  get_CPRTrips: no visible binding for global variable ‘VESSEL_NAME’
+  get_CPRTrips: no visible binding for global variable ‘ACKNOWLEDGEMENTS’
+  get_CPRZooChangeLog: no visible binding for global variable
+    ‘TAXON_NAME’
+  get_CPRZooChangeLog: no visible binding for global variable ‘STARTDATE’
+  get_CPRZooChangeLog: no visible binding for global variable
+    ‘PARENT_NAME’
+  get_CPRZooCopepod: no visible binding for global variable ‘TaxonName’
+  get_CPRZooCopepod: no visible binding for global variable ‘ParentName’
+  get_CPRZooCopepod: no visible binding for global variable ‘same’
+  get_CPRZooCopepod: no visible binding for global variable ‘SampleType’
+  get_CPRZooCopepod: no visible binding for global variable ‘PCI’
+  get_CPRZooCopepod: no visible binding for global variable
+    ‘Biomass_mgm3’
+  get_CPRZooCopepod: no visible binding for global variable ‘Copepod’
+  get_CPRZooCopepod: no visible binding for global variable ‘Species’
+  get_CPRZooCopepod: no visible binding for global variable ‘Genus’
+  get_CPRZooCopepod: no visible binding for global variable ‘Sample’
+  get_CPRZooCopepod: no visible binding for global variable ‘ZAbund_m3’
+  get_CPRZooCopepod: no visible binding for global variable ‘Latitude’
+  get_CPRZooCopepod: no visible binding for global variable ‘Longitude’
+  get_CPRZooCopepod: no visible binding for global variable
+    ‘SampleDateUTC’
+  get_CPRZooCopepod: no visible binding for global variable ‘Year’
+  get_CPRZooCopepod: no visible binding for global variable ‘Month’
+  get_CPRZooCopepod: no visible binding for global variable ‘Day’
+  get_CPRZooCopepod: no visible binding for global variable ‘Time_24hr’
+  get_CPRZooCopepod: no visible binding for global variable ‘StartDate’
+  get_CPRZooCountData: no visible binding for global variable
+    ‘TAXON_NAME’
+  get_CPRZooCountData: no visible binding for global variable
+    ‘TAXON_GROUP’
+  get_CPRZooCountData: no visible binding for global variable
+    ‘TAXON_GRP01’
+  get_CPRZooCountData: no visible binding for global variable ‘SAMPLE’
+  get_CPRZooCountData: no visible binding for global variable ‘GENUS’
+  get_CPRZooCountData: no visible binding for global variable ‘SPECIES’
+  get_CPRZooCountData: no visible binding for global variable ‘COUNTS’
+  get_CPRZooCountData: no visible binding for global variable
+    ‘SAMPVOL_M3’
+  get_CPRZooCountData: no visible binding for global variable
+    ‘ZOOP_ABUNDANCE_M3’
+  get_CPRZooData: no visible binding for global variable ‘SAMPLE’
+  get_CPRZooData: no visible binding for global variable ‘TAXON_NAME’
+  get_CPRZooData: no visible binding for global variable ‘TAXON_GROUP’
+  get_CPRZooData: no visible binding for global variable ‘TAXON_GRP01’
+  get_CPRZooData: no visible binding for global variable ‘GENUS’
+  get_CPRZooData: no visible binding for global variable ‘SPECIES’
+  get_CPRZooData: no visible binding for global variable
+    ‘ZOOP_ABUNDANCE_M3’
+  get_CPRZooData: no visible binding for global variable ‘COUNTS’
+  get_CPRZooData: no visible binding for global variable ‘SAMPVOL_M3’
+  get_CPRZooGenus: no visible binding for global variable ‘TaxonName’
+  get_CPRZooGenus: no visible binding for global variable ‘ParentName’
+  get_CPRZooGenus: no visible binding for global variable ‘genus1’
+  get_CPRZooGenus: no visible binding for global variable ‘genus2’
+  get_CPRZooGenus: no visible binding for global variable ‘same’
+  get_CPRZooGenus: no visible binding for global variable ‘SampleType’
+  get_CPRZooGenus: no visible binding for global variable ‘PCI’
+  get_CPRZooGenus: no visible binding for global variable ‘Biomass_mgm3’
+  get_CPRZooGenus: no visible binding for global variable ‘Sample’
+  get_CPRZooGenus: no visible binding for global variable ‘Genus’
+  get_CPRZooGenus: no visible binding for global variable ‘ZAbund_m3’
+  get_CPRZooGenus: no visible binding for global variable ‘Latitude’
+  get_CPRZooGenus: no visible binding for global variable ‘Longitude’
+  get_CPRZooGenus: no visible binding for global variable ‘SampleDateUTC’
+  get_CPRZooGenus: no visible binding for global variable ‘Year’
+  get_CPRZooGenus: no visible binding for global variable ‘Month’
+  get_CPRZooGenus: no visible binding for global variable ‘Day’
+  get_CPRZooGenus: no visible binding for global variable ‘Time_24hr’
+  get_CPRZooGenus: no visible binding for global variable ‘StartDate’
+  get_CPRZooHTG: no visible binding for global variable ‘Sample’
+  get_CPRZooHTG: no visible binding for global variable ‘TaxonGroup’
+  get_CPRZooHTG: no visible binding for global variable ‘ZAbund_m3’
+  get_CPRZooHTG: no visible binding for global variable ‘SampleType’
+  get_CPRZooHTG: no visible binding for global variable ‘PCI’
+  get_CPRZooHTG: no visible binding for global variable ‘Biomass_mgm3’
+  get_CPRZooHTG: no visible binding for global variable ‘SampleDateUTC’
+  get_CPRZooNonCopepod: no visible binding for global variable
+    ‘TaxonName’
+  get_CPRZooNonCopepod: no visible binding for global variable
+    ‘ParentName’
+  get_CPRZooNonCopepod: no visible binding for global variable ‘same’
+  get_CPRZooNonCopepod: no visible binding for global variable
+    ‘SampleType’
+  get_CPRZooNonCopepod: no visible binding for global variable ‘PCI’
+  get_CPRZooNonCopepod: no visible binding for global variable
+    ‘Biomass_mgm3’
+  get_CPRZooNonCopepod: no visible binding for global variable ‘Copepod’
+  get_CPRZooNonCopepod: no visible binding for global variable ‘Species’
+  get_CPRZooNonCopepod: no visible binding for global variable ‘Genus’
+  get_CPRZooNonCopepod: no visible binding for global variable ‘Sample’
+  get_CPRZooNonCopepod: no visible binding for global variable
+    ‘ZAbund_m3’
+  get_CPRZooNonCopepod: no visible binding for global variable ‘Latitude’
+  get_CPRZooNonCopepod: no visible binding for global variable
+    ‘Longitude’
+  get_CPRZooNonCopepod: no visible binding for global variable
+    ‘SampleDateUTC’
+  get_CPRZooNonCopepod: no visible binding for global variable ‘Year’
+  get_CPRZooNonCopepod: no visible binding for global variable ‘Month’
+  get_CPRZooNonCopepod: no visible binding for global variable ‘Day’
+  get_CPRZooNonCopepod: no visible binding for global variable
+    ‘Time_24hr’
+  get_CPRZooNonCopepod: no visible binding for global variable
+    ‘StartDate’
+  get_CPRZooRaw: no visible binding for global variable ‘SampleType’
+  get_CPRZooRaw: no visible binding for global variable ‘PCI’
+  get_CPRZooRaw: no visible binding for global variable ‘Biomass_mgm3’
+  get_CPRZooRaw: no visible binding for global variable ‘TaxonName’
+  get_CPRZooRaw: no visible binding for global variable ‘ZAbund_m3’
+  get_CPRZooRaw: no visible binding for global variable ‘SampleDateUTC’
+  get_CPRZooRaw: no visible binding for global variable ‘Sample’
+  get_CPRZooRawSS: no visible binding for global variable ‘SampleType’
+  get_CPRZooRawSS: no visible binding for global variable ‘PCI’
+  get_CPRZooRawSS: no visible binding for global variable ‘Biomass_mgm3’
+  get_CPRZooRawSS: no visible binding for global variable ‘Genus’
+  get_CPRZooRawSS: no visible binding for global variable ‘TaxonName’
+  get_CPRZooRawSS: no visible binding for global variable ‘Species’
+  get_CPRZooRawSS: no visible binding for global variable ‘TripCode’
+  get_CPRZooRawSS: no visible binding for global variable ‘Latitude’
+  get_CPRZooRawSS: no visible binding for global variable ‘Longitude’
+  get_CPRZooRawSS: no visible binding for global variable ‘SampleDateUTC’
+  get_CPRZooRawSS: no visible binding for global variable ‘Year’
+  get_CPRZooRawSS: no visible binding for global variable ‘Month’
+  get_CPRZooRawSS: no visible binding for global variable ‘Day’
+  get_CPRZooRawSS: no visible binding for global variable ‘Time_24hr’
+  get_CPRZooRawSS: no visible binding for global variable ‘ZAbund_m3’
+  get_CTD: no visible binding for global variable ‘site_code’
+  get_CTD: no visible binding for global variable ‘time_coverage_start’
+  get_CTD: no visible binding for global variable ‘CPHL’
+  get_CTD: no visible binding for global variable ‘CHLF’
+  get_CTD: no visible binding for global variable ‘LATITUDE’
+  get_CTD: no visible binding for global variable ‘LONGITUDE’
+  get_CTD: no visible binding for global variable ‘DEPTH’
+  get_CTD: no visible binding for global variable ‘PSAL’
+  get_CTD: no visible binding for global variable ‘PSAL_quality_control’
+  get_CTD: no visible binding for global variable ‘TEMP’
+  get_CTD: no visible binding for global variable ‘TEMP_quality_control’
+  get_CTD: no visible binding for global variable ‘DOX2’
+  get_CTD: no visible binding for global variable ‘DOX2_quality_control’
+  get_CTD: no visible binding for global variable ‘CPHL_quality_control’
+  get_CTD: no visible binding for global variable ‘TURB’
+  get_CTD: no visible binding for global variable ‘TURB_quality_control’
+  get_CTD: no visible binding for global variable ‘PRES_REL’
+  get_CTD: no visible binding for global variable ‘CNDC’
+  get_CTD: no visible binding for global variable ‘CNDC_quality_control’
+  get_CTD: no visible binding for global variable ‘DENS’
+  get_CTD: no visible binding for global variable ‘DENS_quality_control’
+  get_CTD: no visible binding for global variable ‘file_id’
+  get_CTD: no visible binding for global variable ‘StationName’
+  get_CTD: no visible binding for global variable ‘TripCode’
+  get_CTD: no visible binding for global variable ‘CastTime_UTC’
+  get_CTD: no visible binding for global variable ‘Latitude’
+  get_CTD: no visible binding for global variable ‘Longitude’
+  get_CTD: no visible binding for global variable ‘Depth_m’
+  get_CTD: no visible binding for global variable ‘Salinity_psu’
+  get_CTD: no visible binding for global variable ‘Salinity_flag’
+  get_CTD: no visible binding for global variable ‘Temperature_degC’
+  get_CTD: no visible binding for global variable ‘Temperature_flag’
+  get_CTD: no visible binding for global variable
+    ‘DissolvedOxygen_umolkg’
+  get_CTD: no visible binding for global variable ‘DissolvedOxygen_flag’
+  get_CTD: no visible binding for global variable ‘Chla_mgm3’
+  get_CTD: no visible binding for global variable ‘Chla_flag’
+  get_CTD: no visible binding for global variable ‘Turbidity_NTU’
+  get_CTD: no visible binding for global variable ‘Turbidity_flag’
+  get_CTD: no visible binding for global variable ‘Pressure_dbar’
+  get_CTD: no visible binding for global variable ‘Conductivity_Sm’
+  get_CTD: no visible binding for global variable ‘Conductivity_flag’
+  get_CTD: no visible binding for global variable ‘WaterDensity_kgm3’
+  get_CTD: no visible binding for global variable ‘WaterDensity_flag’
+  get_CTD: no visible binding for global variable ‘stations’
+  get_CTD: no visible binding for global variable ‘SampleDateUTC’
+  get_CTD: no visible binding for global variable ‘DateDiff’
+  get_Chemistry: no visible binding for global variable ‘TRIP_CODE’
+  get_Chemistry: no visible binding for global variable ‘SAMPLEDEPTH_M’
+  get_Chemistry: no visible binding for global variable ‘SILICATE_UMOLL’
+  get_Chemistry: no visible binding for global variable ‘NITRATE_UMOLL’
+  get_Chemistry: no visible binding for global variable ‘PHOSPHATE_UMOLL’
+  get_Chemistry: no visible binding for global variable ‘SALINITY_PSU’
+  get_Chemistry: no visible binding for global variable ‘AMMONIUM_UMOLL’
+  get_Chemistry: no visible binding for global variable ‘NITRITE_UMOLL’
+  get_Chemistry: no visible binding for global variable ‘DIC_UMOLKG’
+  get_Chemistry: no visible binding for global variable
+    ‘TALKALINITY_UMOLKG’
+  get_Chemistry: no visible binding for global variable ‘OXYGEN_UMOLL’
+  get_Chemistry: no visible binding for global variable ‘SampleDepth_m’
+  get_Chemistry: no visible binding for global variable ‘SILICATE_FLAG’
+  get_Chemistry: no visible binding for global variable ‘Silicate_umolL’
+  get_Chemistry: no visible binding for global variable ‘PHOSPHATE_FLAG’
+  get_Chemistry: no visible binding for global variable ‘Phosphate_umolL’
+  get_Chemistry: no visible binding for global variable ‘AMMONIUM_FLAG’
+  get_Chemistry: no visible binding for global variable ‘Ammonium_umolL’
+  get_Chemistry: no visible binding for global variable ‘NITRATE_FLAG’
+  get_Chemistry: no visible binding for global variable ‘Nitrate_umolL’
+  get_Chemistry: no visible binding for global variable ‘NITRITE_FLAG’
+  get_Chemistry: no visible binding for global variable ‘Nitrite_umolL’
+  get_Chemistry: no visible binding for global variable ‘OXYGEN_FLAG’
+  get_Chemistry: no visible binding for global variable ‘Oxygen_umolL’
+  get_Chemistry: no visible binding for global variable ‘CARBON_FLAG’
+  get_Chemistry: no visible binding for global variable ‘DIC_umolkg’
+  get_Chemistry: no visible binding for global variable ‘ALKALINITY_FLAG’
+  get_Chemistry: no visible binding for global variable
+    ‘TAlkalinity_umolkg’
+  get_Chemistry: no visible binding for global variable ‘SALINITY_FLAG’
+  get_Chemistry: no visible binding for global variable ‘Salinity_PSU’
+  get_Chemistry: no visible binding for global variable ‘TripCode’
+  get_LFCountAll: no visible binding for global variable ‘Comments’
+  get_LFCountAll: no visible binding for global variable ‘ScientificName’
+  get_LFCountAll: no visible binding for global variable ‘SPCode’
+  get_LFCountAll: no visible binding for global variable ‘Header’
+  get_LFCountAll: no visible binding for global variable ‘Taxon_Count’
+  get_LFCountAll: no visible binding for global variable
+    ‘SampleDateLocal’
+  get_LFCountBGC: no visible binding for global variable ‘ProjectName’
+  get_LFCountBGC: no visible binding for global variable ‘Comments’
+  get_LFCountBGC: no visible binding for global variable ‘ScientificName’
+  get_LFCountBGC: no visible binding for global variable ‘SPCode’
+  get_LFCountBGC: no visible binding for global variable ‘Temp_DegC’
+  get_LFCountBGC: no visible binding for global variable ‘Salinity’
+  get_LFCountBGC: no visible binding for global variable ‘Header’
+  get_LFCountBGC: no visible binding for global variable ‘Taxon_Count’
+  get_LFCountBGC: no visible binding for global variable
+    ‘SampleDateLocal’
+  get_LFData: no visible binding for global variable ‘I_SAMPLE_ID’
+  get_LFData: no visible binding for global variable ‘TRIP_CODE’
+  get_LFData: no visible binding for global variable ‘SCIENTIFICNAME’
+  get_LFData: no visible binding for global variable ‘SPCODE’
+  get_LFData: no visible binding for global variable ‘TAXON_COUNT’
+  get_LFData: no visible binding for global variable ‘COMMENTS’
+  get_LFTrips: no visible binding for global variable ‘I_SAMPLE_ID’
+  get_LFTrips: no visible binding for global variable ‘TRIP_CODE’
+  get_LFTrips: no visible binding for global variable ‘STATIONNAME’
+  get_LFTrips: no visible binding for global variable ‘LATITUDE’
+  get_LFTrips: no visible binding for global variable ‘LONGITUDE’
+  get_LFTrips: no visible binding for global variable ‘SAMPLEDATELOCAL’
+  get_LFTrips: no visible binding for global variable ‘PROJECTNAME’
+  get_LFTrips: no visible binding for global variable ‘VOLUME_M3’
+  get_LFTrips: no visible binding for global variable ‘VESSEL’
+  get_LFTrips: no visible binding for global variable ‘TOWTYPE’
+  get_LFTrips: no visible binding for global variable ‘GEARDEPTH_M’
+  get_LFTrips: no visible binding for global variable ‘GEARMESH_UM’
+  get_LFTrips: no visible binding for global variable ‘BATHYM_M’
+  get_LFTrips: no visible binding for global variable ‘TEMPERATURE_C’
+  get_LFTrips: no visible binding for global variable ‘SALINITY’
+  get_LFTrips: no visible binding for global variable ‘COMMENTS’
+  get_LFTrips: no visible binding for global variable ‘QC_FLAG’
+  get_LFTrips: no visible binding for global variable ‘FLAG_COMMENT’
+  get_LFTrips: no visible binding for global variable ‘SampleDateLocal’
+  get_LFTrips: no visible binding for global variable ‘Latitude’
+  get_LFTrips: no visible binding for global variable ‘Longitude’
+  get_LFTrips: no visible binding for global variable ‘tz’
+  get_LFTrips: no visible binding for global variable ‘i_Sample’
+  get_LFTrips: no visible binding for global variable ‘Year’
+  get_LFTrips: no visible binding for global variable ‘FlagComments’
+  get_NRSPhytoChangeLog: no visible binding for global variable
+    ‘TAXON_NAME’
+  get_NRSPhytoChangeLog: no visible binding for global variable
+    ‘START_DATE’
+  get_NRSPhytoChangeLog: no visible binding for global variable
+    ‘PARENT_NAME’
+  get_NRSPhytoData: no visible binding for global variable ‘TRIP_CODE’
+  get_NRSPhytoData: no visible binding for global variable ‘TAXON_NAME’
+  get_NRSPhytoData: no visible binding for global variable ‘TAXON_GROUP’
+  get_NRSPhytoData: no visible binding for global variable ‘GENUS’
+  get_NRSPhytoData: no visible binding for global variable ‘SPECIES’
+  get_NRSPhytoData: no visible binding for global variable ‘CELL_L’
+  get_NRSPhytoData: no visible binding for global variable
+    ‘BIOVOLUME_UM3L’
+  get_NRSPhytoGenus: no visible binding for global variable
+    ‘Biomass_mgm3’
+  get_NRSPhytoGenus: no visible binding for global variable ‘Secchi_m’
+  get_NRSPhytoGenus: no visible binding for global variable ‘TaxonName’
+  get_NRSPhytoGenus: no visible binding for global variable ‘ParentName’
+  get_NRSPhytoGenus: no visible binding for global variable ‘genus1’
+  get_NRSPhytoGenus: no visible binding for global variable ‘genus2’
+  get_NRSPhytoGenus: no visible binding for global variable ‘same’
+  get_NRSPhytoGenus: no visible binding for global variable ‘Genus’
+  get_NRSPhytoGenus: no visible binding for global variable ‘TripCode’
+  get_NRSPhytoGenus: no visible binding for global variable ‘Cells_L’
+  get_NRSPhytoGenus: no visible binding for global variable ‘SampleType’
+  get_NRSPhytoGenus: no visible binding for global variable ‘Station’
+  get_NRSPhytoGenus: no visible binding for global variable ‘Latitude’
+  get_NRSPhytoGenus: no visible binding for global variable ‘Longitude’
+  get_NRSPhytoGenus: no visible binding for global variable
+    ‘SampleDateLocal’
+  get_NRSPhytoGenus: no visible binding for global variable ‘Year’
+  get_NRSPhytoGenus: no visible binding for global variable ‘Month’
+  get_NRSPhytoGenus: no visible binding for global variable ‘Day’
+  get_NRSPhytoGenus: no visible binding for global variable ‘Time_24hr’
+  get_NRSPhytoGenus: no visible binding for global variable ‘StartDate’
+  get_NRSPhytoGenus: no visible global function definition for ‘slice’
+  get_NRSPhytoGenusBV: no visible binding for global variable
+    ‘Biomass_mgm3’
+  get_NRSPhytoGenusBV: no visible binding for global variable ‘Secchi_m’
+  get_NRSPhytoGenusBV: no visible binding for global variable ‘TaxonName’
+  get_NRSPhytoGenusBV: no visible binding for global variable
+    ‘ParentName’
+  get_NRSPhytoGenusBV: no visible binding for global variable ‘genus1’
+  get_NRSPhytoGenusBV: no visible binding for global variable ‘genus2’
+  get_NRSPhytoGenusBV: no visible binding for global variable ‘same’
+  get_NRSPhytoGenusBV: no visible binding for global variable ‘Genus’
+  get_NRSPhytoGenusBV: no visible binding for global variable ‘TripCode’
+  get_NRSPhytoGenusBV: no visible binding for global variable
+    ‘Biovolume_um3L’
+  get_NRSPhytoGenusBV: no visible binding for global variable
+    ‘SampleType’
+  get_NRSPhytoGenusBV: no visible binding for global variable ‘BioV_um3L’
+  get_NRSPhytoGenusBV: no visible binding for global variable ‘Station’
+  get_NRSPhytoGenusBV: no visible binding for global variable ‘Latitude’
+  get_NRSPhytoGenusBV: no visible binding for global variable ‘Longitude’
+  get_NRSPhytoGenusBV: no visible binding for global variable
+    ‘SampleDateLocal’
+  get_NRSPhytoGenusBV: no visible binding for global variable ‘Year’
+  get_NRSPhytoGenusBV: no visible binding for global variable ‘Month’
+  get_NRSPhytoGenusBV: no visible binding for global variable ‘Day’
+  get_NRSPhytoGenusBV: no visible binding for global variable ‘Time_24hr’
+  get_NRSPhytoGenusBV: no visible binding for global variable ‘StartDate’
+  get_NRSPhytoGenusBV: no visible global function definition for ‘slice’
+  get_NRSPhytoHTG: no visible binding for global variable ‘TripCode’
+  get_NRSPhytoHTG: no visible binding for global variable ‘TaxonGroup’
+  get_NRSPhytoHTG: no visible binding for global variable ‘Cells_L’
+  get_NRSPhytoHTG: no visible binding for global variable ‘Biomass_mgm3’
+  get_NRSPhytoHTG: no visible binding for global variable ‘Secchi_m’
+  get_NRSPhytoHTG: no visible binding for global variable ‘SampleType’
+  get_NRSPhytoHTG: no visible binding for global variable
+    ‘SampleDateLocal’
+  get_NRSPhytoHTGBV: no visible binding for global variable ‘TripCode’
+  get_NRSPhytoHTGBV: no visible binding for global variable ‘TaxonGroup’
+  get_NRSPhytoHTGBV: no visible binding for global variable
+    ‘Biovolume_um3L’
+  get_NRSPhytoHTGBV: no visible binding for global variable
+    ‘Biomass_mgm3’
+  get_NRSPhytoHTGBV: no visible binding for global variable ‘Secchi_m’
+  get_NRSPhytoHTGBV: no visible binding for global variable ‘SampleType’
+  get_NRSPhytoHTGBV: no visible binding for global variable ‘BioV_um3L’
+  get_NRSPhytoHTGBV: no visible binding for global variable
+    ‘SampleDateLocal’
+  get_NRSPhytoRaw: no visible binding for global variable ‘Biomass_mgm3’
+  get_NRSPhytoRaw: no visible binding for global variable ‘Secchi_m’
+  get_NRSPhytoRaw: no visible binding for global variable ‘SampleType’
+  get_NRSPhytoRaw: no visible binding for global variable ‘TaxonGroup’
+  get_NRSPhytoRaw: no visible binding for global variable ‘Genus’
+  get_NRSPhytoRaw: no visible binding for global variable ‘Species’
+  get_NRSPhytoRaw: no visible binding for global variable
+    ‘Biovolume_um3L’
+  get_NRSPhytoRaw: no visible binding for global variable ‘SPCODE’
+  get_NRSPhytoRaw: no visible binding for global variable ‘TaxonName’
+  get_NRSPhytoRaw: no visible binding for global variable ‘Cells_L’
+  get_NRSPhytoRaw: no visible binding for global variable
+    ‘SampleDateLocal’
+  get_NRSPhytoRawBV: no visible binding for global variable
+    ‘Biomass_mgm3’
+  get_NRSPhytoRawBV: no visible binding for global variable ‘Secchi_m’
+  get_NRSPhytoRawBV: no visible binding for global variable ‘SampleType’
+  get_NRSPhytoRawBV: no visible binding for global variable ‘TaxonGroup’
+  get_NRSPhytoRawBV: no visible binding for global variable ‘Genus’
+  get_NRSPhytoRawBV: no visible binding for global variable ‘Species’
+  get_NRSPhytoRawBV: no visible binding for global variable ‘Cells_L’
+  get_NRSPhytoRawBV: no visible binding for global variable ‘SPCODE’
+  get_NRSPhytoRawBV: no visible binding for global variable ‘TaxonName’
+  get_NRSPhytoRawBV: no visible binding for global variable
+    ‘Biovolume_um3L’
+  get_NRSPhytoRawBV: no visible binding for global variable
+    ‘SampleDateLocal’
+  get_NRSPhytoSpecies: no visible binding for global variable
+    ‘Biomass_mgm3’
+  get_NRSPhytoSpecies: no visible binding for global variable ‘Secchi_m’
+  get_NRSPhytoSpecies: no visible binding for global variable ‘TaxonName’
+  get_NRSPhytoSpecies: no visible binding for global variable
+    ‘ParentName’
+  get_NRSPhytoSpecies: no visible binding for global variable ‘same’
+  get_NRSPhytoSpecies: no visible binding for global variable ‘Genus’
+  get_NRSPhytoSpecies: no visible binding for global variable ‘Species’
+  get_NRSPhytoSpecies: no visible binding for global variable ‘TripCode’
+  get_NRSPhytoSpecies: no visible binding for global variable ‘Cells_L’
+  get_NRSPhytoSpecies: no visible binding for global variable
+    ‘SampleType’
+  get_NRSPhytoSpecies: no visible binding for global variable ‘Station’
+  get_NRSPhytoSpecies: no visible binding for global variable ‘Latitude’
+  get_NRSPhytoSpecies: no visible binding for global variable ‘Longitude’
+  get_NRSPhytoSpecies: no visible binding for global variable
+    ‘SampleDateLocal’
+  get_NRSPhytoSpecies: no visible binding for global variable ‘Year’
+  get_NRSPhytoSpecies: no visible binding for global variable ‘Month’
+  get_NRSPhytoSpecies: no visible binding for global variable ‘Day’
+  get_NRSPhytoSpecies: no visible binding for global variable ‘Time_24hr’
+  get_NRSPhytoSpecies: no visible binding for global variable ‘StartDate’
+  get_NRSPhytoSpecies: no visible global function definition for ‘slice’
+  get_NRSPhytoSpeciesBV: no visible binding for global variable
+    ‘Biomass_mgm3’
+  get_NRSPhytoSpeciesBV: no visible binding for global variable
+    ‘Secchi_m’
+  get_NRSPhytoSpeciesBV: no visible binding for global variable
+    ‘TaxonName’
+  get_NRSPhytoSpeciesBV: no visible binding for global variable
+    ‘ParentName’
+  get_NRSPhytoSpeciesBV: no visible binding for global variable ‘same’
+  get_NRSPhytoSpeciesBV: no visible binding for global variable ‘Genus’
+  get_NRSPhytoSpeciesBV: no visible binding for global variable ‘Species’
+  get_NRSPhytoSpeciesBV: no visible binding for global variable
+    ‘TripCode’
+  get_NRSPhytoSpeciesBV: no visible binding for global variable
+    ‘Biovolume_um3L’
+  get_NRSPhytoSpeciesBV: no visible binding for global variable
+    ‘SampleType’
+  get_NRSPhytoSpeciesBV: no visible binding for global variable
+    ‘BioV_um3L’
+  get_NRSPhytoSpeciesBV: no visible binding for global variable ‘Station’
+  get_NRSPhytoSpeciesBV: no visible binding for global variable
+    ‘Latitude’
+  get_NRSPhytoSpeciesBV: no visible binding for global variable
+    ‘Longitude’
+  get_NRSPhytoSpeciesBV: no visible binding for global variable
+    ‘SampleDateLocal’
+  get_NRSPhytoSpeciesBV: no visible binding for global variable ‘Year’
+  get_NRSPhytoSpeciesBV: no visible binding for global variable ‘Month’
+  get_NRSPhytoSpeciesBV: no visible binding for global variable ‘Day’
+  get_NRSPhytoSpeciesBV: no visible binding for global variable
+    ‘Time_24hr’
+  get_NRSPhytoSpeciesBV: no visible binding for global variable
+    ‘StartDate’
+  get_NRSPhytoSpeciesBV: no visible binding for global variable ‘Cells_L’
+  get_NRSPhytoSpeciesBV: no visible global function definition for
+    ‘slice’
+  get_NRSPico: no visible binding for global variable ‘TRIP_CODE’
+  get_NRSPico: no visible binding for global variable ‘SAMPLEDEPTH_M’
+  get_NRSPico: no visible binding for global variable ‘REPLICATE’
+  get_NRSPico: no visible binding for global variable ‘SAMPLEDATELOCAL’
+  get_NRSPico: no visible binding for global variable
+    ‘PROCHLOROCOCCUS_CELLSML’
+  get_NRSPico: no visible binding for global variable
+    ‘PROCHLOROCOCCUS_FLAG’
+  get_NRSPico: no visible binding for global variable
+    ‘SYNECOCHOCCUS_CELLSML’
+  get_NRSPico: no visible binding for global variable
+    ‘SYNECOCHOCCUS_FLAG’
+  get_NRSPico: no visible binding for global variable
+    ‘PICOEUKARYOTES_CELLSML’
+  get_NRSPico: no visible binding for global variable
+    ‘PICOEUKARYOTES_FLAG’
+  get_NRSPigments: no visible binding for global variable ‘TRIP_CODE’
+  get_NRSPigments: no visible binding for global variable ‘SAMPLEDEPTH_M’
+  get_NRSPigments: no visible binding for global variable ‘PIGMENTS_FLAG’
+  get_NRSPigments: no visible binding for global variable
+    ‘PIGMENTS_COMMENTS’
+  get_NRSRawPhytoPivot: no visible binding for global variable
+    ‘SampleType’
+  get_NRSRawPhytoPivot: no visible binding for global variable
+    ‘TaxonGroup’
+  get_NRSRawPhytoPivot: no visible binding for global variable ‘Genus’
+  get_NRSRawPhytoPivot: no visible binding for global variable ‘Species’
+  get_NRSRawPhytoPivot: no visible binding for global variable
+    ‘Biovolume_um3L’
+  get_NRSRawPhytoPivot: no visible binding for global variable ‘SPCODE’
+  get_NRSRawPhytoPivot: no visible binding for global variable
+    ‘TaxonName’
+  get_NRSRawPhytoPivot: no visible binding for global variable ‘Cells_L’
+  get_NRSRawPhytoPivot: no visible binding for global variable
+    ‘SampleDateLocal’
+  get_NRSStation: no visible binding for global variable ‘STATIONNAME’
+  get_NRSStation: no visible binding for global variable ‘LATITUDE’
+  get_NRSStation: no visible binding for global variable ‘LONGITUDE’
+  get_NRSStation: no visible binding for global variable ‘STATIONDEPTH_M’
+  get_NRSStation: no visible binding for global variable ‘PROJECTNAME’
+  get_NRSTrips: no visible binding for global variable ‘TRIP_CODE’
+  get_NRSTrips: no visible binding for global variable ‘STATION’
+  get_NRSTrips: no visible binding for global variable ‘STATIONCODE’
+  get_NRSTrips: no visible binding for global variable ‘LATITUDE’
+  get_NRSTrips: no visible binding for global variable ‘LONGITUDE’
+  get_NRSTrips: no visible binding for global variable ‘SAMPLEDATELOCAL’
+  get_NRSTrips: no visible binding for global variable ‘BIOMASS_MGM3’
+  get_NRSTrips: no visible binding for global variable ‘SECCHI_M’
+  get_NRSTrips: no visible binding for global variable ‘SAMPLETYPE’
+  get_NRSTrips: no visible binding for global variable ‘PROJECTNAME’
+  get_NRSTrips: no visible binding for global variable ‘SampleDateLocal’
+  get_NRSTrips: no visible binding for global variable ‘Latitude’
+  get_NRSTrips: no visible binding for global variable ‘Longitude’
+  get_NRSTrips: no visible binding for global variable ‘tz’
+  get_NRSTrips: no visible binding for global variable ‘TripCode’
+  get_NRSTrips: no visible binding for global variable ‘Year’
+  get_NRSTrips: no visible binding for global variable ‘SampleDateUTC’
+  get_NRSTrips: no visible binding for global variable ‘Biomass_mgm3’
+  get_NRSTrips: no visible binding for global variable ‘Secchi_m’
+  get_NRSTrips: no visible binding for global variable ‘SampleType’
+  get_NRSZooChangeLog: no visible binding for global variable
+    ‘TAXON_NAME’
+  get_NRSZooChangeLog: no visible binding for global variable
+    ‘START_DATE’
+  get_NRSZooChangeLog: no visible binding for global variable
+    ‘PARENT_NAME’
+  get_NRSZooCount: no visible binding for global variable ‘TAXON_NAME’
+  get_NRSZooCount: no visible binding for global variable ‘TAXON_GROUP’
+  get_NRSZooCount: no visible binding for global variable ‘TAXON_GRP01’
+  get_NRSZooCount: no visible binding for global variable ‘TRIP_CODE’
+  get_NRSZooCount: no visible binding for global variable ‘GENUS’
+  get_NRSZooCount: no visible binding for global variable ‘SPECIES’
+  get_NRSZooCount: no visible binding for global variable ‘COUNTS’
+  get_NRSZooCount: no visible binding for global variable ‘SAMPVOL_L’
+  get_NRSZooData: no visible binding for global variable ‘TRIP_CODE’
+  get_NRSZooData: no visible binding for global variable ‘TAXON_NAME’
+  get_NRSZooData: no visible binding for global variable ‘TAXON_GROUP’
+  get_NRSZooData: no visible binding for global variable ‘TAXON_GRP01’
+  get_NRSZooData: no visible binding for global variable ‘GENUS’
+  get_NRSZooData: no visible binding for global variable ‘SPECIES’
+  get_NRSZooData: no visible binding for global variable
+    ‘ZOOP_ABUNDANCE_M3’
+  Undefined global functions or variables:
+    . ACKNOWLEDGEMENTS ALKALINITY_FLAG AMMONIUM_FLAG AMMONIUM_UMOLL
+    Ammonium_umolL BATHYM_M BGC BIOMASS_MGM3 BIOVOLUME_UM3L BIOVOL_UM3M3
+    BV_Cell BioV_um3L BioVolume_um3m3 Biomass_mgm3 Biovolume_um3L
+    CARBON_FLAG CC CELL_L CHLA CHLF CNDC CNDC_quality_control CO COMMENTS
+    COUNTS CPHL CPHL_quality_control CTDChlF_mgm3 CTDSalinity
+    CTDTemperature Carbon Carbon_L Carbon_m3 Carnivore CastTime_UTC
+    Cells_L Chla_flag Chla_mgm3 Comments Conductivity_Sm
+    Conductivity_flag Copepod DENS DENS_quality_control DEPTH DEPTH_M
+    DIC_UMOLKG DIC_umolkg DIET DOX2 DOX2_quality_control
+    DV_CPHL_A_AND_CPHL_A Date DateDiff Day Depth_m Diadata Diatom
+    Dinodata Dinoflagellate DissolvedOxygen_flag DissolvedOxygen_umolkg
+    ENDLATITUDE ENDLONGITUDE ENDPORT ENDSAMPLEDATEUTC FLAG_COMMENT
+    FOV_COUNT FlagComments GEARDEPTH_M GEARMESH_UM GENUS Genus Header
+    INORGANICFRACTION_MGL I_SAMPLE_ID Indices InorganicFraction_mgL
+    LATITUDE LENGTH_MM LONGITUDE Latitude Longitude MILES Month
+    NITRATE_FLAG NITRATE_UMOLL NITRITE_FLAG NITRITE_UMOLL Nitrate_umolL
+    Nitrite_umolL NoCopepodSpecies_Sample NoDiatomSpecies_Sample
+    NoDinoSpecies_Sample NoPhytoSpecies_Sample ORGANICFRACTION_MGL
+    OXYGEN_FLAG OXYGEN_UMOLL Omnivore OrganicFraction_mgL Oxygen_umolL
+    PARENT_NAME PAbun_m3 PBioV_um3m3 PCI PHOSPHATE_FLAG PHOSPHATE_UMOLL
+    PHYTO_ABUNDANCE_M3 PICOEUKARYOTES_CELLSML PICOEUKARYOTES_FLAG
+    PIGMENTS_COMMENTS PIGMENTS_FLAG PRES_REL PROCHLOROCOCCUS_CELLSML
+    PROCHLOROCOCCUS_FLAG PROJECTNAME PSAL PSAL_quality_control ParentName
+    Pdata Phosphate_umolL Picoeukaryotes_cellsml Pressure_dbar
+    Prochlorococcus_cellsml ProjectName QC_FLAG REGION REPLICATE SALINITY
+    SALINITY_FLAG SALINITY_PSU SAMPLE SAMPLEDATELOCAL SAMPLEDATEUTC
+    SAMPLEDEPTH_M SAMPLETYPE SAMPVOL_L SAMPVOL_M3 SCIENTIFICNAME
+    SECCHIDEPTH_M SECCHI_M SILICATE_FLAG SILICATE_UMOLL SPCODE SPCode
+    SPECIES STARTDATE STARTLATITUDE STARTLONGITUDE STARTPORT
+    STARTSAMPLEDATEUTC START_DATE STATION STATIONCODE STATIONDEPTH_M
+    STATIONNAME SYNECOCHOCCUS_CELLSML SYNECOCHOCCUS_FLAG Salinity
+    Salinity_PSU Salinity_flag Salinity_psu Sample SampleDateLocal
+    SampleDateUTC SampleDepth_m SampleType ScientificName Secchi_m
+    Silicate_umolL Species StartDate Station StationName
+    Synecochoccus_cellsml TALKALINITY_UMOLKG TAXON_COUNT TAXON_GROUP
+    TAXON_GRP01 TAXON_NAME TAlkalinity_umolkg TEMP TEMPERATURE_C
+    TEMP_quality_control TOWTYPE TRIP_CODE TSSFLAG TSS_MGL TSS_mgL TURB
+    TURB_quality_control TaxonCount TaxonGroup TaxonName Taxon_Count
+    Temp_DegC Temperature_degC Temperature_flag Time_24hr TripCode
+    Turbidity_NTU Turbidity_flag VESSEL VESSEL_NAME VOLUME_M3 WATER_TYPE
+    WaterDensity_flag WaterDensity_kgm3 Year ZAbund_m3 ZCount
+    ZOOP_ABUNDANCE_M3 abunSize file_id genus1 genus2 getLFCountAll
+    getLFCountBGC get_NRSRawPhytoBV get_NRSZooGenus get_NRSZooHTG
+    get_NRSZooRaw get_NRSZooRawBin get_NRSZooSpeciesCopepod
+    get_NRSZooSpeciesNonCopepod i_Sample rankrefd ranksal ranktemp refd
+    same site_code slice stations sumTG sumdiet temp time_coverage_start
+    tz
+
+[34m> checking Rd files ... NOTE[39m
+  prepare_Rd: add_bioregions.Rd:12-14: Dropping empty section \value
+  prepare_Rd: add_bioregions.Rd:18-20: Dropping empty section \examples
+  prepare_Rd: create_bgc.Rd:9-11: Dropping empty section \value
+  prepare_Rd: export_processed_cpr.Rd:15-17: Dropping empty section \examples
+  prepare_Rd: export_processed_larvalfish.Rd:15-17: Dropping empty section \examples
+  prepare_Rd: export_processed_nrs.Rd:15-17: Dropping empty section \examples
+  prepare_Rd: get_CPRHTGBV.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_CPRPhytoChangeLog.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_CPRPhytoCountData.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_CPRPhytoData.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_CPRPhytoGenus.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_CPRPhytoGenusBV.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_CPRPhytoHTG.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_CPRPhytoRaw.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_CPRPhytoRawBV.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_CPRPhytoSpecies.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_CPRPhytoSpeciesBV.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_CPRSamps.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_CPRTrips.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_CPRZooChangeLog.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_CPRZooCopepod.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_CPRZooCountData.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_CPRZooData.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_CPRZooGenus.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_CPRZooHTG.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_CPRZooNonCopepod.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_CPRZooRaw.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_CPRZooRawSS.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_LFCountAll.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_LFCountBGC.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_LFData.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_LFTrips.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_NRSPhytoGenus.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_NRSPhytoGenusBV.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_NRSPhytoHTG.Rd:11-15: Dropping empty section \value
+  prepare_Rd: get_NRSPhytoHTGBV.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_NRSPhytoRaw.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_NRSPhytoRawBV.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_NRSPhytoSpecies.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_NRSPhytoSpeciesBV.Rd:9-11: Dropping empty section \value
+  prepare_Rd: get_NRSRawPhytoPivot.Rd:9-11: Dropping empty section \value
+
+[31m1 error x[39m | [32m0 warnings ✓[39m | [31m4 notes x[39m
+|============                                                                                                                                                    | 7%|==================                                                                                                                                             | 11%|========================                                                                                                                                       | 15%|===============================                                                                                                                                | 19%|=====================================                                                                                                                          | 23%|==========================================                                                                                                                | 27% 1 MB|===============================================                                                                                                           | 30% 1 MB|=====================================================                                                                                                     | 34% 1 MB|===========================================================                                                                                               | 38% 1 MB|=================================================================                                                                                         | 42% 1 MB|======================================================================                                                                                    | 45% 1 MB|============================================================================                                                                              | 49% 1 MB|=================================================================================                                                                         | 52% 1 MB|======================================================================================                                                                    | 55% 2 MB|===========================================================================================                                                               | 59% 2 MB|=================================================================================================                                                         | 62% 2 MB|======================================================================================================                                                    | 66% 2 MB|===========================================================================================================                                               | 69% 2 MB|=================================================================================================================                                         | 73% 2 MB|=======================================================================================================================                                   | 76% 2 MB|============================================================================================================================                              | 80% 2 MB|==================================================================================================================================                        | 84% 3 MB|========================================================================================================================================                  | 87% 3 MB|=============================================================================================================================================             | 91% 3 MB|===================================================================================================================================================       | 94% 3 MB|========================================================================================================================================================  | 98% 3 MB|==========================================================================================================================================================| 100% 3 MB

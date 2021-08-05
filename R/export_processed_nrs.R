@@ -26,7 +26,6 @@ export_processed_nrs <- function(outD){
   # NRSPcl <- get_NRSPhytoChangeLog()
 
   #### Raw Phytoplankton ####
-
   NRSRawP <- get_NRSRawPhytoPivot()
   data.table::fwrite(NRSRawP, file = paste0(outD,.Platform$file.sep,"NRS_Phyto_RawMat.csv"), row.names = FALSE)
   rm(NRSRawP)
@@ -51,7 +50,7 @@ export_processed_nrs <- function(outD){
 
   ###########################################################################################
   #### Raw Phytoplankton Biovolume
-  NRSRawPB <- get_NRSRawPhytoBV()
+  NRSRawPB <- get_NRSPhytoRawBV()
   data.table::fwrite(NRSRawPB, file = paste0(outD,.Platform$file.sep,"NRS_Phyto_BioVolRawMat.csv"), row.names = FALSE)
   rm(NRSRawPB)
 
@@ -74,13 +73,17 @@ export_processed_nrs <- function(outD){
   rm(NRSSpecPB)
 
 
+
+
+
   #### NRS Zooplankton #### #################################################################################################################################
   # Bring in all NRS zooplankton samples, data and changelog
   NRSZdat <- get_NRSZooData()
-  NRSZcl <- get_NRSZooChangeLog()
+  # NRSZcl <- get_NRSZooChangeLog()
 
   #### Raw Zooplankton ####
-  NRSRawZ <- get_NRSZooRaw()
+  # NRSRawZ <- get_NRSZooRaw() JDE CHanged this
+  NRSRawZ <- get_NRSZooData()
   data.table::fwrite(NRSRawZ, file = paste0(outD,.Platform$file.sep,"NRS_Zoop_RawMat.csv"), row.names = FALSE)
   rm(NRSRawZ)
 
@@ -113,10 +116,10 @@ export_processed_nrs <- function(outD){
 
   #### Create NRS Indices File ####
   IndicesNRS <- create_indices_nrs()
-  data.table::fwrite(Indices, file = paste0(outD,.Platform$file.sep,"NRS_Indices.csv"), row.names = FALSE)
+  data.table::fwrite(IndicesNRS, file = paste0(outD,.Platform$file.sep,"NRS_Indices.csv"), row.names = FALSE)
 
   #### Create NRS BGC File ####
-  IndicesNRS <- create_bgc()
+  BGC <- create_bgc()
   data.table::fwrite(BGC, file = paste0(outD,.Platform$file.sep,"NRS_CombinedWaterQuality.csv"), row.names = FALSE)
 
 }
