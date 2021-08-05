@@ -4,11 +4,17 @@
 \alias{export_processed_nrs}
 \title{Create all processed data products}
 \usage{
-export_processed_nrs()
+export_processed_nrs(outD)
+}
+\arguments{
+\item{outD}{}
 }
 \value{
 
 }
 \description{
 Create all processed data products
+}
+\examples{
+
 }
