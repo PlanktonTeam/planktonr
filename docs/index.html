@@ -83,7 +83,7 @@
 <a href="#planktonr-" class="anchor"></a>planktonr <a href="https://github.com/PlanktonTeam/planktonr"><img src="reference/figures/planktonr.png" align="right" height="139"></a>
 </h1></div>
 <!-- badges: start -->
-<!-- badges: end -->
+
 <p>The goal of planktonr is to …</p>
 <div id="tips-while-writing-package" class="section level2">
 <h2 class="hasAnchor">
@@ -93,8 +93,10 @@ pkgload::load_all()<br>
 devtools::check()<br>
 devtools::build_readme()</p>
 <p>usethis::use_vignette(“my-vignette”) # To create your first vignette<br>
-usethis::use_pkgdown() # Run once to configure your package to use pkgdown<br>
-pkgdown::build_site() # Use pkgdown to update your website</p>
+usethis::use_pkgdown() # Run once to configure your package to use pkgdown</p>
+<p>pkgdown::build_site() # Use pkgdown to update your website<br>
+devtools::build_readme() # Update the readme</p>
+<p>use_lifecycle_badge(“Experimental”) usethis::use_github_action_check_standard()</p>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
@@ -157,7 +159,14 @@ pkgdown::build_site() # Use pkgdown to update your website</p>
 </ul>
 </div>
 
-  </div>
+  <div class="dev-status">
+<h2>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/PlanktonTeam/planktonr/actions"><img src="https://github.com/PlanktonTeam/planktonr/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+</ul>
+</div>
+</div>
 </div>
 
 
