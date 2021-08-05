@@ -51,6 +51,7 @@ get_NRSTrips <- function(){
 #'
 #' @examples
 #' df <- get_NRSRawPhytoPivot()
+#' #' @importFrom magrittr "%>%"
 get_NRSRawPhytoPivot <- function(){
 
   NRSRawP <- dplyr::left_join(get_NRSTrips() %>% dplyr::filter(grepl('P', SampleType)),
@@ -61,6 +62,38 @@ get_NRSRawPhytoPivot <- function(){
     dplyr::arrange(dplyr::desc(SampleDateLocal)) %>%
     dplyr::mutate(SampleDateLocal = as.character(SampleDateLocal))
 }
+
+#### Higher Trophic Groups Abund ####
+#' Get Abundance of Phyto Higher Trophic Groups
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' df <- get_NRSPhytoHTG()
+#' #' @importFrom magrittr "%>%"
+get_NRSPhytoHTG <- function(){
+
+  NRSHTGP <- get_NRSTrips() %>%
+    dplyr::group_by(TripCode, TaxonGroup) %>%
+    dplyr::summarise(Cells_L = sum(Cells_L, na.rm = TRUE), .groups = "drop") %>%
+    dplyr::filter(!TaxonGroup %in% c("Other","Coccolithophore", "Diatom","Protozoa"))
+
+  NRSHTGP <- get_NRSPhytoData() %>%
+    dplyr::filter(grepl('P', SampleType)) %>%
+    dplyr::left_join(NRSHTGP, by = "TripCode") %>%
+    dplyr::mutate(TaxonGroup = ifelse(is.na(TaxonGroup), "Ciliate", TaxonGroup),
+           Cells_L = ifelse(is.na(Cells_L), 0, Cells_L)) %>%
+    dplyr::arrange(-desc(TaxonGroup)) %>%
+    tidyr::pivot_wider(names_from = TaxonGroup, values_from = Cells_L, values_fill = list(Cells_L = 0)) %>%
+    dplyr::arrange(dplyr::desc(SampleDateLocal)) %>%
+    dplyr::select(-c(SampleType))
+
+}
+
+
+
+
 
 
 #' Import NRS Phytoplankton Data
