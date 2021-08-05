@@ -52,14 +52,13 @@ get_NRSTrips <- function(){
 #' df <- get_NRSRawPhytoPivot()
 get_NRSRawPhytoPivot <- function(){
 
-  NRSRawP <- left_join(get_NRSTrips() %>% filter(grepl('P', SampleType)),
+  NRSRawP <- dplyr::left_join(get_NRSTrips() %>% dplyr::filter(grepl('P', SampleType)),
                        get_NRSPhytoData(), by = "TripCode") %>%
-    select(-c(TaxonGroup, Genus, Species, Biovolume_um3L, SPCODE, SampleType)) %>%
-    arrange(-desc(TaxonName)) %>%
-    pivot_wider(names_from = TaxonName, values_from = Cells_L, values_fill = list(Cells_L = 0)) %>%
-    arrange(desc(SampleDateLocal)) %>%
-    mutate(SampleDateLocal = as.character(SampleDateLocal))
-
+    dplyr::select(-c(TaxonGroup, Genus, Species, Biovolume_um3L, SPCODE, SampleType)) %>%
+    dplyr::arrange(-desc(TaxonName)) %>%
+    tidyr::pivot_wider(names_from = TaxonName, values_from = Cells_L, values_fill = list(Cells_L = 0)) %>%
+    dplyr::arrange(desc(SampleDateLocal)) %>%
+    dplyr::mutate(SampleDateLocal = as.character(SampleDateLocal))
 }
 
 
@@ -90,7 +89,6 @@ get_NRSPhytoData <- function(){
 get_NRSPhytoChangeLog <- function(){
   NRSPcl <- readr::read_csv(paste0(get_raw_plankton(), "BGC_Phyto_ChangeLog.csv"), na = "") %>%
     dplyr::rename(TaxonName = TAXON_NAME, StartDate = START_DATE, ParentName = PARENT_NAME)
-  return(NRSPcl)
 }
 
 
@@ -107,7 +105,6 @@ get_NRSZooData <- function(){
   NRSZdat <- readr::read_csv(paste0(get_raw_plankton(), "BGC_Zoop_Raw.csv"), na = "") %>%
     dplyr::rename(TripCode = TRIP_CODE, TaxonName = TAXON_NAME, Copepod = TAXON_GROUP, TaxonGroup = TAXON_GRP01,
                   Genus = GENUS, Species = SPECIES, ZAbund_m3 = ZOOP_ABUNDANCE_M3)
-  return(NRSZdat)
 }
 
 
@@ -124,7 +121,6 @@ get_NRSZooCount <- function(){
   NRSZcount <- readr::read_csv(paste0(get_raw_plankton(), "BGC_Zoop_CountRaw.csv"), na = "") %>%
     dplyr::rename(TaxonName = TAXON_NAME, Copepod = TAXON_GROUP, TaxonGroup = TAXON_GRP01, TripCode = TRIP_CODE,
                   Genus = GENUS, Species = SPECIES, TaxonCount = COUNTS, SampVol_L = SAMPVOL_L)
-  return(NRSZcount)
 }
 
 
@@ -140,7 +136,6 @@ get_NRSZooCount <- function(){
 get_NRSZooChangeLog <- function(){
   NRSZcl <- readr::read_csv(paste0(get_raw_plankton(), "BGC_Zoop_ChangeLog.csv"), na = "") %>%
     dplyr::rename(TaxonName = TAXON_NAME, StartDate = START_DATE, ParentName = PARENT_NAME)
-  return(NRSZcl)
 }
 
 
@@ -171,7 +166,6 @@ get_NRSPico <- function(){
                   Prochlorococcus_CellsmL = PROCHLOROCOCCUS_CELLSML, Prochlorococcus_Flag = PROCHLOROCOCCUS_FLAG,
                   Synecochoccus_CellsmL = SYNECOCHOCCUS_CELLSML, Synecochoccus_Flag = SYNECOCHOCCUS_FLAG,
                   Picoeukaryotes_CellsmL = PICOEUKARYOTES_CELLSML, Picoeukaryotes_Flag = PICOEUKARYOTES_FLAG)
-  return(Pico)
 }
 
 
@@ -335,6 +329,5 @@ get_Chemistry <- function(){
     dplyr::ungroup() %>%
     dplyr::mutate_all(~ replace(., is.na(.), NA)) %>%
     untibble()
-  return(chemistry)
 }
 
