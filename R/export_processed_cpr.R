@@ -55,7 +55,7 @@ export_processed_cpr <- function(outD){
 
   cprHTGB <- get_CPRHTGBV()
   data.table::fwrite(cprHTGB, file = paste0(outD,.Platform$file.sep,"CPR_Phyto_BioVolHTGMat.csv", row.names = FALSE))
-  rm(cprHTGPB1)
+  rm(cprHTGB)
 
   #### CPR PHYTO BIOV GENUS ####
 
