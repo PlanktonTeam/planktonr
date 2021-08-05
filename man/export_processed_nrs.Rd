@@ -7,10 +7,7 @@
 export_processed_nrs(outD)
 }
 \arguments{
-\item{outD}{}
-}
-\value{
-
+\item{outD}{The directory where the output will be saved.}
 }
 \description{
 Create all processed data products

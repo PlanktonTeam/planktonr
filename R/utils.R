@@ -8,7 +8,7 @@
 
 #' Remove extra tibble info
 #'
-#' @param tib
+#' @param tib The tibble to convert to dataframe
 #'
 #' @return A dataframe with with all the tibble stuff removed
 #' @export

@@ -32,11 +32,12 @@ devtools::build_readme()
 usethis::use_vignette("my-vignette") # To create your first vignette    
 usethis::use_pkgdown() # Run once to configure your package to use pkgdown    
 
-pkgdown::build_site() # Use pkgdown to update your website    
-devtools::build_readme() # Update the readme
-
 use_lifecycle_badge("Experimental")
 usethis::use_github_action_check_standard()
+
+devtools::build_readme() # Update the readme
+pkgdown::build_site() # Use pkgdown to update your website    
+
 
 ## Installation
 

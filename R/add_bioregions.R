@@ -1,7 +1,7 @@
 
 #' Add bioregions data to existing df
 #'
-#' @param df
+#' @param df A dataframe with columns `Longitude` and `Latitude`
 #'
 #' @return
 #' @export

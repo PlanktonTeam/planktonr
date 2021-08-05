@@ -4,13 +4,10 @@
 \alias{export_processed_larvalfish}
 \title{Create all processed data products for Larval Fish}
 \usage{
-export_processed_larvalfish(OutD)
+export_processed_larvalfish(outD)
 }
 \arguments{
-\item{outD}{}
-}
-\value{
-
+\item{outD}{The directory where the output will be saved.}
 }
 \description{
 Create all processed data products for Larval Fish

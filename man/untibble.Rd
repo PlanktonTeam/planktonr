@@ -7,7 +7,7 @@
 untibble(tib)
 }
 \arguments{
-\item{tib}{}
+\item{tib}{The tibble to convert to dataframe}
 }
 \value{
 A dataframe with with all the tibble stuff removed

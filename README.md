@@ -23,11 +23,11 @@ usethis::use\_vignette(“my-vignette”) \# To create your first vignette
 usethis::use\_pkgdown() \# Run once to configure your package to use
 pkgdown
 
-pkgdown::build\_site() \# Use pkgdown to update your website  
-devtools::build\_readme() \# Update the readme
-
 use\_lifecycle\_badge(“Experimental”)
 usethis::use\_github\_action\_check\_standard()
+
+devtools::build\_readme() \# Update the readme pkgdown::build\_site() \#
+Use pkgdown to update your website
 
 ## Installation
 

@@ -7,7 +7,7 @@
 add_bioregions(df)
 }
 \arguments{
-\item{df}{}
+\item{df}{A dataframe with columns \code{Longitude} and \code{Latitude}}
 }
 \value{
 

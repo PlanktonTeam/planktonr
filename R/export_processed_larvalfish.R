@@ -1,19 +1,18 @@
 #' Create all processed data products for Larval Fish
 #'
-#' @param outD
+#' @param outD The directory where the output will be saved.
 #'
-#' @return
 #' @export
 #'
 #' @examples
 #'
 #'@importFrom magrittr "%>%"
-export_processed_larvalfish <- function(OutD){
+export_processed_larvalfish <- function(outD){
 
   LFCount <- getLFCountAll()
-  fwrite(LFCount, file.path(OutD, "LFCount_All.csv"))
+  data.table::fwrite(LFCount, file.path(outD, "LFCount_All.csv"))
 
 
   LFCountBGC <- getLFCountBGC()
-  fwrite(LFCountBGC, file.path(OutD,"Output/LFCount_BGC.csv"))
+  data.table::fwrite(LFCountBGC, file.path(outD,"Output/LFCount_BGC.csv"))
 }
