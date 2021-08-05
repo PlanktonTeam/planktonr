@@ -16,6 +16,8 @@ knitr::opts_chunk$set(
 # planktonr <a href='https://github.com/PlanktonTeam/planktonr'><img src='man/figures/planktonr.png' align="right" height="139" /></a>
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/PlanktonTeam/planktonr/workflows/R-CMD-check/badge.svg)](https://github.com/PlanktonTeam/planktonr/actions)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
 The goal of planktonr is to ...
@@ -29,7 +31,12 @@ devtools::build_readme()
 
 usethis::use_vignette("my-vignette") # To create your first vignette    
 usethis::use_pkgdown() # Run once to configure your package to use pkgdown    
+
 pkgdown::build_site() # Use pkgdown to update your website    
+devtools::build_readme() # Update the readme
+
+use_lifecycle_badge("Experimental")
+usethis::use_github_action_check_standard()
 
 ## Installation
 

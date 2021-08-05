@@ -23,16 +23,16 @@ create_bgc <- function(){
 
   # Each trip and depth combination for water quality parameters
   # the number of rows in this table should equal that in comb, if not look out for duplicates and replicates
-  NRSTrips <- getNRSTrips() %>%
+  NRSTrips <- get_NRSTrips() %>%
     dplyr::select(-SampleType)
 
   # you will get a warning about the fast method, this actually works better than the accurate method for this data set.
 
   # Hydrochemistry data
-  Chemistry <- getChemistry()
+  Chemistry <- get_Chemistry()
 
   # Zooplankton biomass
-  ZBiomass <-  getNRSTrips() %>%
+  ZBiomass <-  get_NRSTrips() %>%
     dplyr::select(TripCode, Biomass_mgm3, Secchi_m) %>%
     dplyr::mutate(SampleDepth_m = 'WC')
 
@@ -80,7 +80,7 @@ create_bgc <- function(){
     untibble()
 
   # CTD Cast Data
-  CTD <- getCTD() %>%
+  CTD <- get_CTD() %>%
     dplyr::mutate(SampleDepth_m = as.character(round(Depth_m, 0))) %>%
     dplyr::select(-c(Pressure_dbar)) %>%
     dplyr::group_by(TripCode, SampleDepth_m) %>%
@@ -112,10 +112,10 @@ create_bgc <- function(){
 
   # test table
   # n should be 1, replicates or duplicate samples will have values > 1
-  test <- BGC %>%
-    dplyr::group_by(TripCode, SampleDepth_m) %>%
-    dplyr::summarise(n = dplyr::n(),
-                     .groups = "drop")
+  # test <- BGC %>%
+  #   dplyr::group_by(TripCode, SampleDepth_m) %>%
+  #   dplyr::summarise(n = dplyr::n(),
+  #                    .groups = "drop")
 
   return(BGC)
 }
@@ -125,4 +125,4 @@ create_bgc <- function(){
 # max(test$n)
 
 # save to github
-# fwrite(BGC, file = paste0(outD,.Platform$file.sep,"NRS_CombinedWaterQuality.csv"), row.names = FALSE)
+#

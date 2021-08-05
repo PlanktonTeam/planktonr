@@ -13,14 +13,9 @@
 #' df <- create_indices_nrs()
 #' @importFrom magrittr "%>%"
 create_indices_nrs <- function(){
-  # source("../Satellite/fIMOS_MatchAltimetry.R")
-  # source("../Satellite/fIMOS_MatchMODIS.R")
-  # source("../Satellite/fIMOS_MatchGHRSST.R")
-
-  # uses mostly the same raw data from IMOS_PlanktonProducts_Create.R
   # note there are circumstances where a trip won"t have a phyto and a zoo samples due to loss of sample etc.
 
-  NRSdat <- getNRSTrips() %>%
+  NRSdat <- get_NRSTrips() %>%
     dplyr::select(-SampleType) %>%
     dplyr::filter(Station != "Port Hacking 4") #ignore warning, "fast" method does better here than "accurate"
 
@@ -29,7 +24,7 @@ create_indices_nrs <- function(){
     dplyr::select(TripCode, Date, Latitude, Longitude)
 
   # SST and Chlorophyll from CTD
-  CTD <- getCTD() %>%
+  CTD <- get_CTD() %>%
     dplyr::filter(Depth_m < 15) %>% # take average of top 10m as a surface value for SST and CHL, this is removing 17 casts as of nov 2020
     dplyr::group_by(TripCode) %>%
     dplyr::summarise(CTD_SST_C = mean(Temperature_degC, na.rm = TRUE),
@@ -39,7 +34,7 @@ create_indices_nrs <- function(){
     untibble()
 
   # data set for calculating MLD
-  CTD_MLD <- getCTD() %>%
+  CTD_MLD <- get_CTD() %>%
     dplyr::select(TripCode, Temperature_degC, Chla_mgm3, Salinity_psu, Depth_m) %>%
     dplyr::rename(CTDTemperature = Temperature_degC, CTDSalinity = Salinity_psu, CTDChlF_mgm3 = Chla_mgm3, SampleDepth_m = Depth_m) %>%
     tidyr::drop_na(TripCode)
@@ -104,47 +99,8 @@ create_indices_nrs <- function(){
       tidyr::drop_na(TripCode)
   }
 
-  # # Access satellite data for the sample dates using the IMOS_Toolbox
-  #
-  # # If on Windows you will need to install a development
-  # # version of ncdf4 which allows the use of OpenDAP
-  # if(.Platform$OS.type == "windows") {
-  #  warning("It looks like you are on a Windows PC - You will need to install a
-  #  development version of ncdf4 which allows the use of OpenDAP. Please
-  #  run devtools::install_github("mdsumner/ncdf4") to install or
-  #  see "https://github.com/mdsumner/ncdf4" for more information.")
-  # }
-  #
-  # # Get GHRSST SST Data
-  # # Possible products to download are:
-  # # dt_analysis, l2p_flags, quality_level, satellite_zenith_angle, sea_ice_fraction, sea_ice_fraction_dtime_from_sst,
-  # # sea_surface_temperature, sea_surface_temperature_day_night, sses_bias, sses_count,sses_standard_deviation,
-  # # sst_count, sst_dtime, sst_mean, sst_standard_deviation, wind_speed, wind_speed_dtime_from_sst,
-  # res_temp <- "1d"
-  # res_spat <- 10 # Return the average of res_spat x res_spat pixels
-  # pr <- ("sea_surface_temperature")
-  # GHRSST <- fIMOS_MatchGHRSST(dNRSdat, pr, res_temp, res_spat)
-  #
-  # # Get MODIS Data
-  # # Possible products
-  # # pr <- c("sst_quality", "sst", "picop_brewin2012in", "picop_brewin2010at", "par",
-  # #     "owtd", "npp_vgpm_eppley_oc3", "npp_vgpm_eppley_gsm", "nanop_brewin2012in",
-  # #     "nanop_brewin2010at", "l2_flags", "ipar", "dt", "chl_oc3", "chl_gsm", "K_490")
-  #
-  # pr <- c("chl_oci")
-  # res_temp <- "1d"
-  # res_spat <- 10 # Return the average of res_spat x res_spat pixels
-  # MODIS <- fIMOS_MatchMODIS(dNRSdat, pr, res_temp, res_spat)
-  #
-  #
-  # # Get Altimetry (Gridded sea level anomaly, Gridded sea level, Surface geostrophic velocity)
-  # dNRSdat <- dNRSdat[1:3,]
-  # Alt <- fIMOS_MatchAltimetry(dNRSdat, res_spat)
-
-
   # Nutrient data
-
-  Nuts <- getChemistry() %>%
+  Nuts <- get_Chemistry() %>%
     dplyr::group_by(TripCode) %>%
     dplyr::summarise(Silicate_umolL = mean(Silicate_umolL, na.rm = TRUE),
                      Phosphate_umolL = mean(Phosphate_umolL, na.rm = TRUE),
@@ -159,7 +115,7 @@ create_indices_nrs <- function(){
     dplyr::mutate_all(~ replace(., is.na(.), NA)) %>%
     untibble()
 
-  Pigments <- getPigments() %>%
+  Pigments <- get_NRSPigments() %>%
     dplyr::filter(SampleDepth_m <= 25) %>% # take average of top 10m as a surface value for SST and CHL
     # dplyr::filter(SampleDepth_m == "WC") %>%
     dplyr::group_by(TripCode) %>%
@@ -168,8 +124,8 @@ create_indices_nrs <- function(){
     untibble()
 
   # Total Zooplankton Abundance
-  ZooData <- getNRSTrips() %>%
-    dplyr::left_join(getNRSZooData(), by = "TripCode")
+  ZooData <- get_NRSTrips() %>%
+    dplyr::left_join(get_NRSZooData(), by = "TripCode")
 
   TZoo <- ZooData %>%
     dplyr::group_by(TripCode) %>%
@@ -183,7 +139,7 @@ create_indices_nrs <- function(){
                      .groups = "drop")
 
   # Bring in copepod information table with sizes etc.
-  ZInfo <- getZooInfo()
+  ZInfo <- get_ZooInfo()
 
   ACopeSize <- ZooData %>%
     dplyr::filter(Copepod == "COPEPOD") %>%
@@ -214,8 +170,8 @@ create_indices_nrs <- function(){
   # Diversity, evenness etc.
 
   # Bring in plankton data
-  ZooCount <- getNRSTrips() %>%
-    dplyr::left_join(getNRSZooCount(), by = "TripCode")
+  ZooCount <- get_NRSTrips() %>%
+    dplyr::left_join(get_NRSZooCount(), by = "TripCode")
 
   zoo_n <- ZooCount %>%
     dplyr::filter(Copepod == "COPEPOD" & Species != "spp." & !is.na(Species) & !grepl("cf.", Species) & !grepl("grp", Species)) %>%
@@ -239,8 +195,8 @@ create_indices_nrs <- function(){
     dplyr::mutate(CopepodEvenness = ShannonCopepodDiversity / log(NoCopepodSpecies_Sample))
 
   # Total Phyto abundance
-  PhytoData <- getNRSTrips() %>%
-    dplyr::left_join(getNRSPhytoData(), by = "TripCode") %>%
+  PhytoData <- get_NRSTrips() %>%
+    dplyr::left_join(get_NRSPhytoData(), by = "TripCode") %>%
     dplyr::filter(TaxonGroup != "Other")
 
   # PhytoData <- PhytoData %>%
@@ -367,14 +323,6 @@ create_indices_nrs <- function(){
     dplyr::left_join(MLD, by = ("TripCode")) %>%
     dplyr::left_join(Nuts, by = ("TripCode")) %>%
     dplyr::left_join(Pigments, by = ("TripCode"))
-
-
-  # %>%
-  #  dplyr::left_join(GHRSST %>% dplyr::select(-c("Longitude", "Latitude", "Date")), by = ("TripCode")) %>%
-  #  dplyr::left_join(MODIS %>% dplyr::select(-c("Longitude", "Latitude", "Date")), by = ("TripCode")) %>%
-  #  dplyr::left_join(Alt %>% dplyr::select(c("TripCode", "GSLA", "GSL", "UCUR", "VCUR")), by = ("TripCode"))
-
-  # fwrite(Indices, file = paste0(outD,.Platform$file.sep,"NRS_Indices.csv"), row.names = FALSE)
 
   # test table
   # n should be 1, replicates or duplicate samples will have values > 1

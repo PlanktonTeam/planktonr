@@ -20,7 +20,7 @@ create_indices_cpr <- function(){
   get_sat_data <- FALSE
 
   # Add the bioregions to the CPR data
-  cprSampleInfo <- getCPRSamps() %>%
+  cprSampleInfo <- get_CPRSamps() %>%
     add_bioregions()
 
   # ggplot2::ggplot() +
@@ -30,15 +30,15 @@ create_indices_cpr <- function(){
   cprProps <- readr::read_csv(paste0(get_raw_plankton(), "CPR_SatData.csv"), na = "(null)") %>%
     dplyr::rename(Sample = SAMPLE, ChlorophyllSatellite_mgm3 = CHLA, WaterDepth_m = DEPTH_M)
 
-  cprZsamp <- getCPRSamps() %>%
+  cprZsamp <- get_CPRSamps() %>%
     dplyr::filter(grepl("Z", SampleType)) %>%
     dplyr::select(-c(PCI, SampleType))
 
-  cprPsamp <- getCPRSamps() %>%
+  cprPsamp <- get_CPRSamps() %>%
     dplyr::filter(grepl("P", SampleType)) %>%
     dplyr::select(-c(SampleType, Biomass_mgm3))
 
-  cprZdat <- getCPRZooData()
+  cprZdat <- get_CPRZooData()
 
   # Total zoop abundance
   zoodatacpr <-  cprZsamp %>%
@@ -54,7 +54,7 @@ create_indices_cpr <- function(){
     dplyr::summarise(CopeAbundance_m3 = sum(ZAbund_m3, na.rm = TRUE))
 
   # Bring in copepod information table with sizes etc.
-  Zinfo <- getZooInfo()
+  Zinfo <- get_ZooInfo()
 
   ACopeSizeCpr <- zoodatacpr %>%
     dplyr::filter(Copepod == 'COPEPOD') %>%
@@ -77,7 +77,7 @@ create_indices_cpr <- function(){
   # Diversity, evenness etc.
 
   # Bring in plankton data
-  CPRZcount <- getCPRZooCountData()
+  CPRZcount <- get_CPRZooCountData()
 
   zooCountCpr <- cprZsamp %>% # Changed this from cprtr
     dplyr::left_join(CPRZcount, by = "Sample")
@@ -102,11 +102,11 @@ create_indices_cpr <- function(){
     dplyr::bind_cols(ShannonCopepodDiversityCPR = ShannonCopepodDiversityCPR)  %>%
     dplyr::mutate(CopepodEvenness = ShannonCopepodDiversityCPR / log(NoCopepodSpecies_Sample))
 
-  cprPsamp <- getCPRSamps() %>%
+  cprPsamp <- get_CPRSamps() %>%
     dplyr::filter(grepl("P", SampleType)) %>%
     dplyr::select(-c(PCI, SampleType, Biomass_mgm3))
 
-  cprPdat <- getCPRPhytoData()
+  cprPdat <- get_CPRPhytoData()
 
   # Total Phyto abundance
   phytodatacpr <- cprPsamp %>%
@@ -253,7 +253,6 @@ create_indices_cpr <- function(){
 
   return(indices)
 
-  # fwrite(IndicesCPR, file = paste0("Output/",.Platform$file.sep, "CPR_Indices.csv"), row.names = FALSE)
 
   # test table
   # n should be 1, replicates or duplicate samples will have values > 1

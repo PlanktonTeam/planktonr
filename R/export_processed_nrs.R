@@ -23,93 +23,101 @@ export_processed_nrs <- function(outD){
 
   # Bring in all NRS phytoplankton samples, data and changelog
 
-  # NRSPdat <- getNRSPhytoData()
-  # NRSPcl <- getNRSPhytoChangeLog()
+  # NRSPdat <- get_NRSPhytoData()
+  # NRSPcl <- get_NRSPhytoChangeLog()
 
   #### Raw Phytoplankton ####
 
-  NRSRawP <- getNRSRawPhytoPivot()
+  NRSRawP <- get_NRSRawPhytoPivot()
   fwrite(NRSRawP, file = paste0(outD,.Platform$file.sep,"NRS_Phyto_RawMat.csv"), row.names = FALSE)
   rm(NRSRawP)
 
   #### Higher Trophic Groups Abund ####
 
-  NRSHTGP <- getNRSPhytoHTG()
+  NRSHTGP <- get_NRSPhytoHTG()
   fwrite(NRSHTGP, file = paste0(outD,.Platform$file.sep,"NRS_Phyto_HTGMat.csv"), row.names = FALSE)
   rm(NRSHTGP)
 
   #### Genus Abund ####
 
-  NRSGenP <- getNRSPhytoGenus()
+  NRSGenP <- get_NRSPhytoGenus()
   fwrite(NRSGenP, file = paste0(outD,.Platform$file.sep,"NRS_Phyto_GenusMat.csv"), row.names = FALSE)
   rm(NRSGenP)
 
   #### Species Abund ####
 
-  NRSSpecP <- getNRSPhytoSpecies()
+  NRSSpecP <- get_NRSPhytoSpecies()
   fwrite(NRSSpecP, file = paste0(outD,.Platform$file.sep,"NRS_Phyto_SpeciesMat.csv"), row.names = FALSE)
   rm(NRSSpecP)
 
   ###########################################################################################
   #### Raw Phytoplankton Biovolume
-  NRSRawPB <- getNRSRawPhytoBV()
+  NRSRawPB <- get_NRSRawPhytoBV()
   fwrite(NRSRawPB, file = paste0(outD,.Platform$file.sep,"NRS_Phyto_BioVolRawMat.csv"), row.names = FALSE)
   rm(NRSRawPB)
 
   #### Higher Trophic Groups BioV ####
 
-  NRSHTGPB <- getNRSPhytoHTGBV()
+  NRSHTGPB <- get_NRSPhytoHTGBV()
   fwrite(NRSHTGPB, file = paste0(outD,.Platform$file.sep,"NRS_Phyto_BioVolHTGMat.csv"), row.names = FALSE)
   rm(NRSHTGPB)
 
   #### Genus ####
 
-  NRSGenPB <- getNRSPhytoGenusBV()
+  NRSGenPB <- get_NRSPhytoGenusBV()
   fwrite(NRSGenPB, file = paste0(outD,.Platform$file.sep,"NRS_Phyto_BioVolGenusMat.csv"), row.names = FALSE)
   rm(NRSGenPB)
 
   #### Species ####
 
-  NRSSpecPB <- getNRSPhytoSpeciesBV()
+  NRSSpecPB <- get_NRSPhytoSpeciesBV()
   fwrite(NRSSpecPB, file = paste0(outD,.Platform$file.sep,"NRS_Phyto_BioVSpeciesMat.csv"), row.names = FALSE)
   rm(NRSSpecPB)
 
 
   #### NRS Zooplankton #### #################################################################################################################################
   # Bring in all NRS zooplankton samples, data and changelog
-  NRSZdat <- getNRSZooData()
-  NRSZcl <- getNRSZooChangeLog()
+  NRSZdat <- get_NRSZooData()
+  NRSZcl <- get_NRSZooChangeLog()
 
   #### Raw Zooplankton ####
-  NRSRawZ <- getNRSZooRaw()
+  NRSRawZ <- get_NRSZooRaw()
   fwrite(NRSRawZ, file = paste0(outD,.Platform$file.sep,"NRS_Zoop_RawMat.csv"), row.names = FALSE)
   rm(NRSRawZ)
 
   ### Sex and stage binned
-  NRSIdsZ <- getNRSZooRawBin()
+  NRSIdsZ <- get_NRSZooRawBin()
   fwrite(NRSIdsZ, file = paste0(outD,.Platform$file.sep,"NRS_Zoop_IDsMat.csv"), row.names = FALSE)
   rm(NRSIdsZ)
 
   #### Higher Trophic Groups ####
-  nrsHTGZ <- getNRSZooHTG()
+  nrsHTGZ <- get_NRSZooHTG()
   fwrite(nrsHTGZ, file = paste0(outD,.Platform$file.sep,"NRS_Zoop_HTGMat.csv"), row.names = FALSE)
   rm(nrsHTGZ)
 
   #### Genus ####
 
-  NRSGenZ <- getNRSZooGenus()
+  NRSGenZ <- get_NRSZooGenus()
   fwrite(NRSGenZ, file = paste0(outD,.Platform$file.sep,"NRS_Zoop_GenusMat.csv"), row.names = FALSE)
   rm(NRSGenZ)
 
   #### Copepods ####
 
-  NRSCop <- getNRSZooSpeciesCopepod()
+  NRSCop <- get_NRSZooSpeciesCopepod()
   fwrite(NRSCop, file = paste0(outD,.Platform$file.sep,"NRS_Zoop_CopesMat.csv"), row.names = FALSE)
   rm(NRSCop)
 
   #### Non-Copepods ####
-
-  NRSnCop <- getNRSZooSpeciesNonCopepod()
+  NRSnCop <- get_NRSZooSpeciesNonCopepod()
   fwrite(NRSnCop, file = paste0(outD,.Platform$file.sep,"NRS_Zoop_NoncopesMat.csv"), row.names = FALSE)
   rm(NRSnCop)
+
+  #### Create NRS Indices File ####
+  IndicesNRS <- create_indices_nrs()
+  fwrite(Indices, file = paste0(outD,.Platform$file.sep,"NRS_Indices.csv"), row.names = FALSE)
+
+  #### Create NRS BGC File ####
+  IndicesNRS <- create_bgc()
+  fwrite(BGC, file = paste0(outD,.Platform$file.sep,"NRS_CombinedWaterQuality.csv"), row.names = FALSE)
+
 }

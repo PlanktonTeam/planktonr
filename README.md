@@ -4,6 +4,10 @@
 # planktonr <a href='https://github.com/PlanktonTeam/planktonr'><img src='man/figures/planktonr.png' align="right" height="139" /></a>
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/PlanktonTeam/planktonr/workflows/R-CMD-check/badge.svg)](https://github.com/PlanktonTeam/planktonr/actions)
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
 The goal of planktonr is to …
@@ -17,8 +21,13 @@ devtools::build\_readme()
 
 usethis::use\_vignette(“my-vignette”) \# To create your first vignette  
 usethis::use\_pkgdown() \# Run once to configure your package to use
-pkgdown  
-pkgdown::build\_site() \# Use pkgdown to update your website
+pkgdown
+
+pkgdown::build\_site() \# Use pkgdown to update your website  
+devtools::build\_readme() \# Update the readme
+
+use\_lifecycle\_badge(“Experimental”)
+usethis::use\_github\_action\_check\_standard()
 
 ## Installation
 

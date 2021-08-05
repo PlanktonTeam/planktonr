@@ -23,83 +23,87 @@ export_processed_cpr <- function(outD){
   #### CPR Phytoplankton #######################################################################################################################################################
   #### CPR PHYTO RAW ####
 
-  cprRawP <- getCPRPhytoRaw()
+  cprRawP <- get_CPRPhytoRaw()
   fwrite(cprRawP, file = paste0(outD,.Platform$file.sep,"CPR_Phyto_RawMat.csv", row.names = FALSE))
   rm(cprRawP)
 
   #### CPR PHYTO ABUND HTG ####
 
-  cprHTGP <- getCPRPhytoHTG()
+  cprHTGP <- get_CPRPhytoHTG()
   fwrite(cprHTGP, file = paste0(outD,.Platform$file.sep,"CPR_Phyto_HTGMat.csv", row.names = FALSE))
   rm(cprHTGP)
 
   #### CPR PHYTO ABUND GENUS ####
 
-  cprGenP <- getCPRPhytoGenus()
+  cprGenP <- get_CPRPhytoGenus()
   fwrite(cprGenP, file = paste0(outD,.Platform$file.sep,"CPR_Phyto_GenusMat.csv", row.names = FALSE))
   rm(cprGenP)
 
   #### CPR PHYTO ABUND SPECIES ####
 
-  cprSpecP <- getCPRPhytoSpecies()
+  cprSpecP <- get_CPRPhytoSpecies()
   fwrite(cprSpecP, file = paste0(outD,.Platform$file.sep,"CPR_Phyto_SpeciesMat.csv", row.names = FALSE))
   rm(cprSpecP)
 
   ###################################################################
   #### CPR PHYTO RAW ####
 
-  cprRawPB <- getCPRPhytoRawBV()
+  cprRawPB <- get_CPRPhytoRawBV()
   fwrite(cprRawPB, file = paste0(outD,.Platform$file.sep,"CPR_Phyto_BioVolRawMat.csv", row.names = FALSE))
   rm(cprRawPB)
 
   #### CPR PHYTO BIOV HTG ####
 
-  cprHTGB <- getCPRHTGBV()
+  cprHTGB <- get_CPRHTGBV()
   fwrite(cprHTGB, file = paste0(outD,.Platform$file.sep,"CPR_Phyto_BioVolHTGMat.csv", row.names = FALSE))
   rm(cprHTGPB1)
 
   #### CPR PHYTO BIOV GENUS ####
 
-  cprGenPB <- getCPRPhytoGenusBV()
+  cprGenPB <- get_CPRPhytoGenusBV()
   fwrite(cprGenPB, file = paste0(outD,.Platform$file.sep,"CPR_Phyto_BioVolGenusMat.csv", row.names = FALSE))
   rm(cprGenPB)
 
   #### CPR PHYTO BIOV SPECIES ####
 
-  cprSpecPB <- getCPRPhytoSpeciesBV()
+  cprSpecPB <- get_CPRPhytoSpeciesBV()
   fwrite(cprSpecPB, file = paste0(outD,.Platform$file.sep,"CPR_Phyto_BioVolSpeciesMat.csv", row.names = FALSE))
   rm(cprSpecPB)
 
   #### CPR Zooplankton #### ################################################################################################################################
 
   #### CPR ZOOP RAW ####
-  cprRawZ <- getCPRZooRaw()
+  cprRawZ <- get_CPRZooRaw()
   fwrite(cprRawZ, file = paste0(outD,.Platform$file.sep,"CPR_Zoop_RawMat.csv", row.names = FALSE))
   rm(cprRawZ)
 
   ### CPR Zooplankton Sex and stage binned
 
-  cprIdsZ <- getCPRZooRawSS()
+  cprIdsZ <- get_CPRZooRawSS()
   fwrite(cprIdsZ, file = paste0(outD,.Platform$file.sep,"CPR_Zoop_IDsMat.csv", row.names = FALSE))
   rm(cprIdsZ)
 
   #### CPR ZOOP HTG ####
-  cprHTGZ <- getCPRZooHTG()
+  cprHTGZ <- get_CPRZooHTG()
   fwrite(cprHTGZ, file = paste0(outD,.Platform$file.sep,"CPR_Zoop_HTGMat.csv", row.names = FALSE))
   rm(cprHTGZ)
 
   #### CPR ZOOP GENUS ####
-  cprGenZ <- getCPRZooGenus()
+  cprGenZ <- get_CPRZooGenus()
   fwrite(cprGenZ, file = paste0(outD,.Platform$file.sep,"CPR_Zoop_GenusMat.csv", row.names = FALSE))
   rm(cprGenZ)
 
   #### CPR ZOOP COPEPODS ####
-  cprCop <- getCPRZooCopepod()
+  cprCop <- get_CPRZooCopepod()
   fwrite(cprCop, file = paste0(outD,.Platform$file.sep,"CPR_Zoop_CopesMat.csv", row.names = FALSE))
   rm(cprCop)
 
   #### CPR ZOOP NON-COPEPODS ####
-  cprnCop <- getCPRZooNonCopepod()
+  cprnCop <- get_CPRZooNonCopepod()
   fwrite(cprnCop, file = paste0(outD,.Platform$file.sep,"CPR_Zoop_NoncopesMat.csv", row.names = FALSE))
   rm(cprnCop)
+
+  #### Create CPR Indices File ####
+  IndicesCPR <- create_indices_cpr()
+  fwrite(IndicesCPR, file = paste0("Output/",.Platform$file.sep, "CPR_Indices.csv"), row.names = FALSE)
 }
