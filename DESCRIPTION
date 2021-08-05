@@ -21,11 +21,15 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Imports:
     dplyr,
-    magrittr,
-    readr,
-    tidyr,
-    stringr,
-    rlang,
+    forcats,
     lubridate,
     lutz,
+    magrittr,
+    readr,
+    rlang,
+    sf,
+    stringr,
+    tidyr,
     vegan
+Depends: 
+    R (>= 2.10)
