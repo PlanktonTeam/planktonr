@@ -39,7 +39,27 @@ get_NRSTrips <- function(){
                   SampleDateUTC = lubridate::with_tz(lubridate::force_tzs(SampleDateLocal, tz, roll = TRUE), "UTC")) %>%
     dplyr::select(TripCode:SampleDateLocal, Year:SampleDateUTC, Biomass_mgm3, Secchi_m, SampleType) %>%
     dplyr::select(-tz)
-  return(NRSSamp)
+}
+
+# JDE adding this as it seems to be missed.
+
+#' Get raw phytoplankton data in pivoted format
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' df <- get_NRSRawPhytoPivot()
+get_NRSRawPhytoPivot <- function(){
+
+  NRSRawP <- left_join(get_NRSTrips() %>% filter(grepl('P', SampleType)),
+                       get_NRSPhytoData(), by = "TripCode") %>%
+    select(-c(TaxonGroup, Genus, Species, Biovolume_um3L, SPCODE, SampleType)) %>%
+    arrange(-desc(TaxonName)) %>%
+    pivot_wider(names_from = TaxonName, values_from = Cells_L, values_fill = list(Cells_L = 0)) %>%
+    arrange(desc(SampleDateLocal)) %>%
+    mutate(SampleDateLocal = as.character(SampleDateLocal))
+
 }
 
 
@@ -55,7 +75,6 @@ get_NRSPhytoData <- function(){
   NRSPdat <- readr::read_csv(paste0(get_raw_plankton(), "BGC_Phyto_Raw.csv"), na = "") %>%
     dplyr::rename(TripCode = TRIP_CODE, TaxonName = TAXON_NAME, TaxonGroup = TAXON_GROUP, Genus = GENUS, Species = SPECIES,
                   Cells_L = CELL_L, Biovolume_um3L = BIOVOLUME_UM3L)
-  return(NRSPdat)
 }
 
 
