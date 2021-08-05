@@ -20,6 +20,19 @@ knitr::opts_chunk$set(
 
 The goal of planktonr is to ...
 
+
+## Tips while writing package
+devtools::document()
+pkgload::load_all()
+devtools::check()
+devtools::build_readme()
+
+
+usethis::use_vignette("my-vignette") # To create your first vignette
+
+usethis::use_pkgdown() # Run once to configure your package to use pkgdown
+pkgdown::build_site() # Use pkgdown to update your website
+
 ## Installation
 
 You can install the released version of planktonr from [CRAN](https://CRAN.R-project.org) with:

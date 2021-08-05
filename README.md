@@ -8,6 +8,16 @@
 
 The goal of planktonr is to …
 
+## Tips while writing package
+
+devtools::document() pkgload::load\_all() devtools::check()
+devtools::build\_readme()
+
+usethis::use\_vignette(“my-vignette”) \# To create your first vignette
+
+usethis::use\_pkgdown() \# Run once to configure your package to use
+pkgdown pkgdown::build\_site() \# Use pkgdown to update your website
+
 ## Installation
 
 You can install the released version of planktonr from
