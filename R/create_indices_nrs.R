@@ -11,6 +11,7 @@
 #'
 #' @examples
 #' df <- create_indices_nrs()
+#' @importFrom magrittr "%>%"
 create_indices_nrs <- function(){
   # source("../Satellite/fIMOS_MatchAltimetry.R")
   # source("../Satellite/fIMOS_MatchMODIS.R")
@@ -71,7 +72,7 @@ create_indices_nrs <- function(){
     # Extract refence depth (z)
     refz <- mldData %>%
       dplyr::mutate(refd = abs(SampleDepth_m - refDepth), # find depth nearest to 10 m
-                    rankrefd = ave(refd, FUN = . %>% order %>% order)) %>%
+                    rankrefd = stats::ave(refd, FUN = . %>% order %>% order)) %>%
       dplyr::filter(rankrefd == 1)
 
     # Reference Temperature
@@ -82,14 +83,14 @@ create_indices_nrs <- function(){
 
     mld_t <- mldData %>%
       dplyr::mutate(temp = abs(CTDTemperature - refT),
-                    ranktemp = ave(temp, FUN = . %>% order %>% order)) %>%
+                    ranktemp = stats::ave(temp, FUN = . %>% order %>% order)) %>%
       dplyr::filter(ranktemp == 1)
     MLD_temp <- mld_t$SampleDepth_m
 
     refS <- refz$CTDSalinity - 0.03 # temp at 10 m minus 0.4
     mld_s <- mldData %>%
       dplyr::mutate(temp = abs(CTDSalinity - refS),
-                    ranksal = ave(temp, FUN = . %>% order %>% order)) %>%
+                    ranksal = stats::ave(temp, FUN = . %>% order %>% order)) %>%
       dplyr::filter(ranksal == 1)
     MLD_sal <- mld_s$SampleDepth_m
 

@@ -15,8 +15,9 @@
 #' @export
 #'
 #' @examples
+#'
+#'@importFrom magrittr "%>%"
 export_processed_nrs <- function(outD){
-
 
   #### NRS Phytoplankton ####
 
