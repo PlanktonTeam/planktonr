@@ -4,10 +4,10 @@
 #' @export
 #'
 #' @examples
-#' df <- get_CPRTrips()
+#' df <- pr_get_CPRTrips()
 #' @importFrom magrittr "%>%"
-get_CPRTrips <- function(){
-  CPRTrips <- readr::read_csv(paste0(get_raw_plankton(), "CPR_Trips.csv"), na = "") %>%
+pr_get_CPRTrips <- function(){
+  CPRTrips <- readr::read_csv(paste0(pr_get_site(), "CPR_Trips.csv"), na = "") %>%
     dplyr::rename(TripCode = TRIP_CODE, StartLatitude = STARTLATITUDE, StartLongitude = STARTLONGITUDE,
                   StartSampleDateUTC = STARTSAMPLEDATEUTC, EndSampleDateUTC = ENDSAMPLEDATEUTC,
                   EndLatitude = ENDLATITUDE, EndLongitude = ENDLONGITUDE,
@@ -21,10 +21,10 @@ get_CPRTrips <- function(){
 #' @export
 #'
 #' @examples
-#' df <- get_CPRSamps()
+#' df <- pr_get_CPRSamps()
 #' @importFrom magrittr "%>%"
-get_CPRSamps <- function(){
-  CPRSamps <- readr::read_csv(paste0(get_raw_plankton(), "CPR_Samp.csv"), na = "") %>%
+pr_get_CPRSamps <- function(){
+  CPRSamps <- readr::read_csv(paste0(pr_get_site(), "CPR_Samp.csv"), na = "") %>%
     dplyr::rename(Sample = SAMPLE, Latitude = LATITUDE, Longitude = LONGITUDE, SampleDateUTC = SAMPLEDATEUTC,
                   SampleType = SAMPLETYPE, Biomass_mgm3 = BIOMASS_MGM3, TripCode = TRIP_CODE) %>%
     dplyr::filter(!is.na(SampleType)) %>%
@@ -41,10 +41,10 @@ get_CPRSamps <- function(){
 #' @export
 #'
 #' @examples
-#' df <- get_CPRPhytoData()
+#' df <- pr_get_CPRPhytoData()
 #' @importFrom magrittr "%>%"
-get_CPRPhytoData <- function(){
-  cprPdat <- readr::read_csv(paste0(get_raw_plankton(), "CPR_Phyto_Raw.csv"), na = "") %>%
+pr_get_CPRPhytoData <- function(){
+  cprPdat <- readr::read_csv(paste0(pr_get_site(), "CPR_Phyto_Raw.csv"), na = "") %>%
     dplyr::rename(Sample = SAMPLE, TaxonName = TAXON_NAME, TaxonGroup = TAXON_GROUP, Genus = GENUS, Species = SPECIES, PAbun_m3 = PHYTO_ABUNDANCE_M3,
                   BioVolume_um3m3 = BIOVOL_UM3M3) %>%
     dplyr::select(-c(FOV_COUNT, SAMPVOL_M3))
@@ -56,10 +56,10 @@ get_CPRPhytoData <- function(){
 #' @export
 #'
 #' @examples
-#' df <- get_CPRPhytoCountData()
+#' df <- pr_get_CPRPhytoCountData()
 #' @importFrom magrittr "%>%"
-get_CPRPhytoCountData <- function(){
-  cprPdat <- readr::read_csv(paste0(get_raw_plankton(), "CPR_Phyto_Raw.csv"), na = "") %>%
+pr_get_CPRPhytoCountData <- function(){
+  cprPdat <- readr::read_csv(paste0(pr_get_site(), "CPR_Phyto_Raw.csv"), na = "") %>%
     dplyr::rename(Sample = SAMPLE, TaxonName = TAXON_NAME, TaxonGroup = TAXON_GROUP, Genus = GENUS, Species = SPECIES, SampVol_m3 = SAMPVOL_M3,
                   FovCount = FOV_COUNT) %>%
     dplyr::select(-c(BIOVOL_UM3M3, PHYTO_ABUNDANCE_M3))
@@ -71,10 +71,10 @@ get_CPRPhytoCountData <- function(){
 #' @export
 #'
 #' @examples
-#' df <- get_CPRPhytoChangeLog()
+#' df <- pr_get_CPRPhytoChangeLog()
 #' @importFrom magrittr "%>%"
-get_CPRPhytoChangeLog <- function(){
-  cprPcl <- readr::read_csv(paste0(get_raw_plankton(), "CPR_Phyto_ChangeLog.csv"), na = "") %>%
+pr_get_CPRPhytoChangeLog <- function(){
+  cprPcl <- readr::read_csv(paste0(pr_get_site(), "CPR_Phyto_ChangeLog.csv"), na = "") %>%
     dplyr::rename(TaxonName = TAXON_NAME, StartDate = STARTDATE, ParentName = PARENT_NAME)
 }
 
@@ -84,10 +84,10 @@ get_CPRPhytoChangeLog <- function(){
 #' @export
 #'
 #' @examples
-#' df <- get_CPRZooCountData()
+#' df <- pr_get_CPRZooCountData()
 #' @importFrom magrittr "%>%"
-get_CPRZooCountData <- function() {
-  CPRZooCount <- readr::read_csv(paste0(get_raw_plankton(), "CPR_Zoop_Raw.csv"), na = "(null)") %>%
+pr_get_CPRZooCountData <- function() {
+  CPRZooCount <- readr::read_csv(paste0(pr_get_site(), "CPR_Zoop_Raw.csv"), na = "(null)") %>%
     dplyr::rename(TaxonName = TAXON_NAME, Copepod = TAXON_GROUP, TaxonGroup = TAXON_GRP01, Sample = SAMPLE,
                   Genus= GENUS, Species = SPECIES, TaxonCount = COUNTS, SampVol_m3 = SAMPVOL_M3) %>%
     dplyr::select(-ZOOP_ABUNDANCE_M3)
@@ -99,10 +99,10 @@ get_CPRZooCountData <- function() {
 #' @export
 #'
 #' @examples
-#' df <- get_CPRZooData()
+#' df <- pr_get_CPRZooData()
 #' @importFrom magrittr "%>%"
-get_CPRZooData <- function(){
-  cprZdat <- readr::read_csv(paste0(get_raw_plankton(), "CPR_Zoop_Raw.csv"), na = "") %>%
+pr_get_CPRZooData <- function(){
+  cprZdat <- readr::read_csv(paste0(pr_get_site(), "CPR_Zoop_Raw.csv"), na = "") %>%
     dplyr::rename(Sample = SAMPLE, TaxonName = TAXON_NAME, Copepod = TAXON_GROUP, TaxonGroup = TAXON_GRP01,
                   Genus = GENUS, Species = SPECIES, ZAbund_m3 = ZOOP_ABUNDANCE_M3) %>%
     dplyr::select(-c(COUNTS, SAMPVOL_M3))
@@ -114,10 +114,10 @@ get_CPRZooData <- function(){
 #' @export
 #'
 #' @examples
-#' df <- get_CPRZooChangeLog()
+#' df <- pr_get_CPRZooChangeLog()
 #' @importFrom magrittr "%>%"
-get_CPRZooChangeLog <- function(){
-  cprZcl <- readr::read_csv(paste0(get_raw_plankton(), "CPR_Zoop_ChangeLog.csv"), na = "") %>%
+pr_get_CPRZooChangeLog <- function(){
+  cprZcl <- readr::read_csv(paste0(pr_get_site(), "CPR_Zoop_ChangeLog.csv"), na = "") %>%
     dplyr::rename(TaxonName = TAXON_NAME, StartDate = STARTDATE, ParentName = PARENT_NAME)
 }
 
@@ -128,13 +128,13 @@ get_CPRZooChangeLog <- function(){
 #' @export
 #'
 #' @examples
-#' df <- get_CPRPhytoRaw()
+#' df <- pr_get_CPRPhytoRaw()
 #' @importFrom magrittr "%>%"
-get_CPRPhytoRaw <- function(){
-  cprRawP <- get_CPRSamps() %>%
+pr_get_CPRPhytoRaw <- function(){
+  cprRawP <- pr_get_CPRSamps() %>%
     dplyr::filter(grepl("P", SampleType)) %>%
     dplyr::select(-c(PCI, SampleType, Biomass_mgm3)) %>%
-    dplyr::left_join(get_CPRPhytoData(), by = "Sample") %>%
+    dplyr::left_join(pr_get_CPRPhytoData(), by = "Sample") %>%
     dplyr::select(c(Sample:TaxonName,PAbun_m3)) %>%
     dplyr::arrange(-dplyr::desc(TaxonName)) %>%
     dplyr::mutate(TaxonName = ifelse(is.na(TaxonName), "No taxa found", TaxonName)) %>% # for segments where no phyto was found
@@ -149,14 +149,14 @@ get_CPRPhytoRaw <- function(){
 #' @export
 #'
 #' @examples
-#' df <- get_CPRPhytoHTG
+#' df <- pr_get_CPRPhytoHTG
 #' @importFrom magrittr "%>%"
-get_CPRPhytoHTG <- function(){
-  cprHTGP1 <- get_CPRPhytoData() %>% dplyr::group_by(Sample, TaxonGroup) %>%
+pr_get_CPRPhytoHTG <- function(){
+  cprHTGP1 <- pr_get_CPRPhytoData() %>% dplyr::group_by(Sample, TaxonGroup) %>%
     dplyr::summarise(PAbun_m3 = sum(PAbun_m3, na.rm = TRUE), .groups = "drop") %>%
     dplyr::filter(!TaxonGroup %in% c("Other","Coccolithophore", "Diatom","Protozoa"))
 
-  cprHTGP <-  get_CPRSamps() %>%
+  cprHTGP <-  pr_get_CPRSamps() %>%
     dplyr::filter(grepl("P", SampleType)) %>%
     dplyr::select(-c(PCI, SampleType, Biomass_mgm3)) %>% dplyr::left_join(cprHTGP1, by = "Sample") %>%
     dplyr::mutate(TaxonGroup = ifelse(is.na(TaxonGroup), "Ciliate", TaxonGroup),
@@ -173,19 +173,19 @@ get_CPRPhytoHTG <- function(){
 #' @export
 #'
 #' @examples
-#' df <- get_CPRPhytoGenus()
+#' df <- pr_get_CPRPhytoGenus()
 #' @importFrom magrittr "%>%"
-get_CPRPhytoGenus <- function(){
+pr_get_CPRPhytoGenus <- function(){
   # Bring in all NRS zooplankton samples, data and changelog once
-  cprPdat <- get_CPRPhytoData()
+  cprPdat <- pr_get_CPRPhytoData()
 
-  cprPcl <- get_CPRPhytoChangeLog() %>%
+  cprPcl <- pr_get_CPRPhytoChangeLog() %>%
     dplyr::mutate(genus1 = stringr::word(TaxonName, 1),
                   genus2 = stringr::word(ParentName, 1)) %>%
     dplyr::mutate(same = ifelse(genus1==genus2, "yes", "no")) %>%
     dplyr::filter(same == "no")# no changes at genera level
 
-  cprSamp <- get_CPRSamps() %>%
+  cprSamp <- pr_get_CPRSamps() %>%
     dplyr::filter(grepl("P", SampleType)) %>%
     dplyr::select(-c(PCI, SampleType, Biomass_mgm3))
 
@@ -262,17 +262,17 @@ get_CPRPhytoGenus <- function(){
 #' @export
 #'
 #' @examples
-#' df <- get_CPRPhytoSpecies()
+#' df <- pr_get_CPRPhytoSpecies()
 #' @importFrom magrittr "%>%"
-get_CPRPhytoSpecies <-  function(){
+pr_get_CPRPhytoSpecies <-  function(){
   # Bring in all NRS zooplankton samples, data and changelog once
-  cprPdat <- get_CPRPhytoData()
+  cprPdat <- pr_get_CPRPhytoData()
 
-  cprPcl <- get_CPRPhytoChangeLog() %>%
+  cprPcl <- pr_get_CPRPhytoChangeLog() %>%
     dplyr::mutate(same = ifelse(TaxonName == ParentName, "yes", "no")) %>%
     dplyr::filter(same == "no") # no changes at genera level
 
-  cprSamp <- get_CPRSamps() %>%
+  cprSamp <- pr_get_CPRSamps() %>%
     dplyr::filter(grepl("P", SampleType)) %>%
     dplyr::select(-c(PCI, SampleType, Biomass_mgm3))
 
@@ -354,13 +354,13 @@ get_CPRPhytoSpecies <-  function(){
 #' @export
 #'
 #' @examples
-#' df <- get_CPRPhytoRawBV()
+#' df <- pr_get_CPRPhytoRawBV()
 #' @importFrom magrittr "%>%"
-get_CPRPhytoRawBV <- function(){
-  cprRawP <- get_CPRSamps() %>%
+pr_get_CPRPhytoRawBV <- function(){
+  cprRawP <- pr_get_CPRSamps() %>%
     dplyr::filter(grepl("P", SampleType)) %>%
     dplyr::select(-c(PCI, SampleType, Biomass_mgm3)) %>%
-    dplyr::left_join(get_CPRPhytoData(), by = "Sample") %>%
+    dplyr::left_join(pr_get_CPRPhytoData(), by = "Sample") %>%
     dplyr::select(c(Sample:TaxonName,BioVolume_um3m3)) %>%
     dplyr::arrange(-dplyr::desc(TaxonName)) %>%
     dplyr::mutate(TaxonName = ifelse(is.na(TaxonName), "No taxa found", TaxonName)) %>% # for segments where no phyto was found
@@ -375,15 +375,15 @@ get_CPRPhytoRawBV <- function(){
 #' @export
 #'
 #' @examples
-#' df <- get_CPRHTGBV()
+#' df <- pr_get_CPRHTGBV()
 #' @importFrom magrittr "%>%"
-get_CPRHTGBV <- function(){
-  cprHTGPB1 <- get_CPRPhytoData() %>%
+pr_get_CPRHTGBV <- function(){
+  cprHTGPB1 <- pr_get_CPRPhytoData() %>%
     dplyr::group_by(Sample, TaxonGroup) %>%
     dplyr::summarise(PBioV_um3m3 = sum(BioVolume_um3m3, na.rm = TRUE), .groups = "drop") %>%
     dplyr::filter(!TaxonGroup %in% c("Other","Coccolithophore", "Diatom","Protozoa"))
 
-  cprHTGPB1 <-  get_CPRSamps()  %>%
+  cprHTGPB1 <-  pr_get_CPRSamps()  %>%
     dplyr::filter(grepl("P", SampleType)) %>%
     dplyr::select(-c(PCI, SampleType, Biomass_mgm3)) %>%
     dplyr::left_join(cprHTGPB1, by = "Sample") %>%
@@ -400,19 +400,19 @@ get_CPRHTGBV <- function(){
 #' @export
 #'
 #' @examples
-#' df <- get_CPRPhytoGenusBV()
+#' df <- pr_get_CPRPhytoGenusBV()
 #' @importFrom magrittr "%>%"
-get_CPRPhytoGenusBV <- function(){
+pr_get_CPRPhytoGenusBV <- function(){
   # Bring in all NRS zooplankton samples, data and changelog once
-  cprPdat <- get_CPRPhytoData()
+  cprPdat <- pr_get_CPRPhytoData()
 
-  cprPcl <- get_CPRPhytoChangeLog() %>%
+  cprPcl <- pr_get_CPRPhytoChangeLog() %>%
     dplyr::mutate(genus1 = stringr::word(TaxonName, 1),
                   genus2 = stringr::word(ParentName, 1)) %>%
     dplyr::mutate(same = ifelse(genus1==genus2, "yes", "no")) %>%
     dplyr::filter(same == "no")# no changes at genera level
 
-  cprSamp <- get_CPRSamps() %>%
+  cprSamp <- pr_get_CPRSamps() %>%
     dplyr::filter(grepl("P", SampleType)) %>%
     dplyr::select(-c(PCI, SampleType, Biomass_mgm3))
 
@@ -486,17 +486,17 @@ get_CPRPhytoGenusBV <- function(){
 #' @export
 #'
 #' @examples
-#' df <- get_CPRPhytoSpeciesBV()
+#' df <- pr_get_CPRPhytoSpeciesBV()
 #' @importFrom magrittr "%>%"
-get_CPRPhytoSpeciesBV <- function(){
+pr_get_CPRPhytoSpeciesBV <- function(){
   # Bring in all NRS zooplankton samples, data and changelog once
-  cprPdat <- get_CPRPhytoData()
+  cprPdat <- pr_get_CPRPhytoData()
 
-  cprPcl <- get_CPRPhytoChangeLog() %>%
+  cprPcl <- pr_get_CPRPhytoChangeLog() %>%
     dplyr::mutate(same = ifelse(TaxonName == ParentName, "yes", "no")) %>%
     dplyr::filter(same == "no") # no changes at genera level
 
-  cprSamp <- get_CPRSamps() %>%
+  cprSamp <- pr_get_CPRSamps() %>%
     dplyr::filter(grepl("P", SampleType)) %>%
     dplyr::select(-c(PCI, SampleType, Biomass_mgm3))
 
@@ -574,13 +574,13 @@ get_CPRPhytoSpeciesBV <- function(){
 #' @export
 #'
 #' @examples
-#' df <- get_CPRZooRaw()
+#' df <- pr_get_CPRZooRaw()
 #' @importFrom magrittr "%>%"
-get_CPRZooRaw <- function(){
-  cprRawZ <- get_CPRSamps() %>%
+pr_get_CPRZooRaw <- function(){
+  cprRawZ <- pr_get_CPRSamps() %>%
     dplyr::filter(grepl("Z", SampleType)) %>%
     dplyr::select(-c(PCI, SampleType, Biomass_mgm3)) %>%
-    dplyr::left_join(get_CPRZooData(), by = "Sample") %>%
+    dplyr::left_join(pr_get_CPRZooData(), by = "Sample") %>%
     dplyr::select(-c("Copepod", "TaxonGroup", "Genus", "Species", 'SPCODE')) %>%
     dplyr::arrange(-dplyr::desc(TaxonName)) %>%
     dplyr::mutate(TaxonName = ifelse(is.na(TaxonName), "No taxa found", TaxonName)) %>%
@@ -596,13 +596,13 @@ get_CPRZooRaw <- function(){
 #' @export
 #'
 #' @examples
-#' df <- get_CPRZooRawSS()
+#' df <- pr_get_CPRZooRawSS()
 #' @importFrom magrittr "%>%"
-get_CPRZooRawSS <- function(){
-  CPRIdsZ <- get_CPRSamps() %>%
+pr_get_CPRZooRawSS <- function(){
+  CPRIdsZ <- pr_get_CPRSamps() %>%
     dplyr::filter(grepl("Z", SampleType)) %>%
     dplyr::select(-c(PCI, SampleType, Biomass_mgm3)) %>%
-    dplyr::left_join(get_CPRZooData(), by = "Sample") %>%
+    dplyr::left_join(pr_get_CPRZooData(), by = "Sample") %>%
     dplyr::mutate(TaxonName = ifelse(is.na(Genus), TaxonName, paste0(Genus, ' ', Species))) %>%
     dplyr::group_by(TripCode, Latitude, Longitude, SampleDateUTC, Year, Month, Day, Time_24hr, TaxonName) %>%
     dplyr::summarise(ZAbund_m3 = sum(ZAbund_m3, na.rm = TRUE)) %>%
@@ -617,15 +617,15 @@ get_CPRZooRawSS <- function(){
 #' @export
 #'
 #' @examples
-#' df <- get_CPRZooHTG()
+#' df <- pr_get_CPRZooHTG()
 #' @importFrom magrittr "%>%"
-get_CPRZooHTG <- function(){
-  cprHTGZ <- get_CPRZooData() %>%
+pr_get_CPRZooHTG <- function(){
+  cprHTGZ <- pr_get_CPRZooData() %>%
     dplyr::group_by(Sample, TaxonGroup) %>%
     dplyr::summarise(ZAbund_m3 = sum(ZAbund_m3, na.rm = TRUE), .groups = "drop") %>%
     dplyr::filter(!TaxonGroup %in% c("Other"))
 
-  cprHTGZ1 <- get_CPRSamps() %>%
+  cprHTGZ1 <- pr_get_CPRSamps() %>%
     dplyr::filter(grepl("Z", SampleType)) %>%
     dplyr::select(-c(PCI, SampleType, Biomass_mgm3)) %>%
     dplyr::left_join(cprHTGZ, by = "Sample") %>%
@@ -643,19 +643,19 @@ get_CPRZooHTG <- function(){
 #' @export
 #'
 #' @examples
-#' df <- get_CPRZooGenus()
+#' df <- pr_get_CPRZooGenus()
 #' @importFrom magrittr "%>%"
-get_CPRZooGenus <- function(){
+pr_get_CPRZooGenus <- function(){
   # Bring in all NRS zooplankton samples, data and changelog once
-  cprZdat <- get_CPRZooData()
+  cprZdat <- pr_get_CPRZooData()
 
-  cprZcl <- get_CPRZooChangeLog() %>%
+  cprZcl <- pr_get_CPRZooChangeLog() %>%
     dplyr::mutate(genus1 = stringr::word(TaxonName, 1),
                   genus2 = stringr::word(ParentName, 1)) %>%
     dplyr::mutate(same = ifelse(genus1==genus2, "yes", "no")) %>%
     dplyr::filter(same == "no")# no changes at genera level
 
-  cprSamp <- get_CPRSamps() %>%
+  cprSamp <- pr_get_CPRSamps() %>%
     dplyr::filter(grepl("Z", SampleType)) %>%
     dplyr::select(-c(PCI, SampleType, Biomass_mgm3))
 
@@ -727,17 +727,17 @@ get_CPRZooGenus <- function(){
 #' @export
 #'
 #' @examples
-#' df <- get_CPRZooCopepod()
+#' df <- pr_get_CPRZooCopepod()
 #' @importFrom magrittr "%>%"
-get_CPRZooCopepod <- function(){
+pr_get_CPRZooCopepod <- function(){
   # Bring in all NRS zooplankton samples, data and changelog once
-  cprZdat <- get_CPRZooData()
+  cprZdat <- pr_get_CPRZooData()
 
-  cprZcl <- get_CPRZooChangeLog()%>%
+  cprZcl <- pr_get_CPRZooChangeLog()%>%
     dplyr::mutate(same = ifelse(TaxonName == ParentName, "yes", "no")) %>%
     dplyr::filter(same == "no") # no changes at genera level
 
-  cprSamp <- get_CPRSamps() %>%
+  cprSamp <- pr_get_CPRSamps() %>%
     dplyr::filter(grepl("Z", SampleType)) %>%
     dplyr::select(-c(PCI, SampleType, Biomass_mgm3))
 
@@ -819,17 +819,17 @@ get_CPRZooCopepod <- function(){
 #' @export
 #'
 #' @examples
-#' df <- get_CPRZooNonCopepod()
+#' df <- pr_get_CPRZooNonCopepod()
 #' @importFrom magrittr "%>%"
-get_CPRZooNonCopepod <- function(){
+pr_get_CPRZooNonCopepod <- function(){
   # Bring in all NRS zooplankton samples, data and changelog once
-  cprZdat <- get_CPRZooData()
+  cprZdat <- pr_get_CPRZooData()
 
-  cprZcl <- get_CPRZooChangeLog() %>%
+  cprZcl <- pr_get_CPRZooChangeLog() %>%
     dplyr::mutate(same = ifelse(TaxonName == ParentName, "yes", "no")) %>%
     dplyr::filter(same == "no") # no changes at genera level
 
-  cprSamp <- get_CPRSamps() %>%
+  cprSamp <- pr_get_CPRSamps() %>%
     dplyr::filter(grepl("Z", SampleType)) %>%
     dplyr::select(-c(PCI, SampleType, Biomass_mgm3))
 

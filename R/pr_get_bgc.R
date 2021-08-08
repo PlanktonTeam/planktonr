@@ -1,25 +1,13 @@
-## IMOS BGC Combined Water Quality Parameters
-## Claire Davies (CSIRO) and Jason D Everett (UQ/CSIRO)
-
-## Created: Aug 2020
-## Updated:
-## 24 Sept 2020 (Written to Git)
-## 6th October 2020
-#
-################################
-## Bring in data for combined water quality
-################################
-
 #' Create Biogeochemical data
 #'
 #' @return
 #' @export
 #'
 #' @examples
-#' df <- create_bgc()
+#' df <- get_bgc()
 #'
 #' @importFrom magrittr "%>%"
-create_bgc <- function(){
+get_bgc <- function(){
 
   # Each trip and depth combination for water quality parameters
   # the number of rows in this table should equal that in comb, if not look out for duplicates and replicates
@@ -110,19 +98,6 @@ create_bgc <- function(){
     dplyr::left_join(TSS, by = c("TripCode", "SampleDepth_m")) %>%
     dplyr::left_join(CTD, by = c("TripCode", "SampleDepth_m"))
 
-  # test table
-  # n should be 1, replicates or duplicate samples will have values > 1
-  # test <- BGC %>%
-  #   dplyr::group_by(TripCode, SampleDepth_m) %>%
-  #   dplyr::summarise(n = dplyr::n(),
-  #                    .groups = "drop")
 
   return(BGC)
 }
-
-# df <- create_bgc()
-# Check
-# max(test$n)
-
-# save to github
-#

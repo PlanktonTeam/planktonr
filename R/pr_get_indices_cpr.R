@@ -1,31 +1,18 @@
-## IMOS plankton data products Indices
-## Claire Davies (CSIRO) and Jason D Everett (UQ/CSIRO)
-
-## Created: Sept 2020
-## Updated: 11 Nov 2020
-
-
 #' Create a range of indices
 #'
 #' @return A dataframe with with NRS indices
 #' @export
 #'
 #' @examples
-#' df <- create_indices_cpr()
+#' df <- get_indices_cpr()
 #'
 #' @importFrom magrittr "%>%"
 #'
-create_indices_cpr <- function(){
-
-  get_sat_data <- FALSE
+get_indices_cpr <- function(){
 
   # Add the bioregions to the CPR data
   cprSampleInfo <- get_CPRSamps() %>%
     add_bioregions()
-
-  # ggplot2::ggplot() +
-  #   ggplot2::geom_point(data = cprSampleInfo, ggplot2::aes(x = Longitude, y = Latitude), colour = "black") +
-  #   ggplot2::geom_point(data = cprSampleInfo, ggplot2::aes(x = Longitude, y = Latitude, colour = BioRegion), size = 0.5)
 
   cprProps <- readr::read_csv(paste0(get_raw_plankton(), "CPR_SatData.csv"), na = "(null)") %>%
     dplyr::rename(Sample = SAMPLE, ChlorophyllSatellite_mgm3 = CHLA, WaterDepth_m = DEPTH_M)
@@ -234,32 +221,5 @@ create_indices_cpr <- function(){
     #  dplyr::left_join(satcpr %>% dplyr::select(Sample, sst_1d, chl_oc3_1d), by = ("Sample")) %>%  #add once run , GSLA, GSL, UCUR, VCUR
     dplyr::select(-Sample, -SampleType)
 
-  # # make indices table (nrows must always equal nrows of Trips) - old one for IMOS
-  # indices <-  cprTrips  %>%
-  #   dplyr::left_join(cprProps, by = ("Sample")) %>%
-  #   dplyr::left_join(TZoocpr, by = ("Sample")) %>%
-  #   dplyr::left_join(TCopecpr, by = ("Sample")) %>%
-  #   dplyr::left_join(ACopeSizeCpr, by = ("Sample")) %>%
-  #   dplyr::left_join(HCratCpr %>% dplyr::select(-c('CO', 'CC')), by = ("Sample")) %>%
-  #   dplyr::left_join(CopepodEvennessCPR,  by = ("Sample")) %>%
-  #   dplyr::left_join(PhytoCcpr, by = ("Sample")) %>%
-  #   dplyr::left_join(TPhytoCpr, by = ("Sample")) %>%
-  #   dplyr::left_join(DDratcpr %>% dplyr::select(-c('Diatom', 'Dinoflagellate')), by = ("Sample")) %>%
-  #   dplyr::left_join(AvgCellVolcpr, by = ("Sample")) %>%
-  #   dplyr::left_join(PhytoEvencpr, by = ("Sample")) %>%
-  #   dplyr::left_join(DiaEvencpr, by = ("Sample")) %>%
-  #   dplyr::left_join(DinoEvencpr, by = ("Sample")) %>%
-  #   dplyr::select(-Sample)
-
   return(indices)
-
-
-  # test table
-  # n should be 1, replicates or duplicate samples will have values > 1
-  # test <- IndicesCPR %>%
-  # dplyr::group_by(Latitude, Longitude, SampleDateUTC) %>%
-  # dplyr::summarise(n = dplyr::n())
-
-  # max(test$n)
-
 }

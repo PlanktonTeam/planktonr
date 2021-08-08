@@ -1,9 +1,3 @@
-
-# Testing
-# devtools::document()
-# pkgload::load_all()
-# devtools::check()
-
 ## Functions for operating
 
 #' Remove extra tibble info
@@ -29,10 +23,9 @@ untibble <- function (tib) {
 #' @return A string with location of raw plankton data
 #' @export
 #' @examples
-#' file_loc <- get_raw_plankton()
+#' file_loc <- pr_get_site()
 #' @importFrom magrittr "%>%"
-get_raw_plankton <- function(){
-
+pr_get_site <- function(){
   raw <- "https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/RawData/"
   return(raw)
 }
@@ -44,10 +37,10 @@ get_raw_plankton <- function(){
 #' @export
 #'
 #' @examples
-#' df <- get_ZooInfo()
+#' df <- pr_get_ZooInfo()
 #' @importFrom magrittr "%>%"
-get_ZooInfo <- function(){
-  ZInfo <- readr::read_csv(paste0(get_raw_plankton(), "ZoopInfo.csv"), na = "") %>%
+pr_get_ZooInfo <- function(){
+  ZInfo <- readr::read_csv(paste0(pr_get_site(), "ZoopInfo.csv"), na = "") %>%
     dplyr::rename( "TaxonName" = "TAXON_NAME") %>%
     untibble()
 }

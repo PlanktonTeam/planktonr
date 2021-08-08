@@ -1,18 +1,12 @@
-## IMOS plankton data products Indices
-## Claire Davies (CSIRO) and Jason D Everett (UQ/CSIRO)
-
-## Created: Sept 2020
-## Updated:
-
 #' Create a range of indices
 #'
 #' @return A dataframe with with NRS indices
 #' @export
 #'
 #' @examples
-#' df <- create_indices_nrs()
+#' df <- get_indices_nrs()
 #' @importFrom magrittr "%>%"
-create_indices_nrs <- function(){
+get_indices_nrs <- function(){
   # note there are circumstances where a trip won"t have a phyto and a zoo samples due to loss of sample etc.
 
   NRSdat <- get_NRSTrips() %>%
@@ -323,10 +317,6 @@ create_indices_nrs <- function(){
     dplyr::left_join(MLD, by = ("TripCode")) %>%
     dplyr::left_join(Nuts, by = ("TripCode")) %>%
     dplyr::left_join(Pigments, by = ("TripCode"))
-
-  # test table
-  # n should be 1, replicates or duplicate samples will have values > 1
-  # test <- Indices %>% dplyr::group_by(TripCode) %>% dplyr::summarise(n = n())
 
   return(Indices)
 }

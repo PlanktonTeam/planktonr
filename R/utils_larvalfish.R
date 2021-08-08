@@ -4,10 +4,10 @@
 #' @export
 #'
 #' @examples
-#' df <- get_LFTrips()
+#' df <- pr_get_LFTrips()
 #' #' @importFrom magrittr "%>%"
-get_LFTrips <- function(){
-  LFSamp <- readr::read_csv(paste0(get_raw_plankton(), "BGC_LFish_Samples.csv"), na = "",
+pr_get_LFTrips <- function(){
+  LFSamp <- readr::read_csv(paste0(pr_get_site(), "BGC_LFish_Samples.csv"), na = "",
                             col_types = readr::cols(FLAG_COMMENT = readr::col_character())) %>%
     dplyr::rename(i_Sample = I_SAMPLE_ID, TripCode = TRIP_CODE, Station = STATIONNAME,
                   Latitude = LATITUDE, Longitude = LONGITUDE, SampleDateLocal = SAMPLEDATELOCAL,
@@ -32,10 +32,10 @@ get_LFTrips <- function(){
 #' @export
 #'
 #' @examples
-#' df <- get_LFData()
+#' df <- pr_get_LFData()
 #' #' @importFrom magrittr "%>%"
-get_LFData <- function(){
-  LFData <- readr::read_csv(paste0(get_raw_plankton(), "BGC_LFish_CountRaw.csv"), na = "") %>%
+pr_get_LFData <- function(){
+  LFData <- readr::read_csv(paste0(pr_get_site(), "BGC_LFish_CountRaw.csv"), na = "") %>%
     dplyr::rename(i_Sample = I_SAMPLE_ID, TripCode = TRIP_CODE,
                   ScientificName = SCIENTIFICNAME, SPCode = SPCODE,
                   Taxon_Count = TAXON_COUNT, Comments = COMMENTS)
@@ -48,12 +48,12 @@ get_LFData <- function(){
 #' @export
 #'
 #' @examples
-#' df <- get_LFCountAll()
+#' df <- pr_get_LFCountAll()
 #' @importFrom magrittr "%>%"
-get_LFCountAll <- function(){
+pr_get_LFCountAll <- function(){
 
-  LFCount <- get_LFTrips() %>%
-    dplyr::left_join(get_LFData() %>%
+  LFCount <- pr_get_LFTrips() %>%
+    dplyr::left_join(pr_get_LFData() %>%
                        dplyr::select(-Comments), by = c("i_Sample", "TripCode")) %>%
     dplyr::mutate(Header = paste(ScientificName, SPCode, sep = " ")) %>%
     dplyr::select(-ScientificName, -SPCode) %>%
@@ -70,12 +70,12 @@ get_LFCountAll <- function(){
 #' @export
 #'
 #' @examples
-#' df <- get_LFCountBGC()
+#' df <- pr_get_LFCountBGC()
 #' @importFrom magrittr "%>%"
-get_LFCountBGC <- function(){
-  LFCountBGC <- get_LFTrips() %>%
+pr_get_LFCountBGC <- function(){
+  LFCountBGC <- pr_get_LFTrips() %>%
     dplyr::filter(grepl('IMOS', ProjectName)) %>%
-    dplyr::left_join(get_LFData() %>%
+    dplyr::left_join(pr_get_LFData() %>%
                        dplyr::select(-Comments), by = c("i_Sample", "TripCode")) %>%
     dplyr::mutate(Header = paste(ScientificName, SPCode, sep = " ")) %>%
     dplyr::select(-c(ScientificName, SPCode, Temp_DegC, Salinity)) %>%

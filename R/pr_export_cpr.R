@@ -1,12 +1,3 @@
-## IMOS plankton data products
-## Claire Davies (CSIRO) and Jason D Everett (UQ/CSIRO)
-
-## Created: May 2020
-## Updated:
-## 21 July 2020 (Written to Git)
-## 22 September 2020 (Updated data file structure)
-## 13th November 2020 (Split CPR and NRS)
-
 #' Create all processed data products for CPR
 #'
 #' @param outD The directory where the output will be saved.
@@ -14,10 +5,10 @@
 #' @export
 #'
 #' @examples
-#'
+#' pr_export_cpr(".")
 #'@importFrom magrittr "%>%"
 #'
-export_processed_cpr <- function(outD){
+pr_export_cpr <- function(outD){
 
   #### CPR Phytoplankton #######################################################################################################################################################
   #### CPR PHYTO RAW ####
@@ -103,6 +94,7 @@ export_processed_cpr <- function(outD){
   rm(cprnCop)
 
   #### Create CPR Indices File ####
-  IndicesCPR <- create_indices_cpr()
-  data.table::fwrite(IndicesCPR, file = paste0(outD,.Platform$file.sep,"CPR_Indices.csv"), row.names = FALSE)
+  cprIndices <- create_indices_cpr()
+  data.table::fwrite(cprIndices, file = paste0(outD,.Platform$file.sep,"CPR_Indices.csv"), row.names = FALSE)
+  rm(cprIndices)
 }
