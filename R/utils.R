@@ -1,21 +1,5 @@
 ## Functions for operating
 
-#' Remove extra tibble info
-#'
-#' @param tib The tibble to convert to dataframe
-#'
-#' @return A dataframe with with all the tibble stuff removed
-#' @export
-#'
-#' @examples
-#' data(mtcars)
-#' tib <- dplyr::as_tibble(mtcars)
-#' df <- untibble(tib)
-untibble <- function (tib) {
-  tib <- data.frame(unclass(tib), check.names = FALSE, stringsAsFactors = FALSE)
-  return(tib)
-} ## escape the nonsense
-
 
 #' Get location of raw plankton data
 #'

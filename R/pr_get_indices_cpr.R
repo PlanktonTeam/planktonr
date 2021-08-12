@@ -59,7 +59,7 @@ pr_get_indices_cpr <- function(){
     dplyr::group_by(Sample, DIET) %>%
     dplyr::summarise(sumdiet = sum(ZAbund_m3 , na.rm = TRUE)) %>%
     tidyr::pivot_wider(values_from = sumdiet, names_from = DIET) %>%
-    dplyr::mutate(HerbivoreCarnivoreCopepodRatio = Carnivore / (Omnivore + Carnivore)) %>% untibble
+    dplyr::mutate(HerbivoreCarnivoreCopepodRatio = Carnivore / (Omnivore + Carnivore))
 
   # Diversity, evenness etc.
 
