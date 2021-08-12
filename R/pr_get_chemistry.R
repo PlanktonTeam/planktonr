@@ -11,14 +11,15 @@ pr_get_Chemistry <- function(){
                                col_types = readr::cols(DIC_UMOLKG = readr::col_double(),
                                                        OXYGEN_UMOLL = readr::col_double(),
                                                        OXYGEN_COMMENTS = readr::col_character())) %>%
-    dplyr::rename(TripCode = TRIP_CODE,
-                  SampleDepth_m = SAMPLEDEPTH_M, Silicate_umolL = SILICATE_UMOLL, Nitrate_umolL = NITRATE_UMOLL,
-                  Phosphate_umolL = PHOSPHATE_UMOLL, Salinity_PSU = SALINITY_PSU,
-                  Ammonium_umolL = AMMONIUM_UMOLL,
-                  Nitrite_umolL = NITRITE_UMOLL,
-                  DIC_umolkg = DIC_UMOLKG,
-                  TAlkalinity_umolkg = TALKALINITY_UMOLKG,
-                  Oxygen_umolL = OXYGEN_UMOLL) %>%
+    # dplyr::rename(TripCode = TRIP_CODE,
+    #               SampleDepth_m = SAMPLEDEPTH_M, Silicate_umolL = SILICATE_UMOLL, Nitrate_umolL = NITRATE_UMOLL,
+    #               Phosphate_umolL = PHOSPHATE_UMOLL, Salinity_PSU = SALINITY_PSU,
+    #               Ammonium_umolL = AMMONIUM_UMOLL,
+    #               Nitrite_umolL = NITRITE_UMOLL,
+    #               DIC_umolkg = DIC_UMOLKG,
+    #               TAlkalinity_umolkg = TALKALINITY_UMOLKG,
+    #               Oxygen_umolL = OXYGEN_UMOLL) %>%
+    pr_rename() %>%
     dplyr::mutate(SampleDepth_m = as.character(SampleDepth_m),
                   Silicate_umolL = ifelse(SILICATE_FLAG %in% c(3,4,9), NA, Silicate_umolL), # remove all data flagged as bad or probably bad
                   Phosphate_umolL = ifelse(PHOSPHATE_FLAG %in% c(3,4,9), NA, Phosphate_umolL),
@@ -41,6 +42,5 @@ pr_get_Chemistry <- function(){
                      Salinity_PSU = mean(Salinity_PSU, na.rm = TRUE),
                      .groups = "drop") %>%
     dplyr::ungroup() %>%
-    dplyr::mutate_all(~ replace(., is.na(.), NA)) %>%
-    untibble()
+    dplyr::mutate_all(~ replace(., is.na(.), NA))
 }

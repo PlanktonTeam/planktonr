@@ -41,6 +41,6 @@ pr_get_site <- function(){
 #' @importFrom magrittr "%>%"
 pr_get_ZooInfo <- function(){
   ZInfo <- readr::read_csv(paste0(pr_get_site(), "ZoopInfo.csv"), na = "") %>%
-    dplyr::rename( "TaxonName" = "TAXON_NAME") %>%
-    untibble()
+    pr_rename()
+    # dplyr::rename( "TaxonName" = "TAXON_NAME")
 }

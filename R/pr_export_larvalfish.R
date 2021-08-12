@@ -9,10 +9,10 @@
 #'@importFrom magrittr "%>%"
 export_processed_larvalfish <- function(outD){
 
-  LFCount <- get_LFCountAll()
+  LFCount <- pr_get_LFCountAll()
   data.table::fwrite(LFCount, file.path(outD, "NRS_LFCount_All.csv"))
 
 
-  LFCountBGC <- get_LFCountBGC()
+  LFCountBGC <- pr_get_LFCountBGC()
   data.table::fwrite(LFCountBGC, file.path(outD,"NRS_LFCount_BGC.csv"))
 }

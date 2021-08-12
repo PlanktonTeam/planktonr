@@ -37,7 +37,7 @@ pr_get_LFTrips <- function(){
 pr_get_LFData <- function(){
   LFData <- readr::read_csv(paste0(pr_get_site(), "BGC_LFish_CountRaw.csv"), na = "") %>%
     dplyr::rename(i_Sample = I_SAMPLE_ID, TripCode = TRIP_CODE,
-                  ScientificName = SCIENTIFICNAME, SPCode = SPCODE,
+                  ScientificName = SCIENTIFICNAME, SPCode = SPCode,
                   Taxon_Count = TAXON_COUNT, Comments = COMMENTS)
 }
 

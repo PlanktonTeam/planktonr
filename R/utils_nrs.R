@@ -8,8 +8,9 @@
 #' @importFrom magrittr "%>%"
 pr_get_NRSStation <- function(){
   NRSStation <- readr::read_csv(paste0(pr_get_site(), "BGC_StationInfo.csv"), na = "") %>%
-    dplyr::rename(Station = STATIONNAME, Latitude = LATITUDE, Longitude = LONGITUDE, StationDepth_m = STATIONDEPTH_M) %>%
-    dplyr::filter(PROJECTNAME == "NRS")
+    pr_rename() %>%
+    # dplyr::rename(Station = STATIONNAME, Latitude = LATITUDE, Longitude = LONGITUDE, StationDepth_m = STATIONDEPTH_M) %>%
+    dplyr::filter(ProjectName == "NRS")
   return(NRSStation)
 }
 
@@ -24,10 +25,12 @@ pr_get_NRSStation <- function(){
 #' @importFrom magrittr "%>%"
 pr_get_NRSTrips <- function(){
   NRSSamp <- readr::read_csv(paste0(pr_get_site(), "BGC_Trip.csv"), na = "") %>%
-    dplyr::rename(TripCode = TRIP_CODE, Station = STATION, StationCode = STATIONCODE,
-                  Latitude = LATITUDE, Longitude = LONGITUDE, SampleDateLocal = SAMPLEDATELOCAL,
-                  Biomass_mgm3 = BIOMASS_MGM3, Secchi_m = SECCHI_M, SampleType = SAMPLETYPE) %>%
-    dplyr::filter(PROJECTNAME == "NRS") %>%
+    pr_rename() %>%
+    # dplyr::rename(TripCode = TRIP_CODE, Station = STATIONNAME, StationCode = STATIONCODE,
+    #               Latitude = LATITUDE, Longitude = LONGITUDE, SampleDateLocal = SAMPLEDATELOCAL,
+    #               Biomass_mgm3 = BIOMASS_MGM3, Secchi_m = SECCHI_M, SampleType = SAMPLETYPE,
+    #               ZoopSampleDepth_m = ZOOPSAMPLEDEPTH_M, PhytoSampleDepth_m = PHYTOSAMPLEDEPTH_M) %>%
+    dplyr::filter(ProjectName == "NRS") %>%
     dplyr::mutate(Year = lubridate::year(SampleDateLocal),
                   Month = lubridate::month(SampleDateLocal),
                   Day = lubridate::day(SampleDateLocal),
@@ -50,7 +53,7 @@ pr_get_NRSRawPhytoPivot <- function(){
 
   NRSRawP <- dplyr::left_join(pr_get_NRSTrips() %>% dplyr::filter(grepl('P', SampleType)),
                               pr_get_NRSPhytoData(), by = "TripCode") %>%
-    dplyr::select(-c(TaxonGroup, Genus, Species, Biovolume_um3L, SPCODE, SampleType)) %>%
+    dplyr::select(-c(TaxonGroup, Genus, Species, Biovolume_um3L, SPCode, SampleType)) %>%
     dplyr::arrange(-dplyr::desc(TaxonName)) %>%
     tidyr::pivot_wider(names_from = TaxonName, values_from = Cells_L, values_fill = list(Cells_L = 0)) %>%
     dplyr::arrange(dplyr::desc(SampleDateLocal)) %>%
@@ -97,8 +100,9 @@ pr_get_NRSPhytoHTG <- function(){
 #' @importFrom magrittr "%>%"
 pr_get_NRSPhytoData <- function(){
   NRSPdat <- readr::read_csv(paste0(pr_get_site(), "BGC_Phyto_Raw.csv"), na = "") %>%
-    dplyr::rename(TripCode = TRIP_CODE, TaxonName = TAXON_NAME, TaxonGroup = TAXON_GROUP, Genus = GENUS, Species = SPECIES,
-                  Cells_L = CELL_L, Biovolume_um3L = BIOVOLUME_UM3L)
+    pr_rename()
+  # dplyr::rename(TripCode = TRIP_CODE, TaxonName = TAXON_NAME, TaxonGroup = TAXON_GROUP, Genus = GENUS, Species = SPECIES,
+  #               Cells_L = CELL_L, Biovolume_um3L = BIOVOLUME_UM3L)
 }
 
 
@@ -113,7 +117,8 @@ pr_get_NRSPhytoData <- function(){
 #' @importFrom magrittr "%>%"
 pr_get_NRSPhytoChangeLog <- function(){
   NRSPcl <- readr::read_csv(paste0(pr_get_site(), "BGC_Phyto_ChangeLog.csv"), na = "") %>%
-    dplyr::rename(TaxonName = TAXON_NAME, StartDate = START_DATE, ParentName = PARENT_NAME)
+    pr_rename()
+  # dplyr::rename(TaxonName = TAXON_NAME, StartDate = START_DATE, ParentName = PARENT_NAME)
 }
 
 
@@ -128,8 +133,8 @@ pr_get_NRSPhytoChangeLog <- function(){
 #' @importFrom magrittr "%>%"
 pr_get_NRSPhytoRaw <- function(){
   NRSRawP <- dplyr::left_join(pr_get_NRSTrips() %>% dplyr::select(-c(Biomass_mgm3, Secchi_m)) %>% dplyr::filter(grepl('P', SampleType)),
-                       pr_get_NRSPhytoData(), by = "TripCode") %>%
-    dplyr::select(-c(TaxonGroup, Genus, Species, Biovolume_um3L, SPCODE, SampleType)) %>%
+                              pr_get_NRSPhytoData(), by = "TripCode") %>%
+    dplyr::select(-c(TaxonGroup, Genus, Species, Biovolume_um3L, SPCode, SampleType)) %>%
     dplyr::arrange(-dplyr::desc(TaxonName)) %>%
     tidyr::pivot_wider(names_from = TaxonName, values_from = Cells_L, values_fill = list(Cells_L = 0)) %>%
     dplyr::arrange(dplyr::desc(SampleDateLocal)) %>%
@@ -151,10 +156,12 @@ pr_get_NRSPhytoHTG <- function(){
     dplyr::summarise(Cells_L = sum(Cells_L, na.rm = TRUE), .groups = "drop") %>%
     dplyr::filter(!TaxonGroup %in% c("Other","Coccolithophore", "Diatom","Protozoa"))
 
-  NRSHTGP2 <- pr_get_NRSTrips() %>% dplyr::select(-c(Biomass_mgm3, Secchi_m)) %>% dplyr::filter(grepl('P', SampleType)) %>%
+  NRSHTGP2 <- pr_get_NRSTrips() %>%
+    dplyr::select(-c(Biomass_mgm3, Secchi_m)) %>%
+    dplyr::filter(grepl('P', SampleType)) %>%
     dplyr::left_join(NRSHTGP1, by = "TripCode") %>%
     dplyr::mutate(TaxonGroup = ifelse(is.na(TaxonGroup), "Ciliate", TaxonGroup),
-           Cells_L = ifelse(is.na(Cells_L), 0, Cells_L)) %>%
+                  Cells_L = ifelse(is.na(Cells_L), 0, Cells_L)) %>%
     dplyr::arrange(-dplyr::desc(TaxonGroup))
 
   NRSHTGP <-  NRSHTGP2 %>%
@@ -173,6 +180,7 @@ pr_get_NRSPhytoHTG <- function(){
 #' df <- pr_get_NRSPhytoGenus()
 #' @importFrom magrittr "%>%"
 pr_get_NRSPhytoGenus <- function() {
+
   # Bring in data once
   # These can be brought in from AODN once available
   NRSSamp <- pr_get_NRSTrips() %>%
@@ -185,7 +193,7 @@ pr_get_NRSPhytoGenus <- function() {
   # Check genus are effected by change log
   nrslg <- NRSPcl %>%
     dplyr::mutate(genus1 = stringr::word(TaxonName, 1),
-           genus2 = stringr::word(ParentName, 1)) %>%
+                  genus2 = stringr::word(ParentName, 1)) %>%
     dplyr::mutate(same = ifelse(genus1==genus2, "yes", "no")) %>%
     dplyr::filter(same == "no")# no changes at genera level
 
@@ -200,8 +208,8 @@ pr_get_NRSPhytoGenus <- function() {
     dplyr::filter(grepl('P', SampleType)) %>%
     dplyr::left_join(NRSGenP1, by = "TripCode") %>%
     dplyr::mutate(StartDate = lubridate::ymd("2007-12-19"),
-           Genus = ifelse(is.na(Genus), "Acanthoica", Genus),
-           Cells_L = ifelse(is.na(Cells_L), 0, Cells_L)) %>%
+                  Genus = ifelse(is.na(Genus), "Acanthoica", Genus),
+                  Cells_L = ifelse(is.na(Cells_L), 0, Cells_L)) %>%
     dplyr::group_by(TripCode, Station, Latitude, Longitude, SampleDateLocal, Year, Month, Day, Time_24hr, Genus) %>%
     dplyr::summarise(Cells_L = sum(Cells_L), .groups = "drop") %>%
     as.data.frame()
@@ -232,9 +240,9 @@ pr_get_NRSPhytoGenus <- function() {
       dplyr::filter(grepl('P', SampleType)) %>%
       dplyr::left_join(gen, by = "TripCode") %>%
       dplyr::mutate(StartDate = replace(StartDate, is.na(StartDate), Dates$StartDate),
-             Genus = replace(Genus, is.na(Genus), Dates$Genus),
-             Cells_L = replace(Cells_L, StartDate>SampleDateLocal, -999),
-             Cells_L = replace(Cells_L, StartDate<SampleDateLocal & is.na(Cells_L), 0)) %>%
+                    Genus = replace(Genus, is.na(Genus), Dates$Genus),
+                    Cells_L = replace(Cells_L, StartDate > SampleDateLocal, -999),
+                    Cells_L = replace(Cells_L, StartDate < SampleDateLocal & is.na(Cells_L), 0)) %>%
       dplyr::group_by(TripCode, Station, Latitude, Longitude, SampleDateLocal, Year, Month, Day, Time_24hr, Genus) %>%
       dplyr::summarise(Cells_L = sum(Cells_L), .groups = "drop") %>%
       as.data.frame()
@@ -282,15 +290,15 @@ pr_get_NRSPhytoSpecies <- function(){
   NRSSpecP1 <- NRSPdat %>%
     dplyr::mutate(TaxonName = paste0(Genus, ' ', Species)) %>% # remove comments about with flagellates or cilliates etc.
     dplyr::filter(!TaxonName %in% levels(as.factor(nrsls$TaxonName))
-           & Species != "spp." & !is.na(Species) & !grepl("cf.", Species) & !grepl("/", Species)) %>%
+                  & Species != "spp." & !is.na(Species) & !grepl("cf.", Species) & !grepl("/", Species)) %>%
     dplyr::group_by(TripCode, TaxonName) %>%
     dplyr::summarise(Cells_L = sum(Cells_L, na.rm = TRUE), .groups = "drop")
 
   NRSSpecP1 <- NRSSamp %>% dplyr::filter(grepl('P', SampleType)) %>%
     dplyr::left_join(NRSSpecP1, by = "TripCode") %>%
     dplyr::mutate(StartDate = lubridate::ymd("2007-12-19"),
-           TaxonName = ifelse(is.na(TaxonName), "Paralia sulcata", TaxonName),
-           Cells_L = ifelse(is.na(Cells_L), 0, Cells_L)) %>%
+                  TaxonName = ifelse(is.na(TaxonName), "Paralia sulcata", TaxonName),
+                  Cells_L = ifelse(is.na(Cells_L), 0, Cells_L)) %>%
     dplyr::group_by(TripCode, Station, Latitude, Longitude, SampleDateLocal, Year, Month, Day, Time_24hr, TaxonName) %>%
     dplyr::summarise(Cells_L = sum(Cells_L), .groups = "drop") %>%
     as.data.frame()
@@ -299,7 +307,7 @@ pr_get_NRSPhytoSpecies <- function(){
   NRSSpecP2 <- NRSPdat %>%
     dplyr::mutate(TaxonName = paste0(Genus, ' ', Species)) %>% # remove comments about with flagellates or cilliates etc.
     dplyr::filter(TaxonName %in% levels(as.factor(nrsls$TaxonName)) & TaxonName != '' &
-             Species != "spp." & Species != "" & !is.na(Species) & !grepl("cf.", Species)) %>%
+                    Species != "spp." & Species != "" & !is.na(Species) & !grepl("cf.", Species)) %>%
     dplyr::left_join(NRSPcl, by = "TaxonName") %>%
     dplyr::mutate(TaxonName = forcats::as_factor(TaxonName)) %>%
     tidyr::drop_na(TaxonName) %>%
@@ -321,9 +329,9 @@ pr_get_NRSPhytoSpecies <- function(){
     spec <- NRSSamp %>% dplyr::filter(grepl('P', SampleType)) %>%
       dplyr::left_join(spec, by = "TripCode") %>%
       dplyr::mutate(StartDate = replace(StartDate, is.na(StartDate), Dates$StartDate),
-             TaxonName = replace(TaxonName, is.na(TaxonName), Dates$TaxonName),
-             Cells_L = replace(Cells_L, StartDate>SampleDateLocal, -999),
-             Cells_L = replace(Cells_L, StartDate<SampleDateLocal & is.na(Cells_L), 0)) %>%
+                    TaxonName = replace(TaxonName, is.na(TaxonName), Dates$TaxonName),
+                    Cells_L = replace(Cells_L, StartDate>SampleDateLocal, -999),
+                    Cells_L = replace(Cells_L, StartDate<SampleDateLocal & is.na(Cells_L), 0)) %>%
       dplyr::group_by(TripCode, Station, Latitude, Longitude, SampleDateLocal, Year, Month, Day, Time_24hr, TaxonName) %>%
       dplyr::summarise(Cells_L = sum(Cells_L), .groups = "drop") %>%
       as.data.frame()
@@ -354,8 +362,8 @@ pr_get_NRSPhytoSpecies <- function(){
 #' @importFrom magrittr "%>%"
 pr_get_NRSPhytoRawBV <- function(){
   NRSRawP <- dplyr::left_join(pr_get_NRSTrips() %>% dplyr::select(-c(Biomass_mgm3, Secchi_m)) %>% dplyr::filter(grepl('P', SampleType)),
-                       pr_get_NRSPhytoData(), by = "TripCode") %>%
-    dplyr::select(-c(TaxonGroup, Genus, Species, Cells_L, SPCODE, SampleType)) %>%
+                              pr_get_NRSPhytoData(), by = "TripCode") %>%
+    dplyr::select(-c(TaxonGroup, Genus, Species, Cells_L, SPCode, SampleType)) %>%
     dplyr::arrange(-dplyr::desc(TaxonName)) %>%
     tidyr::pivot_wider(names_from = TaxonName, values_from = Biovolume_um3L, values_fill = list(Biovolume_um3L = 0)) %>%
     dplyr::arrange(dplyr::desc(SampleDateLocal)) %>%
@@ -379,7 +387,7 @@ pr_get_NRSPhytoHTGBV <- function() {
   NRSHTGPB1 <- pr_get_NRSTrips() %>% dplyr::select(-c(Biomass_mgm3, Secchi_m)) %>% dplyr::filter(grepl('P', SampleType)) %>%
     dplyr::left_join(NRSHTGPB1, by = "TripCode") %>%
     dplyr::mutate(TaxonGroup = ifelse(is.na(TaxonGroup), "Ciliate", TaxonGroup),
-           BioV_um3L = ifelse(is.na(BioV_um3L), 0, BioV_um3L)) %>%
+                  BioV_um3L = ifelse(is.na(BioV_um3L), 0, BioV_um3L)) %>%
     dplyr::arrange(-dplyr::desc(TaxonGroup))
 
   NRSHTGPB <-  NRSHTGPB1 %>%
@@ -409,7 +417,7 @@ pr_get_NRSPhytoGenusBV <- function(){
   # Check genus are effected by change log
   nrslg <- NRSPcl %>%
     dplyr::mutate(genus1 = stringr::word(TaxonName, 1),
-           genus2 = stringr::word(ParentName, 1)) %>%
+                  genus2 = stringr::word(ParentName, 1)) %>%
     dplyr::mutate(same = ifelse(genus1==genus2, "yes", "no")) %>%
     dplyr::filter(same == "no")# no changes at genera level
 
@@ -420,11 +428,12 @@ pr_get_NRSPhytoGenusBV <- function(){
     dplyr::summarise(BioV_um3L = sum(Biovolume_um3L, na.rm = TRUE), .groups = "drop") %>%
     tidyr::drop_na(Genus)
 
-  NRSGenPB1 <- NRSSamp %>% dplyr::filter(grepl('P', SampleType)) %>%
+  NRSGenPB1 <- NRSSamp %>%
+    dplyr::filter(grepl('P', SampleType)) %>%
     dplyr::left_join(NRSGenPB1, by = "TripCode") %>%
     dplyr::mutate(StartDate = lubridate::ymd("2007-12-19"),
-           Genus = ifelse(is.na(Genus), "Acanthoica", Genus),
-           BioV_um3L = ifelse(is.na(BioV_um3L), 0, BioV_um3L)) %>%
+                  Genus = ifelse(is.na(Genus), "Acanthoica", Genus),
+                  BioV_um3L = ifelse(is.na(BioV_um3L), 0, BioV_um3L)) %>%
     dplyr::group_by(TripCode, Station, Latitude, Longitude, SampleDateLocal, Year, Month, Day, Time_24hr, Genus) %>%
     dplyr::summarise(BioV_um3L = sum(BioV_um3L), .groups = "drop") %>%
     as.data.frame()
@@ -454,9 +463,9 @@ pr_get_NRSPhytoGenusBV <- function(){
     gen <- NRSSamp %>% dplyr::filter(grepl('P', SampleType)) %>%
       dplyr::left_join(gen, by = "TripCode") %>%
       dplyr::mutate(StartDate = replace(StartDate, is.na(StartDate), Dates$StartDate),
-             Genus = replace(Genus, is.na(Genus), Dates$Genus),
-             BioV_um3L = replace(BioV_um3L, StartDate>SampleDateLocal, -999),
-             BioV_um3L = replace(BioV_um3L, StartDate<SampleDateLocal & is.na(BioV_um3L), 0)) %>%
+                    Genus = replace(Genus, is.na(Genus), Dates$Genus),
+                    BioV_um3L = replace(BioV_um3L, StartDate>SampleDateLocal, -999),
+                    BioV_um3L = replace(BioV_um3L, StartDate<SampleDateLocal & is.na(BioV_um3L), 0)) %>%
       dplyr::group_by(TripCode, Station, Latitude, Longitude, SampleDateLocal, Year, Month, Day, Time_24hr, Genus) %>%
       dplyr::summarise(BioV_um3L = sum(BioV_um3L), .groups = "drop") %>%
       as.data.frame()
@@ -505,11 +514,11 @@ pr_get_NRSPhytoSpeciesBV <- function(){
   NRSPdat1 <- NRSPdat %>%
     dplyr::mutate(TaxonName = paste0(Genus, ' ', Species)) %>% # remove comments about with flagellates or ciliates etc.
     dplyr::filter(!grepl("^(?!.*/~\\$)", TaxonName, perl = TRUE) &
-             Species == "spp." &
-             !TaxonName %in% levels(as.factor(nrsls$TaxonName)) )
+                    Species == "spp." &
+                    !TaxonName %in% levels(as.factor(nrsls$TaxonName)) )
   NRSSpecPB1 <- NRSPdat %>%
     dplyr::filter(!TaxonName %in% levels(as.factor(nrsls$TaxonName)) &
-             Species != "spp." & !is.na(Species) & !grepl("cf.", Species)) %>%
+                    Species != "spp." & !is.na(Species) & !grepl("cf.", Species)) %>%
     dplyr::bind_rows(NRSPdat1) %>%
     dplyr::group_by(TripCode, TaxonName) %>%
     dplyr::summarise(BioV_um3L = sum(Biovolume_um3L, na.rm = TRUE), .groups = "drop")
@@ -517,8 +526,8 @@ pr_get_NRSPhytoSpeciesBV <- function(){
   NRSSpecPB1 <- NRSSamp %>% dplyr::filter(grepl('P', SampleType)) %>%
     dplyr::left_join(NRSSpecPB1, by = "TripCode") %>%
     dplyr::mutate(StartDate = lubridate::ymd("2007-12-19"),
-           TaxonName = ifelse(is.na(TaxonName), "Paralia sulcata", TaxonName),
-           BioV_um3L = ifelse(is.na(BioV_um3L), 0, BioV_um3L)) %>%
+                  TaxonName = ifelse(is.na(TaxonName), "Paralia sulcata", TaxonName),
+                  BioV_um3L = ifelse(is.na(BioV_um3L), 0, BioV_um3L)) %>%
     dplyr::group_by(TripCode, Station, Latitude, Longitude, SampleDateLocal, Year, Month, Day, Time_24hr, TaxonName) %>%
     dplyr::summarise(BioV_um3L = sum(BioV_um3L), .groups = "drop") %>%
     as.data.frame()
@@ -527,12 +536,12 @@ pr_get_NRSPhytoSpeciesBV <- function(){
   NRSPdat2 <- NRSPdat %>%
     dplyr::mutate(TaxonName = paste0(Genus, ' ', Species)) %>% # remove comments about with flagellates or ciliates etc.
     dplyr::filter(!grepl("^(?!.*/~\\$)", TaxonName, perl = TRUE) &
-             Species == "spp." &
-             TaxonName %in% levels(as.factor(nrsls$TaxonName)))
+                    Species == "spp." &
+                    TaxonName %in% levels(as.factor(nrsls$TaxonName)))
 
   NRSSpecPB2 <- NRSPdat %>%
     dplyr::filter(TaxonName %in% levels(as.factor(nrsls$TaxonName))
-           & Species != "spp." & !is.na(Species) & !grepl("cf.", Species) & Species != "") %>%
+                  & Species != "spp." & !is.na(Species) & !grepl("cf.", Species) & Species != "") %>%
     dplyr::bind_rows(NRSPdat2) %>%
     dplyr::left_join(NRSPcl, by = "TaxonName") %>%
     dplyr::filter(TaxonName != '') %>%
@@ -559,9 +568,9 @@ pr_get_NRSPhytoSpeciesBV <- function(){
     spec <- NRSSamp %>% dplyr::filter(grepl('P', SampleType)) %>%
       dplyr::left_join(spec, by = "TripCode") %>%
       dplyr::mutate(StartDate = replace(StartDate, is.na(StartDate), Dates$StartDate),
-             TaxonName = replace(TaxonName, is.na(TaxonName), Dates$TaxonName),
-             BioV_um3L = replace(BioV_um3L, StartDate>SampleDateLocal, -999),
-             BioV_um3L = replace(BioV_um3L, StartDate<SampleDateLocal & is.na(BioV_um3L), 0)) %>%
+                    TaxonName = replace(TaxonName, is.na(TaxonName), Dates$TaxonName),
+                    BioV_um3L = replace(BioV_um3L, StartDate>SampleDateLocal, -999),
+                    BioV_um3L = replace(BioV_um3L, StartDate<SampleDateLocal & is.na(BioV_um3L), 0)) %>%
       dplyr::group_by(TripCode, Station, Latitude, Longitude, SampleDateLocal, Year, Month, Day, Time_24hr, TaxonName) %>%
       dplyr::summarise(BioV_um3L = sum(BioV_um3L), .groups = "drop") %>%
       as.data.frame()
@@ -592,11 +601,10 @@ pr_get_NRSPhytoSpeciesBV <- function(){
 #' @importFrom magrittr "%>%"
 pr_get_NRSZooData <- function(){
   NRSZdat <- readr::read_csv(paste0(pr_get_site(), "BGC_Zoop_Raw.csv"), na = "") %>%
-    dplyr::rename(TripCode = TRIP_CODE, TaxonName = TAXON_NAME, Copepod = TAXON_GROUP, TaxonGroup = TAXON_GRP01,
-                  Genus = GENUS, Species = SPECIES, ZAbund_m3 = ZOOP_ABUNDANCE_M3)
+    pr_rename()
+  # dplyr::rename(TripCode = TRIP_CODE, TaxonName = TAXON_NAME, Copepod = COPEPOD, TaxonGroup = TAXON_GROUP,
+  #               Genus = GENUS, Species = SPECIES, ZAbund_m3 = ZOOP_ABUNDANCE_M3, TaxonCount = TAXON_COUNT, SampVol_m3 = SAMPVOL_M3)
 }
-
-
 
 #' Load zooplankton abundance data
 #'
@@ -607,9 +615,10 @@ pr_get_NRSZooData <- function(){
 #' df <- pr_get_NRSZooCount()
 #' @importFrom magrittr "%>%"
 pr_get_NRSZooCount <- function(){
-  NRSZcount <- readr::read_csv(paste0(pr_get_site(), "BGC_Zoop_CountRaw.csv"), na = "") %>%
-    dplyr::rename(TaxonName = TAXON_NAME, Copepod = TAXON_GROUP, TaxonGroup = TAXON_GRP01, TripCode = TRIP_CODE,
-                  Genus = GENUS, Species = SPECIES, TaxonCount = COUNTS, SampVol_L = SAMPVOL_L)
+  NRSZcount <- readr::read_csv(paste0(pr_get_site(), "BGC_Zoop_Raw.csv"), na = "") %>%
+    pr_rename()
+  # dplyr::rename(TaxonName = TAXON_NAME, Copepod = COPEPOD, TaxonGroup = TAXON_GROUP, TripCode = TRIP_CODE,
+  # Genus = GENUS, Species = SPECIES, TaxonCount = TAXON_COUNT, SampVol_m3 = SAMPVOL_M3)
 }
 
 
@@ -624,17 +633,18 @@ pr_get_NRSZooCount <- function(){
 #' @importFrom magrittr "%>%"
 pr_get_NRSZooChangeLog <- function(){
   NRSZcl <- readr::read_csv(paste0(pr_get_site(), "BGC_Zoop_ChangeLog.csv"), na = "") %>%
-    dplyr::rename(TaxonName = TAXON_NAME, StartDate = START_DATE, ParentName = PARENT_NAME)
+    pr_rename()
+  # dplyr::rename(TaxonName = TAXON_NAME, StartDate = START_DATE, ParentName = PARENT_NAME)
 }
 
 
 # Make NRS Zooplankton raw pivoted product
 pr_get_NRSZooRaw <- function(){
   NRSRawZ <- dplyr::left_join(pr_get_NRSTrips() %>% dplyr::select(-c(Biomass_mgm3, Secchi_m)) %>% dplyr::filter(grepl('Z', SampleType)),
-                       pr_get_NRSZooData(), by = "TripCode") %>%
-    dplyr::select(-c(Copepod, TaxonGroup, Genus, Species, SampleType, SPCODE)) %>%
+                              pr_get_NRSZooData(), by = "TripCode") %>%
+    dplyr::select(-c(Copepod, TaxonGroup, Genus, Species, SampleType, SPCode)) %>%
     dplyr::arrange(-dplyr::desc(TaxonName)) %>%
-   tidyr::pivot_wider(names_from = TaxonName, values_from = ZAbund_m3, values_fill = list(ZAbund_m3 = 0)) %>%
+    tidyr::pivot_wider(names_from = TaxonName, values_from = ZAbund_m3, values_fill = list(ZAbund_m3 = 0)) %>%
     dplyr::arrange(dplyr::desc(SampleDateLocal)) %>%
     dplyr::mutate(SampleDateLocal = as.character(SampleDateLocal))
 }
@@ -647,7 +657,7 @@ pr_get_NRSZooRawBin <- function(){
     dplyr::group_by(TripCode, Station, Latitude, Longitude, SampleDateLocal, Year, Month, Day, Time_24hr, SampleDateUTC, TaxonName) %>%
     dplyr::summarise(ZAbund_m3 = sum(ZAbund_m3, na.rm = TRUE)) %>%
     dplyr::arrange(-dplyr::desc(TaxonName))  %>%
-   tidyr::pivot_wider(names_from = TaxonName, values_from = ZAbund_m3, values_fill = list(ZAbund_m3 = 0)) %>%
+    tidyr::pivot_wider(names_from = TaxonName, values_from = ZAbund_m3, values_fill = list(ZAbund_m3 = 0)) %>%
     dplyr::arrange(dplyr::desc(SampleDateLocal)) %>%
     dplyr::mutate(SampleDateLocal = as.character(SampleDateLocal))
 }
@@ -662,11 +672,11 @@ pr_get_NRSZooHTG <-  function(){
   nrsHTGZ1 <-  pr_get_NRSTrips() %>% dplyr::select(-c(Biomass_mgm3, Secchi_m)) %>% dplyr::filter(grepl('Z', SampleType)) %>%
     dplyr::left_join(nrsHTGZ1, by = "TripCode") %>%
     dplyr::mutate(TaxonGroup = ifelse(is.na(TaxonGroup), "Copepod", TaxonGroup),
-           ZAbund_m3 = ifelse(is.na(ZAbund_m3), 0, ZAbund_m3)) %>%
+                  ZAbund_m3 = ifelse(is.na(ZAbund_m3), 0, ZAbund_m3)) %>%
     dplyr::arrange(-dplyr::desc(TaxonGroup))
 
   nrsHTGZ <-  nrsHTGZ1 %>%
-   tidyr::pivot_wider(names_from = TaxonGroup, values_from = ZAbund_m3, values_fill = list(ZAbund_m3 = 0)) %>%
+    tidyr::pivot_wider(names_from = TaxonGroup, values_from = ZAbund_m3, values_fill = list(ZAbund_m3 = 0)) %>%
     dplyr::arrange(dplyr::desc(SampleDateLocal)) %>%
     dplyr::select(-c(SampleType)) %>%
     dplyr::mutate(SampleDateLocal = as.character(SampleDateLocal))
@@ -685,7 +695,7 @@ pr_get_NRSZooGenus <- function(){
   # Check genus are effected by change log
   nrszlg <- NRSZcl %>%
     dplyr::mutate(genus1 = stringr::word(TaxonName, 1),
-           genus2 = stringr::word(ParentName, 1)) %>%
+                  genus2 = stringr::word(ParentName, 1)) %>%
     dplyr::mutate(same = ifelse(genus1==genus2, "yes", "no")) %>%
     dplyr::filter(same == "no")# no changes at genera level
 
@@ -699,8 +709,8 @@ pr_get_NRSZooGenus <- function(){
   NRSGenZ1 <- NRSSamp %>% dplyr::filter(grepl('Z', SampleType)) %>%
     dplyr::left_join(NRSGenZ1, by = "TripCode") %>%
     dplyr::mutate(StartDate = lubridate::ymd("2007-12-19"),
-           Genus = ifelse(is.na(Genus), "Acanthoica", stringr::word(Genus,1)), # bin subgenera together
-           ZAbund_m3 = ifelse(is.na(ZAbund_m3), 0, ZAbund_m3))  %>%
+                  Genus = ifelse(is.na(Genus), "Acanthoica", stringr::word(Genus,1)), # bin subgenera together
+                  ZAbund_m3 = ifelse(is.na(ZAbund_m3), 0, ZAbund_m3))  %>%
     dplyr::group_by(TripCode, Station, Latitude, Longitude, SampleDateLocal, Year, Month, Day, Time_24hr, Genus) %>%
     dplyr::summarise(ZAbund_m3 = sum(ZAbund_m3), .groups = "drop") %>%
     as.data.frame()
@@ -734,9 +744,9 @@ pr_get_NRSZooGenus <- function(){
       dplyr::filter(grepl('Z', SampleType)) %>%
       dplyr::left_join(gen, by = "TripCode") %>%
       dplyr::mutate(StartDate = replace(StartDate, is.na(StartDate), Dates$StartDate),
-             Genus = replace(Genus, is.na(Genus), Dates$Genus),
-             ZAbund_m3 = replace(ZAbund_m3, StartDate>SampleDateLocal, -999),
-             ZAbund_m3 = replace(ZAbund_m3, StartDate<SampleDateLocal & is.na(ZAbund_m3), 0)) %>%
+                    Genus = replace(Genus, is.na(Genus), Dates$Genus),
+                    ZAbund_m3 = replace(ZAbund_m3, StartDate>SampleDateLocal, -999),
+                    ZAbund_m3 = replace(ZAbund_m3, StartDate<SampleDateLocal & is.na(ZAbund_m3), 0)) %>%
       dplyr::group_by(TripCode, Station, Latitude, Longitude, SampleDateLocal, Year, Month, Day, Time_24hr, Genus) %>%
       dplyr::summarise(ZAbund_m3 = sum(ZAbund_m3), .groups = "drop") %>%
       as.data.frame()
@@ -751,7 +761,7 @@ pr_get_NRSZooGenus <- function(){
   # select maximum value of duplicates, but leave -999 for all other occurrences as not regularly identified
 
   NRSGenZ <- NRSGenZ1 %>%
-   tidyr::pivot_wider(names_from = Genus, values_from = ZAbund_m3, values_fill = list(ZAbund_m3 = 0)) %>%
+    tidyr::pivot_wider(names_from = Genus, values_from = ZAbund_m3, values_fill = list(ZAbund_m3 = 0)) %>%
     dplyr::arrange(dplyr::desc(SampleDateLocal)) %>%
     dplyr::mutate(SampleDateLocal = as.character(SampleDateLocal))
 }
@@ -776,8 +786,8 @@ pr_get_NRSZooSpeciesCopepod <- function(){
 
   NRSCop1 <- NRSZdat %>%
     dplyr::filter(!TaxonName %in% levels(as.factor(nrsclc$TaxonName)) & Copepod =="COPEPOD"
-           & Species != "spp." & !is.na(Species) & !grepl("cf.", Species)  &
-             !grepl("/", Species) & !grepl("grp", Species)) %>%
+                  & Species != "spp." & !is.na(Species) & !grepl("cf.", Species)  &
+                    !grepl("/", Species) & !grepl("grp", Species)) %>%
     dplyr::mutate(Species = paste0(Genus," ", stringr::word(Species,1))) %>% # bin complexes
     dplyr::group_by(TripCode, Species) %>%
     dplyr::summarise(ZAbund_m3 = sum(ZAbund_m3, na.rm = TRUE), .groups = "drop")
@@ -786,8 +796,8 @@ pr_get_NRSZooSpeciesCopepod <- function(){
     dplyr::filter(grepl('Z', SampleType)) %>%
     dplyr::left_join(NRSCop1, by = "TripCode") %>%
     dplyr::mutate(StartDate = lubridate::ymd("2007-12-19"),
-           Species = ifelse(is.na(Species), "Calanus Australis", Species), # avoids nulls in pivot
-           ZAbund_m3 = ifelse(is.na(ZAbund_m3), 0, ZAbund_m3)) %>%  # avoids nulls in pivot
+                  Species = ifelse(is.na(Species), "Calanus Australis", Species), # avoids nulls in pivot
+                  ZAbund_m3 = ifelse(is.na(ZAbund_m3), 0, ZAbund_m3)) %>%  # avoids nulls in pivot
     dplyr::group_by(TripCode, Station, Latitude, Longitude, SampleDateLocal, Year, Month, Day, Time_24hr, Species) %>%
     dplyr::summarise(ZAbund_m3 = sum(ZAbund_m3), .groups = "drop") %>%
     as.data.frame()
@@ -795,8 +805,8 @@ pr_get_NRSZooSpeciesCopepod <- function(){
   # add change log species with -999 for NA"s and real absences as 0"s
   NRSCop2 <- NRSZdat %>%
     dplyr::filter(TaxonName %in% levels(as.factor(nrsclc$TaxonName)) & Copepod =="COPEPOD"
-           & Species != "spp." & !is.na(Species)  & Species != "" &
-             !grepl("/", Species) & !grepl("cf.", Species) & !grepl("grp", Species)) %>%
+                  & Species != "spp." & !is.na(Species)  & Species != "" &
+                    !grepl("/", Species) & !grepl("cf.", Species) & !grepl("grp", Species)) %>%
     dplyr::mutate(Species = paste0(Genus," ", stringr::word(Species,1))) %>% # bin complexes
     dplyr::left_join(NRSZcl, by = "TaxonName") %>%
     dplyr::mutate(Species = forcats::as_factor(Species)) %>%
@@ -822,9 +832,9 @@ pr_get_NRSZooSpeciesCopepod <- function(){
       dplyr::filter(grepl('Z', SampleType)) %>%
       dplyr::left_join(copes, by = "TripCode") %>%
       dplyr::mutate(StartDate = replace(StartDate, is.na(StartDate), Dates$StartDate),
-             Species = replace(Species, is.na(Species), Dates$Species),
-             ZAbund_m3 = replace(ZAbund_m3, StartDate>SampleDateLocal, -999),
-             ZAbund_m3 = replace(ZAbund_m3, StartDate<SampleDateLocal & is.na(ZAbund_m3), 0)) %>%
+                    Species = replace(Species, is.na(Species), Dates$Species),
+                    ZAbund_m3 = replace(ZAbund_m3, StartDate>SampleDateLocal, -999),
+                    ZAbund_m3 = replace(ZAbund_m3, StartDate<SampleDateLocal & is.na(ZAbund_m3), 0)) %>%
       dplyr::group_by(TripCode, Station, Latitude, Longitude, SampleDateLocal, Year, Month, Day, Time_24hr, Species) %>%
       dplyr::summarise(ZAbund_m3 = sum(ZAbund_m3), .groups = "drop") %>%
       as.data.frame()
@@ -839,7 +849,7 @@ pr_get_NRSZooSpeciesCopepod <- function(){
   # select maximum value of duplicates, but leave -999 for all other occurences as not regularly identified
 
   NRSCop <-  NRSCop1 %>%
-   tidyr::pivot_wider(names_from = Species, values_from = ZAbund_m3, values_fill = list(ZAbund_m3 = 0)) %>%
+    tidyr::pivot_wider(names_from = Species, values_from = ZAbund_m3, values_fill = list(ZAbund_m3 = 0)) %>%
     dplyr::arrange(dplyr::desc(SampleDateLocal)) %>%
     dplyr::mutate(SampleDateLocal = as.character(SampleDateLocal))
 }
@@ -863,7 +873,7 @@ pr_get_NRSZooSpeciesNonCopepod <- function(){
   # for non change log species
   NRSnCop1 <- NRSZdat %>%
     dplyr::filter(!TaxonName %in% levels(as.factor(nrsclc$TaxonName)) & Copepod =="NON-COPEPOD"
-           & Species != "spp." & !is.na(Species) & !grepl("cf.", Species) & !grepl("grp", Species)) %>%
+                  & Species != "spp." & !is.na(Species) & !grepl("cf.", Species) & !grepl("grp", Species)) %>%
     dplyr::mutate(Species = paste0(Genus," ", stringr::word(Species,1))) %>% # bin complexes
     dplyr::group_by(TripCode, Species) %>%
     dplyr::summarise(ZAbund_m3 = sum(ZAbund_m3, na.rm = TRUE), .groups = "drop")
@@ -871,8 +881,8 @@ pr_get_NRSZooSpeciesNonCopepod <- function(){
   NRSnCop1 <- NRSSamp %>% dplyr::filter(grepl('Z', SampleType)) %>%
     dplyr::left_join(NRSnCop1, by = "TripCode") %>%
     dplyr::mutate(StartDate = lubridate::ymd("2007-12-19"),
-           Species = ifelse(is.na(Species), "Calanus Australis", Species), # avoids nulls in pivot
-           ZAbund_m3 = ifelse(is.na(ZAbund_m3), 0, ZAbund_m3)) %>%  # avoids nulls in pivot
+                  Species = ifelse(is.na(Species), "Calanus Australis", Species), # avoids nulls in pivot
+                  ZAbund_m3 = ifelse(is.na(ZAbund_m3), 0, ZAbund_m3)) %>%  # avoids nulls in pivot
     dplyr::group_by(TripCode, Station, Latitude, Longitude, SampleDateLocal, Year, Month, Day, Time_24hr, Species) %>%
     dplyr::summarise(ZAbund_m3 = sum(ZAbund_m3), .groups = "drop") %>%
     as.data.frame()
@@ -880,7 +890,7 @@ pr_get_NRSZooSpeciesNonCopepod <- function(){
   # add change log species with -999 for NA"s and real absences as 0"s
   NRSnCop2 <- NRSZdat %>%
     dplyr::filter(TaxonName %in% levels(as.factor(nrsclc$TaxonName)) & Copepod =="NON-COPEPOD"  & Species != ""
-           & Species != "spp." & !is.na(Species) & !grepl("cf.", Species) & !grepl("grp", Species)) %>%
+                  & Species != "spp." & !is.na(Species) & !grepl("cf.", Species) & !grepl("grp", Species)) %>%
     dplyr::mutate(Species = paste0(Genus," ", stringr::word(Species,1))) %>% # bin complexes
     dplyr::left_join(NRSZcl, by = "TaxonName") %>%
     dplyr::mutate(Species = forcats::as_factor(Species)) %>%
@@ -906,9 +916,9 @@ pr_get_NRSZooSpeciesNonCopepod <- function(){
     ncopes <- NRSSamp %>% dplyr::filter(grepl('Z', SampleType)) %>%
       dplyr::left_join(ncopes, by = "TripCode") %>%
       dplyr::mutate(StartDate = replace(StartDate, is.na(StartDate), Dates$StartDate),
-             Species = replace(Species, is.na(Species), Dates$Species),
-             ZAbund_m3 = replace(ZAbund_m3, StartDate>SampleDateLocal, -999),
-             ZAbund_m3 = replace(ZAbund_m3, StartDate<SampleDateLocal & is.na(ZAbund_m3), 0)) %>%
+                    Species = replace(Species, is.na(Species), Dates$Species),
+                    ZAbund_m3 = replace(ZAbund_m3, StartDate>SampleDateLocal, -999),
+                    ZAbund_m3 = replace(ZAbund_m3, StartDate<SampleDateLocal & is.na(ZAbund_m3), 0)) %>%
       dplyr::group_by(TripCode, Station, Latitude, Longitude, SampleDateLocal, Year, Month, Day, Time_24hr, Species) %>%
       dplyr::summarise(ZAbund_m3 = sum(ZAbund_m3), .groups = "drop") %>%
       as.data.frame()
@@ -923,7 +933,7 @@ pr_get_NRSZooSpeciesNonCopepod <- function(){
   # select maximum value of duplicates, but leave -999 for all other occurrences as not regularly identified
 
   NRSnCop <- NRSnCop1 %>%
-   tidyr::pivot_wider(names_from = Species, values_from = ZAbund_m3, values_fill = list(ZAbund_m3 = 0)) %>%
+    tidyr::pivot_wider(names_from = Species, values_from = ZAbund_m3, values_fill = list(ZAbund_m3 = 0)) %>%
     dplyr::arrange(dplyr::desc(SampleDateLocal)) %>%
     dplyr::mutate(SampleDateLocal = as.character(SampleDateLocal))
 }
@@ -939,7 +949,8 @@ pr_get_NRSZooSpeciesNonCopepod <- function(){
 #' df <- pr_get_NRSPigments()
 pr_get_NRSPigments <- function(){
   Pigments <- readr::read_csv(paste0(pr_get_site(),"BGC_Pigments.csv"), na = "") %>%
-    dplyr::rename(TripCode = TRIP_CODE, SampleDepth_m = SAMPLEDEPTH_M, PigmentsFlag = PIGMENTS_FLAG, PigmentsComments = PIGMENTS_COMMENTS)
+    pr_rename()
+    # dplyr::rename(TripCode = TRIP_CODE, SampleDepth_m = SAMPLEDEPTH_M, PigmentsFlag = PIGMENTS_FLAG, PigmentsComments = PIGMENTS_COMMENTS)
 }
 
 
@@ -953,9 +964,10 @@ pr_get_NRSPigments <- function(){
 #' @importFrom magrittr "%>%"
 pr_get_NRSPico <- function(){
   Pico <- readr::read_csv(paste0(pr_get_site(), "BGC_Picoplankton.csv"), na = "") %>%
-    dplyr::rename(TripCode = TRIP_CODE, SampleDepth_m = SAMPLEDEPTH_M, Replicate = REPLICATE, SampleDate_Local = SAMPLEDATELOCAL,
-                  Prochlorococcus_CellsmL = PROCHLOROCOCCUS_CELLSML, Prochlorococcus_Flag = PROCHLOROCOCCUS_FLAG,
-                  Synecochoccus_CellsmL = SYNECOCHOCCUS_CELLSML, Synecochoccus_Flag = SYNECOCHOCCUS_FLAG,
-                  Picoeukaryotes_CellsmL = PICOEUKARYOTES_CELLSML, Picoeukaryotes_Flag = PICOEUKARYOTES_FLAG)
+    pr_rename()
+    # dplyr::rename(TripCode = TRIP_CODE, SampleDepth_m = SAMPLEDEPTH_M, Replicate = REPLICATE, SampleDateLocal = SAMPLEDATELOCAL,
+    #               Prochlorococcus_Cellsml = PROCHLOROCOCCUS_CELLSML, Prochlorococcus_Flag = PROCHLOROCOCCUS_FLAG,
+    #               Synecochoccus_Cellsml = SYNECOCHOCCUS_CELLSML, Synecochoccus_Flag = SYNECOCHOCCUS_FLAG,
+    #               Picoeukaryotes_Cellsml = PICOEUKARYOTES_CELLSML, Picoeukaryotes_Flag = PICOEUKARYOTES_FLAG)
 }
 

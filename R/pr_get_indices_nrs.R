@@ -4,33 +4,37 @@
 #' @export
 #'
 #' @examples
-#' df <- get_indices_nrs()
+#' df <- pr_get_indices_nrs()
 #' @importFrom magrittr "%>%"
-get_indices_nrs <- function(){
+pr_get_indices_nrs <- function(){
   # note there are circumstances where a trip won"t have a phyto and a zoo samples due to loss of sample etc.
 
-  NRSdat <- get_NRSTrips() %>%
+  NRSdat <- pr_get_NRSTrips() %>%
     dplyr::select(-SampleType) %>%
     dplyr::filter(Station != "Port Hacking 4") #ignore warning, "fast" method does better here than "accurate"
 
   dNRSdat <- dplyr::distinct(NRSdat, TripCode, .keep_all = TRUE) %>% # Distinct rows for satellite, should be anyway
-    dplyr::rename(Date = SampleDateLocal) %>%
+    pr_rename() %>%
+    # dplyr::rename(Date = SampleDateLocal) %>%
     dplyr::select(TripCode, Date, Latitude, Longitude)
 
   # SST and Chlorophyll from CTD
-  CTD <- get_CTD() %>%
-    dplyr::filter(Depth_m < 15) %>% # take average of top 10m as a surface value for SST and CHL, this is removing 17 casts as of nov 2020
+  CTD <- pr_get_CTD() %>%
+    dplyr::filter(SampleDepth_m < 15) %>% # take average of top 10m as a surface value for SST and CHL, this is removing 17 casts as of nov 2020
     dplyr::group_by(TripCode) %>%
-    dplyr::summarise(CTD_SST_C = mean(Temperature_degC, na.rm = TRUE),
-                     CTDChla_mgm3 = mean(Chla_mgm3, na.rm = TRUE),
-                     CTDSalinity_psu = mean(Salinity_psu, na.rm = TRUE),
-                     .groups = "drop") %>%
-    untibble()
+    dplyr::summarise(CTDDensity_kgm3 = mean(WaterDensity_kgm3, na.rm = TRUE),
+                     CTDTemperature = mean(Temperature_degC, na.rm = TRUE),
+                     CTDConductivity_sm = mean(Conductivity_Sm, na.rm = TRUE),
+                     CTDSalinity = mean(Salinity_psu, na.rm = TRUE),
+                     CTDChlF_mgm3 = mean(Chla_mgm3, na.rm = TRUE),
+                     CTDTurbidity_ntu = mean(Turbidity_NTU, na.rm = TRUE),
+                     .groups = "drop")
 
-  # data set for calculating MLD
-  CTD_MLD <- get_CTD() %>%
-    dplyr::select(TripCode, Temperature_degC, Chla_mgm3, Salinity_psu, Depth_m) %>%
-    dplyr::rename(CTDTemperature = Temperature_degC, CTDSalinity = Salinity_psu, CTDChlF_mgm3 = Chla_mgm3, SampleDepth_m = Depth_m) %>%
+  # Dataset for calculating MLD
+  CTD_MLD <- pr_get_CTD() %>%
+    dplyr::select(TripCode, Temperature_degC, Chla_mgm3, Salinity_psu, SampleDepth_m) %>%
+    # pr_rename() %>%
+    dplyr::rename(CTDTemperature = Temperature_degC, CTDSalinity = Salinity_psu, CTDChlF_mgm3 = Chla_mgm3) %>%
     tidyr::drop_na(TripCode)
 
   MLD <- data.frame(TripCode = character(), MLD_temp = numeric(), MLD_sal = numeric(), DCM = numeric())
@@ -74,13 +78,16 @@ get_indices_nrs <- function(){
       dplyr::mutate(temp = abs(CTDTemperature - refT),
                     ranktemp = stats::ave(temp, FUN = . %>% order %>% order)) %>%
       dplyr::filter(ranktemp == 1)
+
     MLD_temp <- mld_t$SampleDepth_m
 
     refS <- refz$CTDSalinity - 0.03 # temp at 10 m minus 0.4
+
     mld_s <- mldData %>%
       dplyr::mutate(temp = abs(CTDSalinity - refS),
                     ranksal = stats::ave(temp, FUN = . %>% order %>% order)) %>%
       dplyr::filter(ranksal == 1)
+
     MLD_sal <- mld_s$SampleDepth_m
 
     dcm <- (mldData %>%
@@ -94,7 +101,7 @@ get_indices_nrs <- function(){
   }
 
   # Nutrient data
-  Nuts <- get_Chemistry() %>%
+  Nuts <- pr_get_Chemistry() %>%
     dplyr::group_by(TripCode) %>%
     dplyr::summarise(Silicate_umolL = mean(Silicate_umolL, na.rm = TRUE),
                      Phosphate_umolL = mean(Phosphate_umolL, na.rm = TRUE),
@@ -106,20 +113,18 @@ get_indices_nrs <- function(){
                      TAlkalinity_umolkg = mean(TAlkalinity_umolkg, na.rm = TRUE),
                      Salinity_PSU = mean(Salinity_PSU, na.rm = TRUE),
                      .groups = "drop") %>%
-    dplyr::mutate_all(~ replace(., is.na(.), NA)) %>%
-    untibble()
+    dplyr::mutate_all(~ replace(., is.na(.), NA))
 
-  Pigments <- get_NRSPigments() %>%
+  Pigments <- pr_get_NRSPigments() %>%
     dplyr::filter(SampleDepth_m <= 25) %>% # take average of top 10m as a surface value for SST and CHL
     # dplyr::filter(SampleDepth_m == "WC") %>%
     dplyr::group_by(TripCode) %>%
     dplyr::summarise(Chla_mgm3 = mean(DV_CPHL_A_AND_CPHL_A, na.rm = TRUE),
-                     .groups = "drop") %>%
-    untibble()
+                     .groups = "drop")
 
   # Total Zooplankton Abundance
-  ZooData <- get_NRSTrips() %>%
-    dplyr::left_join(get_NRSZooData(), by = "TripCode")
+  ZooData <- pr_get_NRSTrips() %>%
+    dplyr::left_join(pr_get_NRSZooData(), by = "TripCode")
 
   TZoo <- ZooData %>%
     dplyr::group_by(TripCode) %>%
@@ -133,7 +138,7 @@ get_indices_nrs <- function(){
                      .groups = "drop")
 
   # Bring in copepod information table with sizes etc.
-  ZInfo <- get_ZooInfo()
+  ZInfo <- pr_get_ZooInfo()
 
   ACopeSize <- ZooData %>%
     dplyr::filter(Copepod == "COPEPOD") %>%
@@ -150,22 +155,22 @@ get_indices_nrs <- function(){
     dplyr::inner_join(ZInfo %>%
                         dplyr::select(TaxonName, DIET), by = "TaxonName") %>%
     dplyr::mutate(DIET = dplyr::case_when(
-                  DIET == "Carnivore" ~ "CC",
-                  DIET == "Omnivore" ~ "CO",
-                  DIET == "Herbivore" ~ "CO")) %>% #TODO Check that Herbivore is correct
+      DIET == "Carnivore" ~ "CC",
+      DIET == "Omnivore" ~ "CO",
+      DIET == "Herbivore" ~ "CO")) %>% #TODO Check that Herbivore is correct
     tidyr::drop_na() %>%
     dplyr::select(TripCode, DIET, ZAbund_m3) %>%
     dplyr::group_by(TripCode, DIET) %>%
     dplyr::summarise(sumdiet = sum(ZAbund_m3 , na.rm = TRUE), .groups = "drop") %>%
     tidyr::pivot_wider(values_from = sumdiet, names_from = DIET) %>%
-    dplyr::mutate(HerbivoreCarnivoreCopepodRatio = CO / (CO + CC)) %>%
-    untibble()
+    dplyr::mutate(HerbivoreCarnivoreCopepodRatio = CO / (CO + CC))
 
   # Diversity, evenness etc.
 
   # Bring in plankton data
-  ZooCount <- get_NRSTrips() %>%
-    dplyr::left_join(get_NRSZooCount(), by = "TripCode")
+  ZooCount <- pr_get_NRSTrips() %>%
+    # dplyr::left_join(pr_get_NRSZooCount(), by = "TripCode")
+    dplyr::left_join(pr_get_NRSZooData(), by = "TripCode")
 
   zoo_n <- ZooCount %>%
     dplyr::filter(Copepod == "COPEPOD" & Species != "spp." & !is.na(Species) & !grepl("cf.", Species) & !grepl("grp", Species)) %>%
@@ -189,8 +194,8 @@ get_indices_nrs <- function(){
     dplyr::mutate(CopepodEvenness = ShannonCopepodDiversity / log(NoCopepodSpecies_Sample))
 
   # Total Phyto abundance
-  PhytoData <- get_NRSTrips() %>%
-    dplyr::left_join(get_NRSPhytoData(), by = "TripCode") %>%
+  PhytoData <- pr_get_NRSTrips() %>%
+    dplyr::left_join(pr_get_NRSPhytoData(), by = "TripCode") %>%
     dplyr::filter(TaxonGroup != "Other")
 
   # PhytoData <- PhytoData %>%
@@ -220,8 +225,7 @@ get_indices_nrs <- function(){
     dplyr::summarise(sumTG = sum(Cells_L, na.rm = TRUE),
                      .groups = "drop") %>%
     tidyr::pivot_wider(values_from = sumTG, names_from = TaxonGroup) %>%
-    dplyr::mutate(DiatomDinoflagellateRatio = Diatom / (Diatom + Dinoflagellate)) %>%
-    untibble()
+    dplyr::mutate(DiatomDinoflagellateRatio = Diatom / (Diatom + Dinoflagellate))
 
   AvgCellVol <- PhytoData %>%
     dplyr::filter(!is.na(Biovolume_um3L)) %>%

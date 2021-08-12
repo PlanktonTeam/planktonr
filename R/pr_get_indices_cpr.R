@@ -4,28 +4,28 @@
 #' @export
 #'
 #' @examples
-#' df <- get_indices_cpr()
+#' df <- pr_get_indices_cpr()
 #'
 #' @importFrom magrittr "%>%"
 #'
-get_indices_cpr <- function(){
+pr_get_indices_cpr <- function(){
 
   # Add the bioregions to the CPR data
-  cprSampleInfo <- get_CPRSamps() %>%
-    add_bioregions()
+  cprSampleInfo <- pr_get_CPRSamps() %>%
+    pr_add_bioregions()
 
-  cprProps <- readr::read_csv(paste0(get_raw_plankton(), "CPR_SatData.csv"), na = "(null)") %>%
+  cprProps <- readr::read_csv(paste0(pr_get_site(), "CPR_SatData.csv"), na = "(null)") %>%
     dplyr::rename(Sample = SAMPLE, ChlorophyllSatellite_mgm3 = CHLA, WaterDepth_m = DEPTH_M)
 
-  cprZsamp <- get_CPRSamps() %>%
+  cprZsamp <- pr_get_CPRSamps() %>%
     dplyr::filter(grepl("Z", SampleType)) %>%
     dplyr::select(-c(PCI, SampleType))
 
-  cprPsamp <- get_CPRSamps() %>%
+  cprPsamp <- pr_get_CPRSamps() %>%
     dplyr::filter(grepl("P", SampleType)) %>%
     dplyr::select(-c(SampleType, Biomass_mgm3))
 
-  cprZdat <- get_CPRZooData()
+  cprZdat <- pr_get_CPRZooData()
 
   # Total zoop abundance
   zoodatacpr <-  cprZsamp %>%
@@ -41,7 +41,7 @@ get_indices_cpr <- function(){
     dplyr::summarise(CopeAbundance_m3 = sum(ZAbund_m3, na.rm = TRUE))
 
   # Bring in copepod information table with sizes etc.
-  Zinfo <- get_ZooInfo()
+  Zinfo <- pr_get_ZooInfo()
 
   ACopeSizeCpr <- zoodatacpr %>%
     dplyr::filter(Copepod == 'COPEPOD') %>%
@@ -64,7 +64,7 @@ get_indices_cpr <- function(){
   # Diversity, evenness etc.
 
   # Bring in plankton data
-  CPRZcount <- get_CPRZooCountData()
+  CPRZcount <- pr_get_CPRZooCountData()
 
   zooCountCpr <- cprZsamp %>% # Changed this from cprtr
     dplyr::left_join(CPRZcount, by = "Sample")
@@ -89,11 +89,11 @@ get_indices_cpr <- function(){
     dplyr::bind_cols(ShannonCopepodDiversityCPR = ShannonCopepodDiversityCPR)  %>%
     dplyr::mutate(CopepodEvenness = ShannonCopepodDiversityCPR / log(NoCopepodSpecies_Sample))
 
-  cprPsamp <- get_CPRSamps() %>%
+  cprPsamp <- pr_get_CPRSamps() %>%
     dplyr::filter(grepl("P", SampleType)) %>%
     dplyr::select(-c(PCI, SampleType, Biomass_mgm3))
 
-  cprPdat <- get_CPRPhytoData()
+  cprPdat <- pr_get_CPRPhytoData()
 
   # Total Phyto abundance
   phytodatacpr <- cprPsamp %>%
@@ -121,8 +121,7 @@ get_indices_cpr <- function(){
     dplyr::group_by(Sample, TaxonGroup) %>%
     dplyr::summarise(sumTG = sum(PAbun_m3, na.rm = TRUE)) %>%
     tidyr::pivot_wider(values_from = sumTG, names_from = TaxonGroup) %>%
-    dplyr::mutate(DiatomDinoflagellateRatio = Diatom / (Diatom + Dinoflagellate)) %>%
-    untibble()
+    dplyr::mutate(DiatomDinoflagellateRatio = Diatom / (Diatom + Dinoflagellate))
 
   AvgCellVolcpr <- phytodatacpr %>%
     dplyr::filter(!is.na(BioVolume_um3m3)) %>%

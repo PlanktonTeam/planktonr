@@ -88,8 +88,8 @@ pr_get_CPRPhytoChangeLog <- function(){
 #' @importFrom magrittr "%>%"
 pr_get_CPRZooCountData <- function() {
   CPRZooCount <- readr::read_csv(paste0(pr_get_site(), "CPR_Zoop_Raw.csv"), na = "(null)") %>%
-    dplyr::rename(TaxonName = TAXON_NAME, Copepod = TAXON_GROUP, TaxonGroup = TAXON_GRP01, Sample = SAMPLE,
-                  Genus= GENUS, Species = SPECIES, TaxonCount = COUNTS, SampVol_m3 = SAMPVOL_M3) %>%
+    dplyr::rename(Sample = SAMPLE, TaxonName = TAXON_NAME, Copepod = COPEPOD, TaxonGroup = TAXON_GROUP,
+                  Genus= GENUS, Species = SPECIES, TaxonCount = TAXON_COUNT, SampVol_m3 = SAMPVOL_M3) %>%
     dplyr::select(-ZOOP_ABUNDANCE_M3)
 }
 
@@ -103,9 +103,9 @@ pr_get_CPRZooCountData <- function() {
 #' @importFrom magrittr "%>%"
 pr_get_CPRZooData <- function(){
   cprZdat <- readr::read_csv(paste0(pr_get_site(), "CPR_Zoop_Raw.csv"), na = "") %>%
-    dplyr::rename(Sample = SAMPLE, TaxonName = TAXON_NAME, Copepod = TAXON_GROUP, TaxonGroup = TAXON_GRP01,
+    dplyr::rename(Sample = SAMPLE, TaxonName = TAXON_NAME, Copepod = COPEPOD, TaxonGroup = TAXON_GROUP,
                   Genus = GENUS, Species = SPECIES, ZAbund_m3 = ZOOP_ABUNDANCE_M3) %>%
-    dplyr::select(-c(COUNTS, SAMPVOL_M3))
+    dplyr::select(-c(TAXON_COUNT, SAMPVOL_M3))
 }
 
 #' Get CPR zooplankton Change Log
@@ -581,7 +581,7 @@ pr_get_CPRZooRaw <- function(){
     dplyr::filter(grepl("Z", SampleType)) %>%
     dplyr::select(-c(PCI, SampleType, Biomass_mgm3)) %>%
     dplyr::left_join(pr_get_CPRZooData(), by = "Sample") %>%
-    dplyr::select(-c("Copepod", "TaxonGroup", "Genus", "Species", 'SPCODE')) %>%
+    dplyr::select(-c("Copepod", "TaxonGroup", "Genus", "Species", 'SPCode')) %>%
     dplyr::arrange(-dplyr::desc(TaxonName)) %>%
     dplyr::mutate(TaxonName = ifelse(is.na(TaxonName), "No taxa found", TaxonName)) %>%
     tidyr::pivot_wider(names_from = TaxonName, values_from = ZAbund_m3, values_fill = list(ZAbund_m3 = 0)) %>%

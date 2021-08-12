@@ -8,7 +8,7 @@
 #' @examples
 #'
 #' @importFrom magrittr "%>%"
-add_bioregions <- function(df){
+pr_add_bioregions <- function(df){
 
   # First add Marine Bioregions
   df <- df %>%
@@ -42,10 +42,12 @@ add_bioregions <- function(df){
 
   # Then lets do IMCRA Provinvial Bioregions
   df <- df %>%
-    dplyr::select(Longitude, Latitude) %>%  # file with columns named Longitude, Latitude
-    sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = "+proj=longlat +datum=WGS84") %>%
+    # dplyr::select(Longitude, Latitude) %>%  # file with columns named Longitude, Latitude
+    sf::st_as_sf(sf_column_name = "geometry", crs = "+proj=longlat +datum=WGS84") %>%
+    # sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = "+proj=longlat +datum=WGS84") %>%
     sf::st_join(imcra_pb, join = sf::st_within) %>%
-    dplyr::select(c(WATER_TYPE)) %>%
+    tibble::as_tibble() %>%
+    dplyr::select(WATER_TYPE) %>%
     dplyr::bind_cols(df, .) %>%
     dplyr::rename(IMCRA_pb = WATER_TYPE)
 
@@ -54,7 +56,8 @@ add_bioregions <- function(df){
     dplyr::select(Longitude, Latitude) %>%  # file with columns named Longitude, Latitude
     sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = "+proj=longlat +datum=WGS84") %>%
     sf::st_join(imcra_meso, join = sf::st_within) %>%
-    dplyr::select(c(WATER_TYPE)) %>%
+    tibble::as_tibble() %>%
+    dplyr::select(WATER_TYPE) %>%
     dplyr::bind_cols(df, .) %>%
     dplyr::rename(IMCRA_meso = WATER_TYPE)
 

@@ -2,7 +2,7 @@
 # satcpr <- cprSampleInfo %>%
 # dplyr::rename(Date = SampleDateUTC)
 
-# if (get_sat_data == TRUE){
+# if (pr_get_sat_data == TRUE){
 #   # accessing the satelitte data from MODIS
 #
 #   # Possible products
