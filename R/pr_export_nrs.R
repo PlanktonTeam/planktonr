@@ -93,4 +93,15 @@ pr_export_nrs <- function(outD){
   NRSBGC <- pr_get_bgc()
   data.table::fwrite(NRSBGC, file = paste0(outD,.Platform$file.sep,"NRS_CombinedWaterQuality.csv"), row.names = FALSE)
   rm(NRSBGC)
+
+  ## Still to Add in CTD. Unsure if this should be with/without the drop_na, missingCode, NRSaddCTD etc
+  #
+  # CTD <- getCTD() %>% drop_na(TripCode)
+  # write_csv(CTD, "RawData/NRS_CTD.csv")
+  #
+  # missingCode <- rawCTD %>% filter(is.na(TripCode)) %>% select(StationName, CastTime_UTC, file_id) %>% unique()
+  #
+  # NRSaddCTD <- NRSSamp %>% left_join(df, by = 'TripCode')
+  # NRSmissingCTD <- NRSaddCTD %>% filter(is.na(file_id))
+
 }
