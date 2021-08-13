@@ -5,78 +5,29 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/PlanktonTeam/planktonr/workflows/R-CMD-check/badge.svg)](https://github.com/PlanktonTeam/planktonr/actions)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![R-CMD-check](https://github.com/PlanktonTeam/planktonr/workflows/R-CMD-check/badge.svg)](https://github.com/PlanktonTeam/planktonr/actions)
+[![Codecov test
+coverage](https://codecov.io/gh/PlanktonTeam/planktonr/branch/master/graph/badge.svg)](https://codecov.io/gh/PlanktonTeam/planktonr?branch=master)
 <!-- badges: end -->
 
-The goal of planktonr is to …
-
-## Tips while writing package
-
-devtools::document()  
-pkgload::load\_all()  
-devtools::check()  
-devtools::build\_readme()
-
-usethis::use\_vignette(“my-vignette”) \# To create your first vignette  
-usethis::use\_pkgdown() \# Run once to configure your package to use
-pkgdown
-
-use\_lifecycle\_badge(“Experimental”)
-usethis::use\_github\_action\_check\_standard()
-
-devtools::build\_readme() \# Update the readme pkgdown::build\_site() \#
-Use pkgdown to update your website
+planktonr is an r package that facilitates the download, analysis and
+visualisation of phytoplankton and zooplankton data. Our initial focus
+will be on plankton data stored on the Australian Ocean Data Network
+([AODN](https://portal.aodn.org.au)) and collected by the Integrated
+Marine Observing System ([IMOS](www.imos.org.au)), but we hope to expand
+to other plankton data sets in the future.
 
 ## Installation
 
-You can install the released version of planktonr from
-[CRAN](https://CRAN.R-project.org) with:
-
-``` r
-install.packages("planktonr")
-```
-
-And the development version from [GitHub](https://github.com/) with:
+We are currently not on CRAN (hopefully soon). Be aware that this
+package is in the very early stages of development. Functions and
+documentation are not complete so installing at the moment is at your
+own risk. If you are still interested, you can install the development
+version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("PlanktonTeam/planktonr")
 ```
-
-## Example
-
-This is a basic example which shows you how to solve a common problem:
-
-``` r
-library(planktonr)
-## basic example code
-```
-
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
-
-``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
-```
-
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this. You could also
-use GitHub Actions to re-render `README.Rmd` every time you push. An
-example workflow can be found here:
-<https://github.com/r-lib/actions/tree/master/examples>.
-
-You can also embed plots, for example:
-
-<img src="man/figures/README-pressure-1.png" width="100%" />
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
