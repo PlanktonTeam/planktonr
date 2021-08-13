@@ -7,7 +7,7 @@
 #' @examples
 #'
 #'@importFrom magrittr "%>%"
-export_processed_larvalfish <- function(outD){
+pr_export_larvalfish <- function(outD){
 
   LFCount <- pr_get_LFCountAll()
   data.table::fwrite(LFCount, file.path(outD, "NRS_LFCount_All.csv"))

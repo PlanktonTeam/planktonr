@@ -48,13 +48,12 @@ pr_get_bgc <- function(){
   # Total suspended solid data
   TSS <- readr::read_csv(paste0(pr_get_site(),"BGC_TSS.csv"), na = "(null)") %>%
     pr_rename() %>%
-    dplyr::rename(TripCode = NRS_TRIP_CODE) %>%
     # dplyr::rename(TripCode = TRIP_CODE, SampleDepth_m = SAMPLEDEPTH_M, TSS_mgL = TSS_MGL,
     #               InorganicFraction_mgL = INORGANICFRACTION_MGL,
     #               OrganicFraction_mgL = ORGANICFRACTION_MGL, Secchi_m = SECCHIDEPTH_M) %>%
     dplyr::mutate(SampleDepth_m = as.character(SampleDepth_m),
                   TripCode = substring(TripCode,4),
-                  TSS_mg_L = ifelse(TSS_Flag %in% c(3,4,9), NA, TSS_mgL), # remove bad data
+                  TSS_mgL = ifelse(TSS_Flag %in% c(3,4,9), NA, TSS_mgL), # remove bad data
                   InorganicFraction_mgL = ifelse(TSS_Flag %in% c(3,4,9), NA, InorganicFraction_mgL),
                   OrganicFraction_mgL = ifelse(TSS_Flag %in% c(3,4,9), NA, OrganicFraction_mgL)) %>%
     dplyr::group_by(TripCode, SampleDepth_m) %>%

@@ -27,12 +27,14 @@ pr_get_CTD <- function(){
                     site_code == "NRSROT" ~ "Rottnest Island",
                     site_code == "NRSNIN" ~ "Ningaloo"),
                   CPHL = ifelse(!is.na(CPHL), CPHL, CHLF)) %>%
-    # dplyr::rename(CastTime_UTC = time_coverage_start, Latitude = LATITUDE, Longitude = LONGITUDE, SampleDepth_m = DEPTH, Salinity_psu = PSAL,
-    #               Salinity_flag = PSAL_quality_control, Temperature_degC = TEMP, Temperature_flag = TEMP_quality_control, DissolvedOxygen_umolkg = DOX2,
+    pr_rename() %>%
+    dplyr::rename(SampleDepth_m = DEPTH, Salinity_psu = PSAL, Salinity_flag = PSAL_quality_control) %>% # Can't rename this in pr_rename due to replicate name
+    # dplyr::rename(CastTime_UTC = time_coverage_start, Latitude = LATITUDE, Longitude = LONGITUDE, , ,
+    #               , Temperature_degC = TEMP, Temperature_flag = TEMP_quality_control, DissolvedOxygen_umolkg = DOX2,
     #               DissolvedOxygen_flag = DOX2_quality_control, Chla_mgm3 = CPHL, Chla_flag = CPHL_quality_control, Turbidity_NTU = TURB,
     #               Turbidity_flag = TURB_quality_control, Pressure_dbar = PRES_REL, Conductivity_Sm = CNDC, Conductivity_flag = CNDC_quality_control,
     #               WaterDensity_kgm3 = DENS, WaterDensity_flag = DENS_quality_control) %>%
-    pr_rename() %>%
+
     dplyr::select(file_id, StationName, TripCode, CastTime_UTC, Latitude, Longitude, SampleDepth_m, Salinity_psu, Salinity_flag, Temperature_degC, Temperature_flag,
                   DissolvedOxygen_umolkg, DissolvedOxygen_flag, Chla_mgm3, Chla_flag, Turbidity_NTU, Turbidity_flag, Pressure_dbar, Conductivity_Sm,
                   Conductivity_flag, WaterDensity_kgm3, WaterDensity_flag) %>%

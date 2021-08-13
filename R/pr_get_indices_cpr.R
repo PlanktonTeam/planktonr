@@ -14,9 +14,6 @@ pr_get_indices_cpr <- function(){
   cprSampleInfo <- pr_get_CPRSamps() %>%
     pr_add_bioregions()
 
-  cprProps <- readr::read_csv(paste0(pr_get_site(), "CPR_SatData.csv"), na = "(null)") %>%
-    dplyr::rename(Sample = SAMPLE, ChlorophyllSatellite_mgm3 = CHLA, WaterDepth_m = DEPTH_M)
-
   cprZsamp <- pr_get_CPRSamps() %>%
     dplyr::filter(grepl("Z", SampleType)) %>%
     dplyr::select(-c(PCI, SampleType))
@@ -33,12 +30,12 @@ pr_get_indices_cpr <- function(){
 
   TZoocpr <-  zoodatacpr %>%
     dplyr::group_by(Sample) %>%
-    dplyr::summarise(ZoopAbundance_m3 = sum(ZAbund_m3, na.rm = TRUE))
+    dplyr::summarise(ZoopAbundance_m3 = sum(ZooPhytoAbund_m3, na.rm = TRUE), .groups = "drop")
 
   TCopecpr <- zoodatacpr %>%
     dplyr::filter(Copepod == 'COPEPOD') %>%
     dplyr::group_by(Sample) %>%
-    dplyr::summarise(CopeAbundance_m3 = sum(ZAbund_m3, na.rm = TRUE))
+    dplyr::summarise(CopeAbundance_m3 = sum(ZooPhytoAbund_m3, na.rm = TRUE), .groups = "drop")
 
   # Bring in copepod information table with sizes etc.
   Zinfo <- pr_get_ZooInfo()
@@ -46,18 +43,18 @@ pr_get_indices_cpr <- function(){
   ACopeSizeCpr <- zoodatacpr %>%
     dplyr::filter(Copepod == 'COPEPOD') %>%
     dplyr::inner_join(Zinfo %>% dplyr::select(LENGTH_MM, TaxonName, DIET), by = "TaxonName") %>%
-    dplyr::mutate(abunSize = LENGTH_MM * ZAbund_m3) %>%
+    dplyr::mutate(abunSize = LENGTH_MM * ZooPhytoAbund_m3) %>%
     dplyr::group_by(Sample) %>%
-    dplyr::summarise(AvgTotalLengthCopepod_mm = sum(abunSize, na.rm = TRUE)/sum(ZAbund_m3, na.rm = TRUE))
+    dplyr::summarise(AvgTotalLengthCopepod_mm = sum(abunSize, na.rm = TRUE)/sum(ZooPhytoAbund_m3, na.rm = TRUE), .groups = "drop")
 
   HCratCpr <- zoodatacpr %>%
     dplyr::filter(Copepod == 'COPEPOD') %>%
     dplyr::inner_join(Zinfo %>% dplyr::select(TaxonName, DIET), by = "TaxonName") %>%
     dplyr::mutate(DIET = ifelse(DIET == 'Herbivore', 'Omnivore', DIET)) %>%
     tidyr::drop_na() %>%
-    dplyr::select(Sample, DIET, ZAbund_m3) %>%
+    dplyr::select(Sample, DIET, ZooPhytoAbund_m3) %>%
     dplyr::group_by(Sample, DIET) %>%
-    dplyr::summarise(sumdiet = sum(ZAbund_m3 , na.rm = TRUE)) %>%
+    dplyr::summarise(sumdiet = sum(ZooPhytoAbund_m3 , na.rm = TRUE), .groups = "drop") %>%
     tidyr::pivot_wider(values_from = sumdiet, names_from = DIET) %>%
     dplyr::mutate(HerbivoreCarnivoreCopepodRatio = Carnivore / (Omnivore + Carnivore))
 
@@ -73,13 +70,13 @@ pr_get_indices_cpr <- function(){
     dplyr::filter(Copepod == 'COPEPOD' & Species != "spp." & !is.na(Species) & !grepl("cf.", Species) & !grepl("grp", Species)) %>%
     dplyr::mutate(TaxonName = paste0(Genus," ", stringr::word(Species,1))) %>% # bin complexes
     dplyr::group_by(Sample) %>%
-    dplyr::summarise(NoCopepodSpecies_Sample = dplyr::n())
+    dplyr::summarise(NoCopepodSpecies_Sample = dplyr::n(), .groups = "drop")
 
   ShannonCopepodDiversityCPR <- zooCountCpr %>%
     dplyr::filter(Copepod == 'COPEPOD' & Species != "spp." & !is.na(Species) & !grepl("cf.", Species) & !grepl("grp", Species)) %>%
     dplyr::mutate(TaxonName = paste0(Genus," ", stringr::word(Species,1))) %>% # bin complexes
     dplyr::group_by(Sample, TaxonName) %>%
-    dplyr::summarise(ZCount = sum(TaxonCount, na.rm = TRUE)) %>%
+    dplyr::summarise(ZCount = sum(TaxonCount, na.rm = TRUE), .groups = "drop") %>%
     tidyr::pivot_wider(values_from = ZCount, names_from = TaxonName, values_fill = 0) %>%
     dplyr::ungroup() %>%
     dplyr::select(-Sample) %>%
@@ -101,32 +98,32 @@ pr_get_indices_cpr <- function(){
     dplyr::filter(TaxonGroup != 'Other')
 
   PhytoCcpr <- phytodatacpr %>%
-    dplyr::select(Sample, TaxonGroup, PAbun_m3, BioVolume_um3m3) %>%
-    dplyr::mutate(BV_Cell = BioVolume_um3m3 / PAbun_m3, # biovolume of one cell
+    dplyr::select(Sample, TaxonGroup, PhytoAbund_m3, BioVolume_um3m3) %>%
+    dplyr::mutate(BV_Cell = BioVolume_um3m3 / PhytoAbund_m3, # biovolume of one cell
            Carbon = ifelse(TaxonGroup == 'Dinoflagellate', 0.76*(BV_Cell)^0.819, # conversion to Carbon based on taxongroup and biovolume of cell
                            ifelse(TaxonGroup == 'Ciliate', 0.22*(BV_Cell)^0.939,
                                   ifelse(TaxonGroup == 'Cyanobacteria', 0.2, 0.288*(BV_Cell)^0.811 ))),
-           Carbon_m3 = PAbun_m3 * Carbon) %>% # Carbon per m3
+           Carbon_m3 = PhytoAbund_m3 * Carbon) %>% # Carbon per m3
     dplyr::group_by(Sample) %>%
-    dplyr::summarise(PhytoBiomassCarbon_pgm3 = sum(Carbon_m3))
+    dplyr::summarise(PhytoBiomassCarbon_pgm3 = sum(Carbon_m3), .groups = "drop")
 
   TPhytoCpr <- phytodatacpr %>%
     dplyr::group_by(Sample) %>%
-    dplyr::summarise(AbundancePhyto_cells_m3 = sum(PAbun_m3, na.rm = TRUE))
+    dplyr::summarise(AbundancePhyto_cells_m3 = sum(PhytoAbund_m3, na.rm = TRUE))
 
   DDratcpr <- phytodatacpr %>%
     dplyr::filter(TaxonGroup %in% c('Centric diatom', "Pennate diatom", 'Dinoflagellate')) %>%
     dplyr::mutate(TaxonGroup = dplyr::recode(TaxonGroup, 'Centric diatom' = 'Diatom', 'Pennate diatom' = 'Diatom')) %>%
-    dplyr::select(Sample, TaxonGroup, PAbun_m3) %>%
+    dplyr::select(Sample, TaxonGroup, PhytoAbund_m3) %>%
     dplyr::group_by(Sample, TaxonGroup) %>%
-    dplyr::summarise(sumTG = sum(PAbun_m3, na.rm = TRUE)) %>%
+    dplyr::summarise(sumTG = sum(PhytoAbund_m3, na.rm = TRUE), .groups = "drop") %>%
     tidyr::pivot_wider(values_from = sumTG, names_from = TaxonGroup) %>%
     dplyr::mutate(DiatomDinoflagellateRatio = Diatom / (Diatom + Dinoflagellate))
 
   AvgCellVolcpr <- phytodatacpr %>%
     dplyr::filter(!is.na(BioVolume_um3m3)) %>%
     dplyr::group_by(Sample) %>%
-    dplyr::summarise(AvgCellVol_um3 = mean(sum(BioVolume_um3m3)/sum(PAbun_m3)))
+    dplyr::summarise(AvgCellVol_um3 = mean(sum(BioVolume_um3m3)/sum(PhytoAbund_m3)), .groups = "drop")
 
   # Diversity (phyto, diatoms, dinos)
   # stick to abundance data here as otherwise we have FOV counts
@@ -139,7 +136,7 @@ pr_get_indices_cpr <- function(){
                     !grepl("grp", Species)) %>%
     dplyr::mutate(TaxonName = paste0(Genus," ", stringr::word(Species,1))) %>% # bin complexes
     dplyr::group_by(Sample) %>%
-    dplyr::summarise(NoPhytoSpecies_Sample = dplyr::n())
+    dplyr::summarise(NoPhytoSpecies_Sample = dplyr::n(), .groups = "drop")
 
   ShannonPhytoDiversitycpr <- phytodatacpr %>%
     dplyr::filter(TaxonGroup != 'Other' &
@@ -149,7 +146,7 @@ pr_get_indices_cpr <- function(){
                     !grepl("grp", Species)) %>%
     dplyr::mutate(TaxonName = paste0(Genus," ", stringr::word(Species,1))) %>% # bin complexes
     dplyr::group_by(Sample, TaxonName) %>%
-    dplyr::summarise(Pdata = sum(PAbun_m3, na.rm = TRUE)) %>%
+    dplyr::summarise(Pdata = sum(PhytoAbund_m3, na.rm = TRUE), .groups = "drop") %>%
     tidyr::pivot_wider(values_from = Pdata, names_from = TaxonName, values_fill = 0) %>%
     dplyr::ungroup() %>%
     dplyr::select(-Sample) %>%
@@ -174,7 +171,7 @@ pr_get_indices_cpr <- function(){
                     !grepl("grp", Species)) %>%
     dplyr::mutate(TaxonName = paste0(Genus," ", stringr::word(Species,1))) %>% # bin complexes
     dplyr::group_by(Sample, TaxonName) %>%
-    dplyr::summarise(Diadata = sum(PAbun_m3, na.rm = TRUE)) %>%
+    dplyr::summarise(Diadata = sum(PhytoAbund_m3, na.rm = TRUE), .groups = "drop") %>%
     tidyr::pivot_wider(values_from = Diadata, names_from = TaxonName, values_fill = 0) %>%
     dplyr::ungroup() %>%
     dplyr::select(-Sample) %>%
@@ -193,7 +190,7 @@ pr_get_indices_cpr <- function(){
     dplyr::filter(TaxonGroup  == 'Dinoflagellate' & Species != "spp." & !is.na(Species) & !grepl("cf.", Species) & !grepl("grp", Species)) %>%
     dplyr::mutate(TaxonName = paste0(Genus," ", stringr::word(Species,1))) %>% # bin complexes
     dplyr::group_by(Sample, TaxonName) %>%
-    dplyr::summarise(Dinodata = sum(PAbun_m3, na.rm = TRUE)) %>%
+    dplyr::summarise(Dinodata = sum(PhytoAbund_m3, na.rm = TRUE), .groups = "drop") %>%
     tidyr::pivot_wider(values_from = Dinodata, names_from = TaxonName, values_fill = 0) %>%
     dplyr::ungroup() %>%
     dplyr::select(-Sample) %>%
@@ -217,7 +214,6 @@ pr_get_indices_cpr <- function(){
     dplyr::left_join(PhytoEvencpr, by = ("Sample")) %>%
     dplyr::left_join(DiaEvencpr, by = ("Sample")) %>%
     dplyr::left_join(DinoEvencpr, by = ("Sample")) %>%
-    #  dplyr::left_join(satcpr %>% dplyr::select(Sample, sst_1d, chl_oc3_1d), by = ("Sample")) %>%  #add once run , GSLA, GSL, UCUR, VCUR
     dplyr::select(-Sample, -SampleType)
 
   return(indices)

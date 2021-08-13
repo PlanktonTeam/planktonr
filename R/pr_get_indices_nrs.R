@@ -11,7 +11,7 @@ pr_get_indices_nrs <- function(){
 
   NRSdat <- pr_get_NRSTrips() %>%
     dplyr::select(-SampleType) %>%
-    dplyr::filter(Station != "Port Hacking 4") #ignore warning, "fast" method does better here than "accurate"
+    dplyr::filter(StationName != "Port Hacking 4") #ignore warning, "fast" method does better here than "accurate"
 
   dNRSdat <- dplyr::distinct(NRSdat, TripCode, .keep_all = TRUE) %>% # Distinct rows for satellite, should be anyway
     pr_rename() %>%
@@ -111,7 +111,7 @@ pr_get_indices_nrs <- function(){
                      Oxygen_umolL = mean(Oxygen_umolL, na.rm = TRUE),
                      DIC_umolkg = mean(DIC_umolkg, na.rm = TRUE),
                      TAlkalinity_umolkg = mean(TAlkalinity_umolkg, na.rm = TRUE),
-                     Salinity_PSU = mean(Salinity_PSU, na.rm = TRUE),
+                     Salinity_psu = mean(Salinity_psu, na.rm = TRUE),
                      .groups = "drop") %>%
     dplyr::mutate_all(~ replace(., is.na(.), NA))
 
@@ -128,13 +128,13 @@ pr_get_indices_nrs <- function(){
 
   TZoo <- ZooData %>%
     dplyr::group_by(TripCode) %>%
-    dplyr::summarise(ZoopAbundance_m3 = sum(ZAbund_m3, na.rm = TRUE),
+    dplyr::summarise(ZoopAbundance_m3 = sum(ZooPhytoAbund_m3, na.rm = TRUE),
                      .groups = "drop")
 
   TCope <- ZooData %>%
     dplyr::filter(Copepod == "COPEPOD") %>%
     dplyr::group_by(TripCode, ) %>%
-    dplyr::summarise(CopeAbundance_m3 = sum(ZAbund_m3, na.rm = TRUE),
+    dplyr::summarise(CopeAbundance_m3 = sum(ZooPhytoAbund_m3, na.rm = TRUE),
                      .groups = "drop")
 
   # Bring in copepod information table with sizes etc.
@@ -144,10 +144,10 @@ pr_get_indices_nrs <- function(){
     dplyr::filter(Copepod == "COPEPOD") %>%
     dplyr::inner_join(ZInfo %>%
                         dplyr::select(LENGTH_MM, TaxonName, DIET), by = "TaxonName") %>%
-    dplyr::mutate(abunSize = LENGTH_MM * ZAbund_m3,
+    dplyr::mutate(abunSize = LENGTH_MM * ZooPhytoAbund_m3,
                   DIET = ifelse(DIET == "CC", "CC", "CO")) %>%
     dplyr::group_by(TripCode) %>%
-    dplyr::summarise(AvgTotalLengthCopepod_mm = sum(abunSize, na.rm = TRUE)/sum(ZAbund_m3, na.rm = TRUE),
+    dplyr::summarise(AvgTotalLengthCopepod_mm = sum(abunSize, na.rm = TRUE)/sum(ZooPhytoAbund_m3, na.rm = TRUE),
                      .groups = "drop")
 
   HCrat <- ZooData %>% #TODO This whole section needs to be reconsidered. Not sure it gives the correct ratios
@@ -159,9 +159,9 @@ pr_get_indices_nrs <- function(){
       DIET == "Omnivore" ~ "CO",
       DIET == "Herbivore" ~ "CO")) %>% #TODO Check that Herbivore is correct
     tidyr::drop_na() %>%
-    dplyr::select(TripCode, DIET, ZAbund_m3) %>%
+    dplyr::select(TripCode, DIET, ZooPhytoAbund_m3) %>%
     dplyr::group_by(TripCode, DIET) %>%
-    dplyr::summarise(sumdiet = sum(ZAbund_m3 , na.rm = TRUE), .groups = "drop") %>%
+    dplyr::summarise(sumdiet = sum(ZooPhytoAbund_m3 , na.rm = TRUE), .groups = "drop") %>%
     tidyr::pivot_wider(values_from = sumdiet, names_from = DIET) %>%
     dplyr::mutate(HerbivoreCarnivoreCopepodRatio = CO / (CO + CC))
 
