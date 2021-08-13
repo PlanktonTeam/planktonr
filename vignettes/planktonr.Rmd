@@ -17,3 +17,19 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(planktonr)
 ```
+
+## Downloading NRS Data Tables
+
+```{r example1, eval=FALSE, include=TRUE}
+## Code to download latest NRS Plankton Tables
+output_dir <- "." # Directory to save files in
+export_processed_nrs(output_dir)
+```
+
+## Downloading CPR Data Tables
+
+```{r example2, eval=FALSE, include=TRUE}
+## Code to download latest NRS Plankton Tables
+output_dir <- "." # Directory to save files in
+export_processed_cpr(output_dir)
+```

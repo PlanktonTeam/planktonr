@@ -73,53 +73,17 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#planktonr-" class="anchor"></a>planktonr <a href="https://github.com/PlanktonTeam/planktonr"><img src="reference/figures/planktonr.png" align="right" height="139"></a>
 </h1></div>
+<p>use_coverage(pkg = “.”, type = c(“codecov”))</p>
 <!-- badges: start -->
-
-<p>The goal of planktonr is to …</p>
-<div id="tips-while-writing-package" class="section level2">
-<h2 class="hasAnchor">
-<a href="#tips-while-writing-package" class="anchor"></a>Tips while writing package</h2>
-<p>devtools::document()<br>
-pkgload::load_all()<br>
-devtools::check()<br>
-devtools::build_readme()</p>
-<p>usethis::use_vignette(“my-vignette”) # To create your first vignette<br>
-usethis::use_pkgdown() # Run once to configure your package to use pkgdown</p>
-<p>use_lifecycle_badge(“Experimental”) usethis::use_github_action_check_standard()</p>
-<p>devtools::build_readme() # Update the readme pkgdown::build_site() # Use pkgdown to update your website</p>
-</div>
+<p><a href="https://github.com/PlanktonTeam/planktonr/actions"><img src="https://github.com/PlanktonTeam/planktonr/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a> <a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a> <a href="https://codecov.io/gh/PlanktonTeam/planktonr?branch=master"><img src="https://codecov.io/gh/PlanktonTeam/planktonr/branch/master/graph/badge.svg" alt="Codecov test coverage"></a> <!-- badges: end --></p>
+<p>planktonr is an r package that facilitates the download, analysis and visualisation of phytoplankton and zooplankton data. Our initial focus will be on plankton data stored on the Australian Ocean Data Network (<a href="https://portal.aodn.org.au">AODN</a>) and collected by the Integrated Marine Observing System (<a href="www.imos.org.au">IMOS</a>), but we hope to expand to other plankton data sets in the future.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install the released version of planktonr from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
+<p>We are currently not on CRAN (hopefully soon). Be aware that this package is in the very early stages of development. Functions and documentation are not complete so installing at the moment is at your own risk. If you are still interested, you can install the development version from <a href="https://github.com/">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"planktonr"</span><span class="op">)</span></code></pre></div>
-<p>And the development version from <a href="https://github.com/">GitHub</a> with:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
 <span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"PlanktonTeam/planktonr"</span><span class="op">)</span></code></pre></div>
-</div>
-<div id="example" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h2>
-<p>This is a basic example which shows you how to solve a common problem:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PlanktonTeam/planktonr">planktonr</a></span><span class="op">)</span>
-<span class="co">## basic example code</span></code></pre></div>
-<p>What is special about using <code>README.Rmd</code> instead of just <code>README.md</code>? You can include R chunks like so:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">cars</span><span class="op">)</span>
-<span class="co">#&gt;      speed           dist       </span>
-<span class="co">#&gt;  Min.   : 4.0   Min.   :  2.00  </span>
-<span class="co">#&gt;  1st Qu.:12.0   1st Qu.: 26.00  </span>
-<span class="co">#&gt;  Median :15.0   Median : 36.00  </span>
-<span class="co">#&gt;  Mean   :15.4   Mean   : 42.98  </span>
-<span class="co">#&gt;  3rd Qu.:19.0   3rd Qu.: 56.00  </span>
-<span class="co">#&gt;  Max.   :25.0   Max.   :120.00</span></code></pre></div>
-<p>You’ll still need to render <code>README.Rmd</code> regularly, to keep <code>README.md</code> up-to-date. <code><a href="https://devtools.r-lib.org//reference/build_rmd.html">devtools::build_readme()</a></code> is handy for this. You could also use GitHub Actions to re-render <code>README.Rmd</code> every time you push. An example workflow can be found here: <a href="https://github.com/r-lib/actions/tree/master/examples" class="uri">https://github.com/r-lib/actions/tree/master/examples</a>.</p>
-<p>You can also embed plots, for example:</p>
-<p><img src="reference/figures/README-pressure-1.png" width="100%"></p>
-<p>In that case, don’t forget to commit and push the resulting figure files, so they display on GitHub and CRAN.</p>
 </div>
 </div>
   </div>
@@ -149,14 +113,7 @@ usethis::use_pkgdown() # Run once to configure your package to use pkgdown</p>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
-<ul class="list-unstyled">
-<li><a href="https://github.com/PlanktonTeam/planktonr/actions"><img src="https://github.com/PlanktonTeam/planktonr/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
-</ul>
-</div>
-</div>
+  </div>
 </div>
 
 
