@@ -6,12 +6,11 @@
 #' Internal function to load the location of the raw plankton data files.
 #' @return A string with location of raw plankton data
 #' @export
+#' @importFrom magrittr "%>%"
 #' @examples
 #' file_loc <- pr_get_site()
-#' @importFrom magrittr "%>%"
 pr_get_site <- function(){
   raw <- "https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/RawData/"
-  return(raw)
 }
 
 
@@ -22,11 +21,10 @@ pr_get_site <- function(){
 #'
 #' @examples
 #' df <- pr_get_ZooInfo()
-#' @importFrom magrittr "%>%"
+
 pr_get_ZooInfo <- function(){
   ZInfo <- readr::read_csv(paste0(pr_get_site(), "ZoopInfo.csv"), na = "") %>%
     pr_rename()
-  # dplyr::rename( "TaxonName" = "TAXON_NAME")
 }
 
 
@@ -37,10 +35,10 @@ pr_get_ZooInfo <- function(){
 #' @export
 #'
 #' @examples
-#' @importFrom magrittr "%>%"
+
 pr_get_StationName <- function(df){
   df <- df %>%
-    dplyr::mutate(StationName = dplyr::case_when(
+    mutate(StationName = case_when(
       StationCode == "NRSDAR" ~ "Darwin",
       StationCode == "NRSYON" ~ "Yongala",
       StationCode == "NRSNSI" ~ "North Stradbroke Island",

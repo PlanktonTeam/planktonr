@@ -5,7 +5,7 @@
 #'
 #' @examples
 #' df <- pr_get_Chemistry()
-#' @importFrom magrittr "%>%"
+
 pr_get_Chemistry <- function(){
 
   chemistry <- readr::read_csv(paste0(pr_get_site(), "BGC_Chemistry.csv"), na = c("", NaN),
@@ -13,7 +13,7 @@ pr_get_Chemistry <- function(){
                                                        OXYGEN_UMOLL = readr::col_double(),
                                                        OXYGEN_COMMENTS = readr::col_character())) %>%
     pr_rename() %>%
-    # dplyr::rename(TripCode = TRIP_CODE,
+    # rename(TripCode = TRIP_CODE,
     #               SampleDepth_m = SAMPLEDEPTH_M, Silicate_umolL = SILICATE_UMOLL, Nitrate_umolL = NITRATE_UMOLL,
     #               Phosphate_umolL = PHOSPHATE_UMOLL, Salinity_psu = SALINITY_PSU,
     #               Ammonium_umolL = AMMONIUM_UMOLL,
@@ -36,7 +36,7 @@ pr_get_Chemistry <- function(){
 
   # JDE - 13th AUgust 2021 - Remove 3, 4, 6, 9
 
-    dplyr::mutate(SampleDepth_m = as.character(SampleDepth_m),
+    mutate(SampleDepth_m = as.character(SampleDepth_m),
                   Silicate_umolL = ifelse(SILICATE_FLAG %in% c(3,4,9), NA, Silicate_umolL), # remove all data flagged as bad or probably bad
                   Phosphate_umolL = ifelse(PHOSPHATE_FLAG %in% c(3,4,9), NA, Phosphate_umolL),
                   Ammonium_umolL = ifelse(AMMONIUM_FLAG %in% c(3,4,9), NA, Ammonium_umolL),
@@ -46,8 +46,8 @@ pr_get_Chemistry <- function(){
                   DIC_umolkg = ifelse(CARBON_FLAG %in% c(3,4,9), NA, DIC_umolkg),
                   TAlkalinity_umolkg = ifelse(ALKALINITY_FLAG %in% c(3,4,9), NA, TAlkalinity_umolkg),
                   Salinity_psu = ifelse(SALINITY_FLAG %in% c(3,4,9), NA, Salinity_psu)) %>%
-    dplyr::group_by(TripCode, SampleDepth_m) %>%
-    dplyr::summarise(Silicate_umolL = mean(Silicate_umolL, na.rm = TRUE), # some replicated samples from error picking up PHB data, needs addressing in database
+    group_by(TripCode, SampleDepth_m) %>%
+    summarise(Silicate_umolL = mean(Silicate_umolL, na.rm = TRUE), # some replicated samples from error picking up PHB data, needs addressing in database
                      Phosphate_umolL = mean(Phosphate_umolL, na.rm = TRUE),
                      Ammonium_umolL = mean(Ammonium_umolL, na.rm = TRUE),
                      Nitrate_umolL = mean(Nitrate_umolL, na.rm = TRUE),
@@ -57,6 +57,6 @@ pr_get_Chemistry <- function(){
                      TAlkalinity_umolkg = mean(TAlkalinity_umolkg, na.rm = TRUE),
                      Salinity_psu = mean(Salinity_psu, na.rm = TRUE),
                      .groups = "drop") %>%
-    dplyr::ungroup() %>%
-    dplyr::mutate_all(~ replace(., is.na(.), NA))
+    ungroup() %>%
+    mutate_all(~ replace(., is.na(.), NA))
 }
