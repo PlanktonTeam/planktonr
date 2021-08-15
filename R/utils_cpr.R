@@ -9,11 +9,6 @@
 pr_get_CPRTrips <- function(){
   CPRTrips <- readr::read_csv(paste0(pr_get_site(), "CPR_Trips.csv"), na = "") %>%
     pr_rename()
-    # dplyr::rename(TripCode = TRIP_CODE, StartLatitude = STARTLATITUDE, StartLongitude = STARTLONGITUDE,
-    #               StartSampleDateUTC = STARTSAMPLEDATEUTC, EndSampleDateUTC = ENDSAMPLEDATEUTC,
-    #               EndLatitude = ENDLATITUDE, EndLongitude = ENDLONGITUDE,
-    #               StartPort = STARTPORT, EndPort = ENDPORT, Region = REGION, Miles_nm = MILES,
-    #               VesselName = VESSEL_NAME, Acknowledgements = ACKNOWLEDGEMENTS)
 }
 
 #' Get CPR samples
@@ -26,8 +21,6 @@ pr_get_CPRTrips <- function(){
 #' @importFrom magrittr "%>%"
 pr_get_CPRSamps <- function(){
   CPRSamps <- readr::read_csv(paste0(pr_get_site(), "CPR_Samp.csv"), na = "") %>%
-    # dplyr::rename(Sample = SAMPLE, Latitude = LATITUDE, Longitude = LONGITUDE, SampleDateUTC = SAMPLEDATEUTC,
-                  # SampleType = SAMPLETYPE, Biomass_mgm3 = BIOMASS_MGM3, TripCode = TRIP_CODE) %>%
     pr_rename() %>%
     dplyr::filter(!is.na(SampleType)) %>%
     dplyr::mutate(Year = lubridate::year(SampleDateUTC),
@@ -48,8 +41,6 @@ pr_get_CPRSamps <- function(){
 pr_get_CPRPhytoData <- function(){
   cprPdat <- readr::read_csv(paste0(pr_get_site(), "CPR_Phyto_Raw.csv"), na = "") %>%
     pr_rename() %>%
-    # dplyr::rename(Sample = SAMPLE, TaxonName = TAXON_NAME, TaxonGroup = TAXON_GROUP, Genus = GENUS, Species = SPECIES, PhytoAbund_m3 = PHYTO_ABUNDANCE_M3,
-    #               BioVolume_um3m3 = BIOVOL_UM3M3) %>%
     dplyr::select(-c(FovCount, SampVol_m3))
 }
 
@@ -64,8 +55,6 @@ pr_get_CPRPhytoData <- function(){
 pr_get_CPRPhytoCountData <- function(){
   cprPdat <- readr::read_csv(paste0(pr_get_site(), "CPR_Phyto_Raw.csv"), na = "") %>%
     pr_rename() %>%
-    # dplyr::rename(Sample = SAMPLE, TaxonName = TAXON_NAME, TaxonGroup = TAXON_GROUP, Genus = GENUS, Species = SPECIES, SampVol_m3 = SAMPVOL_M3,
-    #               FovCount = FOV_COUNT) %>%
     dplyr::select(-c(BioVolume_um3m3, PhytoAbund_m3))
 }
 
@@ -79,7 +68,6 @@ pr_get_CPRPhytoCountData <- function(){
 #' @importFrom magrittr "%>%"
 pr_get_CPRPhytoChangeLog <- function(){
   cprPcl <- readr::read_csv(paste0(pr_get_site(), "CPR_Phyto_ChangeLog.csv"), na = "") %>%
-    # dplyr::rename(TaxonName = TAXON_NAME, StartDate = STARTDATE, ParentName = PARENT_NAME)
     pr_rename()
 }
 
@@ -93,8 +81,6 @@ pr_get_CPRPhytoChangeLog <- function(){
 #' @importFrom magrittr "%>%"
 pr_get_CPRZooCountData <- function() {
   CPRZooCount <- readr::read_csv(paste0(pr_get_site(), "CPR_Zoop_Raw.csv"), na = "(null)") %>%
-    # dplyr::rename(Sample = SAMPLE, TaxonName = TAXON_NAME, Copepod = COPEPOD, TaxonGroup = TAXON_GROUP,
-    #               Genus= GENUS, Species = SPECIES, TaxonCount = TAXON_COUNT, SampVol_m3 = SAMPVOL_M3) %>%
     pr_rename() %>%
     dplyr::select(-ZooPhytoAbund_m3)
 }
@@ -110,8 +96,6 @@ pr_get_CPRZooCountData <- function() {
 pr_get_CPRZooData <- function(){
   cprZdat <- readr::read_csv(paste0(pr_get_site(), "CPR_Zoop_Raw.csv"), na = "") %>%
     pr_rename() %>%
-    # dplyr::rename(Sample = SAMPLE, TaxonName = TAXON_NAME, Copepod = COPEPOD, TaxonGroup = TAXON_GROUP,
-                  # Genus = GENUS, Species = SPECIES, ZooPhytoAbund_m3 = ZOOP_ABUNDANCE_M3) %>%
     dplyr::select(-c(TaxonCount, SampVol_m3))
 }
 
@@ -125,7 +109,6 @@ pr_get_CPRZooData <- function(){
 #' @importFrom magrittr "%>%"
 pr_get_CPRZooChangeLog <- function(){
   cprZcl <- readr::read_csv(paste0(pr_get_site(), "CPR_Zoop_ChangeLog.csv"), na = "") %>%
-    # dplyr::rename(TaxonName = TAXON_NAME, StartDate = STARTDATE, ParentName = PARENT_NAME)
     pr_rename()
 }
 

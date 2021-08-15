@@ -20,7 +20,7 @@ pr_get_LFTrips <- function(){
                   Month = lubridate::month(SampleDateLocal),
                   Day = lubridate::day(SampleDateLocal),
                   Time_24hr = stringr::str_sub(SampleDateLocal, -8, -1), # hms doesn"t seem to work on 00:00:00 times
-                  tz = lutz::tz_lookup_coords(Latitude, Longitude, method = "fast"),
+                  tz = lutz::tz_lookup_coords(Latitude, Longitude, method = "fast", warn = FALSE),
                   SampleDateUTC = lubridate::with_tz(lubridate::force_tzs(SampleDateLocal, tz, roll = TRUE), "UTC")) %>%
     dplyr::select(i_Sample:SampleDateLocal, Year:SampleDateLocal, Latitude:Comments)
 }
@@ -79,7 +79,7 @@ pr_get_LFCountBGC <- function(){
     dplyr::left_join(pr_get_LFData() %>%
                        dplyr::select(-Comments), by = c("i_Sample", "TripCode")) %>%
     dplyr::mutate(Header = paste(ScientificName, SPCode, sep = " ")) %>%
-    dplyr::select(-c(ScientificName, SPCode, TEMPERATURE_C, SALINITY)) %>%
+    dplyr::select(-c(ScientificName, SPCode, Temperature_degC, Salinity_psu)) %>%
     dplyr::arrange(Header) %>%
     tidyr::pivot_wider(names_from = Header, values_from = TaxonCount, values_fill = 0) %>%
     dplyr::arrange(SampleDateLocal)

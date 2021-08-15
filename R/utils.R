@@ -26,5 +26,29 @@ pr_get_site <- function(){
 pr_get_ZooInfo <- function(){
   ZInfo <- readr::read_csv(paste0(pr_get_site(), "ZoopInfo.csv"), na = "") %>%
     pr_rename()
-    # dplyr::rename( "TaxonName" = "TAXON_NAME")
+  # dplyr::rename( "TaxonName" = "TAXON_NAME")
 }
+
+
+
+#' Add StationName to data
+#'
+#' @return A dataframe with StationName added
+#' @export
+#'
+#' @examples
+#' @importFrom magrittr "%>%"
+pr_get_StationName <- function(df){
+  df <- df %>%
+    dplyr::mutate(StationName = dplyr::case_when(
+      StationCode == "NRSDAR" ~ "Darwin",
+      StationCode == "NRSYON" ~ "Yongala",
+      StationCode == "NRSNSI" ~ "North Stradbroke Island",
+      StationCode == "NRSPHB" ~ "Port Hacking",
+      StationCode == "NRSMAI" ~ "Maria Island",
+      StationCode == "NRSKAI" ~ "Kangaroo Island",
+      StationCode == "NRSESP" ~ "Esperance",
+      StationCode == "NRSROT" ~ "Rottnest Island",
+      StationCode == "NRSNIN" ~ "Ningaloo"))
+}
+

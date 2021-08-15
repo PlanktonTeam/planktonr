@@ -9,7 +9,6 @@
 pr_get_NRSStation <- function(){
   NRSStation <- readr::read_csv(paste0(pr_get_site(), "BGC_StationInfo.csv"), na = "") %>%
     pr_rename() %>%
-    # dplyr::rename(Station = STATIONNAME, Latitude = LATITUDE, Longitude = LONGITUDE, StationDepth_m = STATIONDEPTH_M) %>%
     dplyr::filter(ProjectName == "NRS")
   return(NRSStation)
 }
@@ -26,16 +25,12 @@ pr_get_NRSStation <- function(){
 pr_get_NRSTrips <- function(){
   NRSSamp <- readr::read_csv(paste0(pr_get_site(), "BGC_Trip.csv"), na = "") %>%
     pr_rename() %>%
-    # dplyr::rename(TripCode = TRIP_CODE, Station = STATIONNAME, StationCode = STATIONCODE,
-    #               Latitude = LATITUDE, Longitude = LONGITUDE, SampleDateLocal = SAMPLEDATELOCAL,
-    #               Biomass_mgm3 = BIOMASS_MGM3, Secchi_m = SECCHI_M, SampleType = SAMPLETYPE,
-    #               ZoopSampleDepth_m = ZOOPSAMPLEDEPTH_M, PhytoSampleDepth_m = PHYTOSAMPLEDEPTH_M) %>%
     dplyr::filter(ProjectName == "NRS") %>%
     dplyr::mutate(Year = lubridate::year(SampleDateLocal),
                   Month = lubridate::month(SampleDateLocal),
                   Day = lubridate::day(SampleDateLocal),
                   Time_24hr = stringr::str_sub(SampleDateLocal, -8, -1), # hms doesn"t seem to work on 00:00:00 times
-                  tz = lutz::tz_lookup_coords(Latitude, Longitude, method = "fast"),
+                  tz = lutz::tz_lookup_coords(Latitude, Longitude, method = "fast", warn = FALSE),
                   SampleDateUTC = lubridate::with_tz(lubridate::force_tzs(SampleDateLocal, tz, roll = TRUE), "UTC")) %>%
     dplyr::select(TripCode:SampleDateLocal, Year:SampleDateUTC, Biomass_mgm3, Secchi_m, SampleType) %>%
     dplyr::select(-tz)
@@ -101,8 +96,6 @@ pr_get_NRSPhytoHTG <- function(){
 pr_get_NRSPhytoData <- function(){
   NRSPdat <- readr::read_csv(paste0(pr_get_site(), "BGC_Phyto_Raw.csv"), na = "") %>%
     pr_rename()
-  # dplyr::rename(TripCode = TRIP_CODE, TaxonName = TAXON_NAME, TaxonGroup = TAXON_GROUP, Genus = GENUS, Species = SPECIES,
-  #               Cells_L = CELL_L, Biovolume_um3L = BIOVOLUME_UM3L)
 }
 
 
@@ -118,7 +111,6 @@ pr_get_NRSPhytoData <- function(){
 pr_get_NRSPhytoChangeLog <- function(){
   NRSPcl <- readr::read_csv(paste0(pr_get_site(), "BGC_Phyto_ChangeLog.csv"), na = "") %>%
     pr_rename()
-  # dplyr::rename(TaxonName = TAXON_NAME, StartDate = START_DATE, ParentName = PARENT_NAME)
 }
 
 

@@ -10,9 +10,9 @@
 pr_export_larvalfish <- function(outD){
 
   LFCount <- pr_get_LFCountAll()
-  data.table::fwrite(LFCount, file.path(outD, "NRS_LFCount_All.csv"))
+  data.table::fwrite(LFCount, file.path(outD, "NRS_LarvalFish_All.csv"))
 
 
   LFCountBGC <- pr_get_LFCountBGC()
-  data.table::fwrite(LFCountBGC, file.path(outD,"NRS_LFCount_BGC.csv"))
+  data.table::fwrite(LFCountBGC, file.path(outD,"NRS_LarvalFish_BGC.csv"))
 }
