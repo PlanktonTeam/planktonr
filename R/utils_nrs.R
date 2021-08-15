@@ -594,8 +594,6 @@ pr_get_NRSPhytoSpeciesBV <- function(){
 pr_get_NRSZooData <- function(){
   NRSZdat <- readr::read_csv(paste0(pr_get_site(), "BGC_Zoop_Raw.csv"), na = "") %>%
     pr_rename()
-  # dplyr::rename(TripCode = TRIP_CODE, TaxonName = TAXON_NAME, Copepod = COPEPOD, TaxonGroup = TAXON_GROUP,
-  #               Genus = GENUS, Species = SPECIES, ZooPhytoAbund_m3 = ZOOP_ABUNDANCE_M3, TaxonCount = TAXON_COUNT, SampVol_m3 = SAMPVOL_M3)
 }
 
 #' Load zooplankton abundance data
@@ -609,8 +607,6 @@ pr_get_NRSZooData <- function(){
 pr_get_NRSZooCount <- function(){
   NRSZcount <- readr::read_csv(paste0(pr_get_site(), "BGC_Zoop_Raw.csv"), na = "") %>%
     pr_rename()
-  # dplyr::rename(TaxonName = TAXON_NAME, Copepod = COPEPOD, TaxonGroup = TAXON_GROUP, TripCode = TRIP_CODE,
-  # Genus = GENUS, Species = SPECIES, TaxonCount = TAXON_COUNT, SampVol_m3 = SAMPVOL_M3)
 }
 
 
@@ -626,7 +622,6 @@ pr_get_NRSZooCount <- function(){
 pr_get_NRSZooChangeLog <- function(){
   NRSZcl <- readr::read_csv(paste0(pr_get_site(), "BGC_Zoop_ChangeLog.csv"), na = "") %>%
     pr_rename()
-  # dplyr::rename(TaxonName = TAXON_NAME, StartDate = START_DATE, ParentName = PARENT_NAME)
 }
 
 
@@ -942,7 +937,6 @@ pr_get_NRSZooSpeciesNonCopepod <- function(){
 pr_get_NRSPigments <- function(){
   Pigments <- readr::read_csv(paste0(pr_get_site(),"BGC_Pigments.csv"), na = "") %>%
     pr_rename()
-    # dplyr::rename(TripCode = TRIP_CODE, SampleDepth_m = SAMPLEDEPTH_M, PigmentsFlag = PIGMENTS_FLAG, PigmentsComments = PIGMENTS_COMMENTS)
 }
 
 
@@ -957,9 +951,5 @@ pr_get_NRSPigments <- function(){
 pr_get_NRSPico <- function(){
   Pico <- readr::read_csv(paste0(pr_get_site(), "BGC_Picoplankton.csv"), na = "") %>%
     pr_rename()
-    # dplyr::rename(TripCode = TRIP_CODE, SampleDepth_m = SAMPLEDEPTH_M, Replicate = REPLICATE, SampleDateLocal = SAMPLEDATELOCAL,
-    #               Prochlorococcus_Cellsml = PROCHLOROCOCCUS_CELLSML, Prochlorococcus_Flag = PROCHLOROCOCCUS_FLAG,
-    #               Synecochoccus_Cellsml = SYNECOCHOCCUS_CELLSML, Synecochoccus_Flag = SYNECOCHOCCUS_FLAG,
-    #               Picoeukaryotes_Cellsml = PICOEUKARYOTES_CELLSML, Picoeukaryotes_Flag = PICOEUKARYOTES_FLAG)
 }
 
