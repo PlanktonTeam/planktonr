@@ -6,7 +6,9 @@
 #'
 #' @examples
 #' pr_export_cpr(".")
-#'@importFrom magrittr "%>%"
+#' @import dplyr
+#' @importFrom magrittr "%>%"
+#' @importFrom rlang .data
 #'
 pr_export_cpr <- function(outD){
 

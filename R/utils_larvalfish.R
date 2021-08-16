@@ -5,18 +5,26 @@
 #'
 #' @examples
 #' df <- pr_get_LFTrips()
-#' 
+#' #' @import dplyr
+#' @importFrom magrittr "%>%"
+#' @importFrom rlang .data
 pr_get_LFTrips <- function(){
   LFSamp <- readr::read_csv(paste0(pr_get_site(), "BGC_LFish_Samples.csv"), na = "",
                             col_types = readr::cols(FLAG_COMMENT = readr::col_character())) %>%
     pr_rename() %>%
-    mutate(Year = lubridate::year(SampleDateLocal),
-                  Month = lubridate::month(SampleDateLocal),
-                  Day = lubridate::day(SampleDateLocal),
-                  Time_24hr = stringr::str_sub(SampleDateLocal, -8, -1), # hms doesn"t seem to work on 00:00:00 times
-                  tz = lutz::tz_lookup_coords(Latitude, Longitude, method = "fast", warn = FALSE),
-                  SampleDateUTC = lubridate::with_tz(lubridate::force_tzs(SampleDateLocal, tz, roll = TRUE), "UTC")) %>%
-    select(i_Sample:SampleDateLocal, Year:SampleDateLocal, Latitude:Comments)
+    # rename(.data$i_Sample = I_SAMPLE_ID, .data$TripCode = TRIP_CODE, Station = STATIONNAME,
+    #               .data$Latitude = LATITUDE, .data$Longitude = LONGITUDE, .data$SampleDateLocal = SAMPLEDATELOCAL,
+    #               .data$ProjectName = PROJECTNAME, .data$Volume_m3 = VOLUME_M3, .data$Vessel = VESSEL,
+    #               .data$TowType = TOWTYPE, .data$GearDepth_m = .data$GearDepth_M, .data$GearMesh_um = GEARMESH_UM,
+    #               .data$WaterDepth_m = BATHYM_M, Temp_DegC = TEMPERATURE_C, Salinity = SALINITY,
+    #               .data$Comments = .data$Comments, QC_Flag = QC_Flag, Flag.data$Comments = FLAG_COMMENT) %>%
+    mutate(Year = lubridate::year(.data$SampleDateLocal),
+                  Month = lubridate::month(.data$SampleDateLocal),
+                  Day = lubridate::day(.data$SampleDateLocal),
+                  Time_24hr = stringr::str_sub(.data$SampleDateLocal, -8, -1), # hms doesn"t seem to work on 00:00:00 times
+                  tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE),
+                  SampleDateUTC = lubridate::with_tz(lubridate::force_tzs(.data$SampleDateLocal, .data$tz, roll = TRUE), "UTC")) %>%
+    select(.data$i_Sample:.data$SampleDateLocal, .data$Year:.data$SampleDateLocal, .data$Latitude:.data$Comments)
 }
 
 
@@ -28,7 +36,9 @@ pr_get_LFTrips <- function(){
 #'
 #' @examples
 #' df <- pr_get_LFData()
-#' 
+#' #' @import dplyr
+#' @importFrom magrittr "%>%"
+#' @importFrom rlang .data
 pr_get_LFData <- function(){
   LFData <- readr::read_csv(paste0(pr_get_site(), "BGC_LFish_CountRaw.csv"), na = "") %>%
     pr_rename()
@@ -42,16 +52,18 @@ pr_get_LFData <- function(){
 #'
 #' @examples
 #' df <- pr_get_LFCountAll()
-
+#' @import dplyr
+#' @importFrom magrittr "%>%"
+#' @importFrom rlang .data
 pr_get_LFCountAll <- function(){
 
   LFCount <- pr_get_LFTrips() %>%
-    left_join(pr_get_LFData() %>% select(-Comments), by = c("i_Sample", "TripCode")) %>%
-    mutate(Header = paste(ScientificName, SPCode, sep = " ")) %>%
-    select(-ScientificName, -SPCode) %>%
-    arrange(Header) %>%
-    tidyr::pivot_wider(names_from = Header, values_from = TaxonCount, values_fill = 0) %>%
-    arrange(SampleDateLocal)
+    left_join(pr_get_LFData() %>% select(-.data$Comments), by = c("i_Sample", "TripCode")) %>%
+    mutate(Header = paste(.data$ScientificName, .data$SPCode, sep = " ")) %>%
+    select(-.data$ScientificName, -.data$SPCode) %>%
+    arrange(.data$Header) %>%
+    tidyr::pivot_wider(names_from = .data$Header, values_from = .data$TaxonCount, values_fill = 0) %>%
+    arrange(.data$SampleDateLocal)
 }
 
 
@@ -63,15 +75,17 @@ pr_get_LFCountAll <- function(){
 #'
 #' @examples
 #' df <- pr_get_LFCountBGC()
-
+#' @import dplyr
+#' @importFrom magrittr "%>%"
+#' @importFrom rlang .data
 pr_get_LFCountBGC <- function(){
   LFCountBGC <- pr_get_LFTrips() %>%
-    filter(grepl('IMOS', ProjectName)) %>%
+    filter(grepl('IMOS', .data$ProjectName)) %>%
     left_join(pr_get_LFData() %>%
-                       select(-Comments), by = c("i_Sample", "TripCode")) %>%
-    mutate(Header = paste(ScientificName, SPCode, sep = " ")) %>%
-    select(-c(ScientificName, SPCode, Temperature_degC, Salinity_psu)) %>%
-    arrange(Header) %>%
-    tidyr::pivot_wider(names_from = Header, values_from = TaxonCount, values_fill = 0) %>%
-    arrange(SampleDateLocal)
+                       select(-.data$Comments), by = c("i_Sample", "TripCode")) %>%
+    mutate(Header = paste(.data$ScientificName, .data$SPCode, sep = " ")) %>%
+    select(-c(.data$ScientificName, .data$SPCode, .data$Temperature_degC, .data$Salinity_psu)) %>%
+    arrange(.data$Header) %>%
+    tidyr::pivot_wider(names_from = .data$Header, values_from = .data$TaxonCount, values_fill = 0) %>%
+    arrange(.data$SampleDateLocal)
 }
