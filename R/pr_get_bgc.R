@@ -48,8 +48,8 @@ pr_get_bgc <- function(){
     pr_rename() %>%
     mutate(SampleDepth_m = as.character(.data$SampleDepth_m),
            TripCode = substring(.data$TripCode,4),
-           InorganicFraction_Flag = TSS_Flag, # These flags don't exist but are identical to TSS
-           OrganicFraction_Flag = TSS_Flag) %>%
+           InorganicFraction_Flag = .data$TSS_Flag, # These flags don't exist but are identical to TSS
+           OrganicFraction_Flag = .data$TSS_Flag) %>%
     pr_apply_flags() %>%
     group_by(.data$TripCode, .data$SampleDepth_m) %>%
     summarise(TSS_mgL = mean(.data$TSS_mgL, na.rm = TRUE), # mean of replicates

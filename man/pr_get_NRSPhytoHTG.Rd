@@ -20,6 +20,6 @@ Get NRS Phytoplankton higher taxon group pivoted product - Abundance
 }
 \examples{
 df <- pr_get_NRSPhytoHTG()
-#' @importFrom magrittr "\%>\%"
+#' @import dplyr
 df <- pr_get_NRSPhytoHTG()
 }

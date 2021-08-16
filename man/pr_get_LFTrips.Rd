@@ -14,5 +14,5 @@ Get Larval Fish Trip Data
 }
 \examples{
 df <- pr_get_LFTrips()
-#' @importFrom magrittr "\%>\%"
+#' @import dplyr
 }

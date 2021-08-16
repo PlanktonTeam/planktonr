@@ -67,6 +67,7 @@ pr_get_StationName <- function(df){
 #' @examples
 #' @import dplyr
 #' @importFrom magrittr "%>%"
+#' @importFrom data.table ":="
 #' @importFrom rlang .data
 pr_apply_flags <- function(df){
 

@@ -14,5 +14,4 @@ Get raw phytoplankton data in pivoted format
 }
 \examples{
 df <- pr_get_NRSRawPhytoPivot()
-#' @importFrom magrittr "\%>\%"
 }
