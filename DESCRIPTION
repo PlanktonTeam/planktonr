@@ -21,7 +21,6 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Imports:
     data.table,
-    dplyr,
     forcats,
     lubridate,
     lutz,
@@ -33,7 +32,8 @@ Imports:
     tidyr,
     vegan
 Depends: 
-    R (>= 2.10)
+    R (>= 2.10),
+    dplyr
 Suggests: 
     rmarkdown,
     knitr,
