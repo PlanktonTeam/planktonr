@@ -6,7 +6,9 @@
 #'
 #' @examples
 #'
-#'@importFrom magrittr "%>%"
+#' @import dplyr
+#' @importFrom magrittr "%>%"
+#' @importFrom rlang .data
 pr_export_larvalfish <- function(outD){
 
   LFCount <- pr_get_LFCountAll()
