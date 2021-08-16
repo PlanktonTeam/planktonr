@@ -7,7 +7,7 @@
 pr_add_bioregions(df)
 }
 \arguments{
-\item{df}{A dataframe with columns \code{Longitude} and \code{Latitude}}
+\item{df}{A dataframe with columns \code{.data$Longitude} and \code{.data$Latitude}}
 }
 \value{
 

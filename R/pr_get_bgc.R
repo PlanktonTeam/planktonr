@@ -6,13 +6,15 @@
 #' @examples
 #' df <- pr_get_bgc()
 #'
+#' @import dplyr
 #' @importFrom magrittr "%>%"
+#' @importFrom rlang .data
 pr_get_bgc <- function(){
 
   # Each trip and depth combination for water quality parameters
   # the number of rows in this table should equal that in comb, if not look out for duplicates and replicates
   NRSTrips <- pr_get_NRSTrips() %>%
-    dplyr::select(-SampleType)
+    select(-.data$SampleType)
 
   # you will get a warning about the fast method, this actually works better than the accurate method for this data set.
 
@@ -21,77 +23,71 @@ pr_get_bgc <- function(){
 
   # Zooplankton biomass
   ZBiomass <-  pr_get_NRSTrips() %>%
-    dplyr::select(TripCode, Biomass_mgm3, Secchi_m) %>%
-    dplyr::mutate(SampleDepth_m = 'WC')
+    select(.data$TripCode, .data$Biomass_mgm3, .data$Secchi_m) %>%
+    mutate(SampleDepth_m = 'WC')
 
   # Pigments data
   Pigments <- readr::read_csv(paste0(pr_get_site(),"BGC_Pigments.csv"), na = "(null)") %>%
     pr_rename() %>%
-    # dplyr::rename(TripCode = TRIP_CODE,
-    #               SampleDepth_m = SAMPLEDEPTH_M) %>%
-    dplyr::mutate(SampleDepth_m = as.character(SampleDepth_m)) %>%
-    dplyr::filter(PigmentsFlag %in% c(0,1,2,5,8)) %>% # keep data flagged as good
-    dplyr::select(-c(PigmentsFlag, PigmentsComments))
+    mutate(SampleDepth_m = as.character(.data$SampleDepth_m)) %>%
+    filter(.data$PigmentsFlag %in% c(0,1,2,5,8)) %>% # keep data flagged as good
+    select(-c(.data$PigmentsFlag, .data$PigmentsComments))
 
   # Flow cytometry picoplankton data
   Pico <- pr_get_NRSPico() %>%
-    dplyr::mutate(SampleDepth_m = as.character(SampleDepth_m),
-                  Prochlorococcus_Cellsml = ifelse(Prochlorococcus_Flag %in% c(3,4,9), NA, Prochlorococcus_Cellsml), # remove bad data
-                  Synecochoccus_Cellsml = ifelse(Synecochoccus_Flag %in% c(3,4,9), NA, Synecochoccus_Cellsml),
-                  Picoeukaryotes_Cellsml = ifelse(Picoeukaryotes_Flag %in% c(3,4,9), NA, Picoeukaryotes_Cellsml)) %>%
-    dplyr::group_by(TripCode, SampleDepth_m) %>%
-    dplyr::summarise(Prochlorococcus_Cellsml = mean(Prochlorococcus_Cellsml, na.rm = TRUE), # mean of replicates
-                     Synecochoccus_Cellsml = mean(Synecochoccus_Cellsml, na.rm = TRUE),
-                     Picoeukaryotes_Cellsml = mean(Picoeukaryotes_Cellsml, na.rm = TRUE),
-                     .groups = "drop")
+    mutate(SampleDepth_m = as.character(.data$SampleDepth_m),
+           Prochlorococcus_Cellsml = ifelse(.data$Prochlorococcus_Flag %in% c(3,4,9), NA, .data$Prochlorococcus_Cellsml), # remove bad data
+           Synecochoccus_Cellsml = ifelse(.data$Synecochoccus_Flag %in% c(3,4,9), NA, .data$Synecochoccus_Cellsml),
+           Picoeukaryotes_Cellsml = ifelse(.data$Picoeukaryotes_Flag %in% c(3,4,9), NA, .data$Picoeukaryotes_Cellsml)) %>%
+    group_by(.data$TripCode, .data$SampleDepth_m) %>%
+    summarise(Prochlorococcus_Cellsml = mean(.data$Prochlorococcus_Cellsml, na.rm = TRUE), # mean of replicates
+              Synecochoccus_Cellsml = mean(.data$Synecochoccus_Cellsml, na.rm = TRUE),
+              Picoeukaryotes_Cellsml = mean(.data$Picoeukaryotes_Cellsml, na.rm = TRUE),
+              .groups = "drop")
 
   # Total suspended solid data
   TSS <- readr::read_csv(paste0(pr_get_site(),"BGC_TSS.csv"), na = "(null)") %>%
     pr_rename() %>%
-    # dplyr::rename(TripCode = TRIP_CODE, SampleDepth_m = SAMPLEDEPTH_M, TSS_mgL = TSS_MGL,
-    #               InorganicFraction_mgL = INORGANICFRACTION_MGL,
-    #               OrganicFraction_mgL = ORGANICFRACTION_MGL, Secchi_m = SECCHIDEPTH_M) %>%
-    dplyr::mutate(SampleDepth_m = as.character(SampleDepth_m),
-                  TripCode = substring(TripCode,4),
-                  TSS_mgL = ifelse(TSS_Flag %in% c(3,4,9), NA, TSS_mgL), # remove bad data
-                  InorganicFraction_mgL = ifelse(TSS_Flag %in% c(3,4,9), NA, InorganicFraction_mgL),
-                  OrganicFraction_mgL = ifelse(TSS_Flag %in% c(3,4,9), NA, OrganicFraction_mgL)) %>%
-    dplyr::group_by(TripCode, SampleDepth_m) %>%
-    dplyr::summarise(TSS_mgL = mean(TSS_mgL, na.rm = TRUE), # mean of replicates
-                     InorganicFraction_mgL = mean(InorganicFraction_mgL, na.rm = TRUE),
-                     OrganicFraction_mgL = mean(OrganicFraction_mgL, na.rm = TRUE),
-                     .groups = "drop") %>%
-    tidyr::drop_na(SampleDepth_m)
+    mutate(SampleDepth_m = as.character(.data$SampleDepth_m),
+           TripCode = substring(.data$TripCode,4),
+           TSS_mgL = ifelse(.data$TSS_Flag %in% c(3,4,9), NA, .data$TSS_mgL), # remove bad data
+           InorganicFraction_mgL = ifelse(.data$TSS_Flag %in% c(3,4,9), NA, .data$InorganicFraction_mgL),
+           OrganicFraction_mgL = ifelse(.data$TSS_Flag %in% c(3,4,9), NA, .data$OrganicFraction_mgL)) %>%
+    group_by(.data$TripCode, .data$SampleDepth_m) %>%
+    summarise(TSS_mgL = mean(.data$TSS_mgL, na.rm = TRUE), # mean of replicates
+              InorganicFraction_mgL = mean(.data$InorganicFraction_mgL, na.rm = TRUE),
+              OrganicFraction_mgL = mean(.data$OrganicFraction_mgL, na.rm = TRUE),
+              .groups = "drop") %>%
+    tidyr::drop_na(.data$SampleDepth_m)
 
   # CTD Cast Data
   CTD <- pr_get_CTD() %>%
-    dplyr::mutate(SampleDepth_m = as.character(round(SampleDepth_m, 0))) %>%
-    dplyr::select(-c(Pressure_dbar)) %>%
-    dplyr::group_by(TripCode, SampleDepth_m) %>%
-    dplyr::summarise(CTDDensity_kgm3 = mean(WaterDensity_kgm3, na.rm = TRUE),
-                     CTDTemperature = mean(Temperature_degC, na.rm = TRUE),
-                     CTDConductivity_sm = mean(Conductivity_Sm, na.rm = TRUE),
-                     CTDSalinity = mean(Salinity_psu, na.rm = TRUE),
-                     CTDChlF_mgm3 = mean(Chla_mgm3, na.rm = TRUE),
-                     CTDTurbidity_ntu = mean(Turbidity_NTU, na.rm = TRUE))
+    mutate(SampleDepth_m = as.character(round(.data$SampleDepth_m, 0))) %>%
+    select(-c(.data$Pressure_dbar)) %>%
+    group_by(.data$TripCode, .data$SampleDepth_m) %>%
+    summarise(CTDDensity_kgm3 = mean(.data$WaterDensity_kgm3, na.rm = TRUE),
+              CTDTemperature = mean(.data$Temperature_degC, na.rm = TRUE),
+              CTDConductivity_Sm = mean(.data$Conductivity_Sm, na.rm = TRUE),
+              CTDSalinity = mean(.data$Salinity_psu, na.rm = TRUE),
+              CTDChlF_mgm3 = mean(.data$Chla_mgm3, na.rm = TRUE),
+              CTDTurbidity_ntu = mean(.data$Turbidity_NTU, na.rm = TRUE))
 
   # combine for all samples taken
-  Samples <- dplyr::bind_rows(Chemistry %>% dplyr::select(TripCode, SampleDepth_m),
-                              Pico %>% dplyr::select(TripCode, SampleDepth_m),
-                              Pigments %>% dplyr::select(TripCode, SampleDepth_m),
-                              TSS %>% dplyr::select(TripCode, SampleDepth_m),
-                              ZBiomass %>% dplyr::select(TripCode, SampleDepth_m)) %>%
+  Samples <- bind_rows(Chemistry %>% select(.data$TripCode, .data$SampleDepth_m),
+                       Pico %>% select(.data$TripCode, .data$SampleDepth_m),
+                       Pigments %>% select(.data$TripCode, .data$SampleDepth_m),
+                       TSS %>% select(.data$TripCode, .data$SampleDepth_m),
+                       ZBiomass %>% select(.data$TripCode, .data$SampleDepth_m)) %>%
     unique()
 
   # Combined BGC data for each station at the sample depth
   BGC <- Samples %>%
-    dplyr::left_join(NRSTrips,  by = c("TripCode")) %>%
-    dplyr::mutate(IMOSsampleCode = paste0('NRS',TripCode, '_', ifelse(SampleDepth_m == 'WC', 'WC', stringr::str_pad(SampleDepth_m, 3, side = "left", "0")))) %>%
-    dplyr::left_join(Chemistry, by = c("TripCode", "SampleDepth_m")) %>%
-    dplyr::left_join(Pico, by = c("TripCode", "SampleDepth_m")) %>%
-    dplyr::left_join(Pigments, by = c("TripCode", "SampleDepth_m")) %>%
-    dplyr::left_join(TSS, by = c("TripCode", "SampleDepth_m")) %>%
-    dplyr::left_join(CTD, by = c("TripCode", "SampleDepth_m"))
+    left_join(NRSTrips,  by = c("TripCode")) %>%
+    mutate(IMOSsampleCode = paste0('NRS',.data$TripCode, '_', ifelse(.data$SampleDepth_m == 'WC', 'WC', stringr::str_pad(.data$SampleDepth_m, 3, side = "left", "0")))) %>%
+    left_join(Chemistry, by = c("TripCode", "SampleDepth_m")) %>%
+    left_join(Pico, by = c("TripCode", "SampleDepth_m")) %>%
+    left_join(Pigments, by = c("TripCode", "SampleDepth_m")) %>%
+    left_join(TSS, by = c("TripCode", "SampleDepth_m")) %>%
+    left_join(CTD, by = c("TripCode", "SampleDepth_m"))
 
-  return(BGC)
 }

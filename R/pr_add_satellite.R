@@ -1,6 +1,6 @@
 
 # satcpr <- cprSampleInfo %>%
-# dplyr::rename(Date = SampleDateUTC)
+# rename(.data$Date = .data$SampleDateUTC)
 
 # if (pr_get_sat_data == TRUE){
 #   # accessing the satelitte data from MODIS
@@ -69,6 +69,6 @@
 
 
 # %>%
-#  dplyr::left_join(GHRSST %>% dplyr::select(-c("Longitude", "Latitude", "Date")), by = ("TripCode")) %>%
-#  dplyr::left_join(MODIS %>% dplyr::select(-c("Longitude", "Latitude", "Date")), by = ("TripCode")) %>%
-#  dplyr::left_join(Alt %>% dplyr::select(c("TripCode", "GSLA", "GSL", "UCUR", "VCUR")), by = ("TripCode"))
+#  left_join(GHRSST %>% select(-c("Longitude", "Latitude", "Date")), by = ("TripCode")) %>%
+#  left_join(MODIS %>% select(-c("Longitude", "Latitude", "Date")), by = ("TripCode")) %>%
+#  left_join(Alt %>% select(c("TripCode", "GSLA", "GSL", "UCUR", "VCUR")), by = ("TripCode"))

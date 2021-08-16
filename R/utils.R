@@ -8,10 +8,12 @@
 #' @export
 #' @examples
 #' file_loc <- pr_get_site()
+#' @import dplyr
 #' @importFrom magrittr "%>%"
+#' @importFrom rlang .data
+#' @importFrom rlang .data
 pr_get_site <- function(){
   raw <- "https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/RawData/"
-  return(raw)
 }
 
 
@@ -22,25 +24,27 @@ pr_get_site <- function(){
 #'
 #' @examples
 #' df <- pr_get_ZooInfo()
+#' @import dplyr
 #' @importFrom magrittr "%>%"
+#' @importFrom rlang .data
 pr_get_ZooInfo <- function(){
   ZInfo <- readr::read_csv(paste0(pr_get_site(), "ZoopInfo.csv"), na = "") %>%
     pr_rename()
-  # dplyr::rename( "TaxonName" = "TAXON_NAME")
 }
 
 
 
-#' Add StationName to data
+#' Add .data$StationName to data
 #'
-#' @return A dataframe with StationName added
+#' @return A dataframe with .data$StationName added
 #' @export
 #'
-#' @examples
+#' @import dplyr
 #' @importFrom magrittr "%>%"
+#' @importFrom rlang .data
 pr_get_StationName <- function(df){
   df <- df %>%
-    dplyr::mutate(StationName = dplyr::case_when(
+    mutate(StationName = case_when(
       StationCode == "NRSDAR" ~ "Darwin",
       StationCode == "NRSYON" ~ "Yongala",
       StationCode == "NRSNSI" ~ "North Stradbroke Island",

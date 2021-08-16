@@ -6,7 +6,9 @@
 #'
 #' @examples
 #'
-#'@importFrom magrittr "%>%"
+#' @import dplyr
+#' @importFrom magrittr "%>%"
+#' @importFrom rlang .data
 pr_export_nrs <- function(outD){
 
   #### NRS Phytoplankton ####  #################################################################################
@@ -96,10 +98,10 @@ pr_export_nrs <- function(outD){
 
   ## Still to Add in CTD. Unsure if this should be with/without the drop_na, missingCode, NRSaddCTD etc
   #
-  # CTD <- getCTD() %>% drop_na(TripCode)
+  # CTD <- getCTD() %>% drop_na(.data$TripCode)
   # write_csv(CTD, "RawData/NRS_CTD.csv")
   #
-  # missingCode <- rawCTD %>% filter(is.na(TripCode)) %>% select(StationName, CastTime_UTC, file_id) %>% unique()
+  # missingCode <- rawCTD %>% filter(is.na(.data$TripCode)) %>% select(.data$StationName, CastTime_UTC, file_id) %>% unique()
   #
   # NRSaddCTD <- NRSSamp %>% left_join(df, by = 'TripCode')
   # NRSmissingCTD <- NRSaddCTD %>% filter(is.na(file_id))
