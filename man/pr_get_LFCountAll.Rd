@@ -7,7 +7,7 @@
 pr_get_LFCountAll()
 }
 \value{
-
+A dataframe with Larval Fish Count Data
 }
 \description{
 Make count data of all larval fish

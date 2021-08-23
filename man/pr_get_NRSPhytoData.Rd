@@ -7,7 +7,7 @@
 pr_get_NRSPhytoData()
 }
 \value{
-A dataframe with NRS Phytoplankton Data
+A dataframe with NRS Phytoplankton Data in long form
 }
 \description{
 Load NRS station Phytoplankton Data

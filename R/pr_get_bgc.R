@@ -1,6 +1,6 @@
 #' Create Biogeochemical data
 #'
-#' @return
+#' @return A dataframe with BGC data
 #' @export
 #'
 #' @examples
@@ -24,7 +24,7 @@ pr_get_bgc <- function(){
   # Zooplankton biomass
   ZBiomass <-  pr_get_NRSTrips() %>%
     select(.data$TripCode, .data$Biomass_mgm3, .data$Secchi_m) %>%
-    mutate(SampleDepth_m = 'WC')
+    mutate(SampleDepth_m = "WC")
 
   # Pigments data
   Pigments <- readr::read_csv(paste0(pr_get_site(),"BGC_Pigments.csv"), na = "(null)") %>%
@@ -48,8 +48,8 @@ pr_get_bgc <- function(){
     pr_rename() %>%
     mutate(SampleDepth_m = as.character(.data$SampleDepth_m),
            TripCode = substring(.data$TripCode,4),
-           InorganicFraction_Flag = TSS_Flag, # These flags don't exist but are identical to TSS
-           OrganicFraction_Flag = TSS_Flag) %>%
+           InorganicFraction_Flag = .data$TSS_Flag, # These flags don't exist but are identical to TSS
+           OrganicFraction_Flag = .data$TSS_Flag) %>%
     pr_apply_flags() %>%
     group_by(.data$TripCode, .data$SampleDepth_m) %>%
     summarise(TSS_mgL = mean(.data$TSS_mgL, na.rm = TRUE), # mean of replicates
@@ -81,7 +81,7 @@ pr_get_bgc <- function(){
   # Combined BGC data for each station at the sample depth
   BGC <- Samples %>%
     left_join(NRSTrips,  by = c("TripCode")) %>%
-    mutate(IMOSsampleCode = paste0('NRS',.data$TripCode, '_', ifelse(.data$SampleDepth_m == 'WC', 'WC', stringr::str_pad(.data$SampleDepth_m, 3, side = "left", "0")))) %>%
+    mutate(IMOSsampleCode = paste0('NRS',.data$TripCode, '_', ifelse(.data$SampleDepth_m == "WC", "WC", stringr::str_pad(.data$SampleDepth_m, 3, side = "left", "0")))) %>%
     left_join(Chemistry, by = c("TripCode", "SampleDepth_m")) %>%
     left_join(Pico, by = c("TripCode", "SampleDepth_m")) %>%
     left_join(Pigments, by = c("TripCode", "SampleDepth_m")) %>%

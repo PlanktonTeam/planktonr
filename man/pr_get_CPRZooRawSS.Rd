@@ -7,7 +7,7 @@
 pr_get_CPRZooRawSS()
 }
 \value{
-
+A dataframe with CPR Zooplankton Abundance - Binned by sex and stage
 }
 \description{
 CPR Zoop raw product binned by sex and stage raw pivoted product

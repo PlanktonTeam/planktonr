@@ -2,15 +2,15 @@
 % Please edit documentation in R/utils_cpr.R
 \name{pr_get_CPRZooNonCopepod}
 \alias{pr_get_CPRZooNonCopepod}
-\title{Get CPR Zoop copepod product - Abundance}
+\title{Get CPR Zoop Non-Copepod Abundance Data}
 \usage{
 pr_get_CPRZooNonCopepod()
 }
 \value{
-
+A dataframe with CPR Zooplankton (non-copepod) Abundance - Summed by Species
 }
 \description{
-Get CPR Zoop copepod product - Abundance
+Get CPR Zoop Non-Copepod Abundance Data
 }
 \examples{
 df <- pr_get_CPRZooNonCopepod()

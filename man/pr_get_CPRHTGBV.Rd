@@ -7,7 +7,7 @@
 pr_get_CPRHTGBV()
 }
 \value{
-
+A dataframe with CPR Phytoplankton BioVolume - Summed by Higher Trophic Levels
 }
 \description{
 Get CPR Phyto HTG product - Biovolume

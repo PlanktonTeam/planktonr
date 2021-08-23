@@ -7,7 +7,7 @@
 pr_get_CPRPhytoData()
 }
 \value{
-
+A dataframe with CPR Phytoplankton Abundance data
 }
 \description{
 Get CPR Phytoplankton Abundance data

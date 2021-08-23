@@ -7,7 +7,7 @@
 pr_get_NRSPhytoRawBV()
 }
 \value{
-
+A dataframe with raw NRS Phytoplankton BioVolume
 }
 \description{
 Get NRS Phytoplankton raw pivoted product - Biovolume

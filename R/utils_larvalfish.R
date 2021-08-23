@@ -1,6 +1,6 @@
 #' Get Larval Fish Trip Data
 #'
-#' @return
+#' @return A dataframe with Larval Fish Trip Data
 #' @export
 #'
 #' @examples
@@ -31,7 +31,7 @@ pr_get_LFTrips <- function(){
 
 #' Get Larval Fish Sample Data
 #'
-#' @return
+#' @return A dataframe with Raw Larval Fish Data
 #' @export
 #'
 #' @examples
@@ -47,7 +47,7 @@ pr_get_LFData <- function(){
 
 #' Make count data of all larval fish
 #'
-#' @return
+#' @return A dataframe with Larval Fish Count Data
 #' @export
 #'
 #' @examples
@@ -70,7 +70,7 @@ pr_get_LFCountAll <- function(){
 
 #' Make BGC data for larval fish
 #'
-#' @return
+#' @return A dataframe with Larval Fish BGC Data
 #' @export
 #'
 #' @examples

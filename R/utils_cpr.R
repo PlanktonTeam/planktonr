@@ -1,6 +1,6 @@
 #' Get CPR trips
 #'
-#' @return
+#' @return A dataframe with CPR Trips
 #' @export
 #'
 #' @examples
@@ -9,13 +9,13 @@
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_CPRTrips <- function(){
-  CPRTrips <- readr::read_csv(paste0(pr_get_site(), "CPR_Trips.csv"), na = "") %>%
+  CPRTrips <- readr::read_csv(paste0(pr_get_site(), "CPR_Trip.csv"), na = "") %>%
     pr_rename()
 }
 
 #' Get CPR samples
 #'
-#' @return
+#' @return A dataframe with CPR Samples
 #' @export
 #'
 #' @examples
@@ -36,7 +36,7 @@ pr_get_CPRSamps <- function(){
 
 #' Get CPR Phytoplankton Abundance data
 #'
-#' @return
+#' @return A dataframe with CPR Phytoplankton Abundance data
 #' @export
 #'
 #' @examples
@@ -52,7 +52,7 @@ pr_get_CPRPhytoData <- function(){
 
 #' Get CPR Phytoplankton Count data
 #'
-#' @return
+#' @return A dataframe with CPR Phytoplankton Count data
 #' @export
 #'
 #' @examples
@@ -68,7 +68,7 @@ pr_get_CPRPhytoCountData <- function(){
 
 #' Get Phyto Change Log
 #'
-#' @return
+#' @return A dataframe with the CPR Phytoplankton Changelog
 #' @export
 #'
 #' @examples
@@ -83,7 +83,7 @@ pr_get_CPRPhytoChangeLog <- function(){
 
 #' Get CPR Zooplankton Count
 #'
-#' @return
+#' @return A dataframe with CPR Zooplankton Count data
 #' @export
 #'
 #' @examples
@@ -99,7 +99,7 @@ pr_get_CPRZooCountData <- function() {
 
 #' Get CPR Zooplankton abundance data
 #'
-#' @return
+#' @return A dataframe with CPR Zooplankton Abundance data
 #' @export
 #'
 #' @examples
@@ -115,7 +115,7 @@ pr_get_CPRZooData <- function(){
 
 #' Get CPR zooplankton Change Log
 #'
-#' @return
+#' @return A dataframe with the CPR Zooplankton Changelog
 #' @export
 #'
 #' @examples
@@ -131,7 +131,7 @@ pr_get_CPRZooChangeLog <- function(){
 ################################################################################################################################################
 #' Get CPR Phyto raw & pivoted product - Abundance
 #'
-#' @return
+#' @return A dataframe with CPR Raw Phytoplankton Abundance
 #' @export
 #'
 #' @examples
@@ -154,7 +154,7 @@ pr_get_CPRPhytoRaw <- function(){
 
 #' CPR Phyto HTG pivoted product - Abundance
 #'
-#' @return
+#' @return A dataframe with CPR Phytoplankton Abundance - Summed by Higher Trophic Groups
 #' @export
 #'
 #' @examples
@@ -163,6 +163,7 @@ pr_get_CPRPhytoRaw <- function(){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_CPRPhytoHTG <- function(){
+
   cprHTGP1 <- pr_get_CPRPhytoData() %>% group_by(.data$Sample, .data$TaxonGroup) %>%
     summarise(PhytoAbund_m3 = sum(.data$PhytoAbund_m3, na.rm = TRUE), .groups = "drop") %>%
     filter(!.data$TaxonGroup %in% c("Other","Coccolithophore", "Diatom","Protozoa"))
@@ -181,7 +182,7 @@ pr_get_CPRPhytoHTG <- function(){
 
 #' Get CPR Phyto genus pivoted product - Abundance
 #'
-#' @return
+#' @return A dataframe with CPR Phytoplankton Abundance - Summed by Genus
 #' @export
 #'
 #' @examples
@@ -272,7 +273,7 @@ pr_get_CPRPhytoGenus <- function(){
 
 #' Get CPR Phyto species pivoted product - Abundance
 #'
-#' @return
+#' @return A dataframe with CPR Phytoplankton Abundance - Summed by Species
 #' @export
 #'
 #' @examples
@@ -366,7 +367,7 @@ pr_get_CPRPhytoSpecies <-  function(){
 ###############################################################################################################################################
 #' Get CPR Phyto raw & pivoted product - Biovolume
 #'
-#' @return
+#' @return A dataframe with CPR Phytoplankton BioVolume
 #' @export
 #'
 #' @examples
@@ -389,7 +390,7 @@ pr_get_CPRPhytoRawBV <- function(){
 
 #' Get CPR Phyto HTG product - Biovolume
 #'
-#' @return
+#' @return A dataframe with CPR Phytoplankton BioVolume - Summed by Higher Trophic Levels
 #' @export
 #'
 #' @examples
@@ -416,7 +417,7 @@ pr_get_CPRHTGBV <- function(){
 
 #' Get CPR Phyto genus product - Biovolume
 #'
-#' @return
+#' @return A dataframe with CPR Phytoplankton BioVolume - Summed by Genus
 #' @export
 #'
 #' @examples
@@ -504,7 +505,7 @@ pr_get_CPRPhytoGenusBV <- function(){
 
 #' Get CPR Phyto species product - Biovolume
 #'
-#' @return
+#' @return A dataframe with CPR Phytoplankton BioVolume - Summed by Species
 #' @export
 #'
 #' @examples
@@ -599,7 +600,7 @@ pr_get_CPRPhytoSpeciesBV <- function(){
 #### CPR Zooplankton #### ################################################################################################################################
 #' Get CPR Zoop raw & pivoted product - Abundance
 #'
-#' @return
+#' @return A dataframe with Raw CPR Zooplankton Abundance
 #' @export
 #'
 #' @examples
@@ -623,7 +624,7 @@ pr_get_CPRZooRaw <- function(){
 
 #' CPR Zoop raw product binned by sex and stage raw pivoted product
 #'
-#' @return
+#' @return A dataframe with CPR Zooplankton Abundance - Binned by sex and stage
 #' @export
 #'
 #' @examples
@@ -646,7 +647,7 @@ pr_get_CPRZooRawSS <- function(){
 
 #' Get CPR Zoop HTG pivoted product - Abundance
 #'
-#' @return
+#' @return A dataframe with CPR Zooplankton Abundance - Summed by Higher Trophic Levels
 #' @export
 #'
 #' @examples
@@ -674,7 +675,7 @@ pr_get_CPRZooHTG <- function(){
 
 #' CPR Zoop genus product - Abundance
 #'
-#' @return
+#' @return A dataframe with CPR Zooplankton Abundance - Summed by Genus
 #' @export
 #'
 #' @examples
@@ -760,7 +761,7 @@ pr_get_CPRZooGenus <- function(){
 
 #' CPR Zoop copepod product - Abundance
 #'
-#' @return
+#' @return A dataframe with CPR Copepod Abundance - Summed by Species
 #' @export
 #'
 #' @examples
@@ -856,9 +857,9 @@ pr_get_CPRZooCopepod <- function(){
     arrange(desc(.data$SampleDateUTC))
 }
 
-#' Get CPR Zoop copepod product - Abundance
+#' Get CPR Zoop Non-Copepod Abundance Data
 #'
-#' @return
+#' @return A dataframe with CPR Zooplankton (non-copepod) Abundance - Summed by Species
 #' @export
 #'
 #' @examples

@@ -7,7 +7,7 @@
 pr_get_CPRPhytoSpecies()
 }
 \value{
-
+A dataframe with CPR Phytoplankton Abundance - Summed by Species
 }
 \description{
 Get CPR Phyto species pivoted product - Abundance

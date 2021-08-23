@@ -7,7 +7,7 @@
 pr_get_CPRZooData()
 }
 \value{
-
+A dataframe with CPR Zooplankton Abundance data
 }
 \description{
 Get CPR Zooplankton abundance data

@@ -7,7 +7,7 @@
 pr_get_CPRPhytoRawBV()
 }
 \value{
-
+A dataframe with CPR Phytoplankton BioVolume
 }
 \description{
 Get CPR Phyto raw & pivoted product - Biovolume

@@ -7,7 +7,7 @@
 pr_get_CPRZooCopepod()
 }
 \value{
-
+A dataframe with CPR Copepod Abundance - Summed by Species
 }
 \description{
 CPR Zoop copepod product - Abundance

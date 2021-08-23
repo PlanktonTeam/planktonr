@@ -5,21 +5,14 @@
 \title{Get Abundance of Phyto Higher Trophic Groups}
 \usage{
 pr_get_NRSPhytoHTG()
-
-pr_get_NRSPhytoHTG()
 }
 \value{
-
-
-
+A dataframe with Phytoplankton Abundance data - Summed by Higher Trophic Levels
 }
 \description{
 Get Abundance of Phyto Higher Trophic Groups
-
-Get NRS Phytoplankton higher taxon group pivoted product - Abundance
 }
 \examples{
 df <- pr_get_NRSPhytoHTG()
-#' @importFrom magrittr "\%>\%"
-df <- pr_get_NRSPhytoHTG()
+#' @import dplyr
 }

@@ -7,7 +7,7 @@
 pr_get_CPRZooRaw()
 }
 \value{
-
+A dataframe with Raw CPR Zooplankton Abundance
 }
 \description{
 Get CPR Zoop raw & pivoted product - Abundance

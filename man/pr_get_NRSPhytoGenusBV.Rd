@@ -2,15 +2,15 @@
 % Please edit documentation in R/utils_nrs.R
 \name{pr_get_NRSPhytoGenusBV}
 \alias{pr_get_NRSPhytoGenusBV}
-\title{Get NRS Phytoplankton genus pivoted product - Biovolume}
+\title{Get NRS Phytoplankton genus product - Biovolume}
 \usage{
 pr_get_NRSPhytoGenusBV()
 }
 \value{
-
+A dataframe with NRS Phytoplankton BioVolume - Summed by Genus
 }
 \description{
-Get NRS Phytoplankton genus pivoted product - Biovolume
+Get NRS Phytoplankton genus product - Biovolume
 }
 \examples{
 df <- pr_get_NRSPhytoGenusBV()

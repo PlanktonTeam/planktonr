@@ -5,6 +5,9 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' pr_export_nrs("Output")
+#' }
 #'
 #'@importFrom magrittr "%>%"
 pr_export_nrs <- function(outD){

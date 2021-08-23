@@ -29,6 +29,7 @@ Imports:
     rlang,
     sf,
     stringr,
+    tibble,
     tidyr,
     vegan
 Depends: 

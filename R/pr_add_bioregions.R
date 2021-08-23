@@ -2,11 +2,12 @@
 #'
 #' @param df A dataframe with columns `.data$Longitude` and `.data$Latitude`
 #'
-#' @return
+#' @return A dataframe with Marine Bioregions added
 #' @export
 #'
 #' @examples
-#'
+#' df <- pr_get_NRSStation() %>%
+#' pr_add_bioregions
 #' @import dplyr
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data

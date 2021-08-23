@@ -7,7 +7,7 @@
 pr_get_CPRPhytoCountData()
 }
 \value{
-
+A dataframe with CPR Phytoplankton Count data
 }
 \description{
 Get CPR Phytoplankton Count data

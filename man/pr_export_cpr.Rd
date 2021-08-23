@@ -13,5 +13,7 @@ pr_export_cpr(outD)
 Create all processed data products for CPR
 }
 \examples{
-pr_export_cpr(".")
+\dontrun{
+pr_export_cpr("Output")
+}
 }

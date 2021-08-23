@@ -17,7 +17,6 @@ pr_get_indices_nrs <- function(){
 
   dNRSdat <- distinct(NRSdat, .data$TripCode, .keep_all = TRUE) %>% # Distinct rows for satellite, should be anyway
     pr_rename() %>%
-    # rename(.data$Date = .data$SampleDateLocal) %>%
     select(.data$TripCode, .data$Date, .data$Latitude, .data$Longitude)
 
   # SST and Chlorophyll from CTD

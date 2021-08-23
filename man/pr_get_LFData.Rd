@@ -7,12 +7,12 @@
 pr_get_LFData()
 }
 \value{
-
+A dataframe with Raw Larval Fish Data
 }
 \description{
 Get Larval Fish Sample Data
 }
 \examples{
 df <- pr_get_LFData()
-#' @importFrom magrittr "\%>\%"
+#' @import dplyr
 }
