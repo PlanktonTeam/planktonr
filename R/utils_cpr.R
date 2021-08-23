@@ -50,21 +50,6 @@ pr_get_CPRPhytoData <- function(){
     select(-c(.data$FovCount, .data$SampVol_m3))
 }
 
-#' Get CPR Phytoplankton Count data
-#'
-#' @return A dataframe with CPR Phytoplankton Count data
-#' @export
-#'
-#' @examples
-#' df <- pr_get_CPRPhytoCountData()
-#' @import dplyr
-#' @importFrom magrittr "%>%"
-#' @importFrom rlang .data
-pr_get_CPRPhytoCountData <- function(){
-  cprPdat <- readr::read_csv(paste0(pr_get_site(), "CPR_Phyto_Raw.csv"), na = "") %>%
-    pr_rename() %>%
-    select(-c(.data$BioVolume_um3m3, .data$PhytoAbund_m3))
-}
 
 #' Get Phyto Change Log
 #'
