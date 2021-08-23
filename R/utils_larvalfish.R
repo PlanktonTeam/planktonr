@@ -12,18 +12,7 @@ pr_get_LFTrips <- function(){
   LFSamp <- readr::read_csv(paste0(pr_get_site(), "BGC_LFish_Samples.csv"), na = "",
                             col_types = readr::cols(FLAG_COMMENT = readr::col_character())) %>%
     pr_rename() %>%
-    # rename(.data$i_Sample = I_SAMPLE_ID, .data$TripCode = TRIP_CODE, Station = STATIONNAME,
-    #               .data$Latitude = LATITUDE, .data$Longitude = LONGITUDE, .data$SampleDateLocal = SAMPLEDATELOCAL,
-    #               .data$ProjectName = PROJECTNAME, .data$Volume_m3 = VOLUME_M3, .data$Vessel = VESSEL,
-    #               .data$TowType = TOWTYPE, .data$GearDepth_m = .data$GearDepth_M, .data$GearMesh_um = GEARMESH_UM,
-    #               .data$WaterDepth_m = BATHYM_M, Temp_DegC = TEMPERATURE_C, Salinity = SALINITY,
-    #               .data$Comments = .data$Comments, QC_Flag = QC_Flag, Flag.data$Comments = FLAG_COMMENT) %>%
-    mutate(Year = lubridate::year(.data$SampleDateLocal),
-                  Month = lubridate::month(.data$SampleDateLocal),
-                  Day = lubridate::day(.data$SampleDateLocal),
-                  Time_24hr = stringr::str_sub(.data$SampleDateLocal, -8, -1), # hms doesn"t seem to work on 00:00:00 times
-                  tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE),
-                  SampleDateUTC = lubridate::with_tz(lubridate::force_tzs(.data$SampleDateLocal, .data$tz, roll = TRUE), "UTC")) %>%
+    pr_apply_time() %>%
     select(.data$i_Sample:.data$SampleDateLocal, .data$Year:.data$SampleDateLocal, .data$Latitude:.data$Comments)
 }
 
