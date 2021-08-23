@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_cpr.R
 \name{pr_get_CPRPhytoRawBV}
 \alias{pr_get_CPRPhytoRawBV}
-\title{Get CPR Phyto raw & pivoted product - Biovolume}
+\title{Get CPR Phyto raw product - Biovolume}
 \usage{
 pr_get_CPRPhytoRawBV()
 }
@@ -10,7 +10,7 @@ pr_get_CPRPhytoRawBV()
 A dataframe with CPR Phytoplankton BioVolume
 }
 \description{
-Get CPR Phyto raw & pivoted product - Biovolume
+Get CPR Phyto raw product - Biovolume
 }
 \examples{
 df <- pr_get_CPRPhytoRawBV()

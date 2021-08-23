@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_nrs.R
 \name{pr_get_NRSRawPhytoPivot}
 \alias{pr_get_NRSRawPhytoPivot}
-\title{Get raw phytoplankton data in pivoted format}
+\title{Get raw phytoplankton data in format}
 \usage{
 pr_get_NRSRawPhytoPivot()
 }
@@ -10,7 +10,7 @@ pr_get_NRSRawPhytoPivot()
 A dataframe with Raw Phytoplankton Abundance data
 }
 \description{
-Get raw phytoplankton data in pivoted format
+Get raw phytoplankton data in format
 }
 \examples{
 df <- pr_get_NRSRawPhytoPivot()

@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_nrs.R
 \name{pr_get_NRSZooRaw}
 \alias{pr_get_NRSZooRaw}
-\title{Get NRS Zoop raw & pivoted product - Abundance}
+\title{Get NRS Zoop raw product - Abundance}
 \usage{
 pr_get_NRSZooRaw()
 }
@@ -10,7 +10,7 @@ pr_get_NRSZooRaw()
 A dataframe with Raw NRS Zooplankton Abundance
 }
 \description{
-Get NRS Zoop raw & pivoted product - Abundance
+Get NRS Zoop raw product - Abundance
 }
 \examples{
 df <- pr_get_NRSZooRaw()

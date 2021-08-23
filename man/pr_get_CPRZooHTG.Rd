@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_cpr.R
 \name{pr_get_CPRZooHTG}
 \alias{pr_get_CPRZooHTG}
-\title{Get CPR Zoop HTG pivoted product - Abundance}
+\title{Get CPR Zoop HTG product - Abundance}
 \usage{
 pr_get_CPRZooHTG()
 }
@@ -10,7 +10,7 @@ pr_get_CPRZooHTG()
 A dataframe with CPR Zooplankton Abundance - Summed by Higher Trophic Levels
 }
 \description{
-Get CPR Zoop HTG pivoted product - Abundance
+Get CPR Zoop HTG product - Abundance
 }
 \examples{
 df <- pr_get_CPRZooHTG()

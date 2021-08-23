@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_nrs.R
 \name{pr_get_NRSPhytoHTGBV}
 \alias{pr_get_NRSPhytoHTGBV}
-\title{Get NRS Phytoplankton higher taxon group pivoted product - Biovolume}
+\title{Get NRS Phytoplankton higher taxon group product - Biovolume}
 \usage{
 pr_get_NRSPhytoHTGBV()
 }
@@ -10,7 +10,7 @@ pr_get_NRSPhytoHTGBV()
 A dataframe with NRS Phytoplankton BioVolume
 }
 \description{
-Get NRS Phytoplankton higher taxon group pivoted product - Biovolume
+Get NRS Phytoplankton higher taxon group product - Biovolume
 }
 \examples{
 df <- pr_get_NRSPhytoHTGBV()

@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_cpr.R
 \name{pr_get_CPRZooRawSS}
 \alias{pr_get_CPRZooRawSS}
-\title{CPR Zoop raw product binned by sex and stage raw pivoted product}
+\title{CPR Zoop raw product binned by sex and stage raw product}
 \usage{
 pr_get_CPRZooRawSS()
 }
@@ -10,7 +10,7 @@ pr_get_CPRZooRawSS()
 A dataframe with CPR Zooplankton Abundance - Binned by sex and stage
 }
 \description{
-CPR Zoop raw product binned by sex and stage raw pivoted product
+CPR Zoop raw product binned by sex and stage raw product
 }
 \examples{
 df <- pr_get_CPRZooRawSS()

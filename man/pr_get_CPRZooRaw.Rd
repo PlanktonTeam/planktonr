@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_cpr.R
 \name{pr_get_CPRZooRaw}
 \alias{pr_get_CPRZooRaw}
-\title{Get CPR Zoop raw & pivoted product - Abundance}
+\title{Get CPR Zoop raw product - Abundance}
 \usage{
 pr_get_CPRZooRaw()
 }
@@ -10,7 +10,7 @@ pr_get_CPRZooRaw()
 A dataframe with Raw CPR Zooplankton Abundance
 }
 \description{
-Get CPR Zoop raw & pivoted product - Abundance
+Get CPR Zoop raw product - Abundance
 }
 \examples{
 df <- pr_get_CPRZooRaw()
