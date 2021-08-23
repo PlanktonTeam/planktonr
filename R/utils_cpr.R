@@ -129,7 +129,7 @@ pr_get_CPRZooChangeLog <- function(){
 }
 
 ################################################################################################################################################
-#' Get CPR Phyto raw & pivoted product - Abundance
+#' Get CPR Phyto raw product - Abundance
 #'
 #' @return A dataframe with CPR Raw Phytoplankton Abundance
 #' @export
@@ -152,7 +152,7 @@ pr_get_CPRPhytoRaw <- function(){
     select(-"No taxa found")
 }
 
-#' CPR Phyto HTG pivoted product - Abundance
+#' CPR Phyto HTG product - Abundance
 #'
 #' @return A dataframe with CPR Phytoplankton Abundance - Summed by Higher Trophic Groups
 #' @export
@@ -180,7 +180,7 @@ pr_get_CPRPhytoHTG <- function(){
     select(-.data$Sample)
 }
 
-#' Get CPR Phyto genus pivoted product - Abundance
+#' Get CPR Phyto genus product - Abundance
 #'
 #' @return A dataframe with CPR Phytoplankton Abundance - Summed by Genus
 #' @export
@@ -271,7 +271,7 @@ pr_get_CPRPhytoGenus <- function(){
     arrange(desc(.data$SampleDateUTC))
 }
 
-#' Get CPR Phyto species pivoted product - Abundance
+#' Get CPR Phyto species product - Abundance
 #'
 #' @return A dataframe with CPR Phytoplankton Abundance - Summed by Species
 #' @export
@@ -365,7 +365,7 @@ pr_get_CPRPhytoSpecies <-  function(){
 }
 
 ###############################################################################################################################################
-#' Get CPR Phyto raw & pivoted product - Biovolume
+#' Get CPR Phyto raw product - Biovolume
 #'
 #' @return A dataframe with CPR Phytoplankton BioVolume
 #' @export
@@ -394,11 +394,11 @@ pr_get_CPRPhytoRawBV <- function(){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_CPRHTGBV()
+#' df <- pr_get_CPRPhytoHTGBV()
 #' @import dplyr
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
-pr_get_CPRHTGBV <- function(){
+pr_get_CPRPhytoHTGBV <- function(){
   cprHTGPB1 <- pr_get_CPRPhytoData() %>%
     group_by(.data$Sample, .data$TaxonGroup) %>%
     summarise(PBioV_um3m3 = sum(.data$BioVolume_um3m3, na.rm = TRUE), .groups = "drop") %>%
@@ -598,7 +598,7 @@ pr_get_CPRPhytoSpeciesBV <- function(){
 }
 
 #### CPR Zooplankton #### ################################################################################################################################
-#' Get CPR Zoop raw & pivoted product - Abundance
+#' Get CPR Zoop raw product - Abundance
 #'
 #' @return A dataframe with Raw CPR Zooplankton Abundance
 #' @export
@@ -622,7 +622,7 @@ pr_get_CPRZooRaw <- function(){
     select(-.data$Sample)
 }
 
-#' CPR Zoop raw product binned by sex and stage raw pivoted product
+#' CPR Zoop raw product binned by sex and stage raw product
 #'
 #' @return A dataframe with CPR Zooplankton Abundance - Binned by sex and stage
 #' @export
@@ -645,7 +645,7 @@ pr_get_CPRZooRawSS <- function(){
     arrange(desc(.data$SampleDateUTC))
 }
 
-#' Get CPR Zoop HTG pivoted product - Abundance
+#' Get CPR Zoop HTG product - Abundance
 #'
 #' @return A dataframe with CPR Zooplankton Abundance - Summed by Higher Trophic Levels
 #' @export
