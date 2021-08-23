@@ -7,7 +7,7 @@
 pr_get_CPRPhytoRaw()
 }
 \value{
-
+A dataframe with CPR Raw Phytoplankton Abundance
 }
 \description{
 Get CPR Phyto raw & pivoted product - Abundance

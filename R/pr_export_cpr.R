@@ -5,7 +5,9 @@
 #' @export
 #'
 #' @examples
-#' pr_export_cpr(".")
+#' \dontrun{
+#' pr_export_cpr("Output")
+#' }
 #' @import dplyr
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data

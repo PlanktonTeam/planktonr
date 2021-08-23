@@ -7,7 +7,7 @@
 pr_get_LFCountBGC()
 }
 \value{
-
+A dataframe with Larval Fish BGC Data
 }
 \description{
 Make BGC data for larval fish

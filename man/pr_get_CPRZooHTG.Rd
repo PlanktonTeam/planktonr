@@ -7,7 +7,7 @@
 pr_get_CPRZooHTG()
 }
 \value{
-
+A dataframe with CPR Zooplankton Abundance - Summed by Higher Trophic Levels
 }
 \description{
 Get CPR Zoop HTG pivoted product - Abundance

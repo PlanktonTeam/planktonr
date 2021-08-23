@@ -7,7 +7,7 @@
 pr_get_CPRPhytoChangeLog()
 }
 \value{
-
+A dataframe with the CPR Phytoplankton Changelog
 }
 \description{
 Get Phyto Change Log

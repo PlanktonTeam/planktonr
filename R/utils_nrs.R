@@ -41,7 +41,7 @@ pr_get_NRSTrips <- function(){
 
 #' Get raw phytoplankton data in pivoted format
 #'
-#' @return
+#' @return A dataframe with Raw Phytoplankton Abundance data
 #' @export
 #'
 #' @examples
@@ -63,7 +63,7 @@ pr_get_NRSRawPhytoPivot <- function(){
 #### Higher Trophic Groups Abund ####
 #' Get Abundance of Phyto Higher Trophic Groups
 #'
-#' @return
+#' @return A dataframe with Phytoplankton Abundance data - Summed by Higher Trophic Levels
 #' @export
 #'
 #' @examples
@@ -79,6 +79,7 @@ pr_get_NRSPhytoHTG <- function(){
     filter(!.data$TaxonGroup %in% c("Other","Coccolithophore", "Diatom","Protozoa"))
 
   NRSHTGP <- pr_get_NRSTrips() %>%
+    select(-c(.data$Biomass_mgm3, .data$Secchi_m)) %>%
     filter(grepl('P', .data$SampleType)) %>%
     left_join(NRSHTGP, by = "TripCode") %>%
     mutate(TaxonGroup = ifelse(is.na(.data$TaxonGroup), "Ciliate", .data$TaxonGroup),
@@ -95,7 +96,7 @@ pr_get_NRSPhytoHTG <- function(){
 #' Import NRS Phytoplankton Data
 #'
 #' Load NRS station Phytoplankton Data
-#' @return A dataframe with NRS Phytoplankton Data
+#' @return A dataframe with NRS Phytoplankton Data in long form
 #' @export
 #' @examples
 #' df <- pr_get_NRSPhytoData()
@@ -126,9 +127,9 @@ pr_get_NRSPhytoChangeLog <- function(){
 
 
 #
-#' Get NRS Phytoplankton raw pivoted product - Abundance
+#' Get NRS Phytoplankton raw data - Abundance
 #'
-#' @return
+#' @return A dataframe with NRS Phytoplankton Abundance
 #' @export
 #'
 #' @examples
@@ -146,41 +147,11 @@ pr_get_NRSPhytoRaw <- function(){
     mutate(SampleDateLocal = as.character(.data$SampleDateLocal))
 }
 
-#
-#' Get NRS Phytoplankton higher taxon group pivoted product - Abundance
-#'
-#' @return
-#' @export
-#'
-#' @examples
-#' df <- pr_get_NRSPhytoHTG()
-#' @import dplyr
-#' @importFrom magrittr "%>%"
-#' @importFrom rlang .data
-pr_get_NRSPhytoHTG <- function(){
-  NRSHTGP1 <- pr_get_NRSPhytoData() %>%
-    group_by(.data$TripCode, .data$TaxonGroup) %>%
-    summarise(Cells_L = sum(.data$Cells_L, na.rm = TRUE), .groups = "drop") %>%
-    filter(!.data$TaxonGroup %in% c("Other","Coccolithophore", "Diatom","Protozoa"))
-
-  NRSHTGP2 <- pr_get_NRSTrips() %>%
-    select(-c(.data$Biomass_mgm3, .data$Secchi_m)) %>%
-    filter(grepl('P', .data$SampleType)) %>%
-    left_join(NRSHTGP1, by = "TripCode") %>%
-    mutate(TaxonGroup = ifelse(is.na(.data$TaxonGroup), "Ciliate", .data$TaxonGroup),
-           Cells_L = ifelse(is.na(.data$Cells_L), 0, .data$Cells_L)) %>%
-    arrange(-desc(.data$TaxonGroup))
-
-  NRSHTGP <-  NRSHTGP2 %>%
-    tidyr::pivot_wider(names_from = .data$TaxonGroup, values_from = .data$Cells_L, values_fill = list(Cells_L = 0)) %>%
-    arrange(desc(.data$SampleDateLocal)) %>%
-    select(-c(.data$SampleType))
-}
 
 #
-#' Get NRS Phytoplankton genus pivoted product - Abundance
+#' Get NRS Phytoplankton genus product - Abundance
 #'
-#' @return
+#' @return A dataframe with NRS Phytoplankton Abundance - Summed by Genus
 #' @export
 #'
 #' @examples
@@ -219,11 +190,12 @@ pr_get_NRSPhytoGenus <- function() {
     mutate(StartDate = lubridate::ymd("2007-12-19"),
            Genus = ifelse(is.na(.data$Genus), "Acanthoica", .data$Genus),
            Cells_L = ifelse(is.na(.data$Cells_L), 0, .data$Cells_L)) %>%
-    group_by(.data$TripCode, .data$StationName, .data$Latitude, .data$Longitude, .data$SampleDateLocal, .data$Year, .data$Month, .data$Day, .data$Time_24hr, .data$Genus) %>%
+    group_by(.data$TripCode, .data$StationName, .data$Latitude, .data$Longitude,
+             .data$SampleDateLocal, .data$Year, .data$Month, .data$Day, .data$Time_24hr, .data$Genus) %>%
     summarise(Cells_L = sum(.data$Cells_L), .groups = "drop") %>%
     as.data.frame()
 
-  # add change log species with -999 for NA"s and real absences as 0"s
+  # add change log species with -999 for NA's and real absences as 0's
   NRSGenP2 <- NRSPdat %>%
     filter(.data$TaxonName %in% levels(as.factor(nrslg$TaxonName)) & .data$Genus != '') %>%
     left_join(NRSPcl, by = "TaxonName") %>%
@@ -246,7 +218,7 @@ pr_get_NRSPhytoGenus <- function() {
       droplevels()
 
     gen <- NRSSamp %>%
-      filter(grepl('P', .data$SampleType)) %>%
+      filter(grepl("P", .data$SampleType)) %>%
       left_join(gen, by = "TripCode") %>%
       mutate(StartDate = replace(.data$StartDate, is.na(.data$StartDate), Dates$StartDate),
              Genus = replace(.data$Genus, is.na(.data$Genus), Dates$Genus),
@@ -271,9 +243,9 @@ pr_get_NRSPhytoGenus <- function() {
     mutate(SampleDateLocal = as.character(.data$SampleDateLocal))
 }
 
-#' Get NRS Phytoplankton species pivoted product - Abundance
+#' Get NRS Phytoplankton species product - Abundance
 #'
-#' @return
+#' @return A dataframe with NRS Phytoplankton Abundance - Summed by Species
 #' @export
 #'
 #' @examples
@@ -369,7 +341,7 @@ pr_get_NRSPhytoSpecies <- function(){
 
 #' Get NRS Phytoplankton raw pivoted product - Biovolume
 #'
-#' @return
+#' @return A dataframe with raw NRS Phytoplankton BioVolume
 #' @export
 #'
 #' @examples
@@ -389,7 +361,7 @@ pr_get_NRSPhytoRawBV <- function(){
 
 #' Get NRS Phytoplankton higher taxon group pivoted product - Biovolume
 #'
-#' @return
+#' @return A dataframe with NRS Phytoplankton BioVolume
 #' @export
 #'
 #' @examples
@@ -415,9 +387,9 @@ pr_get_NRSPhytoHTGBV <- function() {
     select(-c(.data$TripCode, .data$SampleType))
 }
 
-#' Get NRS Phytoplankton genus pivoted product - Biovolume
+#' Get NRS Phytoplankton genus product - Biovolume
 #'
-#' @return
+#' @return A dataframe with NRS Phytoplankton BioVolume - Summed by Genus
 #' @export
 #'
 #' @examples
@@ -512,7 +484,7 @@ pr_get_NRSPhytoGenusBV <- function(){
 
 #' Get NRS Phytoplankton species pivoted product - Biovolume
 #'
-#' @return
+#' @return A dataframe with NRS Phytoplankton BioVolume - Summed by Species
 #' @export
 #'
 #' @examples
@@ -637,9 +609,9 @@ pr_get_NRSZooData <- function(){
     pr_rename()
 }
 
-#' Load zooplankton abundance data
+#' Load zooplankton Count data
 #'
-#' @return A dataframe with zooplankton abundance data
+#' @return A dataframe with zooplankton count data
 #' @export
 #'
 #' @examples
@@ -670,7 +642,16 @@ pr_get_NRSZooChangeLog <- function(){
 }
 
 
-# Make NRS Zooplankton raw pivoted product
+#' Get NRS Zoop raw & pivoted product - Abundance
+#'
+#' @return A dataframe with Raw NRS Zooplankton Abundance
+#' @export
+#'
+#' @examples
+#' df <- pr_get_NRSZooRaw()
+#' @import dplyr
+#' @importFrom magrittr "%>%"
+#' @importFrom rlang .data
 pr_get_NRSZooRaw <- function(){
   NRSRawZ <- left_join(pr_get_NRSTrips() %>% select(-c(.data$Biomass_mgm3, .data$Secchi_m)) %>% filter(grepl('Z', .data$SampleType)),
                        pr_get_NRSZooData(), by = "TripCode") %>%
@@ -681,7 +662,16 @@ pr_get_NRSZooRaw <- function(){
     mutate(SampleDateLocal = as.character(.data$SampleDateLocal))
 }
 
-# Make NRS Zooplankton binned by sex and stage raw pivoted product
+#' NRS Zoop raw product binned by sex and stage raw pivoted product
+#'
+#' @return A dataframe with NRS Zooplankton Abundance - Binned by sex and stage
+#' @export
+#'
+#' @examples
+#' df <- pr_get_NRSZooRawBin()
+#' @import dplyr
+#' @importFrom magrittr "%>%"
+#' @importFrom rlang .data
 pr_get_NRSZooRawBin <- function(){
   NRSIdsZ <- left_join(pr_get_NRSTrips() %>% select(-c(.data$Biomass_mgm3, .data$Secchi_m)) %>%
                          filter(grepl('Z', .data$SampleType)), pr_get_NRSZooData(), by = "TripCode") %>%
@@ -694,7 +684,17 @@ pr_get_NRSZooRawBin <- function(){
     mutate(SampleDateLocal = as.character(.data$SampleDateLocal))
 }
 
-# Make NRS Zooplankton higher taxonomic group product
+
+#' Get NRS Zoop HTG pivoted product - Abundance
+#'
+#' @return A dataframe with NRS Zooplankton Abundance - Summed by Higher Trophic Levels
+#' @export
+#'
+#' @examples
+#' df <- pr_get_NRSZooHTG()
+#' @import dplyr
+#' @importFrom magrittr "%>%"
+#' @importFrom rlang .data
 pr_get_NRSZooHTG <-  function(){
   nrsHTGZ1 <- pr_get_NRSZooData() %>%
     group_by(.data$TripCode, .data$TaxonGroup) %>%
@@ -714,7 +714,16 @@ pr_get_NRSZooHTG <-  function(){
     mutate(SampleDateLocal = as.character(.data$SampleDateLocal))
 }
 
-# Make NRS Zooplankton genus product
+#' NRS Zoop genus product - Abundance
+#'
+#' @return A dataframe with NRS Zooplankton Abundance - Summed by Genus
+#' @export
+#'
+#' @examples
+#' df <- pr_get_NRSZooGenus()
+#' @import dplyr
+#' @importFrom magrittr "%>%"
+#' @importFrom rlang .data
 pr_get_NRSZooGenus <- function(){
   # Bring in all NRS zooplankton samples, data and changelog once
   NRSZdat <- pr_get_NRSZooData()
@@ -799,7 +808,16 @@ pr_get_NRSZooGenus <- function(){
     mutate(SampleDateLocal = as.character(.data$SampleDateLocal))
 }
 
-# Make NRS Zooplankton copepod product
+#' NRS Zoop copepod product - Abundance
+#'
+#' @return A dataframe with NRS Copepod Abundance - Summed by Species
+#' @export
+#'
+#' @examples
+#' df <- pr_get_NRSZooSpeciesCopepod()
+#' @import dplyr
+#' @importFrom magrittr "%>%"
+#' @importFrom rlang .data
 pr_get_NRSZooSpeciesCopepod <- function(){
 
   # Bring in all NRS zooplankton samples, data and changelog once
@@ -891,7 +909,17 @@ pr_get_NRSZooSpeciesCopepod <- function(){
     mutate(SampleDateLocal = as.character(.data$SampleDateLocal))
 }
 
-# Make NRS Zooplankton non-copepod product
+
+#' Get NRS Zoop Non-Copepod Abundance Data
+#'
+#' @return A dataframe with NRS Zooplankton (non-copepod) Abundance - Summed by Species
+#' @export
+#'
+#' @examples
+#' df <- pr_get_NRSZooSpeciesNonCopepod()
+#' @import dplyr
+#' @importFrom magrittr "%>%"
+#' @importFrom rlang .data
 pr_get_NRSZooSpeciesNonCopepod <- function(){
 
   # Bring in all NRS zooplankton samples, data and changelog once

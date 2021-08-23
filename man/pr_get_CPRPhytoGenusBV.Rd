@@ -7,7 +7,7 @@
 pr_get_CPRPhytoGenusBV()
 }
 \value{
-
+A dataframe with CPR Phytoplankton BioVolume - Summed by Genus
 }
 \description{
 Get CPR Phyto genus product - Biovolume

@@ -10,7 +10,9 @@
 #' @importFrom rlang .data
 pr_get_CTD <- function(){
 
-  rawCTD <- readr::read_csv(paste0(pr_get_site(), "IMOS_-_Australian_National_Mooring_Network_(ANMN)_-_CTD_Profiles.csv"), na = "", skip = 29,
+  rawCTD <- readr::read_csv(paste0(pr_get_site(), "IMOS_-_Australian_National_Mooring_Network_(ANMN)_-_CTD_Profiles.csv"),
+                            na = "",
+                            comment = "#",
                             col_types = readr::cols(CHLU = readr::col_double(), # columns start with nulls so tidyverse annoyingly assigns col_logical()
                                                     CHLU_quality_control = readr::col_double(),
                                                     CPHL = readr::col_double(),

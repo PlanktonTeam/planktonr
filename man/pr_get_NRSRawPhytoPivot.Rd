@@ -7,7 +7,7 @@
 pr_get_NRSRawPhytoPivot()
 }
 \value{
-
+A dataframe with Raw Phytoplankton Abundance data
 }
 \description{
 Get raw phytoplankton data in pivoted format

@@ -10,11 +10,12 @@ pr_add_bioregions(df)
 \item{df}{A dataframe with columns \code{.data$Longitude} and \code{.data$Latitude}}
 }
 \value{
-
+A dataframe with Marine Bioregions added
 }
 \description{
 Add bioregions data to existing df
 }
 \examples{
-
+df <- pr_get_NRSStation() \%>\%
+pr_add_bioregions
 }

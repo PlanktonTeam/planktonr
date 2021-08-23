@@ -4,172 +4,196 @@
     <loc>https://planktonteam.github.io/planktonr/index.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/add_bioregions.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_add_bioregions.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/create_bgc.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_apply_flags.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/create_indices_cpr.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_export_cpr.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/create_indices_nrs.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_export_larvalfish.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/export_processed_cpr.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_export_nrs.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/export_processed_larvalfish.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRHTGBV.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/export_processed_nrs.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRPhytoChangeLog.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_CPRHTGBV.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRPhytoCountData.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_CPRPhytoChangeLog.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRPhytoData.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_CPRPhytoCountData.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRPhytoGenus.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_CPRPhytoData.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRPhytoGenusBV.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_CPRPhytoGenus.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRPhytoHTG.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_CPRPhytoGenusBV.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRPhytoRaw.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_CPRPhytoHTG.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRPhytoRawBV.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_CPRPhytoRaw.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRPhytoSpecies.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_CPRPhytoRawBV.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRPhytoSpeciesBV.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_CPRPhytoSpecies.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRSamps.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_CPRPhytoSpeciesBV.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRTrips.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_CPRSamps.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRZooChangeLog.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_CPRTrips.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRZooCopepod.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_CPRZooChangeLog.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRZooCountData.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_CPRZooCopepod.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRZooData.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_CPRZooCountData.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRZooGenus.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_CPRZooData.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRZooHTG.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_CPRZooGenus.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRZooNonCopepod.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_CPRZooHTG.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRZooRaw.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_CPRZooNonCopepod.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRZooRawSS.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_CPRZooRaw.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CTD.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_CPRZooRawSS.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_Chemistry.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_CTD.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_LFCountAll.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_Chemistry.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_LFCountBGC.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_LFCountAll.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_LFData.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_LFCountBGC.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_LFTrips.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_LFData.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSPhytoChangeLog.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_LFTrips.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSPhytoData.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_NRSPhytoChangeLog.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSPhytoGenus.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_NRSPhytoData.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSPhytoGenusBV.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_NRSPhytoGenus.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSPhytoHTG.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_NRSPhytoGenusBV.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSPhytoHTGBV.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_NRSPhytoHTG.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSPhytoRaw.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_NRSPhytoHTGBV.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSPhytoRawBV.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_NRSPhytoRaw.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSPhytoSpecies.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_NRSPhytoRawBV.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSPhytoSpeciesBV.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_NRSPhytoSpecies.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSPico.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_NRSPhytoSpeciesBV.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSPigments.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_NRSPico.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSRawPhytoPivot.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_NRSPigments.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSStation.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_NRSRawPhytoPivot.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSTrips.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_NRSStation.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSZooChangeLog.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_NRSTrips.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSZooCount.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_NRSZooChangeLog.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSZooData.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_NRSZooCount.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSZooGenus.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_NRSZooData.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSZooHTG.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_ZooInfo.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSZooRaw.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/get_raw_plankton.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSZooRawBin.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/untibble.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSZooSpeciesCopepod.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSZooSpeciesNonCopepod.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_StationName.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_ZooInfo.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_bgc.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_indices_cpr.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_indices_nrs.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_site.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_rename.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/articles/planktonr.html</loc>

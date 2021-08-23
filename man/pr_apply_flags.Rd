@@ -6,9 +6,16 @@
 \usage{
 pr_apply_flags(df)
 }
+\arguments{
+\item{df}{A dataframe contained data with associated flags}
+}
 \value{
 A dataframe with flagged data removed
 }
 \description{
 Remove flagged data in df
+}
+\examples{
+df <- data.frame(SST = c(27.4, 28.9, 45), SST_Flag = c(1, 1, 4))
+df <- pr_apply_flags(df)
 }
