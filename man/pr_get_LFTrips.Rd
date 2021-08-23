@@ -7,7 +7,7 @@
 pr_get_LFTrips()
 }
 \value{
-
+A dataframe with Larval Fish Trip Data
 }
 \description{
 Get Larval Fish Trip Data

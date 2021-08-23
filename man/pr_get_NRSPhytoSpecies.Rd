@@ -2,15 +2,15 @@
 % Please edit documentation in R/utils_nrs.R
 \name{pr_get_NRSPhytoSpecies}
 \alias{pr_get_NRSPhytoSpecies}
-\title{Get NRS Phytoplankton species pivoted product - Abundance}
+\title{Get NRS Phytoplankton species product - Abundance}
 \usage{
 pr_get_NRSPhytoSpecies()
 }
 \value{
-
+A dataframe with NRS Phytoplankton Abundance - Summed by Species
 }
 \description{
-Get NRS Phytoplankton species pivoted product - Abundance
+Get NRS Phytoplankton species product - Abundance
 }
 \examples{
 df <- pr_get_NRSPhytoSpecies()

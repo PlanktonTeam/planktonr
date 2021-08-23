@@ -2,15 +2,15 @@
 % Please edit documentation in R/utils_nrs.R
 \name{pr_get_NRSZooCount}
 \alias{pr_get_NRSZooCount}
-\title{Load zooplankton abundance data}
+\title{Load zooplankton Count data}
 \usage{
 pr_get_NRSZooCount()
 }
 \value{
-A dataframe with zooplankton abundance data
+A dataframe with zooplankton count data
 }
 \description{
-Load zooplankton abundance data
+Load zooplankton Count data
 }
 \examples{
 df <- pr_get_NRSZooCount()

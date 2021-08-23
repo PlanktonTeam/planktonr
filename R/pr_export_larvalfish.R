@@ -5,7 +5,9 @@
 #' @export
 #'
 #' @examples
-#'
+#' \dontrun{
+#' pr_export_larvalfish("Output")
+#' }
 #' @import dplyr
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data

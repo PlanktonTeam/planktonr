@@ -7,7 +7,7 @@
 pr_get_NRSPhytoHTGBV()
 }
 \value{
-
+A dataframe with NRS Phytoplankton BioVolume
 }
 \description{
 Get NRS Phytoplankton higher taxon group pivoted product - Biovolume

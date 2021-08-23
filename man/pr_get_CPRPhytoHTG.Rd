@@ -7,7 +7,7 @@
 pr_get_CPRPhytoHTG()
 }
 \value{
-
+A dataframe with CPR Phytoplankton Abundance - Summed by Higher Trophic Groups
 }
 \description{
 CPR Phyto HTG pivoted product - Abundance

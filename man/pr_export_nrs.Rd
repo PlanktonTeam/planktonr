@@ -13,5 +13,8 @@ pr_export_nrs(outD)
 Create all processed data products
 }
 \examples{
+\dontrun{
+pr_export_nrs("Output")
+}
 
 }

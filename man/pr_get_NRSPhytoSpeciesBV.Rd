@@ -7,7 +7,7 @@
 pr_get_NRSPhytoSpeciesBV()
 }
 \value{
-
+A dataframe with NRS Phytoplankton BioVolume - Summed by Species
 }
 \description{
 Get NRS Phytoplankton species pivoted product - Biovolume

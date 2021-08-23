@@ -7,7 +7,7 @@
 pr_get_CPRTrips()
 }
 \value{
-
+A dataframe with CPR Trips
 }
 \description{
 Get CPR trips

@@ -35,10 +35,13 @@ pr_get_ZooInfo <- function(){
 
 #' Add StationName to data
 #'
+#' @param df A dataframe that contains `StationCode` but no `StationName`
 #' @return A dataframe with StationName added
 #' @export
 #'
 #' @examples
+#' df <- pr_get_NRSStation() %>%
+#'     pr_get_StationName()
 #' @import dplyr
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
@@ -61,10 +64,13 @@ pr_get_StationName <- function(df){
 
 #' Remove flagged data in df
 #'
+#' @param df A dataframe contained data with associated flags
 #' @return A dataframe with flagged data removed
 #' @export
 #'
 #' @examples
+#' df <- data.frame(SST = c(27.4, 28.9, 45), SST_Flag = c(1, 1, 4))
+#' df <- pr_apply_flags(df)
 #' @import dplyr
 #' @importFrom magrittr "%>%"
 #' @importFrom data.table ":="

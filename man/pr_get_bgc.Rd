@@ -7,7 +7,7 @@
 pr_get_bgc()
 }
 \value{
-
+A dataframe with BGC data
 }
 \description{
 Create Biogeochemical data

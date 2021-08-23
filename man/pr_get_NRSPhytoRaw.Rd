@@ -2,15 +2,15 @@
 % Please edit documentation in R/utils_nrs.R
 \name{pr_get_NRSPhytoRaw}
 \alias{pr_get_NRSPhytoRaw}
-\title{Get NRS Phytoplankton raw pivoted product - Abundance}
+\title{Get NRS Phytoplankton raw data - Abundance}
 \usage{
 pr_get_NRSPhytoRaw()
 }
 \value{
-
+A dataframe with NRS Phytoplankton Abundance
 }
 \description{
-Get NRS Phytoplankton raw pivoted product - Abundance
+Get NRS Phytoplankton raw data - Abundance
 }
 \examples{
 df <- pr_get_NRSPhytoRaw()

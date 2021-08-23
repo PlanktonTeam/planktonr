@@ -6,9 +6,16 @@
 \usage{
 pr_get_StationName(df)
 }
+\arguments{
+\item{df}{A dataframe that contains \code{StationCode} but no \code{StationName}}
+}
 \value{
 A dataframe with StationName added
 }
 \description{
 Add StationName to data
+}
+\examples{
+df <- pr_get_NRSStation() \%>\%
+    pr_get_StationName()
 }

@@ -7,7 +7,7 @@
 pr_get_CPRZooChangeLog()
 }
 \value{
-
+A dataframe with the CPR Zooplankton Changelog
 }
 \description{
 Get CPR zooplankton Change Log

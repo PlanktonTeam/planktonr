@@ -7,7 +7,7 @@
 pr_get_CPRSamps()
 }
 \value{
-
+A dataframe with CPR Samples
 }
 \description{
 Get CPR samples

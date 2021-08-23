@@ -7,7 +7,7 @@
 pr_get_LFData()
 }
 \value{
-
+A dataframe with Raw Larval Fish Data
 }
 \description{
 Get Larval Fish Sample Data

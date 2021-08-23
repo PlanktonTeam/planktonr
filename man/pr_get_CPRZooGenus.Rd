@@ -7,7 +7,7 @@
 pr_get_CPRZooGenus()
 }
 \value{
-
+A dataframe with CPR Zooplankton Abundance - Summed by Genus
 }
 \description{
 CPR Zoop genus product - Abundance

@@ -13,5 +13,7 @@ pr_export_larvalfish(outD)
 Create all processed data products for Larval Fish
 }
 \examples{
-
+\dontrun{
+pr_export_larvalfish("Output")
+}
 }
