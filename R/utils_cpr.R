@@ -13,6 +13,8 @@ pr_get_CPRTrips <- function(){
     pr_rename()
 }
 
+# @param Type A character string on which to filter data (P = Phytoplankton, Z = Zooplankton, F = Fish)
+
 #' Get CPR samples
 #'
 #' @return A dataframe with CPR Samples
@@ -34,9 +36,10 @@ pr_get_CPRSamps <- function(){
     select(c(.data$TripCode, .data$Sample, .data$Latitude:.data$SampleDateUTC, .data$Year:.data$Time_24hr, .data$PCI, .data$Biomass_mgm3, .data$SampleType))
 }
 
-#' Get CPR Phytoplankton Abundance data
+#' Get CPR Phytoplankton Abundance or Count data
 #'
-#' @return A dataframe with CPR Phytoplankton Abundance data
+#' @param var A string of either "Abundance" or "Count"
+#' @return A dataframe with CPR Phytoplankton Abundance or Count data
 #' @export
 #'
 #' @examples
@@ -50,15 +53,15 @@ pr_get_CPRPhytoData <- function(var = "Abundance"){
 
   if(stringr::str_detect(var, "Abundance")){
     cprPdat <- cprPdat %>%
-      select(-c(.data$FovCount, .data$SampVol_m3))
+      select(-c(.data$FovCount, .data$SampVol_m3, .data$BioVolume_um3m3))
   } else if(stringr::str_detect(var, "Count")){
     cprPdat <- cprPdat %>%
       select(-c(.data$BioVolume_um3m3, .data$PhytoAbund_m3))
   }
-  # else if(stringr::str_detect(var, "Biovolume")){
-  #   cprPdat <- cprPdat %>%
-  #     select(-c(.data$BioVolume_um3m3, .data$PhytoAbund_m3))
-  # }
+  else if(stringr::str_detect(var, "Biovolume")){
+    cprPdat <- cprPdat %>%
+      select(-c(.data$FovCount, .data$SampVol_m3, .data$PhytoAbund_m3))
+  }
 
 }
 
@@ -80,6 +83,7 @@ pr_get_CPRPhytoChangeLog <- function(){
 
 #' Get CPR Zooplankton abundance data
 #'
+#' @param var A string of either "Abundance" or "Count"
 #' @return A dataframe with CPR Zooplankton Abundance data
 #' @export
 #'

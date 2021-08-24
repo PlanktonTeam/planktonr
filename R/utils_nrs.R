@@ -18,7 +18,7 @@ pr_get_NRSStation <- function(){
 #' Import NRS BGC information
 #'
 #' Load NRS station BGC information
-#' @param Type A character string on which to filter data (P = Phytoplankont, Z = Zooplankton, F = Fish)
+#' @param Type A character string on which to filter data (P = Phytoplankton, Z = Zooplankton, F = Fish)
 #' @return A dataframe with NRS BGC information
 #' @export
 #' @examples
