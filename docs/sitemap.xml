@@ -10,6 +10,9 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_apply_flags.html</loc>
   </url>
   <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_apply_time.html</loc>
+  </url>
+  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_export_cpr.html</loc>
   </url>
   <url>
@@ -19,13 +22,7 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_export_nrs.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRHTGBV.html</loc>
-  </url>
-  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRPhytoChangeLog.html</loc>
-  </url>
-  <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRPhytoCountData.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRPhytoData.html</loc>
@@ -38,6 +35,9 @@
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRPhytoHTG.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRPhytoHTGBV.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRPhytoRaw.html</loc>
@@ -62,9 +62,6 @@
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRZooCopepod.html</loc>
-  </url>
-  <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRZooCountData.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRZooData.html</loc>
@@ -139,7 +136,7 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSPigments.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSRawPhytoPivot.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSRawPhyto.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSStation.html</loc>
@@ -149,9 +146,6 @@
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSZooChangeLog.html</loc>
-  </url>
-  <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSZooCount.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSZooData.html</loc>
