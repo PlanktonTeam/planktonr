@@ -73,7 +73,7 @@ pr_get_LFCountBGC <- function(){
     left_join(pr_get_LFData() %>%
                        select(-.data$Comments), by = c("i_Sample", "TripCode")) %>%
     mutate(Header = paste(.data$ScientificName, .data$SPCode, sep = " ")) %>%
-    select(-c(.data$ScientificName, .data$SPCode, .data$Temperature_degC, .data$Salinity_psu)) %>%
+    select(-c(.data$ScientificName, .data$SPCode, .data$Temperature_degC, .data$Salinity_psu, .data$FlagComments)) %>%
     arrange(.data$Header) %>%
     tidyr::pivot_wider(names_from = .data$Header, values_from = .data$TaxonCount, values_fill = 0) %>%
     arrange(.data$SampleDateLocal)

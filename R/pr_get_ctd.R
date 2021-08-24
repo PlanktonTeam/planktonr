@@ -20,15 +20,16 @@ pr_get_CTD <- function(){
                                                     cruise_id = readr::col_skip())) %>%
     pr_rename() %>%
     rename(SampleDepth_m = .data$DEPTH, Salinity_psu = .data$PSAL, Salinity_flag = .data$PSAL_quality_control,
-           SampleDateUTC = .data$time_coverage_start, StationCode = .data$site_code, Temperature_degC = .data$TEMP) %>% # Can't rename this in pr_rename due to replicate name
+           SampleDateUTC = .data$time_coverage_start, StationCode = .data$site_code, Temperature_degC = .data$TEMP,
+           ChlF_mgm3 = .data$Chla_mgm3) %>% # Can't rename this in pr_rename due to replicate name
     filter(grepl("NRS", .data$StationCode)) %>% # Subset to NRS only
     mutate(TripCode = ifelse(.data$StationCode == 'NRSDAR', paste0(substr(.data$StationCode,4,6), format(.data$SampleDateUTC, "%Y%m%d_%H:%M")),
                              paste0(substr(.data$StationCode,4,6), format(.data$SampleDateUTC, "%Y%m%d"))),
-           Chla_mgm3 = ifelse(!is.na(.data$Chla_mgm3), .data$Chla_mgm3, .data$CHLF)) %>%
+           ChlF_mgm3 = ifelse(!is.na(.data$ChlF_mgm3), .data$ChlF_mgm3, .data$CHLF)) %>%
     pr_get_StationName() %>%
     select(.data$file_id, .data$StationName, .data$TripCode, .data$SampleDateUTC, .data$Latitude, .data$Longitude,
            .data$SampleDepth_m, .data$Salinity_psu, .data$Salinity_flag, .data$Temperature_degC, .data$Temperature_flag,
-           .data$DissolvedOxygen_umolkg, .data$DissolvedOxygen_flag, .data$Chla_mgm3, .data$Chla_flag,
+           .data$DissolvedOxygen_umolkg, .data$DissolvedOxygen_flag, .data$ChlF_mgm3, .data$Chla_flag,
            .data$Turbidity_NTU, .data$Turbidity_flag, .data$Pressure_dbar, .data$Conductivity_Sm,
            .data$Conductivity_flag, .data$WaterDensity_kgm3, .data$WaterDensity_flag) %>%
     mutate(tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE),

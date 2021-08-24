@@ -19,7 +19,7 @@ pr_get_indices_nrs <- function(){
     pr_rename() %>%
     select(.data$TripCode, .data$Date, .data$Latitude, .data$Longitude)
 
-  var_names <- c("Density_kgm3", "Temperature_degC", "Conductivity_Sm", "Salinity_psu", "Turbidity_NTU")
+  var_names <- c("Density_kgm3", "Temperature_degC", "Conductivity_Sm", "Salinity_psu", "Turbidity_NTU", "CTDChlF_mgm3")
   # SST and Chlorophyll from CTD
   CTD <- pr_get_CTD() %>%
     pr_rename() %>%
@@ -29,9 +29,9 @@ pr_get_indices_nrs <- function(){
 
   # Dataset for calculating MLD
   CTD_MLD <- pr_get_CTD() %>%
-    select(.data$TripCode, .data$Temperature_degC, .data$Chla_mgm3, .data$Salinity_psu, .data$SampleDepth_m) %>%
+    select(.data$TripCode, .data$Temperature_degC, .data$ChlF_mgm3, .data$Salinity_psu, .data$SampleDepth_m) %>%
     # pr_rename() %>%
-    rename(CTDTemperature = .data$Temperature_degC, CTDSalinity = .data$Salinity_psu, CTDChlF_mgm3 = .data$Chla_mgm3) %>%
+    # rename(CTDTemperature = .data$Temperature_degC, CTDSalinity = .data$Salinity_psu, CTDChlF_mgm3 = .data$Chla_mgm3) %>%
     tidyr::drop_na(.data$TripCode)
 
   MLD <- data.frame(TripCode = character(), MLD_temp = numeric(), MLD_sal = numeric(), DCM = numeric())
@@ -66,29 +66,29 @@ pr_get_indices_nrs <- function(){
       filter(.data$rankrefd == 1)
 
     # Reference Temperature
-    refT <- refz$CTDTemperature - 0.4 # temp at 10 m minus 0.4 deg C
+    refT <- refz$Temperature_degC - 0.4 # temp at 10 m minus 0.4 deg C
 
     mldData <- mldData %>%
       filter(.data$SampleDepth_m > refz$SampleDepth_m)
 
     mld_t <- mldData %>%
-      mutate(temp = abs(.data$CTDTemperature - refT),
+      mutate(temp = abs(.data$Temperature_degC - refT),
              ranktemp = stats::ave(.data$temp, FUN = . %>% order %>% order)) %>%
       filter(.data$ranktemp == 1)
 
     MLD_temp <- mld_t$SampleDepth_m
 
-    refS <- refz$CTDSalinity - 0.03 # temp at 10 m minus 0.4
+    refS <- refz$Salinity_psu - 0.03 # temp at 10 m minus 0.4
 
     mld_s <- mldData %>%
-      mutate(temp = abs(.data$CTDSalinity - refS),
+      mutate(temp = abs(.data$Salinity_psu - refS),
              ranksal = stats::ave(.data$temp, FUN = . %>% order %>% order)) %>%
       filter(.data$ranksal == 1)
 
     MLD_sal <- mld_s$SampleDepth_m
 
     dcm <- (mldData %>%
-              filter(.data$CTDChlF_mgm3 > 0 & .data$CTDChlF_mgm3 == max(.data$CTDChlF_mgm3))
+              filter(.data$ChlF_mgm3 > 0 & .data$ChlF_mgm3 == max(.data$ChlF_mgm3))
     )$SampleDepth_m
     dcm[rlang::is_empty(dcm)] = NA
 
