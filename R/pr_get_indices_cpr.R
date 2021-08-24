@@ -63,7 +63,7 @@ pr_get_indices_cpr <- function(){
   # Diversity, evenness etc.
 
   # Bring in plankton data
-  CPRZcount <- pr_get_CPRZooCountData()
+  CPRZcount <- pr_get_CPRZooData("Count")
 
   zooCountCpr <- cprZsamp %>% # Changed this from cprtr
     left_join(CPRZcount, by = "Sample")

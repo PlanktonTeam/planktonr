@@ -13,7 +13,7 @@ pr_get_indices_nrs <- function(){
 
   NRSdat <- pr_get_NRSTrips() %>%
     select(-.data$SampleType) %>%
-    filter(.data$StationName != "Port Hacking 4") #ignore warning, "fast" method does better here than "accurate"
+    filter(.data$StationName != "Port Hacking 4")
 
   dNRSdat <- distinct(NRSdat, .data$TripCode, .keep_all = TRUE) %>% # Distinct rows for satellite, should be anyway
     pr_rename() %>%
@@ -170,7 +170,6 @@ pr_get_indices_nrs <- function(){
 
   # Bring in plankton data
   ZooCount <- pr_get_NRSTrips() %>%
-    # left_join(pr_get_NRSZooCount(), by = "TripCode")
     left_join(pr_get_NRSZooData(), by = "TripCode")
 
   zoo_n <- ZooCount %>%
