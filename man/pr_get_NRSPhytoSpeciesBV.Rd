@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_nrs.R
 \name{pr_get_NRSPhytoSpeciesBV}
 \alias{pr_get_NRSPhytoSpeciesBV}
-\title{Get NRS Phytoplankton species pivoted product - Biovolume}
+\title{Get NRS Phytoplankton species product - Biovolume}
 \usage{
 pr_get_NRSPhytoSpeciesBV()
 }
@@ -10,7 +10,7 @@ pr_get_NRSPhytoSpeciesBV()
 A dataframe with NRS Phytoplankton BioVolume - Summed by Species
 }
 \description{
-Get NRS Phytoplankton species pivoted product - Biovolume
+Get NRS Phytoplankton species product - Biovolume
 }
 \examples{
 df <- pr_get_NRSPhytoSpeciesBV()

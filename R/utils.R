@@ -64,7 +64,7 @@ pr_get_StationName <- function(df){
 
 #' Remove flagged data in df
 #'
-#' @param df A dataframe contained data with associated flags
+#' @param df A dataframe containing data with associated flags
 #' @return A dataframe with flagged data removed
 #' @export
 #'
@@ -104,4 +104,31 @@ pr_apply_flags <- function(df){
     rm(out, var_units, var_flags)
   }
 return(df)
+}
+
+
+
+#' Remove flagged data in df
+#'
+#' @param df A dataframe containing time column
+#' @return A dataframe with extra date columns
+#' @export
+#'
+#' @examples
+#' df <- data.frame(SampleDateLocal = lubridate::now(), Latitude = -32, Longitude = 160)
+#' df <- pr_apply_time(df)
+#' @import dplyr
+#' @importFrom magrittr "%>%"
+#' @importFrom data.table ":="
+#' @importFrom rlang .data
+pr_apply_time <- function(df){
+
+  df <- df %>%
+    mutate(Year = lubridate::year(.data$SampleDateLocal),
+           Month = lubridate::month(.data$SampleDateLocal),
+           Day = lubridate::day(.data$SampleDateLocal),
+           Time_24hr = stringr::str_sub(.data$SampleDateLocal, -8, -1), # hms doesn"t seem to work on 00:00:00 times
+           tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE),
+           SampleDateUTC = lubridate::with_tz(lubridate::force_tzs(.data$SampleDateLocal, .data$tz, roll = TRUE), "UTC"))
+
 }

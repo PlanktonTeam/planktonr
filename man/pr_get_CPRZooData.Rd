@@ -4,7 +4,10 @@
 \alias{pr_get_CPRZooData}
 \title{Get CPR Zooplankton abundance data}
 \usage{
-pr_get_CPRZooData()
+pr_get_CPRZooData(var = "Abundance")
+}
+\arguments{
+\item{var}{A string of either "Abundance" or "Count"}
 }
 \value{
 A dataframe with CPR Zooplankton Abundance data

@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_cpr.R
 \name{pr_get_CPRPhytoHTG}
 \alias{pr_get_CPRPhytoHTG}
-\title{CPR Phyto HTG pivoted product - Abundance}
+\title{CPR Phyto HTG product - Abundance}
 \usage{
 pr_get_CPRPhytoHTG()
 }
@@ -10,7 +10,7 @@ pr_get_CPRPhytoHTG()
 A dataframe with CPR Phytoplankton Abundance - Summed by Higher Trophic Groups
 }
 \description{
-CPR Phyto HTG pivoted product - Abundance
+CPR Phyto HTG product - Abundance
 }
 \examples{
 df <- pr_get_CPRPhytoHTG

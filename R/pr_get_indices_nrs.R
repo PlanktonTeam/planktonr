@@ -11,31 +11,27 @@
 pr_get_indices_nrs <- function(){
   # note there are circumstances where a trip won"t have a phyto and a zoo samples due to loss of sample etc.
 
-  NRSdat <- pr_get_NRSTrips() %>%
+  NRSdat <- pr_get_NRSTrips(c("P", "Z", "F")) %>%
     select(-.data$SampleType) %>%
-    filter(.data$StationName != "Port Hacking 4") #ignore warning, "fast" method does better here than "accurate"
+    filter(.data$StationName != "Port Hacking 4")
 
   dNRSdat <- distinct(NRSdat, .data$TripCode, .keep_all = TRUE) %>% # Distinct rows for satellite, should be anyway
     pr_rename() %>%
     select(.data$TripCode, .data$Date, .data$Latitude, .data$Longitude)
 
+  var_names <- c("Density_kgm3", "Temperature_degC", "Conductivity_Sm", "Salinity_psu", "Turbidity_NTU", "CTDChlF_mgm3")
   # SST and Chlorophyll from CTD
   CTD <- pr_get_CTD() %>%
+    pr_rename() %>%
     filter(.data$SampleDepth_m < 15) %>% # take average of top 10m as a surface value for SST and CHL, this is removing 17 casts as of nov 2020
     group_by(.data$TripCode) %>%
-    summarise(CTDDensity_kgm3 = mean(.data$WaterDensity_kgm3, na.rm = TRUE),
-              CTDTemperature = mean(.data$Temperature_degC, na.rm = TRUE),
-              CTDConductivity_Sm = mean(.data$Conductivity_Sm, na.rm = TRUE),
-              CTDSalinity = mean(.data$Salinity_psu, na.rm = TRUE),
-              CTDChlF_mgm3 = mean(.data$Chla_mgm3, na.rm = TRUE),
-              CTDTurbidity_ntu = mean(.data$Turbidity_NTU, na.rm = TRUE),
-              .groups = "drop")
+    summarise(across(matches(var_names), ~ mean(.x, na.rm = TRUE)), .groups = "drop")
 
   # Dataset for calculating MLD
   CTD_MLD <- pr_get_CTD() %>%
-    select(.data$TripCode, .data$Temperature_degC, .data$Chla_mgm3, .data$Salinity_psu, .data$SampleDepth_m) %>%
+    select(.data$TripCode, .data$Temperature_degC, .data$ChlF_mgm3, .data$Salinity_psu, .data$SampleDepth_m) %>%
     # pr_rename() %>%
-    rename(CTDTemperature = .data$Temperature_degC, CTDSalinity = .data$Salinity_psu, CTDChlF_mgm3 = .data$Chla_mgm3) %>%
+    # rename(CTDTemperature = .data$Temperature_degC, CTDSalinity = .data$Salinity_psu, CTDChlF_mgm3 = .data$Chla_mgm3) %>%
     tidyr::drop_na(.data$TripCode)
 
   MLD <- data.frame(TripCode = character(), MLD_temp = numeric(), MLD_sal = numeric(), DCM = numeric())
@@ -70,29 +66,29 @@ pr_get_indices_nrs <- function(){
       filter(.data$rankrefd == 1)
 
     # Reference Temperature
-    refT <- refz$CTDTemperature - 0.4 # temp at 10 m minus 0.4 deg C
+    refT <- refz$Temperature_degC - 0.4 # temp at 10 m minus 0.4 deg C
 
     mldData <- mldData %>%
       filter(.data$SampleDepth_m > refz$SampleDepth_m)
 
     mld_t <- mldData %>%
-      mutate(temp = abs(.data$CTDTemperature - refT),
+      mutate(temp = abs(.data$Temperature_degC - refT),
              ranktemp = stats::ave(.data$temp, FUN = . %>% order %>% order)) %>%
       filter(.data$ranktemp == 1)
 
     MLD_temp <- mld_t$SampleDepth_m
 
-    refS <- refz$CTDSalinity - 0.03 # temp at 10 m minus 0.4
+    refS <- refz$Salinity_psu - 0.03 # temp at 10 m minus 0.4
 
     mld_s <- mldData %>%
-      mutate(temp = abs(.data$CTDSalinity - refS),
+      mutate(temp = abs(.data$Salinity_psu - refS),
              ranksal = stats::ave(.data$temp, FUN = . %>% order %>% order)) %>%
       filter(.data$ranksal == 1)
 
     MLD_sal <- mld_s$SampleDepth_m
 
     dcm <- (mldData %>%
-              filter(.data$CTDChlF_mgm3 > 0 & .data$CTDChlF_mgm3 == max(.data$CTDChlF_mgm3))
+              filter(.data$ChlF_mgm3 > 0 & .data$ChlF_mgm3 == max(.data$ChlF_mgm3))
     )$SampleDepth_m
     dcm[rlang::is_empty(dcm)] = NA
 
@@ -101,19 +97,12 @@ pr_get_indices_nrs <- function(){
       tidyr::drop_na(.data$TripCode)
   }
 
+  var_names <- c("Silicate_umolL", "Phosphate_umolL", "Ammonium_umolL", "Nitrate_umolL", "Nitrite_umolL",
+                 "Oxygen_umolL", "DIC_umolkg", "TAlkalinity_umolkg", "Salinity_psu")
   # Nutrient data
   Nuts <- pr_get_Chemistry() %>%
     group_by(.data$TripCode) %>%
-    summarise(Silicate_umolL = mean(.data$Silicate_umolL, na.rm = TRUE),
-              Phosphate_umolL = mean(.data$Phosphate_umolL, na.rm = TRUE),
-              Ammonium_umolL = mean(.data$Ammonium_umolL, na.rm = TRUE),
-              Nitrate_umolL = mean(.data$Nitrate_umolL, na.rm = TRUE),
-              Nitrite_umolL = mean(.data$Nitrite_umolL, na.rm = TRUE),
-              Oxygen_umolL = mean(.data$Oxygen_umolL, na.rm = TRUE),
-              DIC_umolkg = mean(.data$DIC_umolkg, na.rm = TRUE),
-              TAlkalinity_umolkg = mean(.data$TAlkalinity_umolkg, na.rm = TRUE),
-              Salinity_psu = mean(.data$Salinity_psu, na.rm = TRUE),
-              .groups = "drop") %>%
+    summarise(across(matches(var_names), ~ mean(.x, na.rm = TRUE)), .groups = "drop") %>%
     mutate_all(~ replace(., is.na(.), NA))
 
   Pigments <- pr_get_NRSPigments() %>%
@@ -124,7 +113,7 @@ pr_get_indices_nrs <- function(){
               .groups = "drop")
 
   # Total Zooplankton Abundance
-  ZooData <- pr_get_NRSTrips() %>%
+  ZooData <- pr_get_NRSTrips("Z") %>%
     left_join(pr_get_NRSZooData(), by = "TripCode")
 
   TZoo <- ZooData %>%
@@ -169,8 +158,7 @@ pr_get_indices_nrs <- function(){
   # Diversity, evenness etc.
 
   # Bring in plankton data
-  ZooCount <- pr_get_NRSTrips() %>%
-    # left_join(pr_get_NRSZooCount(), by = "TripCode")
+  ZooCount <- pr_get_NRSTrips("Z") %>%
     left_join(pr_get_NRSZooData(), by = "TripCode")
 
   zoo_n <- ZooCount %>%
@@ -195,7 +183,7 @@ pr_get_indices_nrs <- function(){
     mutate(CopepodEvenness = .data$ShannonCopepodDiversity / log(.data$NoCopepodSpecies_Sample))
 
   # Total Phyto abundance
-  PhytoData <- pr_get_NRSTrips() %>%
+  PhytoData <- pr_get_NRSTrips("P") %>%
     left_join(pr_get_NRSPhytoData(), by = "TripCode") %>%
     filter(.data$TaxonGroup != "Other")
 

@@ -13,9 +13,11 @@ pr_rename <- function(df){
     "BioVolume_um3m3", "BIOVOL_UM3M3",
     "Biomass_mgm3", "BIOMASS_MGM3",
     "Biovolume_um3L", "BIOVOLUME_UM3L",
-    "CTDChlF_mgm", "Chla_mgm",
-    "CTDSalinity", "Salinity_psu",
-    "CTDTemperature", "Temperature_degC",
+    # "CTDChlF_mgm", "Chla_mgm",
+    # "CTDConductivity_Sm", "Conductivity_Sm",
+    # "CTDSalinity", "Salinity_psu",
+    # "CTDTemperature", "Temperature_degC",
+    # "CTDTurbidity_ntu", "Turbidity_NTU",
     # "CTDChlF_mgm3"
     "Cells_L", "CELL_L",
     "Chla_flag", "CPHL_quality_control",
@@ -26,6 +28,7 @@ pr_rename <- function(df){
     "Conductivity_flag", "CNDC_quality_control",
     "Copepod", "COPEPOD", ##
     "Date", "SampleDateLocal", ##
+    "Density_kgm3", "WaterDensity_kgm3",
     "DIC_Comments", "CARBON_COMMENTS",
     "DIC_Flag", "CARBON_FLAG",
     "DIC_umolkg", "DIC_UMOLKG",
@@ -35,7 +38,8 @@ pr_rename <- function(df){
     # "EndLatitude", "ENDLATITUDE",
     # "EndLongitude", "ENDLONGITUDE",
     # "EndSampleDateUTC", "ENDSAMPLEDATEUTC",
-    # "FlagComments", "FLAG_COMMENT",
+    "FlagComments", "FLAG_COMMENT",
+    "FlagQC", "QC_FLAG",
     "FovCount", "FOV_COUNT",
     "GearDepth_m", "GEARDEPTH_M",
     "GearMesh_um", "GEARMESH_UM",

@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_nrs.R
 \name{pr_get_NRSZooRawBin}
 \alias{pr_get_NRSZooRawBin}
-\title{NRS Zoop raw product binned by sex and stage raw pivoted product}
+\title{NRS Zoop raw product binned by sex and stage raw product}
 \usage{
 pr_get_NRSZooRawBin()
 }
@@ -10,7 +10,7 @@ pr_get_NRSZooRawBin()
 A dataframe with NRS Zooplankton Abundance - Binned by sex and stage
 }
 \description{
-NRS Zoop raw product binned by sex and stage raw pivoted product
+NRS Zoop raw product binned by sex and stage raw product
 }
 \examples{
 df <- pr_get_NRSZooRawBin()

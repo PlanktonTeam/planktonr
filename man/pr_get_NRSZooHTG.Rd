@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_nrs.R
 \name{pr_get_NRSZooHTG}
 \alias{pr_get_NRSZooHTG}
-\title{Get NRS Zoop HTG pivoted product - Abundance}
+\title{Get NRS Zoop HTG product - Abundance}
 \usage{
 pr_get_NRSZooHTG()
 }
@@ -10,7 +10,7 @@ pr_get_NRSZooHTG()
 A dataframe with NRS Zooplankton Abundance - Summed by Higher Trophic Levels
 }
 \description{
-Get NRS Zoop HTG pivoted product - Abundance
+Get NRS Zoop HTG product - Abundance
 }
 \examples{
 df <- pr_get_NRSZooHTG()

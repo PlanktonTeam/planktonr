@@ -13,30 +13,43 @@ pr_get_CPRTrips <- function(){
     pr_rename()
 }
 
+
 #' Get CPR samples
+#'
+#' @param Type A character string on which to filter data (P = Phytoplankton, Z = Zooplankton, B = Biomass)
 #'
 #' @return A dataframe with CPR Samples
 #' @export
 #'
 #' @examples
-#' df <- pr_get_CPRSamps()
+#' df <- pr_get_CPRSamps("Z")
 #' @import dplyr
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
-pr_get_CPRSamps <- function(){
+pr_get_CPRSamps <- function(Type = c("P","Z","B")){
+
   CPRSamps <- readr::read_csv(paste0(pr_get_site(), "CPR_Samp.csv"), na = "") %>%
     pr_rename() %>%
-    filter(!is.na(.data$SampleType)) %>%
+    filter(stringr::str_detect(.data$SampleType, paste(Type, collapse = "|"))) %>%
     mutate(Year = lubridate::year(.data$SampleDateUTC),
            Month = lubridate::month(.data$SampleDateUTC),
            Day = lubridate::day(.data$SampleDateUTC),
            Time_24hr = stringr::str_sub(.data$SampleDateUTC, -8, -1)) %>%
     select(c(.data$TripCode, .data$Sample, .data$Latitude:.data$SampleDateUTC, .data$Year:.data$Time_24hr, .data$PCI, .data$Biomass_mgm3, .data$SampleType))
+
+  if("B" %in% Type){ # Return Biomass if its requested. Otherwise not.
+    CPRSamps <- CPRSamps %>%
+      select(-c(.data$PCI, .data$SampleType))
+  } else{
+    CPRSamps <- CPRSamps %>%
+      select(-c(.data$PCI, .data$SampleType, .data$Biomass_mgm3))
+  }
 }
 
-#' Get CPR Phytoplankton Abundance data
+#' Get CPR Phytoplankton Abundance or Count data
 #'
-#' @return A dataframe with CPR Phytoplankton Abundance data
+#' @param var A string of either "Abundance" or "Count"
+#' @return A dataframe with CPR Phytoplankton Abundance or Count data
 #' @export
 #'
 #' @examples
@@ -44,27 +57,25 @@ pr_get_CPRSamps <- function(){
 #' @import dplyr
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
-pr_get_CPRPhytoData <- function(){
+pr_get_CPRPhytoData <- function(var = "Abundance"){
   cprPdat <- readr::read_csv(paste0(pr_get_site(), "CPR_Phyto_Raw.csv"), na = "") %>%
-    pr_rename() %>%
-    select(-c(.data$FovCount, .data$SampVol_m3))
+    pr_rename()
+
+  if(stringr::str_detect(var, "Abundance")){
+    cprPdat <- cprPdat %>%
+      select(-c(.data$FovCount, .data$SampVol_m3, .data$BioVolume_um3m3))
+  } else if(stringr::str_detect(var, "Count")){
+    cprPdat <- cprPdat %>%
+      select(-c(.data$BioVolume_um3m3, .data$PhytoAbund_m3))
+  } else if(stringr::str_detect(var, "Biovolume")){
+    cprPdat <- cprPdat %>%
+      select(-c(.data$FovCount, .data$SampVol_m3, .data$PhytoAbund_m3))
+  } else if(stringr::str_detect(var, "All")){
+    cprPdat <- cprPdat # Do nothing. Return all variables
+  }
+
 }
 
-#' Get CPR Phytoplankton Count data
-#'
-#' @return A dataframe with CPR Phytoplankton Count data
-#' @export
-#'
-#' @examples
-#' df <- pr_get_CPRPhytoCountData()
-#' @import dplyr
-#' @importFrom magrittr "%>%"
-#' @importFrom rlang .data
-pr_get_CPRPhytoCountData <- function(){
-  cprPdat <- readr::read_csv(paste0(pr_get_site(), "CPR_Phyto_Raw.csv"), na = "") %>%
-    pr_rename() %>%
-    select(-c(.data$BioVolume_um3m3, .data$PhytoAbund_m3))
-}
 
 #' Get Phyto Change Log
 #'
@@ -81,24 +92,9 @@ pr_get_CPRPhytoChangeLog <- function(){
     pr_rename()
 }
 
-#' Get CPR Zooplankton Count
-#'
-#' @return A dataframe with CPR Zooplankton Count data
-#' @export
-#'
-#' @examples
-#' df <- pr_get_CPRZooCountData()
-#' @import dplyr
-#' @importFrom magrittr "%>%"
-#' @importFrom rlang .data
-pr_get_CPRZooCountData <- function() {
-  CPRZooCount <- readr::read_csv(paste0(pr_get_site(), "CPR_Zoop_Raw.csv"), na = "(null)") %>%
-    pr_rename() %>%
-    select(-.data$ZoopAbund_m3)
-}
-
 #' Get CPR Zooplankton abundance data
 #'
+#' @param var A string of either "Abundance" or "Count"
 #' @return A dataframe with CPR Zooplankton Abundance data
 #' @export
 #'
@@ -107,10 +103,18 @@ pr_get_CPRZooCountData <- function() {
 #' @import dplyr
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
-pr_get_CPRZooData <- function(){
+pr_get_CPRZooData <- function(var = "Abundance"){
+
   cprZdat <- readr::read_csv(paste0(pr_get_site(), "CPR_Zoop_Raw.csv"), na = "") %>%
-    pr_rename() %>%
-    select(-c(.data$TaxonCount, .data$SampVol_m3))
+    pr_rename()
+
+  if(stringr::str_detect(var, "Abundance")){
+    cprZdat <- cprZdat %>%
+      select(-c(.data$TaxonCount, .data$SampVol_m3))
+  } else if(stringr::str_detect(var, "Count")){
+    cprZdat <- cprZdat %>%
+      select(-.data$ZoopAbund_m3)
+  }
 }
 
 #' Get CPR zooplankton Change Log
@@ -129,7 +133,7 @@ pr_get_CPRZooChangeLog <- function(){
 }
 
 ################################################################################################################################################
-#' Get CPR Phyto raw & pivoted product - Abundance
+#' Get CPR Phyto raw product - Abundance
 #'
 #' @return A dataframe with CPR Raw Phytoplankton Abundance
 #' @export
@@ -140,19 +144,19 @@ pr_get_CPRZooChangeLog <- function(){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_CPRPhytoRaw <- function(){
-  cprRawP <- pr_get_CPRSamps() %>%
-    filter(grepl("P", .data$SampleType)) %>%
-    select(-c(.data$PCI, .data$SampleType, .data$Biomass_mgm3)) %>%
-    left_join(pr_get_CPRPhytoData(), by = "Sample") %>%
+
+  cprRawP <- pr_get_CPRSamps("P") %>%
+    left_join(pr_get_CPRPhytoData("Abundance"), by = "Sample") %>%
     select(c(.data$Sample:.data$TaxonName,.data$PhytoAbund_m3)) %>%
     arrange(-desc(.data$TaxonName)) %>%
     mutate(TaxonName = ifelse(is.na(.data$TaxonName), "No taxa found", .data$TaxonName)) %>% # for segments where no phyto was found
     tidyr::pivot_wider(names_from = .data$TaxonName, values_from = .data$PhytoAbund_m3, values_fill = list(PhytoAbund_m3 = 0)) %>%
     arrange(desc(.data$SampleDateUTC)) %>%
     select(-"No taxa found")
+
 }
 
-#' CPR Phyto HTG pivoted product - Abundance
+#' CPR Phyto HTG product - Abundance
 #'
 #' @return A dataframe with CPR Phytoplankton Abundance - Summed by Higher Trophic Groups
 #' @export
@@ -164,13 +168,12 @@ pr_get_CPRPhytoRaw <- function(){
 #' @importFrom rlang .data
 pr_get_CPRPhytoHTG <- function(){
 
-  cprHTGP1 <- pr_get_CPRPhytoData() %>% group_by(.data$Sample, .data$TaxonGroup) %>%
+  cprHTGP1 <- pr_get_CPRPhytoData("Abundance") %>%
+    group_by(.data$Sample, .data$TaxonGroup) %>%
     summarise(PhytoAbund_m3 = sum(.data$PhytoAbund_m3, na.rm = TRUE), .groups = "drop") %>%
     filter(!.data$TaxonGroup %in% c("Other","Coccolithophore", "Diatom","Protozoa"))
 
-  cprHTGP <-  pr_get_CPRSamps() %>%
-    filter(grepl("P", .data$SampleType)) %>%
-    select(-c(.data$PCI, .data$SampleType, .data$Biomass_mgm3)) %>%
+  cprHTGP <- pr_get_CPRSamps("P") %>%
     left_join(cprHTGP1, by = "Sample") %>%
     mutate(TaxonGroup = ifelse(is.na(.data$TaxonGroup), "Ciliate", .data$TaxonGroup),
            PhytoAbund_m3 = ifelse(is.na(.data$PhytoAbund_m3), 0, .data$PhytoAbund_m3)) %>%
@@ -180,7 +183,7 @@ pr_get_CPRPhytoHTG <- function(){
     select(-.data$Sample)
 }
 
-#' Get CPR Phyto genus pivoted product - Abundance
+#' Get CPR Phyto genus product - Abundance
 #'
 #' @return A dataframe with CPR Phytoplankton Abundance - Summed by Genus
 #' @export
@@ -192,7 +195,7 @@ pr_get_CPRPhytoHTG <- function(){
 #' @importFrom rlang .data
 pr_get_CPRPhytoGenus <- function(){
   # Bring in all NRS zooplankton samples, data and changelog once
-  cprPdat <- pr_get_CPRPhytoData()
+  cprPdat <- pr_get_CPRPhytoData("Abundance")
 
   cprPcl <- pr_get_CPRPhytoChangeLog() %>%
     mutate(genus1 = stringr::word(.data$TaxonName, 1),
@@ -200,9 +203,7 @@ pr_get_CPRPhytoGenus <- function(){
            same = ifelse(.data$genus1==.data$genus2, "yes", "no")) %>%
     filter(.data$same == "no")# no changes at genera level
 
-  cprSamp <- pr_get_CPRSamps() %>%
-    filter(grepl("P", .data$SampleType)) %>%
-    select(-c(.data$PCI, .data$SampleType, .data$Biomass_mgm3))
+  cprSamp <- pr_get_CPRSamps("P")
 
   # for non change log species
 
@@ -235,6 +236,7 @@ pr_get_CPRPhytoGenus <- function(){
     Gen <- cprGenP2 %>%
       select(.data$Genus) %>%
       unique()
+
     Gen <- as.character(Gen$Genus[i] %>% droplevels())
 
     Dates <- as.data.frame(cprGenP2) %>%
@@ -271,7 +273,7 @@ pr_get_CPRPhytoGenus <- function(){
     arrange(desc(.data$SampleDateUTC))
 }
 
-#' Get CPR Phyto species pivoted product - Abundance
+#' Get CPR Phyto species product - Abundance
 #'
 #' @return A dataframe with CPR Phytoplankton Abundance - Summed by Species
 #' @export
@@ -283,15 +285,13 @@ pr_get_CPRPhytoGenus <- function(){
 #' @importFrom rlang .data
 pr_get_CPRPhytoSpecies <-  function(){
   # Bring in all NRS zooplankton samples, data and changelog once
-  cprPdat <- pr_get_CPRPhytoData()
+  cprPdat <- pr_get_CPRPhytoData("Abundance")
 
   cprPcl <- pr_get_CPRPhytoChangeLog() %>%
     mutate(same = ifelse(.data$TaxonName == .data$ParentName, "yes", "no")) %>%
     filter(.data$same == "no") # no changes at genera level
 
-  cprSamp <- pr_get_CPRSamps() %>%
-    filter(grepl("P", .data$SampleType)) %>%
-    select(-c(.data$PCI, .data$SampleType, .data$Biomass_mgm3))
+  cprSamp <- pr_get_CPRSamps("P")
 
   # for non change log species
   cprSpecP1 <- cprPdat %>%
@@ -365,7 +365,7 @@ pr_get_CPRPhytoSpecies <-  function(){
 }
 
 ###############################################################################################################################################
-#' Get CPR Phyto raw & pivoted product - Biovolume
+#' Get CPR Phyto raw product - Biovolume
 #'
 #' @return A dataframe with CPR Phytoplankton BioVolume
 #' @export
@@ -376,10 +376,8 @@ pr_get_CPRPhytoSpecies <-  function(){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_CPRPhytoRawBV <- function(){
-  cprRawP <- pr_get_CPRSamps() %>%
-    filter(grepl("P", .data$SampleType)) %>%
-    select(-c(.data$PCI, .data$SampleType, .data$Biomass_mgm3)) %>%
-    left_join(pr_get_CPRPhytoData(), by = "Sample") %>%
+  cprRawP <- pr_get_CPRSamps("P") %>%
+    left_join(pr_get_CPRPhytoData("Biovolume"), by = "Sample") %>%
     select(c(.data$Sample:.data$TaxonName,.data$BioVolume_um3m3)) %>%
     arrange(-desc(.data$TaxonName)) %>%
     mutate(TaxonName = ifelse(is.na(.data$TaxonName), "No taxa found", .data$TaxonName)) %>% # for segments where no phyto was found
@@ -394,19 +392,17 @@ pr_get_CPRPhytoRawBV <- function(){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_CPRHTGBV()
+#' df <- pr_get_CPRPhytoHTGBV()
 #' @import dplyr
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
-pr_get_CPRHTGBV <- function(){
-  cprHTGPB1 <- pr_get_CPRPhytoData() %>%
+pr_get_CPRPhytoHTGBV <- function(){
+  cprHTGPB1 <- pr_get_CPRPhytoData("Biovolume") %>%
     group_by(.data$Sample, .data$TaxonGroup) %>%
     summarise(PBioV_um3m3 = sum(.data$BioVolume_um3m3, na.rm = TRUE), .groups = "drop") %>%
     filter(!.data$TaxonGroup %in% c("Other","Coccolithophore", "Diatom","Protozoa"))
 
-  cprHTGPB1 <-  pr_get_CPRSamps()  %>%
-    filter(grepl("P", .data$SampleType)) %>%
-    select(-c(.data$PCI, .data$SampleType, .data$Biomass_mgm3)) %>%
+  cprHTGPB1 <-  pr_get_CPRSamps("P")  %>%
     left_join(cprHTGPB1, by = "Sample") %>%
     mutate(TaxonGroup = ifelse(is.na(.data$TaxonGroup), "Ciliate", .data$TaxonGroup),
            PBioV_um3m3 = ifelse(is.na(.data$PBioV_um3m3), 0, .data$PBioV_um3m3)) %>%
@@ -426,8 +422,8 @@ pr_get_CPRHTGBV <- function(){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_CPRPhytoGenusBV <- function(){
-  # Bring in all NRS zooplankton samples, data and changelog once
-  cprPdat <- pr_get_CPRPhytoData()
+
+  cprPdat <- pr_get_CPRPhytoData("Biovolume")
 
   cprPcl <- pr_get_CPRPhytoChangeLog() %>%
     mutate(genus1 = stringr::word(.data$TaxonName, 1),
@@ -435,9 +431,7 @@ pr_get_CPRPhytoGenusBV <- function(){
     mutate(same = ifelse(.data$genus1==.data$genus2, "yes", "no")) %>%
     filter(.data$same == "no")# no changes at genera level
 
-  cprSamp <- pr_get_CPRSamps() %>%
-    filter(grepl("P", .data$SampleType)) %>%
-    select(-c(.data$PCI, .data$SampleType, .data$Biomass_mgm3))
+  cprSamp <- pr_get_CPRSamps("P")
 
   # for non change log species
 
@@ -515,15 +509,13 @@ pr_get_CPRPhytoGenusBV <- function(){
 #' @importFrom rlang .data
 pr_get_CPRPhytoSpeciesBV <- function(){
   # Bring in all NRS zooplankton samples, data and changelog once
-  cprPdat <- pr_get_CPRPhytoData()
+  cprPdat <- pr_get_CPRPhytoData("Biovolume")
 
   cprPcl <- pr_get_CPRPhytoChangeLog() %>%
     mutate(same = ifelse(.data$TaxonName == .data$ParentName, "yes", "no")) %>%
     filter(.data$same == "no") # no changes at genera level
 
-  cprSamp <- pr_get_CPRSamps() %>%
-    filter(grepl("P", .data$SampleType)) %>%
-    select(-c(.data$PCI, .data$SampleType, .data$Biomass_mgm3))
+  cprSamp <- pr_get_CPRSamps("P")
 
   # for non change log species
   cprSpecPB1 <- cprPdat %>%
@@ -598,7 +590,7 @@ pr_get_CPRPhytoSpeciesBV <- function(){
 }
 
 #### CPR Zooplankton #### ################################################################################################################################
-#' Get CPR Zoop raw & pivoted product - Abundance
+#' Get CPR Zoop raw product - Abundance
 #'
 #' @return A dataframe with Raw CPR Zooplankton Abundance
 #' @export
@@ -609,10 +601,8 @@ pr_get_CPRPhytoSpeciesBV <- function(){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_CPRZooRaw <- function(){
-  cprRawZ <- pr_get_CPRSamps() %>%
-    filter(grepl("Z", .data$SampleType)) %>%
-    select(-c(.data$PCI, .data$SampleType, .data$Biomass_mgm3)) %>%
-    left_join(pr_get_CPRZooData(), by = "Sample") %>%
+  cprRawZ <- pr_get_CPRSamps("Z") %>%
+    left_join(pr_get_CPRZooData("Abundance"), by = "Sample") %>%
     select(-c("Copepod", "TaxonGroup", "Genus", "Species", "SPCode")) %>%
     arrange(-desc(.data$TaxonName)) %>%
     mutate(TaxonName = ifelse(is.na(.data$TaxonName), "No taxa found", .data$TaxonName)) %>%
@@ -622,7 +612,7 @@ pr_get_CPRZooRaw <- function(){
     select(-.data$Sample)
 }
 
-#' CPR Zoop raw product binned by sex and stage raw pivoted product
+#' CPR Zoop raw product binned by sex and stage raw product
 #'
 #' @return A dataframe with CPR Zooplankton Abundance - Binned by sex and stage
 #' @export
@@ -633,10 +623,8 @@ pr_get_CPRZooRaw <- function(){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_CPRZooRawSS <- function(){
-  CPRIdsZ <- pr_get_CPRSamps() %>%
-    filter(grepl("Z", .data$SampleType)) %>%
-    select(-c(.data$PCI, .data$SampleType, .data$Biomass_mgm3)) %>%
-    left_join(pr_get_CPRZooData(), by = "Sample") %>%
+  CPRIdsZ <- pr_get_CPRSamps("Z") %>%
+    left_join(pr_get_CPRZooData("Abundance"), by = "Sample") %>%
     mutate(TaxonName = ifelse(is.na(.data$Genus), .data$TaxonName, paste0(.data$Genus, ' ', .data$Species))) %>%
     group_by(.data$TripCode, .data$Latitude, .data$Longitude, .data$SampleDateUTC, .data$Year, .data$Month, .data$Day, .data$Time_24hr, .data$TaxonName) %>%
     summarise(ZoopAbund_m3 = sum(.data$ZoopAbund_m3, na.rm = TRUE)) %>%
@@ -645,7 +633,7 @@ pr_get_CPRZooRawSS <- function(){
     arrange(desc(.data$SampleDateUTC))
 }
 
-#' Get CPR Zoop HTG pivoted product - Abundance
+#' Get CPR Zoop HTG product - Abundance
 #'
 #' @return A dataframe with CPR Zooplankton Abundance - Summed by Higher Trophic Levels
 #' @export
@@ -656,14 +644,12 @@ pr_get_CPRZooRawSS <- function(){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_CPRZooHTG <- function(){
-  cprHTGZ <- pr_get_CPRZooData() %>%
+  cprHTGZ <- pr_get_CPRZooData("Abundance") %>%
     group_by(.data$Sample, .data$TaxonGroup) %>%
     summarise(ZoopAbund_m3 = sum(.data$ZoopAbund_m3, na.rm = TRUE), .groups = "drop") %>%
     filter(!.data$TaxonGroup %in% c("Other"))
 
-  cprHTGZ1 <- pr_get_CPRSamps() %>%
-    filter(grepl("Z", .data$SampleType)) %>%
-    select(-c(.data$PCI, .data$SampleType, .data$Biomass_mgm3)) %>%
+  cprHTGZ1 <- pr_get_CPRSamps("Z") %>%
     left_join(cprHTGZ, by = "Sample") %>%
     mutate(TaxonGroup = ifelse(is.na(.data$TaxonGroup), "Copepod", .data$TaxonGroup),
            ZoopAbund_m3 = ifelse(is.na(.data$ZoopAbund_m3), 0, .data$ZoopAbund_m3)) %>%
@@ -685,7 +671,7 @@ pr_get_CPRZooHTG <- function(){
 #' @importFrom rlang .data
 pr_get_CPRZooGenus <- function(){
   # Bring in all NRS zooplankton samples, data and changelog once
-  cprZdat <- pr_get_CPRZooData()
+  cprZdat <- pr_get_CPRZooData("Abundance")
 
   cprZcl <- pr_get_CPRZooChangeLog() %>%
     mutate(genus1 = stringr::word(.data$TaxonName, 1),
@@ -693,9 +679,7 @@ pr_get_CPRZooGenus <- function(){
     mutate(same = ifelse(.data$genus1==.data$genus2, "yes", "no")) %>%
     filter(.data$same == "no")# no changes at genera level
 
-  cprSamp <- pr_get_CPRSamps() %>%
-    filter(grepl("Z", .data$SampleType)) %>%
-    select(-c(.data$PCI, .data$SampleType, .data$Biomass_mgm3))
+  cprSamp <- pr_get_CPRSamps("Z")
 
   # for non change log species
   cprGenZ1 <- cprZdat %>%
@@ -771,15 +755,13 @@ pr_get_CPRZooGenus <- function(){
 #' @importFrom rlang .data
 pr_get_CPRZooCopepod <- function(){
   # Bring in all NRS zooplankton samples, data and changelog once
-  cprZdat <- pr_get_CPRZooData()
+  cprZdat <- pr_get_CPRZooData("Abundance")
 
   cprZcl <- pr_get_CPRZooChangeLog()%>%
     mutate(same = ifelse(.data$TaxonName == .data$ParentName, "yes", "no")) %>%
     filter(.data$same == "no") # no changes at genera level
 
-  cprSamp <- pr_get_CPRSamps() %>%
-    filter(grepl("Z", .data$SampleType)) %>%
-    select(-c(.data$PCI, .data$SampleType, .data$Biomass_mgm3))
+  cprSamp <- pr_get_CPRSamps("Z")
 
   # for non change log species
 
@@ -869,15 +851,13 @@ pr_get_CPRZooCopepod <- function(){
 #' @importFrom rlang .data
 pr_get_CPRZooNonCopepod <- function(){
   # Bring in all NRS zooplankton samples, data and changelog once
-  cprZdat <- pr_get_CPRZooData()
+  cprZdat <- pr_get_CPRZooData("Abundance")
 
   cprZcl <- pr_get_CPRZooChangeLog() %>%
     mutate(same = ifelse(.data$TaxonName == .data$ParentName, "yes", "no")) %>%
     filter(.data$same == "no") # no changes at genera level
 
-  cprSamp <- pr_get_CPRSamps() %>%
-    filter(grepl("Z", .data$SampleType)) %>%
-    select(-c(.data$PCI, .data$SampleType, .data$Biomass_mgm3))
+  cprSamp <- pr_get_CPRSamps("Z")
 
   # for non change logspecies
   cprnCop1 <- cprZdat %>%
@@ -933,6 +913,7 @@ pr_get_CPRZooNonCopepod <- function(){
       group_by(.data$Latitude, .data$Longitude, .data$SampleDateUTC, .data$Year, .data$Month, .data$Day, .data$Time_24hr, .data$Species) %>%
       summarise(ZoopAbund_m3 = sum(.data$ZoopAbund_m3), .groups = "drop") %>%
       as.data.frame()
+
     cprnCop1 <- bind_rows(cprnCop1, ncopes)
   }
 

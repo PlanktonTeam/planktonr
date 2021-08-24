@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_cpr.R
 \name{pr_get_CPRPhytoSpecies}
 \alias{pr_get_CPRPhytoSpecies}
-\title{Get CPR Phyto species pivoted product - Abundance}
+\title{Get CPR Phyto species product - Abundance}
 \usage{
 pr_get_CPRPhytoSpecies()
 }
@@ -10,7 +10,7 @@ pr_get_CPRPhytoSpecies()
 A dataframe with CPR Phytoplankton Abundance - Summed by Species
 }
 \description{
-Get CPR Phyto species pivoted product - Abundance
+Get CPR Phyto species product - Abundance
 }
 \examples{
 df <- pr_get_CPRPhytoSpecies()

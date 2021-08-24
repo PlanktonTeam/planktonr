@@ -7,7 +7,7 @@
 pr_apply_flags(df)
 }
 \arguments{
-\item{df}{A dataframe contained data with associated flags}
+\item{df}{A dataframe containing data with associated flags}
 }
 \value{
 A dataframe with flagged data removed

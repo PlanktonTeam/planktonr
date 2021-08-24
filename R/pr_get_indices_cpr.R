@@ -9,20 +9,13 @@
 #' @import dplyr
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
-#'
 pr_get_indices_cpr <- function(){
 
   # Add the bioregions to the CPR data
   cprSampleInfo <- pr_get_CPRSamps() %>%
     pr_add_bioregions()
 
-  cprZsamp <- pr_get_CPRSamps() %>%
-    filter(grepl("Z", .data$SampleType)) %>%
-    select(-c(.data$PCI, .data$SampleType))
-
-  cprPsamp <- pr_get_CPRSamps() %>%
-    filter(grepl("P", .data$SampleType)) %>%
-    select(-c(.data$SampleType, .data$Biomass_mgm3))
+  cprZsamp <- pr_get_CPRSamps(c("Z", "B"))
 
   cprZdat <- pr_get_CPRZooData()
 
@@ -63,7 +56,7 @@ pr_get_indices_cpr <- function(){
   # Diversity, evenness etc.
 
   # Bring in plankton data
-  CPRZcount <- pr_get_CPRZooCountData()
+  CPRZcount <- pr_get_CPRZooData("Count")
 
   zooCountCpr <- cprZsamp %>% # Changed this from cprtr
     left_join(CPRZcount, by = "Sample")
@@ -88,11 +81,9 @@ pr_get_indices_cpr <- function(){
     bind_cols(ShannonCopepodDiversityCPR = ShannonCopepodDiversityCPR)  %>%
     mutate(CopepodEvenness = .data$ShannonCopepodDiversityCPR / log(.data$NoCopepodSpecies_Sample))
 
-  cprPsamp <- pr_get_CPRSamps() %>%
-    filter(grepl("P", .data$SampleType)) %>%
-    select(-c(.data$PCI, .data$SampleType, .data$Biomass_mgm3))
+  cprPsamp <- pr_get_CPRSamps("P")
 
-  cprPdat <- pr_get_CPRPhytoData()
+  cprPdat <- pr_get_CPRPhytoData("All")
 
   # Total Phyto abundance
   phytodatacpr <- cprPsamp %>%
@@ -218,6 +209,6 @@ pr_get_indices_cpr <- function(){
     left_join(PhytoEvencpr, by = "Sample") %>%
     left_join(DiaEvencpr, by = "Sample") %>%
     left_join(DinoEvencpr, by = "Sample") %>%
-    select(-.data$Sample, -.data$SampleType)
+    select(-.data$Sample)
 
 }

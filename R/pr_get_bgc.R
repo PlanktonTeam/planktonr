@@ -16,8 +16,6 @@ pr_get_bgc <- function(){
   NRSTrips <- pr_get_NRSTrips() %>%
     select(-.data$SampleType)
 
-  # you will get a warning about the fast method, this actually works better than the accurate method for this data set.
-
   # Hydrochemistry data
   Chemistry <- pr_get_Chemistry()
 
@@ -58,17 +56,14 @@ pr_get_bgc <- function(){
               .groups = "drop") %>%
     tidyr::drop_na(.data$SampleDepth_m)
 
+
   # CTD Cast Data
+  var_names <- c("Density_kgm3", "Temperature_degC", "Conductivity_Sm", "Salinity_psu", "Turbidity_NTU", "CTDChlF_mgm3")
   CTD <- pr_get_CTD() %>%
     mutate(SampleDepth_m = as.character(round(.data$SampleDepth_m, 0))) %>%
     select(-c(.data$Pressure_dbar)) %>%
     group_by(.data$TripCode, .data$SampleDepth_m) %>%
-    summarise(CTDDensity_kgm3 = mean(.data$WaterDensity_kgm3, na.rm = TRUE),
-              CTDTemperature = mean(.data$Temperature_degC, na.rm = TRUE),
-              CTDConductivity_Sm = mean(.data$Conductivity_Sm, na.rm = TRUE),
-              CTDSalinity = mean(.data$Salinity_psu, na.rm = TRUE),
-              CTDChlF_mgm3 = mean(.data$Chla_mgm3, na.rm = TRUE),
-              CTDTurbidity_ntu = mean(.data$Turbidity_NTU, na.rm = TRUE))
+    summarise(across(matches(var_names), ~ mean(.x, na.rm = TRUE)), .groups = "drop")
 
   # combine for all samples taken
   Samples <- bind_rows(Chemistry %>% select(.data$TripCode, .data$SampleDepth_m),
