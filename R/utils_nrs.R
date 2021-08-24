@@ -28,13 +28,29 @@ pr_get_NRSStation <- function(){
 #' @importFrom rlang .data
 pr_get_NRSTrips <- function(Type = c("P","Z","F")){
 
-  # TODO When using the default "Type", ~6 trips are lost due to the NA in the SampleType. Would be good to solve at some point for completeness
   NRSTrip <- readr::read_csv(paste0(pr_get_site(), "BGC_Trip.csv"), na = "") %>%
     pr_rename() %>%
-    filter(.data$ProjectName == "NRS" & stringr::str_detect(.data$SampleType, paste(Type, collapse = "|"))) %>%
+    filter(.data$ProjectName == "NRS" &
+             (stringr::str_detect(.data$SampleType, paste(Type, collapse = "|")) |
+             is.na(.data$SampleType))) %>%
     pr_apply_time() %>%
     select(.data$TripCode:.data$SampleDateLocal, .data$Year:.data$SampleDateUTC, .data$Biomass_mgm3, .data$Secchi_m, .data$SampleType) %>%
     select(-.data$tz)
+
+
+
+  # P - select(-c(.data$Biomass_mgm3, .data$Secchi_m)) %>%
+  # Z - select(-c(.data$Biomass_mgm3, .data$Secchi_m))
+
+  # if("B" %in% Type){ # Return Biomass if its requested. Otherwise not.
+  #   CPRSamps <- CPRSamps %>%
+  #     select(-c(.data$PCI, .data$SampleType))
+  # } else{
+  #   CPRSamps <- CPRSamps %>%
+  #     select(-c(.data$PCI, .data$SampleType, .data$Biomass_mgm3))
+  # }
+
+
 
 }
 
@@ -44,11 +60,11 @@ pr_get_NRSTrips <- function(Type = c("P","Z","F")){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_NRSRawPhytoPivot()
+#' df <- pr_get_NRSRawPhyto()
 #' @import dplyr
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
-pr_get_NRSRawPhytoPivot <- function(){
+pr_get_NRSRawPhyto <- function(){
 
   NRSRawP <- left_join(pr_get_NRSTrips("P"), pr_get_NRSPhytoData(), by = "TripCode") %>%
     select(-c(.data$TaxonGroup, .data$Genus, .data$Species, .data$Biovolume_um3L, .data$SPCode, .data$SampleType)) %>%
@@ -56,6 +72,7 @@ pr_get_NRSRawPhytoPivot <- function(){
     tidyr::pivot_wider(names_from = .data$TaxonName, values_from = .data$Cells_L, values_fill = list(Cells_L = 0)) %>%
     arrange(desc(.data$SampleDateLocal)) %>%
     mutate(SampleDateLocal = as.character(.data$SampleDateLocal))
+
 }
 
 #### Higher Trophic Groups Abund ####

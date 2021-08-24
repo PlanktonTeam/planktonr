@@ -16,8 +16,6 @@ pr_get_bgc <- function(){
   NRSTrips <- pr_get_NRSTrips() %>%
     select(-.data$SampleType)
 
-  # you will get a warning about the fast method, this actually works better than the accurate method for this data set.
-
   # Hydrochemistry data
   Chemistry <- pr_get_Chemistry()
 
