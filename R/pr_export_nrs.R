@@ -15,7 +15,7 @@ pr_export_nrs <- function(outD){
   #### NRS Phytoplankton ####  #################################################################################
 
   #### Raw Phytoplankton ####
-  NRSRawP <- pr_get_NRSRawPhytoPivot()
+  NRSRawP <- pr_get_NRSRawPhyto()
   data.table::fwrite(NRSRawP, file = paste0(outD,.Platform$file.sep,"NRS_Phyto_RawMat.csv"), row.names = FALSE)
   rm(NRSRawP)
 
