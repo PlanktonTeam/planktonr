@@ -2,15 +2,18 @@
 % Please edit documentation in R/utils_cpr.R
 \name{pr_get_CPRPhytoData}
 \alias{pr_get_CPRPhytoData}
-\title{Get CPR Phytoplankton Abundance data}
+\title{Get CPR Phytoplankton Abundance or Count data}
 \usage{
-pr_get_CPRPhytoData()
+pr_get_CPRPhytoData(var = "Abundance")
+}
+\arguments{
+\item{var}{A string of either "Abundance" or "Count"}
 }
 \value{
-A dataframe with CPR Phytoplankton Abundance data
+A dataframe with CPR Phytoplankton Abundance or Count data
 }
 \description{
-Get CPR Phytoplankton Abundance data
+Get CPR Phytoplankton Abundance or Count data
 }
 \examples{
 df <- pr_get_CPRPhytoData()

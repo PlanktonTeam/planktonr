@@ -115,7 +115,7 @@ return(df)
 #' @export
 #'
 #' @examples
-#' df <- data.frame(SampleDateLocal = lubridate::now())
+#' df <- data.frame(SampleDateLocal = lubridate::now(), Latitude = -32, Longitude = 160)
 #' df <- pr_apply_time(df)
 #' @import dplyr
 #' @importFrom magrittr "%>%"

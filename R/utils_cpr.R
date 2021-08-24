@@ -137,7 +137,7 @@ pr_get_CPRPhytoRaw <- function(){
   cprRawP <- pr_get_CPRSamps() %>%
     filter(grepl("P", .data$SampleType)) %>%
     select(-c(.data$PCI, .data$SampleType, .data$Biomass_mgm3)) %>%
-    left_join(pr_get_CPRPhytoData(), by = "Sample") %>%
+    left_join(pr_get_CPRPhytoData("Abundance"), by = "Sample") %>%
     select(c(.data$Sample:.data$TaxonName,.data$PhytoAbund_m3)) %>%
     arrange(-desc(.data$TaxonName)) %>%
     mutate(TaxonName = ifelse(is.na(.data$TaxonName), "No taxa found", .data$TaxonName)) %>% # for segments where no phyto was found
@@ -159,7 +159,7 @@ pr_get_CPRPhytoRaw <- function(){
 #' @importFrom rlang .data
 pr_get_CPRPhytoHTG <- function(){
 
-  cprHTGP1 <- pr_get_CPRPhytoData() %>%
+  cprHTGP1 <- pr_get_CPRPhytoData("Abundance") %>%
     group_by(.data$Sample, .data$TaxonGroup) %>%
     summarise(PhytoAbund_m3 = sum(.data$PhytoAbund_m3, na.rm = TRUE), .groups = "drop") %>%
     filter(!.data$TaxonGroup %in% c("Other","Coccolithophore", "Diatom","Protozoa"))
@@ -188,7 +188,7 @@ pr_get_CPRPhytoHTG <- function(){
 #' @importFrom rlang .data
 pr_get_CPRPhytoGenus <- function(){
   # Bring in all NRS zooplankton samples, data and changelog once
-  cprPdat <- pr_get_CPRPhytoData()
+  cprPdat <- pr_get_CPRPhytoData("Abundance")
 
   cprPcl <- pr_get_CPRPhytoChangeLog() %>%
     mutate(genus1 = stringr::word(.data$TaxonName, 1),
@@ -279,7 +279,7 @@ pr_get_CPRPhytoGenus <- function(){
 #' @importFrom rlang .data
 pr_get_CPRPhytoSpecies <-  function(){
   # Bring in all NRS zooplankton samples, data and changelog once
-  cprPdat <- pr_get_CPRPhytoData()
+  cprPdat <- pr_get_CPRPhytoData("Abundance")
 
   cprPcl <- pr_get_CPRPhytoChangeLog() %>%
     mutate(same = ifelse(.data$TaxonName == .data$ParentName, "yes", "no")) %>%
@@ -375,7 +375,7 @@ pr_get_CPRPhytoRawBV <- function(){
   cprRawP <- pr_get_CPRSamps() %>%
     filter(grepl("P", .data$SampleType)) %>%
     select(-c(.data$PCI, .data$SampleType, .data$Biomass_mgm3)) %>%
-    left_join(pr_get_CPRPhytoData(), by = "Sample") %>%
+    left_join(pr_get_CPRPhytoData("Biovolume"), by = "Sample") %>%
     select(c(.data$Sample:.data$TaxonName,.data$BioVolume_um3m3)) %>%
     arrange(-desc(.data$TaxonName)) %>%
     mutate(TaxonName = ifelse(is.na(.data$TaxonName), "No taxa found", .data$TaxonName)) %>% # for segments where no phyto was found
@@ -395,7 +395,7 @@ pr_get_CPRPhytoRawBV <- function(){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_CPRPhytoHTGBV <- function(){
-  cprHTGPB1 <- pr_get_CPRPhytoData() %>%
+  cprHTGPB1 <- pr_get_CPRPhytoData("Biovolume") %>%
     group_by(.data$Sample, .data$TaxonGroup) %>%
     summarise(PBioV_um3m3 = sum(.data$BioVolume_um3m3, na.rm = TRUE), .groups = "drop") %>%
     filter(!.data$TaxonGroup %in% c("Other","Coccolithophore", "Diatom","Protozoa"))
@@ -422,8 +422,8 @@ pr_get_CPRPhytoHTGBV <- function(){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_CPRPhytoGenusBV <- function(){
-  # Bring in all NRS zooplankton samples, data and changelog once
-  cprPdat <- pr_get_CPRPhytoData()
+
+  cprPdat <- pr_get_CPRPhytoData("Biovolume")
 
   cprPcl <- pr_get_CPRPhytoChangeLog() %>%
     mutate(genus1 = stringr::word(.data$TaxonName, 1),
@@ -511,7 +511,7 @@ pr_get_CPRPhytoGenusBV <- function(){
 #' @importFrom rlang .data
 pr_get_CPRPhytoSpeciesBV <- function(){
   # Bring in all NRS zooplankton samples, data and changelog once
-  cprPdat <- pr_get_CPRPhytoData()
+  cprPdat <- pr_get_CPRPhytoData("Biovolume")
 
   cprPcl <- pr_get_CPRPhytoChangeLog() %>%
     mutate(same = ifelse(.data$TaxonName == .data$ParentName, "yes", "no")) %>%
