@@ -69,26 +69,31 @@ pr_get_NRSTrips <- function(Type = c("P","Z","F")){
 
 }
 
-#' Get raw phytoplankton data in format
+#
+#' Get NRS Phytoplankton raw data - Abundance
 #'
-#' @return A dataframe with Raw Phytoplankton Abundance data
+#' @return A dataframe with NRS Phytoplankton Abundance
 #' @export
 #'
 #' @examples
-#' df <- pr_get_NRSRawPhyto()
+#' df <- pr_get_NRSPhytoRaw()
 #' @import dplyr
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
-pr_get_NRSRawPhyto <- function(){
+pr_get_NRSPhytoRaw <- function(){
 
-  NRSRawP <- left_join(pr_get_NRSTrips("P"), pr_get_NRSPhytoData(), by = "TripCode") %>%
+  NRSRawP <- left_join(pr_get_NRSTrips("P") %>%
+                         select(-c(.data$Biomass_mgm3, .data$Secchi_m)),
+                       pr_get_NRSPhytoData(), by = "TripCode") %>%
     select(-c(.data$TaxonGroup, .data$Genus, .data$Species, .data$Biovolume_um3L, .data$SPCode, .data$SampleType)) %>%
     arrange(-desc(.data$TaxonName)) %>%
     tidyr::pivot_wider(names_from = .data$TaxonName, values_from = .data$Cells_L, values_fill = list(Cells_L = 0)) %>%
     arrange(desc(.data$SampleDateLocal)) %>%
-    mutate(SampleDateLocal = as.character(.data$SampleDateLocal))
+    mutate(SampleDateLocal = as.character(.data$SampleDateLocal)) %>%
+    select(-"NA")
 
 }
+
 
 #### Higher Trophic Groups Abund ####
 #' Get Abundance of Phyto Higher Trophic Groups
@@ -154,28 +159,6 @@ pr_get_NRSPhytoChangeLog <- function(){
     pr_rename()
 }
 
-
-#
-#' Get NRS Phytoplankton raw data - Abundance
-#'
-#' @return A dataframe with NRS Phytoplankton Abundance
-#' @export
-#'
-#' @examples
-#' df <- pr_get_NRSPhytoRaw()
-#' @import dplyr
-#' @importFrom magrittr "%>%"
-#' @importFrom rlang .data
-pr_get_NRSPhytoRaw <- function(){
-  NRSRawP <- left_join(pr_get_NRSTrips("P") %>%
-                         select(-c(.data$Biomass_mgm3, .data$Secchi_m)),
-                       pr_get_NRSPhytoData(), by = "TripCode") %>%
-    select(-c(.data$TaxonGroup, .data$Genus, .data$Species, .data$Biovolume_um3L, .data$SPCode, .data$SampleType)) %>%
-    arrange(-desc(.data$TaxonName)) %>%
-    tidyr::pivot_wider(names_from = .data$TaxonName, values_from = .data$Cells_L, values_fill = list(Cells_L = 0)) %>%
-    arrange(desc(.data$SampleDateLocal)) %>%
-    mutate(SampleDateLocal = as.character(.data$SampleDateLocal))
-}
 
 
 #
@@ -680,6 +663,7 @@ pr_get_NRSZooChangeLog <- function(){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_NRSZooRaw <- function(){
+
   NRSRawZ <- left_join(pr_get_NRSTrips("Z") %>%
                          select(-c(.data$Biomass_mgm3, .data$Secchi_m)),
                        pr_get_NRSZooData(), by = "TripCode") %>%
@@ -687,7 +671,9 @@ pr_get_NRSZooRaw <- function(){
     arrange(-desc(.data$TaxonName)) %>%
     tidyr::pivot_wider(names_from = .data$TaxonName, values_from = .data$ZoopAbund_m3, values_fill = list(ZoopAbund_m3 = 0)) %>%
     arrange(desc(.data$SampleDateLocal)) %>%
-    mutate(SampleDateLocal = as.character(.data$SampleDateLocal))
+    mutate(SampleDateLocal = as.character(.data$SampleDateLocal)) %>%
+    select(-"NA")
+
 }
 
 #' NRS Zoop raw product binned by sex and stage raw product
