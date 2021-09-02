@@ -11,6 +11,7 @@
 pr_get_CTD <- function(){
 
   rawCTD <- readr::read_csv(paste0(pr_get_site(), "IMOS_-_Australian_National_Mooring_Network_(ANMN)_-_CTD_Profiles.csv"),
+                            show_col_types = FALSE,
                             na = "",
                             comment = "#",
                             col_types = readr::cols(CHLU = readr::col_double(), # columns start with nulls so tidyverse annoyingly assigns col_logical()

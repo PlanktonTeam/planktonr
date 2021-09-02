@@ -9,7 +9,7 @@
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_NRSStation <- function(){
-  NRSStation <- readr::read_csv(paste0(pr_get_site(), "BGC_StationInfo.csv"), na = "") %>%
+  NRSStation <- readr::read_csv(paste0(pr_get_site(), "BGC_StationInfo.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename() %>%
     filter(.data$ProjectName == "NRS")
 }
@@ -28,7 +28,7 @@ pr_get_NRSStation <- function(){
 #' @importFrom rlang .data
 pr_get_NRSTrips <- function(Type = c("P","Z","F")){
 
-  NRSTrip <- readr::read_csv(paste0(pr_get_site(), "BGC_Trip.csv"), na = "") %>%
+  NRSTrip <- readr::read_csv(paste0(pr_get_site(), "BGC_Trip.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename() %>%
     rename(ZSampleDepth_m = .data$ZOOPSAMPLEDEPTH_M,
            PSampleDepth_m = .data$PHYTOSAMPLEDEPTH_M) %>%
@@ -138,7 +138,7 @@ pr_get_NRSPhytoHTG <- function(){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_NRSPhytoData <- function(){
-  NRSPdat <- readr::read_csv(paste0(pr_get_site(), "BGC_Phyto_Raw.csv"), na = "") %>%
+  NRSPdat <- readr::read_csv(paste0(pr_get_site(), "BGC_Phyto_Raw.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 
@@ -155,7 +155,7 @@ pr_get_NRSPhytoData <- function(){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_NRSPhytoChangeLog <- function(){
-  NRSPcl <- readr::read_csv(paste0(pr_get_site(), "BGC_Phyto_ChangeLog.csv"), na = "") %>%
+  NRSPcl <- readr::read_csv(paste0(pr_get_site(), "BGC_Phyto_ChangeLog.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 
@@ -630,7 +630,7 @@ pr_get_NRSPhytoSpeciesBV <- function(){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_NRSZooData <- function(){
-  NRSZdat <- readr::read_csv(paste0(pr_get_site(), "BGC_Zoop_Raw.csv"), na = "") %>%
+  NRSZdat <- readr::read_csv(paste0(pr_get_site(), "BGC_Zoop_Raw.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 
@@ -647,7 +647,7 @@ pr_get_NRSZooData <- function(){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_NRSZooChangeLog <- function(){
-  NRSZcl <- readr::read_csv(paste0(pr_get_site(), "BGC_Zoop_ChangeLog.csv"), na = "") %>%
+  NRSZcl <- readr::read_csv(paste0(pr_get_site(), "BGC_Zoop_ChangeLog.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 
@@ -1040,7 +1040,7 @@ pr_get_NRSZooSpeciesNonCopepod <- function(){
 #' @examples
 #' df <- pr_get_NRSPigments()
 pr_get_NRSPigments <- function(){
-  Pigments <- readr::read_csv(paste0(pr_get_site(),"BGC_Pigments.csv"), na = "") %>%
+  Pigments <- readr::read_csv(paste0(pr_get_site(),"BGC_Pigments.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 
@@ -1056,7 +1056,7 @@ pr_get_NRSPigments <- function(){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_NRSPico <- function(){
-  Pico <- readr::read_csv(paste0(pr_get_site(), "BGC_Picoplankton.csv"), na = "") %>%
+  Pico <- readr::read_csv(paste0(pr_get_site(), "BGC_Picoplankton.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 
