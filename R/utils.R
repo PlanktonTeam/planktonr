@@ -100,7 +100,7 @@ pr_apply_flags <- function(df){
     var_flags <- stringr::str_subset(out,"_Flag") # Find the flag
 
     df <- df %>%
-      mutate(!!var_units := ifelse(eval(rlang::sym(var_flags)) %in% bad_flags, NA, eval(rlang::sym(var_units))))
+      mutate(!!var_units := if_else(eval(rlang::sym(var_flags)) %in% bad_flags, NA, eval(rlang::sym(var_units))))
     rm(out, var_units, var_flags)
   }
 return(df)

@@ -45,7 +45,7 @@ pr_get_indices_cpr <- function(){
   HCratCpr <- zoodatacpr %>%
     filter(.data$Copepod == 'COPEPOD') %>%
     inner_join(Zinfo %>% select(.data$TaxonName, .data$Diet), by = "TaxonName") %>%
-    mutate(Diet = ifelse(.data$Diet == 'Herbivore', 'Omnivore', .data$Diet)) %>%
+    mutate(Diet = if_else(.data$Diet == 'Herbivore', 'Omnivore', .data$Diet)) %>%
     tidyr::drop_na() %>%
     select(.data$Sample, .data$Diet, .data$ZoopAbund_m3) %>%
     group_by(.data$Sample, .data$Diet) %>%

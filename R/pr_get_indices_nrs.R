@@ -135,7 +135,7 @@ pr_get_indices_nrs <- function(){
     inner_join(ZInfo %>%
                  select(.data$Length_mm, .data$TaxonName, .data$Diet), by = "TaxonName") %>%
     mutate(abunSize = .data$Length_mm * .data$ZoopAbund_m3,
-           Diet = ifelse(.data$Diet == "CC", "CC", "CO")) %>%
+           Diet = if_else(.data$Diet == "CC", "CC", "CO")) %>%
     group_by(.data$TripCode) %>%
     summarise(AvgTotalLengthCopepod_mm = sum(.data$abunSize, na.rm = TRUE)/sum(.data$ZoopAbund_m3, na.rm = TRUE),
               .groups = "drop")

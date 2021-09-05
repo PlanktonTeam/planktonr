@@ -24,9 +24,9 @@ pr_get_CTD <- function(){
            SampleDateUTC = .data$time_coverage_start, StationCode = .data$site_code, Temperature_degC = .data$TEMP,
            ChlF_mgm3 = .data$Chla_mgm3) %>% # Can't rename this in pr_rename due to replicate name
     filter(grepl("NRS", .data$StationCode)) %>% # Subset to NRS only
-    mutate(TripCode = ifelse(.data$StationCode == 'NRSDAR', paste0(substr(.data$StationCode,4,6), format(.data$SampleDateUTC, "%Y%m%d_%H:%M")),
+    mutate(TripCode = if_else(.data$StationCode == 'NRSDAR', paste0(substr(.data$StationCode,4,6), format(.data$SampleDateUTC, "%Y%m%d_%H:%M")),
                              paste0(substr(.data$StationCode,4,6), format(.data$SampleDateUTC, "%Y%m%d"))),
-           ChlF_mgm3 = ifelse(!is.na(.data$ChlF_mgm3), .data$ChlF_mgm3, .data$CHLF)) %>%
+           ChlF_mgm3 = if_else(!is.na(.data$ChlF_mgm3), .data$ChlF_mgm3, .data$CHLF)) %>%
     pr_get_StationName() %>%
     select(.data$file_id, .data$StationName, .data$TripCode, .data$SampleDateUTC, .data$Latitude, .data$Longitude,
            .data$SampleDepth_m, .data$Salinity_psu, .data$Salinity_flag, .data$Temperature_degC, .data$Temperature_flag,
@@ -85,8 +85,9 @@ pr_get_CTD <- function(){
 
     Samps <- Samps %>%
       mutate(DateDiff = abs(.data$SampleDateUTC - .data$SampleDateUTC) / 3600,
-             DateDiff = ifelse(.data$DateDiff > 3 & station != "NSI", NA,
-                               ifelse(.data$DateDiff > 15 & station %in% c("NSI", "KAI"), NA, .data$DateDiff)))
+             DateDiff = case_when(.data$DateDiff > 3 & station != "NSI" ~ NA,
+                                  .data$DateDiff > 15 & station %in% c("NSI", "KAI") ~ NA,
+                                  TRUE ~ .data$DateDiff))
 
     SampsMatch <- rawCTDCast %>%
       filter(substr(.data$TripCode, 1, 3) == station) %>%
