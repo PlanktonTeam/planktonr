@@ -174,3 +174,18 @@ pr_add_Carbon <- function(df){
           Carbon_L = .data$Cells_L * .data$Carbon) # Carbon per litre
 }
 
+
+# pr_add_LocalTime <- function(df){
+#
+#   # map_dbl(df, function(x) lubridate::with_tz(.data$SampleDateUTC[1], tzone = .data$tz[1]))
+#
+#   df <- df %>%
+#     mutate(SampleDateLocal = case_when(
+#     .data$tz == "Australia/Darwin" ~ format(.data$SampleDateUTC, tz = "Australia/Darwin"),
+#     .data$tz == "Australia/Brisbane" ~ format(.data$SampleDateUTC, tz = "Australia/Brisbane"),
+#     .data$tz == "Australia/Adelaide" ~ format(.data$SampleDateUTC, tz = "Australia/Adelaide"),
+#     .data$tz == "Australia/Hobart" ~ format(.data$SampleDateUTC, tz = "Australia/Hobart"),
+#     .data$tz == "Australia/Sydney" ~ format(.data$SampleDateUTC, tz = "Australia/Sydney"),
+#     .data$tz == "Australia/Perth" ~ format(.data$SampleDateUTC, tz = "Australia/Perth")))
+#
+# }
