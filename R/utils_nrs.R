@@ -32,9 +32,9 @@ pr_get_NRSTrips <- function(Type = c("P","Z","F")){
     pr_rename() %>%
     rename(ZSampleDepth_m = .data$ZOOPSAMPLEDEPTH_M,
            PSampleDepth_m = .data$PHYTOSAMPLEDEPTH_M) %>%
-  filter(.data$ProjectName == "NRS" &
-           (stringr::str_detect(.data$SampleType, paste(Type, collapse = "|")) |
-              is.na(.data$SampleType))) %>%
+    filter(.data$ProjectName == "NRS" &
+             (stringr::str_detect(.data$SampleType, paste(Type, collapse = "|")) |
+                is.na(.data$SampleType))) %>%
     pr_apply_time() %>%
     select(.data$TripCode:.data$SampleDateLocal, .data$Year:.data$SampleDateUTC, .data$Biomass_mgm3, .data$Secchi_m, .data$SampleType) %>%
     select(-.data$tz)
@@ -855,9 +855,14 @@ pr_get_NRSZooSpeciesCopepod <- function(){
   # for non change log species
 
   NRSCop1 <- NRSZdat %>%
-    filter(!.data$TaxonName %in% levels(as.factor(nrsclc$TaxonName)) & .data$Copepod =="COPEPOD"
-           & .data$Species != "spp." & !is.na(.data$Species) & !grepl("cf.", .data$Species)  &
-             !grepl("/", .data$Species) & !grepl("grp", .data$Species)) %>%
+    filter(!.data$TaxonName %in% levels(as.factor(nrsclc$TaxonName)) &
+             .data$Copepod =="COPEPOD" &
+             .data$Species != "spp." &
+             !is.na(.data$Species) &
+             !grepl("cf.", .data$Species) &
+             !grepl("/", .data$Species) &
+             !grepl("grp", .data$Species)
+           ) %>%
     mutate(Species = paste0(.data$Genus," ", stringr::word(.data$Species,1))) %>% # bin complexes
     group_by(.data$TripCode, .data$Species) %>%
     summarise(ZoopAbund_m3 = sum(.data$ZoopAbund_m3, na.rm = TRUE), .groups = "drop")
@@ -959,7 +964,8 @@ pr_get_NRSZooSpeciesNonCopepod <- function(){
   # for non change log species
   NRSnCop1 <- NRSZdat %>%
     filter(!.data$TaxonName %in% levels(as.factor(nrsclc$TaxonName)) & .data$Copepod =="NON-COPEPOD"
-           & .data$Species != "spp." & !is.na(.data$Species) & !grepl("cf.", .data$Species) & !grepl("grp", .data$Species)) %>%
+          ) %>%
+    pr_filter_species() %>%
     mutate(Species = paste0(.data$Genus," ", stringr::word(.data$Species,1))) %>% # bin complexes
     group_by(.data$TripCode, .data$Species) %>%
     summarise(ZoopAbund_m3 = sum(.data$ZoopAbund_m3, na.rm = TRUE), .groups = "drop")
@@ -977,7 +983,8 @@ pr_get_NRSZooSpeciesNonCopepod <- function(){
   # add change log species with -999 for NA"s and real absences as 0"s
   NRSnCop2 <- NRSZdat %>%
     filter(.data$TaxonName %in% levels(as.factor(nrsclc$TaxonName)) & .data$Copepod =="NON-COPEPOD"  & .data$Species != ""
-           & .data$Species != "spp." & !is.na(.data$Species) & !grepl("cf.", .data$Species) & !grepl("grp", .data$Species)) %>%
+          ) %>%
+    pr_filter_species() %>%
     mutate(Species = paste0(.data$Genus," ", stringr::word(.data$Species,1))) %>% # bin complexes
     left_join(NRSZcl, by = "TaxonName") %>%
     mutate(Species = forcats::as_factor(.data$Species)) %>%

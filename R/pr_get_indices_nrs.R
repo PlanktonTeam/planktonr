@@ -162,13 +162,15 @@ pr_get_indices_nrs <- function(){
     left_join(pr_get_NRSZooData(), by = "TripCode")
 
   zoo_n <- ZooCount %>%
-    filter(.data$Copepod == "COPEPOD" & .data$Species != "spp." & !is.na(.data$Species) & !grepl("cf.", .data$Species) & !grepl("grp", .data$Species)) %>%
+    filter(.data$Copepod == "COPEPOD") %>%
+    pr_filter_species() %>%
     mutate(TaxonName = paste0(.data$Genus," ", stringr::word(.data$Species,1))) %>% # bin complexes
     group_by(.data$TripCode) %>%
     summarise(NoCopepodSpecies_Sample = n(), .groups = "drop")
 
   ShannonCopepodDiversity <- ZooCount %>%
-    filter(.data$Copepod == "COPEPOD" & .data$Species != "spp." & !is.na(.data$Species) & !grepl("cf.", .data$Species) & !grepl("grp", .data$Species)) %>%
+    filter(.data$Copepod == "COPEPOD") %>%
+    pr_filter_species() %>%
     mutate(TaxonName = paste0(.data$Genus," ", stringr::word(.data$Species,1))) %>% # bin complexes
     group_by(.data$TripCode, .data$TaxonName) %>%
     summarise(ZCount = sum(.data$TaxonCount, na.rm = TRUE),
@@ -192,11 +194,7 @@ pr_get_indices_nrs <- function(){
 
   PhytoC <- PhytoData %>%
     select(.data$TripCode, .data$TaxonGroup, .data$Cells_L, .data$Biovolume_um3L) %>%
-    mutate(BV_Cell = .data$Biovolume_um3L / .data$Cells_L, # biovolume of one cell
-           Carbon = ifelse(.data$TaxonGroup == "Dinoflagellate", 0.76*(.data$BV_Cell)^0.819, # conversion to Carbon based on taxongroup and biovolume of cell
-                           ifelse(.data$TaxonGroup == "Ciliate", 0.22*(.data$BV_Cell)^0.939,
-                                  ifelse(.data$TaxonGroup == "Cyanobacteria", 0.2, 0.288*(.data$BV_Cell)^0.811 ))),
-           Carbon_L = .data$Cells_L * .data$Carbon) %>% # Carbon per litre
+    pr_add_Carbon %>% # Add carbon concentration
     group_by(.data$TripCode) %>%
     summarise(PhytoBiomassCarbon_pg_L = sum(.data$Carbon_L),
               .groups = "drop")
@@ -226,14 +224,16 @@ pr_get_indices_nrs <- function(){
   # stick to abundance data here or we lose all the data that Pru counted which we don"t have counts for.
 
   NP <- PhytoData %>%
-    filter(.data$TaxonGroup != "Other" & .data$Species != "spp." & !is.na(.data$Species) & !grepl("cf.", .data$Species) & !grepl("grp", .data$Species)) %>%
+    filter(.data$TaxonGroup != "Other") %>%
+    pr_filter_species() %>%
     mutate(TaxonName = paste0(.data$Genus," ", stringr::word(.data$Species,1))) %>% # bin complexes
     group_by(.data$TripCode) %>%
     summarise(NoPhytoSpecies_Sample = n(),
               .groups = "drop")
 
   ShannonPhytoDiversity <- PhytoData %>%
-    filter(.data$TaxonGroup != "Other" & .data$Species != "spp." & !is.na(.data$Species) & !grepl("cf.", .data$Species) & !grepl("grp", .data$Species)) %>%
+    filter(.data$TaxonGroup != "Other") %>%
+    pr_filter_species() %>%
     mutate(TaxonName = paste0(.data$Genus," ", stringr::word(.data$Species,1))) %>% # bin complexes
     group_by(.data$TripCode, .data$TaxonName) %>%
     summarise(Pdata = sum(.data$Cells_L, na.rm = TRUE),
@@ -248,14 +248,16 @@ pr_get_indices_nrs <- function(){
     mutate(PhytoEvenness = .data$ShannonPhytoDiversity / log(.data$NoPhytoSpecies_Sample))
 
   NDia <- PhytoData %>%
-    filter(.data$TaxonGroup %in% c("Centric diatom", "Pennate diatom") & .data$Species != "spp." & !is.na(.data$Species) & !grepl("cf.", .data$Species) & !grepl("grp", .data$Species)) %>%
+    filter(.data$TaxonGroup %in% c("Centric diatom", "Pennate diatom")) %>%
+    pr_filter_species() %>%
     mutate(TaxonName = paste0(.data$Genus," ", stringr::word(.data$Species,1))) %>% # bin complexes
     group_by(.data$TripCode) %>%
     summarise(NoDiatomSpecies_Sample = n(),
               .groups = "drop")
 
   ShannonDiatomDiversity <- PhytoData %>%
-    filter(.data$TaxonGroup %in% c("Centric diatom", "Pennate diatom") & .data$Species != "spp." & !is.na(.data$Species) & !grepl("cf.", .data$Species) & !grepl("grp", .data$Species)) %>%
+    filter(.data$TaxonGroup %in% c("Centric diatom", "Pennate diatom")) %>%
+    pr_filter_species() %>%
     mutate(TaxonName = paste0(.data$Genus," ", stringr::word(.data$Species,1))) %>% # bin complexes
     group_by(.data$TripCode, .data$TaxonName) %>%
     summarise(Diadata = sum(.data$Cells_L, na.rm = TRUE),
@@ -270,14 +272,16 @@ pr_get_indices_nrs <- function(){
     mutate(DiatomEvenness = .data$ShannonDiatomDiversity / log(.data$NoDiatomSpecies_Sample))
 
   NDino <- PhytoData %>%
-    filter(.data$TaxonGroup == "Dinoflagellate" & .data$Species != "spp." & !is.na(.data$Species) & !grepl("cf.", .data$Species) & !grepl("grp", .data$Species)) %>%
+    filter(.data$TaxonGroup == "Dinoflagellate") %>%
+    pr_filter_species() %>%
     mutate(TaxonName = paste0(.data$Genus," ", stringr::word(.data$Species,1))) %>% # bin complexes
     group_by(.data$TripCode) %>%
     summarise(NoDinoSpecies_Sample = n(),
               .groups = "drop")
 
   ShannonDinoDiversity <- PhytoData %>%
-    filter(.data$TaxonGroup == "Dinoflagellate" & .data$Species != "spp." & !is.na(.data$Species) & !grepl("cf.", .data$Species) & !grepl("grp", .data$Species)) %>%
+    filter(.data$TaxonGroup == "Dinoflagellate") %>%
+    pr_filter_species() %>%
     mutate(TaxonName = paste0(.data$Genus," ", stringr::word(.data$Species,1))) %>% # bin complexes
     group_by(.data$TripCode, .data$TaxonName) %>%
     summarise(Dinodata = sum(.data$Cells_L, na.rm = TRUE),

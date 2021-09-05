@@ -862,7 +862,8 @@ pr_get_CPRZooNonCopepod <- function(){
   # for non change logspecies
   cprnCop1 <- cprZdat %>%
     filter(!.data$TaxonName %in% levels(as.factor(cprZcl$TaxonName)) & .data$Copepod !="COPEPOD"
-           & .data$Species != "spp." & !is.na(.data$Species) & !grepl("cf.", .data$Species) & !grepl("grp", .data$Species)) %>%
+          ) %>%
+    pr_filter_species() %>%
     mutate(Species = paste0(.data$Genus," ", stringr::word(.data$Species,1))) %>% # bin complexes
     group_by(.data$Sample, .data$Species) %>%
     summarise(ZoopAbund_m3 = sum(.data$ZoopAbund_m3, na.rm = TRUE), .groups = "drop")
