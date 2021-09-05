@@ -194,7 +194,7 @@ pr_get_indices_nrs <- function(){
 
   PhytoC <- PhytoData %>%
     select(.data$TripCode, .data$TaxonGroup, .data$Cells_L, .data$Biovolume_um3L) %>%
-    pr_add_Carbon %>% # Add carbon concentration
+    pr_add_Carbon() %>% # Add carbon concentration
     group_by(.data$TripCode) %>%
     summarise(PhytoBiomassCarbon_pg_L = sum(.data$Carbon_L),
               .groups = "drop")
