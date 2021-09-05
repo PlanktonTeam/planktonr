@@ -45,7 +45,7 @@ pr_get_indices_cpr <- function(){
   HCratCpr <- zoodatacpr %>%
     filter(.data$Copepod == 'COPEPOD') %>%
     inner_join(Zinfo %>% select(.data$TaxonName, .data$Diet), by = "TaxonName") %>%
-    mutate(Diet = ifelse(.data$Diet == 'Herbivore', 'Omnivore', .data$Diet)) %>%
+    mutate(Diet = if_else(.data$Diet == 'Herbivore', 'Omnivore', .data$Diet)) %>%
     tidyr::drop_na() %>%
     select(.data$Sample, .data$Diet, .data$ZoopAbund_m3) %>%
     group_by(.data$Sample, .data$Diet) %>%
@@ -94,7 +94,7 @@ pr_get_indices_cpr <- function(){
 
   PhytoCcpr <- phytodatacpr %>%
     select(.data$Sample, .data$TaxonGroup, .data$PhytoAbund_m3, .data$BioVolume_um3m3) %>%
-    pr_add_Carbon %>% # Add carbon concentration
+    pr_add_Carbon() %>% # Add carbon concentration
     group_by(.data$Sample) %>%
     summarise(PhytoBiomassCarbon_pgm3 = sum(.data$Carbon_m3), .groups = "drop")
 

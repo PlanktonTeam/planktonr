@@ -135,7 +135,7 @@ pr_get_indices_nrs <- function(){
     inner_join(ZInfo %>%
                  select(.data$Length_mm, .data$TaxonName, .data$Diet), by = "TaxonName") %>%
     mutate(abunSize = .data$Length_mm * .data$ZoopAbund_m3,
-           Diet = ifelse(.data$Diet == "CC", "CC", "CO")) %>%
+           Diet = if_else(.data$Diet == "CC", "CC", "CO")) %>%
     group_by(.data$TripCode) %>%
     summarise(AvgTotalLengthCopepod_mm = sum(.data$abunSize, na.rm = TRUE)/sum(.data$ZoopAbund_m3, na.rm = TRUE),
               .groups = "drop")
@@ -194,7 +194,7 @@ pr_get_indices_nrs <- function(){
 
   PhytoC <- PhytoData %>%
     select(.data$TripCode, .data$TaxonGroup, .data$Cells_L, .data$Biovolume_um3L) %>%
-    pr_add_Carbon %>% # Add carbon concentration
+    pr_add_Carbon() %>% # Add carbon concentration
     group_by(.data$TripCode) %>%
     summarise(PhytoBiomassCarbon_pg_L = sum(.data$Carbon_L),
               .groups = "drop")

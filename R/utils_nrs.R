@@ -116,8 +116,8 @@ pr_get_NRSPhytoHTG <- function(){
   NRSHTGP <- pr_get_NRSTrips("P") %>%
     select(-c(.data$Biomass_mgm3, .data$Secchi_m)) %>%
     left_join(NRSHTGP, by = "TripCode") %>%
-    mutate(TaxonGroup = ifelse(is.na(.data$TaxonGroup), "Ciliate", .data$TaxonGroup),
-           Cells_L = ifelse(is.na(.data$Cells_L), 0, .data$Cells_L)) %>%
+    mutate(TaxonGroup = if_else(is.na(.data$TaxonGroup), "Ciliate", .data$TaxonGroup),
+           Cells_L = if_else(is.na(.data$Cells_L), 0, .data$Cells_L)) %>%
     arrange(-desc(.data$TaxonGroup)) %>%
     tidyr::pivot_wider(names_from = .data$TaxonGroup, values_from = .data$Cells_L, values_fill = list(Cells_L = 0)) %>%
     arrange(desc(.data$SampleDateLocal)) %>%
@@ -186,7 +186,7 @@ pr_get_NRSPhytoGenus <- function() {
   nrslg <- NRSPcl %>%
     mutate(genus1 = stringr::word(.data$TaxonName, 1),
            genus2 = stringr::word(.data$ParentName, 1)) %>%
-    mutate(same = ifelse(.data$genus1==.data$genus2, "yes", "no")) %>%
+    mutate(same = if_else(.data$genus1==.data$genus2, "yes", "no")) %>%
     filter(.data$same == "no")# no changes at genera level
 
   # for non change log species
@@ -199,8 +199,8 @@ pr_get_NRSPhytoGenus <- function() {
   NRSGenP1 <- NRSSamp %>%
     left_join(NRSGenP1, by = "TripCode") %>%
     mutate(StartDate = lubridate::ymd("2007-12-19"),
-           Genus = ifelse(is.na(.data$Genus), "Acanthoica", .data$Genus),
-           Cells_L = ifelse(is.na(.data$Cells_L), 0, .data$Cells_L)) %>%
+           Genus = if_else(is.na(.data$Genus), "Acanthoica", .data$Genus),
+           Cells_L = if_else(is.na(.data$Cells_L), 0, .data$Cells_L)) %>%
     group_by(.data$TripCode, .data$StationName, .data$Latitude, .data$Longitude,
              .data$SampleDateLocal, .data$Year, .data$Month, .data$Day, .data$Time_24hr, .data$Genus) %>%
     summarise(Cells_L = sum(.data$Cells_L), .groups = "drop") %>%
@@ -278,7 +278,7 @@ pr_get_NRSPhytoSpecies <- function(){
 
   # Check at what level we need change log
   nrsls <- NRSPcl %>%
-    mutate(same = ifelse(.data$TaxonName == .data$ParentName, "yes", "no")) %>%
+    mutate(same = if_else(.data$TaxonName == .data$ParentName, "yes", "no")) %>%
     filter(.data$same == "no") # no changes at genera level
 
   # for non change log species
@@ -293,8 +293,8 @@ pr_get_NRSPhytoSpecies <- function(){
   NRSSpecP1 <- NRSSamp %>%
     left_join(NRSSpecP1, by = "TripCode") %>%
     mutate(StartDate = lubridate::ymd("2007-12-19"),
-           TaxonName = ifelse(is.na(.data$TaxonName), "Paralia sulcata", .data$TaxonName),
-           Cells_L = ifelse(is.na(.data$Cells_L), 0, .data$Cells_L)) %>%
+           TaxonName = if_else(is.na(.data$TaxonName), "Paralia sulcata", .data$TaxonName),
+           Cells_L = if_else(is.na(.data$Cells_L), 0, .data$Cells_L)) %>%
     group_by(.data$TripCode, .data$StationName, .data$Latitude, .data$Longitude,
              .data$SampleDateLocal, .data$Year, .data$Month, .data$Day, .data$Time_24hr, .data$TaxonName) %>%
     summarise(Cells_L = sum(.data$Cells_L), .groups = "drop") %>%
@@ -396,8 +396,8 @@ pr_get_NRSPhytoHTGBV <- function() {
   NRSHTGPB1 <- pr_get_NRSTrips("P") %>%
     select(-c(.data$Biomass_mgm3, .data$Secchi_m)) %>%
     left_join(NRSHTGPB1, by = "TripCode") %>%
-    mutate(TaxonGroup = ifelse(is.na(.data$TaxonGroup), "Ciliate", .data$TaxonGroup),
-           BioV_um3L = ifelse(is.na(.data$BioV_um3L), 0, .data$BioV_um3L)) %>%
+    mutate(TaxonGroup = if_else(is.na(.data$TaxonGroup), "Ciliate", .data$TaxonGroup),
+           BioV_um3L = if_else(is.na(.data$BioV_um3L), 0, .data$BioV_um3L)) %>%
     arrange(-desc(.data$TaxonGroup))
 
   NRSHTGPB <-  NRSHTGPB1 %>%
@@ -430,7 +430,7 @@ pr_get_NRSPhytoGenusBV <- function(){
   nrslg <- NRSPcl %>%
     mutate(genus1 = stringr::word(.data$TaxonName, 1),
            genus2 = stringr::word(.data$ParentName, 1)) %>%
-    mutate(same = ifelse(.data$genus1==.data$genus2, "yes", "no")) %>%
+    mutate(same = if_else(.data$genus1==.data$genus2, "yes", "no")) %>%
     filter(.data$same == "no")# no changes at genera level
 
   # for non change log species
@@ -443,8 +443,8 @@ pr_get_NRSPhytoGenusBV <- function(){
   NRSGenPB1 <- NRSSamp %>%
     left_join(NRSGenPB1, by = "TripCode") %>%
     mutate(StartDate = lubridate::ymd("2007-12-19"),
-           Genus = ifelse(is.na(.data$Genus), "Acanthoica", .data$Genus),
-           BioV_um3L = ifelse(is.na(.data$BioV_um3L), 0, .data$BioV_um3L)) %>%
+           Genus = if_else(is.na(.data$Genus), "Acanthoica", .data$Genus),
+           BioV_um3L = if_else(is.na(.data$BioV_um3L), 0, .data$BioV_um3L)) %>%
     group_by(.data$TripCode, .data$StationName, .data$Latitude, .data$Longitude,
              .data$SampleDateLocal, .data$Year, .data$Month, .data$Day, .data$Time_24hr, .data$Genus) %>%
     summarise(BioV_um3L = sum(.data$BioV_um3L), .groups = "drop") %>%
@@ -526,7 +526,7 @@ pr_get_NRSPhytoSpeciesBV <- function(){
 
   # Check at what level we need change log
   nrsls <- NRSPcl %>%
-    mutate(same = ifelse(.data$TaxonName == .data$ParentName, "yes", "no")) %>%
+    mutate(same = if_else(.data$TaxonName == .data$ParentName, "yes", "no")) %>%
     filter(.data$same == "no") # no changes at genera level
 
   # for non change log species
@@ -547,8 +547,8 @@ pr_get_NRSPhytoSpeciesBV <- function(){
   NRSSpecPB1 <- NRSSamp %>%
     left_join(NRSSpecPB1, by = "TripCode") %>%
     mutate(StartDate = lubridate::ymd("2007-12-19"),
-           TaxonName = ifelse(is.na(.data$TaxonName), "Paralia sulcata", .data$TaxonName),
-           BioV_um3L = ifelse(is.na(.data$BioV_um3L), 0, .data$BioV_um3L)) %>%
+           TaxonName = if_else(is.na(.data$TaxonName), "Paralia sulcata", .data$TaxonName),
+           BioV_um3L = if_else(is.na(.data$BioV_um3L), 0, .data$BioV_um3L)) %>%
     group_by(.data$TripCode, .data$StationName, .data$Latitude, .data$Longitude,
              .data$SampleDateLocal, .data$Year, .data$Month, .data$Day, .data$Time_24hr, .data$TaxonName) %>%
     summarise(BioV_um3L = sum(.data$BioV_um3L), .groups = "drop") %>%
@@ -690,7 +690,7 @@ pr_get_NRSZooRawBin <- function(){
   NRSIdsZ <- left_join(pr_get_NRSTrips("Z") %>%
                          select(-c(.data$Biomass_mgm3, .data$Secchi_m)),
                        pr_get_NRSZooData(), by = "TripCode") %>%
-    mutate(TaxonName = ifelse(is.na(.data$Genus), .data$TaxonName, paste0(.data$Genus, ' ', .data$Species))) %>%
+    mutate(TaxonName = if_else(is.na(.data$Genus), .data$TaxonName, paste0(.data$Genus, ' ', .data$Species))) %>%
     group_by(.data$TripCode, .data$StationName, .data$Latitude, .data$Longitude,
              .data$SampleDateLocal, .data$Year, .data$Month, .data$Day, .data$Time_24hr, .data$SampleDateUTC, .data$TaxonName) %>%
     summarise(ZoopAbund_m3 = sum(.data$ZoopAbund_m3, na.rm = TRUE)) %>%
@@ -720,8 +720,8 @@ pr_get_NRSZooHTG <-  function(){
   nrsHTGZ1 <-  pr_get_NRSTrips("Z") %>%
     select(-c(.data$Biomass_mgm3, .data$Secchi_m)) %>%
     left_join(nrsHTGZ1, by = "TripCode") %>%
-    mutate(TaxonGroup = ifelse(is.na(.data$TaxonGroup), "Copepod", .data$TaxonGroup),
-           ZoopAbund_m3 = ifelse(is.na(.data$ZoopAbund_m3), 0, .data$ZoopAbund_m3)) %>%
+    mutate(TaxonGroup = if_else(is.na(.data$TaxonGroup), "Copepod", .data$TaxonGroup),
+           ZoopAbund_m3 = if_else(is.na(.data$ZoopAbund_m3), 0, .data$ZoopAbund_m3)) %>%
     arrange(-desc(.data$TaxonGroup))
 
   nrsHTGZ <-  nrsHTGZ1 %>%
@@ -754,7 +754,7 @@ pr_get_NRSZooGenus <- function(){
   nrszlg <- NRSZcl %>%
     mutate(genus1 = stringr::word(.data$TaxonName, 1),
            genus2 = stringr::word(.data$ParentName, 1)) %>%
-    mutate(same = ifelse(.data$genus1==.data$genus2, "yes", "no")) %>%
+    mutate(same = if_else(.data$genus1==.data$genus2, "yes", "no")) %>%
     filter(.data$same == "no")# no changes at genera level
 
   # for non change log species
@@ -767,8 +767,8 @@ pr_get_NRSZooGenus <- function(){
   NRSGenZ1 <- NRSSamp %>%
     left_join(NRSGenZ1, by = "TripCode") %>%
     mutate(StartDate = lubridate::ymd("2007-12-19"),
-           Genus = ifelse(is.na(.data$Genus), "Acanthoica", stringr::word(.data$Genus,1)), # bin subgenera together
-           ZoopAbund_m3 = ifelse(is.na(.data$ZoopAbund_m3), 0, .data$ZoopAbund_m3))  %>%
+           Genus = if_else(is.na(.data$Genus), "Acanthoica", stringr::word(.data$Genus,1)), # bin subgenera together
+           ZoopAbund_m3 = if_else(is.na(.data$ZoopAbund_m3), 0, .data$ZoopAbund_m3))  %>%
     group_by(.data$TripCode, .data$StationName, .data$Latitude, .data$Longitude,
              .data$SampleDateLocal, .data$Year, .data$Month, .data$Day, .data$Time_24hr, .data$Genus) %>%
     summarise(ZoopAbund_m3 = sum(.data$ZoopAbund_m3), .groups = "drop") %>%
@@ -849,7 +849,7 @@ pr_get_NRSZooSpeciesCopepod <- function(){
 
   # Check at what level we need change log
   nrsclc <- NRSZcl %>%
-    mutate(same = ifelse(.data$TaxonName == .data$ParentName, "yes", "no")) %>%
+    mutate(same = if_else(.data$TaxonName == .data$ParentName, "yes", "no")) %>%
     filter(.data$same == "no") # no changes at genera level
 
   # for non change log species
@@ -870,8 +870,8 @@ pr_get_NRSZooSpeciesCopepod <- function(){
   NRSCop1 <- NRSSamp %>%
     left_join(NRSCop1, by = "TripCode") %>%
     mutate(StartDate = lubridate::ymd("2007-12-19"),
-           Species = ifelse(is.na(.data$Species), "Calanus Australis", .data$Species), # avoids nulls in pivot
-           ZoopAbund_m3 = ifelse(is.na(.data$ZoopAbund_m3), 0, .data$ZoopAbund_m3)) %>%  # avoids nulls in pivot
+           Species = if_else(is.na(.data$Species), "Calanus Australis", .data$Species), # avoids nulls in pivot
+           ZoopAbund_m3 = if_else(is.na(.data$ZoopAbund_m3), 0, .data$ZoopAbund_m3)) %>%  # avoids nulls in pivot
     group_by(.data$TripCode, .data$StationName, .data$Latitude, .data$Longitude,
              .data$SampleDateLocal, .data$Year, .data$Month, .data$Day, .data$Time_24hr, .data$Species) %>%
     summarise(ZoopAbund_m3 = sum(.data$ZoopAbund_m3), .groups = "drop") %>%
@@ -958,7 +958,7 @@ pr_get_NRSZooSpeciesNonCopepod <- function(){
 
   # Check at what level we need change log
   nrsclc <- NRSZcl %>%
-    mutate(same = ifelse(.data$TaxonName == .data$ParentName, "yes", "no")) %>%
+    mutate(same = if_else(.data$TaxonName == .data$ParentName, "yes", "no")) %>%
     filter(.data$same == "no") # no changes at genera level
 
   # for non change log species
@@ -973,8 +973,8 @@ pr_get_NRSZooSpeciesNonCopepod <- function(){
   NRSnCop1 <- NRSSamp %>%
     left_join(NRSnCop1, by = "TripCode") %>%
     mutate(StartDate = lubridate::ymd("2007-12-19"),
-           Species = ifelse(is.na(.data$Species), "Calanus Australis", .data$Species), # avoids nulls in pivot
-           ZoopAbund_m3 = ifelse(is.na(.data$ZoopAbund_m3), 0, .data$ZoopAbund_m3)) %>%  # avoids nulls in pivot
+           Species = if_else(is.na(.data$Species), "Calanus Australis", .data$Species), # avoids nulls in pivot
+           ZoopAbund_m3 = if_else(is.na(.data$ZoopAbund_m3), 0, .data$ZoopAbund_m3)) %>%  # avoids nulls in pivot
     group_by(.data$TripCode, .data$StationName, .data$Latitude, .data$Longitude,
              .data$SampleDateLocal, .data$Year, .data$Month, .data$Day, .data$Time_24hr, .data$Species) %>%
     summarise(ZoopAbund_m3 = sum(.data$ZoopAbund_m3), .groups = "drop") %>%

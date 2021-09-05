@@ -149,7 +149,7 @@ pr_get_CPRPhytoRaw <- function(){
     left_join(pr_get_CPRPhytoData("Abundance"), by = "Sample") %>%
     select(c(.data$Sample:.data$TaxonName,.data$PhytoAbund_m3)) %>%
     arrange(-desc(.data$TaxonName)) %>%
-    mutate(TaxonName = ifelse(is.na(.data$TaxonName), "No taxa found", .data$TaxonName)) %>% # for segments where no phyto was found
+    mutate(TaxonName = if_else(is.na(.data$TaxonName), "No taxa found", .data$TaxonName)) %>% # for segments where no phyto was found
     tidyr::pivot_wider(names_from = .data$TaxonName, values_from = .data$PhytoAbund_m3, values_fill = list(PhytoAbund_m3 = 0)) %>%
     arrange(desc(.data$SampleDateUTC)) %>%
     select(-"No taxa found")
@@ -175,8 +175,8 @@ pr_get_CPRPhytoHTG <- function(){
 
   cprHTGP <- pr_get_CPRSamps("P") %>%
     left_join(cprHTGP1, by = "Sample") %>%
-    mutate(TaxonGroup = ifelse(is.na(.data$TaxonGroup), "Ciliate", .data$TaxonGroup),
-           PhytoAbund_m3 = ifelse(is.na(.data$PhytoAbund_m3), 0, .data$PhytoAbund_m3)) %>%
+    mutate(TaxonGroup = if_else(is.na(.data$TaxonGroup), "Ciliate", .data$TaxonGroup),
+           PhytoAbund_m3 = if_else(is.na(.data$PhytoAbund_m3), 0, .data$PhytoAbund_m3)) %>%
     arrange(-desc(.data$TaxonGroup)) %>%
     tidyr::pivot_wider(names_from = .data$TaxonGroup, values_from = .data$PhytoAbund_m3, values_fill = list(PhytoAbund_m3 = 0)) %>%
     arrange(desc(.data$SampleDateUTC)) %>%
@@ -200,7 +200,7 @@ pr_get_CPRPhytoGenus <- function(){
   cprPcl <- pr_get_CPRPhytoChangeLog() %>%
     mutate(genus1 = stringr::word(.data$TaxonName, 1),
            genus2 = stringr::word(.data$ParentName, 1),
-           same = ifelse(.data$genus1==.data$genus2, "yes", "no")) %>%
+           same = if_else(.data$genus1==.data$genus2, "yes", "no")) %>%
     filter(.data$same == "no")# no changes at genera level
 
   cprSamp <- pr_get_CPRSamps("P")
@@ -216,8 +216,8 @@ pr_get_CPRPhytoGenus <- function(){
   cprGenP1 <- cprSamp %>%
     left_join(cprGenP1, by = "Sample") %>%
     mutate(StartDate = lubridate::ymd("2007-12-19"),
-           Genus = ifelse(is.na(.data$Genus), "Acanthoica", .data$Genus),
-           PhytoAbund_m3 = ifelse(is.na(.data$PhytoAbund_m3), 0, .data$PhytoAbund_m3)) %>%
+           Genus = if_else(is.na(.data$Genus), "Acanthoica", .data$Genus),
+           PhytoAbund_m3 = if_else(is.na(.data$PhytoAbund_m3), 0, .data$PhytoAbund_m3)) %>%
     group_by(.data$Latitude, .data$Longitude, .data$SampleDateUTC, .data$Year, .data$Month, .data$Day, .data$Time_24hr, .data$Genus) %>%
     summarise(PhytoAbund_m3 = sum(.data$PhytoAbund_m3), .groups = "drop") %>%
     as.data.frame()
@@ -288,7 +288,7 @@ pr_get_CPRPhytoSpecies <-  function(){
   cprPdat <- pr_get_CPRPhytoData("Abundance")
 
   cprPcl <- pr_get_CPRPhytoChangeLog() %>%
-    mutate(same = ifelse(.data$TaxonName == .data$ParentName, "yes", "no")) %>%
+    mutate(same = if_else(.data$TaxonName == .data$ParentName, "yes", "no")) %>%
     filter(.data$same == "no") # no changes at genera level
 
   cprSamp <- pr_get_CPRSamps("P")
@@ -304,8 +304,8 @@ pr_get_CPRPhytoSpecies <-  function(){
   cprSpecP1 <- cprSamp %>%
     left_join(cprSpecP1, by = "Sample") %>%
     mutate(StartDate = lubridate::ymd("2007-12-19"),
-           TaxonName = ifelse(is.na(.data$TaxonName), "Paralia sulcata", .data$TaxonName),
-           PhytoAbund_m3 = ifelse(is.na(.data$PhytoAbund_m3), 0, .data$PhytoAbund_m3))  %>%
+           TaxonName = if_else(is.na(.data$TaxonName), "Paralia sulcata", .data$TaxonName),
+           PhytoAbund_m3 = if_else(is.na(.data$PhytoAbund_m3), 0, .data$PhytoAbund_m3))  %>%
     group_by(.data$Latitude, .data$Longitude, .data$SampleDateUTC, .data$Year, .data$Month, .data$Day, .data$Time_24hr, .data$TaxonName) %>%
     summarise(PhytoAbund_m3 = sum(.data$PhytoAbund_m3), .groups = "drop") %>%
     as.data.frame()
@@ -380,7 +380,7 @@ pr_get_CPRPhytoRawBV <- function(){
     left_join(pr_get_CPRPhytoData("Biovolume"), by = "Sample") %>%
     select(c(.data$Sample:.data$TaxonName,.data$BioVolume_um3m3)) %>%
     arrange(-desc(.data$TaxonName)) %>%
-    mutate(TaxonName = ifelse(is.na(.data$TaxonName), "No taxa found", .data$TaxonName)) %>% # for segments where no phyto was found
+    mutate(TaxonName = if_else(is.na(.data$TaxonName), "No taxa found", .data$TaxonName)) %>% # for segments where no phyto was found
     tidyr::pivot_wider(names_from = .data$TaxonName, values_from = .data$BioVolume_um3m3, values_fill = list(BioVolume_um3m3 = 0)) %>%
     arrange(desc(.data$SampleDateUTC)) %>%
     select(-"No taxa found")
@@ -404,8 +404,8 @@ pr_get_CPRPhytoHTGBV <- function(){
 
   cprHTGPB1 <-  pr_get_CPRSamps("P")  %>%
     left_join(cprHTGPB1, by = "Sample") %>%
-    mutate(TaxonGroup = ifelse(is.na(.data$TaxonGroup), "Ciliate", .data$TaxonGroup),
-           PBioV_um3m3 = ifelse(is.na(.data$PBioV_um3m3), 0, .data$PBioV_um3m3)) %>%
+    mutate(TaxonGroup = if_else(is.na(.data$TaxonGroup), "Ciliate", .data$TaxonGroup),
+           PBioV_um3m3 = if_else(is.na(.data$PBioV_um3m3), 0, .data$PBioV_um3m3)) %>%
     tidyr::pivot_wider(names_from = .data$TaxonGroup, values_from = .data$PBioV_um3m3, values_fill = list(PBioV_um3m3 = 0)) %>%
     arrange(desc(.data$SampleDateUTC)) %>%
     select(-.data$Sample)
@@ -428,7 +428,7 @@ pr_get_CPRPhytoGenusBV <- function(){
   cprPcl <- pr_get_CPRPhytoChangeLog() %>%
     mutate(genus1 = stringr::word(.data$TaxonName, 1),
            genus2 = stringr::word(.data$ParentName, 1)) %>%
-    mutate(same = ifelse(.data$genus1==.data$genus2, "yes", "no")) %>%
+    mutate(same = if_else(.data$genus1==.data$genus2, "yes", "no")) %>%
     filter(.data$same == "no")# no changes at genera level
 
   cprSamp <- pr_get_CPRSamps("P")
@@ -444,8 +444,8 @@ pr_get_CPRPhytoGenusBV <- function(){
   cprGenPB1 <- cprSamp %>%
     left_join(cprGenPB1, by = "Sample") %>%
     mutate(StartDate = lubridate::ymd("2007-12-19"),
-           Genus = ifelse(is.na(.data$Genus), "Acanthoica", .data$Genus),
-           PBioV_um3m3 = ifelse(is.na(.data$PBioV_um3m3), 0, .data$PBioV_um3m3)) %>%
+           Genus = if_else(is.na(.data$Genus), "Acanthoica", .data$Genus),
+           PBioV_um3m3 = if_else(is.na(.data$PBioV_um3m3), 0, .data$PBioV_um3m3)) %>%
     group_by(.data$Latitude, .data$Longitude, .data$SampleDateUTC, .data$Year, .data$Month, .data$Day, .data$Time_24hr, .data$Genus) %>%
     summarise(PBioV_um3m3 = sum(.data$PBioV_um3m3), .groups = "drop") %>%
     as.data.frame()
@@ -512,7 +512,7 @@ pr_get_CPRPhytoSpeciesBV <- function(){
   cprPdat <- pr_get_CPRPhytoData("Biovolume")
 
   cprPcl <- pr_get_CPRPhytoChangeLog() %>%
-    mutate(same = ifelse(.data$TaxonName == .data$ParentName, "yes", "no")) %>%
+    mutate(same = if_else(.data$TaxonName == .data$ParentName, "yes", "no")) %>%
     filter(.data$same == "no") # no changes at genera level
 
   cprSamp <- pr_get_CPRSamps("P")
@@ -528,8 +528,8 @@ pr_get_CPRPhytoSpeciesBV <- function(){
   cprSpecPB1 <- cprSamp %>%
     left_join(cprSpecPB1, by = "Sample") %>%
     mutate(StartDate = lubridate::ymd("2007-12-19"),
-           TaxonName = ifelse(is.na(.data$TaxonName), "Paralia sulcata", .data$TaxonName),
-           PBioV_um3m3 = ifelse(is.na(.data$PBioV_um3m3), 0, .data$PBioV_um3m3))  %>%
+           TaxonName = if_else(is.na(.data$TaxonName), "Paralia sulcata", .data$TaxonName),
+           PBioV_um3m3 = if_else(is.na(.data$PBioV_um3m3), 0, .data$PBioV_um3m3))  %>%
     group_by(.data$Latitude, .data$Longitude, .data$SampleDateUTC, .data$Year, .data$Month, .data$Day, .data$Time_24hr, .data$TaxonName) %>%
     summarise(PBioV_um3m3 = sum(.data$PBioV_um3m3), .groups = "drop") %>%
     as.data.frame()
@@ -605,7 +605,7 @@ pr_get_CPRZooRaw <- function(){
     left_join(pr_get_CPRZooData("Abundance"), by = "Sample") %>%
     select(-c("Copepod", "TaxonGroup", "Genus", "Species", "SPCode")) %>%
     arrange(-desc(.data$TaxonName)) %>%
-    mutate(TaxonName = ifelse(is.na(.data$TaxonName), "No taxa found", .data$TaxonName)) %>%
+    mutate(TaxonName = if_else(is.na(.data$TaxonName), "No taxa found", .data$TaxonName)) %>%
     tidyr::pivot_wider(names_from = .data$TaxonName, values_from = .data$ZoopAbund_m3, values_fill = list(ZoopAbund_m3 = 0)) %>%
     arrange(desc(.data$SampleDateUTC)) %>%
     select(-"No taxa found") %>%
@@ -625,7 +625,7 @@ pr_get_CPRZooRaw <- function(){
 pr_get_CPRZooRawSS <- function(){
   CPRIdsZ <- pr_get_CPRSamps("Z") %>%
     left_join(pr_get_CPRZooData("Abundance"), by = "Sample") %>%
-    mutate(TaxonName = ifelse(is.na(.data$Genus), .data$TaxonName, paste0(.data$Genus, ' ', .data$Species))) %>%
+    mutate(TaxonName = if_else(is.na(.data$Genus), .data$TaxonName, paste0(.data$Genus, ' ', .data$Species))) %>%
     group_by(.data$TripCode, .data$Latitude, .data$Longitude, .data$SampleDateUTC, .data$Year, .data$Month, .data$Day, .data$Time_24hr, .data$TaxonName) %>%
     summarise(ZoopAbund_m3 = sum(.data$ZoopAbund_m3, na.rm = TRUE)) %>%
     arrange(-desc(.data$TaxonName))  %>%
@@ -651,8 +651,8 @@ pr_get_CPRZooHTG <- function(){
 
   cprHTGZ1 <- pr_get_CPRSamps("Z") %>%
     left_join(cprHTGZ, by = "Sample") %>%
-    mutate(TaxonGroup = ifelse(is.na(.data$TaxonGroup), "Copepod", .data$TaxonGroup),
-           ZoopAbund_m3 = ifelse(is.na(.data$ZoopAbund_m3), 0, .data$ZoopAbund_m3)) %>%
+    mutate(TaxonGroup = if_else(is.na(.data$TaxonGroup), "Copepod", .data$TaxonGroup),
+           ZoopAbund_m3 = if_else(is.na(.data$ZoopAbund_m3), 0, .data$ZoopAbund_m3)) %>%
     arrange(-desc(.data$TaxonGroup)) %>%
     tidyr::pivot_wider(names_from = .data$TaxonGroup, values_from = .data$ZoopAbund_m3, values_fill = list(ZoopAbund_m3 = 0)) %>%
     arrange(desc(.data$SampleDateUTC)) %>%
@@ -676,7 +676,7 @@ pr_get_CPRZooGenus <- function(){
   cprZcl <- pr_get_CPRZooChangeLog() %>%
     mutate(genus1 = stringr::word(.data$TaxonName, 1),
            genus2 = stringr::word(.data$ParentName, 1)) %>%
-    mutate(same = ifelse(.data$genus1==.data$genus2, "yes", "no")) %>%
+    mutate(same = if_else(.data$genus1==.data$genus2, "yes", "no")) %>%
     filter(.data$same == "no")# no changes at genera level
 
   cprSamp <- pr_get_CPRSamps("Z")
@@ -691,8 +691,8 @@ pr_get_CPRZooGenus <- function(){
   cprGenZ1 <- cprSamp %>%
     left_join(cprGenZ1, by = "Sample") %>%
     mutate(StartDate = lubridate::ymd("2007-12-19"),
-           Genus = ifelse(is.na(.data$Genus), "Calanus", .data$Genus),
-           ZoopAbund_m3 = ifelse(is.na(.data$ZoopAbund_m3), 0, .data$ZoopAbund_m3)) %>%
+           Genus = if_else(is.na(.data$Genus), "Calanus", .data$Genus),
+           ZoopAbund_m3 = if_else(is.na(.data$ZoopAbund_m3), 0, .data$ZoopAbund_m3)) %>%
     group_by(.data$Latitude, .data$Longitude, .data$SampleDateUTC, .data$Year, .data$Month, .data$Day, .data$Time_24hr, .data$Genus) %>%
     summarise(ZoopAbund_m3 = sum(.data$ZoopAbund_m3), .groups = "drop") %>%
     as.data.frame()
@@ -758,7 +758,7 @@ pr_get_CPRZooCopepod <- function(){
   cprZdat <- pr_get_CPRZooData("Abundance")
 
   cprZcl <- pr_get_CPRZooChangeLog()%>%
-    mutate(same = ifelse(.data$TaxonName == .data$ParentName, "yes", "no")) %>%
+    mutate(same = if_else(.data$TaxonName == .data$ParentName, "yes", "no")) %>%
     filter(.data$same == "no") # no changes at genera level
 
   cprSamp <- pr_get_CPRSamps("Z")
@@ -781,8 +781,8 @@ pr_get_CPRZooCopepod <- function(){
   cprCop1 <- cprSamp %>%
     left_join(cprCop1, by = "Sample") %>%
     mutate(StartDate = lubridate::ymd("2007-12-19"),
-           Species = ifelse(is.na(.data$Species), "Calanus Australis", .data$Species), # avoids nulls in pivot
-           ZoopAbund_m3 = ifelse(is.na(.data$ZoopAbund_m3), 0, .data$ZoopAbund_m3)) %>% # avoids nulls in pivot
+           Species = if_else(is.na(.data$Species), "Calanus Australis", .data$Species), # avoids nulls in pivot
+           ZoopAbund_m3 = if_else(is.na(.data$ZoopAbund_m3), 0, .data$ZoopAbund_m3)) %>% # avoids nulls in pivot
     group_by(.data$Latitude, .data$Longitude, .data$SampleDateUTC, .data$Year, .data$Month, .data$Day, .data$Time_24hr, .data$Species) %>%
     summarise(ZoopAbund_m3 = sum(.data$ZoopAbund_m3), .groups = "drop") %>%
     as.data.frame()
@@ -854,7 +854,7 @@ pr_get_CPRZooNonCopepod <- function(){
   cprZdat <- pr_get_CPRZooData("Abundance")
 
   cprZcl <- pr_get_CPRZooChangeLog() %>%
-    mutate(same = ifelse(.data$TaxonName == .data$ParentName, "yes", "no")) %>%
+    mutate(same = if_else(.data$TaxonName == .data$ParentName, "yes", "no")) %>%
     filter(.data$same == "no") # no changes at genera level
 
   cprSamp <- pr_get_CPRSamps("Z")
@@ -871,8 +871,8 @@ pr_get_CPRZooNonCopepod <- function(){
   cprnCop1 <- cprSamp %>%
     left_join(cprnCop1, by = "Sample") %>%
     mutate(StartDate = lubridate::ymd("2007-12-19"),
-           Species = ifelse(is.na(.data$Species), "Evadne spinifera", .data$Species),
-           ZoopAbund_m3 = ifelse(is.na(.data$ZoopAbund_m3), 0, .data$ZoopAbund_m3)) %>%
+           Species = if_else(is.na(.data$Species), "Evadne spinifera", .data$Species),
+           ZoopAbund_m3 = if_else(is.na(.data$ZoopAbund_m3), 0, .data$ZoopAbund_m3)) %>%
     group_by(.data$Latitude, .data$Longitude, .data$SampleDateUTC, .data$Year, .data$Month, .data$Day, .data$Time_24hr, .data$Species) %>%
     summarise(ZoopAbund_m3 = sum(.data$ZoopAbund_m3), .groups = "drop") %>%
     as.data.frame()

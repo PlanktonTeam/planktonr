@@ -100,7 +100,7 @@ pr_apply_flags <- function(df){
     var_flags <- stringr::str_subset(out,"_Flag") # Find the flag
 
     df <- df %>%
-      mutate(!!var_units := ifelse(eval(rlang::sym(var_flags)) %in% bad_flags, NA, eval(rlang::sym(var_units))))
+      mutate(!!var_units := if_else(eval(rlang::sym(var_flags)) %in% bad_flags, NA, eval(rlang::sym(var_units))))
     rm(out, var_units, var_flags)
   }
 return(df)
@@ -174,3 +174,18 @@ pr_add_Carbon <- function(df){
           Carbon_L = .data$Cells_L * .data$Carbon) # Carbon per litre
 }
 
+
+# pr_add_LocalTime <- function(df){
+#
+#   # map_dbl(df, function(x) lubridate::with_tz(.data$SampleDateUTC[1], tzone = .data$tz[1]))
+#
+#   df <- df %>%
+#     mutate(SampleDateLocal = case_when(
+#     .data$tz == "Australia/Darwin" ~ format(.data$SampleDateUTC, tz = "Australia/Darwin"),
+#     .data$tz == "Australia/Brisbane" ~ format(.data$SampleDateUTC, tz = "Australia/Brisbane"),
+#     .data$tz == "Australia/Adelaide" ~ format(.data$SampleDateUTC, tz = "Australia/Adelaide"),
+#     .data$tz == "Australia/Hobart" ~ format(.data$SampleDateUTC, tz = "Australia/Hobart"),
+#     .data$tz == "Australia/Sydney" ~ format(.data$SampleDateUTC, tz = "Australia/Sydney"),
+#     .data$tz == "Australia/Perth" ~ format(.data$SampleDateUTC, tz = "Australia/Perth")))
+#
+# }
