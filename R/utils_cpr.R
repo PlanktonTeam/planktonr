@@ -9,7 +9,7 @@
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_CPRTrips <- function(){
-  CPRTrips <- readr::read_csv(paste0(pr_get_site(), "CPR_Trip.csv"), na = "") %>%
+  CPRTrips <- readr::read_csv(paste0(pr_get_site(), "CPR_Trip.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 
@@ -28,7 +28,7 @@ pr_get_CPRTrips <- function(){
 #' @importFrom rlang .data
 pr_get_CPRSamps <- function(Type = c("P","Z","B")){
 
-  CPRSamps <- readr::read_csv(paste0(pr_get_site(), "CPR_Samp.csv"), na = "") %>%
+  CPRSamps <- readr::read_csv(paste0(pr_get_site(), "CPR_Samp.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename() %>%
     filter(stringr::str_detect(.data$SampleType, paste(Type, collapse = "|"))) %>%
     mutate(Year = lubridate::year(.data$SampleDateUTC),
@@ -58,7 +58,7 @@ pr_get_CPRSamps <- function(Type = c("P","Z","B")){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_CPRPhytoData <- function(var = "Abundance"){
-  cprPdat <- readr::read_csv(paste0(pr_get_site(), "CPR_Phyto_Raw.csv"), na = "") %>%
+  cprPdat <- readr::read_csv(paste0(pr_get_site(), "CPR_Phyto_Raw.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename()
 
   if(stringr::str_detect(var, "Abundance")){
@@ -88,7 +88,7 @@ pr_get_CPRPhytoData <- function(var = "Abundance"){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_CPRPhytoChangeLog <- function(){
-  cprPcl <- readr::read_csv(paste0(pr_get_site(), "CPR_Phyto_ChangeLog.csv"), na = "") %>%
+  cprPcl <- readr::read_csv(paste0(pr_get_site(), "CPR_Phyto_ChangeLog.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 
@@ -105,7 +105,7 @@ pr_get_CPRPhytoChangeLog <- function(){
 #' @importFrom rlang .data
 pr_get_CPRZooData <- function(var = "Abundance"){
 
-  cprZdat <- readr::read_csv(paste0(pr_get_site(), "CPR_Zoop_Raw.csv"), na = "") %>%
+  cprZdat <- readr::read_csv(paste0(pr_get_site(), "CPR_Zoop_Raw.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename()
 
   if(stringr::str_detect(var, "Abundance")){
@@ -128,7 +128,7 @@ pr_get_CPRZooData <- function(var = "Abundance"){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_CPRZooChangeLog <- function(){
-  cprZcl <- readr::read_csv(paste0(pr_get_site(), "CPR_Zoop_ChangeLog.csv"), na = "") %>%
+  cprZcl <- readr::read_csv(paste0(pr_get_site(), "CPR_Zoop_ChangeLog.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 
@@ -862,7 +862,8 @@ pr_get_CPRZooNonCopepod <- function(){
   # for non change logspecies
   cprnCop1 <- cprZdat %>%
     filter(!.data$TaxonName %in% levels(as.factor(cprZcl$TaxonName)) & .data$Copepod !="COPEPOD"
-           & .data$Species != "spp." & !is.na(.data$Species) & !grepl("cf.", .data$Species) & !grepl("grp", .data$Species)) %>%
+          ) %>%
+    pr_filter_species() %>%
     mutate(Species = paste0(.data$Genus," ", stringr::word(.data$Species,1))) %>% # bin complexes
     group_by(.data$Sample, .data$Species) %>%
     summarise(ZoopAbund_m3 = sum(.data$ZoopAbund_m3, na.rm = TRUE), .groups = "drop")

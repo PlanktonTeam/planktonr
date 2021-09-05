@@ -9,7 +9,7 @@
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_NRSStation <- function(){
-  NRSStation <- readr::read_csv(paste0(pr_get_site(), "BGC_StationInfo.csv"), na = "") %>%
+  NRSStation <- readr::read_csv(paste0(pr_get_site(), "BGC_StationInfo.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename() %>%
     filter(.data$ProjectName == "NRS")
 }
@@ -28,13 +28,13 @@ pr_get_NRSStation <- function(){
 #' @importFrom rlang .data
 pr_get_NRSTrips <- function(Type = c("P","Z","F")){
 
-  NRSTrip <- readr::read_csv(paste0(pr_get_site(), "BGC_Trip.csv"), na = "") %>%
+  NRSTrip <- readr::read_csv(paste0(pr_get_site(), "BGC_Trip.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename() %>%
     rename(ZSampleDepth_m = .data$ZOOPSAMPLEDEPTH_M,
            PSampleDepth_m = .data$PHYTOSAMPLEDEPTH_M) %>%
-  filter(.data$ProjectName == "NRS" &
-           (stringr::str_detect(.data$SampleType, paste(Type, collapse = "|")) |
-              is.na(.data$SampleType))) %>%
+    filter(.data$ProjectName == "NRS" &
+             (stringr::str_detect(.data$SampleType, paste(Type, collapse = "|")) |
+                is.na(.data$SampleType))) %>%
     pr_apply_time() %>%
     select(.data$TripCode:.data$SampleDateLocal, .data$Year:.data$SampleDateUTC, .data$Biomass_mgm3, .data$Secchi_m, .data$SampleType) %>%
     select(-.data$tz)
@@ -138,7 +138,7 @@ pr_get_NRSPhytoHTG <- function(){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_NRSPhytoData <- function(){
-  NRSPdat <- readr::read_csv(paste0(pr_get_site(), "BGC_Phyto_Raw.csv"), na = "") %>%
+  NRSPdat <- readr::read_csv(paste0(pr_get_site(), "BGC_Phyto_Raw.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 
@@ -155,7 +155,7 @@ pr_get_NRSPhytoData <- function(){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_NRSPhytoChangeLog <- function(){
-  NRSPcl <- readr::read_csv(paste0(pr_get_site(), "BGC_Phyto_ChangeLog.csv"), na = "") %>%
+  NRSPcl <- readr::read_csv(paste0(pr_get_site(), "BGC_Phyto_ChangeLog.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 
@@ -630,7 +630,7 @@ pr_get_NRSPhytoSpeciesBV <- function(){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_NRSZooData <- function(){
-  NRSZdat <- readr::read_csv(paste0(pr_get_site(), "BGC_Zoop_Raw.csv"), na = "") %>%
+  NRSZdat <- readr::read_csv(paste0(pr_get_site(), "BGC_Zoop_Raw.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 
@@ -647,7 +647,7 @@ pr_get_NRSZooData <- function(){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_NRSZooChangeLog <- function(){
-  NRSZcl <- readr::read_csv(paste0(pr_get_site(), "BGC_Zoop_ChangeLog.csv"), na = "") %>%
+  NRSZcl <- readr::read_csv(paste0(pr_get_site(), "BGC_Zoop_ChangeLog.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 
@@ -855,9 +855,14 @@ pr_get_NRSZooSpeciesCopepod <- function(){
   # for non change log species
 
   NRSCop1 <- NRSZdat %>%
-    filter(!.data$TaxonName %in% levels(as.factor(nrsclc$TaxonName)) & .data$Copepod =="COPEPOD"
-           & .data$Species != "spp." & !is.na(.data$Species) & !grepl("cf.", .data$Species)  &
-             !grepl("/", .data$Species) & !grepl("grp", .data$Species)) %>%
+    filter(!.data$TaxonName %in% levels(as.factor(nrsclc$TaxonName)) &
+             .data$Copepod =="COPEPOD" &
+             .data$Species != "spp." &
+             !is.na(.data$Species) &
+             !grepl("cf.", .data$Species) &
+             !grepl("/", .data$Species) &
+             !grepl("grp", .data$Species)
+           ) %>%
     mutate(Species = paste0(.data$Genus," ", stringr::word(.data$Species,1))) %>% # bin complexes
     group_by(.data$TripCode, .data$Species) %>%
     summarise(ZoopAbund_m3 = sum(.data$ZoopAbund_m3, na.rm = TRUE), .groups = "drop")
@@ -959,7 +964,8 @@ pr_get_NRSZooSpeciesNonCopepod <- function(){
   # for non change log species
   NRSnCop1 <- NRSZdat %>%
     filter(!.data$TaxonName %in% levels(as.factor(nrsclc$TaxonName)) & .data$Copepod =="NON-COPEPOD"
-           & .data$Species != "spp." & !is.na(.data$Species) & !grepl("cf.", .data$Species) & !grepl("grp", .data$Species)) %>%
+          ) %>%
+    pr_filter_species() %>%
     mutate(Species = paste0(.data$Genus," ", stringr::word(.data$Species,1))) %>% # bin complexes
     group_by(.data$TripCode, .data$Species) %>%
     summarise(ZoopAbund_m3 = sum(.data$ZoopAbund_m3, na.rm = TRUE), .groups = "drop")
@@ -977,7 +983,8 @@ pr_get_NRSZooSpeciesNonCopepod <- function(){
   # add change log species with -999 for NA"s and real absences as 0"s
   NRSnCop2 <- NRSZdat %>%
     filter(.data$TaxonName %in% levels(as.factor(nrsclc$TaxonName)) & .data$Copepod =="NON-COPEPOD"  & .data$Species != ""
-           & .data$Species != "spp." & !is.na(.data$Species) & !grepl("cf.", .data$Species) & !grepl("grp", .data$Species)) %>%
+          ) %>%
+    pr_filter_species() %>%
     mutate(Species = paste0(.data$Genus," ", stringr::word(.data$Species,1))) %>% # bin complexes
     left_join(NRSZcl, by = "TaxonName") %>%
     mutate(Species = forcats::as_factor(.data$Species)) %>%
@@ -1040,7 +1047,7 @@ pr_get_NRSZooSpeciesNonCopepod <- function(){
 #' @examples
 #' df <- pr_get_NRSPigments()
 pr_get_NRSPigments <- function(){
-  Pigments <- readr::read_csv(paste0(pr_get_site(),"BGC_Pigments.csv"), na = "") %>%
+  Pigments <- readr::read_csv(paste0(pr_get_site(),"BGC_Pigments.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 
@@ -1056,7 +1063,7 @@ pr_get_NRSPigments <- function(){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_NRSPico <- function(){
-  Pico <- readr::read_csv(paste0(pr_get_site(), "BGC_Picoplankton.csv"), na = "") %>%
+  Pico <- readr::read_csv(paste0(pr_get_site(), "BGC_Picoplankton.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 

@@ -27,7 +27,7 @@ pr_get_site <- function(){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_ZooInfo <- function(){
-  ZInfo <- readr::read_csv(paste0(pr_get_site(), "ZoopInfo.csv"), na = "") %>%
+  ZInfo <- readr::read_csv(paste0(pr_get_site(), "ZoopInfo.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 
@@ -132,3 +132,45 @@ pr_apply_time <- function(df){
            SampleDateUTC = lubridate::with_tz(lubridate::force_tzs(.data$SampleDateLocal, .data$tz, roll = TRUE), "UTC"))
 
 }
+
+
+#' Remove incorrect species names from dataframe
+#'
+#' @param df
+#'
+#' @return A dataframe with all correct species names
+#' @export
+#'
+#' @examples
+#' df <- tibble(Species = c("IncorrectSpecies cf.", "CorrectSpcies1", NA, "CorrectSpecies2", "Incorrect spp., Incorrect/Species"))
+#' df <- pr_filter_species(df)
+#' @import dplyr
+#' @importFrom magrittr "%>%"
+#' @importFrom rlang .data
+pr_filter_species <- function(df){
+  pat <- c("spp.", "cf.", "/", "grp")
+  df <- df %>%
+    filter(stringr::str_detect(.data$Species, paste(pat, collapse = "|"), negate = TRUE))
+}
+
+
+#' Add Carbon concentration to phytoplankton dataframe
+#'
+#' @param df
+#'
+#' @return Dataframe with Carbon included
+#' @export
+#'
+#' @examples
+#' df <- tibble(TaxonGroup = c("Dinoflagellate", "Cyanobacteria"), Biovolume_um3L = c(100, 150), Cells_L = c(10, 8))
+#' df <- pr_add_Carbon(df)
+pr_add_Carbon <- function(df){
+ df <- df %>%
+   mutate(BV_Cell = .data$Biovolume_um3L / .data$Cells_L, # biovolume of one cell
+          Carbon = case_when(.data$TaxonGroup == "Dinoflagellate" ~ 0.76*(.data$BV_Cell)^0.819, # conversion to Carbon based on taxongroup and biovolume of cell
+                             .data$TaxonGroup == "Ciliate" ~ 0.22*(.data$BV_Cell)^0.939,
+                             .data$TaxonGroup == "Cyanobacteria" ~ 0.2,
+                             TRUE ~ 0.288*(.data$BV_Cell)^0.811),
+          Carbon_L = .data$Cells_L * .data$Carbon) # Carbon per litre
+}
+
