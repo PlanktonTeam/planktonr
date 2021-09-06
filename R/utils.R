@@ -100,7 +100,7 @@ pr_apply_flags <- function(df){
     var_flags <- stringr::str_subset(out,"_Flag") # Find the flag
 
     df <- df %>%
-      mutate(!!var_units := if_else(eval(rlang::sym(var_flags)) %in% bad_flags, NA, eval(rlang::sym(var_units))))
+      mutate(!!var_units := if_else(eval(rlang::sym(var_flags)) %in% bad_flags, NA_real_, eval(rlang::sym(var_units))))
     rm(out, var_units, var_flags)
   }
   return(df)
@@ -136,13 +136,14 @@ pr_apply_time <- function(df){
 
 #' Remove incorrect species names from dataframe
 #'
-#' @param df
+#' @param df A dataframe with species names
 #'
 #' @return A dataframe with all correct species names
 #' @export
 #'
 #' @examples
-#' df <- tibble(Species = c("IncorrectSpecies cf.", "CorrectSpcies1", NA, "CorrectSpecies2", "Incorrect spp., Incorrect/Species"))
+#' df <- tibble(Species = c("IncorrectSpecies cf.", "CorrectSpcies1", NA,
+#'               "CorrectSpecies2", "Incorrect spp., Incorrect/Species"))
 #' df <- pr_filter_species(df)
 #' @import dplyr
 #' @importFrom magrittr "%>%"
@@ -157,16 +158,18 @@ pr_filter_species <- function(df){
 #' Add Carbon concentration to phytoplankton dataframe
 #'
 #' This is where you write the description
-#' @param df
-#' @param meth
+#' @param df Input dataframe with BioVolume
+#' @param meth Method for data collection
 #'
 #' @return Dataframe with Carbon included
 #' @export
 #'
 #' @examples
-#' df <- tibble(TaxonGroup = c("Dinoflagellate", "Cyanobacteria"), Biovolume_um3L = c(100, 150), Cells_L = c(10, 8))
+#' df <- tibble(TaxonGroup = c("Dinoflagellate", "Cyanobacteria"),
+#'                           Biovolume_um3L = c(100, 150), Cells_L = c(10, 8))
 #' df <- pr_add_Carbon(df, "NRS")
-#' df <- tibble(TaxonGroup = c("Dinoflagellate", "Cyanobacteria"), BioVolume_um3m3 = c(100, 150), PhytoAbund_m3 = c(10, 8))
+#' df <- tibble(TaxonGroup = c("Dinoflagellate", "Cyanobacteria"),
+#'                           BioVolume_um3m3 = c(100, 150), PhytoAbund_m3 = c(10, 8))
 #' df <- pr_add_Carbon(df, "CPR")
 pr_add_Carbon <- function(df, meth){
 
@@ -194,17 +197,25 @@ pr_add_Carbon <- function(df, meth){
 
 }
 
-  # pr_add_LocalTime <- function(df){
-  #
-  #   # map_dbl(df, function(x) lubridate::with_tz(.data$SampleDateUTC[1], tzone = .data$tz[1]))
-  #
-  #   df <- df %>%
-  #     mutate(SampleDateLocal = case_when(
-  #     .data$tz == "Australia/Darwin" ~ format(.data$SampleDateUTC, tz = "Australia/Darwin"),
-  #     .data$tz == "Australia/Brisbane" ~ format(.data$SampleDateUTC, tz = "Australia/Brisbane"),
-  #     .data$tz == "Australia/Adelaide" ~ format(.data$SampleDateUTC, tz = "Australia/Adelaide"),
-  #     .data$tz == "Australia/Hobart" ~ format(.data$SampleDateUTC, tz = "Australia/Hobart"),
-  #     .data$tz == "Australia/Sydney" ~ format(.data$SampleDateUTC, tz = "Australia/Sydney"),
-  #     .data$tz == "Australia/Perth" ~ format(.data$SampleDateUTC, tz = "Australia/Perth")))
-  #
-  # }
+
+
+#' Add local Time
+#'
+#' This function adds the local time based on timezone.
+#' @param df Dataframe with UTC Time
+#'
+#' @return A datafrane with local time added
+#' @export
+#'
+#' @examples
+#' df <- tibble(tz = c("Australia/Perth", "Australia/Brisbane"),
+#'                SampleDateUTC = c(lubridate::now(), lubridate::now()))
+#' df <- pr_add_LocalTime(df)
+pr_add_LocalTime <- function(df){
+
+  df <- purrr::map2(df$SampleDateUTC, df$tz, function(x,y) lubridate::with_tz(x, tzone = y))
+
+}
+
+
+
