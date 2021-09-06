@@ -4,6 +4,12 @@
     <loc>https://planktonteam.github.io/planktonr/index.html</loc>
   </url>
   <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_add_Carbon.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_add_LocalTime.html</loc>
+  </url>
+  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_add_bioregions.html</loc>
   </url>
   <url>
@@ -20,6 +26,9 @@
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_export_nrs.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_filter_species.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRPhytoChangeLog.html</loc>
@@ -134,9 +143,6 @@
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSPigments.html</loc>
-  </url>
-  <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSRawPhyto.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSStation.html</loc>

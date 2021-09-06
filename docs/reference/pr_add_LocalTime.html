@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Make count data of all larval fish — pr_get_LFCountAll • planktonr</title>
+<title>Add local Time — pr_add_LocalTime • planktonr</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Make count data of all larval fish — pr_get_LFCountAll" />
-<meta property="og:description" content="Make count data of all larval fish" />
+<meta property="og:title" content="Add local Time — pr_add_LocalTime" />
+<meta property="og:description" content="This function adds the local time based on timezone." />
 
 
 
@@ -111,24 +111,34 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Make count data of all larval fish</h1>
-    <small class="dont-index">Source: <a href='https://github.com/PlanktonTeam/planktonr/blob/master/R/utils_larvalfish.R'><code>R/utils_larvalfish.R</code></a></small>
-    <div class="hidden name"><code>pr_get_LFCountAll.Rd</code></div>
+    <h1>Add local Time</h1>
+    <small class="dont-index">Source: <a href='https://github.com/PlanktonTeam/planktonr/blob/master/R/utils.R'><code>R/utils.R</code></a></small>
+    <div class="hidden name"><code>pr_add_LocalTime.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Make count data of all larval fish</p>
+    <p>This function adds the local time based on timezone.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>pr_get_LFCountAll</span><span class='op'>(</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>pr_add_LocalTime</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span></pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>df</th>
+      <td><p>Dataframe with UTC Time</p></td>
+    </tr>
+    </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A dataframe with Larval Fish Count Data</p>
+    <p>A datafrane with local time added</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'>pr_get_LFCountAll</span><span class='op'>(</span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'>tibble</span><span class='op'>(</span>tz <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Australia/Perth"</span>, <span class='st'>"Australia/Brisbane"</span><span class='op'>)</span>,
+               SampleDateUTC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/now.html'>now</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/now.html'>now</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'>pr_add_LocalTime</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
