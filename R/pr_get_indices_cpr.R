@@ -94,7 +94,7 @@ pr_get_indices_cpr <- function(){
 
   PhytoCcpr <- phytodatacpr %>%
     select(.data$Sample, .data$TaxonGroup, .data$PhytoAbund_m3, .data$BioVolume_um3m3) %>%
-    pr_add_Carbon() %>% # Add carbon concentration
+    pr_add_Carbon("CPR") %>% # Add carbon concentration
     group_by(.data$Sample) %>%
     summarise(PhytoBiomassCarbon_pgm3 = sum(.data$Carbon_m3), .groups = "drop")
 
