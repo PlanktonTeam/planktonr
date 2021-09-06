@@ -84,9 +84,9 @@ pr_get_CTD <- function(){
     }
 
     Samps <- Samps %>%
-      mutate(DateDiff = abs(.data$SampleDateUTC - .data$SampleDateUTC) / 3600,
-             DateDiff = case_when(.data$DateDiff > 3 & station != "NSI" ~ NA,
-                                  .data$DateDiff > 15 & station %in% c("NSI", "KAI") ~ NA,
+      mutate(DateDiff = as.numeric(abs(.data$SampleDateUTC - .data$SampleDateUTC) / 3600),
+             DateDiff = case_when(.data$DateDiff > 3 & station != "NSI" ~ NA_real_,
+                                  .data$DateDiff > 15 & station %in% c("NSI", "KAI") ~ NA_real_,
                                   TRUE ~ .data$DateDiff))
 
     SampsMatch <- rawCTDCast %>%
