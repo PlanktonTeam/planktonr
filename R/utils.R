@@ -103,7 +103,7 @@ pr_apply_flags <- function(df){
       mutate(!!var_units := if_else(eval(rlang::sym(var_flags)) %in% bad_flags, NA, eval(rlang::sym(var_units))))
     rm(out, var_units, var_flags)
   }
-return(df)
+  return(df)
 }
 
 
@@ -156,36 +156,55 @@ pr_filter_species <- function(df){
 
 #' Add Carbon concentration to phytoplankton dataframe
 #'
+#' This is where you write the description
 #' @param df
+#' @param meth
 #'
 #' @return Dataframe with Carbon included
 #' @export
 #'
 #' @examples
 #' df <- tibble(TaxonGroup = c("Dinoflagellate", "Cyanobacteria"), Biovolume_um3L = c(100, 150), Cells_L = c(10, 8))
-#' df <- pr_add_Carbon(df)
-pr_add_Carbon <- function(df){
- df <- df %>%
-   mutate(BV_Cell = .data$Biovolume_um3L / .data$Cells_L, # biovolume of one cell
-          Carbon = case_when(.data$TaxonGroup == "Dinoflagellate" ~ 0.76*(.data$BV_Cell)^0.819, # conversion to Carbon based on taxongroup and biovolume of cell
-                             .data$TaxonGroup == "Ciliate" ~ 0.22*(.data$BV_Cell)^0.939,
-                             .data$TaxonGroup == "Cyanobacteria" ~ 0.2,
-                             TRUE ~ 0.288*(.data$BV_Cell)^0.811),
-          Carbon_L = .data$Cells_L * .data$Carbon) # Carbon per litre
+#' df <- pr_add_Carbon(df, "NRS")
+#' df <- tibble(TaxonGroup = c("Dinoflagellate", "Cyanobacteria"), BioVolume_um3m3 = c(100, 150), PhytoAbund_m3 = c(10, 8))
+#' df <- pr_add_Carbon(df, "CPR")
+pr_add_Carbon <- function(df, meth){
+
+  if (meth %in% "CPR"){
+    df <- df %>%
+      mutate(BV_Cell = .data$BioVolume_um3m3 / .data$PhytoAbund_m3, # biovolume of one cell
+             Carbon = ifelse(.data$TaxonGroup == "Dinoflagellate", 0.76*(.data$BV_Cell)^0.819, # conversion to Carbon based on taxongroup and biovolume of cell
+                             ifelse(.data$TaxonGroup == 'Ciliate', 0.22*(.data$BV_Cell)^0.939,
+                                    ifelse(.data$TaxonGroup == 'Cyanobacteria', 0.2, 0.288*(.data$BV_Cell)^0.811 ))),
+             Carbon_m3 = .data$PhytoAbund_m3 * .data$Carbon) # Carbon per m3
+    return(df)
+  }
+
+
+  if (meth %in% "NRS"){
+    df <- df %>%
+      mutate(BV_Cell = .data$Biovolume_um3L / .data$Cells_L, # biovolume of one cell
+             Carbon = case_when(.data$TaxonGroup == "Dinoflagellate" ~ 0.76*(.data$BV_Cell)^0.819, # conversion to Carbon based on taxongroup and biovolume of cell
+                                .data$TaxonGroup == "Ciliate" ~ 0.22*(.data$BV_Cell)^0.939,
+                                .data$TaxonGroup == "Cyanobacteria" ~ 0.2,
+                                TRUE ~ 0.288*(.data$BV_Cell)^0.811),
+             Carbon_L = .data$Cells_L * .data$Carbon) # Carbon per litre
+    return(df)
+  }
+
 }
 
-
-# pr_add_LocalTime <- function(df){
-#
-#   # map_dbl(df, function(x) lubridate::with_tz(.data$SampleDateUTC[1], tzone = .data$tz[1]))
-#
-#   df <- df %>%
-#     mutate(SampleDateLocal = case_when(
-#     .data$tz == "Australia/Darwin" ~ format(.data$SampleDateUTC, tz = "Australia/Darwin"),
-#     .data$tz == "Australia/Brisbane" ~ format(.data$SampleDateUTC, tz = "Australia/Brisbane"),
-#     .data$tz == "Australia/Adelaide" ~ format(.data$SampleDateUTC, tz = "Australia/Adelaide"),
-#     .data$tz == "Australia/Hobart" ~ format(.data$SampleDateUTC, tz = "Australia/Hobart"),
-#     .data$tz == "Australia/Sydney" ~ format(.data$SampleDateUTC, tz = "Australia/Sydney"),
-#     .data$tz == "Australia/Perth" ~ format(.data$SampleDateUTC, tz = "Australia/Perth")))
-#
-# }
+  # pr_add_LocalTime <- function(df){
+  #
+  #   # map_dbl(df, function(x) lubridate::with_tz(.data$SampleDateUTC[1], tzone = .data$tz[1]))
+  #
+  #   df <- df %>%
+  #     mutate(SampleDateLocal = case_when(
+  #     .data$tz == "Australia/Darwin" ~ format(.data$SampleDateUTC, tz = "Australia/Darwin"),
+  #     .data$tz == "Australia/Brisbane" ~ format(.data$SampleDateUTC, tz = "Australia/Brisbane"),
+  #     .data$tz == "Australia/Adelaide" ~ format(.data$SampleDateUTC, tz = "Australia/Adelaide"),
+  #     .data$tz == "Australia/Hobart" ~ format(.data$SampleDateUTC, tz = "Australia/Hobart"),
+  #     .data$tz == "Australia/Sydney" ~ format(.data$SampleDateUTC, tz = "Australia/Sydney"),
+  #     .data$tz == "Australia/Perth" ~ format(.data$SampleDateUTC, tz = "Australia/Perth")))
+  #
+  # }
