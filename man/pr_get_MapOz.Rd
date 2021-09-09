@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_boo_plot.R
 \name{pr_get_MapOz}
 \alias{pr_get_MapOz}
-\title{To product the base map of Australia for plotting}
+\title{To produce the base map of Australia for plotting}
 \usage{
 pr_get_MapOz()
 }
@@ -10,7 +10,7 @@ pr_get_MapOz()
 an sf object for plotting the base map of Australia
 }
 \description{
-To product the base map of Australia for plotting
+To produce the base map of Australia for plotting
 }
 \examples{
 MapOz <- pr_get_MapOz()
