@@ -20,6 +20,7 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Imports:
+    cmocean,
     data.table,
     forcats,
     lubridate,
@@ -27,6 +28,7 @@ Imports:
     magrittr,
     purrr,
     readr (>= 2.0.0),
+    rnaturalearth,
     rlang,
     sf,
     stringr,
