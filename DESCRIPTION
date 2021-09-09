@@ -29,6 +29,7 @@ Imports:
     purrr,
     readr (>= 2.0.0),
     rnaturalearth,
+    rnaturalearthdata,
     rlang,
     sf,
     stringr,
