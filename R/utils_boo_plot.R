@@ -6,6 +6,8 @@
 #' @return is a list of colours of length n from palette pal
 #' @export
 #'
+#' @importFrom cmocean cmocean
+#'
 #' @examples
 #' plotCols <- pr_get_PlotCols('matter', 5)
 pr_get_PlotCols <- function(pal, n){
@@ -18,6 +20,8 @@ pr_get_PlotCols <- function(pal, n){
 #'
 #' @return an sf object for plotting the base map of Australia
 #' @export
+#'
+#' @import sf
 #'
 #' @examples
 #' MapOz <- pr_get_MapOz()
