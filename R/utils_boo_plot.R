@@ -22,6 +22,7 @@ pr_get_PlotCols <- function(pal, n){
 #' @export
 #'
 #' @import sf
+#' @import rgeos
 #'
 #' @examples
 #' MapOz <- pr_get_MapOz()
