@@ -15,29 +15,29 @@ pr_get_PlotCols <- function(pal, n){
   return(plotCols)
 }
 
-#' To produce the climatology for plotting
+#' Plot basic timeseries
 #'
-#' @param df data frame containing columns Year, Month, Day
-#' @param x Year, Month, Day, time period of climatology
+#' @param df dataframe with SampleDateLocal and parameters
 #'
-#' @return a dataframe for plotting
+#' @return a timeseries plot
 #' @export
 #'
-#' @examples
-#' df <- data.frame(Month = rep(1:12,10), Code = 'NSI', Values = runif(120, min=0, max=10))
-#' pr_make_climatology(df, Month)
-#' @import dplyr
-#' @importFrom stats sd
 #' @importFrom magrittr "%>%"
-#' @importFrom rlang .data
-pr_make_climatology <- function(df, x){
-  x <- dplyr::enquo(arg = x)
-  df_climate <- df %>% dplyr::filter(!!x != 'NA') %>% # need to drop NA from month, added to dataset by complete(Year, Code)
-    dplyr::group_by(!!x, .data$Code) %>%
-    dplyr::summarise(mean = mean(.data$Values, na.rm = TRUE),
-                     N = length(.data$Values),
-                     sd = stats::sd(.data$Values, na.rm = TRUE),
-                     se = sd / sqrt(.data$N),
-                     .groups = "drop")
-  return(df_climate)
+#' @importFrom lubridate ymd
+#'
+#' @examples
+#' df <- data.frame(SampleDateLocal = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"), Code = 'NSI', Values = runif(4, min=0, max=10))
+#' df <- df %>% mutate(SampleDateLocal = lubridate::ymd(SampleDateLocal))
+#' plotCols <- cmocean::cmocean('matter')(1)
+#' timeseries <- pr_plot_timeseries(df)
+pr_plot_timeseries <- function(df, plotCols){
+  p1 <- ggplot(df, aes(x = .data$SampleDateLocal, y = Values)) +
+    geom_line(aes(group = Code, color = Code)) +
+    geom_point(aes(group = Code, color = Code)) +
+    scale_x_datetime() +
+    labs(y = "") +
+    scale_colour_manual(values = plotCols) +
+    theme(legend.position = "none")
+  p1 <- ggplotly(p1) %>% layout(showlegend = FALSE)
+  return(p1)
 }
