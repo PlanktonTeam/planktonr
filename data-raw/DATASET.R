@@ -2,6 +2,9 @@
 
 ## Shrink data-file and save as internal data file
 library(tidyverse)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(sf)
 
 mbr <- sf::st_read(file.path("data-raw","marine_regions")) %>%  # Load marine regions as sf
   sf::st_transform(crs = "+proj=longlat +datum=WGS84") %>%
@@ -19,7 +22,10 @@ imcra_meso <- sf::st_read(file.path("data-raw","imcra_4_meso")) %>%  # Load imcr
   dplyr::select(-c(AREA_KM2, MESO_NUM, MESO_ABBR)) %>%
   sf::st_make_valid()
 
-usethis::use_data(mbr, imcra_pb, imcra_meso, overwrite = TRUE, internal = TRUE, compress = "bzip2")
+MapOz <- rnaturalearth::ne_countries(scale = "medium", country = "Australia",
+                                       returnclass = "sf")
+
+usethis::use_data(mbr, imcra_pb, imcra_meso, MapOz, overwrite = TRUE, internal = TRUE, compress = "bzip2")
 
 tools::checkRdaFiles("R") # Check what compression to use above
 # OK - bzip2
