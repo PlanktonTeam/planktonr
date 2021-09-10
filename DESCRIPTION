@@ -28,7 +28,6 @@ Imports:
     magrittr,
     purrr,
     readr (>= 2.0.0),
-    rgeos,
     rlang,
     rnaturalearth,
     rnaturalearthdata,

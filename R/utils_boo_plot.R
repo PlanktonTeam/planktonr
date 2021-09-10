@@ -15,22 +15,6 @@ pr_get_PlotCols <- function(pal, n){
   return(plotCols)
 }
 
-
-#' To produce the base map of Australia for plotting
-#'
-#' @return an sf object for plotting the base map of Australia
-#' @export
-#'
-#' @import sf
-#'
-#' @examples
-#' MapOz <- pr_get_MapOz()
-pr_get_MapOz <- function(){
-  MapOz <- rnaturalearth::ne_countries(scale = "medium", country = "Australia",
-                                       returnclass = "sf")
-  return(MapOz)
-}
-
 #' To produce the climatology for plotting
 #'
 #' @param df data frame containing columns Year, Month, Day
