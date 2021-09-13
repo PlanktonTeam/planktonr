@@ -4,7 +4,7 @@
 \alias{pr_plot_climate}
 \title{Plot single climatology}
 \usage{
-pr_plot_climate(df, x, pal)
+pr_plot_climate(Type = c("CPR", "NRS"), df, x, pal)
 }
 \arguments{
 \item{df}{dataframe with specified time period, station code and parameter}
@@ -22,5 +22,5 @@ Plot single climatology
 \examples{
 df <- data.frame(Month = rep(1:12,10), Code = 'NSI',
 parameters = 'Biomass_mgm3', Values = runif(120, min=0, max=10))
-monthly <- pr_plot_climate(df, Month, 'matter')
+monthly <- pr_plot_climate("NRS", df, Month, 'matter')
 }

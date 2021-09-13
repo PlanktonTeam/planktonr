@@ -13,5 +13,5 @@ A string with location of raw plankton data
 Internal function to load the location of the raw plankton data files.
 }
 \examples{
-file_loc <- pr_get_site()
+file_loc <- pr_get_outputs()
 }

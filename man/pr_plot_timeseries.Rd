@@ -4,9 +4,11 @@
 \alias{pr_plot_timeseries}
 \title{Plot basic timeseries}
 \usage{
-pr_plot_timeseries(df, pal)
+pr_plot_timeseries(Type = c("CPR", "NRS"), df, pal)
 }
 \arguments{
+\item{Type}{CPR or NRS data}
+
 \item{df}{dataframe with SampleDateLocal, station code and parameter name and values}
 
 \item{pal}{is the palette name from cmocean}
@@ -19,9 +21,9 @@ Plot basic timeseries
 }
 \examples{
 df <- data.frame(SampleDateLocal = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
-Code = 'NSI', parameters = 'Biomass_mgm3', Values = runif(4, min=0, max=10))
+Code = 'NSI', parameters = 'Biomass_mgm3', Values = runif(4, min=0, max=10),
+Type = 'NRS')
 df <- df \%>\% mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
 format = "\%Y-\%m-\%d \%H:\%M:\%S"))
-timeseries <- pr_plot_timeseries(df, 'matter')
-plotly::ggplotly(timeseries)
+timeseries <- pr_plot_timeseries('NRS', df, 'matter')
 }

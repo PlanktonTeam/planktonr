@@ -36,12 +36,12 @@ pr_get_PlotCols <- function(pal, n){
 #' timeseries <- pr_plot_timeseries('NRS', df, 'matter')
 pr_plot_timeseries <- function(Type = c("CPR", "NRS"), df, pal){
   if(Type == 'CPR'){
-    df <- df %>% dplyr::rename(SampleDate = SampleDateUTC,
-                               Code = Bioregion)
+    df <- df %>% dplyr::rename(SampleDate = .data$SampleDateUTC,
+                               Code = .data$Bioregion)
     titlex <- 'Sample Date UTC'
   }
   if(Type == 'NRS'){
-    df <- df %>% dplyr::rename(SampleDate = SampleDateLocal)
+    df <- df %>% dplyr::rename(SampleDate = .data$SampleDateLocal)
     titlex <- 'Sample Date Local'
   }
 
@@ -65,6 +65,7 @@ pr_plot_timeseries <- function(Type = c("CPR", "NRS"), df, pal){
 #' @param df dataframe with specified time period, station code and parameter
 #' @param x specified time period
 #' @param pal is the palette name from cmocean
+#' @param Type CPR or NRS data
 #'
 #' @return a plotly climatology plot
 #' @export
@@ -81,7 +82,7 @@ pr_plot_climate <- function(Type = c("CPR", "NRS"), df, x, pal){
   x <- dplyr::enquo(arg = x)
 
   if(Type == 'CPR'){
-    df <- df %>% dplyr::rename(Code = Bioregion)
+    df <- df %>% dplyr::rename(Code = .data$Bioregion)
   }
 
   n <- length(unique(df$Code))
@@ -112,6 +113,7 @@ pr_plot_climate <- function(Type = c("CPR", "NRS"), df, x, pal){
 #'
 #' @param df data frame with SampleDateLocal, time period and parameter
 #' @param pal is the palette name from cmocean
+#' @param Type CPR or NRS data
 #'
 #' @return plotly combined plot
 #' @export
