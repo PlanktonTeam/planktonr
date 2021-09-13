@@ -21,7 +21,7 @@ pr_get_site <- function(){
 #' @return A string with location of raw plankton data
 #' @export
 #' @examples
-#' file_loc <- pr_get_site()
+#' file_loc <- pr_get_outputs()
 #' @import dplyr
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
