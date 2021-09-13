@@ -24,24 +24,26 @@ pr_get_PlotCols <- function(pal, n){
 #' @export
 #'
 #' @importFrom magrittr "%>%"
-#' @importFrom lubridate ymd
+#' @importFrom ggplot2 aes
 #'
 #' @examples
-#' df <- data.frame(SampleDateLocal = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"), Code = 'NSI', Values = runif(4, min=0, max=10))
-#' df <- df %>% mutate(SampleDateLocal = lubridate::ymd(SampleDateLocal))
+#' df <- data.frame(SampleDateLocal = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
+#' Code = 'NSI', Values = runif(4, min=0, max=10))
+#' df <- df %>% mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
+#' format = "%Y-%m-%d %H:%M:%S"))
 #' timeseries <- pr_plot_timeseries(df, 'matter')
 pr_plot_timeseries <- function(df, pal){
   n <- length(unique(df$Code))
   plotCols <- planktonr::pr_get_PlotCols(pal, n)
 
-  p1 <- ggplot(df, aes(x = .data$SampleDateLocal, y = Values)) +
-    geom_line(aes(group = Code, color = Code)) +
-    geom_point(aes(group = Code, color = Code)) +
-    scale_x_datetime() +
-    labs(y = "") +
-    scale_colour_manual(values = plotCols) +
-    theme(legend.position = "bottom")
-  p1 <- ggplotly(p1) %>% layout(showlegend = FALSE)
+  p1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$SampleDateLocal, y = .data$Values)) +
+    ggplot2::geom_line(ggplot2::aes(group = .data$Code, color = .data$Code)) +
+    ggplot2::geom_point(ggplot2::aes(group = .data$Code, color = .data$Code)) +
+    ggplot2::scale_x_datetime() +
+    ggplot2::labs(y = "") +
+    ggplot2::scale_colour_manual(values = plotCols) +
+    ggplot2::theme(legend.position = "bottom")
+  p1 <- plotly::ggplotly(p1)
   return(p1)
 }
 
@@ -56,6 +58,7 @@ pr_plot_timeseries <- function(df, pal){
 #' @export
 #' @importFrom magrittr "%>%"
 #' @importFrom stats sd
+#' @importFrom ggplot2 aes
 #'
 #' @examples
 #' df <- data.frame(Month = rep(1:12,10), Code = 'NSI', Values = runif(120, min=0, max=10))
@@ -74,16 +77,16 @@ pr_plot_climate <- function(df, x, pal){
                      se = sd / sqrt(.data$N),
                      .groups = "drop")
 
-  p2 <- ggplot(df_climate, aes(x = !!x, y = .data$mean, fill = .data$Code)) +
-    geom_col(position = position_dodge()) +
-    geom_errorbar(aes(ymin = .data$mean-.data$se, ymax = .data$mean+.data$se),
+  p2 <- ggplot2::ggplot(df_climate, ggplot2::aes(x = !!x, y = .data$mean, fill = .data$Code)) +
+    ggplot2::geom_col(position = ggplot2::position_dodge()) +
+    ggplot2::geom_errorbar(ggplot2::aes(ymin = .data$mean-.data$se, ymax = .data$mean+.data$se),
                   width = .2,                    # Width of the error bars
-                  position = position_dodge(.9)) +
-    labs(y = input$ycol) +
-    scale_fill_manual(values = plotCols) +
-    theme(legend.position = "bottom")
+                  position = ggplot2::position_dodge(.9)) +
+    ggplot2::labs(y = "input$ycol") +
+    ggplot2::scale_fill_manual(values = plotCols) +
+    ggplot2::theme(legend.position = "bottom")
 
-  p2 <- ggplotly(p2)
+  p2 <- plotly::ggplotly(p2)
   return(p2)
 }
 
