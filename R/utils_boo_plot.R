@@ -74,10 +74,9 @@ pr_plot_timeseries <- function(Type = c("CPR", "NRS"), df, pal){
 #' @importFrom ggplot2 aes
 #'
 #' @examples
-#' df <- data.frame(Month = rep(1:12,10), Code = 'NSI',
+#' df <- data.frame(Month = rep(1:12,10), Code = c('NSI', 'NSI', 'PHB', 'PHB'),
 #' parameters = 'Biomass_mgm3', Values = runif(120, min=0, max=10))
 #' monthly <- pr_plot_climate("NRS", df, Month, 'matter')
-
 pr_plot_climate <- function(Type = c("CPR", "NRS"), df, x, pal){
   x <- dplyr::enquo(arg = x)
 
@@ -131,8 +130,8 @@ pr_plot_tsclimate <- function(Type = c("CPR", "NRS"), df, pal){
 
   p1 <- pr_plot_timeseries(Type, df, pal) %>%
     plotly::layout(yaxis = list(title = ""))
-  p2 <- pr_plot_climate(Type, df, .data$Month, pal)
-  p3 <- pr_plot_climate(Type, df, .data$Year, pal) %>%
+  p2 <- pr_plot_climate(Type, df, Month, pal)
+  p3 <- pr_plot_climate(Type, df, Year, pal) %>%
     plotly::layout(legend = list(orientation = "h", y = -0.1),
                    yaxis = list(title = ""))
 
