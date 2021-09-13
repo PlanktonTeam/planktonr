@@ -21,8 +21,10 @@ Combined timeseries and climatology plots
 }
 \examples{
 df <- data.frame(SampleDateLocal = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
-Month = sample(1:12, 4), Year = 2012, Code = 'NSI', Values = runif(4, min=0, max=10))
+Month = sample(1:12, 4), Year = 2012, Code = c('NSI', 'NSI', 'PHB', 'PHB'),
+Values = runif(4, min=0, max=10))
 df <- df \%>\% mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
 format = "\%Y-\%m-\%d \%H:\%M:\%S"))
 monthly <- pr_plot_tsclimate('NRS', df, 'matter')
+plotly::ggplotly(monthly)
 }

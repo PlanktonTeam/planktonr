@@ -120,17 +120,19 @@ pr_plot_climate <- function(Type = c("CPR", "NRS"), df, x, pal){
 #'
 #' @examples
 #' df <- data.frame(SampleDateLocal = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
-#' Month = sample(1:12, 4), Year = 2012, Code = 'NSI', Values = runif(4, min=0, max=10))
+#' Month = sample(1:12, 4), Year = 2012, Code = c('NSI', 'NSI', 'PHB', 'PHB'),
+#' Values = runif(4, min=0, max=10))
 #' df <- df %>% mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
 #' format = "%Y-%m-%d %H:%M:%S"))
 #' monthly <- pr_plot_tsclimate('NRS', df, 'matter')
+#' plotly::ggplotly(monthly)
 
 pr_plot_tsclimate <- function(Type = c("CPR", "NRS"), df, pal){
 
-  p1 <- pr_plot_timeseries(Type, df, 'matter') %>%
+  p1 <- pr_plot_timeseries(Type, df, pal) %>%
     plotly::layout(yaxis = list(title = ""))
-  p2 <- pr_plot_climate(Type, df, .data$Month, 'matter')
-  p3 <- pr_plot_climate(Type, df, .data$Year, 'matter') %>%
+  p2 <- pr_plot_climate(Type, df, .data$Month, pal)
+  p3 <- pr_plot_climate(Type, df, .data$Year, pal) %>%
     plotly::layout(legend = list(orientation = "h", y = -0.1),
                    yaxis = list(title = ""))
 
