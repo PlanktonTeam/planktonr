@@ -7,6 +7,8 @@
 pr_plot_climate(Type = c("CPR", "NRS"), df, x, pal)
 }
 \arguments{
+\item{Type}{CPR or NRS data}
+
 \item{df}{dataframe with specified time period, station code and parameter}
 
 \item{x}{specified time period}

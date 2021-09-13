@@ -7,6 +7,8 @@
 pr_plot_tsclimate(Type = c("CPR", "NRS"), df, pal)
 }
 \arguments{
+\item{Type}{CPR or NRS data}
+
 \item{df}{data frame with SampleDateLocal, time period and parameter}
 
 \item{pal}{is the palette name from cmocean}
