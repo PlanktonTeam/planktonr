@@ -15,6 +15,20 @@ pr_get_site <- function(){
   raw <- "https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/RawData/"
 }
 
+#' Get location of output plankton data
+#'
+#' Internal function to load the location of the raw plankton data files.
+#' @return A string with location of raw plankton data
+#' @export
+#' @examples
+#' file_loc <- pr_get_site()
+#' @import dplyr
+#' @importFrom magrittr "%>%"
+#' @importFrom rlang .data
+pr_get_outputs <- function(){
+  raw <- "https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/Output/"
+}
+
 
 #' Load copepod information table with sizes etc.
 #'

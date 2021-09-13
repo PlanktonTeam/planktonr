@@ -1,9 +1,31 @@
+#' Access data for timeseries and climatology plots
+#'
+#' @return dataframe to use in pr_plot functions
+#' @export
+#'
+#' @examples
+#' df <- pr_get_tsdata()
+pr_get_tsdata <- function(){
+  datNRSi <- readr::read_csv(paste0(pr_get_outputs(), "NRS_Indices.csv"), na = "", show_col_types = FALSE) %>%
+    mutate(Month = lubridate::month(SampleDateLocal),
+           Year = lubridate::year(SampleDateLocal),
+           Code = stringr::str_sub(TripCode, 1, 3),
+           Name = stringr::str_c(Station, " (",Code,")"), # Create neat name for plotting
+           Code = factor(Code),
+           Name = factor(Name)) %>%
+    tidyr::complete(Year, tidyr::nesting(Station, Code)) %>% # Turns implicit missing values into explicit missing values.
+    dplyr::select(Year, Month, SampleDateLocal, Latitude, Station, Code, Biomass_mgm3:CopepodEvenness) %>%
+    tidyr::pivot_longer(-c(Year:Code), values_to = 'Values', names_to = "parameters") %>%
+    dplyr::arrange(-Latitude)  # Sort in ascending date order
+    return(datNRSi)
+}
+
 #' To produce the climatology for plotting
 #'
-#' @param df data frame containing columns Year, Month, Day
+#' @param df output of pr_get_tsdata
 #' @param x Year, Month, Day, time period of climatology
 #'
-#' @return a dataframe for plotting
+#' @return dataframe to use in pr_plot_climate functions
 #' @export
 #'
 #' @examples
