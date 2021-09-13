@@ -19,6 +19,7 @@ pr_get_PlotCols <- function(pal, n){
 #'
 #' @param df dataframe with SampleDateLocal, station code and parameter name and values
 #' @param pal is the palette name from cmocean
+#' @param Type CPR or NRS data
 #'
 #' @return a plotly timeseries plot
 #' @export
@@ -28,28 +29,39 @@ pr_get_PlotCols <- function(pal, n){
 #'
 #' @examples
 #' df <- data.frame(SampleDateLocal = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
-#' Code = 'NSI', parameters = 'Biomass_mgm3', Values = runif(4, min=0, max=10))
+#' Code = 'NSI', parameters = 'Biomass_mgm3', Values = runif(4, min=0, max=10),
+#' Type = 'NRS')
 #' df <- df %>% mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
 #' format = "%Y-%m-%d %H:%M:%S"))
-#' timeseries <- pr_plot_timeseries(df, 'matter')
+#' timeseries <- pr_plot_timeseries('NRS', df, 'matter')
 #' plotly::ggplotly(timeseries)
 
 
-pr_plot_timeseries <- function(df, pal){
+pr_plot_timeseries <- function(Type = c("CPR", "NRS"), df, pal){
+  if(Type == 'CPR'){
+    df <- df %>% dplyr::rename(SampleDate = SampleDateUTC,
+                               Code = Bioregion)
+    titlex <- 'Sample Date UTC'
+  }
+  if(Type == 'NRS'){
+    df <- df %>% dplyr::rename(SampleDate = SampleDateLocal)
+    titlex <- 'Sample Date Local'
+  }
+
   n <- length(unique(df$Code))
   plotCols <- planktonr::pr_get_PlotCols(pal, n)
-  title <- unique(df$parameters)
-  p1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$SampleDateLocal, y = .data$Values)) +
+  titley <- unique(df$parameters)
+  p1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$SampleDate, y = .data$Values)) +
     ggplot2::geom_line(ggplot2::aes(group = .data$Code, color = .data$Code)) +
     ggplot2::geom_point(ggplot2::aes(group = .data$Code, color = .data$Code)) +
     ggplot2::scale_x_datetime() +
-    ggplot2::labs(y = title) +
+    ggplot2::labs(y = titley, x = titlex) +
     ggplot2::scale_colour_manual(values = plotCols)
   p1 <- plotly::ggplotly(p1) %>%
     plotly::layout(legend = list(orientation = "h", y = -0.1))
+  p1
   return(p1)
 }
-
 
 #' Plot single climatology
 #'
