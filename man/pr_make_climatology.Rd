@@ -7,12 +7,12 @@
 pr_make_climatology(df, x)
 }
 \arguments{
-\item{df}{data frame containing columns Year, Month, Day}
+\item{df}{output of pr_get_tsdata}
 
 \item{x}{Year, Month, Day, time period of climatology}
 }
 \value{
-a dataframe for plotting
+dataframe to use in pr_plot_climate functions
 }
 \description{
 To produce the climatology for plotting

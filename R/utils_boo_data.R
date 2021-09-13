@@ -7,16 +7,16 @@
 #' df <- pr_get_tsdata()
 pr_get_tsdata <- function(){
   datNRSi <- readr::read_csv(paste0(pr_get_outputs(), "NRS_Indices.csv"), na = "", show_col_types = FALSE) %>%
-    mutate(Month = lubridate::month(SampleDateLocal),
-           Year = lubridate::year(SampleDateLocal),
-           Code = stringr::str_sub(TripCode, 1, 3),
-           Name = stringr::str_c(Station, " (",Code,")"), # Create neat name for plotting
-           Code = factor(Code),
-           Name = factor(Name)) %>%
-    tidyr::complete(Year, tidyr::nesting(Station, Code)) %>% # Turns implicit missing values into explicit missing values.
-    dplyr::select(Year, Month, SampleDateLocal, Latitude, Station, Code, Biomass_mgm3:CopepodEvenness) %>%
-    tidyr::pivot_longer(-c(Year:Code), values_to = 'Values', names_to = "parameters") %>%
-    dplyr::arrange(-Latitude)  # Sort in ascending date order
+    mutate(Month = lubridate::month(.data$SampleDateLocal),
+           Year = lubridate::year(.data$SampleDateLocal),
+           Code = stringr::str_sub(.data$TripCode, 1, 3),
+           Name = stringr::str_c(.data$Station, " (",.data$Code,")"), # Create neat name for plotting
+           Code = factor(.data$Code),
+           Name = factor(.data$Name)) %>%
+    tidyr::complete(.data$Year, tidyr::nesting(.data$Station, .data$Code)) %>% # Turns implicit missing values into explicit missing values.
+    dplyr::select(.data$Year, .data$Month, .data$SampleDateLocal, .data$Latitude, .data$Station, .data$Code, .data$Biomass_mgm3:.data$CopepodEvenness) %>%
+    tidyr::pivot_longer(-c(.data$Year:.data$Code), values_to = 'Values', names_to = "parameters") %>%
+    dplyr::arrange(-.data$Latitude)  # Sort in ascending date order
     return(datNRSi)
 }
 
