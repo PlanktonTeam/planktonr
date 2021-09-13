@@ -7,7 +7,7 @@
 pr_plot_tsclimate(df, pal)
 }
 \arguments{
-\item{df}{data frame with SampleDateLocal, time period and paramter}
+\item{df}{data frame with SampleDateLocal, time period and parameter}
 
 \item{pal}{is the palette name from cmocean}
 }

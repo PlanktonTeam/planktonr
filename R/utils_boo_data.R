@@ -13,7 +13,7 @@ pr_get_tsdata <- function(){
            Name = stringr::str_c(.data$Station, " (",.data$Code,")"), # Create neat name for plotting
            Code = factor(.data$Code),
            Name = factor(.data$Name)) %>%
-    tidyr::complete(.data$Year, tidyr::nesting(.data$Station, .data$Code)) %>% # Turns implicit missing values into explicit missing values.
+    tidyr::complete(.data$Year, tidyr::nesting(Station, Code)) %>% # Turns implicit missing values into explicit missing values.
     dplyr::select(.data$Year, .data$Month, .data$SampleDateLocal, .data$Latitude, .data$Station, .data$Code, .data$Biomass_mgm3:.data$CopepodEvenness) %>%
     tidyr::pivot_longer(-c(.data$Year:.data$Code), values_to = 'Values', names_to = "parameters") %>%
     dplyr::arrange(-.data$Latitude)  # Sort in ascending date order

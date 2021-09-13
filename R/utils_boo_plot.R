@@ -96,7 +96,7 @@ pr_plot_climate <- function(df, x, pal){
 
 #' Combined timeseries and climatology plots
 #'
-#' @param df data frame with SampleDateLocal, time period and paramter
+#' @param df data frame with SampleDateLocal, time period and parameter
 #' @param pal is the palette name from cmocean
 #'
 #' @return plotly combined plot
