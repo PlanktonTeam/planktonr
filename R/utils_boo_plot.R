@@ -34,9 +34,6 @@ pr_get_PlotCols <- function(pal, n){
 #' df <- df %>% mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
 #' format = "%Y-%m-%d %H:%M:%S"))
 #' timeseries <- pr_plot_timeseries('NRS', df, 'matter')
-#' plotly::ggplotly(timeseries)
-
-
 pr_plot_timeseries <- function(Type = c("CPR", "NRS"), df, pal){
   if(Type == 'CPR'){
     df <- df %>% dplyr::rename(SampleDate = SampleDateUTC,
@@ -78,9 +75,14 @@ pr_plot_timeseries <- function(Type = c("CPR", "NRS"), df, pal){
 #' @examples
 #' df <- data.frame(Month = rep(1:12,10), Code = 'NSI',
 #' parameters = 'Biomass_mgm3', Values = runif(120, min=0, max=10))
-#' monthly <- pr_plot_climate(df, Month, 'matter')
-pr_plot_climate <- function(df, x, pal){
+#' monthly <- pr_plot_climate("NRS", df, Month, 'matter')
+
+pr_plot_climate <- function(Type = c("CPR", "NRS"), df, x, pal){
   x <- dplyr::enquo(arg = x)
+
+  if(Type == 'CPR'){
+    df <- df %>% dplyr::rename(Code = Bioregion)
+  }
 
   n <- length(unique(df$Code))
   plotCols <- planktonr::pr_get_PlotCols(pal, n)
@@ -99,10 +101,10 @@ pr_plot_climate <- function(df, x, pal){
                   width = .2,                    # Width of the error bars
                   position = ggplot2::position_dodge(.9)) +
     ggplot2::labs(y = title) +
-    ggplot2::scale_fill_manual(values = plotCols) +
-    ggplot2::theme(legend.position = "bottom")
+    ggplot2::scale_fill_manual(values = plotCols)
 
-  p2 <- plotly::ggplotly(p2)
+  p2 <- plotly::ggplotly(p2) %>%
+    plotly::layout(legend = list(orientation = "h", y = -0.1))
   return(p2)
 }
 
@@ -119,16 +121,14 @@ pr_plot_climate <- function(df, x, pal){
 #' Month = sample(1:12, 4), Year = 2012, Code = 'NSI', Values = runif(4, min=0, max=10))
 #' df <- df %>% mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
 #' format = "%Y-%m-%d %H:%M:%S"))
-#' monthly <- pr_plot_tsclimate(df, 'matter')
+#' monthly <- pr_plot_tsclimate('NRS', df, 'matter')
 
-pr_plot_tsclimate <- function(df, pal){
-  n <- length(unique(df$Code))
-  plotCols <- planktonr::pr_get_PlotCols(pal, n)
+pr_plot_tsclimate <- function(Type = c("CPR", "NRS"), df, pal){
 
-  p1 <- pr_plot_timeseries(df, 'matter') %>%
+  p1 <- pr_plot_timeseries(Type, df, 'matter') %>%
     plotly::layout(yaxis = list(title = ""))
-  p2 <- pr_plot_climate(df, .data$Month, 'matter')
-  p3 <- pr_plot_climate(df, .data$Year, 'matter') %>%
+  p2 <- pr_plot_climate(Type, df, .data$Month, 'matter')
+  p3 <- pr_plot_climate(Type, df, .data$Year, 'matter') %>%
     plotly::layout(legend = list(orientation = "h", y = -0.1),
                    yaxis = list(title = ""))
 
