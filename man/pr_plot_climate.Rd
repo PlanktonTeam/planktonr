@@ -14,12 +14,13 @@ pr_plot_climate(df, x, pal)
 \item{pal}{is the palette name from cmocean}
 }
 \value{
-a climatology plot
+a plotly climatology plot
 }
 \description{
 Plot single climatology
 }
 \examples{
-df <- data.frame(Month = rep(1:12,10), Code = 'NSI', Values = runif(120, min=0, max=10))
+df <- data.frame(Month = rep(1:12,10), Code = 'NSI',
+parameters = 'Biomass_mgm3', Values = runif(120, min=0, max=10))
 monthly <- pr_plot_climate(df, Month, 'matter')
 }
