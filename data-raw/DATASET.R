@@ -26,6 +26,7 @@ MapOz <- rnaturalearth::ne_countries(scale = "medium", country = "Australia",
                                        returnclass = "sf")
 
 usethis::use_data(mbr, imcra_pb, imcra_meso, MapOz, overwrite = TRUE, internal = TRUE, compress = "bzip2")
+usethis::use_data(MapOz, overwrite = TRUE, internal = FALSE, compress = "bzip2")
 
 tools::checkRdaFiles("R") # Check what compression to use above
 # OK - bzip2
