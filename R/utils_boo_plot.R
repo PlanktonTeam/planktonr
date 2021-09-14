@@ -37,7 +37,7 @@ pr_get_PlotCols <- function(pal, n){
 pr_plot_timeseries <- function(Type = c("CPR", "NRS"), df, pal){
   if(Type == 'CPR'){
     df <- df %>% dplyr::rename(SampleDate = .data$SampleDateUTC,
-                               Code = .data$Bioregion)
+                               Code = .data$BioRegion)
     titlex <- 'Sample Date UTC'
   }
   if(Type == 'NRS'){
@@ -81,7 +81,7 @@ pr_plot_climate <- function(Type = c("CPR", "NRS"), df, x, pal){
   x <- dplyr::enquo(arg = x)
 
   if(Type == 'CPR'){
-    df <- df %>% dplyr::rename(Code = .data$Bioregion)
+    df <- df %>% dplyr::rename(Code = .data$BioRegion)
   }
 
   n <- length(unique(df$Code))
