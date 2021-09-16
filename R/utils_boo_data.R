@@ -26,7 +26,7 @@ pr_get_tsdata <- function(Survey = c('CPR', 'NRS'), Type = c("P", "Z")){
     parameter2 <- "DinoflagellateEvenness"
   }
 
-  dat <- readr::read_csv(paste0(planktonr::pr_get_outputs(), file), na = "", show_col_types = FALSE) %>%
+  dat <- readr::read_csv(paste0(planktonr::pr_get_outputs(), file), na = "NA", show_col_types = FALSE) %>%
     dplyr::mutate(Month = lubridate::month(.data$SampleDateLocal),
                   Year = lubridate::year(.data$SampleDateLocal),
                   StatCode = paste(.data$StationName, .data$StationCode)) %>%
