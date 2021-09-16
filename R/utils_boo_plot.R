@@ -19,7 +19,7 @@ pr_get_PlotCols <- function(pal, n){
 #'
 #' @param df dataframe with SampleDateLocal, station code and parameter name and values
 #' @param pal is the palette name from cmocean
-#' @param Type CPR or NRS data
+#' @param Survey CPR or NRS data
 #'
 #' @return a plotly timeseries plot
 #' @export
@@ -34,13 +34,13 @@ pr_get_PlotCols <- function(pal, n){
 #' df <- df %>% mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
 #' format = "%Y-%m-%d %H:%M:%S"))
 #' timeseries <- pr_plot_timeseries('NRS', df, 'matter')
-pr_plot_timeseries <- function(Type = c("CPR", "NRS"), df, pal){
-  if(Type == 'CPR'){
+pr_plot_timeseries <- function(Survey = c("CPR", "NRS"), df, pal){
+  if(Survey == 'CPR'){
     df <- df %>% dplyr::rename(SampleDate = .data$SampleDateUTC,
                                Code = .data$BioRegion)
     titlex <- 'Sample Date UTC'
   }
-  if(Type == 'NRS'){
+  if(Survey == 'NRS'){
     df <- df %>% dplyr::rename(SampleDate = .data$SampleDateLocal)
     titlex <- 'Sample Date Local'
   }
@@ -65,7 +65,7 @@ pr_plot_timeseries <- function(Type = c("CPR", "NRS"), df, pal){
 #' @param df dataframe with specified time period, station code and parameter
 #' @param x specified time period
 #' @param pal is the palette name from cmocean
-#' @param Type CPR or NRS data
+#' @param Survey CPR or NRS data
 #'
 #' @return a plotly climatology plot
 #' @export
@@ -77,10 +77,10 @@ pr_plot_timeseries <- function(Type = c("CPR", "NRS"), df, pal){
 #' df <- data.frame(Month = rep(1:12,10), Code = c('NSI', 'NSI', 'PHB', 'PHB'),
 #' parameters = 'Biomass_mgm3', Values = runif(120, min=0, max=10))
 #' monthly <- pr_plot_climate("NRS", df, Month, 'matter')
-pr_plot_climate <- function(Type = c("CPR", "NRS"), df, x, pal){
+pr_plot_climate <- function(Survey = c("CPR", "NRS"), df, x, pal){
   x <- dplyr::enquo(arg = x)
 
-  if(Type == 'CPR'){
+  if(Survey == 'CPR'){
     df <- df %>% dplyr::rename(Code = .data$BioRegion)
   }
 
@@ -112,7 +112,7 @@ pr_plot_climate <- function(Type = c("CPR", "NRS"), df, x, pal){
 #'
 #' @param df data frame with SampleDateLocal, time period and parameter
 #' @param pal is the palette name from cmocean
-#' @param Type CPR or NRS data
+#' @param Survey CPR or NRS data
 #'
 #' @return plotly combined plot
 #' @export
@@ -126,12 +126,12 @@ pr_plot_climate <- function(Type = c("CPR", "NRS"), df, x, pal){
 #' monthly <- pr_plot_tsclimate('NRS', df, 'matter')
 #' plotly::ggplotly(monthly)
 
-pr_plot_tsclimate <- function(Type = c("CPR", "NRS"), df, pal){
+pr_plot_tsclimate <- function(Survey = c("CPR", "NRS"), df, pal){
 
-  p1 <- pr_plot_timeseries(Type, df, pal) %>%
+  p1 <- pr_plot_timeseries(Survey, df, pal) %>%
     plotly::layout(yaxis = list(title = ""))
-  p2 <- pr_plot_climate(Type, df, Month, pal)
-  p3 <- pr_plot_climate(Type, df, Year, pal) %>%
+  p2 <- pr_plot_climate(Survey, df, Month, pal)
+  p3 <- pr_plot_climate(Survey, df, Year, pal) %>%
     plotly::layout(legend = list(orientation = "h", y = -0.1),
                    yaxis = list(title = ""))
 

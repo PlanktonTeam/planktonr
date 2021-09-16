@@ -4,10 +4,10 @@
 \alias{pr_plot_timeseries}
 \title{Plot basic timeseries}
 \usage{
-pr_plot_timeseries(Type = c("CPR", "NRS"), df, pal)
+pr_plot_timeseries(Survey = c("CPR", "NRS"), df, pal)
 }
 \arguments{
-\item{Type}{CPR or NRS data}
+\item{Survey}{CPR or NRS data}
 
 \item{df}{dataframe with SampleDateLocal, station code and parameter name and values}
 

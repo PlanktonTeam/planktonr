@@ -4,10 +4,10 @@
 \alias{pr_plot_tsclimate}
 \title{Combined timeseries and climatology plots}
 \usage{
-pr_plot_tsclimate(Type = c("CPR", "NRS"), df, pal)
+pr_plot_tsclimate(Survey = c("CPR", "NRS"), df, pal)
 }
 \arguments{
-\item{Type}{CPR or NRS data}
+\item{Survey}{CPR or NRS data}
 
 \item{df}{data frame with SampleDateLocal, time period and parameter}
 

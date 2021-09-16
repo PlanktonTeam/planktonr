@@ -4,10 +4,10 @@
 \alias{pr_plot_climate}
 \title{Plot single climatology}
 \usage{
-pr_plot_climate(Type = c("CPR", "NRS"), df, x, pal)
+pr_plot_climate(Survey = c("CPR", "NRS"), df, x, pal)
 }
 \arguments{
-\item{Type}{CPR or NRS data}
+\item{Survey}{CPR or NRS data}
 
 \item{df}{dataframe with specified time period, station code and parameter}
 

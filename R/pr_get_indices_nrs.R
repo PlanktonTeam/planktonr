@@ -196,12 +196,12 @@ pr_get_indices_nrs <- function(){
     select(.data$TripCode, .data$TaxonGroup, .data$Cells_L, .data$Biovolume_um3L) %>%
     pr_add_Carbon("NRS") %>% # Add carbon concentration
     group_by(.data$TripCode) %>%
-    summarise(PhytoBiomassCarbon_pg_L = sum(.data$Carbon_L),
+    summarise(PhytoBiomassCarbon_pgL = sum(.data$Carbon_L),
               .groups = "drop")
 
   TPhyto <- PhytoData %>%
     group_by(.data$TripCode) %>%
-    summarise(AbundancePhyto_Cells_L = sum(.data$Cells_L, na.rm = TRUE),
+    summarise(AbundancePhyto_CellsL = sum(.data$Cells_L, na.rm = TRUE),
               .groups = "drop")
 
   DDrat <- PhytoData %>%
@@ -316,3 +316,5 @@ pr_get_indices_nrs <- function(){
     left_join(Pigments, by = ("TripCode"))
 
 }
+
+
