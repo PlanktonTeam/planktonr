@@ -13,7 +13,8 @@ pr_get_indices_cpr <- function(){
 
   # Add the bioregions to the CPR data
   cprSampleInfo <- pr_get_CPRSamps() %>%
-    pr_add_bioregions()
+    pr_add_bioregions() %>%
+    dplyr::select(.data$TripCode:.data$Time_24hr, .data$BioRegion, .data$Biomass_mgm3)
 
   cprZsamp <- pr_get_CPRSamps(c("Z", "B"))
 
@@ -43,10 +44,10 @@ pr_get_indices_cpr <- function(){
     summarise(AvgTotalLengthCopepod_mm = sum(.data$abunSize, na.rm = TRUE)/sum(.data$ZoopAbund_m3, na.rm = TRUE), .groups = "drop")
 
   HCratCpr <- zoodatacpr %>%
-    filter(.data$Copepod == 'COPEPOD') %>%
+    dplyr::filter(.data$Copepod == 'COPEPOD') %>%
     inner_join(Zinfo %>% select(.data$TaxonName, .data$Diet), by = "TaxonName") %>%
     mutate(Diet = if_else(.data$Diet == 'Herbivore', 'Omnivore', .data$Diet)) %>%
-    tidyr::drop_na() %>%
+    dplyr::filter(.data$Diet != 'unknown') %>%
     select(.data$Sample, .data$Diet, .data$ZoopAbund_m3) %>%
     group_by(.data$Sample, .data$Diet) %>%
     summarise(sumdiet = sum(.data$ZoopAbund_m3 , na.rm = TRUE), .groups = "drop") %>%
@@ -202,3 +203,5 @@ pr_get_indices_cpr <- function(){
     select(-.data$Sample)
 
 }
+
+#readr::write_csv(indices, "CPR_Indices.csv")

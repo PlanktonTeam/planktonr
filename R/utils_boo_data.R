@@ -15,7 +15,7 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
     parameter2 <- "CopepodEvenness"
   } else
   {
-    parameter1 <- "PhytoBiomassCarbon_pgL"
+    parameter1 <- "PhytoBiomassCarbon_pgm3"
     parameter2 <- "DinoflagellateEvenness"
   }
 
