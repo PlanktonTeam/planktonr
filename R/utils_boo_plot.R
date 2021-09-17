@@ -45,10 +45,17 @@ pr_plot_timeseries <- function(Survey = c("CPR", "NRS"), df, pal){
     titlex <- 'Sample Date Local'
   }
 
+  if(max(.data$Values)-min(.data$Values) > 1000){
+    yvalues <- log10(.data$Values)
+  } else
+  {
+    yvalues <- .data$Values
+  }
+
   n <- length(unique(df$Code))
   plotCols <- planktonr::pr_get_PlotCols(pal, n)
   titley <- unique(df$parameters)
-  p1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$SampleDate, y = .data$Values)) +
+  p1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$SampleDate, y = yvalues)) +
     ggplot2::geom_line(ggplot2::aes(group = .data$Code, color = .data$Code)) +
     ggplot2::geom_point(ggplot2::aes(group = .data$Code, color = .data$Code)) +
     ggplot2::scale_x_datetime() +
