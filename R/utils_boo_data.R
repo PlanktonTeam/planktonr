@@ -28,7 +28,7 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
         tidyr::complete(.data$BioRegion, .data$YearMon) %>%
         dplyr::mutate(Year = as.numeric(stringr::str_sub(.data$YearMon, 1, 4)),
                       Month = as.numeric(stringr::str_sub(.data$YearMon, -2, -1))) %>%
-        tidyr::pivot_longer(.data$Biomass_mgm3:.data$CopepodEvenness, values_to = "Values", names_to = 'parameters') %>%
+        tidyr::pivot_longer(.data[[parameter1]]:.data[[parameter2]], values_to = "Values", names_to = 'parameters') %>%
         dplyr::group_by(.data$SampleDateUTC, .data$Year, .data$Month, .data$BioRegion, .data$parameters) %>%
         dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                          Latitude = mean(.data$Latitude, na.rm = TRUE), # so we can arrange by latitude and get the BioRegions in the correct order
