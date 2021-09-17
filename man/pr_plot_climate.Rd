@@ -4,16 +4,18 @@
 \alias{pr_plot_climate}
 \title{Plot single climatology}
 \usage{
-pr_plot_climate(Survey = c("CPR", "NRS"), df, x, pal)
+pr_plot_climate(df, Survey = c("CPR", "NRS"), x, pal, Scale = "identity")
 }
 \arguments{
-\item{Survey}{CPR or NRS data}
-
 \item{df}{dataframe with specified time period, station code and parameter}
+
+\item{Survey}{CPR or NRS data}
 
 \item{x}{specified time period}
 
 \item{pal}{is the palette name from cmocean}
+
+\item{Scale}{scale of y axis on plot, whatever scale_y_continuous trans accepts}
 }
 \value{
 a plotly climatology plot
@@ -24,5 +26,5 @@ Plot single climatology
 \examples{
 df <- data.frame(Month = rep(1:12,10), Code = c('NSI', 'NSI', 'PHB', 'PHB'),
 parameters = 'Biomass_mgm3', Values = runif(120, min=0, max=10))
-monthly <- pr_plot_climate("NRS", df, Month, 'matter')
+monthly <- pr_plot_climate(df, "NRS", Month, 'matter')
 }

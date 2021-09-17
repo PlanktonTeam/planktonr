@@ -4,14 +4,16 @@
 \alias{pr_plot_tsclimate}
 \title{Combined timeseries and climatology plots}
 \usage{
-pr_plot_tsclimate(Survey = c("CPR", "NRS"), df, pal)
+pr_plot_tsclimate(df, Survey = c("CPR", "NRS"), pal, Scale = "identity")
 }
 \arguments{
-\item{Survey}{CPR or NRS data}
-
 \item{df}{data frame with SampleDateLocal, time period and parameter}
 
+\item{Survey}{CPR or NRS data}
+
 \item{pal}{is the palette name from cmocean}
+
+\item{Scale}{scale of y axis on plot, whatever scale_y_continuous trans accepts}
 }
 \value{
 plotly combined plot
@@ -25,6 +27,6 @@ Month = sample(1:12, 4), Year = 2012, Code = c('NSI', 'NSI', 'PHB', 'PHB'),
 Values = runif(4, min=0, max=10))
 df <- df \%>\% mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
 format = "\%Y-\%m-\%d \%H:\%M:\%S"))
-monthly <- pr_plot_tsclimate('NRS', df, 'matter')
+monthly <- pr_plot_tsclimate(df, 'NRS', 'matter')
 plotly::ggplotly(monthly)
 }

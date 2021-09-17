@@ -4,14 +4,16 @@
 \alias{pr_plot_timeseries}
 \title{Plot basic timeseries}
 \usage{
-pr_plot_timeseries(Survey = c("CPR", "NRS"), df, pal)
+pr_plot_timeseries(df, Survey = c("CPR", "NRS"), pal, Scale = "identity")
 }
 \arguments{
-\item{Survey}{CPR or NRS data}
-
 \item{df}{dataframe with SampleDateLocal, station code and parameter name and values}
 
+\item{Survey}{CPR or NRS data}
+
 \item{pal}{is the palette name from cmocean}
+
+\item{Scale}{scale of y axis on plot, whatever scale_y_continuous trans accepts}
 }
 \value{
 a plotly timeseries plot
@@ -25,5 +27,5 @@ Code = 'NSI', parameters = 'Biomass_mgm3', Values = runif(4, min=0, max=10),
 Type = 'NRS')
 df <- df \%>\% mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
 format = "\%Y-\%m-\%d \%H:\%M:\%S"))
-timeseries <- pr_plot_timeseries('NRS', df, 'matter')
+timeseries <- pr_plot_timeseries(df, 'NRS', 'matter')
 }
