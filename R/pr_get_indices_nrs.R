@@ -87,9 +87,9 @@ pr_get_indices_nrs <- function(){
 
     MLD_sal <- mld_s$SampleDepth_m
 
-    dcm <- (mldData %>%
+    dcm <- mean((mldData %>%
               filter(.data$ChlF_mgm3 > 0 & .data$ChlF_mgm3 == max(.data$ChlF_mgm3))
-    )$SampleDepth_m
+    )$SampleDepth_m)
     dcm[rlang::is_empty(dcm)] = NA
 
     MLD <- MLD %>%
@@ -118,7 +118,8 @@ pr_get_indices_nrs <- function(){
 
   TZoo <- ZooData %>%
     group_by(.data$TripCode) %>%
-    summarise(ZoopAbund_m3 = sum(.data$ZoopAbund_m3, na.rm = TRUE),
+    tidyr::drop_na(.data$ZoopAbund_m3) %>% # stops code putting 0 for trip codes with no counts when na.rm = TRUE
+    summarise(ZoopAbund_m3 = sum(.data$ZoopAbund_m3),
               .groups = "drop")
 
   TCope <- ZooData %>%
@@ -196,12 +197,12 @@ pr_get_indices_nrs <- function(){
     select(.data$TripCode, .data$TaxonGroup, .data$Cells_L, .data$Biovolume_um3L) %>%
     pr_add_Carbon("NRS") %>% # Add carbon concentration
     group_by(.data$TripCode) %>%
-    summarise(PhytoBiomassCarbon_pg_L = sum(.data$Carbon_L),
+    summarise(PhytoBiomassCarbon_pgL = sum(.data$Carbon_L),
               .groups = "drop")
 
   TPhyto <- PhytoData %>%
     group_by(.data$TripCode) %>%
-    summarise(AbundancePhyto_Cells_L = sum(.data$Cells_L, na.rm = TRUE),
+    summarise(AbundancePhyto_CellsL = sum(.data$Cells_L, na.rm = TRUE),
               .groups = "drop")
 
   DDrat <- PhytoData %>%
@@ -316,3 +317,5 @@ pr_get_indices_nrs <- function(){
     left_join(Pigments, by = ("TripCode"))
 
 }
+
+

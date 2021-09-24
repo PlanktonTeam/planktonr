@@ -15,11 +15,41 @@ pr_get_PlotCols <- function(pal, n){
   return(plotCols)
 }
 
+#' Sidebar panel plot of selected stations
+#'
+#' @param df dataframe containing station codes to plot
+#'
+#' @return is a plotly map of the selected stations
+#' @export
+#'
+#' @examples
+#' df <- data.frame(Code = c("NSI", "PHB"))
+#' pmap <- pr_plot_NRSmap(df)
+pr_plot_NRSmap <-  function(df){
+  meta2_sf <- subset(meta_sf, meta_sf$Code %in% df$Code)
+
+  pmap <- ggplot2::ggplot() +
+    ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
+    ggplot2::geom_sf(data = meta_sf, colour = "blue", size = 1.5) +
+    ggplot2::geom_sf(data = meta2_sf, colour = "red", size = 1.5) +
+    ggplot2::scale_x_continuous(expand = c(0, 0), limits = c(112, 155)) +
+    ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(-45, -9)) +
+    ggplot2::theme_void() +
+    ggplot2::theme(axis.title = ggplot2::element_blank(),
+          panel.background = ggplot2::element_rect(fill = NA, colour = NA),
+          plot.background = ggplot2::element_rect(fill = NA),
+          axis.line = ggplot2::element_blank())
+  pmap <- plotly::ggplotly(pmap)
+}
+
+
+
 #' Plot basic timeseries
 #'
 #' @param df dataframe with SampleDateLocal, station code and parameter name and values
 #' @param pal is the palette name from cmocean
-#' @param Type CPR or NRS data
+#' @param Survey CPR or NRS data
+#' @param Scale scale of y axis on plot, whatever scale_y_continuous trans accepts
 #'
 #' @return a plotly timeseries plot
 #' @export
@@ -33,14 +63,14 @@ pr_get_PlotCols <- function(pal, n){
 #' Type = 'NRS')
 #' df <- df %>% mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
 #' format = "%Y-%m-%d %H:%M:%S"))
-#' timeseries <- pr_plot_timeseries('NRS', df, 'matter')
-pr_plot_timeseries <- function(Type = c("CPR", "NRS"), df, pal){
-  if(Type == 'CPR'){
+#' timeseries <- pr_plot_timeseries(df, 'NRS', 'matter')
+pr_plot_timeseries <- function(df, Survey = c("CPR", "NRS"), pal, Scale = 'identity'){
+  if(Survey == 'CPR'){
     df <- df %>% dplyr::rename(SampleDate = .data$SampleDateUTC,
-                               Code = .data$Bioregion)
+                               Code = .data$BioRegion)
     titlex <- 'Sample Date UTC'
   }
-  if(Type == 'NRS'){
+  if(Survey == 'NRS'){
     df <- df %>% dplyr::rename(SampleDate = .data$SampleDateLocal)
     titlex <- 'Sample Date Local'
   }
@@ -52,6 +82,7 @@ pr_plot_timeseries <- function(Type = c("CPR", "NRS"), df, pal){
     ggplot2::geom_line(ggplot2::aes(group = .data$Code, color = .data$Code)) +
     ggplot2::geom_point(ggplot2::aes(group = .data$Code, color = .data$Code)) +
     ggplot2::scale_x_datetime() +
+    ggplot2::scale_y_continuous(trans = Scale) +
     ggplot2::labs(y = titley, x = titlex) +
     ggplot2::scale_colour_manual(values = plotCols)
   p1 <- plotly::ggplotly(p1) %>%
@@ -65,7 +96,8 @@ pr_plot_timeseries <- function(Type = c("CPR", "NRS"), df, pal){
 #' @param df dataframe with specified time period, station code and parameter
 #' @param x specified time period
 #' @param pal is the palette name from cmocean
-#' @param Type CPR or NRS data
+#' @param Survey CPR or NRS data
+#' @param Scale scale of y axis on plot, whatever scale_y_continuous trans accepts
 #'
 #' @return a plotly climatology plot
 #' @export
@@ -76,12 +108,12 @@ pr_plot_timeseries <- function(Type = c("CPR", "NRS"), df, pal){
 #' @examples
 #' df <- data.frame(Month = rep(1:12,10), Code = c('NSI', 'NSI', 'PHB', 'PHB'),
 #' parameters = 'Biomass_mgm3', Values = runif(120, min=0, max=10))
-#' monthly <- pr_plot_climate("NRS", df, Month, 'matter')
-pr_plot_climate <- function(Type = c("CPR", "NRS"), df, x, pal){
+#' monthly <- pr_plot_climate(df, "NRS", Month, 'matter')
+pr_plot_climate <- function(df, Survey = c("CPR", "NRS"), x, pal, Scale = 'identity'){
   x <- dplyr::enquo(arg = x)
 
-  if(Type == 'CPR'){
-    df <- df %>% dplyr::rename(Code = .data$Bioregion)
+  if(Survey == 'CPR'){
+    df <- df %>% dplyr::rename(Code = .data$BioRegion)
   }
 
   n <- length(unique(df$Code))
@@ -101,6 +133,7 @@ pr_plot_climate <- function(Type = c("CPR", "NRS"), df, x, pal){
                   width = .2,                    # Width of the error bars
                   position = ggplot2::position_dodge(.9)) +
     ggplot2::labs(y = title) +
+    ggplot2::scale_y_continuous(trans = Scale) +
     ggplot2::scale_fill_manual(values = plotCols)
 
   p2 <- plotly::ggplotly(p2) %>%
@@ -112,7 +145,8 @@ pr_plot_climate <- function(Type = c("CPR", "NRS"), df, x, pal){
 #'
 #' @param df data frame with SampleDateLocal, time period and parameter
 #' @param pal is the palette name from cmocean
-#' @param Type CPR or NRS data
+#' @param Survey CPR or NRS data
+#' @param Scale scale of y axis on plot, whatever scale_y_continuous trans accepts
 #'
 #' @return plotly combined plot
 #' @export
@@ -123,15 +157,15 @@ pr_plot_climate <- function(Type = c("CPR", "NRS"), df, x, pal){
 #' Values = runif(4, min=0, max=10))
 #' df <- df %>% mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
 #' format = "%Y-%m-%d %H:%M:%S"))
-#' monthly <- pr_plot_tsclimate('NRS', df, 'matter')
+#' monthly <- pr_plot_tsclimate(df, 'NRS', 'matter')
 #' plotly::ggplotly(monthly)
 
-pr_plot_tsclimate <- function(Type = c("CPR", "NRS"), df, pal){
+pr_plot_tsclimate <- function(df, Survey = c("CPR", "NRS"), pal, Scale = 'identity'){
 
-  p1 <- pr_plot_timeseries(Type, df, pal) %>%
+  p1 <- pr_plot_timeseries(df, Survey, pal, Scale) %>%
     plotly::layout(yaxis = list(title = ""))
-  p2 <- pr_plot_climate(Type, df, Month, pal)
-  p3 <- pr_plot_climate(Type, df, Year, pal) %>%
+  p2 <- pr_plot_climate(df, Survey, Month, pal, Scale)
+  p3 <- pr_plot_climate(df, Survey, Year, pal, Scale) %>%
     plotly::layout(legend = list(orientation = "h", y = -0.1),
                    yaxis = list(title = ""))
 

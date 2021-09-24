@@ -25,8 +25,13 @@ imcra_meso <- sf::st_read(file.path("data-raw","imcra_4_meso")) %>%  # Load imcr
 MapOz <- rnaturalearth::ne_countries(scale = "medium", country = "Australia",
                                        returnclass = "sf")
 
-usethis::use_data(mbr, imcra_pb, imcra_meso, MapOz, overwrite = TRUE, internal = TRUE, compress = "bzip2")
-usethis::use_data(MapOz, overwrite = TRUE, internal = FALSE, compress = "bzip2")
+meta_sf <- planktonr::pr_get_NRSTrips("Z") %>%
+  dplyr::select(StationName, StationCode, Longitude, Latitude) %>% unique() %>%
+  dplyr::rename(Code = StationCode, Station = StationName) %>%
+  dplyr::filter(Station != 'Port Hacking 4') %>%
+  sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326)
+
+usethis::use_data(mbr, imcra_pb, imcra_meso, MapOz, meta_sf, overwrite = TRUE, internal = TRUE, compress = "bzip2")
 
 tools::checkRdaFiles("R") # Check what compression to use above
 # OK - bzip2

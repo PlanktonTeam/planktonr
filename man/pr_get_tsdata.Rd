@@ -4,7 +4,12 @@
 \alias{pr_get_tsdata}
 \title{Access data for timeseries and climatology plots}
 \usage{
-pr_get_tsdata()
+pr_get_tsdata(Survey = c("CPR", "NRS"), Type = c("P", "Z"))
+}
+\arguments{
+\item{Survey}{CPR or NRS, defaults to NRS}
+
+\item{Type}{Phyto or zoo, defaults to phyto}
 }
 \value{
 dataframe to use in pr_plot functions
@@ -13,5 +18,5 @@ dataframe to use in pr_plot functions
 Access data for timeseries and climatology plots
 }
 \examples{
-df <- pr_get_tsdata()
+df <- pr_get_tsdata("NRS", "Z")
 }
