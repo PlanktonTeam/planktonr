@@ -15,6 +15,35 @@ pr_get_PlotCols <- function(pal, n){
   return(plotCols)
 }
 
+#' Sidebar panel plot of selected stations
+#'
+#' @param df dataframe containing station codes to plot
+#'
+#' @return is a plotly map of the selected stations
+#' @export
+#'
+#' @examples
+#' df <- data.frame(Code = c("NSI", "PHB"))
+#' pmap <- pr_plot_NRSmap(df)
+pr_plot_NRSmap <-  function(df){
+  meta2_sf <- subset(meta_sf, meta_sf$Code %in% df$Code)
+
+  pmap <- ggplot2::ggplot() +
+    ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
+    ggplot2::geom_sf(data = meta_sf, colour = "blue", size = 1.5) +
+    ggplot2::geom_sf(data = meta2_sf, colour = "red", size = 1.5) +
+    ggplot2::scale_x_continuous(expand = c(0, 0), limits = c(112, 155)) +
+    ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(-45, -9)) +
+    ggplot2::theme_void() +
+    ggplot2::theme(axis.title = ggplot2::element_blank(),
+          panel.background = ggplot2::element_rect(fill = NA, colour = NA),
+          plot.background = ggplot2::element_rect(fill = NA),
+          axis.line = ggplot2::element_blank())
+  pmap <- plotly::ggplotly(pmap)
+}
+
+
+
 #' Plot basic timeseries
 #'
 #' @param df dataframe with SampleDateLocal, station code and parameter name and values
