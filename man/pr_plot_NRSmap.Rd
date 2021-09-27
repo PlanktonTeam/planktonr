@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_boo_plot.R
 \name{pr_plot_NRSmap}
 \alias{pr_plot_NRSmap}
-\title{Sidebar panel plot of selected stations}
+\title{Sidebar panel plot of selected NRS stations}
 \usage{
 pr_plot_NRSmap(df)
 }
@@ -13,7 +13,7 @@ pr_plot_NRSmap(df)
 is a plotly map of the selected stations
 }
 \description{
-Sidebar panel plot of selected stations
+Sidebar panel plot of selected NRS stations
 }
 \examples{
 df <- data.frame(Code = c("NSI", "PHB"))

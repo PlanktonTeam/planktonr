@@ -15,7 +15,7 @@ pr_get_PlotCols <- function(pal, n){
   return(plotCols)
 }
 
-#' Sidebar panel plot of selected stations
+#' Sidebar panel plot of selected NRS stations
 #'
 #' @param df dataframe containing station codes to plot
 #'
@@ -42,7 +42,36 @@ pr_plot_NRSmap <-  function(df){
   pmap <- plotly::ggplotly(pmap)
 }
 
+#' Title Sidebar panel plot of selected CPR bioregions
+#'
+#' @param df dataframe containing CPR bioregions to plot
+#'
+#' @return is a plotly map of the selected bioregions
+#' @export
+#'
+#' @importFrom magrittr "%>%"
+#'
+#' @examples
+#' df <- data.frame(BioRegion = c("Temperate East", "South-west"))
+#' cprmap <- pr_plot_CPRmap(df)
+pr_plot_CPRmap <-  function(df){
+  bioregionSelection <- mbr %>% dplyr::filter(REGION %in% df$BioRegion) %>%
+      mutate(REGION = factor(REGION, levels = c("Coral Sea", "Temperate East", "South-west", "South-east")))
+  n <- length(unique(bioregionSelection$REGION))
 
+  gg <- ggplot2::ggplot() +
+    ggplot2::geom_sf(data = mbr, colour = 'black', fill = 'white') +
+    ggplot2::geom_sf(data = bioregionSelection, colour = 'black', ggplot2::aes(fill = .data$REGION)) +
+    ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
+    ggplot2::scale_fill_manual(values = cmocean::cmocean('matter')(n)) +
+    ggplot2::scale_x_continuous(expand = c(0, 0)) +
+    ggplot2::scale_y_continuous(expand = c(0, 0)) +
+    ggplot2::theme_void() +
+    ggplot2::theme(legend.position = "none",
+          plot.background = ggplot2::element_rect(fill = NA),
+          panel.background = ggplot2::element_rect(fill = NA),
+          axis.line = ggplot2::element_blank())
+}
 
 #' Plot basic timeseries
 #'
