@@ -18,11 +18,11 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
   {
     parameter1 <- "PhytoBiomassCarbon_pgm3"
     parameter2 <- "DinoflagellateEvenness"
-  } else {
+  }
+  if(Type == "P" & Survey == "NRS"){
     parameter1 <- "PhytoBiomassCarbon_pgL"
     parameter2 <- "DinoflagellateEvenness"
   }
-
 
     if(Survey == 'CPR'){
       dat <- readr::read_csv(paste0(planktonr::pr_get_outputs(), "CPR_Indices.csv"), na = "NA", show_col_types = FALSE) %>%
@@ -37,10 +37,9 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
         dplyr::group_by(.data$SampleDateUTC, .data$Year, .data$Month, .data$BioRegion, .data$parameters) %>%
         dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                          .groups = "drop") %>%
-        dplyr::filter(!is.na(.data$BioRegion),
-                      .data$BioRegion != 'North',
-                      .data$BioRegion != 'North-west') %>%
-        pr_reorder()
+        pr_reorder() %>%
+        dplyr::filter(!is.na(.data$BioRegion), !.data$Bioregion %in% c('North', 'North-west')) %>%
+        droplevels()
       return(dat)
   } else
   {
