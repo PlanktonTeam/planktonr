@@ -96,7 +96,7 @@ pr_reorder <- function(df){
     df <- df %>% mutate(StationCode = factor(.data$StationCode, levels = c("DAR", "YON", 'NIN', 'NSI', 'ROT', 'ESP', 'PHB', 'KAI', 'MAI')))
   }
   if("BioRegion" %in% colnames(df)){
-    df <- df %>% mutate(StationCode = factor(.data$StationCode, levels = c("North", "North-west", 'Coral Sea', 'Temperate East', 'South-east', 'South-west')))
+    df <- df %>% mutate(BioRegion = factor(.data$BioRegion, levels = c("North", "North-west", 'Coral Sea', 'Temperate East', 'South-east', 'South-west')))
   }
   return(df)
 }
