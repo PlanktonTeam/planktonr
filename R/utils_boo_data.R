@@ -38,7 +38,7 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
         dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                          .groups = "drop") %>%
         pr_reorder() %>%
-        dplyr::filter(!is.na(.data$BioRegion), !.data$Bioregion %in% c('North', 'North-west')) %>%
+        dplyr::filter(!is.na(.data$BioRegion), !.data$BioRegion %in% c('North', 'North-west')) %>%
         droplevels()
       return(dat)
   } else
