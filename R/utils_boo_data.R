@@ -13,11 +13,16 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
   if(Type == "Z"){
     parameter1 <- "Biomass_mgm3"
     parameter2 <- "CopepodEvenness"
-  } else
+  }
+  if(Type == "P" & Survey == "CPR")
   {
     parameter1 <- "PhytoBiomassCarbon_pgm3"
     parameter2 <- "DinoflagellateEvenness"
+  } else {
+    parameter1 <- "PhytoBiomassCarbon_pgmL"
+    parameter2 <- "DinoflagellateEvenness"
   }
+
 
     if(Survey == 'CPR'){
       dat <- readr::read_csv(paste0(planktonr::pr_get_outputs(), "CPR_Indices.csv"), na = "NA", show_col_types = FALSE) %>%
