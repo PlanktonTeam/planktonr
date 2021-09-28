@@ -23,7 +23,7 @@ Plot basic timeseries
 }
 \examples{
 df <- data.frame(SampleDateLocal = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
-Code = 'NSI', parameters = 'Biomass_mgm3', Values = runif(4, min=0, max=10),
+StationCode = 'NSI', parameters = 'Biomass_mgm3', Values = runif(4, min=0, max=10),
 Type = 'NRS')
 df <- df \%>\% mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
 format = "\%Y-\%m-\%d \%H:\%M:\%S"))

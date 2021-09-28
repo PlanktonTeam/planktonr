@@ -23,10 +23,10 @@ pr_get_PlotCols <- function(pal, n){
 #' @export
 #'
 #' @examples
-#' df <- data.frame(Code = c("NSI", "PHB"))
+#' df <- data.frame(StationCode = c("NSI", "PHB"))
 #' pmap <- pr_plot_NRSmap(df)
 pr_plot_NRSmap <-  function(df){
-  meta2_sf <- subset(meta_sf, meta_sf$Code %in% df$Code)
+  meta2_sf <- subset(meta_sf, meta_sf$Code %in% df$StationCode)
 
   pmap <- ggplot2::ggplot() +
     ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
@@ -55,8 +55,8 @@ pr_plot_NRSmap <-  function(df){
 #' df <- data.frame(BioRegion = c("Temperate East", "South-west"))
 #' cprmap <- pr_plot_CPRmap(df)
 pr_plot_CPRmap <-  function(df){
-  bioregionSelection <- mbr %>% dplyr::filter(REGION %in% df$BioRegion) %>%
-      mutate(REGION = factor(REGION, levels = c("Coral Sea", "Temperate East", "South-west", "South-east")))
+  bioregionSelection <- mbr %>% dplyr::filter(.data$REGION %in% df$BioRegion) %>%
+      mutate(REGION = factor(.data$REGION, levels = c("Coral Sea", "Temperate East", "South-west", "South-east")))
   n <- length(unique(bioregionSelection$REGION))
 
   gg <- ggplot2::ggplot() +
@@ -88,7 +88,7 @@ pr_plot_CPRmap <-  function(df){
 #'
 #' @examples
 #' df <- data.frame(SampleDateLocal = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
-#' Code = 'NSI', parameters = 'Biomass_mgm3', Values = runif(4, min=0, max=10),
+#' StationCode = 'NSI', parameters = 'Biomass_mgm3', Values = runif(4, min=0, max=10),
 #' Type = 'NRS')
 #' df <- df %>% mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
 #' format = "%Y-%m-%d %H:%M:%S"))
@@ -96,7 +96,7 @@ pr_plot_CPRmap <-  function(df){
 pr_plot_timeseries <- function(df, Survey = c("CPR", "NRS"), pal, Scale = 'identity'){
   if(Survey == 'CPR'){
     df <- df %>% dplyr::rename(SampleDate = .data$SampleDateUTC,
-                               Code = .data$BioRegion)
+                               StationCode = .data$BioRegion)
     titlex <- 'Sample Date UTC'
   }
   if(Survey == 'NRS'){
@@ -104,12 +104,12 @@ pr_plot_timeseries <- function(df, Survey = c("CPR", "NRS"), pal, Scale = 'ident
     titlex <- 'Sample Date Local'
   }
 
-  n <- length(unique(df$Code))
+  n <- length(unique(df$StationCode))
   plotCols <- planktonr::pr_get_PlotCols(pal, n)
   titley <- unique(df$parameters)
   p1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$SampleDate, y = .data$Values)) +
-    ggplot2::geom_line(ggplot2::aes(group = .data$Code, color = .data$Code)) +
-    ggplot2::geom_point(ggplot2::aes(group = .data$Code, color = .data$Code)) +
+    ggplot2::geom_line(ggplot2::aes(group = .data$StationCode, color = .data$StationCode)) +
+    ggplot2::geom_point(ggplot2::aes(group = .data$StationCode, color = .data$StationCode)) +
     ggplot2::scale_x_datetime() +
     ggplot2::scale_y_continuous(trans = Scale) +
     ggplot2::labs(y = titley, x = titlex) +
@@ -135,28 +135,28 @@ pr_plot_timeseries <- function(df, Survey = c("CPR", "NRS"), pal, Scale = 'ident
 #' @importFrom ggplot2 aes
 #'
 #' @examples
-#' df <- data.frame(Month = rep(1:12,10), Code = c('NSI', 'NSI', 'PHB', 'PHB'),
+#' df <- data.frame(Month = rep(1:12,10), StationCode = c('NSI', 'NSI', 'PHB', 'PHB'),
 #' parameters = 'Biomass_mgm3', Values = runif(120, min=0, max=10))
 #' monthly <- pr_plot_climate(df, "NRS", Month, 'matter')
 pr_plot_climate <- function(df, Survey = c("CPR", "NRS"), x, pal, Scale = 'identity'){
   x <- dplyr::enquo(arg = x)
 
   if(Survey == 'CPR'){
-    df <- df %>% dplyr::rename(Code = .data$BioRegion)
+    df <- df %>% dplyr::rename(StationCode = .data$BioRegion)
   }
 
-  n <- length(unique(df$Code))
+  n <- length(unique(df$StationCode))
   plotCols <- planktonr::pr_get_PlotCols(pal, n)
   title <- unique(df$parameters)
-  df_climate <- df %>% dplyr::filter(!!x != 'NA') %>% # need to drop NA from month, added to dataset by complete(Year, Code)
-    dplyr::group_by(!!x, .data$Code) %>%
+  df_climate <- df %>% dplyr::filter(!!x != 'NA') %>% # need to drop NA from month, added to dataset by complete(Year, StationCode)
+    dplyr::group_by(!!x, .data$StationCode) %>%
     dplyr::summarise(mean = mean(.data$Values, na.rm = TRUE),
                      N = length(.data$Values),
                      sd = stats::sd(.data$Values, na.rm = TRUE),
                      se = sd / sqrt(.data$N),
                      .groups = "drop")
 
-  p2 <- ggplot2::ggplot(df_climate, ggplot2::aes(x = !!x, y = .data$mean, fill = .data$Code)) +
+  p2 <- ggplot2::ggplot(df_climate, ggplot2::aes(x = !!x, y = .data$mean, fill = .data$StationCode)) +
     ggplot2::geom_col(position = ggplot2::position_dodge()) +
     ggplot2::geom_errorbar(ggplot2::aes(ymin = .data$mean-.data$se, ymax = .data$mean+.data$se),
                   width = .2,                    # Width of the error bars
@@ -182,7 +182,7 @@ pr_plot_climate <- function(df, Survey = c("CPR", "NRS"), x, pal, Scale = 'ident
 #'
 #' @examples
 #' df <- data.frame(SampleDateLocal = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
-#' Month = sample(1:12, 4), Year = 2012, Code = c('NSI', 'NSI', 'PHB', 'PHB'),
+#' Month = sample(1:12, 4), Year = 2012, StationCode = c('NSI', 'NSI', 'PHB', 'PHB'),
 #' Values = runif(4, min=0, max=10))
 #' df <- df %>% mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
 #' format = "%Y-%m-%d %H:%M:%S"))

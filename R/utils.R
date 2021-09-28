@@ -62,15 +62,15 @@ pr_get_ZooInfo <- function(){
 pr_get_StationName <- function(df){
   df <- df %>%
     mutate(StationName = case_when(
-      StationCode == "NRSDAR" ~ "Darwin",
-      StationCode == "NRSYON" ~ "Yongala",
-      StationCode == "NRSNSI" ~ "North Stradbroke Island",
-      StationCode == "NRSPHB" ~ "Port Hacking",
-      StationCode == "NRSMAI" ~ "Maria Island",
-      StationCode == "NRSKAI" ~ "Kangaroo Island",
-      StationCode == "NRSESP" ~ "Esperance",
-      StationCode == "NRSROT" ~ "Rottnest Island",
-      StationCode == "NRSNIN" ~ "Ningaloo"))
+      StationCode == "DAR" ~ "Darwin",
+      StationCode == "YON" ~ "Yongala",
+      StationCode == "NSI" ~ "North Stradbroke Island",
+      StationCode == "PHB" ~ "Port Hacking",
+      StationCode == "MAI" ~ "Maria Island",
+      StationCode == "KAI" ~ "Kangaroo Island",
+      StationCode == "ESP" ~ "Esperance",
+      StationCode == "ROT" ~ "Rottnest Island",
+      StationCode == "NIN" ~ "Ningaloo"))
 }
 
 
