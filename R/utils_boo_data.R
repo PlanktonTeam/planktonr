@@ -13,11 +13,16 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
   if(Type == "Z"){
     parameter1 <- "Biomass_mgm3"
     parameter2 <- "CopepodEvenness"
-  } else
+  }
+  if(Type == "P" & Survey == "CPR")
   {
     parameter1 <- "PhytoBiomassCarbon_pgm3"
     parameter2 <- "DinoflagellateEvenness"
+  } else {
+    parameter1 <- "PhytoBiomassCarbon_pgL"
+    parameter2 <- "DinoflagellateEvenness"
   }
+
 
     if(Survey == 'CPR'){
       dat <- readr::read_csv(paste0(planktonr::pr_get_outputs(), "CPR_Indices.csv"), na = "NA", show_col_types = FALSE) %>%
@@ -43,14 +48,13 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
     dat <- readr::read_csv(paste0(planktonr::pr_get_outputs(), "NRS_Indices.csv"), na = "NA", show_col_types = FALSE) %>%
         dplyr::mutate(Month = lubridate::month(.data$SampleDateLocal),
                   Year = lubridate::year(.data$SampleDateLocal),
-                  StatCode = paste(.data$StationName, .data$StationCode)) %>%
-      dplyr::rename(Code = .data$StationCode) %>%
+                  StationCode = paste(.data$StationName, .data$StationCode)) %>%
       #tidyr::complete(.data$Year, tidyr::nesting(Station, Code)) %>% # Nesting doesn't support data pronouns at this time
-      tidyr::complete(.data$Year, .data$StatCode) %>%
-      dplyr::mutate(Station = stringr::str_sub(.data$StatCode, 1, -5),
-                    Code = stringr::str_sub(.data$StatCode, -3, -1)) %>%
-      dplyr::select(.data$Year, .data$Month, .data$SampleDateLocal, .data$Latitude, .data$Station, .data$Code, .data[[parameter1]]:.data[[parameter2]]) %>%
-      tidyr::pivot_longer(-c(.data$Year:.data$Code), values_to = 'Values', names_to = "parameters") %>%
+      tidyr::complete(.data$Year, .data$StationCode) %>%
+      dplyr::mutate(StationName = stringr::str_sub(.data$StationCode, 1, -5),
+                    StationCode = stringr::str_sub(.data$StationCode, -3, -1)) %>%
+      dplyr::select(.data$Year, .data$Month, .data$SampleDateLocal, .data$Latitude, .data$StationName, .data$StationCode, .data[[parameter1]]:.data[[parameter2]]) %>%
+      tidyr::pivot_longer(-c(.data$Year:.data$StationCode), values_to = 'Values', names_to = "parameters") %>%
       dplyr::arrange(-.data$Latitude)  # Sort in ascending date order
    return(dat)
       }
@@ -65,7 +69,7 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
 #' @export
 #'
 #' @examples
-#' df <- data.frame(Month = rep(1:12,10), Code = 'NSI', Values = runif(120, min=0, max=10))
+#' df <- data.frame(Month = rep(1:12,10), StationCode = 'NSI', Values = runif(120, min=0, max=10))
 #' pr_make_climatology(df, Month)
 #' @import dplyr
 #' @importFrom stats sd
@@ -73,8 +77,8 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
 #' @importFrom rlang .data
 pr_make_climatology <- function(df, x){
   x <- dplyr::enquo(arg = x)
-  df_climate <- df %>% dplyr::filter(!!x != 'NA') %>% # need to drop NA from month, added to dataset by complete(Year, Code)
-    dplyr::group_by(!!x, .data$Code) %>%
+  df_climate <- df %>% dplyr::filter(!!x != 'NA') %>% # need to drop NA from month, added to dataset by complete(Year, StationCode)
+    dplyr::group_by(!!x, .data$StationCode) %>%
     dplyr::summarise(mean = mean(.data$Values, na.rm = TRUE),
                      N = length(.data$Values),
                      sd = stats::sd(.data$Values, na.rm = TRUE),

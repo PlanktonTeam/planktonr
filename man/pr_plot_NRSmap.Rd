@@ -16,6 +16,6 @@ is a plotly map of the selected stations
 Sidebar panel plot of selected NRS stations
 }
 \examples{
-df <- data.frame(Code = c("NSI", "PHB"))
+df <- data.frame(StationCode = c("NSI", "PHB"))
 pmap <- pr_plot_NRSmap(df)
 }

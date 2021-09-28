@@ -24,7 +24,7 @@ a plotly climatology plot
 Plot single climatology
 }
 \examples{
-df <- data.frame(Month = rep(1:12,10), Code = c('NSI', 'NSI', 'PHB', 'PHB'),
+df <- data.frame(Month = rep(1:12,10), StationCode = c('NSI', 'NSI', 'PHB', 'PHB'),
 parameters = 'Biomass_mgm3', Values = runif(120, min=0, max=10))
 monthly <- pr_plot_climate(df, "NRS", Month, 'matter')
 }
