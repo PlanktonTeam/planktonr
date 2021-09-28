@@ -26,7 +26,7 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
 
     if(Survey == 'CPR'){
       dat <- readr::read_csv(paste0(planktonr::pr_get_outputs(), "CPR_Indices.csv"), na = "NA", show_col_types = FALSE) %>%
-        dplyr::select(.data$Latitude, .data$SampleDateUTC, .data$Year, .data$Month, .data$Day, .data$BioRegion, .data$Biomass_mgm3, .data[[parameter1]]:.data[[parameter2]]) %>%
+        dplyr::select(.data$SampleDateUTC, .data$Year, .data$Month, .data$Day, .data$BioRegion, .data$Biomass_mgm3, .data[[parameter1]]:.data[[parameter2]]) %>%
         dplyr::mutate(Biomass_mgm3 = ifelse(.data$Biomass_mgm3 < 0 , 0, .data$Biomass_mgm3),
                       SampleDateUTC = lubridate::round_date(.data$SampleDateUTC, "month"),
                       YearMon = paste(.data$Year, .data$Month)) %>% # this step can be improved when nesting supports data pronouns
@@ -36,12 +36,11 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
         tidyr::pivot_longer(.data[[parameter1]]:.data[[parameter2]], values_to = "Values", names_to = 'parameters') %>%
         dplyr::group_by(.data$SampleDateUTC, .data$Year, .data$Month, .data$BioRegion, .data$parameters) %>%
         dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
-                         Latitude = mean(.data$Latitude, na.rm = TRUE), # so we can arrange by latitude and get the BioRegions in the correct order
                          .groups = "drop") %>%
         dplyr::filter(!is.na(.data$BioRegion),
                       .data$BioRegion != 'North',
                       .data$BioRegion != 'North-west') %>%
-        dplyr::arrange(-.data$Latitude) # this is included to keep the mapping in the right order for the ui
+        pr_reorder()
       return(dat)
   } else
   {
@@ -53,9 +52,9 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
       tidyr::complete(.data$Year, .data$StationCode) %>%
       dplyr::mutate(StationName = stringr::str_sub(.data$StationCode, 1, -5),
                     StationCode = stringr::str_sub(.data$StationCode, -3, -1)) %>%
-      dplyr::select(.data$Year, .data$Month, .data$SampleDateLocal, .data$Latitude, .data$StationName, .data$StationCode, .data[[parameter1]]:.data[[parameter2]]) %>%
+      dplyr::select(.data$Year, .data$Month, .data$SampleDateLocal, .data$StationName, .data$StationCode, .data[[parameter1]]:.data[[parameter2]]) %>%
       tidyr::pivot_longer(-c(.data$Year:.data$StationCode), values_to = 'Values', names_to = "parameters") %>%
-      dplyr::arrange(-.data$Latitude)  # Sort in ascending date order
+      pr_reorder()
    return(dat)
       }
 }
