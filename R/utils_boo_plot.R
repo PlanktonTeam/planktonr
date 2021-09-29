@@ -110,7 +110,7 @@ pr_plot_timeseries <- function(df, Survey = c("CPR", "NRS"), pal, Scale = 'ident
   p1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$SampleDate, y = .data$Values)) +
     ggplot2::geom_line(ggplot2::aes(group = .data$StationCode, color = .data$StationCode)) +
     ggplot2::geom_point(ggplot2::aes(group = .data$StationCode, color = .data$StationCode)) +
-    ggplot2::scale_x_datetime() +
+    ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
     ggplot2::scale_y_continuous(trans = Scale) +
     ggplot2::labs(y = titley, x = titlex) +
     ggplot2::scale_colour_manual(values = plotCols)
@@ -163,6 +163,7 @@ pr_plot_climate <- function(df, Survey = c("CPR", "NRS"), x, pal, Scale = 'ident
                   position = ggplot2::position_dodge(.9)) +
     ggplot2::labs(y = title) +
     ggplot2::scale_y_continuous(trans = Scale) +
+    ggplot2::scale_x_continuous(breaks= seq(1,12,length.out = 12), labels=c("J", "F", "M", "A", "M", "J","J","A","S","O","N","D")) +
     ggplot2::scale_fill_manual(values = plotCols)
 
   p2 <- plotly::ggplotly(p2) %>%
