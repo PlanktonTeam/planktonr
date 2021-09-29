@@ -257,7 +257,7 @@ pr_plot_env_var <- function(df, pal = 'matter', trend = 'None') {
     ggplot2::theme_bw() +
     ggplot2::theme(strip.background = ggplot2::element_blank(),
                    legend.title = ggplot2::element_blank(),
-                   strip.text.y = element_text(face = "bold", size = 12, angle = 0))
+                   strip.text.y = ggplot2::element_text(face = "bold", size = 12, angle = 0))
 
   m <- plotly::ggplotly(m) %>% plotly::layout(legend = list(orientation = "h", xanchor = "center",  # use center of legend as anchor
                                                     x = 0.5, y = -0.1))
