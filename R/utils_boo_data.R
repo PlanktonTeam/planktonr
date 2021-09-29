@@ -151,8 +151,8 @@ pr_get_pigs <-  function(){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_SppCount()
-pr_get_SppCount <- function(){
+#' df <- pr_export_SppCount()
+pr_export_SppCount <- function(){
 
   # First do Phytoplankton
   nrsP <- pr_get_NRSPhytoData() %>%
@@ -195,5 +195,21 @@ pr_get_SppCount <- function(){
   # Now combine them
   out <- bind_rows(outP, outZ)
   return(out)
+
+}
+
+
+#' Get the summary plankton observations
+#'
+#' Get the summary plankton observations from the NRS and CPR.
+#' @return a dataframe with a species summary
+#' @export
+#'
+#' @examples
+#' df <- pr_get_SppCount()
+pr_get_SppCount <- function(gp){
+
+  out <- sppSummary %>%
+    filter(Group == gp)
 
 }

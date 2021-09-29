@@ -8,7 +8,7 @@ library(sf)
 
 devtools::load_all() # Not sure if this is appropriate but I load the package to use the functions to load data
 
-sppSummary <- pr_get_SppCount() # Get the summary info
+sppSummary <- pr_export_SppCount() # Get the summary info
 
 mbr <- sf::st_read(file.path("data-raw","marine_regions")) %>%  # Load marine regions as sf
   sf::st_transform(crs = "+proj=longlat +datum=WGS84") %>%
