@@ -264,6 +264,6 @@ pr_plot_env_var <- function(df, pal = 'matter', trend = 'None') {
 
   plot <- plotly::subplot(plotly::style(p, showlegend = FALSE), m, widths = c(0.75,0.25)) %>%
     plotly::layout(title = list(text = titley),
-                   annotations = list( x = 1.0, y = 1.0, text = "Depth (m)", xref = "paper", yref = "paper",
+                   annotations = list( x = 0.97, y = 1.0, text = "Depth (m)", xref = "paper", yref = "paper",
                                        xanchor = "center", yanchor = "bottom", showarrow = FALSE))
 }
