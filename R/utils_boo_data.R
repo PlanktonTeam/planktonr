@@ -216,3 +216,25 @@ pr_get_SppCount <- function(gp){
     filter(.data$Group == gp)
 
 }
+
+
+#' Random facts about plankton
+#'
+#' This function randomly returns a fun fact about plankton.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' pr_get_facts()
+pr_get_facts <- function(){
+
+  facts <- list("Phytoplankton generate > 50 % of the worlds oxygen (reference)",
+                "Phytoplankton generate > 50 % of the worlds oxygen (reference)",
+                "Phytoplankton generate > 50 % of the worlds oxygen (reference)")
+
+  r <- round(stats::runif(1, min = 1, max = length(facts)))
+
+  out <- facts[[r]]
+
+}
