@@ -140,6 +140,8 @@ pr_get_NRSPhytoHTG <- function(){
 pr_get_NRSPhytoData <- function(){
   NRSPdat <- readr::read_csv(paste0(pr_get_site(), "BGC_Phyto_Raw.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename()
+  # %>%
+  #   rename(TaxonCount = CELL_COUNT) # A possible change....
 }
 
 
