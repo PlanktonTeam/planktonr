@@ -256,10 +256,14 @@ pr_plot_env_var <- function(df, pal = 'matter', trend = 'None') {
     ggplot2::scale_colour_manual(values = plotCols) +
     ggplot2::theme_bw() +
     ggplot2::theme(strip.background = ggplot2::element_blank(),
-                   legend.title = ggplot2::element_blank())
+                   legend.title = ggplot2::element_blank(),
+                   strip.text.y = element_text(face = "bold", size = 12, angle = 0))
 
   m <- plotly::ggplotly(m) %>% plotly::layout(legend = list(orientation = "h", xanchor = "center",  # use center of legend as anchor
                                                     x = 0.5, y = -0.1))
 
-  plot <- plotly::subplot(plotly::style(p, showlegend = FALSE), m, widths = c(0.75,0.25))
+  plot <- plotly::subplot(plotly::style(p, showlegend = FALSE), m, widths = c(0.75,0.25)) %>%
+    plotly::layout(title = list(text = titley),
+                   annotations = list( x = 1.0, y = 1.0, text = "Depth (m)", xref = "paper", yref = "paper",
+                                       xanchor = "center", yanchor = "bottom", showarrow = FALSE))
 }
