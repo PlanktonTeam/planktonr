@@ -156,40 +156,40 @@ pr_export_SppCount <- function(){
 
   # First do Phytoplankton
   nrsP <- pr_get_NRSPhytoData() %>%
-    mutate(TaxonName = stringr::str_c(Genus, " ", Species)) %>%  # Overwrite Taxon Name to remove the fluff
-    select(TaxonName, SPCode, CELL_COUNT) %>%
-    rename(TaxonCount = CELL_COUNT) %>%
+    mutate(TaxonName = stringr::str_c(.data$Genus, " ", .data$Species)) %>%  # Overwrite Taxon Name to remove the fluff
+    select(.data$TaxonName, .data$SPCode, .data$CELL_COUNT) %>%
+    rename(TaxonCount = .data$CELL_COUNT) %>%
     tidyr::drop_na()
 
   cprP <- pr_get_CPRPhytoData("Count") %>%
-    mutate(TaxonName = stringr::str_c(Genus, " ", Species)) %>%  # Overwrite Taxon Name to remove the fluff
-    rename(TaxonCount = FovCount) %>%
-    select(TaxonName, SPCode, TaxonCount) %>%
+    mutate(TaxonName = stringr::str_c(.data$Genus, " ", .data$Species)) %>%  # Overwrite Taxon Name to remove the fluff
+    rename(TaxonCount = .data$FovCount) %>%
+    select(.data$TaxonName, .data$SPCode, .data$TaxonCount) %>%
     tidyr::drop_na()
 
   outP <- bind_rows(nrsP, cprP) %>%
-    group_by(TaxonName, SPCode) %>%
+    group_by(.data$TaxonName, .data$SPCode) %>%
     summarise(n = n(), .groups = "drop") %>%
-    arrange(desc(n)) %>%
-    dplyr::filter(stringr::str_detect(TaxonName, 'spp', negate = TRUE)) %>%
+    arrange(desc(.data$n)) %>%
+    dplyr::filter(stringr::str_detect(.data$TaxonName, 'spp', negate = TRUE)) %>%
     mutate(Group = "Phytoplankton")
 
   # Now do Zooplankton
   nrsZ <- pr_get_NRSZooData() %>%
-    mutate(TaxonName = stringr::str_c(Genus, " ", Species)) %>%  # Overwrite Taxon Name to remove f/m/j etc
-    select(TaxonName, SPCode, TaxonCount) %>%
+    mutate(TaxonName = stringr::str_c(.data$Genus, " ", .data$Species)) %>%  # Overwrite Taxon Name to remove f/m/j etc
+    select(.data$TaxonName, .data$SPCode, .data$TaxonCount) %>%
     tidyr::drop_na()
 
   cprZ <- pr_get_CPRZooData("Count") %>%
-    mutate(TaxonName = stringr::str_c(Genus, " ", Species)) %>%  # Overwrite Taxon Name to remove f/m/j etc
-    select(TaxonName, SPCode, TaxonCount) %>%
+    mutate(TaxonName = stringr::str_c(.data$Genus, " ", .data$Species)) %>%  # Overwrite Taxon Name to remove f/m/j etc
+    select(.data$TaxonName, .data$SPCode, .data$TaxonCount) %>%
     tidyr::drop_na()
 
   outZ <- bind_rows(nrsZ, cprZ) %>%
-    group_by(TaxonName, SPCode) %>%
+    group_by(.data$TaxonName, .data$SPCode) %>%
     summarise(n = n(), .groups = "drop") %>%
-    arrange(desc(n)) %>%
-    dplyr::filter(stringr::str_detect(TaxonName, 'spp', negate = TRUE)) %>%
+    arrange(desc(.data$n)) %>%
+    dplyr::filter(stringr::str_detect(.data$TaxonName, 'spp', negate = TRUE)) %>%
     mutate(Group = "Zooplankton")
 
   # Now combine them
@@ -203,13 +203,16 @@ pr_export_SppCount <- function(){
 #'
 #' Get the summary plankton observations from the NRS and CPR.
 #' @return a dataframe with a species summary
+#'
+#' @param gp The group of plankton requested. Either "Zooplankton" or "Phytoplankton"
+#'
 #' @export
 #'
 #' @examples
-#' df <- pr_get_SppCount()
+#' df <- pr_get_SppCount("Zooplankton")
 pr_get_SppCount <- function(gp){
 
   out <- sppSummary %>%
-    filter(Group == gp)
+    filter(.data$Group == gp)
 
 }
