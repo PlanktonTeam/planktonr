@@ -73,7 +73,33 @@ pr_get_StationName <- function(df){
       StationCode == "NIN" ~ "Ningaloo"))
 }
 
-
+#' Order the Station or region in the df by latitude for consistent plotting
+#'
+#' @param df A dataframe that contains StationName, StationCode or BioRegion
+#'
+#' @return An ordered dataframe
+#' @export
+#'
+#' @importFrom magrittr "%>%"
+#' @examples
+#' df <- data.frame(StationName = c('Port Hacking', 'Maria Island',
+#' 'North Stradbroke Island','Esperance', 'Ningaloo', "Darwin",
+#' 'Rottnest Island',  'Kangaroo Island', "Yongala"))
+#' df <- pr_reorder(df)
+pr_reorder <- function(df){
+  if("StationName" %in% colnames(df)){
+    df <- df %>% mutate(StationName = factor(.data$StationName, levels = c("Darwin", "Yongala", 'Ningaloo', 'North Stradbroke Island',
+                                                               'Rottnest Island', 'Esperance', 'Port Hacking', 'Kangaroo Island',
+                                                               'Maria Island')))
+  }
+  if("StationCode" %in% colnames(df) & !"StationName" %in% colnames(df)){
+    df <- df %>% mutate(StationCode = factor(.data$StationCode, levels = c("DAR", "YON", 'NIN', 'NSI', 'ROT', 'ESP', 'PHB', 'KAI', 'MAI')))
+  }
+  if("BioRegion" %in% colnames(df)){
+    df <- df %>% mutate(BioRegion = factor(.data$BioRegion, levels = c("North", "North-west", 'Coral Sea', 'Temperate East', 'South-east', 'South-west')))
+  }
+  return(df)
+}
 
 
 #' Remove flagged data in df

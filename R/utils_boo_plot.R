@@ -205,3 +205,65 @@ pr_plot_tsclimate <- function(df, Survey = c("CPR", "NRS"), pal, Scale = 'identi
   return(plots)
 }
 
+#' Combined timeseries and climatology plots for environmental variables
+#'
+#' @param df A dataframe from pr_get_nuts or pr_get_pigs
+#' @param pal A Palette from cmocean
+#' @param trend Trend line to be used, options None, Smoother, Linear
+#'
+#' @return A plotly plot with timeseries and climatology at depths
+#' @export
+#'
+#' @examples
+#' df <- pr_get_nuts() %>% pr_plot_env_var()
+pr_plot_env_var <- function(df, pal = 'matter', trend = 'None') {
+  n <- length(unique(df$StationName))
+  plotCols <- planktonr::pr_get_PlotCols(pal, n)
+  titley <- unique(df$parameters)
+  np <- length(unique(df$SampleDepth_m))
+
+  p <- ggplot2::ggplot(df, ggplot2::aes(.data$SampleDateLocal, .data$Values, colour = .data$StationName)) +
+    ggplot2::geom_line() +
+    ggplot2::labs(x = "Time", y = titley) +
+    ggplot2::facet_grid(SampleDepth_m ~., scales = "free") +
+    ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplot2::element_blank(),
+                                         strip.text = ggplot2::element_blank(),
+                                         legend.position = "bottom",
+                                         legend.title = ggplot2::element_blank())+
+    ggplot2::scale_colour_manual(values = plotCols)
+
+  if(trend == "Smoother"){
+    p <- p + ggplot2::geom_smooth(method = 'loess', formula = y ~ x)
+  }
+  if(trend == "Linear"){
+    p <- p + ggplot2::geom_smooth(method = 'lm', formula = y ~ x)
+  }
+
+  p <- plotly::ggplotly(p, height = 200 * np)
+
+  mdat <- df %>% group_by(.data$StationName, .data$Month, .data$SampleDepth_m, .data$parameters) %>%
+    summarise(MonValues = mean(.data$Values, na.rm = TRUE),
+              N = length(.data$Values),
+              sd = stats::sd(.data$Values, na.rm = TRUE),
+              se = sd / sqrt(.data$N),
+              .groups = 'drop')
+
+  m <- ggplot2::ggplot(mdat, aes(.data$Month, .data$MonValues, colour = .data$StationName)) +
+    ggplot2::geom_point() +
+    ggplot2::facet_grid(.data$SampleDepth_m ~., scales = "free") +
+    ggplot2::geom_smooth(method = 'loess', formula = y ~ x) +
+    ggplot2::scale_x_continuous(breaks= seq(1,12,length.out = 12), labels=c("J", "F", "M", "A", "M", "J","J","A","S","O","N","D")) +
+    ggplot2::scale_colour_manual(values = plotCols) +
+    ggplot2::theme_bw() +
+    ggplot2::theme(strip.background = ggplot2::element_blank(),
+                   legend.title = ggplot2::element_blank(),
+                   strip.text.y = ggplot2::element_text(face = "bold", size = 12, angle = 0))
+
+  m <- plotly::ggplotly(m) %>% plotly::layout(legend = list(orientation = "h", xanchor = "center",  # use center of legend as anchor
+                                                    x = 0.5, y = -0.1))
+
+  plot <- plotly::subplot(plotly::style(p, showlegend = FALSE), m, widths = c(0.75,0.25)) %>%
+    plotly::layout(title = list(text = titley),
+                   annotations = list( x = 0.97, y = 1.0, text = "Depth (m)", xref = "paper", yref = "paper",
+                                       xanchor = "center", yanchor = "bottom", showarrow = FALSE))
+}
