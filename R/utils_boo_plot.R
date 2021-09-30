@@ -137,7 +137,7 @@ pr_plot_timeseries <- function(df, Survey = c("CPR", "NRS"), pal, Scale = 'ident
 #' @examples
 #' df <- data.frame(Month = rep(1:12,10), StationCode = c('NSI', 'NSI', 'PHB', 'PHB'),
 #' parameters = 'Biomass_mgm3', Values = runif(120, min=0, max=10))
-#' monthly <- pr_plot_climate(df, "NRS", Month, 'matter')
+#' monthly <- pr_plot_climate(df, "NRS", Year, 'matter')
 pr_plot_climate <- function(df, Survey = c("CPR", "NRS"), x, pal, Scale = 'identity'){
   x <- dplyr::enquo(arg = x)
 
@@ -171,9 +171,8 @@ pr_plot_climate <- function(df, Survey = c("CPR", "NRS"), x, pal, Scale = 'ident
   }
   if("Year" %in% colnames(df_climate)){
     p2 <- p2 +
-      ggplot2::scale_x_continuous(breaks= "1 year", labels = Year)
+      ggplot2::scale_x_continuous(breaks = scales::breaks_width(1))
   }
-
 
   p2 <- plotly::ggplotly(p2) %>%
     plotly::layout(legend = list(orientation = "h", y = -0.1))
@@ -192,7 +191,7 @@ pr_plot_climate <- function(df, Survey = c("CPR", "NRS"), x, pal, Scale = 'ident
 #'
 #' @examples
 #' df <- data.frame(SampleDateLocal = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
-#' Month = sample(1:12, 4), Year = 2012, StationCode = c('NSI', 'NSI', 'PHB', 'PHB'),
+#' Month = sample(1:12, 4), Year = c(2012, 2013, 2014, 2015), StationCode = c('NSI', 'NSI', 'PHB', 'PHB'),
 #' Values = runif(4, min=0, max=10))
 #' df <- df %>% mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
 #' format = "%Y-%m-%d %H:%M:%S"))
@@ -249,7 +248,7 @@ pr_plot_env_var <- function(df, pal = 'matter', trend = 'None') {
     p <- p + ggplot2::geom_smooth(method = 'lm', formula = y ~ x)
   }
 
-  p <- plotly::ggplotly(p, height = 200 * np)
+  p <- plotly::ggplotly(p, height = 150 * np)
 
   mdat <- df %>% group_by(.data$StationName, .data$Month, .data$SampleDepth_m, .data$parameters) %>%
     summarise(MonValues = mean(.data$Values, na.rm = TRUE),
