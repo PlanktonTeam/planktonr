@@ -225,7 +225,7 @@ pr_get_CPRPhytoGenus <- function(){
   # add change log species with -999 for NA"s and real absences as 0"s
   cprGenP2 <- cprPdat  %>%
     filter(.data$TaxonName %in% levels(as.factor(cprPcl$TaxonName))) %>%
-    left_join(cprPcl, by = "TaxonName") %>%
+    left_join(cprPcl %>% select(-c(.data$Genus, .data$Species)), by = "TaxonName") %>%
     filter(.data$Genus != '') %>%
     mutate(Genus = forcats::as_factor(.data$Genus)) %>%
     tidyr::drop_na(.data$Genus) %>%
@@ -316,7 +316,7 @@ pr_get_CPRPhytoSpecies <-  function(){
     filter(.data$TaxonName %in% levels(as.factor(cprPcl$TaxonName))
            & .data$Species != "spp." & !is.na(.data$Species)
            & !grepl("cf.", .data$Species)) %>%
-    left_join(cprPcl, by = "TaxonName") %>%
+    left_join(cprPcl %>% select(-c(.data$Genus, .data$Species)), by = "TaxonName") %>%
     filter(.data$TaxonName != '') %>%
     mutate(TaxonName = forcats::as_factor(.data$TaxonName)) %>%
     tidyr::drop_na(.data$TaxonName) %>%
@@ -453,7 +453,7 @@ pr_get_CPRPhytoGenusBV <- function(){
   # add change log species with -999 for NA"s and real absences as 0"s
   cprGenPB2 <- cprPdat %>%
     filter(.data$TaxonName %in% levels(as.factor(cprPcl$TaxonName))) %>%
-    left_join(cprPcl, by = "TaxonName") %>%
+    left_join(cprPcl %>% select(-c(.data$Genus, .data$Species)), by = "TaxonName") %>%
     filter(.data$Genus != '') %>%
     mutate(Genus = forcats::as_factor(.data$Genus)) %>% tidyr::drop_na(.data$Genus) %>%
     group_by(.data$Sample, .data$StartDate, .data$Genus) %>%
@@ -540,7 +540,7 @@ pr_get_CPRPhytoSpeciesBV <- function(){
     filter(.data$TaxonName %in% levels(as.factor(cprPcl$TaxonName))
            & .data$Species != "spp." & !is.na(.data$Species)
            & !grepl("cf.", .data$Species)) %>%
-    left_join(cprPcl, by = "TaxonName") %>%
+    left_join(cprPcl %>% select(-c(.data$Genus, .data$Species)), by = "TaxonName") %>%
     filter(.data$TaxonName != '') %>%
     mutate(TaxonName = forcats::as_factor(.data$TaxonName)) %>%
     tidyr::drop_na(.data$TaxonName) %>%
@@ -700,7 +700,7 @@ pr_get_CPRZooGenus <- function(){
   # add change log species with -999 for NA"s and real absences as 0"s
   cprGenZ2 <- cprZdat %>%
     filter(.data$TaxonName %in% levels(as.factor(cprZcl$TaxonName))) %>%
-    left_join(cprZcl, by = "TaxonName") %>%
+    left_join(cprZcl %>% select(-c(.data$Genus, .data$Species)), by = "TaxonName") %>%
     filter(.data$Genus != '')  %>%
     mutate(Genus = forcats::as_factor(.data$Genus)) %>%
     group_by(.data$Sample, .data$StartDate, .data$Genus) %>%
@@ -793,7 +793,7 @@ pr_get_CPRZooCopepod <- function(){
            & .data$Species != "spp." & !is.na(.data$Species) & !grepl("cf.", .data$Species) & !grepl("grp", .data$Species)  &
              !grepl("/", .data$Species) & .data$Species != '') %>%
     mutate(Species = paste0(.data$Genus," ", stringr::word(.data$Species,1))) %>% # bin complexes
-    left_join(cprZcl, by = "TaxonName") %>%
+    left_join(cprZcl %>% select(-c(.data$Genus, .data$Species)), by = "TaxonName") %>%
     mutate(Species = forcats::as_factor(.data$Species)) %>% tidyr::drop_na(.data$Species) %>%
     group_by(.data$Sample, .data$StartDate, .data$Species) %>%
     summarise(ZoopAbund_m3 = sum(.data$ZoopAbund_m3, na.rm = TRUE), .groups = "drop")
@@ -882,7 +882,7 @@ pr_get_CPRZooNonCopepod <- function(){
     filter(.data$TaxonName %in% levels(as.factor(cprZcl$TaxonName)) & .data$Copepod !="COPEPOD"
            & .data$Species != "spp." & .data$Species != '' & !is.na(.data$Species) & !grepl("cf.", .data$Species) & !grepl("grp", .data$Species)) %>%
     mutate(Species = paste0(.data$Genus," ", stringr::word(.data$Species,1))) %>% # bin complexes
-    left_join(cprZcl, by = "TaxonName") %>%
+    left_join(cprZcl %>% select(-c(.data$Genus, .data$Species)), by = "TaxonName") %>%
     tidyr::drop_na(.data$Species) %>%
     mutate(Species = forcats::as_factor(.data$Species)) %>%
     group_by(.data$Sample, .data$StartDate, .data$Species) %>%
