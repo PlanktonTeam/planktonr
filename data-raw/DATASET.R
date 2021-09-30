@@ -6,6 +6,10 @@ library(rnaturalearth)
 library(rnaturalearthdata)
 library(sf)
 
+devtools::load_all() # Not sure if this is appropriate but I load the package to use the functions to load data
+
+sppSummary <- pr_export_SppCount() # Get the summary info
+
 mbr <- sf::st_read(file.path("data-raw","marine_regions")) %>%  # Load marine regions as sf
   sf::st_transform(crs = "+proj=longlat +datum=WGS84") %>%
   dplyr::select(-c(SHAPE_AREA, SHAPE_LEN)) %>%
@@ -31,7 +35,7 @@ meta_sf <- planktonr::pr_get_NRSTrips("Z") %>%
   dplyr::filter(Station != 'Port Hacking 4') %>%
   sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326)
 
-usethis::use_data(mbr, imcra_pb, imcra_meso, MapOz, meta_sf, overwrite = TRUE, internal = TRUE, compress = "bzip2")
+usethis::use_data(mbr, imcra_pb, imcra_meso, MapOz, meta_sf, sppSummary, overwrite = TRUE, internal = TRUE, compress = "bzip2")
 
 tools::checkRdaFiles("R") # Check what compression to use above
 # OK - bzip2

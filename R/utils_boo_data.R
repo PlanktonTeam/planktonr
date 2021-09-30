@@ -24,29 +24,29 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
     parameter2 <- "DinoflagellateEvenness"
   }
 
-    if(Survey == 'CPR'){
-      dat <- readr::read_csv(paste0(planktonr::pr_get_outputs(), "CPR_Indices.csv"), na = "NA", show_col_types = FALSE) %>%
-        dplyr::select(.data$SampleDateUTC, .data$Year, .data$Month, .data$Day, .data$BioRegion, .data$Biomass_mgm3, .data[[parameter1]]:.data[[parameter2]]) %>%
-        dplyr::mutate(Biomass_mgm3 = ifelse(.data$Biomass_mgm3 < 0 , 0, .data$Biomass_mgm3),
-                      SampleDateUTC = lubridate::round_date(.data$SampleDateUTC, "month"),
-                      YearMon = paste(.data$Year, .data$Month)) %>% # this step can be improved when nesting supports data pronouns
-        tidyr::complete(.data$BioRegion, .data$YearMon) %>%
-        dplyr::mutate(Year = as.numeric(stringr::str_sub(.data$YearMon, 1, 4)),
-                      Month = as.numeric(stringr::str_sub(.data$YearMon, -2, -1))) %>%
-        tidyr::pivot_longer(.data[[parameter1]]:.data[[parameter2]], values_to = "Values", names_to = 'parameters') %>%
-        dplyr::group_by(.data$SampleDateUTC, .data$Year, .data$Month, .data$BioRegion, .data$parameters) %>%
-        dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
-                         .groups = "drop") %>%
-        pr_reorder() %>%
-        dplyr::filter(!is.na(.data$BioRegion), !.data$BioRegion %in% c('North', 'North-west')) %>%
-        droplevels()
-      return(dat)
+  if(Survey == 'CPR'){
+    dat <- readr::read_csv(paste0(planktonr::pr_get_outputs(), "CPR_Indices.csv"), na = "NA", show_col_types = FALSE) %>%
+      dplyr::select(.data$SampleDateUTC, .data$Year, .data$Month, .data$Day, .data$BioRegion, .data$Biomass_mgm3, .data[[parameter1]]:.data[[parameter2]]) %>%
+      dplyr::mutate(Biomass_mgm3 = ifelse(.data$Biomass_mgm3 < 0 , 0, .data$Biomass_mgm3),
+                    SampleDateUTC = lubridate::round_date(.data$SampleDateUTC, "month"),
+                    YearMon = paste(.data$Year, .data$Month)) %>% # this step can be improved when nesting supports data pronouns
+      tidyr::complete(.data$BioRegion, .data$YearMon) %>%
+      dplyr::mutate(Year = as.numeric(stringr::str_sub(.data$YearMon, 1, 4)),
+                    Month = as.numeric(stringr::str_sub(.data$YearMon, -2, -1))) %>%
+      tidyr::pivot_longer(.data[[parameter1]]:.data[[parameter2]], values_to = "Values", names_to = 'parameters') %>%
+      dplyr::group_by(.data$SampleDateUTC, .data$Year, .data$Month, .data$BioRegion, .data$parameters) %>%
+      dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
+                       .groups = "drop") %>%
+      pr_reorder() %>%
+      dplyr::filter(!is.na(.data$BioRegion), !.data$BioRegion %in% c('North', 'North-west')) %>%
+      droplevels()
+    return(dat)
   } else
   {
     dat <- readr::read_csv(paste0(planktonr::pr_get_outputs(), "NRS_Indices.csv"), na = "NA", show_col_types = FALSE) %>%
-        dplyr::mutate(Month = lubridate::month(.data$SampleDateLocal),
-                  Year = lubridate::year(.data$SampleDateLocal),
-                  StationCode = paste(.data$StationName, .data$StationCode)) %>%
+      dplyr::mutate(Month = lubridate::month(.data$SampleDateLocal),
+                    Year = lubridate::year(.data$SampleDateLocal),
+                    StationCode = paste(.data$StationName, .data$StationCode)) %>%
       #tidyr::complete(.data$Year, tidyr::nesting(Station, Code)) %>% # Nesting doesn't support data pronouns at this time
       tidyr::complete(.data$Year, .data$StationCode) %>%
       dplyr::mutate(StationName = stringr::str_sub(.data$StationCode, 1, -5),
@@ -54,8 +54,8 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
       dplyr::select(.data$Year, .data$Month, .data$SampleDateLocal, .data$StationName, .data$StationCode, .data[[parameter1]]:.data[[parameter2]]) %>%
       tidyr::pivot_longer(-c(.data$Year:.data$StationCode), values_to = 'Values', names_to = "parameters") %>%
       pr_reorder()
-   return(dat)
-      }
+    return(dat)
+  }
 }
 
 #' To produce the climatology for plotting
@@ -94,7 +94,7 @@ pr_make_climatology <- function(df, x){
 #' df <- pr_get_nuts()
 pr_get_nuts <-  function(){
   Nuts <- readr::read_csv(paste0(planktonr::pr_get_site(), "BGC_Chemistry.csv"),
-                        col_types = list(SAMPLEDATELOCAL = readr::col_datetime())) %>%
+                          col_types = list(SAMPLEDATELOCAL = readr::col_datetime())) %>%
     dplyr::select_if(!grepl('FLAG', names(.)) & !grepl('COMMENTS', names(.)) & !grepl('MICROB', names(.))) %>%
     dplyr::filter(.data$PROJECTNAME == 'NRS') %>%
     pr_rename() %>%
@@ -143,3 +143,98 @@ pr_get_pigs <-  function(){
     pr_reorder()
 }
 
+
+#' Summarise the plankton observations
+#'
+#' Summarise the plankton observations from the NRS and CPR.
+#' @return a dataframe with a species summary
+#' @export
+#'
+#' @examples
+#' df <- pr_export_SppCount()
+pr_export_SppCount <- function(){
+
+  # First do Phytoplankton
+  nrsP <- pr_get_NRSPhytoData() %>%
+    mutate(TaxonName = stringr::str_c(.data$Genus, " ", .data$Species)) %>%  # Overwrite Taxon Name to remove the fluff
+    select(.data$TaxonName, .data$SPCode, .data$CELL_COUNT) %>%
+    rename(TaxonCount = .data$CELL_COUNT) %>%
+    tidyr::drop_na()
+
+  cprP <- pr_get_CPRPhytoData("Count") %>%
+    mutate(TaxonName = stringr::str_c(.data$Genus, " ", .data$Species)) %>%  # Overwrite Taxon Name to remove the fluff
+    rename(TaxonCount = .data$FovCount) %>%
+    select(.data$TaxonName, .data$SPCode, .data$TaxonCount) %>%
+    tidyr::drop_na()
+
+  outP <- bind_rows(nrsP, cprP) %>%
+    group_by(.data$TaxonName, .data$SPCode) %>%
+    summarise(n = n(), .groups = "drop") %>%
+    arrange(desc(.data$n)) %>%
+    dplyr::filter(stringr::str_detect(.data$TaxonName, 'spp', negate = TRUE)) %>%
+    mutate(Group = "Phytoplankton")
+
+  # Now do Zooplankton
+  nrsZ <- pr_get_NRSZooData() %>%
+    mutate(TaxonName = stringr::str_c(.data$Genus, " ", .data$Species)) %>%  # Overwrite Taxon Name to remove f/m/j etc
+    select(.data$TaxonName, .data$SPCode, .data$TaxonCount) %>%
+    tidyr::drop_na()
+
+  cprZ <- pr_get_CPRZooData("Count") %>%
+    mutate(TaxonName = stringr::str_c(.data$Genus, " ", .data$Species)) %>%  # Overwrite Taxon Name to remove f/m/j etc
+    select(.data$TaxonName, .data$SPCode, .data$TaxonCount) %>%
+    tidyr::drop_na()
+
+  outZ <- bind_rows(nrsZ, cprZ) %>%
+    group_by(.data$TaxonName, .data$SPCode) %>%
+    summarise(n = n(), .groups = "drop") %>%
+    arrange(desc(.data$n)) %>%
+    dplyr::filter(stringr::str_detect(.data$TaxonName, 'spp', negate = TRUE)) %>%
+    mutate(Group = "Zooplankton")
+
+  # Now combine them
+  out <- bind_rows(outP, outZ)
+  return(out)
+
+}
+
+
+#' Get the summary plankton observations
+#'
+#' Get the summary plankton observations from the NRS and CPR.
+#' @return a dataframe with a species summary
+#'
+#' @param gp The group of plankton requested. Either "Zooplankton" or "Phytoplankton"
+#'
+#' @export
+#'
+#' @examples
+#' df <- pr_get_SppCount("Zooplankton")
+pr_get_SppCount <- function(gp){
+
+  out <- sppSummary %>%
+    filter(.data$Group == gp)
+
+}
+
+
+#' Random facts about plankton
+#'
+#' This function randomly returns a fun fact about plankton.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' pr_get_facts()
+pr_get_facts <- function(){
+
+  facts <- list("Phytoplankton generate > 50 % of the worlds oxygen (reference)",
+                "Phytoplankton generate > 50 % of the worlds oxygen (reference)",
+                "Phytoplankton generate > 50 % of the worlds oxygen (reference)")
+
+  r <- round(stats::runif(1, min = 1, max = length(facts)))
+
+  out <- facts[[r]]
+
+}
