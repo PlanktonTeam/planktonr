@@ -33,6 +33,7 @@ Imports:
     rlang,
     rnaturalearth,
     rnaturalearthdata,
+    scales, 
     sf,
     stringr,
     tibble,

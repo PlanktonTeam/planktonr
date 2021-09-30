@@ -110,7 +110,7 @@ pr_plot_timeseries <- function(df, Survey = c("CPR", "NRS"), pal, Scale = 'ident
   p1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$SampleDate, y = .data$Values)) +
     ggplot2::geom_line(ggplot2::aes(group = .data$StationCode, color = .data$StationCode)) +
     ggplot2::geom_point(ggplot2::aes(group = .data$StationCode, color = .data$StationCode)) +
-    ggplot2::scale_x_datetime() +
+    ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
     ggplot2::scale_y_continuous(trans = Scale) +
     ggplot2::labs(y = titley, x = titlex) +
     ggplot2::scale_colour_manual(values = plotCols)
@@ -165,6 +165,15 @@ pr_plot_climate <- function(df, Survey = c("CPR", "NRS"), x, pal, Scale = 'ident
     ggplot2::scale_y_continuous(trans = Scale) +
     ggplot2::scale_fill_manual(values = plotCols)
 
+  if("Month" %in% colnames(df_climate)){
+    p2 <- p2 +
+      ggplot2::scale_x_continuous(breaks= seq(1,12,length.out = 12), labels=c("J", "F", "M", "A", "M", "J","J","A","S","O","N","D"))
+  }
+  if("Year" %in% colnames(df_climate)){
+    p2 <- p2 +
+      ggplot2::scale_x_continuous(breaks = scales::breaks_width(1))
+  }
+
   p2 <- plotly::ggplotly(p2) %>%
     plotly::layout(legend = list(orientation = "h", y = -0.1))
   return(p2)
@@ -182,7 +191,8 @@ pr_plot_climate <- function(df, Survey = c("CPR", "NRS"), x, pal, Scale = 'ident
 #'
 #' @examples
 #' df <- data.frame(SampleDateLocal = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
-#' Month = sample(1:12, 4), Year = 2012, StationCode = c('NSI', 'NSI', 'PHB', 'PHB'),
+#' Month = sample(1:12, 4), Year = c(2012, 2013, 2014, 2015),
+#' StationCode = c('NSI', 'NSI', 'PHB', 'PHB'),
 #' Values = runif(4, min=0, max=10))
 #' df <- df %>% mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
 #' format = "%Y-%m-%d %H:%M:%S"))
@@ -229,7 +239,8 @@ pr_plot_env_var <- function(df, pal = 'matter', trend = 'None') {
     ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplot2::element_blank(),
                                          strip.text = ggplot2::element_blank(),
                                          legend.position = "bottom",
-                                         legend.title = ggplot2::element_blank())+
+                                         legend.title = ggplot2::element_blank()) +
+    ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
     ggplot2::scale_colour_manual(values = plotCols)
 
   if(trend == "Smoother"){
@@ -239,7 +250,7 @@ pr_plot_env_var <- function(df, pal = 'matter', trend = 'None') {
     p <- p + ggplot2::geom_smooth(method = 'lm', formula = y ~ x)
   }
 
-  p <- plotly::ggplotly(p, height = 200 * np)
+  p <- plotly::ggplotly(p, height = 150 * np)
 
   mdat <- df %>% group_by(.data$StationName, .data$Month, .data$SampleDepth_m, .data$parameters) %>%
     summarise(MonValues = mean(.data$Values, na.rm = TRUE),
