@@ -32,13 +32,9 @@ You can access the online version of IMOS BOO here [links](https://jaseeverett.s
 First load the packages from github and attach the libraries
 
 ```{r setup, warning=FALSE, message=FALSE}
- install.packages("devtools")
- devtools::install_github("PlanktonTeam/IMOS_BioOceanObserver")
-# devtools::install_github("PlanktonTeam/planktonr")
 
-library(imosboo)
 library(planktonr)
-library(tidyverse)
+library(magrittr)
 ```
 
 Lets look at phytoplankton abundance across the bioregions.  
