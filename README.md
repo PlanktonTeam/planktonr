@@ -31,3 +31,7 @@ version from [GitHub](https://github.com/) with:
 # install.packages("devtools")
 devtools::install_github("PlanktonTeam/planktonr")
 ```
+
+Thanks to the team at the Integration and Application Network
+(ian.umces.edu/media-library) for the copepod symbol used in the
+planktonr logo.

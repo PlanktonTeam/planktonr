@@ -205,8 +205,8 @@ pr_plot_tsclimate <- function(df, Survey = c("CPR", "NRS"), pal = 'matter', Scal
 
   p1 <- pr_plot_timeseries(df, Survey, pal, Scale) %>%
     plotly::layout(yaxis = list(title = ""))
-  p2 <- pr_plot_climate(df, Survey, Month, pal, Scale)
-  p3 <- pr_plot_climate(df, Survey, Year, pal, Scale) %>%
+  p2 <- pr_plot_climate(df, Survey, .data$Month, pal, Scale)
+  p3 <- pr_plot_climate(df, Survey, .data$Year, pal, Scale) %>%
     plotly::layout(legend = list(orientation = "h", y = -0.1),
                    yaxis = list(title = ""))
 
