@@ -4,7 +4,7 @@
 \alias{pr_get_PlotCols}
 \title{Setting the colours for plots using cmocean}
 \usage{
-pr_get_PlotCols(pal, n)
+pr_get_PlotCols(pal = "matter", n)
 }
 \arguments{
 \item{pal}{is the palette name}

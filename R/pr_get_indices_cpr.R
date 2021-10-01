@@ -101,7 +101,7 @@ pr_get_indices_cpr <- function(){
 
   TPhytoCpr <- phytodatacpr %>%
     group_by(.data$Sample) %>%
-    summarise(AbundancePhyto_cells_m3 = sum(.data$PhytoAbund_m3, na.rm = TRUE))
+    summarise(PhytoAbund_Cellsm3 = sum(.data$PhytoAbund_m3, na.rm = TRUE))
 
   DDratcpr <- phytodatacpr %>%
     filter(.data$TaxonGroup %in% c('Centric diatom', "Pennate diatom", 'Dinoflagellate')) %>%
