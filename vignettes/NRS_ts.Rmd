@@ -1,0 +1,98 @@
+---
+title: "NRS timeseries examples"
+author: "Claire Davies"
+date: "01/10/2021"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{planktonr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  
+---
+
+```{r, include = FALSE}
+options(rmarkdown.html_vignette.check_title = FALSE)
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width=6, fig.height=8
+)
+
+ggplot2::theme_set(ggplot2::theme_bw(base_size = 10) + ggplot2::theme(legend.title = ggplot2::element_blank()))
+
+```
+
+## Accessing IMOS Biological Ocean Observer
+
+You can access the online version of IMOS BOO here [links](https://jaseeverett.shinyapps.io/IMOS_BioOceanObserver/)
+
+### Example of using planktonr and BOO to generate timeseries from the National Reference Stations
+
+First load the packages from github and attach the libraries
+
+```{r setup, warning=FALSE, message=FALSE}
+# install.packages("devtools")
+# devtools::install_github("PlanktonTeam/IMOS_BioOceanObserver")
+# devtools::install_github("PlanktonTeam/planktonr")
+
+library(imosboo)
+library(planktonr)
+library(tidyverse)
+```
+Lets look at zooplankton abundance at Yongala and Maria Island, a tropical and a temperate National Reference Station.  
+First we get the data then we filter it for the desired parameters.
+
+```{r,include=TRUE}
+
+datNRSz <- planktonr::pr_get_tsdata("NRS", "Z") %>%
+  filter(StationName %in% c("Yongala", "Maria Island"),
+         parameters == "ZoopAbund_m3") %>%
+  droplevels()
+
+```
+
+Then we can plot the data as a timeseries
+
+```{r,include=TRUE}
+
+timeseries <- planktonr::pr_plot_tsclimate(datNRSz, "NRS", 'matter') 
+timeseries
+
+```
+
+Perhaps the story will be clearer using a log scale
+
+```{r,include=TRUE}
+
+timeseries <- planktonr::pr_plot_tsclimate(datNRSz, "NRS", 'matter', 'log10')
+timeseries
+
+```
+
+The zooplankton abundance at Yongala is consistently greater than at Maria Island, although the seasonal cycle at Maria Island is much more pronounced.
+There may be more zooplankton at Yongala, but is there difference in copepod size between tropical Yongala and temperate Maria Island.
+
+```{r,include=TRUE}
+
+datSize <- planktonr::pr_get_tsdata("NRS", "Z") %>%
+  filter(StationName %in% c("Yongala", "Maria Island"),
+         parameters == "AvgTotalLengthCopepod_mm") %>%
+  droplevels()
+
+```
+
+And then plot the total timeseries
+
+```{r,include=TRUE}
+
+timeseries <- planktonr::pr_plot_tsclimate(datSize, "NRS", 'matter')
+timeseries
+
+```
+
+
+So whilst Maria Island has less zooplankton abundance the copepods are larger, and potentially more nutirtious, as would be expected in a colder environment.
+
+
+
