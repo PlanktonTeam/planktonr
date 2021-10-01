@@ -4,7 +4,7 @@ author: "Claire Davies"
 date: "01/10/2021"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{planktonr}
+  %\VignetteIndexEntry{NRS timeseries examples}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
   
