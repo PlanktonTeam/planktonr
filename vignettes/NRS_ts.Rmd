@@ -34,7 +34,7 @@ First load the packages from github and attach the libraries
 ```{r setup, warning=FALSE, message=FALSE}
 
 library(planktonr)
-library(tidyverse)
+library(magrittr)
 ```
 Lets look at zooplankton abundance at Yongala and Maria Island, a tropical and a temperate National Reference Station.  
 First we get the data then we filter it for the desired parameters.
