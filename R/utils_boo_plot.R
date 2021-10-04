@@ -299,8 +299,8 @@ pr_plot_fmap <- function(df, Species){
   cols <- c("lightblue1" ,"skyblue3", "dodgerblue2","blue1", "navyblue")
 
   df <-  df %>%
-    mutate(Taxon = recode(Taxon, "Taxon" == Species)) %>%
-    mutate(freqfac = factor(.data$freqfac, levels = c("Absent", "Seen in 25%",'50%', '75%', "100 % of Samples")))
+    dplyr::mutate(Taxon = ifelse(Taxon == "Taxon", input$species, Taxon)) %>%
+    dplyr::mutate(freqfac = factor(.data$freqfac, levels = c("Absent", "Seen in 25%",'50%', '75%', "100 % of Samples")))
 
   p <- ggplot2::ggplot() +
     ggplot2::geom_sf(data = MapOz) +
