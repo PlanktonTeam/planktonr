@@ -320,9 +320,10 @@ pr_plot_fmap <- function(df, Species){
   speciesName <- stringr::str_replace_all(Species, " ", "")
   filename <- paste("inst/app/www/SDMTweGAM_", speciesName, ".png", sep = "")
   img <- tryCatch(png::readPNG(filename), error = function(e){})
+  dft <-  data.frame(x=c(1,1,1,1), y=c(0,2,1,3), label = c('','No species distribution','map available',''))
   imggrob <- tryCatch(grid::rasterGrob(img), error = function(e) {
-    ggplot2::ggplot(df = data.frame(x=1, y=1)) +
-      ggplot2::geom_text(ggplot2::aes(x=1, y=1, label = 'No species distribution map available'), size = 20) +
+    ggplot2::ggplot(dft) +
+      ggplot2::geom_text(ggplot2::aes(x=.data$x, y=.data$y, label = .data$label), size = 20) +
       ggplot2::theme_void()
   })
   gridExtra::grid.arrange(p,imggrob, ncol = 2)
