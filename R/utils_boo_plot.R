@@ -97,11 +97,11 @@ pr_plot_timeseries <- function(df, Survey = c("CPR", "NRS"), pal = 'matter', Sca
   if(Survey == 'CPR'){
     df <- df %>% dplyr::rename(SampleDate = .data$SampleDateUTC,
                                StationCode = .data$BioRegion)
-    titlex <- 'Sample Date UTC'
+    titlex <- 'Sample Date (UTC)'
   }
   if(Survey == 'NRS'){
     df <- df %>% dplyr::rename(SampleDate = .data$SampleDateLocal)
-    titlex <- 'Sample Date Local'
+    titlex <- 'Sample Date (Local)'
   }
 
   n <- length(unique(df$StationCode))
@@ -140,16 +140,20 @@ pr_plot_timeseries <- function(df, Survey = c("CPR", "NRS"), pal = 'matter', Sca
 #' parameters = 'Biomass_mgm3', Values = runif(120, min=0, max=10))
 #' monthly <- pr_plot_climate(df, "NRS", Month, 'matter')
 pr_plot_climate <- function(df, Survey = c("CPR", "NRS"), x, pal = 'matter', Scale = 'identity'){
+
   x <- dplyr::enquo(arg = x)
 
   if(Survey == 'CPR'){
-    df <- df %>% dplyr::rename(StationCode = .data$BioRegion)
+    df <- df %>%
+      dplyr::rename(StationCode = .data$BioRegion)
   }
 
   n <- length(unique(df$StationCode))
   plotCols <- planktonr::pr_get_PlotCols(pal, n)
-  title <- rlang::enexpr(planktonr::pr_relabel(unique(df$parameters)))
-  df_climate <- df %>% dplyr::filter(!!x != 'NA') %>% # need to drop NA from month, added to dataset by complete(Year, StationCode)
+  title <- planktonr::pr_relabel(unique(df$parameters), style = "plotly")
+
+  df_climate <- df %>%
+    dplyr::filter(!!x != 'NA') %>% # need to drop NA from month, added to dataset by complete(Year, StationCode)
     dplyr::group_by(!!x, .data$StationCode) %>%
     dplyr::summarise(mean = mean(.data$Values, na.rm = TRUE),
                      N = length(.data$Values),
@@ -195,6 +199,7 @@ pr_plot_climate <- function(df, Survey = c("CPR", "NRS"), x, pal = 'matter', Sca
 #' df <- data.frame(SampleDateLocal = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
 #' Month = sample(1:12, 4), Year = c(2012, 2013, 2014, 2015),
 #' StationCode = c('NSI', 'NSI', 'PHB', 'PHB'),
+#' parameters = 'Biomass_mgm3',
 #' Values = runif(4, min=0, max=10))
 #' df <- df %>% mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
 #' format = "%Y-%m-%d %H:%M:%S"))
