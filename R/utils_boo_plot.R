@@ -147,7 +147,7 @@ pr_plot_climate <- function(df, Survey = c("CPR", "NRS"), x, pal, Scale = 'ident
 
   n <- length(unique(df$StationCode))
   plotCols <- planktonr::pr_get_PlotCols(pal, n)
-  title <- unique(df$parameters)
+  title <- enexpr(pr_relabel(unique(df$parameters)))
   df_climate <- df %>% dplyr::filter(!!x != 'NA') %>% # need to drop NA from month, added to dataset by complete(Year, StationCode)
     dplyr::group_by(!!x, .data$StationCode) %>%
     dplyr::summarise(mean = mean(.data$Values, na.rm = TRUE),
@@ -167,7 +167,7 @@ pr_plot_climate <- function(df, Survey = c("CPR", "NRS"), x, pal, Scale = 'ident
 
   if("Month" %in% colnames(df_climate)){
     p2 <- p2 +
-      ggplot2::scale_x_continuous(breaks= seq(1,12,length.out = 12), labels=c("J", "F", "M", "A", "M", "J","J","A","S","O","N","D"))
+      ggplot2::scale_x_continuous(breaks = seq(1,12,length.out = 12), labels=c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"))
   }
   if("Year" %in% colnames(df_climate)){
     p2 <- p2 +
