@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' plotCols <- pr_get_PlotCols('matter', 5)
-pr_get_PlotCols <- function(pal, n){
+pr_get_PlotCols <- function(pal = 'matter', n){
   plotCols <- cmocean::cmocean(pal)(n)
   return(plotCols)
 }
@@ -93,7 +93,7 @@ pr_plot_CPRmap <-  function(df){
 #' df <- df %>% mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
 #' format = "%Y-%m-%d %H:%M:%S"))
 #' timeseries <- pr_plot_timeseries(df, 'NRS', 'matter')
-pr_plot_timeseries <- function(df, Survey = c("CPR", "NRS"), pal, Scale = 'identity'){
+pr_plot_timeseries <- function(df, Survey = c("CPR", "NRS"), pal = 'matter', Scale = 'identity'){
   if(Survey == 'CPR'){
     df <- df %>% dplyr::rename(SampleDate = .data$SampleDateUTC,
                                StationCode = .data$BioRegion)
@@ -115,7 +115,8 @@ pr_plot_timeseries <- function(df, Survey = c("CPR", "NRS"), pal, Scale = 'ident
     ggplot2::labs(y = titley, x = titlex) +
     ggplot2::scale_colour_manual(values = plotCols)
   p1 <- plotly::ggplotly(p1) %>%
-    plotly::layout(legend = list(orientation = "h", y = -0.1))
+    plotly::layout(legend = list(orientation = "h", y = -0.1,
+                                 title=list(text='')))
   p1
   return(p1)
 }
@@ -138,7 +139,7 @@ pr_plot_timeseries <- function(df, Survey = c("CPR", "NRS"), pal, Scale = 'ident
 #' df <- data.frame(Month = rep(1:12,10), StationCode = c('NSI', 'NSI', 'PHB', 'PHB'),
 #' parameters = 'Biomass_mgm3', Values = runif(120, min=0, max=10))
 #' monthly <- pr_plot_climate(df, "NRS", Month, 'matter')
-pr_plot_climate <- function(df, Survey = c("CPR", "NRS"), x, pal, Scale = 'identity'){
+pr_plot_climate <- function(df, Survey = c("CPR", "NRS"), x, pal = 'matter', Scale = 'identity'){
   x <- dplyr::enquo(arg = x)
 
   if(Survey == 'CPR'){
@@ -175,7 +176,8 @@ pr_plot_climate <- function(df, Survey = c("CPR", "NRS"), x, pal, Scale = 'ident
   }
 
   p2 <- plotly::ggplotly(p2) %>%
-    plotly::layout(legend = list(orientation = "h", y = -0.1))
+    plotly::layout(legend = list(orientation = "h", y = -0.1,
+                                 title=list(text='')))
   return(p2)
 }
 
@@ -199,7 +201,7 @@ pr_plot_climate <- function(df, Survey = c("CPR", "NRS"), x, pal, Scale = 'ident
 #' monthly <- pr_plot_tsclimate(df, 'NRS', 'matter')
 #' plotly::ggplotly(monthly)
 
-pr_plot_tsclimate <- function(df, Survey = c("CPR", "NRS"), pal, Scale = 'identity'){
+pr_plot_tsclimate <- function(df, Survey = c("CPR", "NRS"), pal = 'matter', Scale = 'identity'){
 
   p1 <- pr_plot_timeseries(df, Survey, pal, Scale) %>%
     plotly::layout(yaxis = list(title = ""))

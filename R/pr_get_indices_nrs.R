@@ -202,7 +202,7 @@ pr_get_indices_nrs <- function(){
 
   TPhyto <- PhytoData %>%
     group_by(.data$TripCode) %>%
-    summarise(AbundancePhyto_CellsL = sum(.data$Cells_L, na.rm = TRUE),
+    summarise(PhytoAbund_CellsL = sum(.data$Cells_L, na.rm = TRUE),
               .groups = "drop")
 
   DDrat <- PhytoData %>%
