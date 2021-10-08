@@ -94,11 +94,13 @@ pr_plot_CPRmap <-  function(df){
 #' format = "%Y-%m-%d %H:%M:%S"))
 #' timeseries <- pr_plot_timeseries(df, 'NRS', 'matter')
 pr_plot_timeseries <- function(df, Survey = c("CPR", "NRS"), pal = 'matter', Scale = 'identity'){
+
   if(Survey == 'CPR'){
     df <- df %>% dplyr::rename(SampleDate = .data$SampleDateUTC,
                                StationCode = .data$BioRegion)
     titlex <- 'Sample Date (UTC)'
   }
+
   if(Survey == 'NRS'){
     df <- df %>% dplyr::rename(SampleDate = .data$SampleDateLocal)
     titlex <- 'Sample Date (Local)'
@@ -270,7 +272,7 @@ pr_plot_env_var <- function(df, pal = 'matter', trend = 'None') {
     ggplot2::geom_point() +
     ggplot2::facet_grid(.data$SampleDepth_m ~., scales = "free") +
     ggplot2::geom_smooth(method = 'loess', formula = y ~ x) +
-    ggplot2::scale_x_continuous(breaks= seq(1,12,length.out = 12), labels=c("J", "F", "M", "A", "M", "J","J","A","S","O","N","D")) +
+    ggplot2::scale_x_continuous(breaks= seq(1,12,length.out = 12), labels=c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
     ggplot2::scale_colour_manual(values = plotCols) +
     ggplot2::theme_bw() +
     ggplot2::theme(strip.background = ggplot2::element_blank(),

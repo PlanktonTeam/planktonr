@@ -37,7 +37,7 @@ pr_relabel <- function(s, style = "ggplot"){
     "Length_mm", expr(paste("Length (mm)")), "Length (mm)",
     "Nitrate_umolL", expr(paste("Nitrate (",mu,"mol L"^-1,")")), "Nitrate (&micro; mol L<sup>-1</sup>)",
     "Nitrite_umolL", expr(paste("Nitrite (",mu,"mol L"^-1,")")), "Nitrite (&micro; mol L<sup>-1</sup>)",
-    "NoCopepodSpecies_Sample", expr(paste("Copepod Species (Sample "^-1,")")), "Copepod Species (Sample <sup>-1</sup>",
+    "NoCopepodSpecies_Sample", expr(paste("Copepod Species (Sample "^-1,")")), "Copepod Species (Sample <sup>-1</sup>)",
     "NoDiatomSpecies_Sample", expr(paste("Diatom Species (Sample "^-1,")")), "Diatom Species (Sample <sup>-1</sup>",
     "NoDinoSpecies_Sample", expr(paste("Dinoflagellate Species (Sample "^-1,")")), "Dinoflagellate Species (Sample <sup>-1</sup>",
     "NoPhytoSpecies_Sample", expr(paste("Phytoplankton Species (Sample "^-1,")")), "Phytoplankton Species (Sample <sup>-1</sup>",
@@ -66,21 +66,21 @@ pr_relabel <- function(s, style = "ggplot"){
     "ShannonDinoDiversitycpr", expr(paste("Dinoflagellate Diversity (Shannons)")), "Dinoflagellate Diversity (Shannons)",
     "ShannonPhytoDiversitycpr", expr(paste("Phytoplankton Diversity (Shannons)")), "Phytoplankton Diversity (Shannons)",
     "Silicate_umolL", expr(paste("Silicate (",mu,"mol L"^-1,")")), "Silicate (&micro; mol L<sup>-1</sup>)",
-    "StationCode", expr(paste("Station Code")), "Station Code)",
-    "StationName", expr(paste("Station Name")), "Station Name)",
+    "StationCode", expr(paste("Station Code")), "Station Code",
+    "StationName", expr(paste("Station Name")), "Station Name",
     "Synecochoccus_Cellsml", expr(paste("Synecochoccus (cells ml"^-1,")")), "Synecochoccus (cells ml<sup>-1</sup>)",
     "TAcc", expr(paste("Total Accessory Pigments (mg m"^-3,")")), "Total Accessory Pigments (mg m<sup>-3</sup>)",
     "TAlkalinity_umolkg", expr(paste("TAlkalinity (",mu,"mol kg"^-1,")")), "TAlkalinity (&micro; mol kg<sup>-1</sup>)",
-    "TaxonCount", expr(paste("Taxon Count")), "Taxon Count)",
-    "TaxonGroup", expr(paste("Taxon Group")), "Taxon Group)",
-    "TaxonName", expr(paste("Taxon Name")), "Taxon Name)",
+    "TaxonCount", expr(paste("Taxon Count")), "Taxon Count",
+    "TaxonGroup", expr(paste("Taxon Group")), "Taxon Group",
+    "TaxonName", expr(paste("Taxon Name")), "Taxon Name",
     "TCaro", expr(paste("Total Carotenoids (mg m"^-3,")")), "Total Carotenoids (mg m<sup>-3</sup>)",
     "TDP", expr(paste("Total Diagnostic pigments (mg m"^-3,")")), "Total Diagnostic pigments (mg m<sup>-3</sup>)",
     "Temperature_degC", expr(paste("Temperature (",degree,"C)")), "Temperature (&deg;C C)",
-    "TowType", expr(paste("Tow Type")), "Tow Type)",
+    "TowType", expr(paste("Tow Type")), "Tow Type",
     "TotalChla", expr(paste("Total Chlorophyll ",italic(a)," (mg m"^-3,")")), "Total Chlorophyll <i>a</i>, (mg m<sup>-3</sup>)",
     "TPig", expr(paste("Total Pigments (mg m"^-3,")")), "Total Pigments (mg m<sup>-3</sup>)",
-    "TripCode", expr(paste("Trip Code")), "Trip Code)",
+    "TripCode", expr(paste("Trip Code")), "Trip Code",
     "TSS_mgL", expr(paste("TSS (mg L"^-1,")")), "TSS (mg L<sup>-1</sup>)",
     "Turbidity_NTU", expr(paste("Turbidity (NTU)")), "Turbidity (NTU)",
     "Volume_m3", expr(paste("Volume m"^-3,")")), "Volume m<sup>-3</sup>)",
@@ -89,12 +89,16 @@ pr_relabel <- function(s, style = "ggplot"){
     "ZoopAbund_m3", expr(paste("Zooplankton Abundance (m"^-3,")")), "Zooplankton Abundance (m<sup>-3</sup>)"),
     ncol = 3, byrow = TRUE, dimnames = list(NULL, c("Variable","gg", "pl"))))
 
-  i <- which(stringr::str_detect(relabel_df$Variable, s))
+  i <- which(relabel_df$Variable %in% s)
 
   if(style == "ggplot" & length(i) > 0) {
-    return(relabel_df$gg[[i]])
+    return(relabel_df$gg[i]) # Returned as a list due to expr
   } else if (style == "plotly" & length(i) > 0){
-    return(relabel_df$pl[[i]])
+    return(unlist(relabel_df$pl[i]))
+  } else if (style == "input" & length(i) > 0){
+    out <- relabel_df$Variable[i]
+    names(out) <- relabel_df$pl[i]
+    return(out)
   } else if (length(i) == 1){
     return(s) # If no match, return the original string
   }
