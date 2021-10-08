@@ -238,7 +238,8 @@ pr_plot_tsclimate <- function(df, Survey = c("CPR", "NRS"), pal = 'matter', Scal
 pr_plot_env_var <- function(df, pal = 'matter', trend = 'None') {
   n <- length(unique(df$StationName))
   plotCols <- planktonr::pr_get_PlotCols(pal, n)
-  titley <- unique(df$parameters)
+  # titley <- unique(df$parameters)
+  titley <- planktonr::pr_relabel(unique(df$parameters), style = "plotly")
   np <- length(unique(df$SampleDepth_m))
 
   p <- ggplot2::ggplot(df, ggplot2::aes(.data$SampleDateLocal, .data$Values, colour = .data$StationName)) +
