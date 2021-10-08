@@ -94,14 +94,16 @@ pr_plot_CPRmap <-  function(df){
 #' format = "%Y-%m-%d %H:%M:%S"))
 #' timeseries <- pr_plot_timeseries(df, 'NRS', 'matter')
 pr_plot_timeseries <- function(df, Survey = c("CPR", "NRS"), pal = 'matter', Scale = 'identity'){
+
   if(Survey == 'CPR'){
     df <- df %>% dplyr::rename(SampleDate = .data$SampleDateUTC,
                                StationCode = .data$BioRegion)
-    titlex <- 'Sample Date UTC'
+    titlex <- 'Sample Date (UTC)'
   }
+
   if(Survey == 'NRS'){
     df <- df %>% dplyr::rename(SampleDate = .data$SampleDateLocal)
-    titlex <- 'Sample Date Local'
+    titlex <- 'Sample Date (Local)'
   }
 
   n <- length(unique(df$StationCode))
@@ -140,16 +142,20 @@ pr_plot_timeseries <- function(df, Survey = c("CPR", "NRS"), pal = 'matter', Sca
 #' parameters = 'Biomass_mgm3', Values = runif(120, min=0, max=10))
 #' monthly <- pr_plot_climate(df, "NRS", Month, 'matter')
 pr_plot_climate <- function(df, Survey = c("CPR", "NRS"), x, pal = 'matter', Scale = 'identity'){
+
   x <- dplyr::enquo(arg = x)
 
   if(Survey == 'CPR'){
-    df <- df %>% dplyr::rename(StationCode = .data$BioRegion)
+    df <- df %>%
+      dplyr::rename(StationCode = .data$BioRegion)
   }
 
   n <- length(unique(df$StationCode))
   plotCols <- planktonr::pr_get_PlotCols(pal, n)
-  title <- unique(df$parameters)
-  df_climate <- df %>% dplyr::filter(!!x != 'NA') %>% # need to drop NA from month, added to dataset by complete(Year, StationCode)
+  title <- planktonr::pr_relabel(unique(df$parameters), style = "plotly")
+
+  df_climate <- df %>%
+    dplyr::filter(!!x != 'NA') %>% # need to drop NA from month, added to dataset by complete(Year, StationCode)
     dplyr::group_by(!!x, .data$StationCode) %>%
     dplyr::summarise(mean = mean(.data$Values, na.rm = TRUE),
                      N = length(.data$Values),
@@ -168,7 +174,7 @@ pr_plot_climate <- function(df, Survey = c("CPR", "NRS"), x, pal = 'matter', Sca
 
   if("Month" %in% colnames(df_climate)){
     p2 <- p2 +
-      ggplot2::scale_x_continuous(breaks= seq(1,12,length.out = 12), labels=c("J", "F", "M", "A", "M", "J","J","A","S","O","N","D"))
+      ggplot2::scale_x_continuous(breaks = seq(1,12,length.out = 12), labels=c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"))
   }
   if("Year" %in% colnames(df_climate)){
     p2 <- p2 +
@@ -195,6 +201,7 @@ pr_plot_climate <- function(df, Survey = c("CPR", "NRS"), x, pal = 'matter', Sca
 #' df <- data.frame(SampleDateLocal = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
 #' Month = sample(1:12, 4), Year = c(2012, 2013, 2014, 2015),
 #' StationCode = c('NSI', 'NSI', 'PHB', 'PHB'),
+#' parameters = 'Biomass_mgm3',
 #' Values = runif(4, min=0, max=10))
 #' df <- df %>% mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
 #' format = "%Y-%m-%d %H:%M:%S"))
@@ -231,7 +238,8 @@ pr_plot_tsclimate <- function(df, Survey = c("CPR", "NRS"), pal = 'matter', Scal
 pr_plot_env_var <- function(df, pal = 'matter', trend = 'None') {
   n <- length(unique(df$StationName))
   plotCols <- planktonr::pr_get_PlotCols(pal, n)
-  titley <- unique(df$parameters)
+  # titley <- unique(df$parameters)
+  titley <- planktonr::pr_relabel(unique(df$parameters), style = "plotly")
   np <- length(unique(df$SampleDepth_m))
 
   p <- ggplot2::ggplot(df, ggplot2::aes(.data$SampleDateLocal, .data$Values, colour = .data$StationName)) +
@@ -265,7 +273,7 @@ pr_plot_env_var <- function(df, pal = 'matter', trend = 'None') {
     ggplot2::geom_point() +
     ggplot2::facet_grid(.data$SampleDepth_m ~., scales = "free") +
     ggplot2::geom_smooth(method = 'loess', formula = y ~ x) +
-    ggplot2::scale_x_continuous(breaks= seq(1,12,length.out = 12), labels=c("J", "F", "M", "A", "M", "J","J","A","S","O","N","D")) +
+    ggplot2::scale_x_continuous(breaks= seq(1,12,length.out = 12), labels=c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
     ggplot2::scale_colour_manual(values = plotCols) +
     ggplot2::theme_bw() +
     ggplot2::theme(strip.background = ggplot2::element_blank(),
