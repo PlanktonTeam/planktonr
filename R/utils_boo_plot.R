@@ -148,19 +148,12 @@ pr_plot_timeseries <- function(df, Survey = "NRS", pal = 'matter', Scale = 'iden
 #' @examples
 pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal = "matter", y_trans = "identity", output = "ggplot"){
 
-  # trend = "Month"
-  # survey = "CPR"
-  # method = "lm"
-  # pal = "matter"
-  # y_trans = "identity"
-  # output = "ggplot"
-
   if (survey == "CPR"){
     time = rlang::sym("SampleDateUTC")
     site = rlang::sym("BioRegion")
   } else if (survey == "NRS"){
     time = rlang::sym("SampleDateLocal")
-    site = rlang::sym("Station")
+    site = rlang::sym("StationName")
   }
 
   titley <- planktonr::pr_relabel(unique(df$parameters), style = output)
@@ -217,11 +210,6 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
 
   return(p1)
 }
-
-
-
-
-
 
 
 
