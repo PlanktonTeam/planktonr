@@ -4,13 +4,7 @@
 \alias{pr_plot_climate}
 \title{Plot single climatology}
 \usage{
-pr_plot_climate(
-  df,
-  Survey = c("CPR", "NRS"),
-  x,
-  pal = "matter",
-  Scale = "identity"
-)
+pr_plot_climate(df, Survey = "NRS", x, pal = "matter", Scale = "identity")
 }
 \arguments{
 \item{df}{dataframe with specified time period, station code and parameter}

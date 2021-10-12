@@ -36,9 +36,9 @@ pr_plot_NRSmap <-  function(df){
     ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(-45, -9)) +
     ggplot2::theme_void() +
     ggplot2::theme(axis.title = ggplot2::element_blank(),
-          panel.background = ggplot2::element_rect(fill = NA, colour = NA),
-          plot.background = ggplot2::element_rect(fill = NA),
-          axis.line = ggplot2::element_blank())
+                   panel.background = ggplot2::element_rect(fill = NA, colour = NA),
+                   plot.background = ggplot2::element_rect(fill = NA),
+                   axis.line = ggplot2::element_blank())
   pmap <- plotly::ggplotly(pmap)
 }
 
@@ -56,7 +56,7 @@ pr_plot_NRSmap <-  function(df){
 #' cprmap <- pr_plot_CPRmap(df)
 pr_plot_CPRmap <-  function(df){
   bioregionSelection <- mbr %>% dplyr::filter(.data$REGION %in% df$BioRegion) %>%
-      mutate(REGION = factor(.data$REGION, levels = c("Coral Sea", "Temperate East", "South-west", "South-east")))
+    mutate(REGION = factor(.data$REGION, levels = c("Coral Sea", "Temperate East", "South-west", "South-east")))
   n <- length(unique(bioregionSelection$REGION))
 
   gg <- ggplot2::ggplot() +
@@ -68,9 +68,9 @@ pr_plot_CPRmap <-  function(df){
     ggplot2::scale_y_continuous(expand = c(0, 0)) +
     ggplot2::theme_void() +
     ggplot2::theme(legend.position = "none",
-          plot.background = ggplot2::element_rect(fill = NA),
-          panel.background = ggplot2::element_rect(fill = NA),
-          axis.line = ggplot2::element_blank())
+                   plot.background = ggplot2::element_rect(fill = NA),
+                   panel.background = ggplot2::element_rect(fill = NA),
+                   axis.line = ggplot2::element_blank())
 }
 
 #' Plot basic timeseries
@@ -93,35 +93,139 @@ pr_plot_CPRmap <-  function(df){
 #' df <- df %>% mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
 #' format = "%Y-%m-%d %H:%M:%S"))
 #' timeseries <- pr_plot_timeseries(df, 'NRS', 'matter')
-pr_plot_timeseries <- function(df, Survey = c("CPR", "NRS"), pal = 'matter', Scale = 'identity'){
+pr_plot_timeseries <- function(df, Survey = "NRS", pal = 'matter', Scale = 'identity'){
 
   if(Survey == 'CPR'){
-    df <- df %>% dplyr::rename(SampleDate = .data$SampleDateUTC,
-                               StationCode = .data$BioRegion)
+    df <- df %>%
+      dplyr::rename(SampleDate = .data$SampleDateUTC,
+                    StationCode = .data$BioRegion)
     titlex <- 'Sample Date (UTC)'
   }
 
   if(Survey == 'NRS'){
-    df <- df %>% dplyr::rename(SampleDate = .data$SampleDateLocal)
+    df <- df %>%
+      dplyr::rename(SampleDate = .data$SampleDateLocal)
     titlex <- 'Sample Date (Local)'
   }
 
   n <- length(unique(df$StationCode))
   plotCols <- planktonr::pr_get_PlotCols(pal, n)
   titley <- unique(df$parameters)
+
   p1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$SampleDate, y = .data$Values)) +
     ggplot2::geom_line(ggplot2::aes(group = .data$StationCode, color = .data$StationCode)) +
     ggplot2::geom_point(ggplot2::aes(group = .data$StationCode, color = .data$StationCode)) +
     ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
     ggplot2::scale_y_continuous(trans = Scale) +
-    ggplot2::labs(y = titley, x = titlex) +
+    ggplot2::labs(y = titley,
+                  x = titlex) +
     ggplot2::scale_colour_manual(values = plotCols)
+
   p1 <- plotly::ggplotly(p1) %>%
     plotly::layout(legend = list(orientation = "h", y = -0.1,
                                  title=list(text='')))
-  p1
   return(p1)
 }
+
+
+
+#' Plot temporal trends in plankton data
+#'
+#' @param df A dataframe containing the plankton timeseries data.
+#' @param trend Over what timescale to fit the trend - "Raw", "Month" or "Year"
+#' @param survey "NRS" or "CPR" data
+#' @param method Any method accepted by `geom_smooth()`
+#' @param pal is the palette name from `cmocean()`
+#' @param y_trans transformation of y axis on plot, whatever `scale_y_continuous()` trans accepts
+#' @param output is the plot style - "ggplot" or "plotly"
+#' #'
+#' @return a timeseries plot
+#'
+#' @importFrom rlang "!!"
+#'
+#' @export
+#'
+#' @examples
+pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal = "matter", y_trans = "identity", output = "ggplot"){
+
+  # trend = "Month"
+  # survey = "CPR"
+  # method = "lm"
+  # pal = "matter"
+  # y_trans = "identity"
+  # output = "ggplot"
+
+  if (survey == "CPR"){
+    time = rlang::sym("SampleDateUTC")
+    site = rlang::sym("BioRegion")
+  } else if (survey == "NRS"){
+    time = rlang::sym("SampleDateLocal")
+    site = rlang::sym("Station")
+  }
+
+  titley <- planktonr::pr_relabel(unique(df$parameters), style = output)
+
+  # Averaging based on `trend` ----------------------------------------------
+
+  if (trend %in% c("Year", "Month")){
+    df <- df %>%
+      dplyr::filter(!is.na(!!time))  %>% # need to drop NA from month, added to dataset by complete(Year, Code)
+      dplyr::mutate(Year = lubridate::year(!!time), # I don't need both each time but probably quicker to just do it
+                    Month = lubridate::month(!!time)) %>%
+      dplyr::group_by(!!rlang::sym(trend), !!site) %>%
+      dplyr::summarise(value = mean(.data$Values, na.rm = TRUE),
+                       N = dplyr::n(),
+                       sd = sd(.data$Values, na.rm = TRUE),
+                       se = sd / sqrt(N),
+                       .groups = "drop")
+
+  } else {
+    trend <- time # Rename trend to match the column with time
+    df <- df %>%
+      rename(value = Values)
+  }
+
+  # Do the plotting ---------------------------------------------------------
+
+  p1 <- ggplot2::ggplot(df, ggplot2::aes(x = !!rlang::sym(trend), y = .data$value)) + # do this logging as in pr_plot_tsclimate
+    ggplot2::geom_smooth(method = method, formula = y ~ x) +
+    ggplot2::geom_point() +
+    ggplot2::facet_wrap(rlang::enexpr(site), scales = "free_y", ncol = 1) +
+    ggplot2::ylab(rlang::enexpr(titley)) +
+    ggplot2::scale_y_continuous(trans = y_trans) +
+    ggplot2::theme(legend.position = "bottom",
+                   strip.background = ggplot2::element_blank(),
+                   strip.text = ggplot2::element_text(hjust = 0))
+
+  if (rlang::as_string(trend) %in% c("Month")){
+    p1 <- p1 +
+      ggplot2::scale_x_continuous(breaks = seq(1, 12, length.out = 12), labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
+      ggplot2::xlab("Month")
+  } else if (rlang::as_string(trend) %in% c("Year")){
+    p1 <- p1 +
+      ggplot2::scale_x_continuous(breaks = 2) +
+      ggplot2::xlab("Year")
+  } else if (rlang::as_string(trend) %in% c("Raw")){
+    p1 <- p1 +
+      ggplot2::scale_x_datetime(date_breaks = "2 years") +
+      ggplot2::xlab("Year")
+  }
+
+  if (output %in% "plotly"){
+    p1 <- plotly::ggplotly(p1)
+  }
+
+  return(p1)
+}
+
+
+
+
+
+
+
+
+
 
 #' Plot single climatology
 #'
@@ -141,7 +245,7 @@ pr_plot_timeseries <- function(df, Survey = c("CPR", "NRS"), pal = 'matter', Sca
 #' df <- data.frame(Month = rep(1:12,10), StationCode = c('NSI', 'NSI', 'PHB', 'PHB'),
 #' parameters = 'Biomass_mgm3', Values = runif(120, min=0, max=10))
 #' monthly <- pr_plot_climate(df, "NRS", Month, 'matter')
-pr_plot_climate <- function(df, Survey = c("CPR", "NRS"), x, pal = 'matter', Scale = 'identity'){
+pr_plot_climate <- function(df, Survey = "NRS", x, pal = 'matter', Scale = 'identity'){
 
   x <- dplyr::enquo(arg = x)
 
@@ -166,8 +270,8 @@ pr_plot_climate <- function(df, Survey = c("CPR", "NRS"), x, pal = 'matter', Sca
   p2 <- ggplot2::ggplot(df_climate, ggplot2::aes(x = !!x, y = .data$mean, fill = .data$StationCode)) +
     ggplot2::geom_col(position = ggplot2::position_dodge()) +
     ggplot2::geom_errorbar(ggplot2::aes(ymin = .data$mean-.data$se, ymax = .data$mean+.data$se),
-                  width = .2,                    # Width of the error bars
-                  position = ggplot2::position_dodge(.9)) +
+                           width = .2,                    # Width of the error bars
+                           position = ggplot2::position_dodge(.9)) +
     ggplot2::labs(y = title) +
     ggplot2::scale_y_continuous(trans = Scale) +
     ggplot2::scale_fill_manual(values = plotCols)
@@ -212,7 +316,9 @@ pr_plot_tsclimate <- function(df, Survey = c("CPR", "NRS"), pal = 'matter', Scal
 
   p1 <- pr_plot_timeseries(df, Survey, pal, Scale) %>%
     plotly::layout(yaxis = list(title = ""))
+
   p2 <- pr_plot_climate(df, Survey, .data$Month, pal, Scale)
+
   p3 <- pr_plot_climate(df, Survey, .data$Year, pal, Scale) %>%
     plotly::layout(legend = list(orientation = "h", y = -0.1),
                    yaxis = list(title = ""))
@@ -281,7 +387,7 @@ pr_plot_env_var <- function(df, pal = 'matter', trend = 'None') {
                    strip.text.y = ggplot2::element_text(face = "bold", size = 12, angle = 0))
 
   m <- plotly::ggplotly(m) %>% plotly::layout(legend = list(orientation = "h", xanchor = "center",  # use center of legend as anchor
-                                                    x = 0.5, y = -0.1))
+                                                            x = 0.5, y = -0.1))
 
   plot <- plotly::subplot(plotly::style(p, showlegend = FALSE), m, widths = c(0.75,0.25)) %>%
     plotly::layout(title = list(text = titley),
