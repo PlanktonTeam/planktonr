@@ -208,6 +208,9 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_outputs.html</loc>
   </url>
   <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_papers.html</loc>
+  </url>
+  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_pigs.html</loc>
   </url>
   <url>
@@ -235,13 +238,25 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_timeseries.html</loc>
   </url>
   <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_trends.html</loc>
+  </url>
+  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_tsclimate.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_relabel.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_rename.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_reorder.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/articles/CPR_ts.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/articles/NRS_ts.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/articles/planktonr.html</loc>
