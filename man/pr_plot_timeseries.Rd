@@ -4,12 +4,7 @@
 \alias{pr_plot_timeseries}
 \title{Plot basic timeseries}
 \usage{
-pr_plot_timeseries(
-  df,
-  Survey = c("CPR", "NRS"),
-  pal = "matter",
-  Scale = "identity"
-)
+pr_plot_timeseries(df, Survey = "NRS", pal = "matter", Scale = "identity")
 }
 \arguments{
 \item{df}{dataframe with SampleDateLocal, station code and parameter name and values}
