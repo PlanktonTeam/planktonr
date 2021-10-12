@@ -25,10 +25,10 @@ pr_plot_trends(
 
 \item{pal}{is the palette name from \code{cmocean()}}
 
+\item{y_trans}{transformation of y axis on plot, whatever \code{scale_y_continuous()} trans accepts}
+
 \item{output}{is the plot style - "ggplot" or "plotly"
 #'}
-
-\item{scale}{scale of y axis on plot, whatever \code{scale_y_continuous()} trans accepts}
 }
 \value{
 a timeseries plot
