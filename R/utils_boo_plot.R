@@ -136,7 +136,7 @@ pr_plot_timeseries <- function(df, Survey = "NRS", pal = 'matter', Scale = 'iden
 #' @param survey "NRS" or "CPR" data
 #' @param method Any method accepted by `geom_smooth()`
 #' @param pal is the palette name from `cmocean()`
-#' @param scale scale of y axis on plot, whatever `scale_y_continuous()` trans accepts
+#' @param y_trans transformation of y axis on plot, whatever `scale_y_continuous()` trans accepts
 #' @param output is the plot style - "ggplot" or "plotly"
 #' #'
 #' @return a timeseries plot
