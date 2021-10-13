@@ -1,6 +1,6 @@
 ---
 title: "CPR timeseries examples"
-author: "Claire Davies"
+author: "Claire H. Davies and Jason D. Everett"
 date: "01/10/2021"
 output: rmarkdown::html_vignette
 vignette: >
@@ -52,8 +52,7 @@ Then we can plot the data as a timeseries
 
 ```{r,include=TRUE}
 
-timeseries <- planktonr::pr_plot_tsclimate(datCPRp, "CPR", 'matter') 
-timeseries
+planktonr::pr_plot_tsclimate(datCPRp, "CPR", 'matter') 
 
 ```
 
@@ -61,8 +60,7 @@ Perhaps the story will be clearer using a log scale
 
 ```{r,include=TRUE}
 
-timeseries <- planktonr::pr_plot_tsclimate(datCPRp, "CPR", 'matter', 'log10')
-timeseries
+planktonr::pr_plot_tsclimate(datCPRp, "CPR", 'matter', 'log10')
 
 ```
 
@@ -81,8 +79,7 @@ And then plot the total timeseries
 
 ```{r,include=TRUE}
 
-timeseries <- planktonr::pr_plot_tsclimate(datRat, "CPR", 'matter')
-timeseries
+planktonr::pr_plot_tsclimate(datRat, "CPR", 'matter')
 
 ```
 
@@ -91,4 +88,20 @@ The South-west region has more dinoflagellates than the eastern regions with the
 
 
 
+Look to see if zooplankton abundance is changing in the tropical Coral Sea region.
+```{r,include=TRUE}
+datNRSz <- planktonr::pr_get_tsdata("CPR", "Z") %>%
+  filter(parameters == "ZoopAbund_m3" & BioRegion == "Coral Sea") %>%
+  droplevels()
+```
 
+
+```{r,include=TRUE}
+  planktonr::pr_plot_trends(datNRSz, trend = "Raw", survey = "CPR", method = "lm", y_trans = "log10")
+```
+
+
+Now lets check the seasonal cycle.
+```{r,include=TRUE}
+    planktonr::pr_plot_trends(datNRSz, trend = "Month", survey = "CPR", method = "loess", y_trans = "log10")
+```

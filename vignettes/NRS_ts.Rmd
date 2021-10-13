@@ -1,6 +1,6 @@
 ---
 title: "NRS timeseries examples"
-author: "Claire Davies"
+author: "Claire H. Davies and Jason D. Everett"
 date: "01/10/2021"
 output: rmarkdown::html_vignette
 vignette: >
@@ -88,7 +88,23 @@ timeseries
 ```
 
 
-So whilst Maria Island has less zooplankton abundance the copepods are larger, and potentially more nutirtious, as would be expected in a colder environment.
+So whilst Maria Island has less zooplankton abundance the copepods are larger, and potentially more nutritious, as would be expected in a colder environment.
 
 
+Look to see if zooplankton biomass is changing at Maria Island.
+```{r,include=TRUE}
+datNRSz <- planktonr::pr_get_tsdata("NRS", "Z") %>%
+  filter(parameters == "Biomass_mgm3" & StationName == "Maria Island") %>%
+  droplevels()
+```
+
+
+```{r,include=TRUE}
+  planktonr::pr_plot_trends(datNRSz, trend = "Raw", survey = "NRS", method = "lm", y_trans = "log10")
+```
+
+Now lets check the seasonal cycle.
+```{r,include=TRUE}
+    planktonr::pr_plot_trends(datNRSz, trend = "Month", survey = "NRS", method = "loess", y_trans = "log10")
+```
 
