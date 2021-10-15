@@ -1,10 +1,10 @@
 ---
-title: "CPR timeseries examples"
-author: "Claire Davies"
+title: "CPR timeseries"
+author: "Claire H. Davies and Jason D. Everett"
 date: "01/10/2021"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{CPR timeseries examples}
+  %\VignetteIndexEntry{CPR timeseries}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
   
@@ -23,16 +23,15 @@ ggplot2::theme_set(ggplot2::theme_bw(base_size = 10) + ggplot2::theme(legend.tit
 
 ```
 
-## Accessing IMOS Biological Ocean Observer
+## IMOS Biological Ocean Observer
 
 You can access the online version of IMOS BOO here [links](https://jaseeverett.shinyapps.io/IMOS_BioOceanObserver/)
 
-### Example of using planktonr and BOO to generate timeseries from the Continual Plankton Recorder
+### Example of using planktonr to generate timeseries from the Continual Plankton Recorder
 
 First load the packages from github and attach the libraries
 
 ```{r setup, warning=FALSE, message=FALSE}
-
 library(planktonr)
 library(magrittr)
 ```
@@ -41,7 +40,6 @@ Lets look at phytoplankton abundance across the bioregions.
 First we get the data then we filter it for the desired parameters.
 
 ```{r,include=TRUE}
-
 datCPRp <- planktonr::pr_get_tsdata("CPR", "P") %>%
   filter(parameters == "PhytoAbund_Cellsm3") %>%
   droplevels()
@@ -51,9 +49,7 @@ datCPRp <- planktonr::pr_get_tsdata("CPR", "P") %>%
 Then we can plot the data as a timeseries
 
 ```{r,include=TRUE}
-
-timeseries <- planktonr::pr_plot_tsclimate(datCPRp, "CPR", 'matter') 
-timeseries
+planktonr::pr_plot_tsclimate(datCPRp, "CPR", 'matter') 
 
 ```
 
@@ -61,8 +57,7 @@ Perhaps the story will be clearer using a log scale
 
 ```{r,include=TRUE}
 
-timeseries <- planktonr::pr_plot_tsclimate(datCPRp, "CPR", 'matter', 'log10')
-timeseries
+planktonr::pr_plot_tsclimate(datCPRp, "CPR", 'matter', 'log10')
 
 ```
 
@@ -81,8 +76,7 @@ And then plot the total timeseries
 
 ```{r,include=TRUE}
 
-timeseries <- planktonr::pr_plot_tsclimate(datRat, "CPR", 'matter')
-timeseries
+planktonr::pr_plot_tsclimate(datRat, "CPR", 'matter')
 
 ```
 
@@ -91,4 +85,20 @@ The South-west region has more dinoflagellates than the eastern regions with the
 
 
 
+Look to see if zooplankton abundance is changing in the tropical Coral Sea region.
+```{r,include=TRUE}
+datNRSz <- planktonr::pr_get_tsdata("CPR", "Z") %>%
+  filter(parameters == "ZoopAbund_m3" & BioRegion == "Coral Sea") %>%
+  droplevels()
+```
 
+
+```{r,include=TRUE, warning=FALSE}
+  planktonr::pr_plot_trends(datNRSz, trend = "Raw", survey = "CPR", method = "lm", y_trans = "log10")
+```
+
+
+Now lets check the seasonal cycle.
+```{r,include=TRUE}
+    planktonr::pr_plot_trends(datNRSz, trend = "Month", survey = "CPR", method = "loess", y_trans = "log10")
+```
