@@ -1,10 +1,10 @@
 ---
-title: "NRS timeseries examples"
+title: "NRS timeseries"
 author: "Claire H. Davies and Jason D. Everett"
 date: "01/10/2021"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{NRS timeseries examples}
+  %\VignetteIndexEntry{NRS timeseries}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
   
@@ -23,11 +23,11 @@ ggplot2::theme_set(ggplot2::theme_bw(base_size = 10) + ggplot2::theme(legend.tit
 
 ```
 
-## Accessing IMOS Biological Ocean Observer
+## IMOS Biological Ocean Observer
 
 You can access the online version of IMOS BOO here [links](https://jaseeverett.shinyapps.io/IMOS_BioOceanObserver/)
 
-### Example of using planktonr and BOO to generate timeseries from the National Reference Stations
+### Example of using planktonr to generate timeseries from the National Reference Stations
 
 First load the packages from github and attach the libraries
 
@@ -99,7 +99,7 @@ datNRSz <- planktonr::pr_get_tsdata("NRS", "Z") %>%
 ```
 
 
-```{r,include=TRUE}
+```{r,include=TRUE, warning=FALSE}
   planktonr::pr_plot_trends(datNRSz, trend = "Raw", survey = "NRS", method = "lm", y_trans = "log10")
 ```
 

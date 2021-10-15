@@ -1,10 +1,10 @@
 ---
-title: "CPR timeseries examples"
+title: "CPR timeseries"
 author: "Claire H. Davies and Jason D. Everett"
 date: "01/10/2021"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{CPR timeseries examples}
+  %\VignetteIndexEntry{CPR timeseries}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
   
@@ -23,16 +23,15 @@ ggplot2::theme_set(ggplot2::theme_bw(base_size = 10) + ggplot2::theme(legend.tit
 
 ```
 
-## Accessing IMOS Biological Ocean Observer
+## IMOS Biological Ocean Observer
 
 You can access the online version of IMOS BOO here [links](https://jaseeverett.shinyapps.io/IMOS_BioOceanObserver/)
 
-### Example of using planktonr and BOO to generate timeseries from the Continual Plankton Recorder
+### Example of using planktonr to generate timeseries from the Continual Plankton Recorder
 
 First load the packages from github and attach the libraries
 
 ```{r setup, warning=FALSE, message=FALSE}
-
 library(planktonr)
 library(magrittr)
 ```
@@ -41,7 +40,6 @@ Lets look at phytoplankton abundance across the bioregions.
 First we get the data then we filter it for the desired parameters.
 
 ```{r,include=TRUE}
-
 datCPRp <- planktonr::pr_get_tsdata("CPR", "P") %>%
   filter(parameters == "PhytoAbund_Cellsm3") %>%
   droplevels()
@@ -51,7 +49,6 @@ datCPRp <- planktonr::pr_get_tsdata("CPR", "P") %>%
 Then we can plot the data as a timeseries
 
 ```{r,include=TRUE}
-
 planktonr::pr_plot_tsclimate(datCPRp, "CPR", 'matter') 
 
 ```
@@ -96,7 +93,7 @@ datNRSz <- planktonr::pr_get_tsdata("CPR", "Z") %>%
 ```
 
 
-```{r,include=TRUE}
+```{r,include=TRUE, warning=FALSE}
   planktonr::pr_plot_trends(datNRSz, trend = "Raw", survey = "CPR", method = "lm", y_trans = "log10")
 ```
 
