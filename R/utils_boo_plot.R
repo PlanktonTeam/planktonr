@@ -382,3 +382,52 @@ pr_plot_env_var <- function(df, pal = 'matter', trend = 'None') {
                    annotations = list( x = 0.97, y = 1.0, text = "Depth (m)", xref = "paper", yref = "paper",
                                        xanchor = "center", yanchor = "bottom", showarrow = FALSE))
 }
+
+#' Frequency plot of the selected species
+#'
+#' @param df dataframe of format similar to output of pr_get_fmap_data()
+#' @param Species species name example "Acartia danae"
+#'
+#' @return a plot of frequency of occurence of chosen species
+#' @export
+#'
+#' @examples
+#' df <- data.frame(Long = c(110, 130, 155, 150), Lat = c(-10, -35, -27, -45),
+#' freqfac = c("Absent", "Seen in 25%",'50%', '75%'),
+#' Season = c("December - February","March - May","June - August","September - November"),
+#' Taxon = 'Acartia danae')
+#' plot <- pr_plot_fmap(df, 'Acartia danae')
+pr_plot_fmap <- function(df, Species){
+  cols <- c("lightblue1" ,"skyblue3", "dodgerblue2","blue1", "navyblue")
+
+  df <-  df %>%
+    dplyr::mutate(Taxon = ifelse(Taxon == "Taxon", input$species, Taxon)) %>%
+    dplyr::mutate(freqfac = factor(.data$freqfac, levels = c("Absent", "Seen in 25%",'50%', '75%', "100 % of Samples")))
+
+  p <- ggplot2::ggplot() +
+    ggplot2::geom_sf(data = MapOz) +
+    ggplot2::geom_point(data=df, ggplot2::aes(x=.data$Long, y=.data$Lat, colour=.data$freqfac), size = 2) +
+    ggplot2::facet_wrap( ~ .data$Season, dir = "v") +
+    ggplot2::labs(title = Species) +
+    ggplot2::scale_colour_manual(name = '', values = cols, drop = FALSE) +
+    ggplot2::theme(strip.background = ggplot2::element_blank(),
+                   title = ggplot2::element_text(face = "italic"),
+                   legend.title = ggplot2::element_text(face = "plain"),
+                   axis.title.x = ggplot2::element_blank(),
+                   axis.title.y = ggplot2::element_blank(),
+                   panel.background = ggplot2::element_rect(fill = 'snow1'),
+                   legend.position = 'bottom',
+                   legend.key = ggplot2::element_blank())
+
+  speciesName <- stringr::str_replace_all(Species, " ", "")
+  filename <- paste("inst/app/www/SDMTweGAM_", speciesName, ".png", sep = "")
+  img <- tryCatch(png::readPNG(filename), error = function(e){})
+  dft <-  data.frame(x=c(1,1,1,1), y=c(0,2,1,3), label = c('','No species distribution','map available',''))
+  imggrob <- tryCatch(grid::rasterGrob(img), error = function(e) {
+    ggplot2::ggplot(dft) +
+      ggplot2::geom_text(ggplot2::aes(x=.data$x, y=.data$y, label = .data$label), size = 20) +
+      ggplot2::theme_void()
+  })
+  gridExtra::grid.arrange(p,imggrob, ncol = 2)
+}
+
