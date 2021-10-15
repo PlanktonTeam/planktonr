@@ -33,7 +33,7 @@ pr_get_NRSTrips <- function(Type = c("P","Z","F")){
     rename(ZSampleDepth_m = .data$ZOOPSAMPLEDEPTH_M,
            PSampleDepth_m = .data$PHYTOSAMPLEDEPTH_M) %>%
     filter(.data$ProjectName == "NRS" &
-             (stringr::str_detect(.data$SampleType, paste("Z", collapse = "|")) |
+             (stringr::str_detect(.data$SampleType, paste(Type, collapse = "|")) |
                 is.na(.data$SampleType))) %>%
     pr_apply_time() %>%
     select(.data$TripCode:.data$SampleDateLocal, .data$Year:.data$SampleDateUTC, .data$Biomass_mgm3, .data$Secchi_m, .data$SampleType) %>%
