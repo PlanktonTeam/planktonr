@@ -13,5 +13,5 @@ A dataframe with CPR Phytoplankton Abundance - Summed by Higher Trophic Groups
 CPR Phyto HTG product - Abundance
 }
 \examples{
-df <- pr_get_CPRPhytoHTG
+df <- pr_get_CPRPhytoHTG()
 }

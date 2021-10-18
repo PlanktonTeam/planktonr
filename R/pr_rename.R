@@ -2,6 +2,7 @@
 #' Rename variables within dataframe
 #'
 #' @param df Dataframe with column names to renamed
+#' @export
 #'
 #' @return Dataframe with new column names
 pr_rename <- function(df){

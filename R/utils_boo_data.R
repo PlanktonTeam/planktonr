@@ -85,6 +85,83 @@ pr_make_climatology <- function(df, x){
   return(df_climate)
 }
 
+#' Get functional group data
+#'
+#' @param Survey CPR or NRS data
+#' @param Type Zooplankton or phytoplankton data
+#'
+#' @return dataframe for plotting functional group time series info
+#' @export
+#'
+#' @examples
+#' df <- pr_get_fg('CPR', 'P')
+pr_get_fg <- function(Survey = 'NRS', Type = "Z"){
+  if(Survey == 'CPR' & Type == 'P'){
+    df <- pr_get_CPRPhytoHTG()
+  }
+  else if(Survey == 'NRS' & Type == 'P'){
+    df <- pr_get_NRSPhytoHTG()
+  }
+  else if(Survey == 'CPR' & Type == 'Z'){
+    df <- pr_get_CPRZooHTG()
+  }
+  else {
+    df <- pr_get_NRSZooHTG() %>% dplyr::filter(.data$StationName != 'Port Hacking 4')
+  }
+
+  if(Type == 'P'){
+    parameter1 <- 'Centric diatom'
+    parameter2 <- 'Silicoflagellate'
+  } else {
+    parameter1 <- 'Amphipod'
+    parameter2 <- colnames(df[ ,ncol(df)])
+  }
+
+  if(Survey == 'CPR'){
+    df <- df %>%
+      dplyr::select(.data$BioRegion, .data$SampleDateUTC, .data$Month, .data$Year, .data[[parameter1]]:.data[[parameter2]]) %>%
+      dplyr::filter(!is.na(.data$BioRegion), !.data$BioRegion %in% c('North', 'North-west')) %>%
+      droplevels()
+  }
+  else {
+    df <- df %>%
+      dplyr::select(.data$StationName, .data$StationCode, .data$SampleDateLocal, .data$Month, .data$Year, .data[[parameter1]]:.data[[parameter2]])
+  }
+
+  df <- df %>%
+    tidyr::pivot_longer(.data[[parameter1]]:.data[[parameter2]], values_to = "Values", names_to = 'parameters')  %>%
+    dplyr::mutate(Values = .data$Values + min(.data$Values[.data$Values>0], na.rm = TRUE)) %>%
+    dplyr::filter(.data$parameters != 'Flagellate') %>%
+    pr_reorder()
+
+  if(Type == 'P'){
+    df <- df %>%
+      mutate(parameters = factor(.data$parameters, levels = c('Centric diatom', 'Pennate diatom', 'Dinoflagellate', 'Ciliate', 'Cyanobacteria',
+                                                        'Foraminifera', 'Radiozoa', 'Silicoflagellate')))
+  }
+  return(df)
+}
+
+#' Get picoplankton time series data
+#'
+#' @return Dataframe for plotting picoplankton time series
+#' @export
+#'
+#' @examples
+#' df <- pr_get_pico()
+pr_get_pico <- function(){
+  pico <- pr_get_NRSPico() %>%
+    dplyr::select(.data$TripCode, .data$SampleDateLocal, .data[["Prochlorococcus_Cellsml"]]:.data[["Picoeukaryotes_Cellsml"]]) %>%
+    dplyr::mutate(StationCode = stringr::str_sub(.data$TripCode, 1, 3),
+                  Year = lubridate::year(.data$SampleDateLocal),
+                  Month = lubridate::month(.data$SampleDateLocal)) %>%
+    planktonr::pr_get_StationName() %>%
+    tidyr::pivot_longer(.data[["Prochlorococcus_Cellsml"]]:.data[["Picoeukaryotes_Cellsml"]], values_to = "Values", names_to = 'parameters')  %>%
+    dplyr::rename(SampleDate = .data$SampleDateLocal) %>%
+    dplyr::mutate(Values = .data$Values + min(.data$Values[.data$Values>0], na.rm = TRUE))
+}
+
+
 #' Get NRS nutrient timeseries data
 #'
 #' @return dataframe for plotting nutrient time series info

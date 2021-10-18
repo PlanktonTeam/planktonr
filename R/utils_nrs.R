@@ -33,7 +33,7 @@ pr_get_NRSTrips <- function(Type = c("P","Z","F")){
     rename(ZSampleDepth_m = .data$ZOOPSAMPLEDEPTH_M,
            PSampleDepth_m = .data$PHYTOSAMPLEDEPTH_M) %>%
     filter(.data$ProjectName == "NRS" &
-             (stringr::str_detect(.data$SampleType, paste("Z", collapse = "|")) |
+             (stringr::str_detect(.data$SampleType, paste(Type, collapse = "|")) |
                 is.na(.data$SampleType))) %>%
     pr_apply_time() %>%
     select(.data$TripCode:.data$SampleDateLocal, .data$Year:.data$SampleDateUTC, .data$Biomass_mgm3, .data$Secchi_m, .data$SampleType) %>%
@@ -698,8 +698,7 @@ pr_get_NRSZooRawBin <- function(){
     summarise(ZoopAbund_m3 = sum(.data$ZoopAbund_m3, na.rm = TRUE)) %>%
     arrange(-desc(.data$TaxonName))  %>%
     tidyr::pivot_wider(names_from = .data$TaxonName, values_from = .data$ZoopAbund_m3, values_fill = list(ZoopAbund_m3 = 0)) %>%
-    arrange(desc(.data$SampleDateLocal)) %>%
-    mutate(SampleDateLocal = as.character(.data$SampleDateLocal))
+    arrange(desc(.data$SampleDateLocal))
 }
 
 
@@ -729,8 +728,7 @@ pr_get_NRSZooHTG <-  function(){
   nrsHTGZ <-  nrsHTGZ1 %>%
     tidyr::pivot_wider(names_from = .data$TaxonGroup, values_from = .data$ZoopAbund_m3, values_fill = list(ZoopAbund_m3 = 0)) %>%
     arrange(desc(.data$SampleDateLocal)) %>%
-    select(-c(.data$SampleType)) %>%
-    mutate(SampleDateLocal = as.character(.data$SampleDateLocal))
+    select(-c(.data$SampleType))
 }
 
 #' NRS Zoop genus product - Abundance
@@ -825,8 +823,7 @@ pr_get_NRSZooGenus <- function(){
 
   NRSGenZ <- NRSGenZ1 %>%
     tidyr::pivot_wider(names_from = .data$Genus, values_from = .data$ZoopAbund_m3, values_fill = list(ZoopAbund_m3 = 0)) %>%
-    arrange(desc(.data$SampleDateLocal)) %>%
-    mutate(SampleDateLocal = as.character(.data$SampleDateLocal))
+    arrange(desc(.data$SampleDateLocal))
 }
 
 #' NRS Zoop copepod product - Abundance
@@ -933,8 +930,7 @@ pr_get_NRSZooSpeciesCopepod <- function(){
 
   NRSCop <-  NRSCop1 %>%
     tidyr::pivot_wider(names_from = .data$Species, values_from = .data$ZoopAbund_m3, values_fill = list(ZoopAbund_m3 = 0)) %>%
-    arrange(desc(.data$SampleDateLocal)) %>%
-    mutate(SampleDateLocal = as.character(.data$SampleDateLocal))
+    arrange(desc(.data$SampleDateLocal))
 }
 
 
@@ -1035,8 +1031,7 @@ pr_get_NRSZooSpeciesNonCopepod <- function(){
 
   NRSnCop <- NRSnCop1 %>%
     tidyr::pivot_wider(names_from = .data$Species, values_from = .data$ZoopAbund_m3, values_fill = list(ZoopAbund_m3 = 0)) %>%
-    arrange(desc(.data$SampleDateLocal)) %>%
-    mutate(SampleDateLocal = as.character(.data$SampleDateLocal))
+    arrange(desc(.data$SampleDateLocal))
 }
 
 
