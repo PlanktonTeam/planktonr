@@ -87,8 +87,8 @@ pr_make_climatology <- function(df, x){
 
 #' Get functional group data
 #'
-#' @param Survey
-#' @param Type
+#' @param Survey CPR or NRS data
+#' @param Type Zooplankton or phytoplankton data
 #'
 #' @return dataframe for plotting functional group time series info
 #' @export
@@ -106,7 +106,7 @@ pr_get_fg <- function(Survey = 'NRS', Type = "Z"){
     df <- pr_get_CPRZooHTG()
   }
   else {
-    df <- pr_get_NRSZooHTG()
+    df <- pr_get_NRSZooHTG() %>% dplyr::filter(.data$StationName != 'Port Hacking 4')
   }
 
   if(Type == 'P'){
@@ -133,7 +133,7 @@ pr_get_fg <- function(Survey = 'NRS', Type = "Z"){
 
   if(Type == 'P'){
     df <- df %>%
-      mutate(parameters = factor(parameters, levels = c('Centric diatom', 'Pennate diatom', 'Dinoflagellate', 'Ciliate', 'Cyanobacteria',
+      mutate(parameters = factor(.data$parameters, levels = c('Centric diatom', 'Pennate diatom', 'Dinoflagellate', 'Ciliate', 'Cyanobacteria',
                                                         'Foraminifera', 'Radiozoa', 'Silicoflagellate')))
   }
   return(df)
