@@ -318,6 +318,52 @@ pr_plot_tsclimate <- function(df, Survey = c("CPR", "NRS"), pal = 'matter', Scal
   return(plots)
 }
 
+#' Time series plot of functional groups
+#'
+#' @param df dataframe in format of output from pr_get_fg
+#' @param Scale y axis scale Actual or Percent
+#'
+#' @return plot of fg timseries
+#' @export
+#'
+#' @examples
+#' df <- pr_get_fg('NRS', 'P')
+#' plot <- pr_plot_fg(df)
+pr_plot_fg <- function(df, Scale = 'Actual'){
+  titley <- planktonr::pr_relabel("FunctionalGroup", style = "ggplot")
+  n <- length(unique(df$parameters))
+  plotCols <- planktonr::pr_get_PlotCols('matter', n)
+
+ if("SampleDateUTC" %in% colnames(df)){
+    df <- df %>% mutate(SampleDate = .data$SampleDateUTC)
+    titlex <- 'Sample Date UTC'
+  } else {
+    df <- df %>% mutate(SampleDate = .data$SampleDateLocal)
+    titlex <- 'Sample Date Local'
+  }
+
+ if(Scale == 'Percent') {
+    transy <- 'identity'
+    df <- df %>%
+      dplyr::group_by(.data$SampleDate, .data$StationName, .data$parameters) %>%
+      dplyr::summarise(n = sum(.data$Values, na.rm = TRUE)) %>%
+      dplyr::mutate(Values = .data$n / sum(.data$n, na.rm = TRUE)) %>%
+      dplyr::ungroup()
+  } else {
+    transy <- 'log10'
+  }
+
+  p1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$SampleDate, y = .data$Values, fill = .data$parameters)) +
+    ggplot2::geom_area(alpha=0.6 , size=1, colour="white") +
+    ggplot2::facet_grid(StationName~., scales = "free") +
+    ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
+    ggplot2::scale_y_continuous(trans = transy) +
+    ggplot2::labs(y = titley,
+                  x = titlex) +
+    ggplot2::scale_fill_manual(values = plotCols)
+}
+
+
 #' Combined timeseries and climatology plots for environmental variables
 #'
 #' @param df A dataframe from pr_get_nuts or pr_get_pigs

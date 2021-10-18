@@ -31,6 +31,7 @@ pr_relabel <- function(s, style = "ggplot"){
     "DIC_umolkg", rlang::expr(paste("DIC (",mu,"mol kg"^-1,")")), "DIC (&#181; mol kg<sup>-1</sup>)", "DIC",
     "DinoflagellateEvenness", rlang::expr(paste("Dinoflagellate Evenness")), "Dinoflagellate Evenness", "Dinoflagellate Evenness",
     "DissolvedOxygen_umolkg", rlang::expr(paste("Dissolved Oxygen (",mu,"mol kg"^-1,")")), "Dissolved Oxygen (&#181; mol kg<sup>-1</sup>)", "Dissolved Oxygen",
+    "FunctionalGroup", rlang::expr(paste("Functional Group (m"^-3,")")), "Functional Group (m<sup>-3</sup>)", "Functional Group",
     "GearDepth_m", rlang::expr(paste("Gear Depth (m)")), "Gear Depth (m)", "GearDepth",
     "GearMesh_um", rlang::expr(paste("Gear Mesh (",mu,"m")), "Gear Mesh (&#181; m)", "GearMesh",
     "HerbivoreCarnivoreCopepodRatio", rlang::expr(paste("Copepod Herbivore:Carnivore Ratio")), "Copepod Herbivore:Carnivore Ratio", "Copepod Herbivore:Carnivore Ratio",
