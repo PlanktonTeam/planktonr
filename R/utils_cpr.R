@@ -35,7 +35,8 @@ pr_get_CPRSamps <- function(Type = c("P","Z","B")){
            Month = lubridate::month(.data$SampleDateUTC),
            Day = lubridate::day(.data$SampleDateUTC),
            Time_24hr = stringr::str_sub(.data$SampleDateUTC, -8, -1)) %>%
-    select(c(.data$TripCode, .data$Sample, .data$Latitude:.data$SampleDateUTC, .data$Year:.data$Time_24hr, .data$PCI, .data$Biomass_mgm3, .data$SampleType))
+    pr_add_bioregions() %>%
+    select(c(.data$TripCode, .data$Sample, .data$Latitude:.data$SampleDateUTC, .data$Year:.data$BioRegion, .data$PCI, .data$Biomass_mgm3, .data$SampleType))
 
   if("B" %in% Type){ # Return Biomass if its requested. Otherwise not.
     CPRSamps <- CPRSamps %>%
@@ -162,7 +163,7 @@ pr_get_CPRPhytoRaw <- function(){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_CPRPhytoHTG
+#' df <- pr_get_CPRPhytoHTG()
 #' @import dplyr
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data

@@ -13,7 +13,6 @@ pr_get_indices_cpr <- function(){
 
   # Add the bioregions to the CPR data
   cprSampleInfo <- pr_get_CPRSamps() %>%
-    pr_add_bioregions() %>%
     dplyr::select(.data$TripCode:.data$Time_24hr, .data$BioRegion, .data$Biomass_mgm3)
 
   cprZsamp <- pr_get_CPRSamps(c("Z", "B"))

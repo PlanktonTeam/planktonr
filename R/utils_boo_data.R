@@ -94,7 +94,7 @@ pr_make_climatology <- function(df, x){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_fg('NRS', 'P')
+#' df <- pr_get_fg('CPR', 'P')
 pr_get_fg <- function(Survey = 'NRS', Type = "Z"){
   if(Survey == 'CPR' & Type == 'P'){
     df <- pr_get_CPRPhytoHTG()
@@ -119,7 +119,9 @@ pr_get_fg <- function(Survey = 'NRS', Type = "Z"){
 
   if(Survey == 'CPR'){
     df <- df %>%
-      dplyr::select(.data$TripCode, .data$SampleDateUTC, .data$Month, .data$Year, .data[[parameter1]]:.data[[parameter2]])
+      dplyr::select(.data$BioRegion, .data$SampleDateUTC, .data$Month, .data$Year, .data[[parameter1]]:.data[[parameter2]]) %>%
+      dplyr::filter(!is.na(.data$BioRegion), !.data$BioRegion %in% c('North', 'North-west')) %>%
+      droplevels()
   }
   else {
     df <- df %>%
@@ -129,7 +131,8 @@ pr_get_fg <- function(Survey = 'NRS', Type = "Z"){
   df <- df %>%
     tidyr::pivot_longer(.data[[parameter1]]:.data[[parameter2]], values_to = "Values", names_to = 'parameters')  %>%
     dplyr::mutate(Values = .data$Values + min(.data$Values[.data$Values>0], na.rm = TRUE)) %>%
-    dplyr::filter(.data$parameters != 'Flagellate')
+    dplyr::filter(.data$parameters != 'Flagellate') %>%
+    pr_reorder()
 
   if(Type == 'P'){
     df <- df %>%
