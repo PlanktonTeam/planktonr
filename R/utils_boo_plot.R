@@ -351,7 +351,7 @@ pr_plot_tsfg <- function(df, Scale = 'Actual', trend = 'Raw'){
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                        N = dplyr::n(),
                        sd = sd(.data$Values, na.rm = TRUE),
-                       se = sd / sqrt(N),
+                       se = sd / sqrt(.data$N),
                        .groups = "drop")
 
   } else {
@@ -479,7 +479,7 @@ pr_plot_fmap <- function(df, Species){
   cols <- c("lightblue1" ,"skyblue3", "dodgerblue2","blue1", "navyblue")
 
   df <-  df %>%
-    dplyr::mutate(Taxon = ifelse(Taxon == "Taxon", input$species, Taxon)) %>%
+    dplyr::mutate(Taxon = ifelse(.data$Taxon == "Taxon", input$species, .data$Taxon)) %>%
     dplyr::mutate(freqfac = factor(.data$freqfac, levels = c("Absent", "Seen in 25%",'50%', '75%', "100 % of Samples")))
 
   p <- ggplot2::ggplot() +

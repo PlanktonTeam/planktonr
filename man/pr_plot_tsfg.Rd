@@ -10,6 +10,8 @@ pr_plot_tsfg(df, Scale = "Actual", trend = "Raw")
 \item{df}{dataframe in format of output from pr_get_fg}
 
 \item{Scale}{y axis scale Actual or Percent}
+
+\item{trend}{Over what timescale to fit the trend - "Raw", "Month" or "Year"}
 }
 \value{
 plot of fg timseries
