@@ -4,7 +4,7 @@
 \alias{pr_plot_tsfg}
 \title{Time series plot of functional groups}
 \usage{
-pr_plot_tsfg(df, Scale = "Actual")
+pr_plot_tsfg(df, Scale = "Actual", trend = "Raw")
 }
 \arguments{
 \item{df}{dataframe in format of output from pr_get_fg}
@@ -18,6 +18,6 @@ plot of fg timseries
 Time series plot of functional groups
 }
 \examples{
-df <- pr_get_fg('CPR', 'P')
-plot <- pr_plot_tsfg(df)
+df <- pr_get_fg('NRS', 'P')
+plot <- pr_plot_tsfg(df, 'Actual')
 }
