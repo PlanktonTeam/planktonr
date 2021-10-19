@@ -321,6 +321,7 @@ pr_plot_tsclimate <- function(df, Survey = c("CPR", "NRS"), pal = 'matter', Scal
 #'
 #' @param df dataframe in format of output from pr_get_fg
 #' @param Scale y axis scale Actual or Percent
+#' @param trend Over what timescale to fit the trend - "Raw", "Month" or "Year"
 #'
 #' @return plot of fg timseries
 #' @export
