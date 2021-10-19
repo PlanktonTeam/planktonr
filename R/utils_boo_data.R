@@ -94,7 +94,7 @@ pr_make_climatology <- function(df, x){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_fg('CPR', 'P')
+#' df <- pr_get_fg('NRS', 'P')
 pr_get_fg <- function(Survey = 'NRS', Type = "Z"){
   if(Survey == 'CPR' & Type == 'P'){
     df <- pr_get_CPRPhytoHTG()
@@ -157,8 +157,8 @@ pr_get_pico <- function(){
                   Month = lubridate::month(.data$SampleDateLocal)) %>%
     planktonr::pr_get_StationName() %>%
     tidyr::pivot_longer(.data[["Prochlorococcus_Cellsml"]]:.data[["Picoeukaryotes_Cellsml"]], values_to = "Values", names_to = 'parameters')  %>%
-    dplyr::rename(SampleDate = .data$SampleDateLocal) %>%
-    dplyr::mutate(Values = .data$Values + min(.data$Values[.data$Values>0], na.rm = TRUE))
+    dplyr::mutate(Values = .data$Values + min(.data$Values[.data$Values>0], na.rm = TRUE)) %>%
+    pr_reorder()
 }
 
 

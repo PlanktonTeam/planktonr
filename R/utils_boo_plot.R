@@ -326,9 +326,9 @@ pr_plot_tsclimate <- function(df, Survey = c("CPR", "NRS"), pal = 'matter', Scal
 #' @export
 #'
 #' @examples
-#' df <- pr_get_fg('CPR', 'P')
-#' plot <- pr_plot_tsfg(df)
-pr_plot_tsfg <- function(df, Scale = 'Actual'){
+#' df <- pr_get_fg('NRS', 'P')
+#' plot <- pr_plot_tsfg(df, 'Actual', 'Month')
+pr_plot_tsfg <- function(df, Scale = 'Actual', trend = 'Raw'){
   titley <- planktonr::pr_relabel("FunctionalGroup", style = "ggplot")
   n <- length(unique(df$parameters))
   plotCols <- planktonr::pr_get_PlotCols('matter', n)
@@ -343,30 +343,55 @@ pr_plot_tsfg <- function(df, Scale = 'Actual'){
     titlex <- 'Sample Date Local'
   }
 
- if(Scale == 'Percent') {
-    transy <- 'identity'
+  if (trend %in% c("Year", "Month")){
     df <- df %>%
-      dplyr::group_by(!!SampleDate, !!station, .data$parameters) %>%
+      dplyr::filter(!is.na(!!SampleDate))  %>%
+      dplyr::group_by(!!rlang::sym(trend), !!station, .data$parameters) %>%
+      dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
+                       N = dplyr::n(),
+                       sd = sd(.data$Values, na.rm = TRUE),
+                       se = sd / sqrt(N),
+                       .groups = "drop")
+
+  } else {
+    trend <- SampleDate # Rename trend to match the column with time
+  }
+
+ if(Scale == 'Percent') {
+    df <- df %>%
+      dplyr::group_by(!!rlang::sym(trend), !!station, .data$parameters) %>%
       dplyr::summarise(n = sum(.data$Values, na.rm = TRUE)) %>%
       dplyr::mutate(Values = .data$n / sum(.data$n, na.rm = TRUE)) %>%
       dplyr::ungroup()
   } else {
-    transy <- 'log10'
+    df <- df %>% mutate(Values = log10(.data$Values))
   }
 
-  p1 <- ggplot2::ggplot(df, ggplot2::aes(x = !!SampleDate, y = .data$Values, fill = .data$parameters)) +
+  p1 <- ggplot2::ggplot(df, ggplot2::aes(x = !!rlang::sym(trend), y = .data$Values, fill = .data$parameters)) +
     ggplot2::geom_area(alpha=0.6 , size=1, colour="white") +
     ggplot2::facet_wrap(rlang::enexpr(station), scales = "free", ncol = 1) +
-    ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
-    ggplot2::scale_y_continuous(trans = transy) +
-    ggplot2::labs(y = titley,
-                  x = titlex) +
+    ggplot2::labs(y = titley) +
     ggplot2::scale_fill_manual(values = plotCols) +
     ggplot2::theme(legend.position = "bottom",
                    legend.title = ggplot2::element_blank(),
                    strip.background = ggplot2::element_blank(),
                    strip.text = ggplot2::element_text(hjust = 0))
-}
+
+  if (rlang::as_string(trend) %in% c("Month")){
+    p1 <- p1 +
+      ggplot2::scale_x_continuous(breaks = seq(1, 12, length.out = 12), labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
+      ggplot2::xlab("Month")
+  } else if (rlang::as_string(trend) %in% c("Year")){
+    p1 <- p1 +
+      ggplot2::scale_x_continuous(breaks = 2) +
+      ggplot2::xlab("Year")
+  } else if (rlang::as_string(trend) %in% c("SampleDate")){
+    p1 <- p1 +
+      ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
+      ggplot2::xlab("Sample Date")
+  }
+  return(p1)
+  }
 
 
 
