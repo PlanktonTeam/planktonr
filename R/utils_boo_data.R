@@ -151,7 +151,7 @@ pr_get_fg <- function(Survey = 'NRS', Type = "Z"){
 #' df <- pr_get_pico()
 pr_get_pico <- function(){
   pico <- pr_get_NRSPico() %>%
-    dplyr::select(.data$TripCode, .data$SampleDateLocal, .data[["Prochlorococcus_Cellsml"]]:.data[["Picoeukaryotes_Cellsml"]]) %>%
+    dplyr::select(.data$TripCode, .data$SampleDateLocal, .data$SampleDepth_m, .data[["Prochlorococcus_Cellsml"]]:.data[["Picoeukaryotes_Cellsml"]]) %>%
     dplyr::mutate(StationCode = stringr::str_sub(.data$TripCode, 1, 3),
                   Year = lubridate::year(.data$SampleDateLocal),
                   Month = lubridate::month(.data$SampleDateLocal)) %>%

@@ -327,7 +327,7 @@ pr_plot_tsclimate <- function(df, Survey = c("CPR", "NRS"), pal = 'matter', Scal
 #'
 #' @examples
 #' df <- pr_get_fg('NRS', 'P')
-#' plot <- pr_plot_tsfg(df, 'Actual', 'Month')
+#' plot <- pr_plot_tsfg(df, 'Actual')
 pr_plot_tsfg <- function(df, Scale = 'Actual', trend = 'Raw'){
   titley <- planktonr::pr_relabel("FunctionalGroup", style = "ggplot")
   n <- length(unique(df$parameters))
