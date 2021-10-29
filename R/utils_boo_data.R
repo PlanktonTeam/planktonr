@@ -136,9 +136,25 @@ pr_get_fg <- function(Survey = 'NRS', Type = "Z"){
 
   if(Type == 'P'){
     df <- df %>%
-      mutate(parameters = factor(.data$parameters, levels = c('Centric diatom', 'Pennate diatom', 'Dinoflagellate', 'Ciliate', 'Cyanobacteria',
-                                                        'Foraminifera', 'Radiozoa', 'Silicoflagellate')))
+      dplyr::mutate(parameters = ifelse(.data$parameters %in% c('Ciliate','Foraminifera', 'Radiozoa', 'Silicoflagellate'), 'Other', .data$parameters),
+                    parameters = factor(.data$parameters, levels = c('Centric diatom', 'Pennate diatom', 'Dinoflagellate', 'Cyanobacteria',
+                                                                    'Other'))) %>%
+      dplyr::group_by_at(1:6) %>%
+      dplyr::summarise(Values = sum(.data$Values, na.rm = TRUE),
+                       .groups = 'drop') %>%
+      dplyr::mutate(Values = ifelse(.data$Values < 1, 1, .data$Values))
   }
+  if(Type == 'Z'){
+    df <- df %>%
+      dplyr::mutate(parameters = ifelse(.data$parameters %in% c('Copepod', 'Appendicularian', 'Mollusc', 'Cladoceran', 'Chaetognath', 'Thaliacean'), .data$parameters, 'Other'),
+             parameters = factor(.data$parameters, levels = c('Copepod', 'Appendicularian', 'Mollusc', 'Cladoceran', 'Chaetognath', 'Thaliacean',
+                                                              'Other'))) %>%
+      dplyr::group_by_at(1:6) %>%
+      dplyr::summarise(Values = sum(.data$Values, na.rm = TRUE),
+                       .groups = 'drop') %>%
+      dplyr::mutate(Values = ifelse(.data$Values < 1, 1, .data$Values))
+  }
+
   return(df)
 }
 

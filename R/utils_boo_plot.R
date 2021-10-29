@@ -121,9 +121,6 @@ pr_plot_timeseries <- function(df, Survey = "NRS", pal = 'matter', Scale = 'iden
                   x = titlex) +
     ggplot2::scale_colour_manual(values = plotCols)
 
-  p1 <- plotly::ggplotly(p1) %>%
-    plotly::layout(legend = list(orientation = "h", y = -0.1,
-                                 title=list(text='')))
   return(p1)
 }
 
@@ -272,9 +269,6 @@ pr_plot_climate <- function(df, Survey = "NRS", x, pal = 'matter', Scale = 'iden
       ggplot2::scale_x_continuous(breaks = scales::breaks_width(1))
   }
 
-  p2 <- plotly::ggplotly(p2) %>%
-    plotly::layout(legend = list(orientation = "h", y = -0.1,
-                                 title=list(text='')))
   return(p2)
 }
 
