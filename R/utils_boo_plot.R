@@ -110,7 +110,7 @@ pr_plot_timeseries <- function(df, Survey = "NRS", pal = 'matter', Scale = 'iden
 
   n <- length(unique(df$StationCode))
   plotCols <- planktonr::pr_get_PlotCols(pal, n)
-  titley <- unique(df$parameters)
+  titley <- planktonr::pr_relabel(unique(df$parameters), style = "ggplot")
 
   p1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$SampleDate, y = .data$Values)) +
     ggplot2::geom_line(ggplot2::aes(group = .data$StationCode, color = .data$StationCode)) +
@@ -119,11 +119,12 @@ pr_plot_timeseries <- function(df, Survey = "NRS", pal = 'matter', Scale = 'iden
     ggplot2::scale_y_continuous(trans = Scale) +
     ggplot2::labs(y = titley,
                   x = titlex) +
-    ggplot2::scale_colour_manual(values = plotCols)
+    ggplot2::scale_colour_manual(values = plotCols) +
+    ggplot2::theme_bw(base_size = 12) +
+    ggplot2::theme(legend.position = 'bottom')
 
   return(p1)
 }
-
 
 
 #' Plot temporal trends in plankton data
@@ -207,6 +208,7 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
     p1 <- plotly::ggplotly(p1)
   }
 
+
   return(p1)
 }
 
@@ -240,7 +242,7 @@ pr_plot_climate <- function(df, Survey = "NRS", x, pal = 'matter', Scale = 'iden
 
   n <- length(unique(df$StationCode))
   plotCols <- planktonr::pr_get_PlotCols(pal, n)
-  title <- planktonr::pr_relabel(unique(df$parameters), style = "plotly")
+  title <- planktonr::pr_relabel(unique(df$parameters), style = "ggplot")
 
   df_climate <- df %>%
     dplyr::filter(!!x != 'NA') %>% # need to drop NA from month, added to dataset by complete(Year, StationCode)
@@ -258,7 +260,9 @@ pr_plot_climate <- function(df, Survey = "NRS", x, pal = 'matter', Scale = 'iden
                            position = ggplot2::position_dodge(.9)) +
     ggplot2::labs(y = title) +
     ggplot2::scale_y_continuous(trans = Scale) +
-    ggplot2::scale_fill_manual(values = plotCols)
+    ggplot2::scale_fill_manual(values = plotCols)  +
+    ggplot2::theme_bw(base_size = 12) +
+    ggplot2::theme(legend.position = 'bottom')
 
   if("Month" %in% colnames(df_climate)){
     p2 <- p2 +
@@ -291,23 +295,19 @@ pr_plot_climate <- function(df, Survey = "NRS", x, pal = 'matter', Scale = 'iden
 #' df <- df %>% mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
 #' format = "%Y-%m-%d %H:%M:%S"))
 #' monthly <- pr_plot_tsclimate(df, 'NRS', 'matter')
-#' plotly::ggplotly(monthly)
 
 pr_plot_tsclimate <- function(df, Survey = c("CPR", "NRS"), pal = 'matter', Scale = 'identity'){
 
-  p1 <- pr_plot_timeseries(df, Survey, pal, Scale) %>%
-    plotly::layout(yaxis = list(title = ""))
+  p1 <- pr_plot_timeseries(df, Survey, pal, Scale) + ggplot2::theme(legend.position = 'none',
+                                                             axis.title.y = ggplot2::element_blank())
 
-  p2 <- pr_plot_climate(df, Survey, .data$Month, pal, Scale)
+  p2 <- pr_plot_climate(df, Survey, .data$Month, pal, Scale) + ggplot2::theme(legend.position = 'none')
 
-  p3 <- pr_plot_climate(df, Survey, .data$Year, pal, Scale) %>%
-    plotly::layout(legend = list(orientation = "h", y = -0.1),
-                   yaxis = list(title = ""))
+  p3 <- pr_plot_climate(df, Survey, .data$Year, pal, Scale) + ggplot2::theme(axis.title.y = ggplot2::element_blank(),
+                                                                      legend.title = ggplot2::element_blank())
 
-  plots <- plotly::subplot(plotly::style(p1, showlegend = FALSE),
-                           plotly::style(p2, showlegend = FALSE),
-                           p3, nrows = 3, titleY = TRUE, titleX = TRUE,
-                           margin = 0.05)
+  plots <- patchwork::wrap_plots(p1, p2,  p3, nrow = 3)
+
   return(plots)
 }
 

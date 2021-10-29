@@ -35,5 +35,4 @@ Values = runif(4, min=0, max=10))
 df <- df \%>\% mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
 format = "\%Y-\%m-\%d \%H:\%M:\%S"))
 monthly <- pr_plot_tsclimate(df, 'NRS', 'matter')
-plotly::ggplotly(monthly)
 }
