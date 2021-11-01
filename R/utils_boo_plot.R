@@ -469,13 +469,11 @@ pr_plot_env_var <- function(df, pal = 'matter', trend = 'None') {
 #' freqfac = c("Absent", "Seen in 25%",'50%', '75%'),
 #' Season = c("December - February","March - May","June - August","September - November"),
 #' Taxon = 'Acartia danae')
-#' plot <- pr_plot_fmap(df, 'Acartia danae')
-pr_plot_fmap <- function(df, Species){
+#' plot <- pr_plot_fmap(df)
+pr_plot_fmap <- function(df){
   cols <- c("lightblue1" ,"skyblue3", "dodgerblue2","blue1", "navyblue")
 
-  df <-  df %>%
-    dplyr::mutate(Taxon = ifelse(.data$Taxon == "Taxon", input$species, .data$Taxon)) %>%
-    dplyr::mutate(freqfac = factor(.data$freqfac, levels = c("Absent", "Seen in 25%",'50%', '75%', "100 % of Samples")))
+  Species <- unique(df$Taxon)
 
   p <- ggplot2::ggplot() +
     ggplot2::geom_sf(data = MapOz) +
