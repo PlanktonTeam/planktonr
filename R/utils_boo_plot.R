@@ -459,7 +459,6 @@ pr_plot_env_var <- function(df, pal = 'matter', trend = 'None') {
 #' Frequency plot of the selected species
 #'
 #' @param df dataframe of format similar to output of pr_get_fmap_data()
-#' @param Species species name example "Acartia danae"
 #'
 #' @return a plot of frequency of occurence of chosen species
 #' @export
