@@ -296,6 +296,7 @@ pr_plot_climate <- function(df, Survey = "NRS", x, pal = 'matter', Scale = 'iden
 #' format = "%Y-%m-%d %H:%M:%S"))
 #' monthly <- pr_plot_tsclimate(df, 'NRS', 'matter')
 
+
 pr_plot_tsclimate <- function(df, Survey = c("CPR", "NRS"), pal = 'matter', Scale = 'identity'){
 
   p1 <- pr_plot_timeseries(df, Survey, pal, Scale) + ggplot2::theme(legend.position = 'none',
@@ -491,15 +492,5 @@ pr_plot_fmap <- function(df, Species){
                    legend.position = 'bottom',
                    legend.key = ggplot2::element_blank())
 
-  speciesName <- stringr::str_replace_all(Species, " ", "")
-  filename <- paste("inst/app/www/SDMTweGAM_", speciesName, ".png", sep = "")
-  img <- tryCatch(png::readPNG(filename), error = function(e){})
-  dft <-  data.frame(x=c(1,1,1,1), y=c(0,2,1,3), label = c('','No species distribution','map available',''))
-  imggrob <- tryCatch(grid::rasterGrob(img), error = function(e) {
-    ggplot2::ggplot(dft) +
-      ggplot2::geom_text(ggplot2::aes(x=.data$x, y=.data$y, label = .data$label), size = 20) +
-      ggplot2::theme_void()
-  })
-  gridExtra::grid.arrange(p,imggrob, ncol = 2)
 }
 
