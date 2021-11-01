@@ -4,7 +4,7 @@
 \alias{pr_plot_fmap}
 \title{Frequency plot of the selected species}
 \usage{
-pr_plot_fmap(df, Species)
+pr_plot_fmap(df)
 }
 \arguments{
 \item{df}{dataframe of format similar to output of pr_get_fmap_data()}
@@ -22,5 +22,5 @@ df <- data.frame(Long = c(110, 130, 155, 150), Lat = c(-10, -35, -27, -45),
 freqfac = c("Absent", "Seen in 25\%",'50\%', '75\%'),
 Season = c("December - February","March - May","June - August","September - November"),
 Taxon = 'Acartia danae')
-plot <- pr_plot_fmap(df, 'Acartia danae')
+plot <- pr_plot_fmap(df)
 }

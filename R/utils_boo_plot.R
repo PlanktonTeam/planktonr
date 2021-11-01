@@ -483,7 +483,7 @@ pr_plot_fmap <- function(df){
     ggplot2::scale_colour_manual(name = '', values = cols, drop = FALSE) +
     ggplot2::theme(strip.background = ggplot2::element_blank(),
                    title = ggplot2::element_text(face = "italic"),
-                   legend.title = ggplot2::element_text(face = "plain"),
+                   legend.title = ggplot2::element_text(face = "plain", size = 12),
                    axis.title.x = ggplot2::element_blank(),
                    axis.title.y = ggplot2::element_blank(),
                    panel.background = ggplot2::element_rect(fill = 'snow1'),
