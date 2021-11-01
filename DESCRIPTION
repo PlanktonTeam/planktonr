@@ -28,6 +28,7 @@ Imports:
     lubridate,
     lutz,
     magrittr,
+    patchwork,
     plotly,
     png,
     purrr,
