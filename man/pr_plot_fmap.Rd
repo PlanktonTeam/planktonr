@@ -8,8 +8,6 @@ pr_plot_fmap(df)
 }
 \arguments{
 \item{df}{dataframe of format similar to output of pr_get_fmap_data()}
-
-\item{Species}{species name example "Acartia danae"}
 }
 \value{
 a plot of frequency of occurence of chosen species
