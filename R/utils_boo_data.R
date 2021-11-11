@@ -381,7 +381,8 @@ pr_get_sti <-  function(){
                   CopeAbundance_m3 = .data$CopeAbundance_m3 + min(.data$CopeAbundance_m3[.data$CopeAbundance_m3>0], na.rm = TRUE))
 
   comball <- cpr %>% dplyr::bind_rows(nrs) %>%
-    dplyr:: mutate(sst = round(.data$SST/0.5) * 0.5)
+    dplyr:: mutate(sst = round(.data$SST/0.5) * 0.5) %>%
+    dplyr::arrange(.data$Species)
 }
 
 
