@@ -39,6 +39,7 @@ Imports:
     scales, 
     sf,
     stringr,
+    suncalc,
     tibble,
     tidyr,
     vegan

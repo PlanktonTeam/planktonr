@@ -316,6 +316,74 @@ pr_get_fMap_data <-  function(){
 
 }
 
+#' Get data for plots of species abundance by day and night using CPR data
+#'
+#' @return df to be sued with pr_plot_daynight
+#' @export
+#'
+#' @examples
+#' df <- pr_get_daynight()
+pr_get_daynight <- function(){
+  cprzdat <-  planktonr::pr_get_CPRZooCopepod()
+
+  dates <- cprzdat %>%
+    dplyr::select(.data$SampleDateUTC, .data$Latitude, .data$Longitude) %>%
+    dplyr::rename(date = .data$SampleDateUTC, lat = .data$Latitude, lon = .data$Longitude) %>%
+    dplyr::mutate(date = lubridate::as_date(.data$date))
+
+  daynight <- suncalc::getSunlightTimes(data = dates,
+                                        keep = c("sunrise", "sunset"),
+                                        tz = 'UTC') %>%
+    dplyr::bind_cols(cprzdat["SampleDateUTC"]) %>%
+    dplyr::mutate(daynight = ifelse(.data$SampleDateUTC > .data$sunrise & .data$SampleDateUTC < .data$sunset, 'Day', 'Night'))
+
+  cprzmon <- cprzdat %>% dplyr::bind_cols(daynight["daynight"]) %>%
+    dplyr::select(.data[["Latitude"]]:.data[["Time_24hr"]], .data$daynight, everything()) %>%
+    tidyr::pivot_longer(-c(.data[["Latitude"]]:.data[["daynight"]]), values_to = "CopeAbundance_m3", names_to = 'Species') %>%
+    dplyr::group_by(.data$Month, .data$daynight, .data$Species) %>%
+    dplyr::summarise(CopeAbundance_m3 = mean(.data$CopeAbundance_m3, na.rm = TRUE),
+                     .groups = 'drop')
+}
+
+#' Get data for STI plots of species abundance
+#'
+#' @return df to be sued with pr_plot_sti
+#' @export
+#'
+#' @examples
+#' df <- pr_get_sti()
+pr_get_sti <-  function(){
+  cprzdat <-  planktonr::pr_get_CPRZooCopepod()
+  nrszdat <- planktonr::pr_get_NRSZooSpeciesCopepod()
+
+  ## These will be replace with proper satelite data from extractions in time
+  nrssat <- readr::read_csv("https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/RawData/NRS_SatData.csv",
+                     show_col_types = FALSE) %>%
+    rename(Latitude = .data$LATITUDE, Longitude = .data$LONGITUDE, SampleDateLocal = .data$SAMPLEDATE_LOCAL)
+  cprsat <- readr::read_csv("https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/RawData/CPR_SatData.csv",
+                     show_col_types = FALSE) %>%
+    rename(Latitude = .data$LATITUDE, Longitude = .data$LONGITUDE, SampleDateUTC = .data$SAMPLEDATE_UTC)
+
+  cpr <- cprzdat %>%
+    tidyr::pivot_longer(-c(.data[["Latitude"]]:.data[["Time_24hr"]]), names_to = 'Species', values_to = "CopeAbundance_m3") %>%
+    dplyr::left_join(cprsat, by = c("Latitude", "Longitude", "SampleDateUTC")) %>%
+    dplyr::select(.data$Species, .data$SST, .data$CopeAbundance_m3) %>%
+    dplyr::filter(!is.na(.data$SST) & .data$CopeAbundance_m3 > 0) %>%
+    dplyr::mutate(Project = 'cpr',
+                  CopeAbundance_m3 = .data$CopeAbundance_m3 + min(.data$CopeAbundance_m3[.data$CopeAbundance_m3>0], na.rm = TRUE))
+
+  nrs <- nrszdat %>%
+    tidyr::pivot_longer(-c(.data[["TripCode"]]:.data[["Time_24hr"]]), names_to = 'Species', values_to = "CopeAbundance_m3") %>%
+    dplyr::left_join(nrssat, by = c("Latitude", "Longitude", "SampleDateLocal")) %>%
+    dplyr::select(.data$Species, .data$SST, .data$CopeAbundance_m3) %>%
+    dplyr::filter(!is.na(.data$SST) & .data$CopeAbundance_m3 > 0) %>%
+    dplyr::mutate(Project = 'nrs',
+                  CopeAbundance_m3 = .data$CopeAbundance_m3 + min(.data$CopeAbundance_m3[.data$CopeAbundance_m3>0], na.rm = TRUE))
+
+  comball <- cpr %>% dplyr::bind_rows(nrs) %>%
+    dplyr:: mutate(sst = round(.data$SST/0.5) * 0.5)
+}
+
 
 #' Summarise the plankton observations
 #'
