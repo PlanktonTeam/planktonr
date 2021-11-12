@@ -6,6 +6,9 @@
 \usage{
 pr_get_sti(Type = c("P", "Z"))
 }
+\arguments{
+\item{Type}{Phyto or zoo, defaults to phyto}
+}
 \value{
 df to be sued with pr_plot_sti
 }

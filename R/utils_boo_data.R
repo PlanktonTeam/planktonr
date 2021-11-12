@@ -238,6 +238,7 @@ pr_get_pigs <-  function(){
 
 
 #' Get data for frequency map plots
+#' @param Type Phyto or zoo, defaults to phyto
 #'
 #' @return dataframe for plotting wiht pr_plot_fmap
 #' @export
@@ -338,6 +339,7 @@ pr_get_fMap_data <-  function(Type = "Z"){
 }
 
 #' Get data for plots of species abundance by day and night using CPR data
+#' @param Type Phyto or zoo, defaults to phyto
 #'
 #' @return df to be sued with pr_plot_daynight
 #' @export
@@ -371,6 +373,7 @@ pr_get_daynight <- function(Type = c("P", "Z")){
 }
 
 #' Get data for STI plots of species abundance
+#' @param Type Phyto or zoo, defaults to phyto
 #'
 #' @return df to be sued with pr_plot_sti
 #' @export
