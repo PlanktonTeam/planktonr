@@ -491,3 +491,108 @@ pr_plot_fmap <- function(df){
 
 }
 
+
+#' Plot of relative day and night abundances
+#'
+#' @param df dataframe as output of pr_get_daynight() filtered for one species
+#'
+#' @return plot of relative day and night abundances
+#' @export
+#'
+#' @examples
+#' df <- data.frame(Month = rep(seq(1,12,1),2), daynight = c(rep('day', 12), rep('night', 12)),
+#' CopeAbundance_m3 = runif(24, 0.1, 10), Species = 'Acartia danae')
+#' plot <- pr_plot_daynight(df)
+pr_plot_daynight <-  function(df){
+
+  titlemain <- unique(df$Species)
+  if("CopeAbundance_m3" %in% names(df)){
+    ylabel <- planktonr::pr_relabel("CopeAbundance_m3", style = "ggplot") # this is probably only worth doing for copepods as we don't have a lot of data for other things
+  } else {
+    ylabel <- planktonr::pr_relabel("PhytoAbund_m3", style = "ggplot")
+  }
+
+  plots <- ggplot2::ggplot(df, ggplot2::aes(.data$Month, .data$Species_m3)) +
+    ggplot2::geom_point() +
+    ggplot2::geom_smooth(formula = 'y ~ x', method = 'loess') +
+    ggplot2::facet_grid(~ .data$daynight, scales = "free_y") +
+    ggplot2::scale_x_continuous(breaks= seq(1,12,length.out = 12), labels=c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
+    ggplot2::theme_bw(base_size = 12) +
+    ggplot2::theme(strip.background = ggplot2::element_blank()) +
+    ggplot2::labs(y = ylabel) +
+    ggplot2::ggtitle(titlemain) +
+    ggplot2::theme(plot.title = ggplot2::element_text(face = 'italic'))
+
+}
+
+
+#' Plot of STI kernel density for species
+#'
+#' @param df dataframe as output of pr_get_sti() filtered for one species
+#'
+#' @return plot of STI kernel density
+#' @export
+#'
+#' @examples
+#' df <- data.frame(sst = runif(24, 5, 25), Project = c(rep('cpr', 12), rep('nrs', 12)),
+#' Species_m3 = runif(24, 0.1, 10), Species = 'Acartia danae')
+#' plot <- pr_plot_sti(df)
+pr_plot_sti <-  function(df){
+  means <- df %>% dplyr::group_by(.data$Project) %>%
+    dplyr::summarise(mean = mean(.data$Species_m3, na.rm = TRUE))
+
+  #means are so different so log data as the abundance scale is so wide
+
+  sti <- df %>% dplyr::left_join(means, by = 'Project') %>%
+    dplyr::mutate(relab = .data$Species_m3/.data$mean) %>%
+    dplyr::group_by(.data$sst, .data$Species) %>%
+    dplyr::summarize(relab = sum(.data$relab),
+                     freq = n(),
+                     a = sum(.data$relab)/n(),
+                     .groups = 'drop')
+
+  n <- length(sti$sst)
+  # have a stop if n < 10
+
+  ## STI via kernel density
+
+  kernStep <- 0.001
+  kernMin <- 0
+  kernMax <- 32
+  kernN <- round((kernMax - kernMin) / kernStep + 1)
+  kernTemps <- seq(kernMin, kernMax, length.out=kernN)
+  kernBw <- 2
+
+  kern_yp <- matrix(0, nrow = kernN, ncol = 1)
+  kypout <- matrix(0, nrow = kernN, ncol = 1)
+
+  taxon <- unique(sti$Species)
+  sti$Species <- factor(sti$Species)
+  sti$weight <- with(sti, abs(relab) / sum(relab))
+  kernOut <- with(sti,
+                  density(sst, weight=weight,
+                          bw=kernBw,
+                          from=kernMin,
+                          to=kernMax,
+                          n=kernN))
+
+  z <- data.frame(kernTemps, y = kernOut$y)
+  STI <- round(z[which.max(z[,2]),]$kernTemps,1)
+
+# looks at these lines if we want to plot on an abundance scale instead of 0 - 1 scale
+#  kern_yp[,i] <- kernOut$y/sum(kernOut$y) * 100 * mean(sti$relab)
+#  kypout[,i] <- kernOut$y
+
+  xlabel <- planktonr::pr_relabel("Temperature_degC", style = "ggplot")
+  subtit <- rlang::expr(paste("STI = ",!!STI,degree,"C"))
+
+  stiplot <- ggplot2::ggplot(z, aes(kernTemps, .data$y)) + ggplot2::geom_point() +
+    ggplot2::geom_vline(xintercept = STI, colour = 'blue', lty = 4) +
+    ggplot2::theme_bw() +
+    ggplot2::labs(x=xlabel, y="Relative kernel density") +
+    ggplot2::ggtitle(taxon, subtitle = subtit) +
+    ggplot2::theme(plot.title = ggplot2::element_text(face = 'italic'))
+
+}
+
+

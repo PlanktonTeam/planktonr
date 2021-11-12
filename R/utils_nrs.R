@@ -254,8 +254,7 @@ pr_get_NRSPhytoGenus <- function() {
   # select maximum value of duplicates, but leave -999 for all other occurrences as not regularly identified
   NRSGenP <-  NRSGenP1 %>%
     tidyr::pivot_wider(names_from = .data$Genus, values_from = .data$Cells_L, values_fill = list(Cells_L = 0)) %>%
-    arrange(desc(.data$SampleDateLocal))  %>%
-    mutate(SampleDateLocal = as.character(.data$SampleDateLocal))
+    arrange(desc(.data$SampleDateLocal))
 }
 
 #' Get NRS Phytoplankton species product - Abundance
@@ -353,8 +352,7 @@ pr_get_NRSPhytoSpecies <- function(){
 
   NRSSpecP <-  NRSSpecP1 %>%
     tidyr::pivot_wider(names_from = .data$TaxonName, values_from = .data$Cells_L, values_fill = list(Cells_L = 0)) %>%
-    arrange(desc(.data$SampleDateLocal))  %>%
-    mutate(SampleDateLocal = as.character(.data$SampleDateLocal))
+    arrange(desc(.data$SampleDateLocal))
 }
 
 

@@ -21,6 +21,7 @@ pr_rename <- function(df){
     # "CTDTurbidity_ntu", "Turbidity_NTU",
     # "CTDChlF_mgm3"
     "Cells_L", "CELL_L",
+    "TaxonCount", "CELL_COUNT",
     "Chla_flag", "CPHL_quality_control",
     "Chla_mgm3", "CPHL",
     # "ChlorophyllSatellite_mgm", "CHLA",

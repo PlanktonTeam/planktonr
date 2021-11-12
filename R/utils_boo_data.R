@@ -243,27 +243,48 @@ pr_get_pigs <-  function(){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_fMap_data()
-pr_get_fMap_data <-  function(){
-  ZooCountNRS <- planktonr::pr_get_NRSZooData() %>%
-    dplyr::rename(Sample = .data$TripCode, Counts = .data$TaxonCount) %>%
-    dplyr::filter(!is.na(.data$Species) & !grepl("cf.|spp.|grp", .data$Species) & .data$Genus != '') %>%
-    dplyr::mutate(Taxon = paste0(stringr::word(.data$Genus,1), " ", stringr::word(.data$Species,1)),
-                  Survey = 'NRS') %>%
-    dplyr::group_by(.data$Sample, .data$Survey, .data$Taxon, .data$SampVol_m3) %>%
-    dplyr::summarise(Counts = sum(.data$Counts, na.rm = TRUE), .groups = "drop")
+#' df <- pr_get_fMap_data("P")
+pr_get_fMap_data <-  function(Type = "Z"){
+  if(Type == "P"){
+    PhytoCountNRS <- planktonr::pr_get_NRSPhytoData() %>%
+      dplyr::rename(Sample = .data$TripCode, Counts = .data$TaxonCount) %>%
+      dplyr::filter(!is.na(.data$Species) & !grepl("cf.|spp.|grp", .data$Species) & .data$Genus != '') %>%
+      dplyr::mutate(Taxon = paste0(stringr::word(.data$Genus,1), " ", stringr::word(.data$Species,1)),
+                    Survey = 'NRS',
+                    SampVol_m3 = .data$SampVol_L/1000) %>%
+      dplyr::group_by(.data$Sample, .data$Survey, .data$Taxon, .data$SampVol_m3) %>%
+      dplyr::summarise(Counts = sum(.data$Counts, na.rm = TRUE), .groups = "drop")
 
-  ZooCountCPR <- planktonr::pr_get_CPRZooData("Count") %>%
-    dplyr::rename(Counts = .data$TaxonCount) %>%
-    dplyr::filter(!is.na(.data$Species) & !grepl("cf.|spp.|grp", .data$Species) & .data$Genus != '') %>%
-    dplyr::mutate(Taxon = paste0(stringr::word(.data$Genus,1), " ", stringr::word(.data$Species,1)),
-                  Survey = 'CPR') %>%
-    dplyr::group_by(.data$Sample, .data$Survey, .data$Taxon, .data$SampVol_m3) %>%
-    dplyr::summarise(Counts = sum(.data$Counts, na.rm = TRUE), .groups = "drop")
+    PhytoCountCPR <- planktonr::pr_get_CPRPhytoData("Count") %>% # nned to think about FOV versus counts
+      dplyr::rename(Counts = .data$FovCount) %>%
+      dplyr::filter(!is.na(.data$Species) & !grepl("cf.|spp.|grp", .data$Species) & .data$Genus != '') %>%
+      dplyr::mutate(Taxon = paste0(stringr::word(.data$Genus,1), " ", stringr::word(.data$Species,1)),
+                    Survey = 'CPR') %>%
+      dplyr::group_by(.data$Sample, .data$Survey, .data$Taxon, .data$SampVol_m3) %>%
+      dplyr::summarise(Counts = sum(.data$Counts, na.rm = TRUE), .groups = "drop")
 
-  obs <- dplyr::bind_rows(ZooCountCPR, ZooCountNRS) %>% dplyr::arrange(.data$Taxon)
+    obs <- dplyr::bind_rows(PhytoCountCPR, PhytoCountNRS) %>% dplyr::arrange(.data$Taxon)
+  } else {
+    ZooCountNRS <- planktonr::pr_get_NRSZooData() %>%
+      dplyr::rename(Sample = .data$TripCode, Counts = .data$TaxonCount) %>%
+      dplyr::filter(!is.na(.data$Species) & !grepl("cf.|spp.|grp", .data$Species) & .data$Genus != '') %>%
+      dplyr::mutate(Taxon = paste0(stringr::word(.data$Genus,1), " ", stringr::word(.data$Species,1)),
+                    Survey = 'NRS') %>%
+      dplyr::group_by(.data$Sample, .data$Survey, .data$Taxon, .data$SampVol_m3) %>%
+      dplyr::summarise(Counts = sum(.data$Counts, na.rm = TRUE), .groups = "drop")
 
-  NRSSamp <- planktonr::pr_get_NRSTrips("Z") %>%
+    ZooCountCPR <- planktonr::pr_get_CPRZooData("Count") %>%
+      dplyr::rename(Counts = .data$TaxonCount) %>%
+      dplyr::filter(!is.na(.data$Species) & !grepl("cf.|spp.|grp", .data$Species) & .data$Genus != '') %>%
+      dplyr::mutate(Taxon = paste0(stringr::word(.data$Genus,1), " ", stringr::word(.data$Species,1)),
+                    Survey = 'CPR') %>%
+      dplyr::group_by(.data$Sample, .data$Survey, .data$Taxon, .data$SampVol_m3) %>%
+      dplyr::summarise(Counts = sum(.data$Counts, na.rm = TRUE), .groups = "drop")
+
+    obs <- dplyr::bind_rows(ZooCountCPR, ZooCountNRS) %>% dplyr::arrange(.data$Taxon)
+  }
+
+  NRSSamp <- planktonr::pr_get_NRSTrips(Type) %>%
     dplyr::rename(Sample = .data$TripCode, Date = .data$SampleDateLocal) %>%
     dplyr::mutate(DOY = lubridate::yday(.data$Date),
                   Start = as.Date(paste0(min(lubridate::year(.data$Date))-1, "-12-31")),
@@ -272,7 +293,7 @@ pr_get_fMap_data <-  function(){
                   Survey = 'NRS')  %>%
     dplyr::select(.data$Sample, .data$Survey, .data$Date, .data$DOY, .data$Latitude, .data$Longitude, .data$thetadoy)
 
-  CPRSamp <- planktonr::pr_get_CPRSamps("Z") %>%
+  CPRSamp <- planktonr::pr_get_CPRSamps(Type) %>%
     dplyr::rename(Date = .data$SampleDateUTC) %>%
     dplyr::mutate(DOY = lubridate::yday(.data$Date),
                   Start = as.Date(paste0(min(lubridate::year(.data$Date))-1, "-12-31")),
@@ -314,6 +335,88 @@ pr_get_fMap_data <-  function(){
 
   return(freqMapData)
 
+}
+
+#' Get data for plots of species abundance by day and night using CPR data
+#'
+#' @return df to be sued with pr_plot_daynight
+#' @export
+#'
+#' @examples
+#' df <- pr_get_daynight()
+pr_get_daynight <- function(Type = c("P", "Z")){
+  if(Type == "Z"){
+    cprzdat <-  planktonr::pr_get_CPRZooCopepod()
+  } else {
+    cprzdat <-  planktonr::pr_get_CPRPhytoSpecies()
+  }
+
+  dates <- cprzdat %>%
+    dplyr::select(.data$SampleDateUTC, .data$Latitude, .data$Longitude) %>%
+    dplyr::rename(date = .data$SampleDateUTC, lat = .data$Latitude, lon = .data$Longitude) %>%
+    dplyr::mutate(date = lubridate::as_date(.data$date))
+
+  daynight <- suncalc::getSunlightTimes(data = dates,
+                                        keep = c("sunrise", "sunset"),
+                                        tz = 'UTC') %>%
+    dplyr::bind_cols(cprzdat["SampleDateUTC"]) %>%
+    dplyr::mutate(daynight = ifelse(.data$SampleDateUTC > .data$sunrise & .data$SampleDateUTC < .data$sunset, 'Day', 'Night'))
+
+  cprzmon <- cprzdat %>% dplyr::bind_cols(daynight["daynight"]) %>%
+    dplyr::select(.data[["Latitude"]]:.data[["Time_24hr"]], .data$daynight, everything()) %>%
+    tidyr::pivot_longer(-c(.data[["Latitude"]]:.data[["daynight"]]), values_to = "Species_m3", names_to = 'Species') %>%
+    dplyr::group_by(.data$Month, .data$daynight, .data$Species) %>%
+    dplyr::summarise(Species_m3 = mean(.data$Species_m3, na.rm = TRUE),
+                     .groups = 'drop')
+}
+
+#' Get data for STI plots of species abundance
+#'
+#' @return df to be sued with pr_plot_sti
+#' @export
+#'
+#' @examples
+#' df <- pr_get_sti("P")
+pr_get_sti <-  function(Type = c("P", "Z")){
+
+  if(Type == "Z"){
+     cprzdat <-  planktonr::pr_get_CPRZooCopepod()
+     nrszdat <- planktonr::pr_get_NRSZooSpeciesCopepod()
+     parameter <- "CopeAbundance_m3"
+  } else {
+    cprzdat <-  planktonr::pr_get_CPRPhytoSpecies()
+    nrszdat <- planktonr::pr_get_NRSPhytoSpecies()
+    parameter <- "PhytoAbundance_m3"
+  }
+
+
+  ## These will be replace with proper satelite data from extractions in time
+  nrssat <- readr::read_csv("https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/RawData/NRS_SatData.csv",
+                     show_col_types = FALSE) %>%
+    rename(Latitude = .data$LATITUDE, Longitude = .data$LONGITUDE, SampleDateLocal = .data$SAMPLEDATE_LOCAL)
+  cprsat <- readr::read_csv("https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/RawData/CPR_SatData.csv",
+                     show_col_types = FALSE) %>%
+    rename(Latitude = .data$LATITUDE, Longitude = .data$LONGITUDE, SampleDateUTC = .data$SAMPLEDATE_UTC)
+
+  cpr <- cprzdat %>%
+    tidyr::pivot_longer(-c(.data[["Latitude"]]:.data[["Time_24hr"]]), names_to = 'Species', values_to = parameter) %>%
+    dplyr::left_join(cprsat, by = c("Latitude", "Longitude", "SampleDateUTC")) %>%
+    dplyr::select(.data$Species, .data$SST, .data[[parameter]]) %>%
+    dplyr::filter(!is.na(.data$SST) & .data[[parameter]] > 0) %>%
+    dplyr::mutate(Project = 'cpr',
+                  Species_m3 = .data[[parameter]] + min(.data[[parameter]][.data[[parameter]]>0], na.rm = TRUE))
+
+  nrs <- nrszdat %>%
+    tidyr::pivot_longer(-c(.data[["TripCode"]]:.data[["Time_24hr"]]), names_to = 'Species', values_to = parameter) %>%
+    dplyr::left_join(nrssat, by = c("Latitude", "Longitude", "SampleDateLocal")) %>%
+    dplyr::select(.data$Species, .data$SST, .data[[parameter]]) %>%
+    dplyr::filter(!is.na(.data$SST) & .data[[parameter]] > 0) %>%
+    dplyr::mutate(Project = 'nrs',
+                  Species_m3 = .data[[parameter]] + min(.data[[parameter]][.data[[parameter]]>0], na.rm = TRUE))
+
+  comball <- cpr %>% dplyr::bind_rows(nrs) %>%
+    dplyr:: mutate(sst = round(.data$SST/0.5) * 0.5) %>%
+    dplyr::arrange(.data$Species)
 }
 
 
