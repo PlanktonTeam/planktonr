@@ -4,7 +4,7 @@
 \alias{pr_get_sti}
 \title{Get data for STI plots of species abundance}
 \usage{
-pr_get_sti()
+pr_get_sti(Type = c("P", "Z"))
 }
 \value{
 df to be sued with pr_plot_sti
@@ -13,5 +13,5 @@ df to be sued with pr_plot_sti
 Get data for STI plots of species abundance
 }
 \examples{
-df <- pr_get_sti()
+df <- pr_get_sti("P")
 }

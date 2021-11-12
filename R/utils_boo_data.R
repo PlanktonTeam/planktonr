@@ -433,8 +433,7 @@ pr_export_SppCount <- function(){
   # First do Phytoplankton
   nrsP <- pr_get_NRSPhytoData() %>%
     mutate(TaxonName = stringr::str_c(.data$Genus, " ", .data$Species)) %>%  # Overwrite Taxon Name to remove the fluff
-    select(.data$TaxonName, .data$SPCode, .data$CELL_COUNT) %>%
-    rename(TaxonCount = .data$CELL_COUNT) %>%
+    select(.data$TaxonName, .data$SPCode, .data$TaxonCount) %>%
     tidyr::drop_na()
 
   cprP <- pr_get_CPRPhytoData("Count") %>%
