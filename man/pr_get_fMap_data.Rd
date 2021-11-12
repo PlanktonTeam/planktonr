@@ -6,6 +6,9 @@
 \usage{
 pr_get_fMap_data(Type = "Z")
 }
+\arguments{
+\item{Type}{Phyto or zoo, defaults to phyto}
+}
 \value{
 dataframe for plotting wiht pr_plot_fmap
 }
