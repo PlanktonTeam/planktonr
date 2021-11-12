@@ -243,27 +243,48 @@ pr_get_pigs <-  function(){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_fMap_data()
-pr_get_fMap_data <-  function(){
-  ZooCountNRS <- planktonr::pr_get_NRSZooData() %>%
-    dplyr::rename(Sample = .data$TripCode, Counts = .data$TaxonCount) %>%
-    dplyr::filter(!is.na(.data$Species) & !grepl("cf.|spp.|grp", .data$Species) & .data$Genus != '') %>%
-    dplyr::mutate(Taxon = paste0(stringr::word(.data$Genus,1), " ", stringr::word(.data$Species,1)),
-                  Survey = 'NRS') %>%
-    dplyr::group_by(.data$Sample, .data$Survey, .data$Taxon, .data$SampVol_m3) %>%
-    dplyr::summarise(Counts = sum(.data$Counts, na.rm = TRUE), .groups = "drop")
+#' df <- pr_get_fMap_data("P")
+pr_get_fMap_data <-  function(Type = "Z"){
+  if(Type == "P"){
+    PhytoCountNRS <- planktonr::pr_get_NRSPhytoData() %>%
+      dplyr::rename(Sample = .data$TripCode, Counts = .data$TaxonCount) %>%
+      dplyr::filter(!is.na(.data$Species) & !grepl("cf.|spp.|grp", .data$Species) & .data$Genus != '') %>%
+      dplyr::mutate(Taxon = paste0(stringr::word(.data$Genus,1), " ", stringr::word(.data$Species,1)),
+                    Survey = 'NRS',
+                    SampVol_m3 = .data$SampVol_L/1000) %>%
+      dplyr::group_by(.data$Sample, .data$Survey, .data$Taxon, .data$SampVol_m3) %>%
+      dplyr::summarise(Counts = sum(.data$Counts, na.rm = TRUE), .groups = "drop")
 
-  ZooCountCPR <- planktonr::pr_get_CPRZooData("Count") %>%
-    dplyr::rename(Counts = .data$TaxonCount) %>%
-    dplyr::filter(!is.na(.data$Species) & !grepl("cf.|spp.|grp", .data$Species) & .data$Genus != '') %>%
-    dplyr::mutate(Taxon = paste0(stringr::word(.data$Genus,1), " ", stringr::word(.data$Species,1)),
-                  Survey = 'CPR') %>%
-    dplyr::group_by(.data$Sample, .data$Survey, .data$Taxon, .data$SampVol_m3) %>%
-    dplyr::summarise(Counts = sum(.data$Counts, na.rm = TRUE), .groups = "drop")
+    PhytoCountCPR <- planktonr::pr_get_CPRPhytoData("Count") %>% # nned to think about FOV versus counts
+      dplyr::rename(Counts = .data$FovCount) %>%
+      dplyr::filter(!is.na(.data$Species) & !grepl("cf.|spp.|grp", .data$Species) & .data$Genus != '') %>%
+      dplyr::mutate(Taxon = paste0(stringr::word(.data$Genus,1), " ", stringr::word(.data$Species,1)),
+                    Survey = 'CPR') %>%
+      dplyr::group_by(.data$Sample, .data$Survey, .data$Taxon, .data$SampVol_m3) %>%
+      dplyr::summarise(Counts = sum(.data$Counts, na.rm = TRUE), .groups = "drop")
 
-  obs <- dplyr::bind_rows(ZooCountCPR, ZooCountNRS) %>% dplyr::arrange(.data$Taxon)
+    obs <- dplyr::bind_rows(PhytoCountCPR, PhytoCountNRS) %>% dplyr::arrange(.data$Taxon)
+  } else {
+    ZooCountNRS <- planktonr::pr_get_NRSZooData() %>%
+      dplyr::rename(Sample = .data$TripCode, Counts = .data$TaxonCount) %>%
+      dplyr::filter(!is.na(.data$Species) & !grepl("cf.|spp.|grp", .data$Species) & .data$Genus != '') %>%
+      dplyr::mutate(Taxon = paste0(stringr::word(.data$Genus,1), " ", stringr::word(.data$Species,1)),
+                    Survey = 'NRS') %>%
+      dplyr::group_by(.data$Sample, .data$Survey, .data$Taxon, .data$SampVol_m3) %>%
+      dplyr::summarise(Counts = sum(.data$Counts, na.rm = TRUE), .groups = "drop")
 
-  NRSSamp <- planktonr::pr_get_NRSTrips("Z") %>%
+    ZooCountCPR <- planktonr::pr_get_CPRZooData("Count") %>%
+      dplyr::rename(Counts = .data$TaxonCount) %>%
+      dplyr::filter(!is.na(.data$Species) & !grepl("cf.|spp.|grp", .data$Species) & .data$Genus != '') %>%
+      dplyr::mutate(Taxon = paste0(stringr::word(.data$Genus,1), " ", stringr::word(.data$Species,1)),
+                    Survey = 'CPR') %>%
+      dplyr::group_by(.data$Sample, .data$Survey, .data$Taxon, .data$SampVol_m3) %>%
+      dplyr::summarise(Counts = sum(.data$Counts, na.rm = TRUE), .groups = "drop")
+
+    obs <- dplyr::bind_rows(ZooCountCPR, ZooCountNRS) %>% dplyr::arrange(.data$Taxon)
+  }
+
+  NRSSamp <- planktonr::pr_get_NRSTrips(Type) %>%
     dplyr::rename(Sample = .data$TripCode, Date = .data$SampleDateLocal) %>%
     dplyr::mutate(DOY = lubridate::yday(.data$Date),
                   Start = as.Date(paste0(min(lubridate::year(.data$Date))-1, "-12-31")),
@@ -272,7 +293,7 @@ pr_get_fMap_data <-  function(){
                   Survey = 'NRS')  %>%
     dplyr::select(.data$Sample, .data$Survey, .data$Date, .data$DOY, .data$Latitude, .data$Longitude, .data$thetadoy)
 
-  CPRSamp <- planktonr::pr_get_CPRSamps("Z") %>%
+  CPRSamp <- planktonr::pr_get_CPRSamps(Type) %>%
     dplyr::rename(Date = .data$SampleDateUTC) %>%
     dplyr::mutate(DOY = lubridate::yday(.data$Date),
                   Start = as.Date(paste0(min(lubridate::year(.data$Date))-1, "-12-31")),
