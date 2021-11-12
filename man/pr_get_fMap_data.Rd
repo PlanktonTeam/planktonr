@@ -4,7 +4,7 @@
 \alias{pr_get_fMap_data}
 \title{Get data for frequency map plots}
 \usage{
-pr_get_fMap_data()
+pr_get_fMap_data(Type = "Z")
 }
 \value{
 dataframe for plotting wiht pr_plot_fmap
@@ -13,5 +13,5 @@ dataframe for plotting wiht pr_plot_fmap
 Get data for frequency map plots
 }
 \examples{
-df <- pr_get_fMap_data()
+df <- pr_get_fMap_data("P")
 }

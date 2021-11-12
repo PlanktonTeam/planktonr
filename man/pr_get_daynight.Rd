@@ -4,7 +4,7 @@
 \alias{pr_get_daynight}
 \title{Get data for plots of species abundance by day and night using CPR data}
 \usage{
-pr_get_daynight()
+pr_get_daynight(Type = c("P", "Z"))
 }
 \value{
 df to be sued with pr_plot_daynight
