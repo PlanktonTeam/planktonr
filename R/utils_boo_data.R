@@ -323,8 +323,12 @@ pr_get_fMap_data <-  function(){
 #'
 #' @examples
 #' df <- pr_get_daynight()
-pr_get_daynight <- function(){
-  cprzdat <-  planktonr::pr_get_CPRZooCopepod()
+pr_get_daynight <- function(Type = c("P", "Z")){
+  if(Type == "Z"){
+    cprzdat <-  planktonr::pr_get_CPRZooCopepod()
+  } else {
+    cprzdat <-  planktonr::pr_get_CPRPhytoSpecies()
+  }
 
   dates <- cprzdat %>%
     dplyr::select(.data$SampleDateUTC, .data$Latitude, .data$Longitude) %>%
@@ -339,9 +343,9 @@ pr_get_daynight <- function(){
 
   cprzmon <- cprzdat %>% dplyr::bind_cols(daynight["daynight"]) %>%
     dplyr::select(.data[["Latitude"]]:.data[["Time_24hr"]], .data$daynight, everything()) %>%
-    tidyr::pivot_longer(-c(.data[["Latitude"]]:.data[["daynight"]]), values_to = "CopeAbundance_m3", names_to = 'Species') %>%
+    tidyr::pivot_longer(-c(.data[["Latitude"]]:.data[["daynight"]]), values_to = "Species_m3", names_to = 'Species') %>%
     dplyr::group_by(.data$Month, .data$daynight, .data$Species) %>%
-    dplyr::summarise(CopeAbundance_m3 = mean(.data$CopeAbundance_m3, na.rm = TRUE),
+    dplyr::summarise(Species_m3 = mean(.data$Species_m3, na.rm = TRUE),
                      .groups = 'drop')
 }
 
@@ -351,10 +355,19 @@ pr_get_daynight <- function(){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_sti()
-pr_get_sti <-  function(){
-  cprzdat <-  planktonr::pr_get_CPRZooCopepod()
-  nrszdat <- planktonr::pr_get_NRSZooSpeciesCopepod()
+#' df <- pr_get_sti("P")
+pr_get_sti <-  function(Type = c("P", "Z")){
+
+  if(Type == "Z"){
+     cprzdat <-  planktonr::pr_get_CPRZooCopepod()
+     nrszdat <- planktonr::pr_get_NRSZooSpeciesCopepod()
+     parameter <- "CopeAbundance_m3"
+  } else {
+    cprzdat <-  planktonr::pr_get_CPRPhytoSpecies()
+    nrszdat <- planktonr::pr_get_NRSPhytoSpecies()
+    parameter <- "PhytoAbundance_m3"
+  }
+
 
   ## These will be replace with proper satelite data from extractions in time
   nrssat <- readr::read_csv("https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/RawData/NRS_SatData.csv",
@@ -365,20 +378,20 @@ pr_get_sti <-  function(){
     rename(Latitude = .data$LATITUDE, Longitude = .data$LONGITUDE, SampleDateUTC = .data$SAMPLEDATE_UTC)
 
   cpr <- cprzdat %>%
-    tidyr::pivot_longer(-c(.data[["Latitude"]]:.data[["Time_24hr"]]), names_to = 'Species', values_to = "CopeAbundance_m3") %>%
+    tidyr::pivot_longer(-c(.data[["Latitude"]]:.data[["Time_24hr"]]), names_to = 'Species', values_to = parameter) %>%
     dplyr::left_join(cprsat, by = c("Latitude", "Longitude", "SampleDateUTC")) %>%
-    dplyr::select(.data$Species, .data$SST, .data$CopeAbundance_m3) %>%
-    dplyr::filter(!is.na(.data$SST) & .data$CopeAbundance_m3 > 0) %>%
+    dplyr::select(.data$Species, .data$SST, .data[[parameter]]) %>%
+    dplyr::filter(!is.na(.data$SST) & .data[[parameter]] > 0) %>%
     dplyr::mutate(Project = 'cpr',
-                  CopeAbundance_m3 = .data$CopeAbundance_m3 + min(.data$CopeAbundance_m3[.data$CopeAbundance_m3>0], na.rm = TRUE))
+                  Species_m3 = .data[[parameter]] + min(.data[[parameter]][.data[[parameter]]>0], na.rm = TRUE))
 
   nrs <- nrszdat %>%
-    tidyr::pivot_longer(-c(.data[["TripCode"]]:.data[["Time_24hr"]]), names_to = 'Species', values_to = "CopeAbundance_m3") %>%
+    tidyr::pivot_longer(-c(.data[["TripCode"]]:.data[["Time_24hr"]]), names_to = 'Species', values_to = parameter) %>%
     dplyr::left_join(nrssat, by = c("Latitude", "Longitude", "SampleDateLocal")) %>%
-    dplyr::select(.data$Species, .data$SST, .data$CopeAbundance_m3) %>%
-    dplyr::filter(!is.na(.data$SST) & .data$CopeAbundance_m3 > 0) %>%
+    dplyr::select(.data$Species, .data$SST, .data[[parameter]]) %>%
+    dplyr::filter(!is.na(.data$SST) & .data[[parameter]] > 0) %>%
     dplyr::mutate(Project = 'nrs',
-                  CopeAbundance_m3 = .data$CopeAbundance_m3 + min(.data$CopeAbundance_m3[.data$CopeAbundance_m3>0], na.rm = TRUE))
+                  Species_m3 = .data[[parameter]] + min(.data[[parameter]][.data[[parameter]]>0], na.rm = TRUE))
 
   comball <- cpr %>% dplyr::bind_rows(nrs) %>%
     dplyr:: mutate(sst = round(.data$SST/0.5) * 0.5) %>%

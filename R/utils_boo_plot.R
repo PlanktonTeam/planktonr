@@ -506,9 +506,13 @@ pr_plot_fmap <- function(df){
 pr_plot_daynight <-  function(df){
 
   titlemain <- unique(df$Species)
-  ylabel <- planktonr::pr_relabel("CopeAbundance_m3", style = "ggplot") # this is probably only worth doing for copepods as we don't have a lot of data for other things
+  if("CopeAbundance_m3" %in% names(df)){
+    ylabel <- planktonr::pr_relabel("CopeAbundance_m3", style = "ggplot") # this is probably only worth doing for copepods as we don't have a lot of data for other things
+  } else {
+    ylabel <- planktonr::pr_relabel("PhytoAbund_m3", style = "ggplot")
+  }
 
-  plots <- ggplot2::ggplot(df, ggplot2::aes(.data$Month, .data$CopeAbundance_m3)) +
+  plots <- ggplot2::ggplot(df, ggplot2::aes(.data$Month, .data$Species_m3)) +
     ggplot2::geom_point() +
     ggplot2::geom_smooth(formula = 'y ~ x', method = 'loess') +
     ggplot2::facet_grid(~ .data$daynight, scales = "free_y") +
@@ -531,16 +535,16 @@ pr_plot_daynight <-  function(df){
 #'
 #' @examples
 #' df <- data.frame(sst = runif(24, 5, 25), Project = c(rep('cpr', 12), rep('nrs', 12)),
-#' CopeAbundance_m3 = runif(24, 0.1, 10), Species = 'Acartia danae')
+#' Species_m3 = runif(24, 0.1, 10), Species = 'Acartia danae')
 #' plot <- pr_plot_sti(df)
 pr_plot_sti <-  function(df){
   means <- df %>% dplyr::group_by(.data$Project) %>%
-    dplyr::summarise(mean = mean(.data$CopeAbundance_m3, na.rm = TRUE))
+    dplyr::summarise(mean = mean(.data$Species_m3, na.rm = TRUE))
 
   #means are so different so log data as the abundance scale is so wide
 
   sti <- df %>% dplyr::left_join(means, by = 'Project') %>%
-    dplyr::mutate(relab = .data$CopeAbundance_m3/.data$mean) %>%
+    dplyr::mutate(relab = .data$Species_m3/.data$mean) %>%
     dplyr::group_by(.data$sst, .data$Species) %>%
     dplyr::summarize(relab = sum(.data$relab),
                      freq = n(),
