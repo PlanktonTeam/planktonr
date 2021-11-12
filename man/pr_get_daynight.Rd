@@ -16,5 +16,5 @@ df to be sued with pr_plot_daynight
 Get data for plots of species abundance by day and night using CPR data
 }
 \examples{
-df <- pr_get_daynight()
+df <- pr_get_daynight("Z")
 }

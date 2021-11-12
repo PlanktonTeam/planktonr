@@ -345,7 +345,7 @@ pr_get_fMap_data <-  function(Type = "Z"){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_daynight()
+#' df <- pr_get_daynight("Z")
 pr_get_daynight <- function(Type = c("P", "Z")){
   if(Type == "Z"){
     cprzdat <-  planktonr::pr_get_CPRZooCopepod()
