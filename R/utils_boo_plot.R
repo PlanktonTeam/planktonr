@@ -61,9 +61,11 @@ pr_plot_NRSmap <-  function(df){
 #' df <- data.frame(BioRegion = c("Temperate East", "South-west"))
 #' cprmap <- pr_plot_CPRmap(df)
 pr_plot_CPRmap <-  function(df){
+
   bioregionSelection <- mbr %>%
     dplyr::filter(.data$REGION %in% df$BioRegion) %>%
     mutate(REGION = factor(.data$REGION, levels = c("Coral Sea", "Temperate East", "South-west", "South-east")))
+
   n <- length(unique(bioregionSelection$REGION))
 
   gg <- ggplot2::ggplot() +
