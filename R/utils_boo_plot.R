@@ -25,11 +25,12 @@ pr_get_PlotCols <- function(pal = "matter", n){
 #' @examples
 #' df <- data.frame(StationCode = c("NSI", "PHB"))
 #' pmap <- pr_plot_NRSmap(df)
-pr_plot_NRSmap <-  function(df){
+pr_plot_NRSmap <- function(df){
 
   # meta2_sf <- subset(meta_sf, meta_sf$Code %in% df$StationCode)
   meta2_sf <- meta_sf %>%
-    dplyr::filter(Code %in% df$StationCode)
+    sf::st_as_sf() %>% # This seems to strip away some of the tibble stuff that makes the filter not work...
+    dplyr::filter(.data$Code %in% df$StationCode)
 
   pmap <- ggplot2::ggplot() +
     ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +

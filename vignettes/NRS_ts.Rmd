@@ -26,7 +26,6 @@ ggplot2::theme_set(ggplot2::theme_bw(base_size = 10) +
 ```
 
 # IMOS Biological Ocean Observer
-
 You can access the online version of IMOS BOO here [links](https://jaseeverett.shinyapps.io/IMOS_BioOceanObserver/)
 
 ## Load packages and data
@@ -55,7 +54,7 @@ datNRS_zoo <- pr_get_tsdata("NRS", "Z")
 We can plot a sitemap to see where the data are.
 
 ```{r,include=TRUE}
-# pr_plot_NRSmap(datNRS_zoo)
+pr_plot_NRSmap(datNRS_zoo)
 ```
 
 ## Plot timeseries
