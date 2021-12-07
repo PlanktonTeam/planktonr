@@ -25,7 +25,7 @@ ggplot2::theme_set(ggplot2::theme_bw(base_size = 10) + ggplot2::theme(legend.tit
 
 ```
 
-## IMOS Biological Ocean Observer
+# IMOS Biological Ocean Observer
 You can access the online version of IMOS BOO here [links](https://jaseeverett.shinyapps.io/IMOS_BioOceanObserver/)
 
 ## Load packages and data
@@ -43,6 +43,7 @@ Then attach the library
 library(planktonr)
 ```
 
+## Phytoplankton Abundance Data
 Lets look at phytoplankton abundance across the bioregions.  
 First we get the data then we filter it for the desired parameters.
 
@@ -72,6 +73,7 @@ Perhaps the story will be clearer using a log scale
 pr_plot_tsclimate(datCPR_p, "CPR", "matter", "log10")
 ```
 
+## Examine Diatom:Dinoflagellate Ratio
 The south-west has consistently lower abundances than the regions on the east coast, with the highest abundances occuring in the temperate-east.
 Can we see more variation in the diatom to dinoflagellate rations across the regions?
 
@@ -90,6 +92,7 @@ pr_plot_tsclimate(datRat, "CPR", "matter")
 
 The South-west region has more dinoflagellates than the eastern regions with the highest abundances of diatoms seen in the South-east and temperate East regions.
 
+## Zooplankton Abundance Data
 Look to see if zooplankton abundance is changing in the tropical Coral Sea region.
 ```{r,include=TRUE}
 datNRSz <- pr_get_tsdata("CPR", "Z") %>%

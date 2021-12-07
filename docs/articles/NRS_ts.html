@@ -19,8 +19,6 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -33,12 +31,18 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="">0.0.0.9002</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="The package is in the early stages of development. Not recommended for use at this stage.">0.0.0.9002</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
+<li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
 <li>
   <a href="../articles/planktonr.html">Get started</a>
 </li>
@@ -63,7 +67,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/PlanktonTeam/planktonr/" class="external-link">
+  <a href="https://github.com/PlanktonTeam/planktonr/">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -78,56 +82,56 @@
 
       
 
-      </header><div class="row">
+      </header><script src="NRS_ts_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Analysing NRS timeseries</h1>
-                        <h4 data-toc-skip class="author">Claire H. Davies and Jason D. Everett</h4>
+                        <h4 class="author">Claire H. Davies and Jason D. Everett</h4>
             
-            <h4 data-toc-skip class="date">Tuesday 07 December 2021</h4>
+            <h4 class="date">Tuesday 07 December 2021</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/PlanktonTeam/planktonr/blob/HEAD/vignettes/NRS_ts.Rmd" class="external-link"><code>vignettes/NRS_ts.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/PlanktonTeam/planktonr/blob/master/vignettes/NRS_ts.Rmd"><code>vignettes/NRS_ts.Rmd</code></a></small>
       <div class="hidden name"><code>NRS_ts.Rmd</code></div>
 
     </div>
 
     
     
-<div class="section level1">
-<h1 id="imos-biological-ocean-observer">IMOS Biological Ocean Observer<a class="anchor" aria-label="anchor" href="#imos-biological-ocean-observer"></a>
-</h1>
-<p>You can access the online version of IMOS BOO here <a href="https://jaseeverett.shinyapps.io/IMOS_BioOceanObserver/" class="external-link">links</a></p>
-<div class="section level2">
-<h2 id="load-packages-and-data">Load packages and data<a class="anchor" aria-label="anchor" href="#load-packages-and-data"></a>
-</h2>
+<div id="imos-biological-ocean-observer" class="section level1">
+<h1 class="hasAnchor">
+<a href="#imos-biological-ocean-observer" class="anchor"></a>IMOS Biological Ocean Observer</h1>
+<p>You can access the online version of IMOS BOO here <a href="https://jaseeverett.shinyapps.io/IMOS_BioOceanObserver/">links</a></p>
+<div id="load-packages-and-data" class="section level2">
+<h2 class="hasAnchor">
+<a href="#load-packages-and-data" class="anchor"></a>Load packages and data</h2>
 <p>This vignette demonstrates how to use planktonr to generate timeseries from the IMOS National Reference Station data.</p>
 <p>First install the package from github if needed</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"PlanktonTeam/planktonr"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"PlanktonTeam/planktonr"</span><span class="op">)</span></code></pre></div>
 <p>Then attach the library</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PlanktonTeam/planktonr" class="external-link">planktonr</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PlanktonTeam/planktonr">planktonr</a></span><span class="op">)</span></code></pre></div>
 <p>Lets look at zooplankton abundance at Yongala and Maria Island, a tropical and a temperate National Reference Station.<br>
 First we get the data then we filter it for the desired parameters.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">datNRS_zoo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_get_tsdata.html">pr_get_tsdata</a></span><span class="op">(</span><span class="st">"NRS"</span>, <span class="st">"Z"</span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="plot-sitemap">Plot Sitemap<a class="anchor" aria-label="anchor" href="#plot-sitemap"></a>
-</h2>
+<div id="plot-sitemap" class="section level2">
+<h2 class="hasAnchor">
+<a href="#plot-sitemap" class="anchor"></a>Plot Sitemap</h2>
 <p>We can plot a sitemap to see where the data are.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># pr_plot_NRSmap(datNRS_zoo)</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="plot-timeseries">Plot timeseries<a class="anchor" aria-label="anchor" href="#plot-timeseries"></a>
-</h2>
+<div id="plot-timeseries" class="section level2">
+<h2 class="hasAnchor">
+<a href="#plot-timeseries" class="anchor"></a>Plot timeseries</h2>
 <p>Then we can plot the data as a timeseries for Yongala and Maria Island.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">datNRS_zoo</span> <span class="op">&lt;-</span> <span class="va">datNRS_zoo</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">StationName</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Yongala"</span>, <span class="st">"Maria Island"</span><span class="op">)</span>,
-         <span class="va">parameters</span> <span class="op">==</span> <span class="st">"ZoopAbund_m3"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">datNRS_zoo</span> <span class="op">&lt;-</span> <span class="va">datNRS_zoo</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">StationName</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Yongala"</span>, <span class="st">"Maria Island"</span><span class="op">)</span>,
+         <span class="va">parameters</span> <span class="op">==</span> <span class="st">"ZoopAbund_m3"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html">droplevels</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/pr_plot_tsclimate.html">pr_plot_tsclimate</a></span><span class="op">(</span>df <span class="op">=</span> <span class="va">datNRS_zoo</span>, Survey <span class="op">=</span> <span class="st">"NRS"</span><span class="op">)</span> </code></pre></div>
 <p><img src="NRS_ts_files/figure-html/unnamed-chunk-5-1.png" width="576"></p>
@@ -135,47 +139,47 @@ First we get the data then we filter it for the desired parameters.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/pr_plot_tsclimate.html">pr_plot_tsclimate</a></span><span class="op">(</span><span class="va">datNRS_zoo</span>, Survey <span class="op">=</span> <span class="st">"NRS"</span>, Scale <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span></code></pre></div>
 <p><img src="NRS_ts_files/figure-html/unnamed-chunk-6-1.png" width="576"></p>
-<p>We can also change the colour scale to any scales given by cmocean (<a href="https://cran.r-project.org/web/packages/cmocean/vignettes/cmocean.html" class="external-link uri">https://cran.r-project.org/web/packages/cmocean/vignettes/cmocean.html</a>)</p>
+<p>We can also change the colour scale to any scales given by cmocean (<a href="https://cran.r-project.org/web/packages/cmocean/vignettes/cmocean.html" class="uri">https://cran.r-project.org/web/packages/cmocean/vignettes/cmocean.html</a>)</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/pr_plot_tsclimate.html">pr_plot_tsclimate</a></span><span class="op">(</span><span class="va">datNRS_zoo</span>, Survey <span class="op">=</span> <span class="st">"NRS"</span>, Scale <span class="op">=</span> <span class="st">"log10"</span>, pal <span class="op">=</span> <span class="st">"algae"</span><span class="op">)</span></code></pre></div>
 <p><img src="NRS_ts_files/figure-html/unnamed-chunk-7-1.png" width="576"></p>
 </div>
-<div class="section level2">
-<h2 id="pipeable-functions">Pipeable functions<a class="anchor" aria-label="anchor" href="#pipeable-functions"></a>
-</h2>
+<div id="pipeable-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#pipeable-functions" class="anchor"></a>Pipeable functions</h2>
 <p>The data analysis and plotting functions are pipeable so we can select additional sites on the fly.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/pr_get_tsdata.html">pr_get_tsdata</a></span><span class="op">(</span><span class="st">"NRS"</span>, <span class="st">"Z"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">StationName</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Yongala"</span>, <span class="st">"Port Hacking"</span>, <span class="st">"Maria Island"</span><span class="op">)</span>,
-         <span class="va">parameters</span> <span class="op">==</span> <span class="st">"ZoopAbund_m3"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+<code class="sourceCode R"><span class="fu"><a href="../reference/pr_get_tsdata.html">pr_get_tsdata</a></span><span class="op">(</span><span class="st">"NRS"</span>, <span class="st">"Z"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">StationName</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Yongala"</span>, <span class="st">"Port Hacking"</span>, <span class="st">"Maria Island"</span><span class="op">)</span>,
+         <span class="va">parameters</span> <span class="op">==</span> <span class="st">"ZoopAbund_m3"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html">droplevels</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="../reference/pr_plot_tsclimate.html">pr_plot_tsclimate</a></span><span class="op">(</span>Survey <span class="op">=</span> <span class="st">"NRS"</span>, Scale <span class="op">=</span> <span class="st">"log10"</span>, pal <span class="op">=</span> <span class="st">"algae"</span><span class="op">)</span></code></pre></div>
 <p><img src="NRS_ts_files/figure-html/unnamed-chunk-8-1.png" width="576"></p>
 </div>
-<div class="section level2">
-<h2 id="load-and-plot-size-data">Load and plot size data<a class="anchor" aria-label="anchor" href="#load-and-plot-size-data"></a>
-</h2>
+<div id="load-and-plot-size-data" class="section level2">
+<h2 class="hasAnchor">
+<a href="#load-and-plot-size-data" class="anchor"></a>Load and plot size data</h2>
 <p>The zooplankton abundance at Yongala is consistently greater than at Maria Island, although the seasonal cycle at Maria Island is much more pronounced. There may be more zooplankton at Yongala, but is there a difference in copepod size between tropical Yongala and temperate Maria Island.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">datSize</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_get_tsdata.html">pr_get_tsdata</a></span><span class="op">(</span><span class="st">"NRS"</span>, <span class="st">"Z"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">StationName</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Yongala"</span>, <span class="st">"Maria Island"</span><span class="op">)</span>,
-         <span class="va">parameters</span> <span class="op">==</span> <span class="st">"AvgTotalLengthCopepod_mm"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">datSize</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_get_tsdata.html">pr_get_tsdata</a></span><span class="op">(</span><span class="st">"NRS"</span>, <span class="st">"Z"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">StationName</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Yongala"</span>, <span class="st">"Maria Island"</span><span class="op">)</span>,
+         <span class="va">parameters</span> <span class="op">==</span> <span class="st">"AvgTotalLengthCopepod_mm"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html">droplevels</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>And then plot the total timeseries</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/pr_plot_tsclimate.html">pr_plot_tsclimate</a></span><span class="op">(</span><span class="va">datSize</span>, Survey <span class="op">=</span> <span class="st">"NRS"</span>, pal <span class="op">=</span> <span class="st">"matter"</span><span class="op">)</span></code></pre></div>
 <p><img src="NRS_ts_files/figure-html/unnamed-chunk-10-1.png" width="576"></p>
 <p>So whilst Maria Island has less zooplankton abundance the copepods are larger, and potentially more nutritious, as would be expected in a colder environment.</p>
 </div>
-<div class="section level2">
-<h2 id="trends-in-biomass-data">Trends in Biomass Data<a class="anchor" aria-label="anchor" href="#trends-in-biomass-data"></a>
-</h2>
+<div id="trends-in-biomass-data" class="section level2">
+<h2 class="hasAnchor">
+<a href="#trends-in-biomass-data" class="anchor"></a>Trends in Biomass Data</h2>
 <p>Look to see if zooplankton biomass is changing at Maria Island.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">datNRS_zoo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_get_tsdata.html">pr_get_tsdata</a></span><span class="op">(</span><span class="st">"NRS"</span>, <span class="st">"Z"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">parameters</span> <span class="op">==</span> <span class="st">"Biomass_mgm3"</span> <span class="op">&amp;</span> 
-           <span class="va">StationName</span> <span class="op">==</span> <span class="st">"Maria Island"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">datNRS_zoo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_get_tsdata.html">pr_get_tsdata</a></span><span class="op">(</span><span class="st">"NRS"</span>, <span class="st">"Z"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">parameters</span> <span class="op">==</span> <span class="st">"Biomass_mgm3"</span> <span class="op">&amp;</span> 
+           <span class="va">StationName</span> <span class="op">==</span> <span class="st">"Maria Island"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html">droplevels</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/pr_plot_trends.html">pr_plot_trends</a></span><span class="op">(</span><span class="va">datNRS_zoo</span>, trend <span class="op">=</span> <span class="st">"Raw"</span>, survey <span class="op">=</span> <span class="st">"NRS"</span>, method <span class="op">=</span> <span class="st">"lm"</span>, y_trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span></code></pre></div>
 <p><img src="NRS_ts_files/figure-html/unnamed-chunk-12-1.png" width="576"></p>
@@ -184,14 +188,14 @@ First we get the data then we filter it for the desired parameters.</p>
 <code class="sourceCode R"><span class="fu"><a href="../reference/pr_plot_trends.html">pr_plot_trends</a></span><span class="op">(</span><span class="va">datNRS_zoo</span>, trend <span class="op">=</span> <span class="st">"Month"</span>, survey <span class="op">=</span> <span class="st">"NRS"</span>, method <span class="op">=</span> <span class="st">"loess"</span>, y_trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span></code></pre></div>
 <p><img src="NRS_ts_files/figure-html/unnamed-chunk-13-1.png" width="576"></p>
 </div>
-<div class="section level2">
-<h2 id="examine-functional-groups">Examine functional groups<a class="anchor" aria-label="anchor" href="#examine-functional-groups"></a>
-</h2>
+<div id="examine-functional-groups" class="section level2">
+<h2 class="hasAnchor">
+<a href="#examine-functional-groups" class="anchor"></a>Examine functional groups</h2>
 <p>We can also look at the change in functional groups through time. Firstly by annual averages</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">NRSfgz</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_get_fg.html">pr_get_fg</a></span><span class="op">(</span><span class="st">"NRS"</span>, <span class="st">"Z"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">StationName</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Yongala"</span>, <span class="st">"Maria Island"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">NRSfgz</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_get_fg.html">pr_get_fg</a></span><span class="op">(</span><span class="st">"NRS"</span>, <span class="st">"Z"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">StationName</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Yongala"</span>, <span class="st">"Maria Island"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html">droplevels</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/pr_plot_tsfg.html">pr_plot_tsfg</a></span><span class="op">(</span>df <span class="op">=</span> <span class="va">NRSfgz</span>, Scale <span class="op">=</span> <span class="st">"Actual"</span><span class="op">)</span></code></pre></div>
 <p><img src="NRS_ts_files/figure-html/unnamed-chunk-14-1.png" width="576"></p>
@@ -218,13 +222,11 @@ First we get the data then we filter it for the desired parameters.</p>
 
 
       <footer><div class="copyright">
-  <p></p>
-<p>Developed by Jason D. Everett, Claire H. Davies.</p>
+  <p>Developed by Jason D. Everett, Claire H. Davies.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -232,8 +234,6 @@ First we get the data then we filter it for the desired parameters.</p>
 
   
 
-
-  
 
   </body>
 </html>
