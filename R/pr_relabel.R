@@ -17,6 +17,7 @@ pr_relabel <- function(s, style = "ggplot"){
     "Ammonium_umolL", rlang::expr(paste("Ammonium (",mu,"mol L"^-1,")")), "Ammonium (&#181; mol L<sup>-1</sup>)", "Ammonium",
     "AvgCellVol_um3", rlang::expr(paste("Average Cell Volume (mum"^3,"sample"^-1,")")), "Average Cell Volume (&#181;m<sup>3</sup> sample<sup>-1</sup>)", "Average Cell Volume",
     "AvgTotalLengthCopepod_mm", rlang::expr(paste("Avg. Copepod Length (mm)")), "Avg. Copepod Length (mm)", "Copepod Length",
+    "Bacterial_Richness", rlang::expr(paste("Bacterial_Richness")), "Bacterial_Richness", "Bacterial_Richness",
     "Biomass_mgm3", rlang::expr(paste("Biomass (mg m"^-3,")")), "Biomass (mg m<sup>-3</sup>)", "Zooplankton Biomass",
     "Biovolume_um3L", rlang::expr(paste("Biovolume (mum"^3," L"^-1,")")), "Biovolume (&#181;m<sup>3 L<sup>-1</sup>)", "Phytoplankton Biovolume",
     "BioVolume_um3m3", rlang::expr(paste("Biovolume (mum"^3," m"^-3,")")), "Biovolume (&#181;m<sup>3 m^-3</sup>)", "Phytoplankton Biovolume",
