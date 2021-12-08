@@ -41,8 +41,7 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
       dplyr::filter(!is.na(.data$BioRegion), !.data$BioRegion %in% c('North', 'North-west')) %>%
       droplevels()
     return(dat)
-  } else
-  {
+  } else {
     dat <- readr::read_csv(paste0(planktonr::pr_get_outputs(), "NRS_Indices.csv"), na = "NA", show_col_types = FALSE) %>%
       dplyr::mutate(Month = lubridate::month(.data$SampleDateLocal),
                     Year = lubridate::year(.data$SampleDateLocal),
@@ -106,7 +105,8 @@ pr_get_fg <- function(Survey = 'NRS', Type = "Z"){
     df <- pr_get_CPRZooHTG()
   }
   else {
-    df <- pr_get_NRSZooHTG() %>% dplyr::filter(.data$StationName != 'Port Hacking 4')
+    df <- pr_get_NRSZooHTG() %>%
+      dplyr::filter(.data$StationName != 'Port Hacking 4')
   }
 
   if(Type == 'P'){
@@ -125,7 +125,8 @@ pr_get_fg <- function(Survey = 'NRS', Type = "Z"){
   }
   else {
     df <- df %>%
-      dplyr::select(.data$StationName, .data$StationCode, .data$SampleDateLocal, .data$Month, .data$Year, .data[[parameter1]]:.data[[parameter2]])
+      dplyr::select(.data$StationName, .data$StationCode, .data$SampleTime_local, .data$Month, .data$Year_local, .data[[parameter1]]:.data[[parameter2]])
+      # dplyr::select(.data$StationName, .data$StationCode, .data$SampleDateLocal, .data$Month, .data$Year, .data[[parameter1]]:.data[[parameter2]])
   }
 
   df <- df %>%

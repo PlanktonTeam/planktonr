@@ -349,7 +349,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
     station = rlang::sym("BioRegion")
     titlex <- "Sample Date UTC"
   } else {
-    SampleDate = rlang::sym("SampleDateLocal")
+    SampleDate = rlang::sym("SampleTime_local")
     station = rlang::sym("StationName")
     titlex <- "Sample Date Local"
   }

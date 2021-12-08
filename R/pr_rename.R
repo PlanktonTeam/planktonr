@@ -7,8 +7,31 @@
 #' @return Dataframe with new column names
 pr_rename <- function(df){
 
+# STILL TO DO FROM RAW DATASETS
+#   "StationName", "STATION_NAME"
+#   LOCAL_TRIP_START_TIME
+#   IMOS_SITE_CODE
+#   NRS_TRIP_CODE
+#   NRS_SAMPLE_CODE
+#   UTC_TRIP_START_TIME
+#   FAMILY
+#   LIFE_STAGE
+#   TAXON_ECO_GROUP
+#   CAAB_CODE
+#   TAXON_START_DATE
+#   TAXON_PER_M3
+#   SAMPLE_COMMENTS
+#   TAXON_FIRST_OCCURRENCE
+#   PARENT_TAXON_NAME
+#   TAXON_TRAINING
+#   TAXON_COMMENTS
+
+
+
+
   ##TODO - Need to replace these before I implement the flagging code.
   rename_df <- tibble::as_tibble(matrix(c(
+    "Month", "Month_local",
     "Ammonium_Flag", "AMMONIUM_FLAG",
     "Ammonium_umolL", "AMMONIUM_UMOLL",
     "BioVolume_um3m3", "BIOVOL_UM3M3",

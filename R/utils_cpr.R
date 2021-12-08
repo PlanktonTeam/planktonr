@@ -9,7 +9,7 @@
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_CPRTrips <- function(){
-  CPRTrips <- readr::read_csv(paste0(pr_get_site(), "CPR_Trip.csv"), na = "", show_col_types = FALSE) %>%
+  CPRTrips <- readr::read_csv(paste0(pr_get_site2(), "CPR_Trip.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 
@@ -28,7 +28,7 @@ pr_get_CPRTrips <- function(){
 #' @importFrom rlang .data
 pr_get_CPRSamps <- function(Type = c("P","Z","B")){
 
-  CPRSamps <- readr::read_csv(paste0(pr_get_site(), "CPR_Samp.csv"), na = "", show_col_types = FALSE) %>%
+  CPRSamps <- readr::read_csv(paste0(pr_get_site2(), "CPR_Samp.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename() %>%
     filter(stringr::str_detect(.data$SampleType, paste(Type, collapse = "|"))) %>%
     mutate(Year = lubridate::year(.data$SampleDateUTC),
@@ -59,7 +59,7 @@ pr_get_CPRSamps <- function(Type = c("P","Z","B")){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_CPRPhytoData <- function(var = "Abundance"){
-  cprPdat <- readr::read_csv(paste0(pr_get_site(), "CPR_Phyto_Raw.csv"), na = "", show_col_types = FALSE) %>%
+  cprPdat <- readr::read_csv(paste0(pr_get_site2(), "CPR_Phyto_Raw.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename()
 
   if(stringr::str_detect(var, "Abundance")){
@@ -89,7 +89,7 @@ pr_get_CPRPhytoData <- function(var = "Abundance"){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_CPRPhytoChangeLog <- function(){
-  cprPcl <- readr::read_csv(paste0(pr_get_site(), "CPR_Phyto_ChangeLog.csv"), na = "", show_col_types = FALSE) %>%
+  cprPcl <- readr::read_csv(paste0(pr_get_site2(), "CPR_Phyto_ChangeLog.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 
@@ -106,7 +106,7 @@ pr_get_CPRPhytoChangeLog <- function(){
 #' @importFrom rlang .data
 pr_get_CPRZooData <- function(var = "Abundance"){
 
-  cprZdat <- readr::read_csv(paste0(pr_get_site(), "CPR_Zoop_Raw.csv"), na = "", show_col_types = FALSE) %>%
+  cprZdat <- readr::read_csv(paste0(pr_get_site2(), "CPR_Zoop_Raw.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename()
 
   if(stringr::str_detect(var, "Abundance")){
@@ -129,7 +129,7 @@ pr_get_CPRZooData <- function(var = "Abundance"){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_CPRZooChangeLog <- function(){
-  cprZcl <- readr::read_csv(paste0(pr_get_site(), "CPR_Zoop_ChangeLog.csv"), na = "", show_col_types = FALSE) %>%
+  cprZcl <- readr::read_csv(paste0(pr_get_site2(), "CPR_Zoop_ChangeLog.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 
