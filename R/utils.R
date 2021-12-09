@@ -58,7 +58,7 @@ pr_get_outputs <- function(){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_ZooInfo <- function(){
-  ZInfo <- readr::read_csv(paste0(pr_get_site(), "ZoopInfo.csv"), na = "", show_col_types = FALSE) %>%
+  ZInfo <- readr::read_csv(paste0(pr_get_site2(), "ZoopInfo.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 

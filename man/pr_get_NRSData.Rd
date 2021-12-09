@@ -16,5 +16,5 @@ A dataframe with requested plankton data in long form
 Load NRS station Phytoplankton Data
 }
 \examples{
-df <- pr_get_NRSData()
+df <- pr_get_NRSData("bgc_phytoplankton_abundance_htg_data")
 }

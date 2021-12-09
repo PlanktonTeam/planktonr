@@ -31,7 +31,10 @@ pr_rename <- function(df){
 
   ##TODO - Need to replace these before I implement the flagging code.
   rename_df <- tibble::as_tibble(matrix(c(
+    "Year", "Year_local",
     "Month", "Month_local",
+    "Day", "Day_local",
+    "Time", "Time_local24hr",
     "Ammonium_Flag", "AMMONIUM_FLAG",
     "Ammonium_umolL", "AMMONIUM_UMOLL",
     "BioVolume_um3m3", "BIOVOL_UM3M3",

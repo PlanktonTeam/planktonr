@@ -7,7 +7,7 @@
 #' @return A dataframe with requested plankton data in long form
 #' @export
 #' @examples
-#' df <- pr_get_NRSData()
+#' df <- pr_get_NRSData("bgc_phytoplankton_abundance_htg_data")
 #' @import dplyr
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
@@ -111,19 +111,19 @@ pr_get_NRSPhytoHTG <- function(){
 
 
 
-#' Import NRS Phytoplankton Data
-#'
-#' Load NRS station Phytoplankton Data
-#' @return A dataframe with NRS Phytoplankton Data in long form
-#' @export
-#' @examples
-#' df <- pr_get_NRSPhytoData()
-#' @import dplyr
-#' @importFrom magrittr "%>%"
-#' @importFrom rlang .data
-pr_get_NRSPhytoData <- function(){
-  dat <- pr_get_NRSData("anmn_nrs_bgc_plankton_phytoplankton_data")
-}
+# Import NRS Phytoplankton Data
+#
+# Load NRS station Phytoplankton Data
+# @return A dataframe with NRS Phytoplankton Data in long form
+# @export
+# @examples
+# df <- pr_get_NRSPhytoData()
+# @import dplyr
+# @importFrom magrittr "%>%"
+# @importFrom rlang .data
+# pr_get_NRSPhytoData <- function(){
+#   dat <- pr_get_NRSData("anmn_nrs_bgc_plankton_phytoplankton_data")
+# }
 
 
 
@@ -232,7 +232,6 @@ pr_get_NRSPhytoSpeciesBV <- function(){
 
 
 #' Load zooplankton abundance data
-#'
 #' @return A dataframe with zooplankton abundance data
 #' @export
 #'
@@ -242,7 +241,8 @@ pr_get_NRSPhytoSpeciesBV <- function(){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_NRSZooData <- function(){
-  dat <- pr_get_NRSData("anmn_nrs_bgc_plankton_zooplankton_data")
+  dat <- readr::read_csv(paste0(pr_get_site2(), "BGC_Zoop_Raw.csv"), na = "", show_col_types = FALSE) %>%
+    pr_rename()
 }
 
 
@@ -277,28 +277,28 @@ pr_get_NRSZooRaw <- function(){
   dat <- pr_get_NRSData("bgc_zooplankton_abundance_raw_data")
 }
 
-#' NRS Zoop raw product binned by sex and stage raw product
-#'
-#' @return A dataframe with NRS Zooplankton Abundance - Binned by sex and stage
-#' @export
-#'
-#' @examples
-#' df <- pr_get_NRSZooRawBin()
-#' @import dplyr
-#' @importFrom magrittr "%>%"
-#' @importFrom rlang .data
-pr_get_NRSZooRawBin <- function(){
-  dat <- left_join(pr_get_NRSTrips("Z") %>%
-                     select(-c(.data$Biomass_mgm3, .data$Secchi_m)),
-                   pr_get_NRSZooData(), by = "TripCode") %>%
-    mutate(TaxonName = if_else(is.na(.data$Genus), .data$TaxonName, paste0(.data$Genus, ' ', .data$Species))) %>%
-    group_by(.data$TripCode, .data$StationName, .data$Latitude, .data$Longitude,
-             .data$SampleDateLocal, .data$Year, .data$Month, .data$Day, .data$Time_24hr, .data$SampleDateUTC, .data$TaxonName) %>%
-    summarise(ZoopAbund_m3 = sum(.data$ZoopAbund_m3, na.rm = TRUE)) %>%
-    arrange(-desc(.data$TaxonName))  %>%
-    tidyr::pivot_wider(names_from = .data$TaxonName, values_from = .data$ZoopAbund_m3, values_fill = list(ZoopAbund_m3 = 0)) %>%
-    arrange(desc(.data$SampleDateLocal))
-}
+# NRS Zoop raw product binned by sex and stage raw product
+#
+# @return A dataframe with NRS Zooplankton Abundance - Binned by sex and stage
+# @export
+#
+# @examples
+# df <- pr_get_NRSZooRawBin()
+# @import dplyr
+# @importFrom magrittr "%>%"
+# @importFrom rlang .data
+# pr_get_NRSZooRawBin <- function(){
+#   dat <- left_join(pr_get_NRSTrips("Z") %>%
+#                      select(-c(.data$Biomass_mgm3, .data$Secchi_m)),
+#                    pr_get_NRSZooData(), by = "TripCode") %>%
+#     mutate(TaxonName = if_else(is.na(.data$Genus), .data$TaxonName, paste0(.data$Genus, ' ', .data$Species))) %>%
+#     group_by(.data$TripCode, .data$StationName, .data$Latitude, .data$Longitude,
+#              .data$SampleDateLocal, .data$Year, .data$Month, .data$Day, .data$Time_24hr, .data$SampleDateUTC, .data$TaxonName) %>%
+#     summarise(ZoopAbund_m3 = sum(.data$ZoopAbund_m3, na.rm = TRUE)) %>%
+#     arrange(-desc(.data$TaxonName))  %>%
+#     tidyr::pivot_wider(names_from = .data$TaxonName, values_from = .data$ZoopAbund_m3, values_fill = list(ZoopAbund_m3 = 0)) %>%
+#     arrange(desc(.data$SampleDateLocal))
+# }
 
 
 #' Get NRS Zoop HTG product - Abundance

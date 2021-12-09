@@ -311,13 +311,16 @@ pr_plot_climate <- function(df, Survey = "NRS", x, pal = "matter", Scale = "iden
 
 pr_plot_tsclimate <- function(df, Survey = c("CPR", "NRS"), pal = "matter", Scale = "identity"){
 
-  p1 <- pr_plot_timeseries(df, Survey, pal, Scale) + ggplot2::theme(legend.position = "none",
-                                                             axis.title.y = ggplot2::element_blank())
+  p1 <- pr_plot_timeseries(df, Survey, pal, Scale) +
+    ggplot2::theme(legend.position = "none",
+                   axis.title.y = ggplot2::element_blank())
 
-  p2 <- pr_plot_climate(df, Survey, .data$Month, pal, Scale) + ggplot2::theme(legend.position = "none")
+  p2 <- pr_plot_climate(df, Survey, .data$Month, pal, Scale) +
+    ggplot2::theme(legend.position = "none")
 
-  p3 <- pr_plot_climate(df, Survey, .data$Year, pal, Scale) + ggplot2::theme(axis.title.y = ggplot2::element_blank(),
-                                                                      legend.title = ggplot2::element_blank())
+  p3 <- pr_plot_climate(df, Survey, .data$Year, pal, Scale) +
+    ggplot2::theme(axis.title.y = ggplot2::element_blank(),
+                   legend.title = ggplot2::element_blank())
 
   plots <- patchwork::wrap_plots(p1, p2,  p3, nrow = 3)
 
@@ -351,7 +354,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
   } else {
     SampleDate = rlang::sym("SampleTime_local")
     station = rlang::sym("StationName")
-    titlex <- "Sample Date Local"
+    titlex <- "Sample Date Local" #TODO
   }
 
   if (trend %in% c("Year", "Month")){
