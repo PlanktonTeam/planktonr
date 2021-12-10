@@ -89,7 +89,7 @@ pr_plot_CPRmap <-  function(df){
 #' @examples
 #' df <- data.frame(SampleDateLocal = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
 #' StationCode = 'NSI', parameters = 'Biomass_mgm3', Values = runif(4, min=0, max=10),
-#' Type = 'NRS')
+#' Survey = 'NRS')
 #' df <- df %>% mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
 #' format = "%Y-%m-%d %H:%M:%S"))
 #' timeseries <- pr_plot_timeseries(df, 'NRS', 'matter')
@@ -105,7 +105,7 @@ pr_plot_timeseries <- function(df, Survey = "NRS", pal = 'matter', Scale = 'iden
   if(Survey == 'NRS'){
     df <- df %>%
       dplyr::rename(SampleDate = .data$SampleDateLocal) %>%
-      dplyr::group_by(.data$SampleDate, .data$StationCode, .data$parameters, .data$Type) %>% # accounting for microbial data different depths
+      dplyr::group_by(.data$SampleDate, .data$StationCode, .data$parameters) %>% # accounting for microbial data different depths
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                        .groups = 'drop')
     titlex <- 'Sample Date (Local)'
