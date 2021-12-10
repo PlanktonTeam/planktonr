@@ -104,7 +104,10 @@ pr_plot_timeseries <- function(df, Survey = "NRS", pal = 'matter', Scale = 'iden
 
   if(Survey == 'NRS'){
     df <- df %>%
-      dplyr::rename(SampleDate = .data$SampleDateLocal)
+      dplyr::rename(SampleDate = .data$SampleDateLocal) %>%
+      dplyr::group_by(.data$SampleDate, .data$StationCode, .data$parameters, .data$Type) %>% # accounting for microbial data different depths
+      dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
+                       .groups = 'drop')
     titlex <- 'Sample Date (Local)'
   }
 
