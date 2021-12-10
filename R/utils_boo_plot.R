@@ -89,7 +89,7 @@ pr_plot_CPRmap <-  function(df){
 #' @examples
 #' df <- data.frame(SampleDateLocal = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
 #' StationCode = 'NSI', parameters = 'Biomass_mgm3', Values = runif(4, min=0, max=10),
-#' Type = 'NRS')
+#' Survey = 'NRS')
 #' df <- df %>% mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
 #' format = "%Y-%m-%d %H:%M:%S"))
 #' timeseries <- pr_plot_timeseries(df, 'NRS', 'matter')
@@ -104,7 +104,10 @@ pr_plot_timeseries <- function(df, Survey = "NRS", pal = 'matter', Scale = 'iden
 
   if(Survey == 'NRS'){
     df <- df %>%
-      dplyr::rename(SampleDate = .data$SampleDateLocal)
+      dplyr::rename(SampleDate = .data$SampleDateLocal) %>%
+      dplyr::group_by(.data$SampleDate, .data$StationCode, .data$parameters) %>% # accounting for microbial data different depths
+      dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
+                       .groups = 'drop')
     titlex <- 'Sample Date (Local)'
   }
 
@@ -144,8 +147,8 @@ pr_plot_timeseries <- function(df, Survey = "NRS", pal = 'matter', Scale = 'iden
 #' @export
 #'
 #' @examples
-#' df <- pr_get_tsdata("CPR", "Z") %>% filter(parameters == 'Biomass_mgm3')
-#' plot <- pr_plot_trends(df, survey = "CPR")
+#' df <- pr_get_tsdata("NRS", "Z") %>% filter(parameters == 'Biomass_mgm3')
+#' plot <- pr_plot_trends(df, survey = "NRS")
 pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal = "matter", y_trans = "identity", output = "ggplot"){
 
   if (survey == "CPR"){
@@ -175,6 +178,9 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
   } else {
     trend <- time # Rename trend to match the column with time
     df <- df %>%
+      dplyr::group_by(!!time, !!site, .data$parameters) %>% # accounting for microbial data different depths
+      dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
+                       .groups = 'drop')%>%
       rename(value = Values)
   }
 
