@@ -147,8 +147,8 @@ pr_plot_timeseries <- function(df, Survey = "NRS", pal = 'matter', Scale = 'iden
 #' @export
 #'
 #' @examples
-#' df <- pr_get_tsdata("CPR", "Z") %>% filter(parameters == 'Biomass_mgm3')
-#' plot <- pr_plot_trends(df, survey = "CPR")
+#' df <- pr_get_tsdata("NRS", "Z") %>% filter(parameters == 'Biomass_mgm3')
+#' plot <- pr_plot_trends(df, survey = "NRS")
 pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal = "matter", y_trans = "identity", output = "ggplot"){
 
   if (survey == "CPR"){
@@ -178,6 +178,9 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
   } else {
     trend <- time # Rename trend to match the column with time
     df <- df %>%
+      dplyr::group_by(!!time, !!site, .data$parameters) %>% # accounting for microbial data different depths
+      dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
+                       .groups = 'drop')%>%
       rename(value = Values)
   }
 
