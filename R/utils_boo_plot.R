@@ -356,7 +356,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
     station = rlang::sym("StationName")
     titlex <- "Sample Date Local" #TODO
   }
-
+  # StationName StationCode SampleDateLocal     Month  Year parameters      Values
   if (trend %in% c("Year", "Month")){
     df <- df %>%
       dplyr::filter(!is.na(!!SampleDate))  %>%

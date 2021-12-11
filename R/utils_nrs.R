@@ -358,6 +358,25 @@ pr_get_NRSZooSpeciesNonCopepod <- function(){
   dat <- pr_get_NRSData("bgc_zooplankton_abundance_non_copepods_data")
 }
 
+#' Get NRS Zoop Species Abundance Data
+#'
+#' @return A dataframe with NRS Zooplankton Abundance - Summed by Species
+#' @export
+#'
+#' @examples
+#' df <- pr_get_NRSZooSpecies()
+#' @import dplyr
+#' @importFrom magrittr "%>%"
+#' @importFrom rlang .data
+pr_get_NRSZooSpecies <- function(){
+
+  dat <- pr_get_NRSData("bgc_zooplankton_abundance_copepods_data") %>%
+    dplyr::select(-c("Project", "StationName", "StationCode", "Latitude",
+                     "Longitude", "SampleTime_local", "Year", "Month",
+                     "Day", "Time", "SampleDepth_m", "biomass_mgm3")) %>%
+    dplyr::left_join(pr_get_NRSData("bgc_zooplankton_abundance_non_copepods_data"), ., by = "TripCode")
+
+}
 
 
 #' Get pigments data
