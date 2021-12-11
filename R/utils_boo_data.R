@@ -127,7 +127,7 @@ pr_get_fg <- function(Survey = 'NRS', Type = "Z"){
   else {
     df <- df %>%
       dplyr::select(.data$StationName, .data$StationCode, .data$SampleTime_local, .data$Month, .data$Year, .data[[parameter1]]:.data[[parameter2]])
-      # dplyr::select(.data$StationName, .data$StationCode, .data$SampleDateLocal, .data$Month, .data$Year, .data[[parameter1]]:.data[[parameter2]])
+    # dplyr::select(.data$StationName, .data$StationCode, .data$SampleDateLocal, .data$Month, .data$Year, .data[[parameter1]]:.data[[parameter2]])
   }
 
   df <- df %>%
@@ -140,7 +140,7 @@ pr_get_fg <- function(Survey = 'NRS', Type = "Z"){
     df <- df %>%
       dplyr::mutate(parameters = ifelse(.data$parameters %in% c('Ciliate','Foraminifera', 'Radiozoa', 'Silicoflagellate'), 'Other', .data$parameters),
                     parameters = factor(.data$parameters, levels = c('Centric diatom', 'Pennate diatom', 'Dinoflagellate', 'Cyanobacteria',
-                                                                    'Other'))) %>%
+                                                                     'Other'))) %>%
       dplyr::group_by_at(1:6) %>%
       dplyr::summarise(Values = sum(.data$Values, na.rm = TRUE),
                        .groups = 'drop') %>%
@@ -149,8 +149,8 @@ pr_get_fg <- function(Survey = 'NRS', Type = "Z"){
   if(Type == 'Z'){
     df <- df %>%
       dplyr::mutate(parameters = ifelse(.data$parameters %in% c('Copepod', 'Appendicularian', 'Mollusc', 'Cladoceran', 'Chaetognath', 'Thaliacean'), .data$parameters, 'Other'),
-             parameters = factor(.data$parameters, levels = c('Copepod', 'Appendicularian', 'Mollusc', 'Cladoceran', 'Chaetognath', 'Thaliacean',
-                                                              'Other'))) %>%
+                    parameters = factor(.data$parameters, levels = c('Copepod', 'Appendicularian', 'Mollusc', 'Cladoceran', 'Chaetognath', 'Thaliacean',
+                                                                     'Other'))) %>%
       dplyr::group_by_at(1:6) %>%
       dplyr::summarise(Values = sum(.data$Values, na.rm = TRUE),
                        .groups = 'drop') %>%
@@ -239,7 +239,11 @@ pr_get_pigs <-  function(){
 }
 
 
+
+
+
 #' Get data for frequency map plots
+#'
 #' @param Type Phyto or zoo, defaults to phyto
 #'
 #' @return dataframe for plotting wiht pr_plot_fmap
@@ -247,14 +251,14 @@ pr_get_pigs <-  function(){
 #'
 #' @examples
 #' df <- pr_get_fMap_data("P")
-pr_get_fMap_data <-  function(Type = "Z"){
+pr_get_fMap_data <- function(Type = "Z"){
   if(Type == "P"){
 
     # "Sample"     "Survey"     "Taxon"      "SampVol_m3" "Counts"
 
     PhytoCountNRS <- planktonr::pr_get_NRSPhytoSpecies() %>%
       tidyr::pivot_longer(cols = !starts_with(c("Project", "StationName", "StationCode", "Latitude", "Longitude", "TripCode",
-                                            "SampleTime_local", "Year", "Month", "Day", "Time", "SampleDepth_m"), ignore.case = FALSE),
+                                                "SampleTime_local", "Year", "Month", "Day", "Time", "SampleDepth_m"), ignore.case = FALSE),
                           names_to = "Taxon", values_to = "Counts") %>%
       dplyr::rename(Sample = .data$TripCode) %>%
       dplyr::mutate(Survey = "NRS",
@@ -292,7 +296,8 @@ pr_get_fMap_data <-  function(Type = "Z"){
       dplyr::group_by(.data$Sample, .data$Survey, .data$Taxon, .data$SampVol_m3) %>%
       dplyr::summarise(Counts = sum(.data$Counts, na.rm = TRUE), .groups = "drop")
 
-    obs <- dplyr::bind_rows(ZooCountCPR, ZooCountNRS) %>% dplyr::arrange(.data$Taxon)
+    obs <- dplyr::bind_rows(ZooCountCPR, ZooCountNRS) %>%
+      dplyr::arrange(.data$Taxon)
   }
 
   NRSSamp <- planktonr::pr_get_NRSTrips(Type) %>%
@@ -343,7 +348,7 @@ pr_get_fMap_data <-  function(Type = "Z"){
                   freqsamp = 0,
                   freqfac = as.factor("Absent"))
 
-    freqMapData <- dplyr::bind_rows(mapdata, absences)
+  freqMapData <- dplyr::bind_rows(mapdata, absences)
 
   return(freqMapData)
 
@@ -394,10 +399,10 @@ pr_get_daynight <- function(Type = c("P", "Z")){
 pr_get_sti <-  function(Type = c("P", "Z")){
 
   if(Type == "Z"){
-     cprzdat <-  planktonr::pr_get_CPRZooCopepod()
-     nrszdat <- planktonr::pr_get_NRSZooSpeciesCopepod() %>%
-       dplyr::select(-biomass_mgm3)
-     parameter <- "CopeAbundance_m3"
+    cprzdat <-  planktonr::pr_get_CPRZooCopepod()
+    nrszdat <- planktonr::pr_get_NRSZooSpeciesCopepod() %>%
+      dplyr::select(-biomass_mgm3)
+    parameter <- "CopeAbundance_m3"
   } else {
     cprzdat <-  planktonr::pr_get_CPRPhytoSpecies()
     nrszdat <- planktonr::pr_get_NRSPhytoSpecies()
@@ -407,12 +412,12 @@ pr_get_sti <-  function(Type = c("P", "Z")){
 
   ## These will be replace with proper satellite data from extractions in time
   nrssat <- readr::read_csv("https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/RawData/NRS_SatData.csv",
-                     show_col_types = FALSE) %>%
+                            show_col_types = FALSE) %>%
     pr_rename() %>%
     rename(SampleTime_local = .data$SAMPLEDATE_LOCAL)
 
   cprsat <- readr::read_csv("https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/RawData/CPR_SatData.csv",
-                     show_col_types = FALSE) %>%
+                            show_col_types = FALSE) %>%
     pr_rename() %>%
     rename(SampleDateUTC = .data$SAMPLEDATE_UTC)
 
