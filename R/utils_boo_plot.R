@@ -402,13 +402,14 @@ pr_plot_tsfg <- function(df, Scale = 'Actual', trend = 'Raw'){
 #' @param df A dataframe from pr_get_nuts or pr_get_pigs
 #' @param pal A Palette from cmocean
 #' @param trend Trend line to be used, options None, Smoother, Linear
+#' @param Scale scale on which to plot y axis
 #'
 #' @return A plotly plot with timeseries and climatology at depths
 #' @export
 #'
 #' @examples
 #' df <- pr_get_nuts() %>% pr_plot_env_var()
-pr_plot_env_var <- function(df, pal = 'matter', trend = 'None') {
+pr_plot_env_var <- function(df, pal = 'matter', trend = 'None', Scale = 'identity') {
   n <- length(unique(df$StationName))
   plotCols <- planktonr::pr_get_PlotCols(pal, n)
   # titley <- unique(df$parameters)
@@ -424,6 +425,7 @@ pr_plot_env_var <- function(df, pal = 'matter', trend = 'None') {
                                          legend.position = "bottom",
                                          legend.title = ggplot2::element_blank()) +
     ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
+    ggplot2::scale_y_continuous(trans = Scale) +
     ggplot2::scale_colour_manual(values = plotCols)
 
   if(trend == "Smoother"){
