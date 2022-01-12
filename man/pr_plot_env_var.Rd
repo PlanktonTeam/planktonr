@@ -4,7 +4,7 @@
 \alias{pr_plot_env_var}
 \title{Combined timeseries and climatology plots for environmental variables}
 \usage{
-pr_plot_env_var(df, pal = "matter", trend = "None")
+pr_plot_env_var(df, pal = "matter", trend = "None", Scale = "identity")
 }
 \arguments{
 \item{df}{A dataframe from pr_get_nuts or pr_get_pigs}
@@ -12,6 +12,8 @@ pr_plot_env_var(df, pal = "matter", trend = "None")
 \item{pal}{A Palette from cmocean}
 
 \item{trend}{Trend line to be used, options None, Smoother, Linear}
+
+\item{Scale}{scale on which to plot y axis}
 }
 \value{
 A plotly plot with timeseries and climatology at depths
