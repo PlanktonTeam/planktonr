@@ -204,9 +204,9 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
     p1 <- p1 +
       ggplot2::scale_x_continuous(breaks = 2) +
       ggplot2::xlab("Year")
-  } else if (rlang::as_string(trend) %in% c("Raw")){
+  } else if (!rlang::as_string(trend) %in% c("Month", "Raw")){
     p1 <- p1 +
-      ggplot2::scale_x_datetime(date_breaks = "2 years") +
+      ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
       ggplot2::xlab("Year")
   }
 
