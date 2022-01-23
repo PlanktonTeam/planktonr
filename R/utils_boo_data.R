@@ -199,6 +199,27 @@ pr_get_nuts <-  function(){
     pr_reorder()
 }
 
+#' Get NRS long term nutrient timeseries data
+#'
+#' @return dataframe for plotting nutrient time series info
+#' @export
+#'
+#' @examples
+#' df <- pr_get_LTnuts()
+pr_get_LTnuts <-  function(){
+  NutsLT <- readr::read_csv(paste0(planktonr::pr_get_outputs(), "nuts_longterm_clean2.csv"),
+                          col_types = list(.data$SampleDate = readr::col_date())) %>%
+    tidyr::pivot_longer(-c(.data$StationCode:.data$SampleDepth_m), values_to = "Values", names_to = 'parameters') %>%
+    dplyr::mutate(ProjectName = 'LTM',
+                  Month = lubridate::month(.data$SampleDate)) %>%
+    pr_get_StationName() %>%
+    pr_reorder()
+
+  # add temperature to nuts
+  # add nuts and nutsLT together
+  }
+
+
 #' Get NRS pigment timeseries data
 #'
 #' @return dataframe for plotting pigment time series info
