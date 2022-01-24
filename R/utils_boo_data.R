@@ -221,6 +221,7 @@ pr_get_LTnuts <-  function(){
   Temp <- planktonr::pr_get_CTD() %>%
     dplyr::mutate(StationCode = stringr::str_sub(.data$TripCode, 1, 3)) %>%
     dplyr::select(.data$StationCode, .data$StationName, .data$SampleDateLocal, .data$SampleDepth_m, .data$Temperature_degC) %>%
+    dplyr::filter(StationCode %in% c('MAI', 'ROT', 'PHB')) %>%
       tidyr::pivot_longer(-c(.data$StationCode:.data$SampleDepth_m), values_to = "Values", names_to = 'parameters') %>%
       dplyr::mutate(ProjectName = 'NRS',
                     SampleDateLocal = strptime(as.POSIXct(.data$SampleDateLocal), "%Y-%m-%d"))
