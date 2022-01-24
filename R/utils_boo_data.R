@@ -201,7 +201,7 @@ pr_get_nuts <-  function(){
 
 #' Get NRS long term nutrient timeseries data
 #'
-#' @return dataframe for plotting nutrient time series info
+#' @return dataframe for plotting long term nutrient time series info
 #' @export
 #'
 #' @examples

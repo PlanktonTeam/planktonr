@@ -204,4 +204,4 @@ pr_get_indices_cpr <- function(){
 
 }
 
-write.csv(indices, "CPR_Indices.csv", row.names = FALSE)
+#write.csv(indices, "CPR_Indices.csv", row.names = FALSE)
