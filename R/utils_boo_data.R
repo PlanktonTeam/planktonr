@@ -210,7 +210,6 @@ pr_get_LTnuts <-  function(){
   NutsLT <- readr::read_csv(paste0(planktonr::pr_get_outputs(), "nuts_longterm_clean2.csv")) %>%
     tidyr::pivot_longer(-c(.data$StationCode:.data$SampleDepth_m), values_to = "Values", names_to = 'parameters') %>%
     dplyr::mutate(ProjectName = 'LTM',
-                  Month = lubridate::month(.data$SampleDateLocal),
                   SampleDateLocal = strptime(as.POSIXct(.data$SampleDateLocal), "%Y-%m-%d")) %>%
     pr_get_StationName() %>%
     pr_reorder()
@@ -223,12 +222,23 @@ pr_get_LTnuts <-  function(){
     dplyr::select(.data$StationCode, .data$StationName, .data$SampleDateLocal, .data$SampleDepth_m, .data$Temperature_degC) %>%
       tidyr::pivot_longer(-c(.data$StationCode:.data$SampleDepth_m), values_to = "Values", names_to = 'parameters') %>%
       dplyr::mutate(ProjectName = 'NRS',
-                    Month = lubridate::month(.data$SampleDateLocal),
                     SampleDateLocal = strptime(as.POSIXct(.data$SampleDateLocal), "%Y-%m-%d"))
 
-  LTnuts <- dplyr::bind_rows(NutsLT, Nuts, Temp)
+  LTnuts <- dplyr::bind_rows(NutsLT, Nuts, Temp) %>%
+    dplyr::mutate(Year = lubridate::year(.data$SampleDateLocal),
+                  Month = lubridate::month(.data$SampleDateLocal))
 
-  }
+  means <- LTnuts %>%
+    dplyr::select(.data$StationName, .data$parameters, .data$Values) %>%
+    dplyr::group_by(.data$StationName, .data$parameters) %>%
+    dplyr::summarise(means = mean(Values, na.rm = TRUE),
+                     sd = stats::sd(Values, na.rm = TRUE),
+                     .groups = 'drop')
+
+  Pol <- LTnuts %>% dplyr::left_join(means, by = c("StationName", "parameters")) %>%
+    dplyr::mutate(anomaly = (Values - means)/sd)
+
+   }
 
 
 #' Get NRS pigment timeseries data
