@@ -207,16 +207,27 @@ pr_get_nuts <-  function(){
 #' @examples
 #' df <- pr_get_LTnuts()
 pr_get_LTnuts <-  function(){
-  NutsLT <- readr::read_csv(paste0(planktonr::pr_get_outputs(), "nuts_longterm_clean2.csv"),
-                          col_types = list(.data$SampleDate = readr::col_date())) %>%
+  NutsLT <- readr::read_csv(paste0(planktonr::pr_get_outputs(), "nuts_longterm_clean2.csv")) %>%
     tidyr::pivot_longer(-c(.data$StationCode:.data$SampleDepth_m), values_to = "Values", names_to = 'parameters') %>%
     dplyr::mutate(ProjectName = 'LTM',
-                  Month = lubridate::month(.data$SampleDate)) %>%
+                  Month = lubridate::month(.data$SampleDateLocal),
+                  SampleDateLocal = strptime(as.POSIXct(.data$SampleDateLocal), "%Y-%m-%d")) %>%
     pr_get_StationName() %>%
     pr_reorder()
 
-  # add temperature to nuts
-  # add nuts and nutsLT together
+  Nuts <- planktonr::pr_get_nuts() %>%
+    dplyr::mutate(SampleDateLocal = strptime(.data$SampleDateLocal, "%Y-%m-%d"))
+
+  Temp <- pr_get_CTD() %>%
+    dplyr::mutate(StationCode = stringr::str_sub(.data$TripCode, 1, 3)) %>%
+    dplyr::select(.data$StationCode, .data$StationName, .data$SampleDateLocal, .data$SampleDepth_m, .data$Temperature_degC) %>%
+      tidyr::pivot_longer(-c(.data$StationCode:.data$SampleDepth_m), values_to = "Values", names_to = 'parameters') %>%
+      dplyr::mutate(ProjectName = 'NRS',
+                    Month = lubridate::month(.data$SampleDateLocal),
+                    SampleDateLocal = strptime(as.POSIXct(.data$SampleDateLocal), "%Y-%m-%d"))
+
+  LTnuts <- dplyr::bind_rows(NutsLT, Nuts, Temp)
+
   }
 
 
