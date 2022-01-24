@@ -215,7 +215,8 @@ pr_get_LTnuts <-  function(){
     pr_reorder()
 
   Nuts <- planktonr::pr_get_nuts() %>%
-    dplyr::mutate(SampleDateLocal = strptime(.data$SampleDateLocal, "%Y-%m-%d"))
+    dplyr::mutate(SampleDateLocal = strptime(.data$SampleDateLocal, "%Y-%m-%d")) %>%
+    dplyr::filter(StationCode %in% c('MAI', 'ROT', 'PHB'))
 
   Temp <- planktonr::pr_get_CTD() %>%
     dplyr::mutate(StationCode = stringr::str_sub(.data$TripCode, 1, 3)) %>%
