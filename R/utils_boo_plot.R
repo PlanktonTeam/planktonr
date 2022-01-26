@@ -204,9 +204,9 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
     p1 <- p1 +
       ggplot2::scale_x_continuous(breaks = 2) +
       ggplot2::xlab("Year")
-  } else if (rlang::as_string(trend) %in% c("Raw")){
+  } else if (!rlang::as_string(trend) %in% c("Month", "Year")){
     p1 <- p1 +
-      ggplot2::scale_x_datetime(date_breaks = "2 years") +
+      ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
       ggplot2::xlab("Year")
   }
 
@@ -394,6 +394,86 @@ pr_plot_tsfg <- function(df, Scale = 'Actual', trend = 'Raw'){
   }
   return(p1)
   }
+
+#' Policy plot
+#'
+#' @param df dataframe containing timeseries data with parameters and Values
+#' @param EOV Essential OCean Variable as a parameter
+#' @param Survey NRS, CPR or Long term monitoring
+#' @param trans scale for y axis
+#' @param pal colour pallet from cmocean
+#' @param labels do you want to print labels on the x axes
+#'
+#' @return plot of timeseries, anomalies and climatology
+#' @export
+#'
+#' @examples
+#' df <- data.frame(SampleDate = c("2010-01-01","2010-02-25","2010-06-21","2010-04-11","2010-08-05"),
+#' StationName = 'Port Hacking', parameters = 'Biomass_mgm3', Values = runif(5, 1, 50),
+#' fv = runif(5, 1, 50), anomaly = runif(5, 1, 3), Month = runif(5, 1, 6)) %>%
+#' dplyr::mutate(SampleDate = as.POSIXct(SampleDate))
+#' plot <-  pr_plot_EOV(df, 'Biomass_mgm3', 'NRS', 'identity', 'matter', 'yes')
+pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = 'NRS', trans = 'identity', pal = 'matter', labels = "yes") {
+
+  titley <- planktonr::pr_relabel(EOV, style = "ggplot")
+
+  pals <- planktonr::pr_get_PlotCols(pal = pal, n = 20)
+  col <- pals[15]
+  colin <- pals[5]
+  if(Survey == "LTM"){
+    lims <- as.POSIXct(strptime(c("1944-01-01","2020-31-31"), format = "%Y-%m-%d"))
+    df <- df %>% dplyr::filter(.data$parameters == EOV)
+  } else {
+    lims <- as.POSIXct(strptime(c("2010-01-01","2020-31-31"), format = "%Y-%m-%d"))
+    df <- df %>% dplyr::filter(.data$parameters == EOV) %>% dplyr::rename(SampleDate = 1)
+  }
+
+  p1 <- ggplot2::ggplot(df) +
+    ggplot2::geom_point(ggplot2::aes(x = .data$SampleDate, y = .data$Values), colour = col) +
+    ggplot2::geom_smooth(ggplot2::aes(x = .data$SampleDate, y = .data$fv), method = "lm", formula = 'y ~ x', colour = col, fill = colin) +
+    ggplot2::labs(x = "Year", y = rlang::enexpr(titley)) +
+    ggplot2::scale_y_continuous(trans = trans) +
+    ggplot2::theme(legend.position = "none")
+
+  if(labels == "no"){
+    p1 <- p1 + ggplot2::theme(axis.title.x = ggplot2::element_blank())
+  }
+  if(Survey == 'LTM'){
+    p1 <-  p1 + ggplot2::scale_x_datetime(date_breaks = "10 years", date_labels = "%Y", limits = lims)
+  } else {
+    p1 <-  p1 + ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", limits = lims)
+  }
+
+  p2 <- ggplot2::ggplot(df, ggplot2::aes(.data$SampleDate, .data$anomaly)) +
+    ggplot2::geom_col(fill = colin, colour = col) +
+    ggplot2::xlab("Year") +
+    ggplot2::labs(y = "Anomaly")
+
+  if(labels == "no"){
+    p2 <- p2 + ggplot2::theme(axis.title.x = ggplot2::element_blank())
+  }
+  if(Survey == 'LTM'){
+    p2 <-  p2 + ggplot2::scale_x_datetime(date_breaks = "10 years", date_labels = "%Y", limits = lims)
+  } else {
+    p2 <-  p2 + ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", limits = lims)
+  }
+
+  p3 <- ggplot2::ggplot(df) +
+    ggplot2::geom_point(ggplot2::aes(x = .data$Month, y = .data$Values), colour = col) +
+    ggplot2::geom_smooth(ggplot2::aes(x = .data$Month, y = .data$fv), method = "loess", formula = 'y ~ x', colour = col, fill = colin) +
+    ggplot2::scale_y_continuous(trans = trans) +
+    ggplot2::scale_x_continuous(breaks = seq(0.5, 6.3, length.out = 12), labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
+    ggplot2::xlab("Month") +
+    ggplot2::theme(legend.position = "none",
+                   axis.title.y = ggplot2::element_blank())
+
+  if(labels == "no"){
+    p3 <- p3 + ggplot2::theme(axis.title.x = ggplot2::element_blank())
+  }
+
+  p1 + p2 + p3 + patchwork::plot_layout(widths = c(3,3,2))
+
+}
 
 
 

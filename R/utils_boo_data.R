@@ -199,6 +199,50 @@ pr_get_nuts <-  function(){
     pr_reorder()
 }
 
+#' Get NRS long term nutrient timeseries data
+#'
+#' @return dataframe for plotting long term nutrient time series info
+#' @export
+#'
+#' @examples
+#' df <- pr_get_LTnuts()
+pr_get_LTnuts <-  function(){
+  NutsLT <- readr::read_csv(paste0(planktonr::pr_get_outputs(), "nuts_longterm_clean2.csv")) %>%
+    tidyr::pivot_longer(-c(.data$StationCode:.data$SampleDepth_m), values_to = "Values", names_to = 'parameters') %>%
+    dplyr::mutate(ProjectName = 'LTM',
+                  SampleDateLocal = strptime(as.POSIXct(.data$SampleDateLocal), "%Y-%m-%d")) %>%
+    pr_get_StationName() %>%
+    pr_reorder()
+
+  Nuts <- planktonr::pr_get_nuts() %>%
+    dplyr::mutate(SampleDateLocal = strptime(.data$SampleDateLocal, "%Y-%m-%d")) %>%
+    dplyr::filter(StationCode %in% c('MAI', 'ROT', 'PHB'))
+
+  Temp <- planktonr::pr_get_CTD() %>%
+    dplyr::mutate(StationCode = stringr::str_sub(.data$TripCode, 1, 3)) %>%
+    dplyr::select(.data$StationCode, .data$StationName, .data$SampleDateLocal, .data$SampleDepth_m, .data$Temperature_degC) %>%
+    dplyr::filter(StationCode %in% c('MAI', 'ROT', 'PHB')) %>%
+      tidyr::pivot_longer(-c(.data$StationCode:.data$SampleDepth_m), values_to = "Values", names_to = 'parameters') %>%
+      dplyr::mutate(ProjectName = 'NRS',
+                    SampleDateLocal = strptime(as.POSIXct(.data$SampleDateLocal), "%Y-%m-%d"))
+
+  LTnuts <- dplyr::bind_rows(NutsLT, Nuts, Temp) %>%
+    dplyr::mutate(Year = lubridate::year(.data$SampleDateLocal),
+                  Month = lubridate::month(.data$SampleDateLocal))
+
+  means <- LTnuts %>%
+    dplyr::select(.data$StationName, .data$parameters, .data$Values) %>%
+    dplyr::group_by(.data$StationName, .data$parameters) %>%
+    dplyr::summarise(means = mean(Values, na.rm = TRUE),
+                     sd = stats::sd(Values, na.rm = TRUE),
+                     .groups = 'drop')
+
+  Pol <- LTnuts %>% dplyr::left_join(means, by = c("StationName", "parameters")) %>%
+    dplyr::mutate(anomaly = (Values - means)/sd)
+
+   }
+
+
 #' Get NRS pigment timeseries data
 #'
 #' @return dataframe for plotting pigment time series info

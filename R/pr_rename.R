@@ -11,6 +11,7 @@ pr_rename <- function(df){
   rename_df <- tibble::as_tibble(matrix(c(
     "Ammonium_Flag", "AMMONIUM_FLAG",
     "Ammonium_umolL", "AMMONIUM_UMOLL",
+    "AshFreeBiomass_mgm3", "ASHFREEBIOMASS_MGM3",
     "BioVolume_um3m3", "BIOVOL_UM3M3",
     "Biomass_mgm3", "BIOMASS_MGM3",
     "Biovolume_um3L", "BIOVOLUME_UM3L",
@@ -74,6 +75,7 @@ pr_rename <- function(df){
     "Prochlorococcus_Cellsml", "PROCHLOROCOCCUS_CELLSML",
     "Prochlorococcus_Flag", "PROCHLOROCOCCUS_FLAG",
     "ProjectName", "PROJECTNAME",
+    "Region", "REGION",
     # "Replicate", "REPLICATE",
     "SPCode", "SPCODE",
     "Salinity_Comments", "SALINITY_COMMENTS",

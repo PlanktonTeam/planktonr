@@ -13,19 +13,22 @@ pr_get_indices_nrs <- function(){
 
   NRSdat <- pr_get_NRSTrips(c("P", "Z", "F")) %>%
     select(-.data$SampleType) %>%
-    filter(.data$StationName != "Port Hacking 4")
+    dplyr::mutate(SampleDateLocal = strptime(.data$SampleDateLocal, format = "%Y-%m-%d")) %>%
+    filter(.data$StationName != "Port Hacking 4") %>%
+    dplyr::select(-c(ZSampleDepth_m, PSampleDepth_m, SampleDateUTC))
 
   dNRSdat <- distinct(NRSdat, .data$TripCode, .keep_all = TRUE) %>% # Distinct rows for satellite, should be anyway
     pr_rename() %>%
     select(.data$TripCode, .data$Date, .data$Latitude, .data$Longitude)
 
-  var_names <- c("Density_kgm3", "Temperature_degC", "Conductivity_Sm", "Salinity_psu", "Turbidity_NTU", "CTDChlF_mgm3")
+  var_names <- c("Temperature_degC", "Salinity_psu", "ChlF_mgm3")
   # SST and Chlorophyll from CTD
   CTD <- pr_get_CTD() %>%
     pr_rename() %>%
     filter(.data$SampleDepth_m < 15) %>% # take average of top 10m as a surface value for SST and CHL, this is removing 17 casts as of nov 2020
     group_by(.data$TripCode) %>%
-    summarise(across(matches(var_names), ~ mean(.x, na.rm = TRUE)), .groups = "drop")
+    summarise(across(matches(var_names), ~ mean(.x, na.rm = TRUE)), .groups = "drop") %>%
+    dplyr::rename(CTDTemperature_degC = Temperature_degC, CTDChlF_mgm3 = ChlF_mgm3, CTDSalinity_psu = Salinity_psu)
 
   # Dataset for calculating MLD
   CTD_MLD <- pr_get_CTD() %>%
@@ -34,7 +37,7 @@ pr_get_indices_nrs <- function(){
     # rename(CTDTemperature = .data$Temperature_degC, CTDSalinity = .data$Salinity_psu, CTDChlF_mgm3 = .data$Chla_mgm3) %>%
     tidyr::drop_na(.data$TripCode)
 
-  MLD <- data.frame(TripCode = character(), MLD_temp = numeric(), MLD_sal = numeric(), DCM = numeric())
+  MLD <- data.frame(TripCode = character(), MLDtemp_m = numeric(), MLDsal_m = numeric(), DCM_m = numeric())
 
   # MLD by T and S (Ref: Condie & Dunn 2006)
   # DCM from max f from CTD
@@ -76,7 +79,7 @@ pr_get_indices_nrs <- function(){
              ranktemp = stats::ave(.data$temp, FUN = . %>% order %>% order)) %>%
       filter(.data$ranktemp == 1)
 
-    MLD_temp <- mld_t$SampleDepth_m
+    MLDtemp_m <- mld_t$SampleDepth_m
 
     refS <- refz$Salinity_psu - 0.03 # temp at 10 m minus 0.4
 
@@ -85,15 +88,15 @@ pr_get_indices_nrs <- function(){
              ranksal = stats::ave(.data$temp, FUN = . %>% order %>% order)) %>%
       filter(.data$ranksal == 1)
 
-    MLD_sal <- mld_s$SampleDepth_m
+    MLDsal_m <- mld_s$SampleDepth_m
 
-    dcm <- mean((mldData %>%
+    dcm_m <- mean((mldData %>%
               filter(.data$ChlF_mgm3 > 0 & .data$ChlF_mgm3 == max(.data$ChlF_mgm3))
     )$SampleDepth_m)
-    dcm[rlang::is_empty(dcm)] = NA
+    dcm_m[rlang::is_empty(dcm_m)] = NA
 
     MLD <- MLD %>%
-      bind_rows(data.frame(TripCode = as.character(Trip), MLD_temp = MLD_temp, MLD_sal = MLD_sal, DCM = dcm)) %>%
+      bind_rows(data.frame(TripCode = as.character(Trip), MLDtemp_m = MLDtemp_m, MLDsal_m = MLDsal_m, DCM_m = dcm_m)) %>%
       tidyr::drop_na(.data$TripCode)
   }
 
@@ -109,7 +112,7 @@ pr_get_indices_nrs <- function(){
     filter(.data$SampleDepth_m <= 25) %>% # take average of top 10m as a surface value for SST and CHL
     # filter(.data$SampleDepth_m == "WC") %>%
     group_by(.data$TripCode) %>%
-    summarise(Chla_mgm3 = mean(.data$DV_CPHL_A_AND_CPHL_A, na.rm = TRUE),
+    summarise(PigmentChla_mgm3 = mean(.data$DV_CPHL_A_AND_CPHL_A, na.rm = TRUE),
               .groups = "drop")
 
   # Total Zooplankton Abundance
@@ -119,7 +122,7 @@ pr_get_indices_nrs <- function(){
   TZoo <- ZooData %>%
     group_by(.data$TripCode) %>%
     tidyr::drop_na(.data$ZoopAbund_m3) %>% # stops code putting 0 for trip codes with no counts when na.rm = TRUE
-    summarise(ZoopAbund_m3 = sum(.data$ZoopAbund_m3),
+    summarise(ZoopAbundance_m3 = sum(.data$ZoopAbund_m3),
               .groups = "drop")
 
   TCope <- ZooData %>%
@@ -314,8 +317,8 @@ pr_get_indices_nrs <- function(){
     left_join(CTD, by = ("TripCode")) %>%
     left_join(MLD, by = ("TripCode")) %>%
     left_join(Nuts, by = ("TripCode")) %>%
-    left_join(Pigments, by = ("TripCode"))
+    left_join(Pigments, by = ("TripCode")) %>%
+    mutate_if(is.numeric, ~replace(., is.na(.), ""))
 
 }
-
 

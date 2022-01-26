@@ -12,7 +12,7 @@
 pr_get_indices_cpr <- function(){
 
   # Add the bioregions to the CPR data
-  cprSampleInfo <- pr_get_CPRSamps() %>%
+  cprSampleInfo <- pr_get_CPRSamps(c("P","Z","B")) %>%
     dplyr::select(.data$TripCode:.data$Time_24hr, .data$BioRegion, .data$Biomass_mgm3)
 
   cprZsamp <- pr_get_CPRSamps(c("Z", "B"))
@@ -199,8 +199,9 @@ pr_get_indices_cpr <- function(){
     left_join(PhytoEvencpr, by = "Sample") %>%
     left_join(DiaEvencpr, by = "Sample") %>%
     left_join(DinoEvencpr, by = "Sample") %>%
-    select(-.data$Sample)
+    select(-.data$Sample) %>%
+    mutate_if(is.numeric, ~replace(., is.na(.), ""))
 
 }
 
-#readr::write_csv(indices, "CPR_Indices.csv")
+#write.csv(indices, "CPR_Indices.csv", row.names = FALSE)

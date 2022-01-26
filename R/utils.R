@@ -257,5 +257,64 @@ pr_add_LocalTime <- function(df){
 
 }
 
+#' For use in models to create a circular predictor
+#'
+#' This function i for use in models to create a circular predictor
+#' @param theta Paramter to model in radians
+#' @param k degrees of freedom
+#'
+#' @return A harmonic function
+#' @export
+#'
+#' @examples
+#' theta = 2
+#' k = 1
+#' df <- pr_harmonic(theta, k)
+
+pr_harmonic <- function (theta, k = 4) {
+  X <- matrix(0, length(theta), 2 * k)
+  nam <- as.vector(outer(c("c", "s"), 1:k, paste, sep = ""))
+  dimnames(X) <- list(names(theta), nam)
+  m <- 0
+  for (j in 1:k) {
+    X[, (m <- m + 1)] <- cos(j * theta)
+    X[, (m <- m + 1)] <- sin(j * theta)
+  }
+  X
+}
+
+#' Get coefficients from linear model
+#'
+#' @param df datafram containing Year, Month, parameters, values
+#'
+#' @return coefficients from linear model
+#' @export
+#'
+#' @examples
+#' df <- data.frame(Year = runif(10, 2000, 2003), Month = runif(10, 1, 6), parameters = c('Biomasss_mgm3', 'Diversity'),
+#' Values = runif(10, 1, 5))
+#' pr <- pr_get_coeffs(df)
+pr_get_coeffs <-  function(df){
+
+  params <- df %>% dplyr::select(.data$parameters) %>% unique()
+  params <- params$parameters
+
+  coeffs <- function(params){
+    lmdat <-  df %>% dplyr::filter(parameters == params) %>%
+      tidyr::drop_na()
+    m <- lm(Values ~ Year + planktonr::pr_harmonic(Month, k = 1), data = lmdat)
+    lmdat <- data.frame(lmdat %>% dplyr::bind_cols(fv = m$fitted.values))
+    ms <- summary(m)
+    slope <- ifelse(ms$coefficients[2,1] < 0, 'decreasing', 'increasing')
+    p <-  ifelse(ms$coefficients[2,4] < 0.005, 'significantly', 'but not significantly')
+    df <-  data.frame(slope = slope, p = p, parameters = params)
+    df <- lmdat %>% dplyr::inner_join(df, by = 'parameters')
+  }
+
+  outputs <- purrr::map_dfr(params, coeffs)
+
+}
+
+
 
 
