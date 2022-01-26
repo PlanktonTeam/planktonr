@@ -422,10 +422,10 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = 'NRS', trans = 'ident
   colin <- pals[5]
   if(Survey == "LTM"){
     lims <- as.POSIXct(strptime(c("1944-01-01","2020-31-31"), format = "%Y-%m-%d"))
-    df <- df %>% dplyr::filter(parameters == EOV)
+    df <- df %>% dplyr::filter(.data$parameters == EOV)
   } else {
     lims <- as.POSIXct(strptime(c("2010-01-01","2020-31-31"), format = "%Y-%m-%d"))
-    df <- df %>% dplyr::filter(parameters == EOV) %>% dplyr::rename(SampleDate = 1)
+    df <- df %>% dplyr::filter(.data$parameters == EOV) %>% dplyr::rename(SampleDate = 1)
   }
 
   p1 <- ggplot2::ggplot(df) +
@@ -471,7 +471,6 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = 'NRS', trans = 'ident
     p3 <- p3 + ggplot2::theme(axis.title.x = ggplot2::element_blank())
   }
 
-  #plot <- gridExtra::grid.arrange(p1, p2, p3, nrow = 1, widths = c(3,3,1))
   p1 + p2 + p3 + patchwork::plot_layout(widths = c(3,3,2))
 
 }
