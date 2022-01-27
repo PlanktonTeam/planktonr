@@ -65,6 +65,8 @@ pr_get_indices_cpr <- function(){
     filter(.data$Copepod == 'COPEPOD') %>%
     pr_filter_species() %>%
     mutate(TaxonName = paste0(.data$Genus," ", stringr::word(.data$Species,1))) %>% # bin complexes
+    select(.data$Sample, .data$TaxonName) %>%
+    unique() %>%
     group_by(.data$Sample) %>%
     summarise(NoCopepodSpecies_Sample = n(), .groups = "drop")
 
@@ -123,6 +125,8 @@ pr_get_indices_cpr <- function(){
     filter(.data$TaxonGroup != 'Other') %>%
     pr_filter_species() %>%
     mutate(TaxonName = paste0(.data$Genus," ", stringr::word(.data$Species,1))) %>% # bin complexes
+    select(.data$Sample, .data$TaxonName) %>%
+    unique() %>%
     group_by(.data$Sample) %>%
     summarise(NoPhytoSpecies_Sample = n(), .groups = "drop")
 
@@ -145,6 +149,8 @@ pr_get_indices_cpr <- function(){
     filter(.data$TaxonGroup %in% c('Centric diatom', 'Pennate diatom')) %>%
     pr_filter_species() %>%
     mutate(TaxonName = paste0(.data$Genus," ", stringr::word(.data$Species,1))) %>% # bin complexes
+    select(.data$Sample, .data$TaxonName) %>%
+    unique() %>%
     group_by(.data$Sample) %>%
     summarise(NoDiatomSpecies_Sample = n())
 
@@ -167,6 +173,8 @@ pr_get_indices_cpr <- function(){
     filter(.data$TaxonGroup == 'Dinoflagellate') %>%
     pr_filter_species() %>%
     mutate(TaxonName = paste0(.data$Genus," ", stringr::word(.data$Species,1))) %>% # bin complexes
+    select(.data$Sample, .data$TaxonName) %>%
+    unique() %>%
     group_by(.data$Sample) %>%
     summarise(NoDinoSpecies_Sample = n())
 
@@ -204,4 +212,3 @@ pr_get_indices_cpr <- function(){
 
 }
 
-#write.csv(indices, "CPR_Indices.csv", row.names = FALSE)
