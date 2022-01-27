@@ -12,7 +12,7 @@ pr_get_indices_nrs <- function(){
   # note there are circumstances where a trip won"t have a phyto and a zoo samples due to loss of sample etc.
 
   NRSdat <- pr_get_NRSTrips(c("P", "Z", "F")) %>%
-    select(-.data$SampleType) %>%
+    select(-c(.data$SampleType, .data$Methods)) %>%
     dplyr::mutate(SampleDateLocal = strptime(.data$SampleDateLocal, format = "%Y-%m-%d")) %>%
     filter(.data$StationName != "Port Hacking 4") %>%
     dplyr::select(-c(ZSampleDepth_m, PSampleDepth_m, SampleDateUTC))
@@ -233,7 +233,7 @@ pr_get_indices_nrs <- function(){
     filter(.data$TaxonGroup != "Other") %>%
     pr_filter_species() %>%
     mutate(TaxonName = paste0(.data$Genus," ", stringr::word(.data$Species,1))) %>% # bin complexes
-    dplyr::select((.data$TaxonName, .data$TripCode)) %>%
+    dplyr::select(.data$TaxonName, .data$TripCode) %>%
     unique() %>%
     group_by(.data$TripCode) %>%
     summarise(NoPhytoSpecies_Sample = n(),

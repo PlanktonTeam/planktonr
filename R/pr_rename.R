@@ -52,6 +52,7 @@ pr_rename <- function(df){
     "Latitude", "LATITUDE",
     "Length_mm", "LENGTH_MM",
     "Longitude", "LONGITUDE",
+    "Methods", "METHODS",
     "Nitrate_Flag", "NITRATE_FLAG",
     "Nitrate_umolL", "NITRATE_UMOLL",
     "Nitrite_Flag", "NITRITE_FLAG",
