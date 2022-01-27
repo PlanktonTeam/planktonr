@@ -43,10 +43,11 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
     return(dat)
   } else
   {
-    dat <- readr::read_csv(paste0(planktonr::pr_get_outputs(), "NRS_Indices.csv"), na = "NA", show_col_types = FALSE) %>%
+   dat <- readr::read_csv(paste0(planktonr::pr_get_outputs(), "NRS_Indices.csv"), na = "NA", show_col_types = FALSE) %>%
       dplyr::mutate(Month = lubridate::month(.data$SampleDateLocal),
                     Year = lubridate::year(.data$SampleDateLocal),
-                    StationCode = paste(.data$StationName, .data$StationCode)) %>%
+                    StationCode = paste(.data$StationName, .data$StationCode),
+                    SampleDateLocal = as.POSIXct(.data$SampleDateLocal, format = '%Y-%m-%d')) %>%
       #tidyr::complete(.data$Year, tidyr::nesting(Station, Code)) %>% # Nesting doesn't support data pronouns at this time
       tidyr::complete(.data$Year, .data$StationCode) %>%
       dplyr::mutate(StationName = stringr::str_sub(.data$StationCode, 1, -5),

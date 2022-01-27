@@ -169,6 +169,8 @@ pr_get_indices_nrs <- function(){
     filter(.data$Copepod == "COPEPOD") %>%
     pr_filter_species() %>%
     mutate(TaxonName = paste0(.data$Genus," ", stringr::word(.data$Species,1))) %>% # bin complexes
+    dplyr::select(.data$TripCode, .data$TaxonName) %>%
+    unique() %>%
     group_by(.data$TripCode) %>%
     summarise(NoCopepodSpecies_Sample = n(), .groups = "drop")
 
@@ -231,6 +233,8 @@ pr_get_indices_nrs <- function(){
     filter(.data$TaxonGroup != "Other") %>%
     pr_filter_species() %>%
     mutate(TaxonName = paste0(.data$Genus," ", stringr::word(.data$Species,1))) %>% # bin complexes
+    dplyr::select((.data$TaxonName, .data$TripCode)) %>%
+    unique() %>%
     group_by(.data$TripCode) %>%
     summarise(NoPhytoSpecies_Sample = n(),
               .groups = "drop")
