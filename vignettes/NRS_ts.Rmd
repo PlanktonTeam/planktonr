@@ -43,7 +43,7 @@ First we get the data then we filter it for the desired parameters.
 
 datNRSz <- planktonr::pr_get_tsdata("NRS", "Z") %>%
   filter(StationName %in% c("Yongala", "Maria Island"),
-         parameters == "ZoopAbund_m3") %>%
+         parameters == "ZoopAbundance_m3") %>%
   droplevels()
 
 ```

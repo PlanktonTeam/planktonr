@@ -189,7 +189,7 @@ pr_apply_time <- function(df){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_filter_species <- function(df){
-  pat <- c("spp.", "cf.", "/", "grp")
+  pat <- c("spp.", "cf.", "/", "grp", "complex", "type")
   df <- df %>%
     filter(stringr::str_detect(.data$Species, paste(pat, collapse = "|"), negate = TRUE))
 }
