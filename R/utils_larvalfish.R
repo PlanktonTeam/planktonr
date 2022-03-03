@@ -6,14 +6,13 @@
 #' @examples
 #' df <- pr_get_LFTrips()
 #' #' @import dplyr
-#' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_LFTrips <- function(){
   LFSamp <- readr::read_csv(paste0(pr_get_site2(), "BGC_LFish_Samples.csv"), na = "", show_col_types = FALSE,
                             col_types = readr::cols(FLAG_COMMENT = readr::col_character())) %>%
     pr_rename() %>%
     pr_apply_time() %>%
-    select(.data$i_Sample:.data$SampleDateLocal, .data$Year:.data$SampleDateLocal, .data$Latitude:.data$Comments)
+    dplyr::select(.data$i_Sample:.data$SampleDateLocal, .data$Year:.data$SampleDateLocal, .data$Latitude:.data$Comments)
 }
 
 
@@ -26,7 +25,6 @@ pr_get_LFTrips <- function(){
 #' @examples
 #' df <- pr_get_LFData()
 #' #' @import dplyr
-#' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_LFData <- function(){
   LFData <- readr::read_csv(paste0(pr_get_site2(), "BGC_LFish_CountRaw.csv"), na = "", show_col_types = FALSE) %>%
@@ -41,18 +39,16 @@ pr_get_LFData <- function(){
 #'
 #' @examples
 #' df <- pr_get_LFCountAll()
-#' @import dplyr
-#' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_LFCountAll <- function(){
 
   LFCount <- pr_get_LFTrips() %>%
-    left_join(pr_get_LFData() %>% select(-.data$Comments), by = c("i_Sample", "TripCode")) %>%
-    mutate(Header = paste(.data$ScientificName, .data$SPCode, sep = " ")) %>%
-    select(-.data$ScientificName, -.data$SPCode) %>%
-    arrange(.data$Header) %>%
+    dplyr::left_join(pr_get_LFData() %>% dplyr::select(-.data$Comments), by = c("i_Sample", "TripCode")) %>%
+    dplyr::mutate(Header = paste(.data$ScientificName, .data$SPCode, sep = " ")) %>%
+    dplyr::select(-.data$ScientificName, -.data$SPCode) %>%
+    dplyr::arrange(.data$Header) %>%
     tidyr::pivot_wider(names_from = .data$Header, values_from = .data$TaxonCount, values_fill = 0) %>%
-    arrange(.data$SampleDateLocal)
+    dplyr::arrange(.data$SampleDateLocal)
 }
 
 
@@ -64,17 +60,15 @@ pr_get_LFCountAll <- function(){
 #'
 #' @examples
 #' df <- pr_get_LFCountBGC()
-#' @import dplyr
-#' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_LFCountBGC <- function(){
   LFCountBGC <- pr_get_LFTrips() %>%
-    filter(grepl('IMOS', .data$ProjectName)) %>%
-    left_join(pr_get_LFData() %>%
-                       select(-.data$Comments), by = c("i_Sample", "TripCode")) %>%
-    mutate(Header = paste(.data$ScientificName, .data$SPCode, sep = " ")) %>%
-    select(-c(.data$ScientificName, .data$SPCode, .data$Temperature_degC, .data$Salinity_psu, .data$FlagComments)) %>%
-    arrange(.data$Header) %>%
+    dplyr::filter(grepl('IMOS', .data$ProjectName)) %>%
+    dplyr::left_join(pr_get_LFData() %>%
+                       dplyr::select(-.data$Comments), by = c("i_Sample", "TripCode")) %>%
+    dplyr::mutate(Header = paste(.data$ScientificName, .data$SPCode, sep = " ")) %>%
+    dplyr::select(-c(.data$ScientificName, .data$SPCode, .data$Temperature_degC, .data$Salinity_psu, .data$FlagComments)) %>%
+    dplyr::arrange(.data$Header) %>%
     tidyr::pivot_wider(names_from = .data$Header, values_from = .data$TaxonCount, values_fill = 0) %>%
-    arrange(.data$SampleDateLocal)
+    dplyr::arrange(.data$SampleDateLocal)
 }

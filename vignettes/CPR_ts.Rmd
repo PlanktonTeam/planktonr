@@ -41,6 +41,7 @@ Then attach the library
 
 ```{r, warning=FALSE, message=FALSE}
 library(planktonr)
+library(dplyr)
 ```
 
 ## Phytoplankton Abundance Data

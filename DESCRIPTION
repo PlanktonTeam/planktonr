@@ -22,6 +22,7 @@ RoxygenNote: 7.1.2
 Imports:
     cmocean,
     data.table,
+    dplyr,
     forcats,
     ggplot2,
     gridExtra,
@@ -36,16 +37,17 @@ Imports:
     rlang,
     rnaturalearth,
     rnaturalearthdata,
-    scales, 
+    scales,
     sf,
+    stats,
     stringr,
     suncalc,
     tibble,
     tidyr,
+    tidyselect,
     vegan
 Depends: 
-    R (>= 2.10),
-    dplyr
+    R (>= 2.10)
 Suggests: 
     rmarkdown,
     knitr,

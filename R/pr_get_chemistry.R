@@ -4,11 +4,9 @@
 #' @export
 #'
 #' @examples
-#' df <- pr_get_Chemistry()
-#' @import dplyr
-#' @importFrom magrittr "%>%"
+#' df <- pr_get_chemistry()
 #' @importFrom rlang .data
-pr_get_Chemistry <- function(){
+pr_get_chemistry <- function(){
 
   var_names <- c("Silicate_umolL", "Phosphate_umolL", "Ammonium_umolL", "Nitrate_umolL", "Nitrite_umolL",
                  "Oxygen_umolL", "DIC_umolkg", "TAlkalinity_umolkg", "Salinity_psu")
@@ -19,8 +17,8 @@ pr_get_Chemistry <- function(){
                                                        OXYGEN_COMMENTS = readr::col_character())) %>%
     pr_rename() %>%
     pr_apply_flags() %>%
-    mutate(SampleDepth_m = as.character(.data$SampleDepth_m)) %>%
-    group_by(.data$TripCode, .data$SampleDepth_m) %>%
-    summarise(across(matches(var_names), ~ mean(.x, na.rm = TRUE)), .groups = "drop") %>%
-    mutate_all(~ replace(., is.na(.), NA))
+    dplyr::mutate(SampleDepth_m = as.character(.data$SampleDepth_m)) %>%
+    dplyr::group_by(.data$TripCode, .data$SampleDepth_m) %>%
+    dplyr::summarise(dplyr::across(dplyr::matches(var_names), ~ mean(.x, na.rm = TRUE)), .groups = "drop") %>%
+    dplyr::mutate_all(~ replace(., is.na(.), NA))
 }

@@ -56,7 +56,6 @@ pr_plot_NRSmap <- function(df){
 #' @return is a plotly map of the selected bioregions
 #' @export
 #'
-#' @importFrom magrittr "%>%"
 #'
 #' @examples
 #' df <- data.frame(BioRegion = c("Temperate East", "South-west"))
@@ -65,7 +64,7 @@ pr_plot_CPRmap <-  function(df){
 
   bioregionSelection <- mbr %>%
     dplyr::filter(.data$REGION %in% df$BioRegion) %>%
-    mutate(REGION = factor(.data$REGION, levels = c("Coral Sea", "Temperate East", "South-west", "South-east")))
+    dplyr::mutate(REGION = factor(.data$REGION, levels = c("Coral Sea", "Temperate East", "South-west", "South-east")))
 
   n <- length(unique(bioregionSelection$REGION))
 
@@ -94,7 +93,6 @@ pr_plot_CPRmap <-  function(df){
 #' @return a plotly timeseries plot
 #' @export
 #'
-#' @importFrom magrittr "%>%"
 #' @importFrom ggplot2 aes
 #'
 #' @examples
@@ -123,8 +121,8 @@ pr_plot_timeseries <- function(df, Survey = "NRS", pal = "matter", Scale = "iden
   }
 
   n <- length(unique(df$StationCode))
-  plotCols <- planktonr::pr_get_PlotCols(pal, n)
-  titley <- planktonr::pr_relabel(unique(df$parameters), style = "ggplot")
+  plotCols <- pr_get_PlotCols(pal, n)
+  titley <- pr_relabel(unique(df$parameters), style = "ggplot")
 
   p1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$SampleDate, y = .data$Values)) +
     ggplot2::geom_line(ggplot2::aes(group = .data$StationCode, color = .data$StationCode)) +
@@ -170,7 +168,7 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
     site = rlang::sym("StationName")
   }
 
-  titley <- planktonr::pr_relabel(unique(df$parameters), style = output)
+  titley <- pr_relabel(unique(df$parameters), style = output)
 
   # Averaging based on `trend` ----------------------------------------------
 
@@ -183,7 +181,7 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
       dplyr::summarise(value = mean(.data$Values, na.rm = TRUE),
                        N = dplyr::n(),
                        sd = sd(.data$Values, na.rm = TRUE),
-                       se = sd / sqrt(N),
+                       se = sd / sqrt(.data$N),
                        .groups = "drop")
 
   } else {
@@ -192,7 +190,7 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
       dplyr::group_by(!!time, !!site, .data$parameters) %>% # accounting for microbial data different depths
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                        .groups = 'drop')%>%
-      rename(value = Values)
+      dplyr::rename(value = .data$Values)
   }
 
   # Do the plotting ---------------------------------------------------------
@@ -241,7 +239,6 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
 #'
 #' @return a plotly climatology plot
 #' @export
-#' @importFrom magrittr "%>%"
 #' @importFrom stats sd
 #' @importFrom ggplot2 aes
 #'
@@ -259,8 +256,8 @@ pr_plot_climate <- function(df, Survey = "NRS", x, pal = "matter", Scale = "iden
   }
 
   n <- length(unique(df$StationCode))
-  plotCols <- planktonr::pr_get_PlotCols(pal, n)
-  title <- planktonr::pr_relabel(unique(df$parameters), style = "ggplot")
+  plotCols <- pr_get_PlotCols(pal, n)
+  title <- pr_relabel(unique(df$parameters), style = "ggplot")
 
   df_climate <- df %>%
     dplyr::filter(!!x != "NA") %>% # need to drop NA from month, added to dataset by complete(Year, StationCode)
@@ -347,11 +344,11 @@ pr_plot_tsclimate <- function(df, Survey = c("CPR", "NRS"), pal = "matter", Scal
 #' df <- pr_get_fg('NRS', 'P')
 #' plot <- pr_plot_tsfg(df, 'Actual')
 pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
-  titley <- planktonr::pr_relabel("FunctionalGroup", style = "ggplot")
+  titley <- pr_relabel("FunctionalGroup", style = "ggplot")
 
   n <- length(unique(df$parameters))
 
-  plotCols <- planktonr::pr_get_PlotCols(pal, n)
+  plotCols <- pr_get_PlotCols(pal, n)
 
  if("SampleDateUTC" %in% colnames(df)){
     SampleDate = rlang::sym("SampleDateUTC")
@@ -384,7 +381,8 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
       dplyr::mutate(Values = .data$n / sum(.data$n, na.rm = TRUE)) %>%
       dplyr::ungroup()
   } else {
-    df <- df %>% mutate(Values = log10(.data$Values))
+    df <- df %>%
+      dplyr::mutate(Values = log10(.data$Values))
   }
 
   p1 <- ggplot2::ggplot(df, ggplot2::aes(x = !!rlang::sym(trend), y = .data$Values, fill = .data$parameters)) +
@@ -434,17 +432,20 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
 #' plot <-  pr_plot_EOV(df, 'Biomass_mgm3', 'NRS', 'identity', 'matter', 'yes')
 pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = 'NRS', trans = 'identity', pal = 'matter', labels = "yes") {
 
-  titley <- planktonr::pr_relabel(EOV, style = "ggplot")
+  titley <- pr_relabel(EOV, style = "ggplot")
 
-  pals <- planktonr::pr_get_PlotCols(pal = pal, n = 20)
+  pals <- pr_get_PlotCols(pal = pal, n = 20)
   col <- pals[15]
   colin <- pals[5]
   if(Survey == "LTM"){
     lims <- as.POSIXct(strptime(c("1944-01-01","2020-31-31"), format = "%Y-%m-%d"))
-    df <- df %>% dplyr::filter(.data$parameters == EOV)
+    df <- df %>%
+      dplyr::filter(.data$parameters == EOV)
   } else {
     lims <- as.POSIXct(strptime(c("2010-01-01","2020-31-31"), format = "%Y-%m-%d"))
-    df <- df %>% dplyr::filter(.data$parameters == EOV) %>% dplyr::rename(SampleDate = 1)
+    df <- df %>%
+      dplyr::filter(.data$parameters == EOV) %>%
+      dplyr::rename(SampleDate = 1)
   }
 
   p1 <- ggplot2::ggplot(df) +
@@ -510,9 +511,9 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = 'NRS', trans = 'ident
 #' df <- pr_get_nuts() %>% pr_plot_env_var()
 pr_plot_env_var <- function(df, pal = 'matter', trend = 'None', Scale = 'identity') {
   n <- length(unique(df$StationName))
-  plotCols <- planktonr::pr_get_PlotCols(pal, n)
+  plotCols <- pr_get_PlotCols(pal, n)
   # titley <- unique(df$parameters)
-  titley <- planktonr::pr_relabel(unique(df$parameters), style = "plotly")
+  titley <- pr_relabel(unique(df$parameters), style = "plotly")
   np <- length(unique(df$SampleDepth_m))
 
   p <- ggplot2::ggplot(df, ggplot2::aes(.data$SampleDateLocal, .data$Values, colour = .data$StationName)) +
@@ -537,8 +538,9 @@ pr_plot_env_var <- function(df, pal = 'matter', trend = 'None', Scale = 'identit
 
   p <- plotly::ggplotly(p, height = 150 * np)
 
-  mdat <- df %>% group_by(.data$StationName, .data$Month, .data$SampleDepth_m, .data$parameters) %>%
-    summarise(MonValues = mean(.data$Values, na.rm = TRUE),
+  mdat <- df %>%
+    dplyr::group_by(.data$StationName, .data$Month, .data$SampleDepth_m, .data$parameters) %>%
+    dplyr::summarise(MonValues = mean(.data$Values, na.rm = TRUE),
               N = length(.data$Values),
               sd = stats::sd(.data$Values, na.rm = TRUE),
               se = sd / sqrt(.data$N),
@@ -615,9 +617,9 @@ pr_plot_daynight <-  function(df){
 
   titlemain <- unique(df$Species)
   if("CopeAbundance_m3" %in% names(df)){
-    ylabel <- planktonr::pr_relabel("CopeAbundance_m3", style = "ggplot") # this is probably only worth doing for copepods as we don"t have a lot of data for other things
+    ylabel <- pr_relabel("CopeAbundance_m3", style = "ggplot") # this is probably only worth doing for copepods as we don"t have a lot of data for other things
   } else {
-    ylabel <- planktonr::pr_relabel("PhytoAbund_m3", style = "ggplot")
+    ylabel <- pr_relabel("PhytoAbund_m3", style = "ggplot")
   }
 
   plots <- ggplot2::ggplot(df, ggplot2::aes(.data$Month, .data$Species_m3)) +
@@ -646,17 +648,19 @@ pr_plot_daynight <-  function(df){
 #' Species_m3 = runif(24, 0.1, 10), Species = 'Acartia danae')
 #' plot <- pr_plot_sti(df)
 pr_plot_sti <-  function(df){
-  means <- df %>% dplyr::group_by(.data$Project) %>%
+  means <- df %>%
+    dplyr::group_by(.data$Project) %>%
     dplyr::summarise(mean = mean(.data$Species_m3, na.rm = TRUE))
 
   #means are so different so log data as the abundance scale is so wide
 
-  sti <- df %>% dplyr::left_join(means, by = "Project") %>%
+  sti <- df %>%
+    dplyr::left_join(means, by = "Project") %>%
     dplyr::mutate(relab = .data$Species_m3/.data$mean) %>%
     dplyr::group_by(.data$sst, .data$Species) %>%
     dplyr::summarize(relab = sum(.data$relab),
-                     freq = n(),
-                     a = sum(.data$relab)/n(),
+                     freq = dplyr::n(),
+                     a = sum(.data$relab)/dplyr::n(),
                      .groups = "drop")
 
   n <- length(sti$sst)
@@ -691,7 +695,7 @@ pr_plot_sti <-  function(df){
 #  kern_yp[,i] <- kernOut$y/sum(kernOut$y) * 100 * mean(sti$relab)
 #  kypout[,i] <- kernOut$y
 
-  xlabel <- planktonr::pr_relabel("Temperature_degC", style = "ggplot")
+  xlabel <- pr_relabel("Temperature_degC", style = "ggplot")
   subtit <- rlang::expr(paste("STI = ",!!STI,degree,"C"))
 
   stiplot <- ggplot2::ggplot(z, aes(kernTemps, .data$y)) + ggplot2::geom_point() +

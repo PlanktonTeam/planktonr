@@ -8,8 +8,6 @@
 #' \dontrun{
 #' pr_export_larvalfish("Output")
 #' }
-#' @import dplyr
-#' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_export_larvalfish <- function(outD){
 

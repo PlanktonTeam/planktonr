@@ -1,6 +1,3 @@
-## Functions for operating
-
-
 #' Get location of raw plankton data
 #'
 #' Internal function to load the location of the raw plankton data files.
@@ -8,8 +5,6 @@
 #' @export
 #' @examples
 #' file_loc <- pr_get_site()
-#' @import dplyr
-#' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_site <- function(){
   raw <-"http://geoserver-123.aodn.org.au/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=imos:LAYER_NAME&outputFormat=csv-with-metadata-header"
@@ -24,8 +19,6 @@ pr_get_site <- function(){
 #' @export
 #' @examples
 #' file_loc <- pr_get_site2()
-#' @import dplyr
-#' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_site2 <- function(){
   raw <- "https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/RawData/"
@@ -39,8 +32,6 @@ pr_get_site2 <- function(){
 #' @export
 #' @examples
 #' file_loc <- pr_get_outputs()
-#' @import dplyr
-#' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_outputs <- function(){
    raw <- "https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/Output/"
@@ -54,8 +45,6 @@ pr_get_outputs <- function(){
 #'
 #' @examples
 #' df <- pr_get_ZooInfo()
-#' @import dplyr
-#' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_ZooInfo <- function(){
   ZInfo <- readr::read_csv(paste0(pr_get_site2(), "ZoopInfo.csv"), na = "", show_col_types = FALSE) %>%
@@ -73,12 +62,10 @@ pr_get_ZooInfo <- function(){
 #' @examples
 #' df <- pr_get_NRSStation() %>%
 #'     pr_get_StationName()
-#' @import dplyr
-#' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_StationName <- function(df){
   df <- df %>%
-    mutate(StationName = case_when(
+    dplyr::mutate(StationName = dplyr::case_when(
       StationCode == "DAR" ~ "Darwin",
       StationCode == "YON" ~ "Yongala",
       StationCode == "NSI" ~ "North Stradbroke Island",
@@ -97,7 +84,6 @@ pr_get_StationName <- function(df){
 #' @return An ordered dataframe
 #' @export
 #'
-#' @importFrom magrittr "%>%"
 #' @examples
 #' df <- data.frame(StationName = c('Port Hacking', 'Maria Island',
 #' 'North Stradbroke Island','Esperance', 'Ningaloo', "Darwin",
@@ -105,15 +91,18 @@ pr_get_StationName <- function(df){
 #' df <- pr_reorder(df)
 pr_reorder <- function(df){
   if("StationName" %in% colnames(df)){
-    df <- df %>% mutate(StationName = factor(.data$StationName, levels = c("Darwin", "Yongala", 'Ningaloo', 'North Stradbroke Island',
+    df <- df %>%
+      dplyr::mutate(StationName = factor(.data$StationName, levels = c("Darwin", "Yongala", 'Ningaloo', 'North Stradbroke Island',
                                                                'Rottnest Island', 'Esperance', 'Port Hacking', 'Kangaroo Island',
                                                                'Maria Island')))
   }
   if("StationCode" %in% colnames(df) & !"StationName" %in% colnames(df)){
-    df <- df %>% mutate(StationCode = factor(.data$StationCode, levels = c("DAR", "YON", 'NIN', 'NSI', 'ROT', 'ESP', 'PHB', 'KAI', 'MAI')))
+    df <- df %>%
+      dplyr::mutate(StationCode = factor(.data$StationCode, levels = c("DAR", "YON", 'NIN', 'NSI', 'ROT', 'ESP', 'PHB', 'KAI', 'MAI')))
   }
   if("BioRegion" %in% colnames(df)){
-    df <- df %>% mutate(BioRegion = factor(.data$BioRegion, levels = c("North", "North-west", 'Coral Sea', 'Temperate East', 'South-east', 'South-west')))
+    df <- df %>%
+      dplyr::mutate(BioRegion = factor(.data$BioRegion, levels = c("North", "North-west", 'Coral Sea', 'Temperate East', 'South-east', 'South-west')))
   }
   return(df)
 }
@@ -128,8 +117,6 @@ pr_reorder <- function(df){
 #' @examples
 #' df <- data.frame(SST = c(27.4, 28.9, 45), SST_Flag = c(1, 1, 4))
 #' df <- pr_apply_flags(df)
-#' @import dplyr
-#' @importFrom magrittr "%>%"
 #' @importFrom data.table ":="
 #' @importFrom rlang .data
 pr_apply_flags <- function(df){
@@ -157,7 +144,7 @@ pr_apply_flags <- function(df){
     var_flags <- stringr::str_subset(out,"_Flag") # Find the flag
 
     df <- df %>%
-      mutate(!!var_units := if_else(eval(rlang::sym(var_flags)) %in% bad_flags, NA_real_, eval(rlang::sym(var_units))))
+      dplyr::mutate(!!var_units := dplyr::if_else(eval(rlang::sym(var_flags)) %in% bad_flags, NA_real_, eval(rlang::sym(var_units))))
     rm(out, var_units, var_flags)
   }
   return(df)
@@ -174,14 +161,12 @@ pr_apply_flags <- function(df){
 #' @examples
 #' df <- data.frame(SampleDateLocal = lubridate::now(), Latitude = -32, Longitude = 160)
 #' df <- pr_apply_time(df)
-#' @import dplyr
-#' @importFrom magrittr "%>%"
 #' @importFrom data.table ":="
 #' @importFrom rlang .data
 pr_apply_time <- function(df){
 
   df <- df %>%
-    mutate(Year = lubridate::year(.data$SampleDateLocal),
+    dplyr::mutate(Year = lubridate::year(.data$SampleDateLocal),
            Month = lubridate::month(.data$SampleDateLocal),
            Day = lubridate::day(.data$SampleDateLocal),
            Time_24hr = stringr::str_sub(.data$SampleDateLocal, -8, -1), # hms doesn"t seem to work on 00:00:00 times
@@ -199,16 +184,14 @@ pr_apply_time <- function(df){
 #' @export
 #'
 #' @examples
-#' df <- tibble(Species = c("IncorrectSpecies cf.", "CorrectSpcies1", NA,
+#' df <- data.frame(Species = c("IncorrectSpecies cf.", "CorrectSpcies1", NA,
 #'               "CorrectSpecies2", "Incorrect spp., Incorrect/Species"))
 #' df <- pr_filter_species(df)
-#' @import dplyr
-#' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_filter_species <- function(df){
   pat <- c("spp.", "cf.", "/", "grp", "complex", "type")
   df <- df %>%
-    filter(stringr::str_detect(.data$Species, paste(pat, collapse = "|"), negate = TRUE))
+    dplyr::filter(stringr::str_detect(.data$Species, paste(pat, collapse = "|"), negate = TRUE))
 }
 
 
@@ -222,17 +205,17 @@ pr_filter_species <- function(df){
 #' @export
 #'
 #' @examples
-#' df <- tibble(TaxonGroup = c("Dinoflagellate", "Cyanobacteria"),
+#' df <- data.frame(TaxonGroup = c("Dinoflagellate", "Cyanobacteria"),
 #'                           Biovolume_um3L = c(100, 150), Cells_L = c(10, 8))
 #' df <- pr_add_Carbon(df, "NRS")
-#' df <- tibble(TaxonGroup = c("Dinoflagellate", "Cyanobacteria"),
+#' df <- data.frame(TaxonGroup = c("Dinoflagellate", "Cyanobacteria"),
 #'                           BioVolume_um3m3 = c(100, 150), PhytoAbund_m3 = c(10, 8))
 #' df <- pr_add_Carbon(df, "CPR")
 pr_add_Carbon <- function(df, meth){
 
   if (meth %in% "CPR"){
     df <- df %>%
-      mutate(BV_Cell = .data$BioVolume_um3m3 / .data$PhytoAbund_m3, # biovolume of one cell
+      dplyr::mutate(BV_Cell = .data$BioVolume_um3m3 / .data$PhytoAbund_m3, # biovolume of one cell
              Carbon = ifelse(.data$TaxonGroup == "Dinoflagellate", 0.76*(.data$BV_Cell)^0.819, # conversion to Carbon based on taxongroup and biovolume of cell
                              ifelse(.data$TaxonGroup == 'Ciliate', 0.22*(.data$BV_Cell)^0.939,
                                     ifelse(.data$TaxonGroup == 'Cyanobacteria', 0.2, 0.288*(.data$BV_Cell)^0.811 ))),
@@ -243,8 +226,8 @@ pr_add_Carbon <- function(df, meth){
 
   if (meth %in% "NRS"){
     df <- df %>%
-      mutate(BV_Cell = .data$Biovolume_um3L / .data$Cells_L, # biovolume of one cell
-             Carbon = case_when(.data$TaxonGroup == "Dinoflagellate" ~ 0.76*(.data$BV_Cell)^0.819, # conversion to Carbon based on taxongroup and biovolume of cell
+      dplyr::mutate(BV_Cell = .data$Biovolume_um3L / .data$Cells_L, # biovolume of one cell
+             Carbon = dplyr::case_when(.data$TaxonGroup == "Dinoflagellate" ~ 0.76*(.data$BV_Cell)^0.819, # conversion to Carbon based on taxongroup and biovolume of cell
                                 .data$TaxonGroup == "Ciliate" ~ 0.22*(.data$BV_Cell)^0.939,
                                 .data$TaxonGroup == "Cyanobacteria" ~ 0.2,
                                 TRUE ~ 0.288*(.data$BV_Cell)^0.811),
@@ -265,7 +248,7 @@ pr_add_Carbon <- function(df, meth){
 #' @export
 #'
 #' @examples
-#' df <- tibble(tz = c("Australia/Perth", "Australia/Brisbane"),
+#' df <- data.frame(tz = c("Australia/Perth", "Australia/Brisbane"),
 #'                SampleDateUTC = c(lubridate::now(), lubridate::now()))
 #' df <- pr_add_LocalTime(df)
 pr_add_LocalTime <- function(df){
@@ -308,23 +291,29 @@ pr_harmonic <- function (theta, k = 4) {
 #' @export
 #'
 #' @examples
-#' df <- data.frame(Year = runif(10, 2000, 2003), Month = runif(10, 1, 6), parameters = c('Biomasss_mgm3', 'Diversity'),
+#' df <- data.frame(Year = runif(10, 2000, 2003),
+#'                  Month = runif(10, 1, 6),
+#'                  parameters = c('Biomasss_mgm3', 'Diversity'),
 #' Values = runif(10, 1, 5))
 #' pr <- pr_get_coeffs(df)
 pr_get_coeffs <-  function(df){
 
-  params <- df %>% dplyr::select(.data$parameters) %>% unique()
+  params <- df %>%
+    dplyr::select(.data$parameters) %>%
+    unique()
   params <- params$parameters
 
   coeffs <- function(params){
-    lmdat <-  df %>% dplyr::filter(parameters == params) %>%
+    lmdat <-  df %>%
+      dplyr::filter(.data$parameters == params) %>%
       tidyr::drop_na()
-    m <- lm(Values ~ Year + planktonr::pr_harmonic(Month, k = 1), data = lmdat)
+
+    m <- stats::lm(Values ~ Year + pr_harmonic(Month, k = 1), data = lmdat)
     lmdat <- data.frame(lmdat %>% dplyr::bind_cols(fv = m$fitted.values))
     ms <- summary(m)
     slope <- ifelse(ms$coefficients[2,1] < 0, 'decreasing', 'increasing')
-    p <-  ifelse(ms$coefficients[2,4] < 0.005, 'significantly', 'but not significantly')
-    df <-  data.frame(slope = slope, p = p, parameters = params)
+    p <- ifelse(ms$coefficients[2,4] < 0.005, 'significantly', 'but not significantly')
+    df <- data.frame(slope = slope, p = p, parameters = params)
     df <- lmdat %>% dplyr::inner_join(df, by = 'parameters')
   }
 
