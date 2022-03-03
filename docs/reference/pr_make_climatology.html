@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="The package is in the early stages of development. Not recommended for use at this stage.">0.0.0.9001</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="The package is in the early stages of development. Not recommended for use at this stage.">0.0.0.9002</span>
       </span>
     </div>
 
@@ -98,10 +98,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/CPR_ts.html">CPR timeseries</a>
+      <a href="../articles/CPR_ts.html">Analysing CPR timeseries</a>
     </li>
     <li>
-      <a href="../articles/NRS_ts.html">NRS timeseries</a>
+      <a href="../articles/NRS_ts.html">Analysing NRS timeseries</a>
     </li>
   </ul>
 </li>
@@ -155,23 +155,24 @@
     <p>dataframe to use in pr_plot_climate functions</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>Month <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>12</span>,<span class='fl'>10</span><span class='op'>)</span>, StationCode <span class='op'>=</span> <span class='st'>'NSI'</span>, Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>120</span>, min<span class='op'>=</span><span class='fl'>0</span>, max<span class='op'>=</span><span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>pr_make_climatology</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>Month</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 12 × 6</span>
-#&gt;    Month StationCode  mean     N    sd    se
-#&gt;    <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'> 1</span>     1 NSI          3.79    10  2.29 0.724
-#&gt; <span style='color: #BCBCBC;'> 2</span>     2 NSI          3.33    10  2.42 0.765
-#&gt; <span style='color: #BCBCBC;'> 3</span>     3 NSI          4.42    10  2.95 0.932
-#&gt; <span style='color: #BCBCBC;'> 4</span>     4 NSI          4.76    10  2.92 0.922
-#&gt; <span style='color: #BCBCBC;'> 5</span>     5 NSI          6.26    10  3.21 1.01 
-#&gt; <span style='color: #BCBCBC;'> 6</span>     6 NSI          4.73    10  2.71 0.856
-#&gt; <span style='color: #BCBCBC;'> 7</span>     7 NSI          3.99    10  1.88 0.593
-#&gt; <span style='color: #BCBCBC;'> 8</span>     8 NSI          6.74    10  1.57 0.497
-#&gt; <span style='color: #BCBCBC;'> 9</span>     9 NSI          5.44    10  2.48 0.784
-#&gt; <span style='color: #BCBCBC;'>10</span>    10 NSI          4.35    10  2.57 0.812
-#&gt; <span style='color: #BCBCBC;'>11</span>    11 NSI          5.94    10  3.47 1.10 
-#&gt; <span style='color: #BCBCBC;'>12</span>    12 NSI          6.30    10  2.57 0.812</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>Month <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>12</span>,<span class='fl'>10</span><span class='op'>)</span>, StationCode <span class='op'>=</span> <span class='st'>'NSI'</span>, Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>120</span>, min<span class='op'>=</span><span class='fl'>0</span>, max<span class='op'>=</span><span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>pr_make_climatology</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>Month</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 12 × 6</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Month StationCode  mean     N    sd    se</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span>     1 NSI          3.79    10  2.29 0.724</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span>     2 NSI          3.33    10  2.42 0.765</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span>     3 NSI          4.42    10  2.95 0.932</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span>     4 NSI          4.76    10  2.92 0.922</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span>     5 NSI          6.26    10  3.21 1.01 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span>     6 NSI          4.73    10  2.71 0.856</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span>     7 NSI          3.99    10  1.88 0.593</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span>     8 NSI          6.74    10  1.57 0.497</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span>     9 NSI          5.44    10  2.48 0.784</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span>    10 NSI          4.35    10  2.57 0.812</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>11</span>    11 NSI          5.94    10  3.47 1.10 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>12</span>    12 NSI          6.30    10  2.57 0.812</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

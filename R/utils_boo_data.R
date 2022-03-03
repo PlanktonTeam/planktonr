@@ -41,9 +41,8 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
       dplyr::filter(!is.na(.data$BioRegion), !.data$BioRegion %in% c('North', 'North-west')) %>%
       droplevels()
     return(dat)
-  } else
-  {
-   dat <- readr::read_csv(paste0(planktonr::pr_get_outputs(), "NRS_Indices.csv"), na = "NA", show_col_types = FALSE) %>%
+  } else {
+    dat <- readr::read_csv(paste0(planktonr::pr_get_outputs(), "NRS_Indices.csv"), na = "NA", show_col_types = FALSE) %>%
       dplyr::mutate(Month = lubridate::month(.data$SampleDateLocal),
                     Year = lubridate::year(.data$SampleDateLocal),
                     StationCode = paste(.data$StationName, .data$StationCode),
@@ -98,6 +97,7 @@ pr_make_climatology <- function(df, x){
 #' @examples
 #' df <- pr_get_fg('NRS', 'P')
 pr_get_fg <- function(Survey = 'NRS', Type = "Z"){
+
   if(Survey == 'CPR' & Type == 'P'){
     df <- pr_get_CPRPhytoHTG()
   }
@@ -108,7 +108,8 @@ pr_get_fg <- function(Survey = 'NRS', Type = "Z"){
     df <- pr_get_CPRZooHTG()
   }
   else {
-    df <- pr_get_NRSZooHTG() %>% dplyr::filter(.data$StationName != 'Port Hacking 4')
+    df <- pr_get_NRSZooHTG() %>%
+      dplyr::filter(.data$StationName != 'Port Hacking 4')
   }
 
   if(Type == 'P'){
@@ -127,7 +128,8 @@ pr_get_fg <- function(Survey = 'NRS', Type = "Z"){
   }
   else {
     df <- df %>%
-      dplyr::select(.data$StationName, .data$StationCode, .data$SampleDateLocal, .data$Month, .data$Year, .data[[parameter1]]:.data[[parameter2]])
+      dplyr::select(.data$StationName, .data$StationCode, .data$SampleTime_local, .data$Month, .data$Year, .data[[parameter1]]:.data[[parameter2]])
+    # dplyr::select(.data$StationName, .data$StationCode, .data$SampleDateLocal, .data$Month, .data$Year, .data[[parameter1]]:.data[[parameter2]])
   }
 
   df <- df %>%
@@ -140,7 +142,7 @@ pr_get_fg <- function(Survey = 'NRS', Type = "Z"){
     df <- df %>%
       dplyr::mutate(parameters = ifelse(.data$parameters %in% c('Ciliate','Foraminifera', 'Radiozoa', 'Silicoflagellate'), 'Other', .data$parameters),
                     parameters = factor(.data$parameters, levels = c('Centric diatom', 'Pennate diatom', 'Dinoflagellate', 'Cyanobacteria',
-                                                                    'Other'))) %>%
+                                                                     'Other'))) %>%
       dplyr::group_by_at(1:6) %>%
       dplyr::summarise(Values = sum(.data$Values, na.rm = TRUE),
                        .groups = 'drop') %>%
@@ -149,8 +151,8 @@ pr_get_fg <- function(Survey = 'NRS', Type = "Z"){
   if(Type == 'Z'){
     df <- df %>%
       dplyr::mutate(parameters = ifelse(.data$parameters %in% c('Copepod', 'Appendicularian', 'Mollusc', 'Cladoceran', 'Chaetognath', 'Thaliacean'), .data$parameters, 'Other'),
-             parameters = factor(.data$parameters, levels = c('Copepod', 'Appendicularian', 'Mollusc', 'Cladoceran', 'Chaetognath', 'Thaliacean',
-                                                              'Other'))) %>%
+                    parameters = factor(.data$parameters, levels = c('Copepod', 'Appendicularian', 'Mollusc', 'Cladoceran', 'Chaetognath', 'Thaliacean',
+                                                                     'Other'))) %>%
       dplyr::group_by_at(1:6) %>%
       dplyr::summarise(Values = sum(.data$Values, na.rm = TRUE),
                        .groups = 'drop') %>%
@@ -188,7 +190,7 @@ pr_get_pico <- function(){
 #' @examples
 #' df <- pr_get_nuts()
 pr_get_nuts <-  function(){
-  Nuts <- readr::read_csv(paste0(planktonr::pr_get_site(), "BGC_Chemistry.csv"),
+  Nuts <- readr::read_csv(paste0(planktonr::pr_get_site2(), "BGC_Chemistry.csv"),
                           col_types = list(SAMPLEDATELOCAL = readr::col_datetime())) %>%
     dplyr::select_if(!grepl('FLAG', names(.)) & !grepl('COMMENTS', names(.)) & !grepl('MICROB', names(.))) %>%
     dplyr::filter(.data$PROJECTNAME == 'NRS') %>%
@@ -253,7 +255,7 @@ pr_get_LTnuts <-  function(){
 #' @examples
 #' df <- pr_get_pigs()
 pr_get_pigs <-  function(){
-  Pigs  <- readr::read_csv(paste0(planktonr::pr_get_site(), "BGC_Pigments.csv"),
+  Pigs  <- readr::read_csv(paste0(planktonr::pr_get_site2(), "BGC_Pigments.csv"),
                            col_types = list(PROJECTNAME = readr::col_character(),
                                             TRIP_CODE = readr::col_character(),
                                             SAMPLEDATELOCAL = readr::col_datetime(),
@@ -283,7 +285,11 @@ pr_get_pigs <-  function(){
 }
 
 
+
+
+
 #' Get data for frequency map plots
+#'
 #' @param Type Phyto or zoo, defaults to phyto
 #'
 #' @return dataframe for plotting wiht pr_plot_fmap
@@ -291,16 +297,20 @@ pr_get_pigs <-  function(){
 #'
 #' @examples
 #' df <- pr_get_fMap_data("P")
-pr_get_fMap_data <-  function(Type = "Z"){
+pr_get_fMap_data <- function(Type = "Z"){
   if(Type == "P"){
-    PhytoCountNRS <- planktonr::pr_get_NRSPhytoData() %>%
-      dplyr::rename(Sample = .data$TripCode, Counts = .data$TaxonCount) %>%
-      dplyr::filter(!is.na(.data$Species) & !grepl("cf.|spp.|grp", .data$Species) & .data$Genus != '') %>%
-      dplyr::mutate(Taxon = paste0(stringr::word(.data$Genus,1), " ", stringr::word(.data$Species,1)),
-                    Survey = 'NRS',
-                    SampVol_m3 = .data$SampVol_L/1000) %>%
-      dplyr::group_by(.data$Sample, .data$Survey, .data$Taxon, .data$SampVol_m3) %>%
-      dplyr::summarise(Counts = sum(.data$Counts, na.rm = TRUE), .groups = "drop")
+
+    # "Sample"     "Survey"     "Taxon"      "SampVol_m3" "Counts"
+
+    PhytoCountNRS <- planktonr::pr_get_NRSPhytoSpecies() %>%
+      tidyr::pivot_longer(cols = !starts_with(c("Project", "StationName", "StationCode", "Latitude", "Longitude", "TripCode",
+                                                "SampleTime_local", "Year", "Month", "Day", "Time", "SampleDepth_m"), ignore.case = FALSE),
+                          names_to = "Taxon", values_to = "Counts") %>%
+      dplyr::rename(Sample = .data$TripCode) %>%
+      dplyr::mutate(Survey = "NRS",
+                    SampVol_m3 = 1) %>%
+      dplyr::select(Sample, Survey, Taxon, Counts, SampVol_m3)
+
 
     PhytoCountCPR <- planktonr::pr_get_CPRPhytoData("Count") %>% # nned to think about FOV versus counts
       dplyr::rename(Counts = .data$FovCount) %>%
@@ -310,15 +320,19 @@ pr_get_fMap_data <-  function(Type = "Z"){
       dplyr::group_by(.data$Sample, .data$Survey, .data$Taxon, .data$SampVol_m3) %>%
       dplyr::summarise(Counts = sum(.data$Counts, na.rm = TRUE), .groups = "drop")
 
-    obs <- dplyr::bind_rows(PhytoCountCPR, PhytoCountNRS) %>% dplyr::arrange(.data$Taxon)
+    obs <- dplyr::bind_rows(PhytoCountCPR, PhytoCountNRS) %>%
+      dplyr::arrange(.data$Taxon)
+
   } else {
-    ZooCountNRS <- planktonr::pr_get_NRSZooData() %>%
-      dplyr::rename(Sample = .data$TripCode, Counts = .data$TaxonCount) %>%
-      dplyr::filter(!is.na(.data$Species) & !grepl("cf.|spp.|grp", .data$Species) & .data$Genus != '') %>%
-      dplyr::mutate(Taxon = paste0(stringr::word(.data$Genus,1), " ", stringr::word(.data$Species,1)),
-                    Survey = 'NRS') %>%
-      dplyr::group_by(.data$Sample, .data$Survey, .data$Taxon, .data$SampVol_m3) %>%
-      dplyr::summarise(Counts = sum(.data$Counts, na.rm = TRUE), .groups = "drop")
+    ZooCountNRS <- pr_get_NRSZooSpecies() %>%
+      tidyr::pivot_longer(cols = !starts_with(c("Project", "StationName", "StationCode", "Latitude", "Longitude", "TripCode",
+                                                "SampleTime_local", "Year", "Month", "Day", "Time", "SampleDepth_m"), ignore.case = FALSE),
+                          names_to = "Taxon", values_to = "Counts") %>%
+      dplyr::rename(Sample = .data$TripCode) %>%
+      dplyr::mutate(Survey = "NRS",
+                    SampVol_m3 = 1) %>%
+      dplyr::select(Sample, Survey, Taxon, Counts, SampVol_m3)
+
 
     ZooCountCPR <- planktonr::pr_get_CPRZooData("Count") %>%
       dplyr::rename(Counts = .data$TaxonCount) %>%
@@ -328,7 +342,8 @@ pr_get_fMap_data <-  function(Type = "Z"){
       dplyr::group_by(.data$Sample, .data$Survey, .data$Taxon, .data$SampVol_m3) %>%
       dplyr::summarise(Counts = sum(.data$Counts, na.rm = TRUE), .groups = "drop")
 
-    obs <- dplyr::bind_rows(ZooCountCPR, ZooCountNRS) %>% dplyr::arrange(.data$Taxon)
+    obs <- dplyr::bind_rows(ZooCountCPR, ZooCountNRS) %>%
+      dplyr::arrange(.data$Taxon)
   }
 
   NRSSamp <- planktonr::pr_get_NRSTrips(Type) %>%
@@ -378,6 +393,7 @@ pr_get_fMap_data <-  function(Type = "Z"){
     dplyr::mutate(Taxon = "Taxon",
                   freqsamp = 0,
                   freqfac = as.factor("Absent"))
+
   freqMapData <- dplyr::bind_rows(mapdata, absences)
 
   return(freqMapData)
@@ -429,9 +445,10 @@ pr_get_daynight <- function(Type = c("P", "Z")){
 pr_get_sti <-  function(Type = c("P", "Z")){
 
   if(Type == "Z"){
-     cprzdat <-  planktonr::pr_get_CPRZooCopepod()
-     nrszdat <- planktonr::pr_get_NRSZooSpeciesCopepod()
-     parameter <- "CopeAbundance_m3"
+    cprzdat <-  planktonr::pr_get_CPRZooCopepod()
+    nrszdat <- planktonr::pr_get_NRSZooSpeciesCopepod() %>%
+      dplyr::select(-biomass_mgm3)
+    parameter <- "CopeAbundance_m3"
   } else {
     cprzdat <-  planktonr::pr_get_CPRPhytoSpecies()
     nrszdat <- planktonr::pr_get_NRSPhytoSpecies()
@@ -439,13 +456,16 @@ pr_get_sti <-  function(Type = c("P", "Z")){
   }
 
 
-  ## These will be replace with proper satelite data from extractions in time
+  ## These will be replace with proper satellite data from extractions in time
   nrssat <- readr::read_csv("https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/RawData/NRS_SatData.csv",
-                     show_col_types = FALSE) %>%
-    rename(Latitude = .data$LATITUDE, Longitude = .data$LONGITUDE, SampleDateLocal = .data$SAMPLEDATE_LOCAL)
+                            show_col_types = FALSE) %>%
+    pr_rename() %>%
+    rename(SampleTime_local = .data$SAMPLEDATE_LOCAL)
+
   cprsat <- readr::read_csv("https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/RawData/CPR_SatData.csv",
-                     show_col_types = FALSE) %>%
-    rename(Latitude = .data$LATITUDE, Longitude = .data$LONGITUDE, SampleDateUTC = .data$SAMPLEDATE_UTC)
+                            show_col_types = FALSE) %>%
+    pr_rename() %>%
+    rename(SampleDateUTC = .data$SAMPLEDATE_UTC)
 
   cpr <- cprzdat %>%
     tidyr::pivot_longer(-c(.data[["Latitude"]]:.data[["Time_24hr"]]), names_to = 'Species', values_to = parameter) %>%
@@ -456,71 +476,72 @@ pr_get_sti <-  function(Type = c("P", "Z")){
                   Species_m3 = .data[[parameter]] + min(.data[[parameter]][.data[[parameter]]>0], na.rm = TRUE))
 
   nrs <- nrszdat %>%
-    tidyr::pivot_longer(-c(.data[["TripCode"]]:.data[["Time_24hr"]]), names_to = 'Species', values_to = parameter) %>%
-    dplyr::left_join(nrssat, by = c("Latitude", "Longitude", "SampleDateLocal")) %>%
+    tidyr::pivot_longer(-c(.data[["Project"]]:.data[["SampleDepth_m"]]), names_to = 'Species', values_to = parameter) %>%
+    dplyr::left_join(nrssat, by = c("Latitude", "Longitude", "SampleTime_local")) %>%
     dplyr::select(.data$Species, .data$SST, .data[[parameter]]) %>%
     dplyr::filter(!is.na(.data$SST) & .data[[parameter]] > 0) %>%
     dplyr::mutate(Project = 'nrs',
                   Species_m3 = .data[[parameter]] + min(.data[[parameter]][.data[[parameter]]>0], na.rm = TRUE))
 
-  comball <- cpr %>% dplyr::bind_rows(nrs) %>%
-    dplyr:: mutate(sst = round(.data$SST/0.5) * 0.5) %>%
+  comball <- cpr %>%
+    dplyr::bind_rows(nrs) %>%
+    dplyr:: mutate(SST = round(.data$SST/0.5) * 0.5) %>%
     dplyr::arrange(.data$Species)
 }
 
 
-#' Summarise the plankton observations
-#'
-#' Summarise the plankton observations from the NRS and CPR.
-#' @return a dataframe with a species summary
-#' @export
-#'
-#' @examples
-#' df <- pr_export_SppCount()
-pr_export_SppCount <- function(){
-
-  # First do Phytoplankton
-  nrsP <- pr_get_NRSPhytoData() %>%
-    mutate(TaxonName = stringr::str_c(.data$Genus, " ", .data$Species)) %>%  # Overwrite Taxon Name to remove the fluff
-    select(.data$TaxonName, .data$SPCode, .data$TaxonCount) %>%
-    tidyr::drop_na()
-
-  cprP <- pr_get_CPRPhytoData("Count") %>%
-    mutate(TaxonName = stringr::str_c(.data$Genus, " ", .data$Species)) %>%  # Overwrite Taxon Name to remove the fluff
-    rename(TaxonCount = .data$FovCount) %>%
-    select(.data$TaxonName, .data$SPCode, .data$TaxonCount) %>%
-    tidyr::drop_na()
-
-  outP <- bind_rows(nrsP, cprP) %>%
-    group_by(.data$TaxonName, .data$SPCode) %>%
-    summarise(n = n(), .groups = "drop") %>%
-    arrange(desc(.data$n)) %>%
-    dplyr::filter(stringr::str_detect(.data$TaxonName, 'spp', negate = TRUE)) %>%
-    mutate(Group = "Phytoplankton")
-
-  # Now do Zooplankton
-  nrsZ <- pr_get_NRSZooData() %>%
-    mutate(TaxonName = stringr::str_c(.data$Genus, " ", .data$Species)) %>%  # Overwrite Taxon Name to remove f/m/j etc
-    select(.data$TaxonName, .data$SPCode, .data$TaxonCount) %>%
-    tidyr::drop_na()
-
-  cprZ <- pr_get_CPRZooData("Count") %>%
-    mutate(TaxonName = stringr::str_c(.data$Genus, " ", .data$Species)) %>%  # Overwrite Taxon Name to remove f/m/j etc
-    select(.data$TaxonName, .data$SPCode, .data$TaxonCount) %>%
-    tidyr::drop_na()
-
-  outZ <- bind_rows(nrsZ, cprZ) %>%
-    group_by(.data$TaxonName, .data$SPCode) %>%
-    summarise(n = n(), .groups = "drop") %>%
-    arrange(desc(.data$n)) %>%
-    dplyr::filter(stringr::str_detect(.data$TaxonName, 'spp', negate = TRUE)) %>%
-    mutate(Group = "Zooplankton")
-
-  # Now combine them
-  out <- bind_rows(outP, outZ)
-  return(out)
-
-}
+# Summarise the plankton observations
+#
+# Summarise the plankton observations from the NRS and CPR.
+# @return a dataframe with a species summary
+# @export
+#
+# @examples
+# df <- pr_export_SppCount()
+# pr_export_SppCount <- function(){
+#
+#   # First do Phytoplankton
+#   nrsP <- pr_get_NRSPhytoData() %>%
+#     mutate(TaxonName = stringr::str_c(.data$Genus, " ", .data$Species)) %>%  # Overwrite Taxon Name to remove the fluff
+#     select(.data$TaxonName, .data$SPCode, .data$TaxonCount) %>%
+#     tidyr::drop_na()
+#
+#   cprP <- pr_get_CPRPhytoData("Count") %>%
+#     mutate(TaxonName = stringr::str_c(.data$Genus, " ", .data$Species)) %>%  # Overwrite Taxon Name to remove the fluff
+#     rename(TaxonCount = .data$FovCount) %>%
+#     select(.data$TaxonName, .data$SPCode, .data$TaxonCount) %>%
+#     tidyr::drop_na()
+#
+#   outP <- bind_rows(nrsP, cprP) %>%
+#     group_by(.data$TaxonName, .data$SPCode) %>%
+#     summarise(n = n(), .groups = "drop") %>%
+#     arrange(desc(.data$n)) %>%
+#     dplyr::filter(stringr::str_detect(.data$TaxonName, 'spp', negate = TRUE)) %>%
+#     mutate(Group = "Phytoplankton")
+#
+#   # Now do Zooplankton
+#   nrsZ <- pr_get_NRSZooData() %>%
+#     mutate(TaxonName = stringr::str_c(.data$Genus, " ", .data$Species)) %>%  # Overwrite Taxon Name to remove f/m/j etc
+#     select(.data$TaxonName, .data$SPCode, .data$TaxonCount) %>%
+#     tidyr::drop_na()
+#
+#   cprZ <- pr_get_CPRZooData("Count") %>%
+#     mutate(TaxonName = stringr::str_c(.data$Genus, " ", .data$Species)) %>%  # Overwrite Taxon Name to remove f/m/j etc
+#     select(.data$TaxonName, .data$SPCode, .data$TaxonCount) %>%
+#     tidyr::drop_na()
+#
+#   outZ <- bind_rows(nrsZ, cprZ) %>%
+#     group_by(.data$TaxonName, .data$SPCode) %>%
+#     summarise(n = n(), .groups = "drop") %>%
+#     arrange(desc(.data$n)) %>%
+#     dplyr::filter(stringr::str_detect(.data$TaxonName, 'spp', negate = TRUE)) %>%
+#     mutate(Group = "Zooplankton")
+#
+#   # Now combine them
+#   out <- bind_rows(outP, outZ)
+#   return(out)
+#
+# }
 
 
 #' Get the summary plankton observations
@@ -553,9 +574,30 @@ pr_get_SppCount <- function(gp){
 #' pr_get_facts()
 pr_get_facts <- function(){
 
-  facts <- list("Phytoplankton generate > 50 % of the worlds oxygen (reference)",
-                "Phytoplankton generate > 50 % of the worlds oxygen (reference)",
-                "Phytoplankton generate > 50 % of the worlds oxygen (reference)")
+  facts <- list("Zooplankton are not only a major food source for commercial and invertebrate fisheries, but some groups are harvest directly for human consumption: 1.2 million tonnes of jellyfish are harvested each year in China, and about 400,000 tonnes of krill are caught annually in the Southern Ocean and off Japan, for human consumption and for fish meal (CCAMLR 2021).",
+                "Omega-3 fatty acids support human neurological function, cardiovascular health, and immune response (Calder 2015). As zooplankton have high levels of Omega-3 fatty acids, 1000 tonnes of the copepod _Calanus finmarchicus_ are harvested by Norway annually for use in human supplements.",
+                "Almost all wild-caught fish (80 million tonnes per year) and crustaceans (prawns, shrimps, lobsters and crabs: 3.4 million tonnes) have larval stages that live as plankton drifting in the water column.",
+                "Plankton such as flagellates, diatoms, copepods, krill and mysids are used extensively in aquaculture production for rearing fish larvae and juveniles, and for feeding shellfish (Richardson et al. 2019)",
+                "Some phytoplankton species produce toxins that cause skin and eye irritation, digestive upsets, breakdown of liver cells, attack the nervous system, and can even cause death. The major pathway to humans is when we eat shellfish that have filtered toxic phytoplankton from the water.",
+                "Zooplankton with chitinous exoskeletons, particularly copepods, are hosts for bacterial pathogens such as Vibrio cholerae, which is responsible for ~5 million cases and 120 000 deaths per year.",
+                "Zooplankton, phytoplankton, bacterioplankton and marine viruses are used in bioprospecting and other commercial products.",
+                "Copepods and larvae of crabs, prawns and mysids are used in studies assessing acute and sublethal pollutant impacts because they are extremely sensitive to toxins, can be mass cultured, have a short life cycle, and have distinct stages that provides endpoints to determine toxicity of contaminants (Van Dam et al. 2008).",
+                "Plankton are commonly used as ecological indicators in report cards and ecosystem assessments to assess the health of marine systems. These plankton indicators have been developed to assess human impacts on marine systems: climate change, ocean acidification and heatwaves; eutrophication; overfishing; and species invasions (Richardson et al. 2020).",
+                "Biomimetics is the field of imitation of natural systems to solve human problems. For example, the elegant and diverse body forms of diatoms, coccolithophores, silicoflagellates, tintinnids, radiolarians, foraminiferans and acantharians are inspiring novel building designs by architects and engineers (Pohl & Nachtigall 2015).",
+                "Biomimetics is the field of imitation of natural systems to solve human problems. For example, scientists are studying how plankton produce composite materials, in different orientations, to make their structure strong and lightweight (Pohl & Nachtigall 2015).",
+                "The biological pump, controlled by phytoplankton and zooplankton, fixes vast amounts of CO2 via photosynthesis, which is ultimately removed from surface to deeper waters by sinking and active transport. How the biological pump will be stimulated or impeded with climate change is an area of active research.",
+                "Harpacticoid copepods are valuable in marine aquaria because they clean the substrate and aquarium panels, and their nauplii and copepodites provide food for invertebrates such as corals, clams and sea cucumbers.",
+                "As phytoplankton and zooplankton are key to processing and cycling nutrients in the marine food web, data on their abundance and type are used to assess the eReefs biogeochemical model for managing water quality on the Great Barrier Reef (Robson et al. 2020; Skerratt et al. 2018).")
+
+  # Krill – biology, ecology and fishing. Commission for the Conservation of Antarctic Marine Living Resources. Retrieved 17 October 2021. https://www.ccamlr.org/en/fisheries/krill-%E2%80%93-biology-ecology-and-fishing
+  # Calder PC (2015) Functional roles of fatty acids and their effects on human health. Journal of Parenteral and Enteral Nutrition, 39, 18S–32S.
+  # Richardson AJ, Uribe-Palomino J, Slotwinski A, Coman F, Miskiewicz AG, Rothlisberg PC, Young JW, Suthers IM (2019) Chapter 8. Coastal and marine zooplankton: identification, biology and ecology. In Plankton: A Guide to Their Ecology and Monitoring for Water Quality. Edited by Suthers I, Rissik D, Richardson AJ. 2nd edition. CSIRO Publishing. pp. 141-208
+  # Vezzulli L, Grande C, Reid PC, Hélaouët P, Edwards M, Höfle MG, et al. (2016) Climate influence on Vibrio and associated human diseases during the past half-century in the coastal North Atlantic. Proceedings of the National Academy of Sciences of the United States of America 113, E5062–E5071. doi:10.1073/pnas.1609157113
+  # Van Dam RA, Harford AJ, Houston MA, Hogan AC, Negri AP (2008) Tropical marine toxicity testing in Australia: a review and recommendations. Australasian Journal of Ecotoxicology 14: 55–88.
+  # Richardson AJ, Eriksen R, Moltmann T, Hodgson-Johnston I, Wallis JR (2020) State and Trends of Australia’s Ocean Report, Integrated Marine Observing System, Hobart. 164 pp. https://www.imosoceanreport.org.au/
+  # Pohl G, Nachtigall W (2015) Biomimetics for Architecture and Design. Nature – Analogies – Technology. 1st edn. Springer, Heidelberg, Germany.
+  # Robson BJ, Skerratt J, Baird ME, Davies C, Herzfeld M, Jones EM, Mongin M, Richardson AJ, Rizwi F, Wild-Allen K, Steven A (2020) Enhanced assessment of the eReefs marine models for the Great Barrier Reef using a four-level model evaluation framework. Environmental Modelling and Software 129: 104707. 15 pp.
+  # Skerratt JH, Mongin M, Wild-Allen KA, Baird ME, Robson BJ, Schaffelke B, Soja-Wozniak M, Margvelashvili N, Davies CH, Richardson AJ, Steven ADL (2019) Simulated nutrient and plankton dynamics in the Great Barrier Reef (2011-2016). Journal of Marine Systems 192: 51-74
 
   r <- round(stats::runif(1, min = 1, max = length(facts)))
 

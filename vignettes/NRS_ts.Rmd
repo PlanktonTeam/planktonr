@@ -1,7 +1,7 @@
 ---
-title: "NRS timeseries"
+title: "Analysing NRS timeseries"
 author: "Claire H. Davies and Jason D. Everett"
-date: "01/10/2021"
+date: "`r format(Sys.time(), '%A %d %B %Y')`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{NRS timeseries}
@@ -15,96 +15,142 @@ options(rmarkdown.html_vignette.check_title = FALSE)
 
 knitr::opts_chunk$set(
   collapse = TRUE,
+  warning = FALSE,
+  message = FALSE,
   comment = "#>",
   fig.width=6, fig.height=8
 )
 
-ggplot2::theme_set(ggplot2::theme_bw(base_size = 10) + ggplot2::theme(legend.title = ggplot2::element_blank()))
-
+ggplot2::theme_set(ggplot2::theme_bw(base_size = 10) + 
+                     ggplot2::theme(legend.title = ggplot2::element_blank()))
 ```
 
-## IMOS Biological Ocean Observer
-
+# IMOS Biological Ocean Observer
 You can access the online version of IMOS BOO here [links](https://jaseeverett.shinyapps.io/IMOS_BioOceanObserver/)
 
-### Example of using planktonr to generate timeseries from the National Reference Stations
+## Load packages and data
+This vignette demonstrates how to use planktonr to generate timeseries from the IMOS National Reference Station data.
 
-First load the packages from github and attach the libraries
+First install the package from github if needed
 
-```{r setup, warning=FALSE, message=FALSE}
+```{r, setup, warning=FALSE, message=FALSE, eval=FALSE}
+remotes::install_github("PlanktonTeam/planktonr")
+```
 
+Then attach the library
+
+```{r, warning=FALSE, message=FALSE}
 library(planktonr)
-library(magrittr)
 ```
 Lets look at zooplankton abundance at Yongala and Maria Island, a tropical and a temperate National Reference Station.  
 First we get the data then we filter it for the desired parameters.
 
 ```{r,include=TRUE}
+datNRS_zoo <- pr_get_tsdata("NRS", "Z")
+```
 
-datNRSz <- planktonr::pr_get_tsdata("NRS", "Z") %>%
+## Plot Sitemap
+
+We can plot a sitemap to see where the data are.
+
+```{r,include=TRUE}
+pr_plot_NRSmap(datNRS_zoo)
+```
+
+## Plot timeseries
+Then we can plot the data as a timeseries for Yongala and Maria Island.
+
+```{r,include=TRUE}
+datNRS_zoo <- datNRS_zoo %>%
   filter(StationName %in% c("Yongala", "Maria Island"),
          parameters == "ZoopAbundance_m3") %>%
   droplevels()
 
+pr_plot_tsclimate(df = datNRS_zoo, Survey = "NRS") 
 ```
 
-Then we can plot the data as a timeseries
+We can plot the data on a log_10 scale:
 
 ```{r,include=TRUE}
-
-timeseries <- planktonr::pr_plot_tsclimate(datNRSz, "NRS", 'matter') 
-timeseries
-
+pr_plot_tsclimate(datNRS_zoo, Survey = "NRS", Scale = "log10")
 ```
 
-Perhaps the story will be clearer using a log scale
+We can also change the colour scale to any scales given by cmocean (https://cran.r-project.org/web/packages/cmocean/vignettes/cmocean.html)
 
 ```{r,include=TRUE}
-
-timeseries <- planktonr::pr_plot_tsclimate(datNRSz, "NRS", 'matter', 'log10')
-timeseries
-
+pr_plot_tsclimate(datNRS_zoo, Survey = "NRS", Scale = "log10", pal = "algae")
 ```
+
+## Pipeable functions
+
+The data analysis and plotting functions are pipeable so we can select additional sites on the fly.
+
+```{r,include=TRUE}
+pr_get_tsdata("NRS", "Z") %>%
+  filter(StationName %in% c("Yongala", "Port Hacking", "Maria Island"),
+         parameters == "ZoopAbund_m3") %>%
+  droplevels() %>% 
+  pr_plot_tsclimate(Survey = "NRS", Scale = "log10", pal = "algae")
+```
+
+## Load and plot size data
 
 The zooplankton abundance at Yongala is consistently greater than at Maria Island, although the seasonal cycle at Maria Island is much more pronounced.
-There may be more zooplankton at Yongala, but is there difference in copepod size between tropical Yongala and temperate Maria Island.
+There may be more zooplankton at Yongala, but is there a difference in copepod size between tropical Yongala and temperate Maria Island.
 
 ```{r,include=TRUE}
-
-datSize <- planktonr::pr_get_tsdata("NRS", "Z") %>%
+datSize <- pr_get_tsdata("NRS", "Z") %>%
   filter(StationName %in% c("Yongala", "Maria Island"),
          parameters == "AvgTotalLengthCopepod_mm") %>%
   droplevels()
-
 ```
 
 And then plot the total timeseries
 
 ```{r,include=TRUE}
-
-timeseries <- planktonr::pr_plot_tsclimate(datSize, "NRS", 'matter')
-timeseries
-
+pr_plot_tsclimate(datSize, Survey = "NRS", pal = "matter")
 ```
 
 
 So whilst Maria Island has less zooplankton abundance the copepods are larger, and potentially more nutritious, as would be expected in a colder environment.
 
-
+## Trends in Biomass Data
 Look to see if zooplankton biomass is changing at Maria Island.
 ```{r,include=TRUE}
-datNRSz <- planktonr::pr_get_tsdata("NRS", "Z") %>%
-  filter(parameters == "Biomass_mgm3" & StationName == "Maria Island") %>%
+datNRS_zoo <- pr_get_tsdata("NRS", "Z") %>%
+  filter(parameters == "Biomass_mgm3" & 
+           StationName == "Maria Island") %>%
   droplevels()
 ```
 
 
 ```{r,include=TRUE, warning=FALSE}
-  planktonr::pr_plot_trends(datNRSz, trend = "Raw", survey = "NRS", method = "lm", y_trans = "log10")
+pr_plot_trends(datNRS_zoo, trend = "Raw", survey = "NRS", method = "lm", y_trans = "log10")
 ```
 
 Now lets check the seasonal cycle.
 ```{r,include=TRUE}
-    planktonr::pr_plot_trends(datNRSz, trend = "Month", survey = "NRS", method = "loess", y_trans = "log10")
+pr_plot_trends(datNRS_zoo, trend = "Month", survey = "NRS", method = "loess", y_trans = "log10")
 ```
 
+## Examine functional groups
+
+We can also look at the change in functional groups through time. Firstly by annual averages
+
+```{r,include=TRUE}
+NRSfgz <- pr_get_fg("NRS", "Z") %>% 
+  filter(StationName %in% c("Yongala", "Maria Island")) %>% 
+  droplevels()
+
+pr_plot_tsfg(df = NRSfgz, Scale = "Actual")
+```
+
+And also by Month.  
+```{r,include=TRUE}  
+pr_plot_tsfg(df = NRSfgz, trend = "Month")
+```
+
+It may be better to analyse the data by proportion.
+```{r,include=TRUE}  
+pr_plot_tsfg(df = NRSfgz, trend = "Month", Scale = "Percent")
+```

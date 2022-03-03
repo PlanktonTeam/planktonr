@@ -12,8 +12,25 @@
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_site <- function(){
+  raw <-"http://geoserver-123.aodn.org.au/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=imos:LAYER_NAME&outputFormat=csv-with-metadata-header"
+}
+# https://geoserver-portal.aodn.org.au/geoserver/ows?typeName=imos:anmn_nrs_bgc_plankton_zooplankton_data&SERVICE=WFS&outputFormat=csv&REQUEST=GetFeature&VERSION=1.0.0
+
+
+#' Get location of raw plankton data on GitHub
+#'
+#' Internal function to load the location of the raw plankton data files stored on GitHub.
+#' @return A string with location of raw plankton data
+#' @export
+#' @examples
+#' file_loc <- pr_get_site2()
+#' @import dplyr
+#' @importFrom magrittr "%>%"
+#' @importFrom rlang .data
+pr_get_site2 <- function(){
   raw <- "https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/RawData/"
 }
+
 
 #' Get location of output plankton data
 #'
@@ -26,7 +43,7 @@ pr_get_site <- function(){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_outputs <- function(){
-  raw <- "https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/Output/"
+   raw <- "https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/Output/"
 }
 
 
@@ -41,7 +58,7 @@ pr_get_outputs <- function(){
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_get_ZooInfo <- function(){
-  ZInfo <- readr::read_csv(paste0(pr_get_site(), "ZoopInfo.csv"), na = "", show_col_types = FALSE) %>%
+  ZInfo <- readr::read_csv(paste0(pr_get_site2(), "ZoopInfo.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 

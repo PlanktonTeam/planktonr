@@ -25,7 +25,7 @@ pr_get_bgc <- function(){
     mutate(SampleDepth_m = "WC")
 
   # Pigments data
-  Pigments <- readr::read_csv(paste0(pr_get_site(),"BGC_Pigments.csv"), na = "", show_col_types = FALSE) %>%
+  Pigments <- readr::read_csv(paste0(pr_get_site2(),"BGC_Pigments.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename() %>%
     mutate(SampleDepth_m = as.character(.data$SampleDepth_m)) %>%
     filter(.data$PigmentsFlag %in% c(0,1,2,5,8)) %>% # keep data flagged as good
@@ -42,7 +42,7 @@ pr_get_bgc <- function(){
               .groups = "drop")
 
   # Total suspended solid data
-  TSS <- readr::read_csv(paste0(pr_get_site(),"BGC_TSS.csv"), na = "", show_col_types = FALSE) %>%
+  TSS <- readr::read_csv(paste0(pr_get_site2(),"BGC_TSS.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename() %>%
     mutate(SampleDepth_m = as.character(.data$SampleDepth_m),
            TripCode = substring(.data$TripCode,4),

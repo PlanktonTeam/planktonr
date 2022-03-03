@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' plotCols <- pr_get_PlotCols('matter', 5)
-pr_get_PlotCols <- function(pal = 'matter', n){
+pr_get_PlotCols <- function(pal = "matter", n){
   plotCols <- cmocean::cmocean(pal)(n)
   return(plotCols)
 }
@@ -25,8 +25,12 @@ pr_get_PlotCols <- function(pal = 'matter', n){
 #' @examples
 #' df <- data.frame(StationCode = c("NSI", "PHB"))
 #' pmap <- pr_plot_NRSmap(df)
-pr_plot_NRSmap <-  function(df){
-  meta2_sf <- subset(meta_sf, meta_sf$Code %in% df$StationCode)
+pr_plot_NRSmap <- function(df){
+
+  # meta2_sf <- subset(meta_sf, meta_sf$Code %in% df$StationCode)
+  meta2_sf <- meta_sf %>%
+    sf::st_as_sf() %>% # This seems to strip away some of the tibble stuff that makes the filter not work...
+    dplyr::filter(.data$Code %in% df$StationCode)
 
   pmap <- ggplot2::ggplot() +
     ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
@@ -39,7 +43,10 @@ pr_plot_NRSmap <-  function(df){
                    panel.background = ggplot2::element_rect(fill = NA, colour = NA),
                    plot.background = ggplot2::element_rect(fill = NA),
                    axis.line = ggplot2::element_blank())
+
   pmap <- plotly::ggplotly(pmap)
+
+  return(pmap)
 }
 
 #' Title Sidebar panel plot of selected CPR bioregions
@@ -55,15 +62,18 @@ pr_plot_NRSmap <-  function(df){
 #' df <- data.frame(BioRegion = c("Temperate East", "South-west"))
 #' cprmap <- pr_plot_CPRmap(df)
 pr_plot_CPRmap <-  function(df){
-  bioregionSelection <- mbr %>% dplyr::filter(.data$REGION %in% df$BioRegion) %>%
+
+  bioregionSelection <- mbr %>%
+    dplyr::filter(.data$REGION %in% df$BioRegion) %>%
     mutate(REGION = factor(.data$REGION, levels = c("Coral Sea", "Temperate East", "South-west", "South-east")))
+
   n <- length(unique(bioregionSelection$REGION))
 
   gg <- ggplot2::ggplot() +
-    ggplot2::geom_sf(data = mbr, colour = 'black', fill = 'white') +
-    ggplot2::geom_sf(data = bioregionSelection, colour = 'black', ggplot2::aes(fill = .data$REGION)) +
+    ggplot2::geom_sf(data = mbr, colour = "black", fill = "white") +
+    ggplot2::geom_sf(data = bioregionSelection, colour = "black", ggplot2::aes(fill = .data$REGION)) +
     ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
-    ggplot2::scale_fill_manual(values = cmocean::cmocean('matter')(n)) +
+    ggplot2::scale_fill_manual(values = cmocean::cmocean("matter")(n)) +
     ggplot2::scale_x_continuous(expand = c(0, 0)) +
     ggplot2::scale_y_continuous(expand = c(0, 0)) +
     ggplot2::theme_void() +
@@ -71,6 +81,7 @@ pr_plot_CPRmap <-  function(df){
                    plot.background = ggplot2::element_rect(fill = NA),
                    panel.background = ggplot2::element_rect(fill = NA),
                    axis.line = ggplot2::element_blank())
+  return(gg)
 }
 
 #' Plot basic timeseries
@@ -93,16 +104,16 @@ pr_plot_CPRmap <-  function(df){
 #' df <- df %>% mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
 #' format = "%Y-%m-%d %H:%M:%S"))
 #' timeseries <- pr_plot_timeseries(df, 'NRS', 'matter')
-pr_plot_timeseries <- function(df, Survey = "NRS", pal = 'matter', Scale = 'identity'){
+pr_plot_timeseries <- function(df, Survey = "NRS", pal = "matter", Scale = "identity"){
 
-  if(Survey == 'CPR'){
+  if(Survey == "CPR"){
     df <- df %>%
       dplyr::rename(SampleDate = .data$SampleDateUTC,
                     StationCode = .data$BioRegion)
-    titlex <- 'Sample Date (UTC)'
+    titlex <- "Sample Date (UTC)"
   }
 
-  if(Survey == 'NRS'){
+  if(Survey == "NRS"){
     df <- df %>%
       dplyr::rename(SampleDate = .data$SampleDateLocal) %>%
       dplyr::group_by(.data$SampleDate, .data$StationCode, .data$parameters) %>% # accounting for microbial data different depths
@@ -124,7 +135,7 @@ pr_plot_timeseries <- function(df, Survey = "NRS", pal = 'matter', Scale = 'iden
                   x = titlex) +
     ggplot2::scale_colour_manual(values = plotCols) +
     ggplot2::theme_bw(base_size = 12) +
-    ggplot2::theme(legend.position = 'bottom')
+    ggplot2::theme(legend.position = "bottom")
 
   return(p1)
 }
@@ -192,6 +203,7 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
     ggplot2::facet_wrap(rlang::enexpr(site), scales = "free_y", ncol = 1) +
     ggplot2::ylab(rlang::enexpr(titley)) +
     ggplot2::scale_y_continuous(trans = y_trans) +
+    ggplot2::theme_bw() +
     ggplot2::theme(legend.position = "bottom",
                    strip.background = ggplot2::element_blank(),
                    strip.text = ggplot2::element_text(hjust = 0))
@@ -237,11 +249,11 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
 #' df <- data.frame(Month = rep(1:12,10), StationCode = c('NSI', 'NSI', 'PHB', 'PHB'),
 #' parameters = 'Biomass_mgm3', Values = runif(120, min=0, max=10))
 #' monthly <- pr_plot_climate(df, "NRS", Month, 'matter')
-pr_plot_climate <- function(df, Survey = "NRS", x, pal = 'matter', Scale = 'identity'){
+pr_plot_climate <- function(df, Survey = "NRS", x, pal = "matter", Scale = "identity"){
 
   x <- dplyr::enquo(arg = x)
 
-  if(Survey == 'CPR'){
+  if(Survey == "CPR"){
     df <- df %>%
       dplyr::rename(StationCode = .data$BioRegion)
   }
@@ -251,7 +263,7 @@ pr_plot_climate <- function(df, Survey = "NRS", x, pal = 'matter', Scale = 'iden
   title <- planktonr::pr_relabel(unique(df$parameters), style = "ggplot")
 
   df_climate <- df %>%
-    dplyr::filter(!!x != 'NA') %>% # need to drop NA from month, added to dataset by complete(Year, StationCode)
+    dplyr::filter(!!x != "NA") %>% # need to drop NA from month, added to dataset by complete(Year, StationCode)
     dplyr::group_by(!!x, .data$StationCode) %>%
     dplyr::summarise(mean = mean(.data$Values, na.rm = TRUE),
                      N = length(.data$Values),
@@ -268,7 +280,7 @@ pr_plot_climate <- function(df, Survey = "NRS", x, pal = 'matter', Scale = 'iden
     ggplot2::scale_y_continuous(trans = Scale) +
     ggplot2::scale_fill_manual(values = plotCols)  +
     ggplot2::theme_bw(base_size = 12) +
-    ggplot2::theme(legend.position = 'bottom')
+    ggplot2::theme(legend.position = "bottom")
 
   if("Month" %in% colnames(df_climate)){
     p2 <- p2 +
@@ -303,15 +315,18 @@ pr_plot_climate <- function(df, Survey = "NRS", x, pal = 'matter', Scale = 'iden
 #' monthly <- pr_plot_tsclimate(df, 'NRS', 'matter')
 
 
-pr_plot_tsclimate <- function(df, Survey = c("CPR", "NRS"), pal = 'matter', Scale = 'identity'){
+pr_plot_tsclimate <- function(df, Survey = c("CPR", "NRS"), pal = "matter", Scale = "identity"){
 
-  p1 <- pr_plot_timeseries(df, Survey, pal, Scale) + ggplot2::theme(legend.position = 'none',
-                                                             axis.title.y = ggplot2::element_blank())
+  p1 <- pr_plot_timeseries(df, Survey, pal, Scale) +
+    ggplot2::theme(legend.position = "none",
+                   axis.title.y = ggplot2::element_blank())
 
-  p2 <- pr_plot_climate(df, Survey, .data$Month, pal, Scale) + ggplot2::theme(legend.position = 'none')
+  p2 <- pr_plot_climate(df, Survey, .data$Month, pal, Scale) +
+    ggplot2::theme(legend.position = "none")
 
-  p3 <- pr_plot_climate(df, Survey, .data$Year, pal, Scale) + ggplot2::theme(axis.title.y = ggplot2::element_blank(),
-                                                                      legend.title = ggplot2::element_blank())
+  p3 <- pr_plot_climate(df, Survey, .data$Year, pal, Scale) +
+    ggplot2::theme(axis.title.y = ggplot2::element_blank(),
+                   legend.title = ggplot2::element_blank())
 
   plots <- patchwork::wrap_plots(p1, p2,  p3, nrow = 3)
 
@@ -323,6 +338,7 @@ pr_plot_tsclimate <- function(df, Survey = c("CPR", "NRS"), pal = 'matter', Scal
 #' @param df dataframe in format of output from pr_get_fg
 #' @param Scale y axis scale Actual or Percent
 #' @param trend Over what timescale to fit the trend - "Raw", "Month" or "Year"
+#' @param pal is the palette name from cmocean
 #'
 #' @return plot of fg timseries
 #' @export
@@ -330,21 +346,23 @@ pr_plot_tsclimate <- function(df, Survey = c("CPR", "NRS"), pal = 'matter', Scal
 #' @examples
 #' df <- pr_get_fg('NRS', 'P')
 #' plot <- pr_plot_tsfg(df, 'Actual')
-pr_plot_tsfg <- function(df, Scale = 'Actual', trend = 'Raw'){
+pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
   titley <- planktonr::pr_relabel("FunctionalGroup", style = "ggplot")
+
   n <- length(unique(df$parameters))
-  plotCols <- planktonr::pr_get_PlotCols('matter', n)
+
+  plotCols <- planktonr::pr_get_PlotCols(pal, n)
 
  if("SampleDateUTC" %in% colnames(df)){
     SampleDate = rlang::sym("SampleDateUTC")
     station = rlang::sym("BioRegion")
-    titlex <- 'Sample Date UTC'
+    titlex <- "Sample Date UTC"
   } else {
-    SampleDate = rlang::sym("SampleDateLocal")
+    SampleDate = rlang::sym("SampleTime_local")
     station = rlang::sym("StationName")
-    titlex <- 'Sample Date Local'
+    titlex <- "Sample Date Local" #TODO
   }
-
+  # StationName StationCode SampleDateLocal     Month  Year parameters      Values
   if (trend %in% c("Year", "Month")){
     df <- df %>%
       dplyr::filter(!is.na(!!SampleDate))  %>%
@@ -359,7 +377,7 @@ pr_plot_tsfg <- function(df, Scale = 'Actual', trend = 'Raw'){
     trend <- SampleDate # Rename trend to match the column with time
   }
 
- if(Scale == 'Percent') {
+ if(Scale == "Percent") {
     df <- df %>%
       dplyr::group_by(!!rlang::sym(trend), !!station, .data$parameters) %>%
       dplyr::summarise(n = sum(.data$Values, na.rm = TRUE)) %>%
@@ -374,6 +392,7 @@ pr_plot_tsfg <- function(df, Scale = 'Actual', trend = 'Raw'){
     ggplot2::facet_wrap(rlang::enexpr(station), scales = "free", ncol = 1) +
     ggplot2::labs(y = titley) +
     ggplot2::scale_fill_manual(values = plotCols) +
+    ggplot2::theme_bw() +
     ggplot2::theme(legend.position = "bottom",
                    legend.title = ggplot2::element_blank(),
                    strip.background = ggplot2::element_blank(),
@@ -500,7 +519,8 @@ pr_plot_env_var <- function(df, pal = 'matter', trend = 'None', Scale = 'identit
     ggplot2::geom_line() +
     ggplot2::labs(x = "Time", y = titley) +
     ggplot2::facet_grid(SampleDepth_m ~., scales = "free") +
-    ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplot2::element_blank(),
+    ggplot2::theme_bw() +
+    ggplot2::theme(strip.background = ggplot2::element_blank(),
                                          strip.text = ggplot2::element_blank(),
                                          legend.position = "bottom",
                                          legend.title = ggplot2::element_blank()) +
@@ -509,10 +529,10 @@ pr_plot_env_var <- function(df, pal = 'matter', trend = 'None', Scale = 'identit
     ggplot2::scale_colour_manual(values = plotCols)
 
   if(trend == "Smoother"){
-    p <- p + ggplot2::geom_smooth(method = 'loess', formula = y ~ x)
+    p <- p + ggplot2::geom_smooth(method = "loess", formula = y ~ x)
   }
   if(trend == "Linear"){
-    p <- p + ggplot2::geom_smooth(method = 'lm', formula = y ~ x)
+    p <- p + ggplot2::geom_smooth(method = "lm", formula = y ~ x)
   }
 
   p <- plotly::ggplotly(p, height = 150 * np)
@@ -522,12 +542,12 @@ pr_plot_env_var <- function(df, pal = 'matter', trend = 'None', Scale = 'identit
               N = length(.data$Values),
               sd = stats::sd(.data$Values, na.rm = TRUE),
               se = sd / sqrt(.data$N),
-              .groups = 'drop')
+              .groups = "drop")
 
   m <- ggplot2::ggplot(mdat, aes(.data$Month, .data$MonValues, colour = .data$StationName)) +
     ggplot2::geom_point() +
     ggplot2::facet_grid(.data$SampleDepth_m ~., scales = "free") +
-    ggplot2::geom_smooth(method = 'loess', formula = y ~ x) +
+    ggplot2::geom_smooth(method = "loess", formula = y ~ x) +
     ggplot2::scale_x_continuous(breaks= seq(1,12,length.out = 12), labels=c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
     ggplot2::scale_colour_manual(values = plotCols) +
     ggplot2::theme_bw() +
@@ -567,14 +587,14 @@ pr_plot_fmap <- function(df){
     ggplot2::geom_point(data=df, ggplot2::aes(x=.data$Long, y=.data$Lat, colour=.data$freqfac), size = 2) +
     ggplot2::facet_wrap( ~ .data$Season, dir = "v") +
     ggplot2::labs(title = Species) +
-    ggplot2::scale_colour_manual(name = '', values = cols, drop = FALSE) +
+    ggplot2::scale_colour_manual(name = "", values = cols, drop = FALSE) +
     ggplot2::theme(strip.background = ggplot2::element_blank(),
                    title = ggplot2::element_text(face = "italic"),
                    legend.title = ggplot2::element_text(face = "plain", size = 12),
                    axis.title.x = ggplot2::element_blank(),
                    axis.title.y = ggplot2::element_blank(),
-                   panel.background = ggplot2::element_rect(fill = 'snow1'),
-                   legend.position = 'bottom',
+                   panel.background = ggplot2::element_rect(fill = "snow1"),
+                   legend.position = "bottom",
                    legend.key = ggplot2::element_blank())
 
 }
@@ -595,21 +615,21 @@ pr_plot_daynight <-  function(df){
 
   titlemain <- unique(df$Species)
   if("CopeAbundance_m3" %in% names(df)){
-    ylabel <- planktonr::pr_relabel("CopeAbundance_m3", style = "ggplot") # this is probably only worth doing for copepods as we don't have a lot of data for other things
+    ylabel <- planktonr::pr_relabel("CopeAbundance_m3", style = "ggplot") # this is probably only worth doing for copepods as we don"t have a lot of data for other things
   } else {
     ylabel <- planktonr::pr_relabel("PhytoAbund_m3", style = "ggplot")
   }
 
   plots <- ggplot2::ggplot(df, ggplot2::aes(.data$Month, .data$Species_m3)) +
     ggplot2::geom_point() +
-    ggplot2::geom_smooth(formula = 'y ~ x', method = 'loess') +
+    ggplot2::geom_smooth(formula = "y ~ x", method = "loess") +
     ggplot2::facet_grid(~ .data$daynight, scales = "free_y") +
     ggplot2::scale_x_continuous(breaks= seq(1,12,length.out = 12), labels=c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
     ggplot2::theme_bw(base_size = 12) +
     ggplot2::theme(strip.background = ggplot2::element_blank()) +
     ggplot2::labs(y = ylabel) +
     ggplot2::ggtitle(titlemain) +
-    ggplot2::theme(plot.title = ggplot2::element_text(face = 'italic'))
+    ggplot2::theme(plot.title = ggplot2::element_text(face = "italic"))
 
 }
 
@@ -631,13 +651,13 @@ pr_plot_sti <-  function(df){
 
   #means are so different so log data as the abundance scale is so wide
 
-  sti <- df %>% dplyr::left_join(means, by = 'Project') %>%
+  sti <- df %>% dplyr::left_join(means, by = "Project") %>%
     dplyr::mutate(relab = .data$Species_m3/.data$mean) %>%
     dplyr::group_by(.data$sst, .data$Species) %>%
     dplyr::summarize(relab = sum(.data$relab),
                      freq = n(),
                      a = sum(.data$relab)/n(),
-                     .groups = 'drop')
+                     .groups = "drop")
 
   n <- length(sti$sst)
   # have a stop if n < 10
@@ -675,11 +695,11 @@ pr_plot_sti <-  function(df){
   subtit <- rlang::expr(paste("STI = ",!!STI,degree,"C"))
 
   stiplot <- ggplot2::ggplot(z, aes(kernTemps, .data$y)) + ggplot2::geom_point() +
-    ggplot2::geom_vline(xintercept = STI, colour = 'blue', lty = 4) +
+    ggplot2::geom_vline(xintercept = STI, colour = "blue", lty = 4) +
     ggplot2::theme_bw() +
     ggplot2::labs(x=xlabel, y="Relative kernel density") +
     ggplot2::ggtitle(taxon, subtitle = subtit) +
-    ggplot2::theme(plot.title = ggplot2::element_text(face = 'italic'))
+    ggplot2::theme(plot.title = ggplot2::element_text(face = "italic"))
 
 }
 

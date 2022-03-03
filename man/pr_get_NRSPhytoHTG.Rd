@@ -14,5 +14,4 @@ Get Abundance of Phyto Higher Trophic Groups
 }
 \examples{
 df <- pr_get_NRSPhytoHTG()
-#' @import dplyr
 }
