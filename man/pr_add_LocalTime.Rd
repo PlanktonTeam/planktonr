@@ -16,7 +16,7 @@ A datafrane with local time added
 This function adds the local time based on timezone.
 }
 \examples{
-df <- tibble(tz = c("Australia/Perth", "Australia/Brisbane"),
+df <- data.frame(tz = c("Australia/Perth", "Australia/Brisbane"),
                SampleDateUTC = c(lubridate::now(), lubridate::now()))
 df <- pr_add_LocalTime(df)
 }

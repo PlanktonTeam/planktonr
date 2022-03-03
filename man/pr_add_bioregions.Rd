@@ -17,5 +17,5 @@ Add bioregions data to existing df
 }
 \examples{
 df <- pr_get_NRSStation() \%>\%
-pr_add_bioregions
+  pr_add_bioregions()
 }

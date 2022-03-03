@@ -474,7 +474,7 @@ pr_get_sti <-  function(Type = c("P", "Z")){
                   Species_m3 = .data[[parameter]] + min(.data[[parameter]][.data[[parameter]]>0], na.rm = TRUE))
 
   nrs <- nrszdat %>%
-    tidyr::pivot_longer(-c(.data[["Project"]]:.data[["SampleDepth_m"]]), names_to = 'Species', values_to = parameter) %>%
+    tidyr::pivot_longer(-c(.data[["Project"]]:.data[["Method"]]), names_to = 'Species', values_to = parameter) %>%
     dplyr::left_join(nrssat, by = c("Latitude", "Longitude", "SampleTime_local")) %>%
     dplyr::select(.data$Species, .data$SST, .data[[parameter]]) %>%
     dplyr::filter(!is.na(.data$SST) & .data[[parameter]] > 0) %>%
@@ -483,7 +483,7 @@ pr_get_sti <-  function(Type = c("P", "Z")){
 
   comball <- cpr %>%
     dplyr::bind_rows(nrs) %>%
-    dplyr:: mutate(SST = round(.data$SST/0.5) * 0.5) %>%
+    dplyr::mutate(SST = round(.data$SST/0.5) * 0.5) %>%
     dplyr::arrange(.data$Species)
 }
 
