@@ -25,7 +25,7 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
   }
 
   if(Survey == 'CPR'){
-    dat <- readr::read_csv(paste0(planktonr::pr_get_outputs(), "CPR_Indices.csv"), na = "NA", show_col_types = FALSE) %>%
+    dat <- readr::read_csv(paste0(pr_get_outputs(), "CPR_Indices.csv"), na = "NA", show_col_types = FALSE) %>%
       dplyr::select(.data$SampleDateUTC, .data$Year, .data$Month, .data$Day, .data$BioRegion, .data$Biomass_mgm3, .data[[parameter1]]:.data[[parameter2]]) %>%
       dplyr::mutate(Biomass_mgm3 = suppressWarnings(replace(.data$Biomass_mgm3, which(.data$Biomass_mgm3  < 0), 0)),
                     SampleDateUTC = lubridate::round_date(.data$SampleDateUTC, "month"),
@@ -42,7 +42,7 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
       droplevels()
     return(dat)
   } else {
-    dat <- readr::read_csv(paste0(planktonr::pr_get_outputs(), "NRS_Indices.csv"), na = "NA", show_col_types = FALSE) %>%
+    dat <- readr::read_csv(paste0(pr_get_outputs(), "NRS_Indices.csv"), na = "NA", show_col_types = FALSE) %>%
       dplyr::mutate(Month = lubridate::month(.data$SampleDateLocal),
                     Year = lubridate::year(.data$SampleDateLocal),
                     StationCode = paste(.data$StationName, .data$StationCode),
@@ -70,9 +70,7 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
 #' @examples
 #' df <- data.frame(Month = rep(1:12,10), StationCode = 'NSI', Values = runif(120, min=0, max=10))
 #' pr_make_climatology(df, Month)
-#' @import dplyr
 #' @importFrom stats sd
-#' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 pr_make_climatology <- function(df, x){
   x <- dplyr::enquo(arg = x)
@@ -175,7 +173,7 @@ pr_get_pico <- function(){
     dplyr::mutate(StationCode = stringr::str_sub(.data$TripCode, 1, 3),
                   Year = lubridate::year(.data$SampleDateLocal),
                   Month = lubridate::month(.data$SampleDateLocal)) %>%
-    planktonr::pr_get_StationName() %>%
+    pr_get_StationName() %>%
     tidyr::pivot_longer(.data[["Prochlorococcus_Cellsml"]]:.data[["Picoeukaryotes_Cellsml"]], values_to = "Values", names_to = 'parameters')  %>%
     dplyr::mutate(Values = .data$Values + min(.data$Values[.data$Values>0], na.rm = TRUE)) %>%
     pr_reorder()
@@ -190,7 +188,7 @@ pr_get_pico <- function(){
 #' @examples
 #' df <- pr_get_nuts()
 pr_get_nuts <-  function(){
-  Nuts <- readr::read_csv(paste0(planktonr::pr_get_site2(), "BGC_Chemistry.csv"),
+  Nuts <- readr::read_csv(paste0(pr_get_site2(), "BGC_Chemistry.csv"),
                           col_types = list(SAMPLEDATELOCAL = readr::col_datetime())) %>%
     dplyr::select_if(!grepl('FLAG', names(.)) & !grepl('COMMENTS', names(.)) & !grepl('MICROB', names(.))) %>%
     dplyr::filter(.data$PROJECTNAME == 'NRS') %>%
@@ -211,21 +209,21 @@ pr_get_nuts <-  function(){
 #' @examples
 #' df <- pr_get_LTnuts()
 pr_get_LTnuts <-  function(){
-  NutsLT <- readr::read_csv(paste0(planktonr::pr_get_outputs(), "nuts_longterm_clean2.csv")) %>%
+  NutsLT <- readr::read_csv(paste0(pr_get_outputs(), "nuts_longterm_clean2.csv")) %>%
     tidyr::pivot_longer(-c(.data$StationCode:.data$SampleDepth_m), values_to = "Values", names_to = 'parameters') %>%
     dplyr::mutate(ProjectName = 'LTM',
                   SampleDateLocal = strptime(as.POSIXct(.data$SampleDateLocal), "%Y-%m-%d")) %>%
     pr_get_StationName() %>%
     pr_reorder()
 
-  Nuts <- planktonr::pr_get_nuts() %>%
+  Nuts <- pr_get_nuts() %>%
     dplyr::mutate(SampleDateLocal = strptime(.data$SampleDateLocal, "%Y-%m-%d")) %>%
-    dplyr::filter(StationCode %in% c('MAI', 'ROT', 'PHB'))
+    dplyr::filter(.data$StationCode %in% c('MAI', 'ROT', 'PHB'))
 
-  Temp <- planktonr::pr_get_CTD() %>%
+  Temp <- pr_get_CTD() %>%
     dplyr::mutate(StationCode = stringr::str_sub(.data$TripCode, 1, 3)) %>%
     dplyr::select(.data$StationCode, .data$StationName, .data$SampleDateLocal, .data$SampleDepth_m, .data$Temperature_degC) %>%
-    dplyr::filter(StationCode %in% c('MAI', 'ROT', 'PHB')) %>%
+    dplyr::filter(.data$StationCode %in% c('MAI', 'ROT', 'PHB')) %>%
       tidyr::pivot_longer(-c(.data$StationCode:.data$SampleDepth_m), values_to = "Values", names_to = 'parameters') %>%
       dplyr::mutate(ProjectName = 'NRS',
                     SampleDateLocal = strptime(as.POSIXct(.data$SampleDateLocal), "%Y-%m-%d"))
@@ -237,12 +235,13 @@ pr_get_LTnuts <-  function(){
   means <- LTnuts %>%
     dplyr::select(.data$StationName, .data$parameters, .data$Values) %>%
     dplyr::group_by(.data$StationName, .data$parameters) %>%
-    dplyr::summarise(means = mean(Values, na.rm = TRUE),
-                     sd = stats::sd(Values, na.rm = TRUE),
+    dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
+                     sd = stats::sd(.data$Values, na.rm = TRUE),
                      .groups = 'drop')
 
-  Pol <- LTnuts %>% dplyr::left_join(means, by = c("StationName", "parameters")) %>%
-    dplyr::mutate(anomaly = (Values - means)/sd)
+  Pol <- LTnuts %>%
+    dplyr::left_join(means, by = c("StationName", "parameters")) %>%
+    dplyr::mutate(anomaly = (.data$Values - .data$means)/.data$sd)
 
    }
 
@@ -255,7 +254,7 @@ pr_get_LTnuts <-  function(){
 #' @examples
 #' df <- pr_get_pigs()
 pr_get_pigs <-  function(){
-  Pigs  <- readr::read_csv(paste0(planktonr::pr_get_site2(), "BGC_Pigments.csv"),
+  Pigs  <- readr::read_csv(paste0(pr_get_site2(), "BGC_Pigments.csv"),
                            col_types = list(PROJECTNAME = readr::col_character(),
                                             TRIP_CODE = readr::col_character(),
                                             SAMPLEDATELOCAL = readr::col_datetime(),
@@ -301,18 +300,17 @@ pr_get_fMap_data <- function(Type = "Z"){
   if(Type == "P"){
 
     # "Sample"     "Survey"     "Taxon"      "SampVol_m3" "Counts"
-
-    PhytoCountNRS <- planktonr::pr_get_NRSPhytoSpecies() %>%
-      tidyr::pivot_longer(cols = !starts_with(c("Project", "StationName", "StationCode", "Latitude", "Longitude", "TripCode",
-                                                "SampleTime_local", "Year", "Month", "Day", "Time", "SampleDepth_m"), ignore.case = FALSE),
+    PhytoCountNRS <- pr_get_NRSPhytoSpecies() %>%
+      tidyr::pivot_longer(cols = !dplyr::starts_with(c("Project", "StationName", "StationCode", "Latitude", "Longitude", "TripCode",
+                                                "SampleTime", "Year", "Month", "Day", "Time", "SampleDepth_m", "Method", "CTD"), ignore.case = FALSE),
                           names_to = "Taxon", values_to = "Counts") %>%
       dplyr::rename(Sample = .data$TripCode) %>%
       dplyr::mutate(Survey = "NRS",
                     SampVol_m3 = 1) %>%
-      dplyr::select(Sample, Survey, Taxon, Counts, SampVol_m3)
+      dplyr::select(.data$Sample, .data$Survey, .data$Taxon, .data$Counts, .data$SampVol_m3)
 
 
-    PhytoCountCPR <- planktonr::pr_get_CPRPhytoData("Count") %>% # nned to think about FOV versus counts
+    PhytoCountCPR <- pr_get_CPRPhytoData("Count") %>% # nned to think about FOV versus counts
       dplyr::rename(Counts = .data$FovCount) %>%
       dplyr::filter(!is.na(.data$Species) & !grepl("cf.|spp.|grp", .data$Species) & .data$Genus != '') %>%
       dplyr::mutate(Taxon = paste0(stringr::word(.data$Genus,1), " ", stringr::word(.data$Species,1)),
@@ -325,16 +323,16 @@ pr_get_fMap_data <- function(Type = "Z"){
 
   } else {
     ZooCountNRS <- pr_get_NRSZooSpecies() %>%
-      tidyr::pivot_longer(cols = !starts_with(c("Project", "StationName", "StationCode", "Latitude", "Longitude", "TripCode",
-                                                "SampleTime_local", "Year", "Month", "Day", "Time", "SampleDepth_m"), ignore.case = FALSE),
+      tidyr::pivot_longer(cols = !tidyselect::starts_with(c("Project", "StationName", "StationCode", "Latitude", "Longitude", "TripCode",
+                                                "SampleTime", "Year", "Month", "Day", "Time", "SampleDepth_m", "CTD", "Biomass_mgm3", "AshFreeBiomass_mgm3" ), ignore.case = FALSE),
                           names_to = "Taxon", values_to = "Counts") %>%
       dplyr::rename(Sample = .data$TripCode) %>%
       dplyr::mutate(Survey = "NRS",
                     SampVol_m3 = 1) %>%
-      dplyr::select(Sample, Survey, Taxon, Counts, SampVol_m3)
+      dplyr::select(.data$Sample, .data$Survey, .data$Taxon, .data$Counts, .data$SampVol_m3)
 
 
-    ZooCountCPR <- planktonr::pr_get_CPRZooData("Count") %>%
+    ZooCountCPR <- pr_get_CPRZooData("Count") %>%
       dplyr::rename(Counts = .data$TaxonCount) %>%
       dplyr::filter(!is.na(.data$Species) & !grepl("cf.|spp.|grp", .data$Species) & .data$Genus != '') %>%
       dplyr::mutate(Taxon = paste0(stringr::word(.data$Genus,1), " ", stringr::word(.data$Species,1)),
@@ -346,7 +344,7 @@ pr_get_fMap_data <- function(Type = "Z"){
       dplyr::arrange(.data$Taxon)
   }
 
-  NRSSamp <- planktonr::pr_get_NRSTrips(Type) %>%
+  NRSSamp <- pr_get_NRSTrips(Type) %>%
     dplyr::rename(Sample = .data$TripCode, Date = .data$SampleDateLocal) %>%
     dplyr::mutate(DOY = lubridate::yday(.data$Date),
                   Start = as.Date(paste0(min(lubridate::year(.data$Date))-1, "-12-31")),
@@ -355,7 +353,7 @@ pr_get_fMap_data <- function(Type = "Z"){
                   Survey = 'NRS')  %>%
     dplyr::select(.data$Sample, .data$Survey, .data$Date, .data$DOY, .data$Latitude, .data$Longitude, .data$thetadoy)
 
-  CPRSamp <- planktonr::pr_get_CPRSamps(Type) %>%
+  CPRSamp <- pr_get_CPRSamps(Type) %>%
     dplyr::rename(Date = .data$SampleDateUTC) %>%
     dplyr::mutate(DOY = lubridate::yday(.data$Date),
                   Start = as.Date(paste0(min(lubridate::year(.data$Date))-1, "-12-31")),
@@ -410,9 +408,9 @@ pr_get_fMap_data <- function(Type = "Z"){
 #' df <- pr_get_daynight("Z")
 pr_get_daynight <- function(Type = c("P", "Z")){
   if(Type == "Z"){
-    cprzdat <-  planktonr::pr_get_CPRZooCopepod()
+    cprzdat <-  pr_get_CPRZooCopepod()
   } else {
-    cprzdat <-  planktonr::pr_get_CPRPhytoSpecies()
+    cprzdat <-  pr_get_CPRPhytoSpecies()
   }
 
   dates <- cprzdat %>%
@@ -427,7 +425,7 @@ pr_get_daynight <- function(Type = c("P", "Z")){
     dplyr::mutate(daynight = ifelse(.data$SampleDateUTC > .data$sunrise & .data$SampleDateUTC < .data$sunset, 'Day', 'Night'))
 
   cprzmon <- cprzdat %>% dplyr::bind_cols(daynight["daynight"]) %>%
-    dplyr::select(.data[["Latitude"]]:.data[["Time_24hr"]], .data$daynight, everything()) %>%
+    dplyr::select(.data[["Latitude"]]:.data[["Time_24hr"]], .data$daynight, tidyselect::everything()) %>%
     tidyr::pivot_longer(-c(.data[["Latitude"]]:.data[["daynight"]]), values_to = "Species_m3", names_to = 'Species') %>%
     dplyr::group_by(.data$Month, .data$daynight, .data$Species) %>%
     dplyr::summarise(Species_m3 = mean(.data$Species_m3, na.rm = TRUE),
@@ -445,13 +443,13 @@ pr_get_daynight <- function(Type = c("P", "Z")){
 pr_get_sti <-  function(Type = c("P", "Z")){
 
   if(Type == "Z"){
-    cprzdat <-  planktonr::pr_get_CPRZooCopepod()
-    nrszdat <- planktonr::pr_get_NRSZooSpeciesCopepod() %>%
-      dplyr::select(-biomass_mgm3)
+    cprzdat <-  pr_get_CPRZooCopepod()
+    nrszdat <- pr_get_NRSZooSpeciesCopepod() %>%
+      dplyr::select(-.data$Biomass_mgm3)
     parameter <- "CopeAbundance_m3"
   } else {
-    cprzdat <-  planktonr::pr_get_CPRPhytoSpecies()
-    nrszdat <- planktonr::pr_get_NRSPhytoSpecies()
+    cprzdat <-  pr_get_CPRPhytoSpecies()
+    nrszdat <- pr_get_NRSPhytoSpecies()
     parameter <- "PhytoAbundance_m3"
   }
 
@@ -460,12 +458,12 @@ pr_get_sti <-  function(Type = c("P", "Z")){
   nrssat <- readr::read_csv("https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/RawData/NRS_SatData.csv",
                             show_col_types = FALSE) %>%
     pr_rename() %>%
-    rename(SampleTime_local = .data$SAMPLEDATE_LOCAL)
+    dplyr::rename(SampleTime_local = .data$SAMPLEDATE_LOCAL)
 
   cprsat <- readr::read_csv("https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/RawData/CPR_SatData.csv",
                             show_col_types = FALSE) %>%
     pr_rename() %>%
-    rename(SampleDateUTC = .data$SAMPLEDATE_UTC)
+    dplyr::rename(SampleDateUTC = .data$SAMPLEDATE_UTC)
 
   cpr <- cprzdat %>%
     tidyr::pivot_longer(-c(.data[["Latitude"]]:.data[["Time_24hr"]]), names_to = 'Species', values_to = parameter) %>%
@@ -502,43 +500,43 @@ pr_get_sti <-  function(Type = c("P", "Z")){
 #
 #   # First do Phytoplankton
 #   nrsP <- pr_get_NRSPhytoData() %>%
-#     mutate(TaxonName = stringr::str_c(.data$Genus, " ", .data$Species)) %>%  # Overwrite Taxon Name to remove the fluff
-#     select(.data$TaxonName, .data$SPCode, .data$TaxonCount) %>%
+#     dplyr::mutate(TaxonName = stringr::str_c(.data$Genus, " ", .data$Species)) %>%  # Overwrite Taxon Name to remove the fluff
+#     dplyr::select(.data$TaxonName, .data$SPCode, .data$TaxonCount) %>%
 #     tidyr::drop_na()
 #
 #   cprP <- pr_get_CPRPhytoData("Count") %>%
-#     mutate(TaxonName = stringr::str_c(.data$Genus, " ", .data$Species)) %>%  # Overwrite Taxon Name to remove the fluff
-#     rename(TaxonCount = .data$FovCount) %>%
-#     select(.data$TaxonName, .data$SPCode, .data$TaxonCount) %>%
+#     dplyr::mutate(TaxonName = stringr::str_c(.data$Genus, " ", .data$Species)) %>%  # Overwrite Taxon Name to remove the fluff
+#     dplyr::rename(TaxonCount = .data$FovCount) %>%
+#     dplyr::select(.data$TaxonName, .data$SPCode, .data$TaxonCount) %>%
 #     tidyr::drop_na()
 #
-#   outP <- bind_rows(nrsP, cprP) %>%
-#     group_by(.data$TaxonName, .data$SPCode) %>%
-#     summarise(n = n(), .groups = "drop") %>%
-#     arrange(desc(.data$n)) %>%
+#   outP <- dplyr::bind_rows(nrsP, cprP) %>%
+#     dplyr::group_by(.data$TaxonName, .data$SPCode) %>%
+#     dplyr::summarise(n = n(), .groups = "drop") %>%
+#     dplyr::arrange(dplyr::desc(.data$n)) %>%
 #     dplyr::filter(stringr::str_detect(.data$TaxonName, 'spp', negate = TRUE)) %>%
-#     mutate(Group = "Phytoplankton")
+#     dplyr::mutate(Group = "Phytoplankton")
 #
 #   # Now do Zooplankton
 #   nrsZ <- pr_get_NRSZooData() %>%
-#     mutate(TaxonName = stringr::str_c(.data$Genus, " ", .data$Species)) %>%  # Overwrite Taxon Name to remove f/m/j etc
-#     select(.data$TaxonName, .data$SPCode, .data$TaxonCount) %>%
+#     dplyr::mutate(TaxonName = stringr::str_c(.data$Genus, " ", .data$Species)) %>%  # Overwrite Taxon Name to remove f/m/j etc
+#     dplyr::select(.data$TaxonName, .data$SPCode, .data$TaxonCount) %>%
 #     tidyr::drop_na()
 #
 #   cprZ <- pr_get_CPRZooData("Count") %>%
-#     mutate(TaxonName = stringr::str_c(.data$Genus, " ", .data$Species)) %>%  # Overwrite Taxon Name to remove f/m/j etc
-#     select(.data$TaxonName, .data$SPCode, .data$TaxonCount) %>%
+#     dplyr::mutate(TaxonName = stringr::str_c(.data$Genus, " ", .data$Species)) %>%  # Overwrite Taxon Name to remove f/m/j etc
+#     dplyr::select(.data$TaxonName, .data$SPCode, .data$TaxonCount) %>%
 #     tidyr::drop_na()
 #
-#   outZ <- bind_rows(nrsZ, cprZ) %>%
-#     group_by(.data$TaxonName, .data$SPCode) %>%
-#     summarise(n = n(), .groups = "drop") %>%
-#     arrange(desc(.data$n)) %>%
+#   outZ <- dplyr::bind_rows(nrsZ, cprZ) %>%
+#     dplyr::group_by(.data$TaxonName, .data$SPCode) %>%
+#     dplyr::summarise(n = n(), .groups = "drop") %>%
+#     dplyr::arrange(dplyr::desc(.data$n)) %>%
 #     dplyr::filter(stringr::str_detect(.data$TaxonName, 'spp', negate = TRUE)) %>%
-#     mutate(Group = "Zooplankton")
+#     dplyr::mutate(Group = "Zooplankton")
 #
 #   # Now combine them
-#   out <- bind_rows(outP, outZ)
+#   out <- dplyr::bind_rows(outP, outZ)
 #   return(out)
 #
 # }
@@ -558,7 +556,7 @@ pr_get_sti <-  function(Type = c("P", "Z")){
 pr_get_SppCount <- function(gp){
 
   out <- sppSummary %>%
-    filter(.data$Group == gp)
+    dplyr::filter(.data$Group == gp)
 
 }
 

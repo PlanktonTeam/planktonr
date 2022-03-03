@@ -29,7 +29,7 @@ imcra_meso <- sf::st_read(file.path("data-raw","imcra_4_meso")) %>%  # Load imcr
 MapOz <- rnaturalearth::ne_countries(scale = "medium", country = "Australia",
                                        returnclass = "sf")
 
-meta_sf <- planktonr::pr_get_NRSTrips("Z") %>%
+meta_sf <- pr_get_NRSTrips("Z") %>%
   dplyr::select(StationName, StationCode, Longitude, Latitude) %>% unique() %>%
   dplyr::rename(Code = StationCode, Station = StationName) %>%
   dplyr::filter(Station != 'Port Hacking 4') %>%

@@ -7,28 +7,6 @@
 #' @return Dataframe with new column names
 pr_rename <- function(df){
 
-# STILL TO DO FROM RAW DATASETS
-#   "StationName", "STATION_NAME"
-#   LOCAL_TRIP_START_TIME
-#   IMOS_SITE_CODE
-#   NRS_TRIP_CODE
-#   NRS_SAMPLE_CODE
-#   UTC_TRIP_START_TIME
-#   FAMILY
-#   LIFE_STAGE
-#   TAXON_ECO_GROUP
-#   CAAB_CODE
-#   TAXON_START_DATE
-#   TAXON_PER_M3
-#   SAMPLE_COMMENTS
-#   TAXON_FIRST_OCCURRENCE
-#   PARENT_TAXON_NAME
-#   TAXON_TRAINING
-#   TAXON_COMMENTS
-
-
-
-
   ##TODO - Need to replace these before I implement the flagging code.
   rename_df <- tibble::as_tibble(matrix(c(
     "Year", "Year_local",
@@ -47,6 +25,7 @@ pr_rename <- function(df){
     # "CTDTemperature", "Temperature_degC",
     # "CTDTurbidity_ntu", "Turbidity_NTU",
     # "CTDChlF_mgm3"
+    "CAABCode","CAAB_CODE",
     "Cells_L", "CELL_L",
     "TaxonCount", "CELL_COUNT",
     "Chla_flag", "CPHL_quality_control",
@@ -67,6 +46,7 @@ pr_rename <- function(df){
     # "EndLatitude", "ENDLATITUDE",
     # "EndLongitude", "ENDLONGITUDE",
     # "EndSampleDateUTC", "ENDSAMPLEDATEUTC",
+    "Family", "FAMILY",
     "FlagComments", "FLAG_COMMENT",
     "FlagQC", "QC_FLAG",
     "FovCount", "FOV_COUNT",
@@ -158,6 +138,29 @@ pr_rename <- function(df){
     "ZoopAbund_m3", "ZOOP_ABUNDANCE_M3", ###
     # "ZoopSampleDepth_m", "ZOOPSAMPLEDEPTH_M",
     "i_Sample", "I_SAMPLE_ID"),
+    ncol = 2, byrow = TRUE, dimnames = list(NULL, c("New","Old"))))
+
+  df <- data.table::setnames(df, old = rename_df$Old, new = rename_df$New, skip_absent = TRUE)
+
+
+  # STILL TO DO FROM RAW DATASETS
+  #   LOCAL_TRIP_START_TIME
+  #   UTC_TRIP_START_TIME
+  #   LIFE_STAGE
+  #   TAXON_START_DATE
+  #   TAXON_PER_M3
+  #   SAMPLE_COMMENTS
+  #   TAXON_FIRST_OCCURRENCE
+  #   PARENT_TAXON_NAME
+
+  rename_df <- tibble::as_tibble(matrix(c(
+    "TaxonGroup","TAXON_ECO_GROUP",
+    "TripCode", "NRS_TRIP_CODE",
+    "StationCode", "STATIONCODE",
+    "SampleCode", "NRS_SAMPLE_CODE",
+    "SiteCode", "IMOS_SITE_CODE",
+    "TaxonTraining", "TAXON_TRAINING",
+    "TaxonComments", "TAXON_COMMENTS"),
     ncol = 2, byrow = TRUE, dimnames = list(NULL, c("New","Old"))))
 
   df <- data.table::setnames(df, old = rename_df$Old, new = rename_df$New, skip_absent = TRUE)
