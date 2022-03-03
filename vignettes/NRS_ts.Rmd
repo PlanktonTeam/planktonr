@@ -63,7 +63,7 @@ Then we can plot the data as a timeseries for Yongala and Maria Island.
 ```{r,include=TRUE}
 datNRS_zoo <- datNRS_zoo %>%
   filter(StationName %in% c("Yongala", "Maria Island"),
-         parameters == "ZoopAbund_m3") %>%
+         parameters == "ZoopAbundance_m3") %>%
   droplevels()
 
 pr_plot_tsclimate(df = datNRS_zoo, Survey = "NRS") 

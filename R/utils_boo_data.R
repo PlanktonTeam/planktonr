@@ -27,7 +27,7 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
   if(Survey == 'CPR'){
     dat <- readr::read_csv(paste0(planktonr::pr_get_outputs(), "CPR_Indices.csv"), na = "NA", show_col_types = FALSE) %>%
       dplyr::select(.data$SampleDateUTC, .data$Year, .data$Month, .data$Day, .data$BioRegion, .data$Biomass_mgm3, .data[[parameter1]]:.data[[parameter2]]) %>%
-      dplyr::mutate(Biomass_mgm3 = ifelse(.data$Biomass_mgm3 < 0 , 0, .data$Biomass_mgm3),
+      dplyr::mutate(Biomass_mgm3 = suppressWarnings(replace(.data$Biomass_mgm3, which(.data$Biomass_mgm3  < 0), 0)),
                     SampleDateUTC = lubridate::round_date(.data$SampleDateUTC, "month"),
                     YearMon = paste(.data$Year, .data$Month)) %>% # this step can be improved when nesting supports data pronouns
       tidyr::complete(.data$BioRegion, .data$YearMon) %>%
@@ -45,12 +45,14 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
     dat <- readr::read_csv(paste0(planktonr::pr_get_outputs(), "NRS_Indices.csv"), na = "NA", show_col_types = FALSE) %>%
       dplyr::mutate(Month = lubridate::month(.data$SampleDateLocal),
                     Year = lubridate::year(.data$SampleDateLocal),
-                    StationCode = paste(.data$StationName, .data$StationCode)) %>%
+                    StationCode = paste(.data$StationName, .data$StationCode),
+                    SampleDateLocal = as.POSIXct(.data$SampleDateLocal, format = '%Y-%m-%d')) %>%
       #tidyr::complete(.data$Year, tidyr::nesting(Station, Code)) %>% # Nesting doesn't support data pronouns at this time
       tidyr::complete(.data$Year, .data$StationCode) %>%
       dplyr::mutate(StationName = stringr::str_sub(.data$StationCode, 1, -5),
                     StationCode = stringr::str_sub(.data$StationCode, -3, -1)) %>%
       dplyr::select(.data$Year, .data$Month, .data$SampleDateLocal, .data$StationName, .data$StationCode, .data[[parameter1]]:.data[[parameter2]]) %>%
+      dplyr::select(-c(.data$Day, .data$Time_24hr)) %>%
       tidyr::pivot_longer(-c(.data$Year:.data$StationCode), values_to = 'Values', names_to = "parameters") %>%
       pr_reorder()
     return(dat)
@@ -200,6 +202,50 @@ pr_get_nuts <-  function(){
     pr_get_StationName() %>%
     pr_reorder()
 }
+
+#' Get NRS long term nutrient timeseries data
+#'
+#' @return dataframe for plotting long term nutrient time series info
+#' @export
+#'
+#' @examples
+#' df <- pr_get_LTnuts()
+pr_get_LTnuts <-  function(){
+  NutsLT <- readr::read_csv(paste0(planktonr::pr_get_outputs(), "nuts_longterm_clean2.csv")) %>%
+    tidyr::pivot_longer(-c(.data$StationCode:.data$SampleDepth_m), values_to = "Values", names_to = 'parameters') %>%
+    dplyr::mutate(ProjectName = 'LTM',
+                  SampleDateLocal = strptime(as.POSIXct(.data$SampleDateLocal), "%Y-%m-%d")) %>%
+    pr_get_StationName() %>%
+    pr_reorder()
+
+  Nuts <- planktonr::pr_get_nuts() %>%
+    dplyr::mutate(SampleDateLocal = strptime(.data$SampleDateLocal, "%Y-%m-%d")) %>%
+    dplyr::filter(StationCode %in% c('MAI', 'ROT', 'PHB'))
+
+  Temp <- planktonr::pr_get_CTD() %>%
+    dplyr::mutate(StationCode = stringr::str_sub(.data$TripCode, 1, 3)) %>%
+    dplyr::select(.data$StationCode, .data$StationName, .data$SampleDateLocal, .data$SampleDepth_m, .data$Temperature_degC) %>%
+    dplyr::filter(StationCode %in% c('MAI', 'ROT', 'PHB')) %>%
+      tidyr::pivot_longer(-c(.data$StationCode:.data$SampleDepth_m), values_to = "Values", names_to = 'parameters') %>%
+      dplyr::mutate(ProjectName = 'NRS',
+                    SampleDateLocal = strptime(as.POSIXct(.data$SampleDateLocal), "%Y-%m-%d"))
+
+  LTnuts <- dplyr::bind_rows(NutsLT, Nuts, Temp) %>%
+    dplyr::mutate(Year = lubridate::year(.data$SampleDateLocal),
+                  Month = lubridate::month(.data$SampleDateLocal))
+
+  means <- LTnuts %>%
+    dplyr::select(.data$StationName, .data$parameters, .data$Values) %>%
+    dplyr::group_by(.data$StationName, .data$parameters) %>%
+    dplyr::summarise(means = mean(Values, na.rm = TRUE),
+                     sd = stats::sd(Values, na.rm = TRUE),
+                     .groups = 'drop')
+
+  Pol <- LTnuts %>% dplyr::left_join(means, by = c("StationName", "parameters")) %>%
+    dplyr::mutate(anomaly = (Values - means)/sd)
+
+   }
+
 
 #' Get NRS pigment timeseries data
 #'

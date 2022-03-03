@@ -26,7 +26,8 @@ pr_get_CTD <- function(){
     filter(grepl("NRS", .data$StationCode)) %>% # Subset to NRS only
     mutate(TripCode = if_else(.data$StationCode == 'NRSDAR', paste0(substr(.data$StationCode,4,6), format(.data$SampleDateUTC, "%Y%m%d_%H:%M")),
                              paste0(substr(.data$StationCode,4,6), format(.data$SampleDateUTC, "%Y%m%d"))),
-           ChlF_mgm3 = if_else(!is.na(.data$ChlF_mgm3), .data$ChlF_mgm3, .data$CHLF)) %>%
+           ChlF_mgm3 = if_else(!is.na(.data$ChlF_mgm3), .data$ChlF_mgm3, .data$CHLF),
+           StationCode = stringr::str_sub(.data$StationCode, 4, 6)) %>%
     pr_get_StationName() %>%
     select(.data$file_id, .data$StationName, .data$TripCode, .data$SampleDateUTC, .data$Latitude, .data$Longitude,
            .data$SampleDepth_m, .data$Salinity_psu, .data$Salinity_flag, .data$Temperature_degC, .data$Temperature_flag,
