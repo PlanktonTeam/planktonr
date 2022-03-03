@@ -4,7 +4,7 @@ author: "Claire H. Davies and Jason D. Everett"
 date: "`r format(Sys.time(), '%A %d %B %Y')`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{CPR timeseries}
+  %\VignetteIndexEntry{Analysing CPR timeseries}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
   
