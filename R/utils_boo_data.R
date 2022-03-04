@@ -7,15 +7,17 @@
 #' @export
 #'
 #' @examples
+#' df <- pr_get_tsdata("NRS", "P")
 #' df <- pr_get_tsdata("NRS", "Z")
+#' df <- pr_get_tsdata("CPR", "P")
+#' df <- pr_get_tsdata("CPR", "Z")
 pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
 
   if(Type == "Z"){
     parameter1 <- "Biomass_mgm3"
     parameter2 <- "CopepodEvenness"
   }
-  if(Type == "P" & Survey == "CPR")
-  {
+  if(Type == "P" & Survey == "CPR"){
     parameter1 <- "PhytoBiomassCarbon_pgm3"
     parameter2 <- "DinoflagellateEvenness"
   }
@@ -52,7 +54,7 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
       dplyr::mutate(StationName = stringr::str_sub(.data$StationCode, 1, -5),
                     StationCode = stringr::str_sub(.data$StationCode, -3, -1)) %>%
       dplyr::select(.data$Year, .data$Month, .data$SampleDateLocal, .data$StationName, .data$StationCode, .data[[parameter1]]:.data[[parameter2]]) %>%
-      dplyr::select(-c(.data$Day, .data$Time_24hr)) %>%
+      # dplyr::select(-c(.data$Day, .data$Time_24hr)) %>% # Don't seem to exist in new data
       tidyr::pivot_longer(-c(.data$Year:.data$StationCode), values_to = 'Values', names_to = "parameters") %>%
       pr_reorder()
     return(dat)
@@ -93,7 +95,10 @@ pr_make_climatology <- function(df, x){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_fg('NRS', 'P')
+#' NRSfgz <- planktonr::pr_get_fg("NRS", "Z")
+#' NRSfgp <- planktonr::pr_get_fg("NRS", "P")
+#' CPRfgz <- planktonr::pr_get_fg("CPR", "Z")
+#' CPRfgp <- planktonr::pr_get_fg("CPR", "P")
 pr_get_fg <- function(Survey = 'NRS', Type = "Z"){
 
   if(Survey == 'CPR' & Type == 'P'){
