@@ -17,4 +17,5 @@ Get data for STI plots of species abundance
 }
 \examples{
 df <- pr_get_sti("P")
+df <- pr_get_sti("Z")
 }

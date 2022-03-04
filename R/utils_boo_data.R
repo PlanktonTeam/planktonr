@@ -449,12 +449,15 @@ pr_get_daynight <- function(Type = c("P", "Z")){
 #'
 #' @examples
 #' df <- pr_get_sti("P")
+#' df <- pr_get_sti("Z")
 pr_get_sti <-  function(Type = c("P", "Z")){
 
   if(Type == "Z"){
     cprzdat <-  pr_get_CPRZooCopepod()
     nrszdat <- pr_get_NRSZooSpeciesCopepod() %>%
-      dplyr::select(-.data$Biomass_mgm3)
+      dplyr::mutate(Method = NA) %>%
+      dplyr::relocate(.data$Method, .after = .data$AshFreeBiomass_mgm3) # Method is missing in Z so we add a dummy variable to allow the code below to run.
+
     parameter <- "CopeAbundance_m3"
   } else {
     cprzdat <-  pr_get_CPRPhytoSpecies()
