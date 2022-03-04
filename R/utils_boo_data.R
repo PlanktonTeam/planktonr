@@ -28,7 +28,8 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
 
   if(Survey == 'CPR'){
     dat <- readr::read_csv(paste0(pr_get_outputs(), "CPR_Indices.csv"), na = "NA", show_col_types = FALSE) %>%
-      dplyr::select(.data$SampleDateUTC, .data$Year, .data$Month, .data$Day, .data$BioRegion, .data$Biomass_mgm3, .data[[parameter1]]:.data[[parameter2]]) %>%
+      dplyr::select(.data$SampleDateUTC, .data$Year, .data$Month, .data$Day, .data$BioRegion, .data$Biomass_mgm3,
+                    .data[[parameter1]]:.data[[parameter2]]) %>%
       dplyr::mutate(Biomass_mgm3 = suppressWarnings(replace(.data$Biomass_mgm3, which(.data$Biomass_mgm3  < 0), 0)),
                     SampleDateUTC = lubridate::round_date(.data$SampleDateUTC, "month"),
                     YearMon = paste(.data$Year, .data$Month)) %>% # this step can be improved when nesting supports data pronouns
@@ -43,7 +44,7 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
       dplyr::filter(!is.na(.data$BioRegion), !.data$BioRegion %in% c('North', 'North-west')) %>%
       droplevels()
     return(dat)
-  } else {
+  } else if(Survey == "NRS"){
     dat <- readr::read_csv(paste0(pr_get_outputs(), "NRS_Indices.csv"), na = "NA", show_col_types = FALSE) %>%
       dplyr::mutate(Month = lubridate::month(.data$SampleDateLocal),
                     Year = lubridate::year(.data$SampleDateLocal),
@@ -51,10 +52,13 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
                     SampleDateLocal = as.POSIXct(.data$SampleDateLocal, format = '%Y-%m-%d')) %>%
       #tidyr::complete(.data$Year, tidyr::nesting(Station, Code)) %>% # Nesting doesn't support data pronouns at this time
       tidyr::complete(.data$Year, .data$StationCode) %>%
+      dplyr::relocate(.data$AshFreeBiomass_mgm3, .after = .data$Time_24hr) %>%
+      dplyr::relocate(.data$Biomass_mgm3, .after = .data$Time_24hr) %>%
       dplyr::mutate(StationName = stringr::str_sub(.data$StationCode, 1, -5),
                     StationCode = stringr::str_sub(.data$StationCode, -3, -1)) %>%
-      dplyr::select(.data$Year, .data$Month, .data$SampleDateLocal, .data$StationName, .data$StationCode, .data[[parameter1]]:.data[[parameter2]]) %>%
-      # dplyr::select(-c(.data$Day, .data$Time_24hr)) %>% # Don't seem to exist in new data
+      dplyr::select(.data$Year, .data$Month, .data$SampleDateLocal, .data$StationName, .data$StationCode,
+                    .data[[parameter1]]:.data[[parameter2]]) %>%
+      # dplyr::select(-c(.data$Day, .data$Time_24hr)) %>%
       tidyr::pivot_longer(-c(.data$Year:.data$StationCode), values_to = 'Values', names_to = "parameters") %>%
       pr_reorder()
     return(dat)
