@@ -198,7 +198,8 @@ pr_get_pico <- function(){
 #' df <- pr_get_nuts()
 pr_get_nuts <-  function(){
   Nuts <- readr::read_csv(paste0(pr_get_site2(), "BGC_Chemistry.csv"),
-                          col_types = list(SAMPLEDATELOCAL = readr::col_datetime())) %>%
+                          col_types = list(SAMPLEDATELOCAL = readr::col_datetime()),
+                          show_col_types = FALSE) %>%
     dplyr::select_if(!grepl('FLAG', names(.)) & !grepl('COMMENTS', names(.)) & !grepl('MICROB', names(.))) %>%
     dplyr::filter(.data$PROJECTNAME == 'NRS') %>%
     pr_rename() %>%
@@ -218,7 +219,8 @@ pr_get_nuts <-  function(){
 #' @examples
 #' df <- pr_get_LTnuts()
 pr_get_LTnuts <-  function(){
-  NutsLT <- readr::read_csv(paste0(pr_get_outputs(), "nuts_longterm_clean2.csv")) %>%
+  NutsLT <- readr::read_csv(paste0(pr_get_outputs(), "nuts_longterm_clean2.csv"),
+                            show_col_types = FALSE) %>%
     tidyr::pivot_longer(-c(.data$StationCode:.data$SampleDepth_m), values_to = "Values", names_to = 'parameters') %>%
     dplyr::mutate(ProjectName = 'LTM',
                   SampleDateLocal = strptime(as.POSIXct(.data$SampleDateLocal), "%Y-%m-%d")) %>%
@@ -264,6 +266,7 @@ pr_get_LTnuts <-  function(){
 #' df <- pr_get_pigs()
 pr_get_pigs <-  function(){
   Pigs  <- readr::read_csv(paste0(pr_get_site2(), "BGC_Pigments.csv"),
+                           show_col_types = FALSE,
                            col_types = list(PROJECTNAME = readr::col_character(),
                                             TRIP_CODE = readr::col_character(),
                                             SAMPLEDATELOCAL = readr::col_datetime(),
