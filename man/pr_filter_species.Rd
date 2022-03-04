@@ -16,7 +16,7 @@ A dataframe with all correct species names
 Remove incorrect species names from dataframe
 }
 \examples{
-df <- tibble(Species = c("IncorrectSpecies cf.", "CorrectSpcies1", NA,
+df <- data.frame(Species = c("IncorrectSpecies cf.", "CorrectSpcies1", NA,
               "CorrectSpecies2", "Incorrect spp., Incorrect/Species"))
 df <- pr_filter_species(df)
 }

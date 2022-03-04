@@ -99,8 +99,9 @@ pr_plot_CPRmap <-  function(df){
 #' df <- data.frame(SampleDateLocal = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
 #' StationCode = 'NSI', parameters = 'Biomass_mgm3', Values = runif(4, min=0, max=10),
 #' Survey = 'NRS')
-#' df <- df %>% mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
-#' format = "%Y-%m-%d %H:%M:%S"))
+#' df <- df %>%
+#'       dplyr::mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
+#'       format = "%Y-%m-%d %H:%M:%S"))
 #' timeseries <- pr_plot_timeseries(df, 'NRS', 'matter')
 pr_plot_timeseries <- function(df, Survey = "NRS", pal = "matter", Scale = "identity"){
 
@@ -156,7 +157,7 @@ pr_plot_timeseries <- function(df, Survey = "NRS", pal = "matter", Scale = "iden
 #' @export
 #'
 #' @examples
-#' df <- pr_get_tsdata("NRS", "Z") %>% filter(parameters == 'Biomass_mgm3')
+#' df <- pr_get_tsdata("NRS", "Z") %>% dplyr::filter(parameters == 'Biomass_mgm3')
 #' plot <- pr_plot_trends(df, survey = "NRS")
 pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal = "matter", y_trans = "identity", output = "ggplot"){
 
@@ -223,7 +224,6 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
   if (output %in% "plotly"){
     p1 <- plotly::ggplotly(p1)
   }
-
 
   return(p1)
 }
@@ -303,12 +303,13 @@ pr_plot_climate <- function(df, Survey = "NRS", x, pal = "matter", Scale = "iden
 #'
 #' @examples
 #' df <- data.frame(SampleDateLocal = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
-#' Month = sample(1:12, 4), Year = c(2012, 2013, 2014, 2015),
-#' StationCode = c('NSI', 'NSI', 'PHB', 'PHB'),
-#' parameters = 'Biomass_mgm3',
-#' Values = runif(4, min=0, max=10))
-#' df <- df %>% mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
-#' format = "%Y-%m-%d %H:%M:%S"))
+#'                  Month = sample(1:12, 4), Year = c(2012, 2013, 2014, 2015),
+#'                  StationCode = c('NSI', 'NSI', 'PHB', 'PHB'),
+#'                  parameters = 'Biomass_mgm3',
+#'                  Values = runif(4, min=0, max=10))
+#' df <- df %>%
+#'       dplyr::mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
+#'                     format = "%Y-%m-%d %H:%M:%S"))
 #' monthly <- pr_plot_tsclimate(df, 'NRS', 'matter')
 
 
@@ -426,9 +427,9 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
 #'
 #' @examples
 #' df <- data.frame(SampleDate = c("2010-01-01","2010-02-25","2010-06-21","2010-04-11","2010-08-05"),
-#' StationName = 'Port Hacking', parameters = 'Biomass_mgm3', Values = runif(5, 1, 50),
-#' fv = runif(5, 1, 50), anomaly = runif(5, 1, 3), Month = runif(5, 1, 6)) %>%
-#' dplyr::mutate(SampleDate = as.POSIXct(SampleDate))
+#'              StationName = 'Port Hacking', parameters = 'Biomass_mgm3', Values = runif(5, 1, 50),
+#'              fv = runif(5, 1, 50), anomaly = runif(5, 1, 3), Month = runif(5, 1, 6)) %>%
+#'              dplyr::mutate(SampleDate = as.POSIXct(SampleDate))
 #' plot <-  pr_plot_EOV(df, 'Biomass_mgm3', 'NRS', 'identity', 'matter', 'yes')
 pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = 'NRS', trans = 'identity', pal = 'matter', labels = "yes") {
 
@@ -491,7 +492,7 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = 'NRS', trans = 'ident
     p3 <- p3 + ggplot2::theme(axis.title.x = ggplot2::element_blank())
   }
 
-  p1 + p2 + p3 + patchwork::plot_layout(widths = c(3,3,2))
+  patchwork::wrap_plots(p1, p2, p3, widths = c(3,3,2))
 
 }
 

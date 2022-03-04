@@ -18,5 +18,8 @@ dataframe for plotting functional group time series info
 Get functional group data
 }
 \examples{
-df <- pr_get_fg('NRS', 'P')
+NRSfgz <- planktonr::pr_get_fg("NRS", "Z")
+NRSfgp <- planktonr::pr_get_fg("NRS", "P")
+CPRfgz <- planktonr::pr_get_fg("CPR", "Z")
+CPRfgp <- planktonr::pr_get_fg("CPR", "P")
 }

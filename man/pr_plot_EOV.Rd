@@ -34,8 +34,8 @@ Policy plot
 }
 \examples{
 df <- data.frame(SampleDate = c("2010-01-01","2010-02-25","2010-06-21","2010-04-11","2010-08-05"),
-StationName = 'Port Hacking', parameters = 'Biomass_mgm3', Values = runif(5, 1, 50),
-fv = runif(5, 1, 50), anomaly = runif(5, 1, 3), Month = runif(5, 1, 6)) \%>\%
-dplyr::mutate(SampleDate = as.POSIXct(SampleDate))
+             StationName = 'Port Hacking', parameters = 'Biomass_mgm3', Values = runif(5, 1, 50),
+             fv = runif(5, 1, 50), anomaly = runif(5, 1, 3), Month = runif(5, 1, 6)) \%>\%
+             dplyr::mutate(SampleDate = as.POSIXct(SampleDate))
 plot <-  pr_plot_EOV(df, 'Biomass_mgm3', 'NRS', 'identity', 'matter', 'yes')
 }

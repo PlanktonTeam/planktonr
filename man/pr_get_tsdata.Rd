@@ -18,5 +18,8 @@ dataframe to use in pr_plot functions
 Access data for timeseries and climatology plots
 }
 \examples{
+df <- pr_get_tsdata("NRS", "P")
 df <- pr_get_tsdata("NRS", "Z")
+df <- pr_get_tsdata("CPR", "P")
+df <- pr_get_tsdata("CPR", "Z")
 }

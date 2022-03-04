@@ -7,15 +7,17 @@
 #' @export
 #'
 #' @examples
+#' df <- pr_get_tsdata("NRS", "P")
 #' df <- pr_get_tsdata("NRS", "Z")
+#' df <- pr_get_tsdata("CPR", "P")
+#' df <- pr_get_tsdata("CPR", "Z")
 pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
 
   if(Type == "Z"){
     parameter1 <- "Biomass_mgm3"
     parameter2 <- "CopepodEvenness"
   }
-  if(Type == "P" & Survey == "CPR")
-  {
+  if(Type == "P" & Survey == "CPR"){
     parameter1 <- "PhytoBiomassCarbon_pgm3"
     parameter2 <- "DinoflagellateEvenness"
   }
@@ -26,7 +28,8 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
 
   if(Survey == 'CPR'){
     dat <- readr::read_csv(paste0(pr_get_outputs(), "CPR_Indices.csv"), na = "NA", show_col_types = FALSE) %>%
-      dplyr::select(.data$SampleDateUTC, .data$Year, .data$Month, .data$Day, .data$BioRegion, .data$Biomass_mgm3, .data[[parameter1]]:.data[[parameter2]]) %>%
+      dplyr::select(.data$SampleDateUTC, .data$Year, .data$Month, .data$Day, .data$BioRegion, .data$Biomass_mgm3,
+                    .data[[parameter1]]:.data[[parameter2]]) %>%
       dplyr::mutate(Biomass_mgm3 = suppressWarnings(replace(.data$Biomass_mgm3, which(.data$Biomass_mgm3  < 0), 0)),
                     SampleDateUTC = lubridate::round_date(.data$SampleDateUTC, "month"),
                     YearMon = paste(.data$Year, .data$Month)) %>% # this step can be improved when nesting supports data pronouns
@@ -41,7 +44,7 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
       dplyr::filter(!is.na(.data$BioRegion), !.data$BioRegion %in% c('North', 'North-west')) %>%
       droplevels()
     return(dat)
-  } else {
+  } else if(Survey == "NRS"){
     dat <- readr::read_csv(paste0(pr_get_outputs(), "NRS_Indices.csv"), na = "NA", show_col_types = FALSE) %>%
       dplyr::mutate(Month = lubridate::month(.data$SampleDateLocal),
                     Year = lubridate::year(.data$SampleDateLocal),
@@ -49,10 +52,13 @@ pr_get_tsdata <- function(Survey = c("CPR", "NRS"), Type = c("P", "Z")){
                     SampleDateLocal = as.POSIXct(.data$SampleDateLocal, format = '%Y-%m-%d')) %>%
       #tidyr::complete(.data$Year, tidyr::nesting(Station, Code)) %>% # Nesting doesn't support data pronouns at this time
       tidyr::complete(.data$Year, .data$StationCode) %>%
+      dplyr::relocate(.data$AshFreeBiomass_mgm3, .after = .data$Time_24hr) %>%
+      dplyr::relocate(.data$Biomass_mgm3, .after = .data$Time_24hr) %>%
       dplyr::mutate(StationName = stringr::str_sub(.data$StationCode, 1, -5),
                     StationCode = stringr::str_sub(.data$StationCode, -3, -1)) %>%
-      dplyr::select(.data$Year, .data$Month, .data$SampleDateLocal, .data$StationName, .data$StationCode, .data[[parameter1]]:.data[[parameter2]]) %>%
-      dplyr::select(-c(.data$Day, .data$Time_24hr)) %>%
+      dplyr::select(.data$Year, .data$Month, .data$SampleDateLocal, .data$StationName, .data$StationCode,
+                    .data[[parameter1]]:.data[[parameter2]]) %>%
+      # dplyr::select(-c(.data$Day, .data$Time_24hr)) %>%
       tidyr::pivot_longer(-c(.data$Year:.data$StationCode), values_to = 'Values', names_to = "parameters") %>%
       pr_reorder()
     return(dat)
@@ -93,7 +99,10 @@ pr_make_climatology <- function(df, x){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_fg('NRS', 'P')
+#' NRSfgz <- planktonr::pr_get_fg("NRS", "Z")
+#' NRSfgp <- planktonr::pr_get_fg("NRS", "P")
+#' CPRfgz <- planktonr::pr_get_fg("CPR", "Z")
+#' CPRfgp <- planktonr::pr_get_fg("CPR", "P")
 pr_get_fg <- function(Survey = 'NRS', Type = "Z"){
 
   if(Survey == 'CPR' & Type == 'P'){
@@ -474,7 +483,7 @@ pr_get_sti <-  function(Type = c("P", "Z")){
                   Species_m3 = .data[[parameter]] + min(.data[[parameter]][.data[[parameter]]>0], na.rm = TRUE))
 
   nrs <- nrszdat %>%
-    tidyr::pivot_longer(-c(.data[["Project"]]:.data[["SampleDepth_m"]]), names_to = 'Species', values_to = parameter) %>%
+    tidyr::pivot_longer(-c(.data[["Project"]]:.data[["Method"]]), names_to = 'Species', values_to = parameter) %>%
     dplyr::left_join(nrssat, by = c("Latitude", "Longitude", "SampleTime_local")) %>%
     dplyr::select(.data$Species, .data$SST, .data[[parameter]]) %>%
     dplyr::filter(!is.na(.data$SST) & .data[[parameter]] > 0) %>%
@@ -483,7 +492,7 @@ pr_get_sti <-  function(Type = c("P", "Z")){
 
   comball <- cpr %>%
     dplyr::bind_rows(nrs) %>%
-    dplyr:: mutate(SST = round(.data$SST/0.5) * 0.5) %>%
+    dplyr::mutate(SST = round(.data$SST/0.5) * 0.5) %>%
     dplyr::arrange(.data$Species)
 }
 
