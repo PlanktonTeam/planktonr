@@ -107,16 +107,16 @@ pr_make_climatology <- function(df, x){
 pr_get_fg <- function(Survey = 'NRS', Type = "Z"){
 
   if(Survey == 'CPR' & Type == 'P'){
-    df <- pr_get_CPRPhytoHTG()
+    df <- pr_get_CPRData(type = "phytoplankton", variable = "abundance", subset = "htg")
   }
   else if(Survey == 'NRS' & Type == 'P'){
-    df <- pr_get_NRSPhytoHTG()
+    df <- pr_get_NRSData(type = "phytoplankton", variable = "abundance", subset = "htg")
   }
   else if(Survey == 'CPR' & Type == 'Z'){
-    df <- pr_get_CPRZooHTG()
+    df <- pr_get_CPRData(type = "zooplankton", variable = "abundance", subset = "htg")
   }
   else {
-    df <- pr_get_NRSZooHTG() %>%
+    df <- pr_get_NRSData(type = "zooplankton", variable = "abundance", subset = "htg") %>%
       dplyr::filter(.data$StationName != 'Port Hacking 4')
   }
 
@@ -314,7 +314,8 @@ pr_get_fMap_data <- function(Type = "Z"){
 
   if(Type == "P"){
     # "Sample"     "Survey"     "Taxon"      "SampVol_m3" "Counts"
-    PhytoCountNRS <- pr_get_NRSPhytoSpecies() %>%
+    PhytoCountNRS <-
+      pr_get_NRSData(type = "phytoplankton", variable = "abundance", subset = "species") %>%
       tidyr::pivot_longer(cols = !dplyr::starts_with(c("Project", "StationName", "StationCode", "Latitude", "Longitude", "TripCode",
                                                        "SampleTime", "Year", "Month", "Day", "Time", "SampleDepth_m", "Method", "CTD"), ignore.case = FALSE),
                           names_to = "Taxon", values_to = "Counts") %>%
@@ -324,7 +325,7 @@ pr_get_fMap_data <- function(Type = "Z"){
       dplyr::select(.data$Sample, .data$Survey, .data$Taxon, .data$Counts, .data$SampVol_m3)
 
 
-    PhytoCountCPR <- pr_get_CPRPhytoData("Count") %>% # nned to think about FOV versus counts
+    PhytoCountCPR <- pr_get_CPRPhytoData("Count") %>% # need to think about FOV versus counts
       dplyr::rename(Counts = .data$FovCount) %>%
       dplyr::filter(!is.na(.data$Species) & !grepl("cf.|spp.|grp", .data$Species) & .data$Genus != '') %>%
       dplyr::mutate(Taxon = paste0(stringr::word(.data$Genus,1), " ", stringr::word(.data$Species,1)),
@@ -336,7 +337,7 @@ pr_get_fMap_data <- function(Type = "Z"){
       dplyr::arrange(.data$Taxon)
 
   } else {
-    ZooCountNRS <- pr_get_NRSZooSpecies() %>%
+    ZooCountNRS <- pr_get_NRSData(type = "zooplankton", variable = "abundance", subset = "species") %>%
       tidyr::pivot_longer(cols = !tidyselect::starts_with(c("Project", "StationName", "StationCode", "Latitude", "Longitude", "TripCode",
                                                             "SampleTime", "Year", "Month", "Day", "Time", "SampleDepth_m", "CTD", "Biomass_mgm3", "AshFreeBiomass_mgm3" ), ignore.case = FALSE),
                           names_to = "Taxon", values_to = "Counts") %>%
@@ -422,9 +423,9 @@ pr_get_fMap_data <- function(Type = "Z"){
 #' df <- pr_get_daynight("Z")
 pr_get_daynight <- function(Type = c("P", "Z")){
   if(Type == "Z"){
-    dat <- pr_get_CPRZooCopepod()
+    dat <- pr_get_CPRData(type = "zooplankton", variable = "abundance", subset = "copepods")
   } else {
-    dat <- pr_get_CPRPhytoSpecies()
+    dat <- pr_get_CPRData(type = "phytoplankton", variable = "abundance", subset = "species")
   }
 
   dates <- dat %>%
@@ -459,14 +460,16 @@ pr_get_daynight <- function(Type = c("P", "Z")){
 pr_get_sti <-  function(Type = "P"){
 
   if(Type == "Z"){
-    cprzdat <-  pr_get_CPRZooCopepod()
-    nrszdat <- pr_get_NRSZooSpeciesCopepod() %>%
+    cprdat <- pr_get_CPRData(type = "zooplankton", variable = "abundance", subset = "copepods")
+
+    nrsdat <- pr_get_NRSData(type = "zooplankton", variable = "abundance", subset = "copepods") %>%
       dplyr::mutate(Method = NA) %>%
       dplyr::relocate(.data$Method, .after = .data$AshFreeBiomass_mgm3) # Method is missing in Z so we add a dummy variable to allow the code below to run.
+
     parameter <- "CopeAbundance_m3"
-  } else {
-    cprzdat <-  pr_get_CPRPhytoSpecies()
-    nrszdat <- pr_get_NRSPhytoSpecies()
+  } else if(Type == "P"){
+    cprdat <- pr_get_CPRData(type = "phytoplankton", variable = "abundance", subset = "species")
+    nrsdat <- pr_get_NRSData(type = "phytoplankton", variable = "abundance", subset = "species")
     parameter <- "PhytoAbundance_m3"
   }
 
@@ -482,7 +485,7 @@ pr_get_sti <-  function(Type = "P"){
     pr_rename() %>%
     dplyr::rename(SampleDate_UTC = .data$SAMPLEDATE_UTC)
 
-  cpr <- cprzdat %>%
+  cpr <- cprdat %>%
     tidyr::pivot_longer(-c(.data[["TripCode"]]:.data[["Time"]]), names_to = 'Species', values_to = parameter) %>%
     dplyr::left_join(cprsat, by = c("Latitude", "Longitude", "SampleDate_UTC")) %>%
     dplyr::select(.data$Species, .data$SST, .data[[parameter]]) %>%
@@ -490,7 +493,7 @@ pr_get_sti <-  function(Type = "P"){
     dplyr::mutate(Project = 'cpr',
                   Species_m3 = .data[[parameter]] + min(.data[[parameter]][.data[[parameter]]>0], na.rm = TRUE))
 
-  nrs <- nrszdat %>%
+  nrs <- nrsdat %>%
     tidyr::pivot_longer(-c(.data[["Project"]]:.data[["Method"]]), names_to = 'Species', values_to = parameter) %>%
     dplyr::left_join(nrssat, by = c("Latitude", "Longitude", "SampleTime_local")) %>%
     dplyr::select(.data$Species, .data$SST, .data[[parameter]]) %>%

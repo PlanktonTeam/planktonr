@@ -9,7 +9,6 @@
 pr_get_site <- function(){
   raw <-"http://geoserver-123.aodn.org.au/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=imos:LAYER_NAME&outputFormat=csv-with-metadata-header"
 }
-# https://geoserver-portal.aodn.org.au/geoserver/ows?typeName=imos:anmn_nrs_bgc_plankton_zooplankton_data&SERVICE=WFS&outputFormat=csv&REQUEST=GetFeature&VERSION=1.0.0
 
 
 #' Get location of raw plankton data on GitHub

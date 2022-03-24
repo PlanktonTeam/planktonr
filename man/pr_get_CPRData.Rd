@@ -4,10 +4,14 @@
 \alias{pr_get_CPRData}
 \title{Import CPR Data}
 \usage{
-pr_get_CPRData(file)
+pr_get_CPRData(type = "phytoplankton", variable = "abundance", subset = "raw")
 }
 \arguments{
-\item{file}{Filename to retrieve from AODN.}
+\item{type}{The data of interest: Phytoplankton or Zooplankton}
+
+\item{variable}{Variable options are: abundance or biovolume (phytoplankton only)}
+
+\item{subset}{Data compilation. Full options are below.}
 }
 \value{
 A dataframe with requested plankton data in long form
@@ -15,6 +19,23 @@ A dataframe with requested plankton data in long form
 \description{
 Load CPR Data
 }
+\details{
+cpr_phytoplankton_abundance_raw_data
+cpr_phytoplankton_abundance_htg_data
+cpr_phytoplankton_abundance_genus_data
+cpr_phytoplankton_abundance_species_data
+
+cpr_phytoplankton_biovolume_raw_data
+cpr_phytoplankton_biovolume_htg_data
+cpr_phytoplankton_biovolume_genus_data
+cpr_phytoplankton_biovolume_species_data
+
+cpr_zooplankton_abundance_copepods_data
+cpr_zooplankton_abundance_non_copepods_data
+cpr_zooplankton_abundance_genus_data
+cpr_zooplankton_abundance_htg_data
+cpr_zooplankton_abundance_raw_data
+}
 \examples{
-df <- pr_get_CPRData("cpr_zooplankton_abundance_copepods_data")
+df <- pr_get_CPRData(type = "phytoplankton", variable = "abundance", subset = "raw")
 }

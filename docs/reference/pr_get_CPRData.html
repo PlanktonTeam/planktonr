@@ -66,22 +66,42 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">pr_get_CPRData</span><span class="op">(</span><span class="va">file</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">pr_get_CPRData</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"phytoplankton"</span>, variable <span class="op">=</span> <span class="st">"abundance"</span>, subset <span class="op">=</span> <span class="st">"raw"</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>file</dt>
-<dd><p>Filename to retrieve from AODN.</p></dd>
+    <dl><dt>type</dt>
+<dd><p>The data of interest: Phytoplankton or Zooplankton</p></dd>
+<dt>variable</dt>
+<dd><p>Variable options are: abundance or biovolume (phytoplankton only)</p></dd>
+<dt>subset</dt>
+<dd><p>Data compilation. Full options are below.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A dataframe with requested plankton data in long form</p>
     </div>
+    <div id="details">
+    <h2>Details</h2>
+    <p>cpr_phytoplankton_abundance_raw_data
+cpr_phytoplankton_abundance_htg_data
+cpr_phytoplankton_abundance_genus_data
+cpr_phytoplankton_abundance_species_data</p>
+<p>cpr_phytoplankton_biovolume_raw_data
+cpr_phytoplankton_biovolume_htg_data
+cpr_phytoplankton_biovolume_genus_data
+cpr_phytoplankton_biovolume_species_data</p>
+<p>cpr_zooplankton_abundance_copepods_data
+cpr_zooplankton_abundance_non_copepods_data
+cpr_zooplankton_abundance_genus_data
+cpr_zooplankton_abundance_htg_data
+cpr_zooplankton_abundance_raw_data</p>
+    </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">pr_get_CPRData</span><span class="op">(</span><span class="st">"cpr_zooplankton_abundance_copepods_data"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">pr_get_CPRData</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"phytoplankton"</span>, variable <span class="op">=</span> <span class="st">"abundance"</span>, subset <span class="op">=</span> <span class="st">"raw"</span><span class="op">)</span></span>
 </code></pre></div>
     </div>
   </div>

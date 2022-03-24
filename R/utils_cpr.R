@@ -2,14 +2,35 @@
 #'
 #' Load CPR Data
 #'
-#' @param file Filename to retrieve from AODN.
+#' cpr_phytoplankton_abundance_raw_data
+#' cpr_phytoplankton_abundance_htg_data
+#' cpr_phytoplankton_abundance_genus_data
+#' cpr_phytoplankton_abundance_species_data
+#'
+#' cpr_phytoplankton_biovolume_raw_data
+#' cpr_phytoplankton_biovolume_htg_data
+#' cpr_phytoplankton_biovolume_genus_data
+#' cpr_phytoplankton_biovolume_species_data
+#'
+#' cpr_zooplankton_abundance_copepods_data
+#' cpr_zooplankton_abundance_non_copepods_data
+#' cpr_zooplankton_abundance_genus_data
+#' cpr_zooplankton_abundance_htg_data
+#' cpr_zooplankton_abundance_raw_data
+#'
+#' @param type The data of interest: Phytoplankton or Zooplankton
+#' @param variable Variable options are: abundance or biovolume (phytoplankton only)
+#' @param subset Data compilation. Full options are below.
 #'
 #' @return A dataframe with requested plankton data in long form
 #' @export
 #' @examples
-#' df <- pr_get_CPRData("cpr_zooplankton_abundance_copepods_data")
+#' df <- pr_get_CPRData(type = "phytoplankton", variable = "abundance", subset = "raw")
 #' @importFrom rlang .data
-pr_get_CPRData <- function(file){
+pr_get_CPRData <- function(type = "phytoplankton", variable = "abundance", subset = "raw"){
+
+file = paste("cpr", type, variable, subset, "data", sep = "_")
+
   dat <- readr::read_csv(stringr::str_replace(pr_get_site(), "LAYER_NAME", file), na = "", show_col_types = FALSE, comment = "#") %>%
     pr_rename()
 }
@@ -102,105 +123,6 @@ pr_get_CPRPhytoChangeLog <- function(){
     pr_rename()
 }
 
-################################################################################################################################################
-#' Get CPR Phyto raw product - Abundance
-#'
-#' @return A dataframe with CPR Raw Phytoplankton Abundance
-#' @export
-#'
-#' @examples
-#' df <- pr_get_CPRPhytoRaw()
-#' @importFrom rlang .data
-pr_get_CPRPhytoRaw <- function(){
-  dat <- planktonr::pr_get_CPRData("cpr_phytoplankton_abundance_raw_data")
-
-}
-
-#' CPR Phyto HTG product - Abundance
-#'
-#' @return A dataframe with CPR Phytoplankton Abundance - Summed by Higher Trophic Groups
-#' @export
-#'
-#' @examples
-#' df <- pr_get_CPRPhytoHTG()
-#' @importFrom rlang .data
-pr_get_CPRPhytoHTG <- function(){
-  dat <- planktonr::pr_get_CPRData("cpr_phytoplankton_abundance_htg_data")
-}
-
-#' Get CPR Phyto genus product - Abundance
-#'
-#' @return A dataframe with CPR Phytoplankton Abundance - Summed by Genus
-#' @export
-#'
-#' @examples
-#' df <- pr_get_CPRPhytoGenus()
-#' @importFrom rlang .data
-pr_get_CPRPhytoGenus <- function(){
-  dat <- planktonr::pr_get_CPRData("cpr_phytoplankton_abundance_genus_data")
-}
-
-#' Get CPR Phyto species product - Abundance
-#'
-#' @return A dataframe with CPR Phytoplankton Abundance - Summed by Species
-#' @export
-#'
-#' @examples
-#' df <- pr_get_CPRPhytoSpecies()
-#' @importFrom rlang .data
-pr_get_CPRPhytoSpecies <-  function(){
-  dat <- planktonr::pr_get_CPRData("cpr_phytoplankton_abundance_species_data")
-}
-
-###############################################################################################################################################
-#' Get CPR Phyto raw product - Biovolume
-#'
-#' @return A dataframe with CPR Phytoplankton BioVolume
-#' @export
-#'
-#' @examples
-#' df <- pr_get_CPRPhytoRawBV()
-#' @importFrom rlang .data
-pr_get_CPRPhytoRawBV <- function(){
-  dat <- planktonr::pr_get_CPRData("cpr_phytoplankton_biovolume_raw_data")
-}
-
-#' Get CPR Phyto HTG product - Biovolume
-#'
-#' @return A dataframe with CPR Phytoplankton BioVolume - Summed by Higher Trophic Levels
-#' @export
-#'
-#' @examples
-#' df <- pr_get_CPRPhytoHTGBV()
-#' @importFrom rlang .data
-pr_get_CPRPhytoHTGBV <- function(){
-  dat <- planktonr::pr_get_CPRData("cpr_phytoplankton_biovolume_htg_data")
-}
-
-#' Get CPR Phyto genus product - Biovolume
-#'
-#' @return A dataframe with CPR Phytoplankton BioVolume - Summed by Genus
-#' @export
-#'
-#' @examples
-#' df <- pr_get_CPRPhytoGenusBV()
-#' @importFrom rlang .data
-pr_get_CPRPhytoGenusBV <- function(){
-  dat <- planktonr::pr_get_CPRData("cpr_phytoplankton_biovolume_genus_data")
-}
-
-#' Get CPR Phyto species product - Biovolume
-#'
-#' @return A dataframe with CPR Phytoplankton BioVolume - Summed by Species
-#' @export
-#'
-#' @examples
-#' df <- pr_get_CPRPhytoSpeciesBV()
-#' @importFrom rlang .data
-pr_get_CPRPhytoSpeciesBV <- function(){
-  dat <- planktonr::pr_get_CPRData("cpr_phytoplankton_biovolume_species_data")
-}
-
 #### CPR Zooplankton #### ################################################################################################################################
 
 #' Get CPR Zooplankton abundance data
@@ -237,65 +159,4 @@ pr_get_CPRZooData <- function(var = "Abundance"){
 pr_get_CPRZooChangeLog <- function(){
   cprZcl <- readr::read_csv(paste0(pr_get_site2(), "CPR_Zoop_ChangeLog.csv"), na = "", show_col_types = FALSE) %>%
     pr_rename()
-}
-
-
-#' Get CPR Zoop raw product - Abundance
-#'
-#' @return A dataframe with Raw CPR Zooplankton Abundance
-#' @export
-#'
-#' @examples
-#' df <- pr_get_CPRZooRaw()
-#' @importFrom rlang .data
-pr_get_CPRZooRaw <- function(){
-  dat <- planktonr::pr_get_CPRData("cpr_zooplankton_abundance_raw_data")
-}
-
-#' Get CPR Zoop HTG product - Abundance
-#'
-#' @return A dataframe with CPR Zooplankton Abundance - Summed by Higher Trophic Levels
-#' @export
-#'
-#' @examples
-#' df <- pr_get_CPRZooHTG()
-#' @importFrom rlang .data
-pr_get_CPRZooHTG <- function(){
-  dat <- planktonr::pr_get_CPRData("cpr_zooplankton_abundance_htg_data")
-}
-
-#' CPR Zoop genus product - Abundance
-#'
-#' @return A dataframe with CPR Zooplankton Abundance - Summed by Genus
-#' @export
-#'
-#' @examples
-#' df <- pr_get_CPRZooGenus()
-#' @importFrom rlang .data
-pr_get_CPRZooGenus <- function(){
-  dat <- planktonr::pr_get_CPRData("cpr_zooplankton_abundance_genus_data")
-}
-
-#' CPR Zoop copepod product - Abundance
-#'
-#' @return A dataframe with CPR Copepod Abundance - Summed by Species
-#' @export
-#'
-#' @examples
-#' df <- pr_get_CPRZooCopepod()
-#' @importFrom rlang .data
-pr_get_CPRZooCopepod <- function(){
-  dat <- planktonr::pr_get_CPRData("cpr_zooplankton_abundance_copepods_data")
-}
-
-#' Get CPR Zoop Non-Copepod Abundance Data
-#'
-#' @return A dataframe with CPR Zooplankton (non-copepod) Abundance - Summed by Species
-#' @export
-#'
-#' @examples
-#' df <- pr_get_CPRZooNonCopepod()
-#' @importFrom rlang .data
-pr_get_CPRZooNonCopepod <- function(){
-  dat <- planktonr::pr_get_CPRData("cpr_zooplankton_abundance_non_copepods_data")
 }

@@ -4,7 +4,7 @@
 \alias{pr_get_NRSData}
 \title{Import NRS Data}
 \usage{
-pr_get_NRSData(file)
+pr_get_NRSData(type = "phytoplankton", variable = "abundance", subset = "raw")
 }
 \arguments{
 \item{file}{Filename to retrieve from AODN.}
@@ -16,5 +16,5 @@ A dataframe with requested plankton data in long form
 Load NRS station Data
 }
 \examples{
-df <- pr_get_NRSData("bgc_phytoplankton_abundance_htg_data")
+df <- pr_get_NRSData(type = "phytoplankton", variable = "abundance", subset = "raw")
 }
