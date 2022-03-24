@@ -1,6 +1,6 @@
-#' Import NRS Phytoplankton Data
+#' Import NRS Data
 #'
-#' Load NRS station Phytoplankton Data
+#' Load NRS station Data
 #'
 #' @param file Filename to retrieve from AODN.
 #'
@@ -243,29 +243,6 @@ pr_get_NRSZooChangeLog <- function(){
 pr_get_NRSZooRaw <- function(){
   dat <- pr_get_NRSData("bgc_zooplankton_abundance_raw_data")
 }
-
-# NRS Zoop raw product binned by sex and stage raw product
-#
-# @return A dataframe with NRS Zooplankton Abundance - Binned by sex and stage
-# @export
-#
-# @examples
-# df <- pr_get_NRSZooRawBin()
-# @import dplyr
-# @importFrom magrittr "%>%"
-# @importFrom rlang .data
-# pr_get_NRSZooRawBin <- function(){
-#   dat <- left_join(pr_get_NRSTrips("Z") %>%
-#                      dplyr::select(-c(.data$Biomass_mgm3, .data$Secchi_m)),
-#                    pr_get_NRSZooData(), by = "TripCode") %>%
-#     dplyr::mutate(TaxonName = dplyr::if_else(is.na(.data$Genus), .data$TaxonName, paste0(.data$Genus, ' ', .data$Species))) %>%
-#     dplyr::group_by(.data$TripCode, .data$StationName, .data$Latitude, .data$Longitude,
-#              .data$SampleDateLocal, .data$Year, .data$Month, .data$Day, .data$Time_24hr, .data$SampleDateUTC, .data$TaxonName) %>%
-#     dplyr::summarise(ZoopAbund_m3 = sum(.data$ZoopAbund_m3, na.rm = TRUE)) %>%
-#     dplyr::arrange(-dplyr::desc(.data$TaxonName))  %>%
-#     tidyr::pivot_wider(names_from = .data$TaxonName, values_from = .data$ZoopAbund_m3, values_fill = list(ZoopAbund_m3 = 0)) %>%
-#     dplyr::arrange(dplyr::desc(.data$SampleDateLocal))
-# }
 
 
 #' Get NRS Zoop HTG product - Abundance

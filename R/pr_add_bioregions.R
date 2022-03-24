@@ -43,9 +43,7 @@ pr_add_bioregions <- function(df){
 
   # Then lets do IMCRA Provinvial Bioregions
   df <- df %>%
-    # select(.data$Longitude, .data$Latitude) %>%  # file with columns named .data$Longitude, .data$Latitude
     sf::st_as_sf(sf_column_name = "geometry", crs = "+proj=longlat +datum=WGS84") %>%
-    # sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = "+proj=longlat +datum=WGS84") %>%
     sf::st_join(imcra_pb, join = sf::st_within) %>%
     tibble::as_tibble() %>%
     dplyr::select(.data$WATER_TYPE) %>%

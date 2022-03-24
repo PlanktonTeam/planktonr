@@ -4,7 +4,7 @@
 \alias{pr_get_CPRSamps}
 \title{Get CPR samples}
 \usage{
-pr_get_CPRSamps(Type = c("P", "Z", "B"))
+pr_get_CPRSamps(Type = "P")
 }
 \arguments{
 \item{Type}{A character string on which to filter data (P = Phytoplankton, Z = Zooplankton, B = Biomass)}

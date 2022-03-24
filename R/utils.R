@@ -171,7 +171,7 @@ pr_apply_time <- function(df){
            Day = lubridate::day(.data$SampleDateLocal),
            Time_24hr = stringr::str_sub(.data$SampleDateLocal, -8, -1), # hms doesn"t seem to work on 00:00:00 times
            tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE),
-           SampleDateUTC = lubridate::with_tz(lubridate::force_tzs(.data$SampleDateLocal, .data$tz, roll = TRUE), "UTC"))
+           SampleDate_UTC = lubridate::with_tz(lubridate::force_tzs(.data$SampleDateLocal, .data$tz, roll = TRUE), "UTC"))
 
 }
 
@@ -249,11 +249,11 @@ pr_add_Carbon <- function(df, meth){
 #'
 #' @examples
 #' df <- data.frame(tz = c("Australia/Perth", "Australia/Brisbane"),
-#'                SampleDateUTC = c(lubridate::now(), lubridate::now()))
+#'                SampleDate_UTC = c(lubridate::now(), lubridate::now()))
 #' df <- pr_add_LocalTime(df)
 pr_add_LocalTime <- function(df){
 
-  df <- purrr::map2(df$SampleDateUTC, df$tz, function(x,y) lubridate::with_tz(x, tzone = y))
+  df <- purrr::map2(df$SampleDate_UTC, df$tz, function(x,y) lubridate::with_tz(x, tzone = y))
 
 }
 

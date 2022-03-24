@@ -4,7 +4,7 @@
 \alias{pr_get_tsdata}
 \title{Access data for timeseries and climatology plots}
 \usage{
-pr_get_tsdata(Survey = c("CPR", "NRS"), Type = c("P", "Z"))
+pr_get_tsdata(Survey = "CPR", Type = "P")
 }
 \arguments{
 \item{Survey}{CPR or NRS, defaults to NRS}

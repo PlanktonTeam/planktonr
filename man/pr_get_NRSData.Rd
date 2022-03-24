@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_nrs.R
 \name{pr_get_NRSData}
 \alias{pr_get_NRSData}
-\title{Import NRS Phytoplankton Data}
+\title{Import NRS Data}
 \usage{
 pr_get_NRSData(file)
 }
@@ -13,7 +13,7 @@ pr_get_NRSData(file)
 A dataframe with requested plankton data in long form
 }
 \description{
-Load NRS station Phytoplankton Data
+Load NRS station Data
 }
 \examples{
 df <- pr_get_NRSData("bgc_phytoplankton_abundance_htg_data")
