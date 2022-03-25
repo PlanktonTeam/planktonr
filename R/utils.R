@@ -11,32 +11,6 @@ pr_get_site <- function(){
 }
 
 
-#' Get location of raw plankton data on GitHub
-#'
-#' Internal function to load the location of the raw plankton data files stored on GitHub.
-#' @return A string with location of raw plankton data
-#' @export
-#' @examples
-#' file_loc <- pr_get_site2()
-#' @importFrom rlang .data
-pr_get_site2 <- function(){
-  raw <- "https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/RawData/"
-}
-
-
-#' Get location of output plankton data
-#'
-#' Internal function to load the location of the raw plankton data files.
-#' @return A string with location of raw plankton data
-#' @export
-#' @examples
-#' file_loc <- pr_get_outputs()
-#' @importFrom rlang .data
-pr_get_outputs <- function(){
-   raw <- "https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/Output/"
-}
-
-
 #' Load copepod information table with sizes etc.
 #'
 #' @return A dataframe with NRS zooplankton information
@@ -46,7 +20,7 @@ pr_get_outputs <- function(){
 #' df <- pr_get_ZooInfo()
 #' @importFrom rlang .data
 pr_get_ZooInfo <- function(){
-  ZInfo <- readr::read_csv(paste0(pr_get_site2(), "ZoopInfo.csv"), na = "", show_col_types = FALSE) %>%
+  ZInfo <- readr::read_csv(system.file("extdata", "ZoopInfo.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 

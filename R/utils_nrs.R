@@ -2,16 +2,22 @@
 #'
 #' Load NRS station Data
 #'
-#' @param file Filename to retrieve from AODN.
+#' @param Type The data of interest: Phytoplankton or Zooplankton
+#' @param Variable Variable options are: abundance or biovolume (phytoplankton only)
+#' @param Subset Data compilation. Full options are below.
 #'
 #' @return A dataframe with requested plankton data in long form
 #' @export
 #' @examples
-#' df <- pr_get_NRSData(type = "phytoplankton", variable = "abundance", subset = "raw")
+#' df <- pr_get_NRSData(Type = "phytoplankton", Variable = "abundance", Subset = "raw")
 #' @importFrom rlang .data
-pr_get_NRSData <- function(type = "phytoplankton", variable = "abundance", subset = "raw"){
+pr_get_NRSData <- function(Type = "phytoplankton", Variable = "abundance", Subset = "raw"){
 
-  file = paste("bgc", type, variable, subset, "data", sep = "_")
+  Type = stringr::str_to_lower(Type) # Make sure its lower case
+  if (Type == "p"){Type = "phytoplankton"}
+  if (Type == "z"){Type = "zooplankton"}
+
+  file = paste("bgc", Type, Variable, Subset, "data", sep = "_")
 
   dat <- readr::read_csv(stringr::str_replace(pr_get_site(), "LAYER_NAME", file), na = "", show_col_types = FALSE, comment = "#") %>%
     pr_rename()
@@ -28,7 +34,7 @@ pr_get_NRSData <- function(type = "phytoplankton", variable = "abundance", subse
 #' df <- pr_get_NRSStation()
 #' @importFrom rlang .data
 pr_get_NRSStation <- function(){
-  dat <- readr::read_csv(paste0(pr_get_site2(), "BGC_StationInfo.csv"), na = "", show_col_types = FALSE) %>%
+  dat <- readr::read_csv(system.file("extdata", "BGC_StationInfo.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
     pr_rename() %>%
     dplyr::filter(.data$ProjectName == "NRS")
 }
@@ -45,7 +51,7 @@ pr_get_NRSStation <- function(){
 #' @importFrom rlang .data
 pr_get_NRSTrips <- function(Type = c("P","Z","F")){
 
-  NRSTrip <- readr::read_csv(paste0(pr_get_site2(), "BGC_Trip.csv"), na = "", show_col_types = FALSE) %>%
+  NRSTrip <- readr::read_csv(system.file("extdata", "BGC_Trip.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
     pr_rename() %>%
     dplyr::rename(ZSampleDepth_m = .data$ZOOPSAMPLEDEPTH_M,
                   PSampleDepth_m = .data$PHYTOSAMPLEDEPTH_M) %>%
@@ -74,36 +80,6 @@ pr_get_NRSTrips <- function(Type = c("P","Z","F")){
 
 
 
-
-# Import NRS Phytoplankton Data
-#
-# Load NRS station Phytoplankton Data
-# @return A dataframe with NRS Phytoplankton Data in long form
-# @export
-# @examples
-# df <- pr_get_NRSPhytoData()
-# @importFrom rlang .data
-# pr_get_NRSPhytoData <- function(){
-#    dat <- pr_get_NRSData("anmn_nrs_bgc_plankton_phytoplankton_data")
-# }
-
-
-
-# Import NRS Phytoplankton Changelog
-#
-# Load NRS Phytoplankton Changelog
-# @return A dataframe with NRS Phytoplankton Changelog
-# @export
-# @examples
-# df <- pr_get_NRSPhytoChangeLog()
-# @importFrom rlang .data
-# pr_get_NRSPhytoChangeLog <- function(){
-#  dat <- readr::read_csv(paste0(pr_get_site2(), "BGC_Phyto_ChangeLog.csv"), na = "", show_col_types = FALSE) %>%
-#    pr_rename()
-#}
-
-
-
 #' Load zooplankton abundance data
 #' @return A dataframe with zooplankton abundance data
 #' @export
@@ -112,7 +88,7 @@ pr_get_NRSTrips <- function(Type = c("P","Z","F")){
 #' df <- pr_get_NRSZooData()
 #' @importFrom rlang .data
 pr_get_NRSZooData <- function(){
-  dat <- readr::read_csv(paste0(pr_get_site2(), "BGC_Zoop_Raw.csv"), na = "", show_col_types = FALSE) %>%
+  dat <- readr::read_csv(system.file("extdata", "BGC_Zoop_Raw.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 
@@ -127,26 +103,9 @@ pr_get_NRSZooData <- function(){
 #' df <- pr_get_NRSZooChangeLog()
 #' @importFrom rlang .data
 pr_get_NRSZooChangeLog <- function(){
-  dat <- readr::read_csv(paste0(pr_get_site2(), "BGC_Zoop_ChangeLog.csv"), na = "", show_col_types = FALSE) %>%
+  dat <- readr::read_csv(system.file("extdata", "BGC_Zoop_ChangeLog.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
-
-
-
-# Get NRS Zoop Species Abundance Data
-#
-# @return A dataframe with NRS Zooplankton Abundance - Summed by Species
-# @export
-#
-# @examples
-# df <- pr_get_NRSZooSpecies()
-# pr_get_NRSZooSpecies <- function(){
-#   dat <- pr_get_NRSData(type = "zooplankton", variable = "abundance", subset = "copepods") %>%
-#     dplyr::select(-c("Project", "StationName", "StationCode", "Latitude",
-#                      "Longitude", "SampleTime_local", "Year", "Month",
-#                      "Day", "Time", "SampleDepth_m", "Biomass_mgm3")) %>%
-#     dplyr::left_join(pr_get_NRSData("bgc_zooplankton_abundance_non_copepods_data"), ., by = "TripCode")
-# }
 
 
 #' Get pigments data
@@ -157,7 +116,7 @@ pr_get_NRSZooChangeLog <- function(){
 #' @examples
 #' df <- pr_get_NRSPigments()
 pr_get_NRSPigments <- function(){
-  dat <- readr::read_csv(paste0(pr_get_site2(),"BGC_Pigments.csv"), na = "", show_col_types = FALSE) %>%
+  dat <- readr::read_csv(system.file("extdata", "BGC_Pigments.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 
@@ -171,7 +130,7 @@ pr_get_NRSPigments <- function(){
 #' df <- pr_get_NRSPico()
 #' @importFrom rlang .data
 pr_get_NRSPico <- function(){
-  dat <- readr::read_csv(paste0(pr_get_site2(), "BGC_Picoplankton.csv"), na = "", show_col_types = FALSE) %>%
+  dat <- readr::read_csv(system.file("extdata", "BGC_Picoplankton.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 

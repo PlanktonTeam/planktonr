@@ -27,7 +27,8 @@ pr_get_tsdata <- function(Survey = "CPR", Type = "P"){
   }
 
   if(Survey == 'CPR'){
-    dat <- readr::read_csv(paste0(pr_get_outputs(), "CPR_Indices.csv"), na = "NA", show_col_types = FALSE) %>%
+
+    dat <- readr::read_csv(system.file("extdata", "CPR_Indices.csv", package = "planktonr", mustWork = TRUE), na = "NA", show_col_types = FALSE) %>%
       dplyr::select(.data$SampleDateUTC, .data$Year, .data$Month, .data$Day, .data$BioRegion, .data$Biomass_mgm3,
                     .data[[parameter1]]:.data[[parameter2]]) %>%
       dplyr::rename(SampleDate_UTC = .data$SampleDateUTC) %>%
@@ -46,7 +47,7 @@ pr_get_tsdata <- function(Survey = "CPR", Type = "P"){
       droplevels()
     return(dat)
   } else if(Survey == "NRS"){
-    dat <- readr::read_csv(paste0(pr_get_outputs(), "NRS_Indices.csv"), na = "NA", show_col_types = FALSE) %>%
+    dat <- readr::read_csv(system.file("extdata", "NRS_Indices.csv", package = "planktonr", mustWork = TRUE), na = "NA", show_col_types = FALSE) %>%
       dplyr::mutate(Month = lubridate::month(.data$SampleDateLocal),
                     Year = lubridate::year(.data$SampleDateLocal),
                     StationCode = paste(.data$StationName, .data$StationCode),
@@ -107,16 +108,13 @@ pr_make_climatology <- function(df, x){
 pr_get_fg <- function(Survey = 'NRS', Type = "Z"){
 
   if(Survey == 'CPR' & Type == 'P'){
-    df <- pr_get_CPRData(type = "phytoplankton", variable = "abundance", subset = "htg")
-  }
-  else if(Survey == 'NRS' & Type == 'P'){
-    df <- pr_get_NRSData(type = "phytoplankton", variable = "abundance", subset = "htg")
-  }
-  else if(Survey == 'CPR' & Type == 'Z'){
-    df <- pr_get_CPRData(type = "zooplankton", variable = "abundance", subset = "htg")
-  }
-  else {
-    df <- pr_get_NRSData(type = "zooplankton", variable = "abundance", subset = "htg") %>%
+    df <- pr_get_CPRData(Type, Variable = "abundance", Subset = "htg")
+  } else if(Survey == 'NRS' & Type == 'P'){
+    df <- pr_get_NRSData(Type, Variable = "abundance", Subset = "htg")
+  } else if(Survey == 'CPR' & Type == 'Z'){
+    df <- pr_get_CPRData(Type, Variable = "abundance", Subset = "htg")
+  } else {
+    df <- pr_get_NRSData(Type, Variable = "abundance", Subset = "htg") %>%
       dplyr::filter(.data$StationName != 'Port Hacking 4')
   }
 
@@ -156,8 +154,7 @@ pr_get_fg <- function(Survey = 'NRS', Type = "Z"){
       dplyr::summarise(Values = sum(.data$Values, na.rm = TRUE),
                        .groups = 'drop') %>%
       dplyr::mutate(Values = ifelse(.data$Values < 1, 1, .data$Values))
-  }
-  if(Type == 'Z'){
+  } else if(Type == 'Z'){
     df <- df %>%
       dplyr::mutate(parameters = ifelse(.data$parameters %in% c('Copepod', 'Appendicularian', 'Mollusc', 'Cladoceran', 'Chaetognath', 'Thaliacean'), .data$parameters, 'Other'),
                     parameters = factor(.data$parameters, levels = c('Copepod', 'Appendicularian', 'Mollusc', 'Cladoceran', 'Chaetognath', 'Thaliacean',
@@ -199,7 +196,8 @@ pr_get_pico <- function(){
 #' @examples
 #' df <- pr_get_nuts()
 pr_get_nuts <-  function(){
-  Nuts <- readr::read_csv(paste0(pr_get_site2(), "BGC_Chemistry.csv"),
+
+  Nuts <- readr::read_csv(system.file("extdata", "BGC_Chemistry.csv", package = "planktonr", mustWork = TRUE),
                           col_types = list(SAMPLEDATELOCAL = readr::col_datetime()),
                           show_col_types = FALSE) %>%
     dplyr::select_if(!grepl('FLAG', names(.)) & !grepl('COMMENTS', names(.)) & !grepl('MICROB', names(.))) %>%
@@ -221,7 +219,7 @@ pr_get_nuts <-  function(){
 #' @examples
 #' df <- pr_get_LTnuts()
 pr_get_LTnuts <-  function(){
-  NutsLT <- readr::read_csv(paste0(pr_get_outputs(), "nuts_longterm_clean2.csv"),
+  NutsLT <- readr::read_csv(system.file("extdata", "nuts_longterm_clean2.csv", package = "planktonr", mustWork = TRUE),
                             show_col_types = FALSE) %>%
     tidyr::pivot_longer(-c(.data$StationCode:.data$SampleDepth_m), values_to = "Values", names_to = 'parameters') %>%
     dplyr::mutate(ProjectName = 'LTM',
@@ -267,7 +265,7 @@ pr_get_LTnuts <-  function(){
 #' @examples
 #' df <- pr_get_pigs()
 pr_get_pigs <-  function(){
-  Pigs  <- readr::read_csv(paste0(pr_get_site2(), "BGC_Pigments.csv"),
+  Pigs  <- readr::read_csv(system.file("extdata", "BGC_Pigments.csv", package = "planktonr", mustWork = TRUE),
                            show_col_types = FALSE,
                            col_types = list(PROJECTNAME = readr::col_character(),
                                             TRIP_CODE = readr::col_character(),
@@ -313,9 +311,7 @@ pr_get_pigs <-  function(){
 pr_get_fMap_data <- function(Type = "Z"){
 
   if(Type == "P"){
-    # "Sample"     "Survey"     "Taxon"      "SampVol_m3" "Counts"
-    PhytoCountNRS <-
-      pr_get_NRSData(type = "phytoplankton", variable = "abundance", subset = "species") %>%
+    PhytoCountNRS <- pr_get_NRSData(Type = "phytoplankton", Variable = "abundance", Subset = "species") %>%
       tidyr::pivot_longer(cols = !dplyr::starts_with(c("Project", "StationName", "StationCode", "Latitude", "Longitude", "TripCode",
                                                        "SampleTime", "Year", "Month", "Day", "Time", "SampleDepth_m", "Method", "CTD"), ignore.case = FALSE),
                           names_to = "Taxon", values_to = "Counts") %>%
@@ -337,7 +333,7 @@ pr_get_fMap_data <- function(Type = "Z"){
       dplyr::arrange(.data$Taxon)
 
   } else {
-    ZooCountNRS <- pr_get_NRSData(type = "zooplankton", variable = "abundance", subset = "species") %>%
+    ZooCountNRS <- pr_get_NRSData(Type = "zooplankton", Variable = "abundance", Subset = "species") %>%
       tidyr::pivot_longer(cols = !tidyselect::starts_with(c("Project", "StationName", "StationCode", "Latitude", "Longitude", "TripCode",
                                                             "SampleTime", "Year", "Month", "Day", "Time", "SampleDepth_m", "CTD", "Biomass_mgm3", "AshFreeBiomass_mgm3" ), ignore.case = FALSE),
                           names_to = "Taxon", values_to = "Counts") %>%
@@ -423,9 +419,9 @@ pr_get_fMap_data <- function(Type = "Z"){
 #' df <- pr_get_daynight("Z")
 pr_get_daynight <- function(Type = c("P", "Z")){
   if(Type == "Z"){
-    dat <- pr_get_CPRData(type = "zooplankton", variable = "abundance", subset = "copepods")
+    dat <- pr_get_CPRData(Type = "zooplankton", Variable = "abundance", Subset = "copepods")
   } else {
-    dat <- pr_get_CPRData(type = "phytoplankton", variable = "abundance", subset = "species")
+    dat <- pr_get_CPRData(Type = "phytoplankton", Variable = "abundance", Subset = "species")
   }
 
   dates <- dat %>%
@@ -460,27 +456,27 @@ pr_get_daynight <- function(Type = c("P", "Z")){
 pr_get_sti <-  function(Type = "P"){
 
   if(Type == "Z"){
-    cprdat <- pr_get_CPRData(type = "zooplankton", variable = "abundance", subset = "copepods")
+    cprdat <- pr_get_CPRData(Type, Variable = "abundance", Subset = "copepods")
 
-    nrsdat <- pr_get_NRSData(type = "zooplankton", variable = "abundance", subset = "copepods") %>%
+    nrsdat <- pr_get_NRSData(Type, Variable = "abundance", Subset = "copepods") %>%
       dplyr::mutate(Method = NA) %>%
       dplyr::relocate(.data$Method, .after = .data$AshFreeBiomass_mgm3) # Method is missing in Z so we add a dummy variable to allow the code below to run.
 
     parameter <- "CopeAbundance_m3"
   } else if(Type == "P"){
-    cprdat <- pr_get_CPRData(type = "phytoplankton", variable = "abundance", subset = "species")
-    nrsdat <- pr_get_NRSData(type = "phytoplankton", variable = "abundance", subset = "species")
+    cprdat <- pr_get_CPRData(Type, Variable = "abundance", Subset = "species")
+    nrsdat <- pr_get_NRSData(Type, Variable = "abundance", Subset = "species")
     parameter <- "PhytoAbundance_m3"
   }
 
 
   ## These will be replace with proper satellite data from extractions in time
-  nrssat <- readr::read_csv("https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/RawData/NRS_SatData.csv",
+  nrssat <- readr::read_csv(system.file("extdata", "NRS_SatData.csv", package = "planktonr", mustWork = TRUE),
                             show_col_types = FALSE) %>%
     pr_rename() %>%
     dplyr::rename(SampleTime_local = .data$SAMPLEDATE_LOCAL)
 
-  cprsat <- readr::read_csv("https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/RawData/CPR_SatData.csv",
+  cprsat <- readr::read_csv(system.file("extdata", "CPR_SatData.csv", package = "planktonr", mustWork = TRUE),
                             show_col_types = FALSE) %>%
     pr_rename() %>%
     dplyr::rename(SampleDate_UTC = .data$SAMPLEDATE_UTC)
@@ -506,60 +502,6 @@ pr_get_sti <-  function(Type = "P"){
     dplyr::mutate(SST = round(.data$SST/0.5) * 0.5) %>%
     dplyr::arrange(.data$Species)
 }
-
-
-# Summarise the plankton observations
-#
-# Summarise the plankton observations from the NRS and CPR.
-# @return a dataframe with a species summary
-# @export
-#
-# @examples
-# df <- pr_export_SppCount()
-# pr_export_SppCount <- function(){
-#
-#   # First do Phytoplankton
-#   nrsP <- pr_get_NRSPhytoData() %>%
-#     dplyr::mutate(TaxonName = stringr::str_c(.data$Genus, " ", .data$Species)) %>%  # Overwrite Taxon Name to remove the fluff
-#     dplyr::select(.data$TaxonName, .data$SPCode, .data$TaxonCount) %>%
-#     tidyr::drop_na()
-#
-#   cprP <- pr_get_CPRPhytoData("Count") %>%
-#     dplyr::mutate(TaxonName = stringr::str_c(.data$Genus, " ", .data$Species)) %>%  # Overwrite Taxon Name to remove the fluff
-#     dplyr::rename(TaxonCount = .data$FovCount) %>%
-#     dplyr::select(.data$TaxonName, .data$SPCode, .data$TaxonCount) %>%
-#     tidyr::drop_na()
-#
-#   outP <- dplyr::bind_rows(nrsP, cprP) %>%
-#     dplyr::group_by(.data$TaxonName, .data$SPCode) %>%
-#     dplyr::summarise(n = n(), .groups = "drop") %>%
-#     dplyr::arrange(dplyr::desc(.data$n)) %>%
-#     dplyr::filter(stringr::str_detect(.data$TaxonName, 'spp', negate = TRUE)) %>%
-#     dplyr::mutate(Group = "Phytoplankton")
-#
-#   # Now do Zooplankton
-#   nrsZ <- pr_get_NRSZooData() %>%
-#     dplyr::mutate(TaxonName = stringr::str_c(.data$Genus, " ", .data$Species)) %>%  # Overwrite Taxon Name to remove f/m/j etc
-#     dplyr::select(.data$TaxonName, .data$SPCode, .data$TaxonCount) %>%
-#     tidyr::drop_na()
-#
-#   cprZ <- pr_get_CPRZooData("Count") %>%
-#     dplyr::mutate(TaxonName = stringr::str_c(.data$Genus, " ", .data$Species)) %>%  # Overwrite Taxon Name to remove f/m/j etc
-#     dplyr::select(.data$TaxonName, .data$SPCode, .data$TaxonCount) %>%
-#     tidyr::drop_na()
-#
-#   outZ <- dplyr::bind_rows(nrsZ, cprZ) %>%
-#     dplyr::group_by(.data$TaxonName, .data$SPCode) %>%
-#     dplyr::summarise(n = n(), .groups = "drop") %>%
-#     dplyr::arrange(dplyr::desc(.data$n)) %>%
-#     dplyr::filter(stringr::str_detect(.data$TaxonName, 'spp', negate = TRUE)) %>%
-#     dplyr::mutate(Group = "Zooplankton")
-#
-#   # Now combine them
-#   out <- dplyr::bind_rows(outP, outZ)
-#   return(out)
-#
-# }
 
 
 #' Get the summary plankton observations
