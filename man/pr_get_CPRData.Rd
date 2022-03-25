@@ -4,14 +4,14 @@
 \alias{pr_get_CPRData}
 \title{Import CPR Data}
 \usage{
-pr_get_CPRData(type = "phytoplankton", variable = "abundance", subset = "raw")
+pr_get_CPRData(Type = "phytoplankton", Variable = "abundance", Subset = "raw")
 }
 \arguments{
-\item{type}{The data of interest: Phytoplankton or Zooplankton}
+\item{Type}{The data of interest: Phytoplankton or Zooplankton}
 
-\item{variable}{Variable options are: abundance or biovolume (phytoplankton only)}
+\item{Variable}{Variable options are: abundance or biovolume (phytoplankton only)}
 
-\item{subset}{Data compilation. Full options are below.}
+\item{Subset}{Data compilation. Full options are below.}
 }
 \value{
 A dataframe with requested plankton data in long form
@@ -37,5 +37,5 @@ cpr_zooplankton_abundance_htg_data
 cpr_zooplankton_abundance_raw_data
 }
 \examples{
-df <- pr_get_CPRData(type = "phytoplankton", variable = "abundance", subset = "raw")
+df <- pr_get_CPRData(Type = "phytoplankton", Variable = "abundance", Subset = "raw")
 }
