@@ -66,13 +66,17 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">pr_get_NRSData</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"phytoplankton"</span>, variable <span class="op">=</span> <span class="st">"abundance"</span>, subset <span class="op">=</span> <span class="st">"raw"</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">pr_get_NRSData</span><span class="op">(</span>Type <span class="op">=</span> <span class="st">"phytoplankton"</span>, Variable <span class="op">=</span> <span class="st">"abundance"</span>, Subset <span class="op">=</span> <span class="st">"raw"</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>file</dt>
-<dd><p>Filename to retrieve from AODN.</p></dd>
+    <dl><dt>Type</dt>
+<dd><p>The data of interest: Phytoplankton or Zooplankton</p></dd>
+<dt>Variable</dt>
+<dd><p>Variable options are: abundance or biovolume (phytoplankton only)</p></dd>
+<dt>Subset</dt>
+<dd><p>Data compilation. Full options are below.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -81,7 +85,7 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">pr_get_NRSData</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"phytoplankton"</span>, variable <span class="op">=</span> <span class="st">"abundance"</span>, subset <span class="op">=</span> <span class="st">"raw"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">pr_get_NRSData</span><span class="op">(</span>Type <span class="op">=</span> <span class="st">"phytoplankton"</span>, Variable <span class="op">=</span> <span class="st">"abundance"</span>, Subset <span class="op">=</span> <span class="st">"raw"</span><span class="op">)</span></span>
 </code></pre></div>
     </div>
   </div>
