@@ -107,7 +107,7 @@ pr_plot_timeseries <- function(df, Survey = "NRS", pal = "matter", Scale = "iden
 
   if(Survey == "CPR"){
     df <- df %>%
-      dplyr::rename(SampleDate = .data$SampleDateUTC,
+      dplyr::rename(SampleDate = .data$SampleDate_UTC,
                     StationCode = .data$BioRegion)
     titlex <- "Sample Date (UTC)"
   }
@@ -162,7 +162,7 @@ pr_plot_timeseries <- function(df, Survey = "NRS", pal = "matter", Scale = "iden
 pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal = "matter", y_trans = "identity", output = "ggplot"){
 
   if (survey == "CPR"){
-    time = rlang::sym("SampleDateUTC")
+    time = rlang::sym("SampleDate_UTC")
     site = rlang::sym("BioRegion")
   } else if (survey == "NRS"){
     time = rlang::sym("SampleDateLocal")
@@ -351,8 +351,8 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
 
   plotCols <- pr_get_PlotCols(pal, n)
 
- if("SampleDateUTC" %in% colnames(df)){
-    SampleDate = rlang::sym("SampleDateUTC")
+ if("SampleDate_UTC" %in% colnames(df)){
+    SampleDate = rlang::sym("SampleDate_UTC")
     station = rlang::sym("BioRegion")
     titlex <- "Sample Date UTC"
   } else {
@@ -697,7 +697,7 @@ pr_plot_sti <-  function(df){
 #  kypout[,i] <- kernOut$y
 
   xlabel <- pr_relabel("Temperature_degC", style = "ggplot")
-  subtit <- rlang::expr(paste("STI = ",!!STI,degree,"C"))
+  subtit <- rlang::expr(paste("STI = ",!!STI, "\U00B0","C"))
 
   stiplot <- ggplot2::ggplot(z, aes(kernTemps, .data$y)) + ggplot2::geom_point() +
     ggplot2::geom_vline(xintercept = STI, colour = "blue", lty = 4) +

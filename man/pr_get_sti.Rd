@@ -4,7 +4,7 @@
 \alias{pr_get_sti}
 \title{Get data for STI plots of species abundance}
 \usage{
-pr_get_sti(Type = c("P", "Z"))
+pr_get_sti(Type = "P")
 }
 \arguments{
 \item{Type}{Phyto or zoo, defaults to phyto}

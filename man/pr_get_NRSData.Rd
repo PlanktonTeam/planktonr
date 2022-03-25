@@ -2,19 +2,23 @@
 % Please edit documentation in R/utils_nrs.R
 \name{pr_get_NRSData}
 \alias{pr_get_NRSData}
-\title{Import NRS Phytoplankton Data}
+\title{Import NRS Data}
 \usage{
-pr_get_NRSData(file)
+pr_get_NRSData(Type = "phytoplankton", Variable = "abundance", Subset = "raw")
 }
 \arguments{
-\item{file}{Filename to retrieve from AODN.}
+\item{Type}{The data of interest: Phytoplankton or Zooplankton}
+
+\item{Variable}{Variable options are: abundance or biovolume (phytoplankton only)}
+
+\item{Subset}{Data compilation. Full options are below.}
 }
 \value{
 A dataframe with requested plankton data in long form
 }
 \description{
-Load NRS station Phytoplankton Data
+Load NRS station Data
 }
 \examples{
-df <- pr_get_NRSData("bgc_phytoplankton_abundance_htg_data")
+df <- pr_get_NRSData(Type = "phytoplankton", Variable = "abundance", Subset = "raw")
 }

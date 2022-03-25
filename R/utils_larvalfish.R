@@ -8,7 +8,8 @@
 #' #' @import dplyr
 #' @importFrom rlang .data
 pr_get_LFTrips <- function(){
-  LFSamp <- readr::read_csv(paste0(pr_get_site2(), "BGC_LFish_Samples.csv"), na = "", show_col_types = FALSE,
+
+  LFSamp <- readr::read_csv(system.file("extdata", "BGC_LFish_Samples.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE,
                             col_types = readr::cols(FLAG_COMMENT = readr::col_character())) %>%
     pr_rename() %>%
     pr_apply_time() %>%
@@ -27,7 +28,7 @@ pr_get_LFTrips <- function(){
 #' #' @import dplyr
 #' @importFrom rlang .data
 pr_get_LFData <- function(){
-  LFData <- readr::read_csv(paste0(pr_get_site2(), "BGC_LFish_CountRaw.csv"), na = "", show_col_types = FALSE) %>%
+  LFData <- readr::read_csv(system.file("extdata", "BGC_LFish_CountRaw.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 

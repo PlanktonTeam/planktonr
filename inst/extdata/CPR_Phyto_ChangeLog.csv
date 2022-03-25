@@ -1,0 +1,498 @@
+TAXON_NAME,STARTDATE,PARENT_NAME,TRAINING,COMMENTS
+Ceratocorys horrida,2010-09-15,Ceratocorys spp.,Identified by Gustaaf Hallegraeff,
+Codonellopsis orthoceras,2010-01-01,Ciliate (Inc. tintinnid),External training Tony John,
+Codonellopsis pusilla,2010-01-01,Ciliate (Inc. tintinnid),External training Tony John,
+Codonellopsis spp.,2010-01-01,Ciliate (Inc. tintinnid),External training Tony John,
+Cyttarocylis spp.,2008-09-29,Ciliate (Inc. tintinnid),External training Tony John,
+Epiplocylis spp.,2010-01-01,Ciliate (Inc. tintinnid),External training Tony John,
+Eutintinnus spp.,2010-01-01,Ciliate (Inc. tintinnid),External training Tony John,
+Odontella spp.,2010-01-01,Ciliate (Inc. tintinnid),External training Tony John,
+Parundella spp.,2010-01-01,Ciliate (Inc. tintinnid),External training Tony John,
+Undella spp.,2008-09-29,Ciliate (Inc. tintinnid),External training Tony John,
+Xystonella spp.,2010-01-01,Ciliate (Inc. tintinnid),External training Tony John,
+Coscinodiscus spp. 100-150 µm,2008-09-29,Coscinodiscus spp. > 80 µm,,New size classes added when group started to count NRS phyto
+Coscinodiscus spp. 150-200 µm,2008-09-29,Coscinodiscus spp. > 80 µm,,New size classes added when group started to count NRS phyto
+Coscinodiscus spp. 300-400 µm,2008-09-29,Coscinodiscus spp. > 80 µm,,New size classes added when group started to count NRS phyto
+Gonyaulax polygramma,2008-09-29,Gonyaulax spp.,Identified from photo by Gustaaf Hallegraeff,
+Oxytoxum scolopax,2012-03-01,Oxytoxum spp.,Pru Bonham internal training,
+Pennate diatom > 10 µm,2011-05-17,Pennate diatom,Internal training Pru Bonhma and Gustaaf Hallegraeff,
+Protoperidinium grande,2012-03-01,Protoperidinium spp.,Pru Bonham internal training,
+Protoperidinium oceanicum,2012-03-01,Protoperidinium spp.,,
+Protoperidinium oceanicum/oblongum,2012-03-01,Protoperidinium spp.,,
+Pseudo-nitzschia delicatissima complex <=3 µm,2011-05-17,Pseudo-nitzschia spp.,Internal training Pru Bonhma and Gustaaf Hallegraeff,
+Pseudo-nitzschia seriata complex >3 µm,2011-05-17,Pseudo-nitzschia spp.,Internal training Pru Bonhma and Gustaaf Hallegraeff,
+Dictyocha antarctica,2010-01-01,Silicoflagellate,Internal training,Valid in SOCPR since 2008-10-01 and AusCPR since 2010-03-01
+Dictyocha fibula,2010-01-01,Silicoflagellate,Internal training,Valid in SOCPR since 2008-10-01 and AusCPR since 2010-03-01
+Dictyocha speculum,2010-01-01,Silicoflagellate,Internal training,Valid in SOCPR since 2008-10-01 and AusCPR since 2010-03-01
+Octactis octonaria,2010-01-01,Silicoflagellate,Internal training,Valid in SOCPR since 2008-10-01 and AusCPR since 2010-03-01
+Octactis spp.,2010-01-01,Silicoflagellate,Internal training,
+Silicoflagellate 4 points,2010-01-01,Silicoflagellate,External training Tony John,
+Silicoflagellate 6 points,2010-01-01,Silicoflagellate,External training Tony John,
+Thalassiosira spp. 10-20 µm,2008-09-29,Thalassiosira spp.,Internal training Pru Bonhma and Gustaaf Hallegraeff,Valid in SOCPR since 2008-10-01 and AusCPR since 2011-05-17
+Thalassiosira spp. 20-40 µm,2008-09-29,Thalassiosira spp.,Internal training Pru Bonhma and Gustaaf Hallegraeff,Valid in SOCPR since 2008-10-01 and AusCPR since 2011-05-18
+Thalassiosira spp. 40-60 µm,2008-09-29,Thalassiosira spp.,Internal training Pru Bonhma and Gustaaf Hallegraeff,Valid in SOCPR since 2008-10-01 and AusCPR since 2011-05-19
+Thalassiosira spp. <10 µm,2008-09-29,Thalassiosira spp.,Internal training Pru Bonhma and Gustaaf Hallegraeff,Valid in SOCPR since 2008-10-01 and AusCPR since 2011-05-20
+Tripos furca type,2011-05-17,Tripos spp.,Internal training Pru Bonhma and Gustaaf Hallegraeff,
+Tripos fusus type,2011-05-17,Tripos spp.,Internal training Pru Bonhma and Gustaaf Hallegraeff,
+Tripos hundhausenii,2015-02-01,Tripos spp.,,
+Tripos muelleri type,2011-05-17,Tripos spp.,Internal training Pru Bonhma and Gustaaf Hallegraeff,
+Acantharia,2008-09-29,,,
+Acanthoica quattrospina,2008-09-29,,,
+Acanthostomella cf. conicoides,2008-09-29,,,
+Acanthostomella minutissima,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Acanthostomella norvegica,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Acanthostomella spp.,2008-09-29,,,
+Actinocyclus spp.,2008-09-29,,,
+Actinopoda,2008-09-29,,,
+Alexandrium spp.,2008-09-29,,,
+Amphidinium hadai,2008-09-29,,,
+Amphisolenia bidentata,2008-09-29,,,
+Amphisolenia spp.,2008-09-29,,,
+Amphisolenia thrinax,2008-09-29,,,
+Amphora spp.,2008-09-29,,,
+Amphorella brandti,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Amphorella laackmanni,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Amphorella minor,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Amphorella quadrilineata,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Amphorellopsis acuta,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Amphorides,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Amphorides amphora,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Amphorides cf. quadrilineata,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Amphorides spp.,2008-09-29,,,
+Amplectella monocollaria,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Ascampbelliella aperta,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Ascampbelliella cf. acuta,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Ascampbelliella spp.,2008-09-29,,,
+Ascampbelliella urceolata,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Aspergillus sydowii,2010-03-02,,Identified by Gustaaf Hallegraeff,
+Asterionella spp.,2008-09-29,,,
+Asterionellopsis glacialis,2010-01-01,,External training Tony John,
+Asterionellopsis spp.,2008-09-29,,,
+Asteromphalus hookeri,2008-09-29,,,
+Bacillaria paxillifera,2008-09-29,,,
+Bacillaria spp.,2010-01-01,,External training Tony John,
+Bacteriastrum delicatulum,2008-09-29,,,
+Bacteriastrum spp.,2008-09-29,,,
+Bellerochea horologicalis,2008-09-29,,,
+Bellerochea malleus,2010-01-01,,External training Tony John,
+Bellerochea spp.,2010-01-01,,External training Tony John,AusCPR identified this with the start of the West Australian routes.
+Biddulphia spp.,2008-09-29,,,
+Braarudosphaera bigelowii,2008-09-29,,,
+Centric diatom,2008-09-29,,,
+Centric diatom 10-20 µm,2008-09-29,,,
+Centric diatom 30-40 µm,2008-09-29,,,
+Centric diatom 40-50 µm,2008-09-29,,,
+Cerataulina spp.,2008-09-29,,,
+Ceratocorys spp.,2008-09-29,,,
+Chaetoceros (Hyalochaete),2008-09-29,,,AusCPR identifies to Hyalochaete or Phaoceros SOCPR speciates some chaetoceros
+Chaetoceros (Phaeoceros),2008-09-29,,,AusCPR identifies to Hyalochaete or Phaoceros SOCPR speciates some chaetoceros
+Chaetoceros atlanticus,2008-09-29,,,AusCPR identifies to Hyalochaete or Phaoceros SOCPR speciates some chaetoceros
+Chaetoceros brevis,2012-03-01,,Pru Bonham internal training,
+Chaetoceros bulbosus,2008-09-29,,,AusCPR identifies to Hyalochaete or Phaoceros SOCPR speciates some chaetoceros
+Chaetoceros cf. affinis,2008-09-29,,,
+Chaetoceros coarctatus,2008-09-29,,,
+Chaetoceros convolutus,2008-09-29,,,AusCPR identifies to Hyalochaete or Phaoceros SOCPR speciates some chaetoceros
+Chaetoceros criophilus,2008-09-29,,,AusCPR identifies to Hyalochaete or Phaoceros SOCPR speciates some chaetoceros
+Chaetoceros curvatus,2008-09-29,,,AusCPR identifies to Hyalochaete or Phaoceros SOCPR speciates some chaetoceros
+Chaetoceros decipiens < 15 µm cell width,2008-09-29,,,
+Chaetoceros densus,2008-09-29,,,
+Chaetoceros dichaetus,2008-09-29,,,AusCPR identifies to Hyalochaete or Phaoceros SOCPR speciates some chaetoceros
+Chaetoceros didymus,2008-09-29,,,
+Chaetoceros eibenii,2008-09-29,,,
+Chaetoceros lorenzianus,2008-09-29,,,
+Chaetoceros messanense,2008-09-29,,,AusCPR identifies to Hyalochaete or Phaoceros SOCPR speciates some chaetoceros
+Chaetoceros neglectus,2012-03-01,,Pru Bonham internal training,
+Chaetoceros pendulus,2008-09-29,,,AusCPR identifies to Hyalochaete or Phaoceros SOCPR speciates some chaetoceros
+Chaetoceros peruvianus,2008-09-29,,,
+Chaetoceros peruvianus < 40 µm cell width,2008-09-29,,,AusCPR identifies to Hyalochaete or Phaoceros SOCPR speciates some chaetoceros
+Chaetoceros peruvianus > 40 µm cell width,2012-03-01,,Pru Bonham internal training,
+Chaetoceros resting cyst,2008-09-29,,,
+Chaetoceros socialis,2008-09-29,,,AusCPR identifies to Hyalochaete or Phaoceros SOCPR speciates some chaetoceros
+Chaetoceros spp. < 10 µm cell width,2008-09-29,,,
+Ciliate (Inc. tintinnid),2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Ciliate (hairy 30 µm),2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Ciliate (naked 25-50 µm),2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Ciliate (naked < 25µm),2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Ciliate 10-20 µm,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Ciliate 100-150 µm naked,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Ciliate 20-30 µm,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Ciliate 30-40 µm,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Ciliate 30-40 µm fusiform,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Ciliate 40-50 µm,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Ciliate 50-60 µm,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Climacocylis scalaria,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Climacocylis scalaroides,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Climacocylis spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Climacodium frauenfeldianum,2010-01-01,,External training Tony John,
+Climacodium spp.,2010-01-01,,External training Tony John,
+Coccolithophore,2008-09-29,,,
+Coccolithophore cf.,2008-09-29,,,
+Cocconeis fasciolata,2008-09-29,,,
+Cocconeis spp.,2008-09-29,,,
+Codonella cf. elongata,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Codonella cf. galea,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Codonella galea,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Codonella spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Codonellopsis balechi,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Codonellopsis cf. ostenfeldi,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Codonellopsis gausii,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Codonellopsis morchella,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Codonellopsis ostenfeldi,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Codoniella campanulata,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Corethron criophilum - INVALID use C. pennatum,2008-09-29,,,
+Corethron inerme,2008-09-29,,,
+Corethron pennatum,2008-09-29,,,
+Corethron spp.,2008-09-29,,,
+Coscinodiscus gigas,2008-09-29,,,
+Coscinodiscus spp.,2008-09-29,,,
+Coscinodiscus spp. 200-300 µm,2008-09-29,,,
+Coscinodiscus spp. 400-500 µm,2008-09-29,,,
+Coscinodiscus spp. 60-80 µm,2008-09-29,,,
+Coscinodiscus spp. > 80 µm,2008-09-29,,,
+Coxliella laciniosa,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Cyanobacteria,2008-09-29,,,
+Cyanobacteria coccoid chain,2008-09-29,,,
+Cyclidium spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Cylindrical diatom,2008-09-29,,,
+Cylindrotheca closterium,2012-03-01,,Pru Bonham internal training,
+Cylindrotheca spp.,2008-09-29,,,
+Cymatocylis calyciformis,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Cymatocylis spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Cyttarocylis ampulla,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Dactyliosolen antarcticus,2008-09-29,,,
+Dactyliosolen phuketensis,2008-09-29,,,
+Dactyliosolen spp.,2008-09-29,,,
+Dactyliosolen tenuijunctus,2008-09-29,,,
+Dadayiella ganymedes,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Dadayiella spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Daturella spp.,2008-09-29,,,Not routinely counted
+Detonula spp.,2008-09-29,,,
+Dictyocha crux,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Dictyocha fibula f. rhombica,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Dictyocha fibula var. pentagona,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Dictyocha messanensis f. spinosa,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Dictyocha octonaria - INVALID use Octactis octonaria,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Dictyocha spp.,2008-09-29,,,
+Dictyocha stapedia,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Dictyochophyceae,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Dictyocysta cf. californiensis,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Dictyocysta cf. duplex,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Dictyocysta elegans,2012-03-01,,,
+Dictyocysta elegans var. lepida,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Dictyocysta elegans var. speciosa,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Dictyocysta mitra,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Dictyocysta nidulus,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Dictyocysta reticulata,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Dictyocysta spp.,2010-01-01,,External training Tony John,
+Didinium spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Dinoflagellate cyst,2010-01-01,,External training Tony John,
+Dinophysis acuminata,2012-03-01,,Pru Bonham internal training,
+Dinophysis caudata,2008-09-29,,,
+Dinophysis dens,2008-09-29,,,
+Dinophysis spp.,2008-09-29,,,
+Dinophysis tripos,2008-09-29,,,
+Diploneis spp.,2012-03-01,,Pru Bonham internal training,
+Distephanus spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Ditylum brightwellii < 40 µm width,2008-09-29,,,
+Ditylum spp.,2008-09-29,,,
+Echinoderm spine,2010-01-01,,External training Tony John,
+Egg,2010-01-01,,External training Tony John,
+Entomoneis spp.,2010-11-01,,External training Tony John,AusCPR identified this with the start of the West Australian routes.
+Epiplocylis blanda,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Epiplocylis cf. undella,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Epiplocylis constricta,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Epiplocylis deflexa,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Epiplocylis healdi,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Epiplocylis undella,2012-03-01,,,
+Epiplocyloides cf. reticulata,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Epiplocyloides ralumensis,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Epiplocyloides spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Eucampia antarctica,2008-09-29,,,
+Eucampia spp.,2008-09-29,,,
+Eucampia spp. <100 µm cell length,2008-09-29,,,
+Euplotidae,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Eutintinnus apertus,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Eutintinnus cf. fraknoi,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Eutintinnus cf. lusus-undae,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Eutintinnus cf. rugosus,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Eutintinnus lusus-undae,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Eutintinnus medius,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Eutintinnus pacificus,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Eutintinnus stramentus,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Favella azorica,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Favella campanula,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Favella ehrenbergii,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Favella spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Filamentous algae (branching),2010-01-01,,External training Tony John,
+Filamentous algae (non branching),2010-01-01,,External training Tony John,
+Fish scales,2010-01-01,,External training Tony John,
+Flagellate,2008-09-29,,,
+Flagellate <10 µm fusiform,2012-03-01,,Pru Bonham internal training,
+Foraminifera,2008-09-29,,,
+Fragilaria / Fragilariopsis,2008-09-29,,,
+Fragilaria spp.,2008-09-29,,,
+Fragilariopsis curta,2008-09-29,,,
+Fragilariopsis doliolus,2008-09-29,,,
+Fragilariopsis kerguelensis,2008-09-29,,,
+Fragilariopsis separanda/rhombica,2008-09-29,,,
+Fragilariopsis spp.,2008-09-29,,,
+Fungal hyphae,2010-01-01,,External training Tony John,
+Fungal spores,2010-01-01,,External training Tony John,
+Gazelletta hexanema,2010-01-01,,External training Tony John,
+Globigerinidae,2008-09-29,,,
+Globotoralia spp.,2008-09-29,,,
+Gold balls,2010-01-01,,,
+Goniodomataceae,2008-09-29,,,
+Gonyaulax scrippsae,2008-09-29,,,
+Gonyaulax spp.,2008-09-29,,,
+Grammatophora spp.,2008-09-29,,,
+Guinardia cf. tubiformis,2008-09-29,,,
+Guinardia cylindrus,2012-03-01,,Pru Bonham internal training,
+Guinardia flaccida,2008-09-29,,,
+Guinardia spp.,2008-09-29,,,
+Guinardia striata,2008-09-29,,Pru Bonham internal training,
+Gymnodinium spp.,2010-01-01,,External training Tony John,
+Gyrodinium spp.,2008-09-29,,,
+Gyrodinium spp. 20-40 µm,2008-09-29,,,
+Helicostomella spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Hemiaulus hauckii,2008-09-29,,,
+Hemiaulus membranaceus,2008-09-29,,,
+Hemiaulus sinensis,2008-09-29,,,
+Hemiaulus spp.,2008-09-29,,,
+Laboea spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Laboea strobila,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Lauderia spp.,2008-09-29,,,
+Leprotintinnus nordqvistii,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Leptocylindrus danicus,2008-09-29,,Pru Bonham internal training,
+Leptocylindrus mediterraneus,2008-09-29,,,
+Leptocylindrus mediterraneus (with flagellates),2016-11-01,,,
+Leptocylindrus spp.,2008-09-29,,,
+Licmophora spp.,2008-09-29,,,
+Lioloma spp.,2010-11-01,,,
+Lithodesmium spp.,2010-11-01,,,
+Lohmanniella oviformis,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Lohmanniella spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Mastogloia spp.,2008-09-29,,,
+Melosira spp.,2008-09-29,,,
+Membraneis challengeri,2008-09-29,,,
+Mesodinium rubrum,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Mesodinium spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Metacylis corbula,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Metacylis spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Microzooplankton unid,2008-09-29,,,
+Nassellaria,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Navicula - shaped,2008-09-29,,,
+Navicula cf. 100-120 µm length,2012-03-01,,New sizes classes introduced,
+Navicula cf. 120-140 µm length,2012-03-01,,New sizes classes introduced,
+Navicula cf. 140-160 µm length,2012-03-01,,New sizes classes introduced,
+Navicula cf. 20-40 µm length,2012-03-01,,New sizes classes introduced,
+Navicula cf. 40-60 µm length,2012-03-01,,New sizes classes introduced,New size classes added when group started counting NRS phyto
+Navicula cf. 60-80 µm length,2012-03-01,,New sizes classes introduced,
+Navicula cf. 80-100 µm length,2012-03-01,,New sizes classes introduced,
+Navicula cf. <20 µm length,2012-03-01,,New sizes classes introduced,
+Navicula cristata,2008-09-29,,,
+Nematocysts,2008-09-29,,,
+Nitzschia bicapitata,2008-09-29,,,
+Nitzschia cf. bicapitata,2008-09-29,,,
+Nitzschia longissima,2008-09-29,,,
+Nitzschia spp.,2008-09-29,,,
+Noctiluca scintillans,2010-01-01,,External training Tony John,
+Ocelli,2010-01-01,,External training Tony John,
+Odontella sinensis,2010-01-01,,,
+Ormosella spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Ornithocercus quadratus,2008-09-29,,,
+Ornithocercus spp.,2008-09-29,,,
+Oxytoxum parvum,2012-03-01,,,
+Oxytoxum spp.,2008-09-29,,,
+Oxytoxum subulatum,2012-03-01,,,
+Paint,2008-09-29,,,
+Paractedoctema,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Parafavella spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Paralia sulcata,2010-01-01,,External training Tony John,
+Parundella caudata,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Pennate diatom,2008-09-29,,,
+Pennate diatom 10 - 25 µm,2011-05-17,,,
+Pennate diatom 25 - 50 µm,2011-05-17,,,
+Pennate diatom 75 - 100 µm,2011-05-17,,,
+Pennate diatom < 10 µm,2011-05-17,,,
+Pennate diatom > 100 µm,2011-05-17,,,
+Peridinium spp.,2011-05-17,,Internal training Pru Bonhma and Gustaaf Hallegraeff,
+Phaeocystis spp. (colony),2008-09-29,,,
+Phalacroma doryphorum,2008-09-29,,,
+Pinus pollen,2008-09-29,,,
+Planktoniella sol,2008-09-29,,,
+Plastic,2010-07-06,,,
+Pleurosigma / Gyrosigma spp.,2008-09-29,,,
+Pleurosigma spp. < 150 µm,2010-01-01,,External training Tony John,
+Podolampas antarctica,2010-01-01,,,
+Podolampas palmipes,2008-09-29,,,
+Podolampas spinifera,2008-09-29,,,
+Podolampas spp.,2010-01-01,,External training Tony John,
+Pollen,2010-01-01,,External training Tony John,
+Proboscia alata,2008-09-29,,,
+Proboscia inermis,2008-09-29,,,
+Proboscia spp.,2008-09-29,,External training Tony John,AusCPR identifies to Probioscia spp. SOCPR speciates Proboscia
+Proboscia truncata,2008-09-29,,,
+Proplectella acuta,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Proplectella globosa,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Proplectella perpusilla,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Proplectella spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Prorocentrum gracile,2008-09-29,,,
+Prorocentrum spp.,2008-09-29,,,
+Protoperidinium granii,2010-01-01,,,AusCPR identified this with the start of the West Australian routes.
+Protoperidinium spp.,2008-09-29,,,
+Protorhabdonella curta,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Protorhabdonella simplex,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Protorhabdonella spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Protozoa,2008-09-29,,,AusCPR identified this with the start of the West Australian routes.
+Pseudo-nitzschia spp.,2008-09-29,,,
+Pseudosolenia calcar-avis,2008-09-29,,,
+Pterosperma polygonum,2008-09-29,,,
+Ptychodiscus noctiluca,2008-09-29,,,
+Pyrocystis fusiformis,2008-09-29,,,
+Pyrocystis hamulus,2008-09-29,,,
+Pyrocystis spp.,2008-09-29,,,
+Pyrophacus spp.,2012-03-01,,Pru Bonham internal training,
+Pyrophacus vancampoae cyst,2012-03-01,,,Not routinely counted
+Radiolarian,2010-01-01,,External training Tony John,
+Rhabdonella amor,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Rhabdonella apophysata,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Rhabdonella brandti,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Rhabdonella spiralis,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Rhabdonella spp.,2010-01-01,,External training Tony John,
+Rhabdonellopsis spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Rhizosolenia acuminata,2008-09-29,,Pru Bonham internal training,
+Rhizosolenia bergonii,2008-09-29,,,
+Rhizosolenia chunii,2008-09-29,,,
+Rhizosolenia fallax,2008-09-29,,Hobart phytoplankton workshop Feb2015,R. fallax group used if unsure of identification if sure R. fallax may be used
+Rhizosolenia hebetata f. semispina,2008-09-29,,,
+Rhizosolenia imbricata,2008-09-29,,Hobart phytoplankton workshop Feb2015,R. imbricata group used if unsure of identification if sure R. imbricata may be used
+Rhizosolenia imbricata group,2012-03-01,,Pru Bonham internal training,
+Rhizosolenia setigera,2008-09-29,,Hobart phytoplankton workshop Feb2015,R. setigera group used if unsure of identification if sure R. setigera may be used
+Rhizosolenia setigera group,2008-09-29,,,
+Rhizosolenia simplex,2008-09-29,,,
+Rhizosolenia spp.,2008-09-29,,,
+Rhizosolenia styliformis,2008-09-29,,Hobart phytoplankton workshop Feb2015,R. styliformis group used if unsure of identification if sure R. styliformis may be used
+Rimostrombidium spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Sagenoarium spp.,2010-01-01,,External training Tony John,
+Salpingella acuminata,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Salpingella costata,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Salpingella minutissima,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Salpingella spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Salpingella subconica,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Scrippsiella spp.,2010-01-01,,External training Tony John,
+Silicoflagellate,2008-09-29,,,
+Skeletonema pseudocostatum,2008-09-29,,,
+Skeletonema spp.,2008-09-29,,,
+Spermatophore,2010-01-01,,External training Tony John,
+Spicule,2010-01-01,,External training Tony John,
+Spikey balls,2010-01-01,,External training Tony John,
+Steenstrupiella cf. steenstrupii,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Steenstrupiella intumescens,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Steenstrupiella spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Steenstrupiella steenstrupii,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Stellate body,2010-01-01,,External training Tony John,
+Stenosemella nivalis,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Stephanopyxis spp.,2010-01-01,,External training Tony John,
+Striatella spp.,2008-09-29,,,
+Strombidiidae,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Strombidinopsidae,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Strombidium capitatum,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Strombidium conicum,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Strombidium spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Strombidium wulffi,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Thalassionema nitzschioides,2010-01-01,,External training Tony John,
+Thalassionema spp.,2008-09-29,,,
+Thalassionema spp. < 100 µm length,2008-09-29,,,
+Thalassionema spp. > 100 µm length,2008-09-29,,,
+Thalassiosira eccentrica,2008-09-29,,,
+Thalassiosira oliveriana,2008-09-29,,,
+Thalassiosira spp.,2008-09-29,,,
+Thalassiosira spp. 60-80 µm,2008-09-29,,,
+Thalassiothrix antarctica,2008-09-29,,,
+Thalassiothrix cf. spp.,2008-09-29,,,
+Thalassiothrix spp.,2008-09-29,,Internal training Pru Bonhma and Gustaaf Hallegraeff,
+Theoperidae,2010-11-01,,,AusCPR identified this with the start of the West Australian routes.
+Tintinnidium spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Tintinnina ,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Tintinnopsis compressa,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Tintinnopsis cylindrica,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Tintinnopsis gracilis,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Tintinnopsis lobiancoi,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Tintinnopsis minuta,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Tintinnopsis mortensenii,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Tintinnopsis radix,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Tintinnopsis rotundata,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Tintinnopsis spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Tintinnopsis tocantinensis,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Tontonia spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Trichodesmium spp.,2008-09-29,,,
+Trichodesmium thiebautii,2008-09-29,,,
+Trichotoxon reinboldii,2008-09-29,,,
+Trigonium spp.,2008-09-29,,,
+Tripos arietinus,2008-09-29,,,
+Tripos axialis,2010-01-01,,External training Tony John,
+Tripos belone,2008-09-29,,,
+Tripos biceps,2010-01-01,,External training Tony John,
+Tripos brevis,2010-01-01,,External training Tony John,
+Tripos candelabrum,2010-01-01,,External training Tony John,
+Tripos carriensis,2010-01-01,,External training Tony John,
+Tripos cephalotus,2008-09-29,,,
+Tripos concilians,2008-09-29,,,
+Tripos contortus,2010-01-01,,External training Tony John,
+Tripos contrarius,2010-01-01,,External training Tony John,
+Tripos declinatus,2010-01-01,,External training Tony John,
+Tripos deflexus,2008-09-29,,,
+Tripos euarcuatus,2008-09-29,,,
+Tripos extensus,2010-01-01,,External training Tony John,
+Tripos furca,2010-01-01,,External training Tony John,
+Tripos fusus,2010-01-01,,External training Tony John,
+Tripos fusus/extensus,2008-09-29,,,
+Tripos gibberus,2008-09-29,,,
+Tripos gravidus,2008-09-29,,External training Tony John,
+Tripos gravidus type,2011-05-17,,,
+Tripos hexacanthus,2008-09-29,,External training Tony John,
+Tripos horridus,2010-01-01,,External training Tony John,
+Tripos incisus,2008-09-29,,,
+Tripos kofoidii,2010-01-01,,External training Tony John,
+Tripos limulus,2008-09-29,,,
+Tripos lineatus,2010-01-01,,External training Tony John,
+Tripos lineatus/pentagonus complex,2008-09-29,,,
+Tripos longipes,2010-01-01,,External training Tony John,
+Tripos lunula,2010-01-01,,External training Tony John,
+Tripos macroceros,2010-01-01,,External training Tony John,
+Tripos macroceros type,2011-05-17,,,
+Tripos massiliensis,2010-01-01,,External training Tony John,
+Tripos muelleri,2008-09-29,,External training Tony John,
+Tripos pentagonus,2010-01-01,,External training Tony John,
+Tripos platycornis,2010-01-01,,External training Tony John,
+Tripos ranipes,2010-01-01,,External training Tony John,
+Tripos reflexus,2008-09-29,,,
+Tripos setaceus,2008-09-29,,,
+Tripos spp.,2010-01-01,,External training Tony John,
+Tripos symmetricus,2010-01-01,,External training Tony John,
+Tripos tenuis,2008-09-29,,,
+Tripos teres,2008-09-29,,,
+Tripos trichoceros,2010-01-01,,External training Tony John,
+Tripos vultur,2010-01-01,,External training Tony John,
+Undella claparedi,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Undella hyalina,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Undella turgida,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Unid diatom,2008-09-29,,,
+Unid dinoflagellate 10 - 30 µm,2008-09-29,,,
+Unid dinoflagellate 30 - 50 µm,2008-09-29,,,
+Unid dinoflagellate < 10 µm,2008-09-29,,Pru Bonham internal training,New taxon groups made to replace armoured not armoured as this is too hard to distinguish
+Unid dinoflagellate > 10 µm,2008-09-29,,Pru Bonham internal training,New taxon groups made to replace armoured not armoured as this is too hard to distinguish
+Vorticella spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Xystonella lanceolata,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Xystonella longicauda,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Xystonella treforti,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Xystonellopsis cymatica,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+Xystonellopsis spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+cf. Dactyliosolen spp.,2008-09-29,,,
+cf. Leptocylindrus spp.,2008-09-29,,,
+cf. Lioloma spp.,2010-11-01,,,
+cf. Melosira spp.,2008-09-29,,,
+cf. Mesodinium spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples
+cf. Psammodictyon spp.,2008-09-29,,,
+cf. Strombidium spp.,2012-03-01,No previous id,Tintinnids and Forams not counted routinely in AusCPR before March 2013,Ciliates not previously counted routinely in AusCPR samples

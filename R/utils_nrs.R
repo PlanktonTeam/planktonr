@@ -1,15 +1,24 @@
-#' Import NRS Phytoplankton Data
+#' Import NRS Data
 #'
-#' Load NRS station Phytoplankton Data
+#' Load NRS station Data
 #'
-#' @param file Filename to retrieve from AODN.
+#' @param Type The data of interest: Phytoplankton or Zooplankton
+#' @param Variable Variable options are: abundance or biovolume (phytoplankton only)
+#' @param Subset Data compilation. Full options are below.
 #'
 #' @return A dataframe with requested plankton data in long form
 #' @export
 #' @examples
-#' df <- pr_get_NRSData("bgc_phytoplankton_abundance_htg_data")
+#' df <- pr_get_NRSData(Type = "phytoplankton", Variable = "abundance", Subset = "raw")
 #' @importFrom rlang .data
-pr_get_NRSData <- function(file){
+pr_get_NRSData <- function(Type = "phytoplankton", Variable = "abundance", Subset = "raw"){
+
+  Type = stringr::str_to_lower(Type) # Make sure its lower case
+  if (Type == "p"){Type = "phytoplankton"}
+  if (Type == "z"){Type = "zooplankton"}
+
+  file = paste("bgc", Type, Variable, Subset, "data", sep = "_")
+
   dat <- readr::read_csv(stringr::str_replace(pr_get_site(), "LAYER_NAME", file), na = "", show_col_types = FALSE, comment = "#") %>%
     pr_rename()
 }
@@ -25,7 +34,7 @@ pr_get_NRSData <- function(file){
 #' df <- pr_get_NRSStation()
 #' @importFrom rlang .data
 pr_get_NRSStation <- function(){
-  dat <- readr::read_csv(paste0(pr_get_site2(), "BGC_StationInfo.csv"), na = "", show_col_types = FALSE) %>%
+  dat <- readr::read_csv(system.file("extdata", "BGC_StationInfo.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
     pr_rename() %>%
     dplyr::filter(.data$ProjectName == "NRS")
 }
@@ -42,13 +51,13 @@ pr_get_NRSStation <- function(){
 #' @importFrom rlang .data
 pr_get_NRSTrips <- function(Type = c("P","Z","F")){
 
-  NRSTrip <- readr::read_csv(paste0(pr_get_site2(), "BGC_Trip.csv"), na = "", show_col_types = FALSE) %>%
+  NRSTrip <- readr::read_csv(system.file("extdata", "BGC_Trip.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
     pr_rename() %>%
     dplyr::rename(ZSampleDepth_m = .data$ZOOPSAMPLEDEPTH_M,
-           PSampleDepth_m = .data$PHYTOSAMPLEDEPTH_M) %>%
+                  PSampleDepth_m = .data$PHYTOSAMPLEDEPTH_M) %>%
     dplyr::filter(.data$ProjectName == "NRS" &
-             (stringr::str_detect(.data$SampleType, paste("P", collapse = "|")) |
-                is.na(.data$SampleType))) %>%
+                    (stringr::str_detect(.data$SampleType, paste("P", collapse = "|")) |
+                       is.na(.data$SampleType))) %>%
     pr_apply_time() %>%
     dplyr::select(-c(.data$tz, .data$ProjectName))
 
@@ -69,139 +78,6 @@ pr_get_NRSTrips <- function(Type = c("P","Z","F")){
 
 }
 
-#
-#' Get NRS Phytoplankton raw data - Abundance
-#'
-#' @return A dataframe with NRS Phytoplankton Abundance
-#' @export
-#'
-#' @examples
-#' df <- pr_get_NRSPhytoRaw()
-#' @importFrom rlang .data
-pr_get_NRSPhytoRaw <- function(){
-  dat <- pr_get_NRSData("bgc_phytoplankton_abundance_raw_data")
-}
-
-
-#### Higher Trophic Groups Abund ####
-#' Get Abundance of Phyto Higher Trophic Groups
-#'
-#' @return A dataframe with Phytoplankton Abundance data - Summed by Higher Trophic Levels
-#' @export
-#'
-#' @examples
-#' df <- pr_get_NRSPhytoHTG()
-#' @importFrom rlang .data
-pr_get_NRSPhytoHTG <- function(){
-
-  dat <- pr_get_NRSData("bgc_phytoplankton_abundance_htg_data")
-
-}
-
-
-
-#' Import NRS Phytoplankton Data
-#'
-#' Load NRS station Phytoplankton Data
-#' @return A dataframe with NRS Phytoplankton Data in long form
-#' @export
-#' @examples
-#' df <- pr_get_NRSPhytoData()
-#' @importFrom rlang .data
- pr_get_NRSPhytoData <- function(){
-  dat <- pr_get_NRSData("anmn_nrs_bgc_plankton_phytoplankton_data")
-}
-
-
-
-#' Import NRS Phytoplankton Changelog
-#'
-#' Load NRS Phytoplankton Changelog
-#' @return A dataframe with NRS Phytoplankton Changelog
-#' @export
-#' @examples
-#' df <- pr_get_NRSPhytoChangeLog()
-#' @importFrom rlang .data
-pr_get_NRSPhytoChangeLog <- function(){
-  dat <- readr::read_csv(paste0(pr_get_site2(), "BGC_Phyto_ChangeLog.csv"), na = "", show_col_types = FALSE) %>%
-    pr_rename()
-}
-
-
-
-#
-#' Get NRS Phytoplankton genus product - Abundance
-#'
-#' @return A dataframe with NRS Phytoplankton Abundance - Summed by Genus
-#' @export
-#'
-#' @examples
-#' df <- pr_get_NRSPhytoGenus()
-#' @importFrom rlang .data
-pr_get_NRSPhytoGenus <- function() {
-  dat <- pr_get_NRSData("bgc_phytoplankton_abundance_genus_data")
-}
-
-#' Get NRS Phytoplankton species product - Abundance
-#'
-#' @return A dataframe with NRS Phytoplankton Abundance - Summed by Species
-#' @export
-#'
-#' @examples
-#' df <- pr_get_NRSPhytoSpecies()
-#' @importFrom rlang .data
-pr_get_NRSPhytoSpecies <- function(){
-  dat <- pr_get_NRSData("bgc_phytoplankton_abundance_species_data")
-}
-
-
-#' Get NRS Phytoplankton raw product - Biovolume
-#'
-#' @return A dataframe with raw NRS Phytoplankton BioVolume
-#' @export
-#'
-#' @examples
-#' df <- pr_get_NRSPhytoRawBV()
-#' @importFrom rlang .data
-pr_get_NRSPhytoRawBV <- function(){
-  dat <- pr_get_NRSData("bgc_phytoplankton_biovolume_raw_data")
-}
-
-#' Get NRS Phytoplankton higher taxon group product - Biovolume
-#'
-#' @return A dataframe with NRS Phytoplankton BioVolume
-#' @export
-#'
-#' @examples
-#' df <- pr_get_NRSPhytoHTGBV()
-#' @importFrom rlang .data
-pr_get_NRSPhytoHTGBV <- function() {
-  dat <- pr_get_NRSData("bgc_phytoplankton_biovolume_htg_data")
-}
-
-#' Get NRS Phytoplankton genus product - Biovolume
-#'
-#' @return A dataframe with NRS Phytoplankton BioVolume - Summed by Genus
-#' @export
-#'
-#' @examples
-#' df <- pr_get_NRSPhytoGenusBV()
-#' @importFrom rlang .data
-pr_get_NRSPhytoGenusBV <- function(){
-  dat <- pr_get_NRSData("bgc_phytoplankton_biovolume_genus_data")
-}
-
-#' Get NRS Phytoplankton species product - Biovolume
-#'
-#' @return A dataframe with NRS Phytoplankton BioVolume - Summed by Species
-#' @export
-#'
-#' @examples
-#' df <- pr_get_NRSPhytoSpeciesBV()
-#' @importFrom rlang .data
-pr_get_NRSPhytoSpeciesBV <- function(){
-  dat <- pr_get_NRSData("bgc_phytoplankton_biovolume_species_data")
-}
 
 
 #' Load zooplankton abundance data
@@ -212,7 +88,7 @@ pr_get_NRSPhytoSpeciesBV <- function(){
 #' df <- pr_get_NRSZooData()
 #' @importFrom rlang .data
 pr_get_NRSZooData <- function(){
-  dat <- readr::read_csv(paste0(pr_get_site2(), "BGC_Zoop_Raw.csv"), na = "", show_col_types = FALSE) %>%
+  dat <- readr::read_csv(system.file("extdata", "BGC_Zoop_Raw.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 
@@ -227,111 +103,8 @@ pr_get_NRSZooData <- function(){
 #' df <- pr_get_NRSZooChangeLog()
 #' @importFrom rlang .data
 pr_get_NRSZooChangeLog <- function(){
-  dat <- readr::read_csv(paste0(pr_get_site2(), "BGC_Zoop_ChangeLog.csv"), na = "", show_col_types = FALSE) %>%
+  dat <- readr::read_csv(system.file("extdata", "BGC_Zoop_ChangeLog.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
     pr_rename()
-}
-
-
-#' Get NRS Zoop raw product - Abundance
-#'
-#' @return A dataframe with Raw NRS Zooplankton Abundance
-#' @export
-#'
-#' @examples
-#' df <- pr_get_NRSZooRaw()
-#' @importFrom rlang .data
-pr_get_NRSZooRaw <- function(){
-  dat <- pr_get_NRSData("bgc_zooplankton_abundance_raw_data")
-}
-
-# NRS Zoop raw product binned by sex and stage raw product
-#
-# @return A dataframe with NRS Zooplankton Abundance - Binned by sex and stage
-# @export
-#
-# @examples
-# df <- pr_get_NRSZooRawBin()
-# @import dplyr
-# @importFrom magrittr "%>%"
-# @importFrom rlang .data
-# pr_get_NRSZooRawBin <- function(){
-#   dat <- left_join(pr_get_NRSTrips("Z") %>%
-#                      dplyr::select(-c(.data$Biomass_mgm3, .data$Secchi_m)),
-#                    pr_get_NRSZooData(), by = "TripCode") %>%
-#     dplyr::mutate(TaxonName = dplyr::if_else(is.na(.data$Genus), .data$TaxonName, paste0(.data$Genus, ' ', .data$Species))) %>%
-#     dplyr::group_by(.data$TripCode, .data$StationName, .data$Latitude, .data$Longitude,
-#              .data$SampleDateLocal, .data$Year, .data$Month, .data$Day, .data$Time_24hr, .data$SampleDateUTC, .data$TaxonName) %>%
-#     dplyr::summarise(ZoopAbund_m3 = sum(.data$ZoopAbund_m3, na.rm = TRUE)) %>%
-#     dplyr::arrange(-dplyr::desc(.data$TaxonName))  %>%
-#     tidyr::pivot_wider(names_from = .data$TaxonName, values_from = .data$ZoopAbund_m3, values_fill = list(ZoopAbund_m3 = 0)) %>%
-#     dplyr::arrange(dplyr::desc(.data$SampleDateLocal))
-# }
-
-
-#' Get NRS Zoop HTG product - Abundance
-#'
-#' @return A dataframe with NRS Zooplankton Abundance - Summed by Higher Trophic Levels
-#' @export
-#'
-#' @examples
-#' df <- pr_get_NRSZooHTG()
-#' @importFrom rlang .data
-pr_get_NRSZooHTG <-  function(){
-  dat <- pr_get_NRSData("bgc_zooplankton_abundance_htg_data")
-}
-
-#' NRS Zoop genus product - Abundance
-#'
-#' @return A dataframe with NRS Zooplankton Abundance - Summed by Genus
-#' @export
-#'
-#' @examples
-#' df <- pr_get_NRSZooGenus()
-#' @importFrom rlang .data
-pr_get_NRSZooGenus <- function(){
-  dat <- pr_get_NRSData("bgc_zooplankton_abundance_genus_data")
-}
-
-#' NRS Zoop copepod product - Abundance
-#'
-#' @return A dataframe with NRS Copepod Abundance - Summed by Species
-#' @export
-#'
-#' @examples
-#' df <- pr_get_NRSZooSpeciesCopepod()
-#' @importFrom rlang .data
-pr_get_NRSZooSpeciesCopepod <- function(){
-  dat <- pr_get_NRSData("bgc_zooplankton_abundance_copepods_data")
-}
-
-
-#' Get NRS Zoop Non-Copepod Abundance Data
-#'
-#' @return A dataframe with NRS Zooplankton (non-copepod) Abundance - Summed by Species
-#' @export
-#'
-#' @examples
-#' df <- pr_get_NRSZooSpeciesNonCopepod()
-#' @importFrom rlang .data
-pr_get_NRSZooSpeciesNonCopepod <- function(){
-  dat <- pr_get_NRSData("bgc_zooplankton_abundance_non_copepods_data")
-}
-
-#' Get NRS Zoop Species Abundance Data
-#'
-#' @return A dataframe with NRS Zooplankton Abundance - Summed by Species
-#' @export
-#'
-#' @examples
-#' df <- pr_get_NRSZooSpecies()
-pr_get_NRSZooSpecies <- function(){
-
-  dat <- pr_get_NRSData("bgc_zooplankton_abundance_copepods_data") %>%
-    dplyr::select(-c("Project", "StationName", "StationCode", "Latitude",
-                     "Longitude", "SampleTime_local", "Year", "Month",
-                     "Day", "Time", "SampleDepth_m", "Biomass_mgm3")) %>%
-    dplyr::left_join(pr_get_NRSData("bgc_zooplankton_abundance_non_copepods_data"), ., by = "TripCode")
-
 }
 
 
@@ -343,7 +116,7 @@ pr_get_NRSZooSpecies <- function(){
 #' @examples
 #' df <- pr_get_NRSPigments()
 pr_get_NRSPigments <- function(){
-  dat <- readr::read_csv(paste0(pr_get_site2(),"BGC_Pigments.csv"), na = "", show_col_types = FALSE) %>%
+  dat <- readr::read_csv(system.file("extdata", "BGC_Pigments.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 
@@ -357,7 +130,7 @@ pr_get_NRSPigments <- function(){
 #' df <- pr_get_NRSPico()
 #' @importFrom rlang .data
 pr_get_NRSPico <- function(){
-  dat <- readr::read_csv(paste0(pr_get_site2(), "BGC_Picoplankton.csv"), na = "", show_col_types = FALSE) %>%
+  dat <- readr::read_csv(system.file("extdata", "BGC_Picoplankton.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 

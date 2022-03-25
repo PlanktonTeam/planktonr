@@ -1,0 +1,2187 @@
+TAXON_NAME,SUBGENERA,FUNCTIONALGROUP,GENUS,SPECIES,SPCODE,LENGTH_MM,SIZEREFERENCE,DIET
+Subeucalanus mucronatus f,,Copepod,Subeucalanus,mucronatus,104546,3.1,Bradford-Grieve 1994,Herbivore
+Acartia simplex f,Acartiura,Copepod,Acartia,simplex,346040,1.11,Bradford-Grieve 1976,Omnivore
+Doliolum denticulatum,,Thaliacean,Doliolum,denticulatum,137246,,,unknown
+Pegea confoederata,,Thaliacean,Pegea,confoederata,137266,,,unknown
+Pseudevadne tergestina m,,Cladoceran,Pseudevadne,tergestina,106278,,,unknown
+Euaugaptilus spp.,,Copepod,Euaugaptilus,spp.,104139,6.29,Boltovskoy 1999,Carnivore
+Lubbockia squillimana f,,Copepod,Lubbockia,squillimana,128894,1.525,Boltovskoy 1999,Omnivore
+Copepod damaged / unidentified,,Copepod,,,1080,1,,unknown
+Delibus nudus f,,Copepod,Delibus,nudus,363905,0.55,New species - ‘Delibus f’ & ‘Delibus m’ size range based on the min & max size range of the female & male of D.nudus and D.Sewelli,Herbivore
+Eucalanus elongatus m,,Copepod,Eucalanus,elongatus,149718,4.1,Razouls 2012,Herbivore
+Eucalanus spp. j,,Copepod,Eucalanus,spp.,104171,3.2,"‘Species j’ (juvenile) (eg. Acartia spp. j or Centropages australiensis j )  the maximum size limit is based on the minimum size of either the smallest male or female of that species or genus and no minimum size limit has been entered",Herbivore
+Euchaeta spp. j,,Copepod,Euchaeta,spp.,104174,2.21,"‘Species j’ (juvenile) (eg. Acartia spp. j or Centropages australiensis j )  the maximum size limit is based on the minimum size of either the smallest male or female of that species or genus and no minimum size limit has been entered",Carnivore
+Labidocera acuta f,,Copepod,Labidocera,acuta,104726,3.225,Boltovskoy 1999,Carnivore
+Pontellopsis tasmanensis f,,Copepod,Pontellopsis,tasmanensis,354898,1.56,Razouls 2013,Carnivore
+Copilia spp. m,,Copepod,Copilia,spp.,128721,5.75,‘Species m’ (male) (eg. Acartia spp. m ) size range based on the min & max size range for all the male species of that genus in the database,Omnivore
+Acartia spp.,,Copepod,Acartia,spp.,104108,1.11,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Omnivore
+Anthomedusae,,Cnidarian,,,151687,,,unknown
+Acartia danae m,Acartia,Copepod,Acartia,danae,346026,0.79,Boltovskoy 1999,Omnivore
+Acartia pacifica m,Odontacartia,Copepod,Acartia,pacifica,346059,1.15,Razouls 2012,Omnivore
+Acrocalanus monachus m,,Copepod,Acrocalanus,monachus,220839,0.835,Razouls 2012,Herbivore
+Calocalanus pavo m,,Copepod,Calocalanus,pavo,104669,0.975,Boltovskoy 1999,Herbivore
+Acrocalanus spp. m,,Copepod,Acrocalanus,spp.,104192,1.095,‘Species m’ (male) (eg. Acartia spp. m ) size range based on the min & max size range for all the male species of that genus in the database,Herbivore
+Calanopia spp. j,,Copepod,Calanopia,spp.,104207,1.2,"‘Species j’ (juvenile) (eg. Acartia spp. j or Centropages australiensis j )  the maximum size limit is based on the minimum size of either the smallest male or female of that species or genus and no minimum size limit has been entered",Carnivore
+Calocalanus spp. f,,Copepod,Calocalanus,spp.,104193,0.465,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Herbivore
+Lucicutia flavicornis f,,Copepod,Lucicutia,flavicornis,104597,1.65,Boltovskoy 1999,Omnivore
+Macrosetella gracilis f,,Copepod,Macrosetella,gracilis,116382,1.45,Boltovskoy 1999,Herbivore
+Nauplii harpacticoid,,Copepod,,,1102,0.2,,Herbivore
+Oncaea media complex m,,Copepod,Oncaea,media complex,128938,0.56,Bottger-Schnack 2001,Omnivore
+Oncaea mediterranea complex m,,Copepod,Oncaea,mediterranea complex,128939,0.96,Bottger-Schnack 1997,Omnivore
+Paracalanus indicus f,,Copepod,Paracalanus,indicus,104683,0.9,Bradford-Grieve 1994,Herbivore
+Pleuromamma gracilis m,,Copepod,Pleuromamma,gracilis,104639,1.75,Boltovskoy 1999,Omnivore
+Sapphirina angusta f,,Copepod,Sapphirina,angusta,129041,4,Boltovskoy 1999,Omnivore
+Sapphirina opalina f,,Copepod,Sapphirina,opalina,129054,3.15,Boltovskoy 1999,Omnivore
+Poecilostomatoida / Cyclopoid f,,Copepod,,,1103,0.7,,unknown
+Subeucalanus crassus f,,Copepod,Subeucalanus,crassus,104544,3.25,Boltovskoy 1999,Herbivore
+Actinotroch of phoronid worm,,Phoronid,,,148378,,,unknown
+Brachyuran zoea,,Decapod,,,106673,,,unknown
+Medusa,,Cnidarian,,,135220,,,unknown
+Scolecithrix spp.,,Copepod,Scolecithrix,spp.,104230,2.1,,Herbivore
+Lucicutia spp. j,,Copepod,Lucicutia,spp.,104183,2,"‘Species j’ (juvenile) (eg. Acartia spp. j or Centropages australiensis j )  the maximum size limit is based on the minimum size of either the smallest male or female of that species or genus and no minimum size limit has been entered",Omnivore
+Copilia mirabilis f,,Copepod,Copilia,mirabilis,129038,3.15,Boltovskoy 1999,Omnivore
+Calocalanus spp. m,,Copepod,Calocalanus,spp.,104193,0.765,‘Species m’ (male) (eg. Acartia spp. m ) size range based on the min & max size range for all the male species of that genus in the database,Herbivore
+Oncaea venusta venella hump f,,Copepod,Oncaea,venusta venella hump,363588,0.85,Bottger-Schnack & Huys 2004,Omnivore
+Labidocera spp.,,Copepod,Labidocera,spp.,104208,2.445,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Carnivore
+Calycophoran,,Cnidarian,,,135333,,,unknown
+Lubbockia spp. f,,Copepod,Lubbockia,spp.,128672,1.525,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Omnivore
+Acartia tonsa f,Acanthacartia,Copepod,Acartia,tonsa,345943,1.2,Boltovskoy 1999,Omnivore
+Clausocalanus minor f,,Copepod,Clausocalanus,minor,220842,1.17,Frost & Fleminger 1968,Herbivore
+Calocalanus plumulosus m,,Copepod,Calocalanus,plumulosus,211848,0.865,Boltovskoy 1999,Herbivore
+Candacia bradyi f,,Copepod,Candacia,bradyi,346234,1.75,Razouls 2012,Carnivore
+Calocalanus cf. pavoninus f,,Copepod,Calocalanus,cf. pavoninus,104670,0.67,Bradford-Grieve 1994,Herbivore
+Pseudodiaptomus baylyi f,,Copepod,Pseudodiaptomus,baylyi,355135,1.175,Razouls 2013,Omnivore
+Labidocera minuta m,,Copepod,Labidocera,minuta,220921,1.65,Boltovskoy 1999,Carnivore
+Pseudodiaptomus cornutus f,,Copepod,Pseudodiaptomus,cornutus,355148,1.165,Razouls 2012,Omnivore
+Neocalanus tonsus m,,Copepod,Neocalanus,tonsus,344701,3.85,Boltovskoy 1999,Herbivore
+Onychocorycaeus latus m,,Copepod,Onychocorycaeus,latus,128818,0.935,Boltovskoy 1999,Carnivore
+Clausocalanus mastigophorus f,,Copepod,Clausocalanus,mastigophorus,104506,1.535,Frost & Fleminger 1968,Herbivore
+Centropages calaninus m,,Copepod,Centropages,calaninus,104492,1.8,Boltovskoy 1999,Omnivore
+Subeucalanus subtenuis m,,Copepod,Subeucalanus,subtenuis,104549,2.75,Boltovskoy 1999,Herbivore
+Labidocera tasmanica m,,Copepod,Labidocera,tasmanica,346613,2.64,Nyan Taw 1974,Carnivore
+Pontellina plumata f,,Copepod,Pontellina,plumata,104743,1.69,Boltovskoy 1999,Carnivore
+Onychocorycaeus pacificus f,,Copepod,Onychocorycaeus,pacificus,359744,1.13,Razouls 2012,Carnivore
+Subeucalanus longiceps f,,Copepod,Subeucalanus,longiceps,345366,4.55,Bradford-Grieve 1994,Herbivore
+Subeucalanus longiceps m,,Copepod,Subeucalanus,longiceps,345366,6,Bradford-Grieve 1994,Herbivore
+Pleuromamma abdominalis j,,Copepod,Pleuromamma,abdominalis,104637,2.4,Boltovskoy 1999,Omnivore
+Lensia subtiloides,,Cnidarian,Lensia,subtiloides,135440,,,unknown
+Unid invert larvae,,Other,,,1066,,,unknown
+Ditrichocorycaeus asiaticus f,,Copepod,Ditrichocorycaeus,asiaticus,358328,1.22,Razouls 2012,Carnivore
+Calanus australis CV,,Copepod,Calanus,australis,345760,2.6,Boltovskoy 1999,Herbivore
+Undinula vulgaris CII,,Copepod,Undinula,vulgaris,104473,1,Bjornberg 1966,Herbivore
+Oncaea mediterranea slender f,,Copepod,Oncaea,mediterranea slender,128939,1.4,Bottger-Schnack 1997,Omnivore
+Heterorhabdus spp. f,,Copepod,Heterorhabdus,spp.,104178,1.985,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Carnivore
+Candacia discaudata f,,Copepod,Candacia,discaudata,346235,1.745,Razouls 2012,Carnivore
+Sagitta bipunctata,,Chaetognath,Sagitta,bipunctata,105448,,,unknown
+Acartia simplex m,Acartiura,Copepod,Acartia,simplex,346040,0.96,Bradford-Grieve 1976,Omnivore
+Copilia spp. j,,Copepod,Copilia,spp.,128721,2.2,"‘Species j’ (juvenile) (eg. Acartia spp. j or Centropages australiensis j )  the maximum size limit is based on the minimum size of either the smallest male or female of that species or genus and no minimum size limit has been entered",Omnivore
+Copilia spp. f,,Copepod,Copilia,spp.,128721,3.65,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Omnivore
+Monocorycaeus robustus f,,Copepod,Monocorycaeus,robustus,128815,2.2,Razouls 2012,Carnivore
+Agetus flaccus f,,Copepod,Agetus,flaccus,128795,1.545,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Carnivore
+Undinula vulgaris CIV,,Copepod,Undinula,vulgaris,104473,1.615,Bjornberg 1966,Herbivore
+Penilia avirostris m,,Cladoceran,Penilia,avirostris,106272,,,unknown
+Pseudevadne tergestina f gravid,,Cladoceran,Pseudevadne,tergestina,106278,,,unknown
+Siphonophore diphyidae,,Cnidarian,,,135338,,,unknown
+Cladoceran f gravid,,Cladoceran,,,1076,,,unknown
+Neocalanus gracilis m,,Copepod,Neocalanus,gracilis,104471,2.7,Boltovskoy 1999,Herbivore
+Podon intermedius m,,Cladoceran,Podon,intermedius,106276,,,unknown
+Heterorhabdus spp.,,Copepod,Heterorhabdus,spp.,104178,1.985,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Carnivore
+Calanus simillimus,,Copepod,Calanus,simillimus,342436,3.225,Boltovskoy 1999,Herbivore
+Metridia longa,,Copepod,Metridia,longa,104632,4.2,Boltovskoy 1999,Omnivore
+Large copepodite CIV,,Copepod,,,1080,2.4,,Herbivore
+Euphausia spinifera furcilia,,Euphausiid,Euphausia,spinifera,221051,,,unknown
+Hyperiella spp.,,Amphipod,Hyperiella,spp.,325378,,,unknown
+Solidosagitta marri,,Chaetognath,Solidosagitta,marri,266854,,,unknown
+Euphausia similis var. armata,,Euphausiid,Euphausia,similis var. armata,492647,,,unknown
+Rhincalanus gigas CIV-CV,,Copepod,Rhincalanus,gigas,220837,7.88,Boltovskoy 1999,Herbivore
+Clio pyramidata,,Mollusc,Clio,pyramidata,139033,,,unknown
+Pelagobia longicirrata,,Polychaete,Pelagobia,longicirrata,130219,,,unknown
+Euphausia similis,,Euphausiid,Euphausia,similis,221048,,,unknown
+Small copepodite CIV,,Copepod,,,1080,0.8,,Herbivore
+Myctophid,,Fish,,,125498,,,unknown
+Eucalanidae CII,,Copepod,,,104085,2,,Herbivore
+Dimophyes arctica,,Cnidarian,Dimophyes,arctica,135418,,,unknown
+Oikopleura (Coecaria) spp.,,Appendicularian,Oikopleura (Coecaria),spp.,343703,,,unknown
+Ditrichocorycaeus minimus f,,Copepod,Ditrichocorycaeus,minimus,128808,0.75,Razouls 2012,Carnivore
+Euphausia hanseni,,Euphausiid,Euphausia,hanseni,110685,,,unknown
+Oncaea clevei complex f,,Copepod,Oncaea,clevei complex,354022,0.65,Bottger-Schnack 2001,Omnivore
+Oncaea media f,,Copepod,Oncaea,media,128938,0.755,Bottger-Schnack 2001,Omnivore
+Oithona brevicornis f,,Copepod,Oithona,brevicornis,106643,0.6,Nishida 1985,Herbivore
+Triconia antarctica f,,Copepod,Triconia,antarctica,345368,1.205,Boltovskoy 1999,Omnivore
+Thysanoessa macrura,,Euphausiid,Thysanoessa,macrura,236219,,,unknown
+Euphausia superba FIII,,Euphausiid,Euphausia,superba,236217,,,unknown
+Styrofoam bead,,Other,,,,,,unknown
+Pareucalanus sewelli f,,Copepod,Pareucalanus,sewelli,360047,4.995,Bradford-Grieve 1994,Herbivore
+Clausocalanus minor m,,Copepod,Clausocalanus,minor,220842,1.17,Frost & Fleminger 1968,Herbivore
+Calanus helgolandicus,,Copepod,Calanus,helgolandicus,104466,2.7,Razouls 2013,Herbivore
+Salpa maxima,,Thaliacean,Salpa,maxima,137273,,,unknown
+Paracalanus indicus i,,Copepod,Paracalanus,indicus,104683,0.935,Bradford-Grieve 1994,Herbivore
+Paraeuchaeta antarctica f,,Copepod,Paraeuchaeta,antarctica,344974,8.61,"Bradford Haakonssen & Jillett 1983",Carnivore
+Paralabidocera antarctica m,,Copepod,Paralabidocera,antarctica,345234,1.625,,Carnivore
+Pleuromamma quadrungulata m,,Copepod,Pleuromamma,quadrungulata,104641,3.47,Boltovskoy 1999,Omnivore
+Pseudocyclops kulai,,Copepod,Pseudocyclops,kulai,355109,0.825,Razouls 2013,Omnivore
+Sapphirina ovatolanceolata / gemma,,Copepod,Sapphirina,ovatolanceolata / gemma,129055,3.07,Razouls 2012,Omnivore
+Onychocorycaeus pacificus,,Copepod,Onychocorycaeus,pacificus,359744,1.085,Razouls 2012,Carnivore
+Pontellina morii,,Copepod,Pontellina,morii,220928,1.57,Razouls 2012,Carnivore
+Calanoides macrocarinatus m,,Copepod,Calanoides,macrocarinatus,345758,3.4,Boltovskoy 1999,Herbivore
+Parvocalanus elegans,,Copepod,Parvocalanus,elegans,354636,0.49,Razouls 2013,Herbivore
+Labidocera farrani,,Copepod,Labidocera,farrani,346593,3.045,Razouls 2013,Carnivore
+Haloptilus oxycephalus f,,Copepod,Haloptilus,oxycephalus,104434,3.555,Boltovskoy 1999,Carnivore
+Scolecithricella minor m,,Copepod,Scolecithricella,minor,104811,1.33,Boltovskoy 1999,Herbivore
+Candacia cheirura,,Copepod,Candacia,cheirura,345777,2.625,Boltovskoy 1999,Carnivore
+Paraheterorhabdus farrani,,Copepod,Paraheterorhabdus,farrani,345232,3.94,Razouls 2013,Carnivore
+Sapphirina nigromaculata,,Copepod,Sapphirina,nigromaculata,129053,2.495,Boltovskoy 1999,Omnivore
+Ditrichocorycaeus subtilis,,Copepod,Ditrichocorycaeus,subtilis,128809,0.75,Razouls 2012,Carnivore
+Heterorhabdus lobatus m,,Copepod,Heterorhabdus,lobatus,346538,2.35,Boltovskoy 1999,Carnivore
+Stephos durio (invalid),,Copepod,Stephos,durio (invalid),,,unknown,unknown
+Anawekia spinosa,,Copepod,Anawekia,spinosa,346097,0.74,Razouls 2013,unknown
+Parvocalanus crassirostris,,Copepod,Parvocalanus,crassirostris,360051,0.45,Boltovskoy 1999,Herbivore
+Acrocalanus spp. j,,Copepod,Acrocalanus,spp.,104192,0.79,Boltovskoy 1999,Herbivore
+Acrocalanus gibber j,,Copepod,Acrocalanus,gibber,104645,0.93,Boltovskoy 1999,Herbivore
+Labidocera laevidentata f,,Copepod,Labidocera,laevidentata,220924,1.98,Razouls 2013,Carnivore
+Parvocalanus latus f,,Copepod,Parvocalanus,latus,354637,0.445,Razouls 2013,Herbivore
+Pilidium larvae,,Nemertean,,,557238,,,unknown
+Pontella spp. f,,Copepod,Pontella,spp.,104209,1.69,,Carnivore
+Pontellina morii j,,Copepod,Pontellina,morii,220928,1.57,Razouls 2012,Carnivore
+Scolecithricella spp. j,,Copepod,Scolecithricella,spp.,104229,1,Razouls 2013,Herbivore
+Haloptilus spp.,,Copepod,Haloptilus,spp.,104140,4.99,Boltovskoy 1999,Carnivore
+Neocalanus gracilis,,Copepod,Neocalanus,gracilis,104471,3.15,Boltovskoy 1999,Herbivore
+Pontellina spp.,,Copepod,Pontellina,spp.,104210,1.6,Razouls 2013,Carnivore
+Scinidae,,Amphipod,,,101424,,,unknown
+Acartia pacifica j,Odontacartia,Copepod,Acartia,pacifica,346059,1,Razouls 2013,Omnivore
+Parvocalanus dubia j,,Copepod,Parvocalanus,dubia,360052,0.74,Razouls 2013,Herbivore
+Euchaeta marina j,,Copepod,Euchaeta,marina,104552,3.26,Boltovskoy 1999,Carnivore
+Tortanus spp.,,Copepod,Tortanus,spp.,157683,1.5,,Carnivore
+Pyrosomatidae ,,Thaliacean,,,137224,,,unknown
+Eudoxoides spiralis bract,,Cnidarian,Eudoxoides,spiralis,135424,,,unknown
+Flaccisagitta hexaptera,,Chaetognath,Flaccisagitta,hexaptera,105435,,,unknown
+Oithona brevicornis m,,Copepod,Oithona,brevicornis,106643,0.6,Nishida 1985,Herbivore
+Euphausid larvae,,Euphausiid,,,110671,,,unknown
+Bestiolina spp.,,Copepod,Bestiolina,spp.,346148,0.8,Bradford-Grieve 1993,Herbivore
+Aetideus giesbrechti f,,Copepod,Aetideus,giesbrechti,104276,2,Boltovskoy 1999,Omnivore
+Calocalanus pavoninus f,,Copepod,Calocalanus,pavoninus,104670,0.67,Bradford-Grieve 1994,Herbivore
+Haloptilus spiniceps f,,Copepod,Haloptilus,spiniceps,104437,4.625,Boltovskoy 1999,Carnivore
+Haloptilus spp. f,,Copepod,Haloptilus,spp.,104140,5.37,Boltovskoy 1999,Carnivore
+Temora turbinata j,,Copepod,Temora,turbinata,104880,0.93,Boltovskoy 1999,Herbivore
+Oithona tenuis m,,Copepod,Oithona,tenuis,106658,1.18,Nishida 1985,Herbivore
+Oithona vivida f,,Copepod,Oithona,vivida,106659,0.76,Boltovskoy 1999,Herbivore
+Oncaea shmelevi f,,Copepod,Oncaea,schmelvi,128951,0.685,Razouls 2013,Omnivore
+Oncaea shmelevi m,,Copepod,Oncaea,schmelvi,128951,0.595,Razouls 2013,Omnivore
+Paracalanus aculeatus minor f,,Copepod,Paracalanus,aculeatus minor,362834,0.775,Razouls 2013,Herbivore
+Spinocalanus spp. f,,Copepod,Spinocalanus,spp.,104236,1.954,Razouls 2013,Herbivore
+Spinoncaea cf. tenuis f,,Copepod,Spinoncaea,cf. tenuis.,348050,0.29,Razouls 2013,Omnivore
+Bestiolina similis,,Copepod,Bestiolina,similis,346152,0.8,Bradford-Grieve 1993,Herbivore
+Pseudodiaptomus mertoni,,Copepod,Pseudodiaptomus,mertoni,355172,1.105,Razouls 2012,Omnivore
+Oithona aruensis f,,Copepod,Oithona,aruensis,353987,0.43,Razouls 2013,Herbivore
+Oithona aruensis m,,Copepod,Oithona,aruensis,353987,0.405,Razouls 2013,Herbivore
+Undeuchaeta plumosa f,,Copepod,Undeuchaeta,plumosa,104343,3.6,Boltovskoy 1999,Carnivore
+Calanoides spp.,,Copepod,Calanoides,spp.,104151,2.465,,Herbivore
+Portunidae larvae,,Decapod,,,106763,,,unknown
+Acartia bispinosa m,Odontacartia,Copepod,Acartia,bispinosa,346051,1.285,Razouls 2013,Omnivore
+Candacia tenuimana,,Copepod,Candacia,tenuimana,104485,2.125,Boltovskoy 1999,Carnivore
+Ihlea magalhanica,,Thaliacean,Ihlea,magalhanica,266541,,,unknown
+Pyrosoma atlanticum,,Thaliacean,Pyrosoma,atlanticum,137250,,,unknown
+Salpa fusiformis,,Thaliacean,Salpa,fusiformis,137272,,,unknown
+Ditrichocorycaeus lubbocki,,Copepod,Ditrichocorycaeus,lubbocki,128807,0.89,Razouls 2012,Carnivore
+Labidocera tasmanica f,,Copepod,Labidocera,tasmanica,346613,2.64,Nyan Taw 1974,Carnivore
+Thyropus sphaeroma,,Amphipod,Thyropus,sphaeroma,421631,,,unknown
+Penaeus latisulcatus,,Decapod,Penaeus,latisulcatus,210372,,,unknown
+Penaeus merguiensis,,Decapod,Penaeus,merguiensis,210377,,,unknown
+Oncaea vodjanitskii complex f,,Copepod,Oncaea,vodjanitskii complex,354038,0.24,Razouls 2013,Omnivore
+Parasitic cestode,,Other,,,,,,unknown
+Conchoecia spp.,,Ostracod,Conchoecia,spp.,127533,,,unknown
+Firoloida spp.,,Mollusc,Firoloida,spp.,138008,,,unknown
+Boeckella propinqua,,Copepod,Boeckella,triarticulata,349252,1.61,Bayly AG 1961,Omnivore
+Clausocalanus jobei m,,Copepod,Clausocalanus,jobei,104504,1.285,Frost & Fleminger 1968,Herbivore
+Favella spp.,,Ciliophora,Favella,spp.,172431,,,unknown
+Calocalanus elongatus f,,Copepod,Calocalanus,elongatus,104653,0.71,,Herbivore
+Pleuromamma xiphias m,,Copepod,Pleuromamma,xiphias,104643,4.81,,Omnivore
+Euphausia similis f,,Euphausiid,Euphausia,similis,221048,,,unknown
+Lycaea pachypoda m,,Amphipod,Lycaea,pachypoda,236573,,,unknown
+Phoxocephalidae,,Amphipod,,,101403,,,unknown
+Oikopleura spp.,,Appendicularian,Oikopleura,spp.,103367,,,unknown
+Thysanoessa gregaria furcilia FVI,,Euphausiid,Thysanoessa,gregaria,110707,,,unknown
+Moolapheonoides spp.,,Amphipod,Moolapheonoides,spp.,391194,,,unknown
+Colurella spp.,,Rotifer,Colurella,spp.,134938,,,unknown
+Ridgewayia spp.,,Copepod,Ridgewayia,spp.,104218,0.665,,Omnivore
+Chiridius spp.,,Copepod,Chiridius,spp.,104117,2.875,,Omnivore
+Eutima curva,,Cnidarian,Eutima,curva,221227,,,unknown
+Mollusc veliger,,Mollusc,,,51,,,unknown
+Calocalanus cf. longispinus,,Copepod,Calocalanus,cf. longispinus,104661,0.67,,Herbivore
+Mysidopsis surugae,,Mysida,Mysidopsis,surugae,227008,,,unknown
+Cyclosalpa affinis,,Thaliacean,Cyclosalpa,affinis,137257,,,unknown
+Haplostylus dakini,,Mysida,Haplostylus,dakini,226404,,,unknown
+Cypridinodes spp.,,Ostracod,Cypridinodes,spp.,205311,,,unknown
+Labidocera acutifrons,,Copepod,Labidocera,acutifrons,104727,3.7,,Carnivore
+Cypridina spp.,,Ostracod,Cypridina,spp.,127520,,,unknown
+Creseis conica,,Mollusc,Creseis,conica,390545,,,unknown
+Cavolinia uncinata,,Mollusc,Cavolinia,uncinata,139031,,,unknown
+Anisomysis (Anisomysis) mullini,,Mysida,Anisomysis,mullini,226728,,,unknown
+Eupronoe maculata,,Amphipod,Eupronoe,maculata,236627,,,unknown
+Anisomysis (Paranisomysis) lamellicauda,,Mysida,Anisomysis,lamellicauda,226603,,,unknown
+Carybdea rastonii,,Thaliacean,Carybdea,rastonii,287143,,,unknown
+Octophialucium spp.,,Cnidarian,Octophialucium,spp.,117150,,,unknown
+Beroe ovata,,Ctenophore,Beroe,ovata,106362,,,unknown
+Eusiridae,,Amphipod,,,101380,,,unknown
+Eusarsiella spp.,,Ostracod,Eusarsiella,spp.,127564,,,unknown
+Lucifer faxoni,,Decapod,Lucifer,faxoni,158346,,,unknown
+Iasis cylindrica,,Thaliacean,Salpa,cylindrica,268130,,,unknown
+Tintinnopsis spp.,,Ciliophora,Tintinnopsis,spp.,163780,,,unknown
+Copilia hendorffi,,Copepod,Copilia,hendorffi,346293,6.1,Razouls 2012,Omnivore
+Euchaeta indica,,Copepod,Euchaeta,indica,346438,2.605,"Bradford Haakonssen & Jillett 1983",Carnivore
+Daphnia spp.,,Cladoceran,Daphnia,spp.,148370,,,unknown
+Rotifera,,Rotifer,,,14260,,,unknown
+Moina spp.,,Cladoceran,Moina,spp.,148346,,,unknown
+Oncaeidae f,,Copepod,,,128586,0.7,,Omnivore
+Mesocyclops spp. f,,Copepod,Mesocyclops,spp.,156881,1.19,Swe Thwin,Carnivore
+Platyscelus ovoides,,Amphipod,Platyscelus,ovoides,103275,,,unknown
+Paraphronima crassipes,,Amphipod,Paraphronima,crassipes,236596,,,unknown
+Calanopia spp. m,,Copepod,Calanopia,spp.,104207,1.55,,Carnivore
+Codonellopsis morchella,,Ciliophora,Codonellopsis,morchella,240441,,,unknown
+Diacavolinia longirostris,,Mollusc,Diacavolinia,longirostris,137754,,,unknown
+Thysanoessa gregaria adult,,Euphausiid,Thysanoessa,gregaria,110707,,,unknown
+Holothurian doliolaria larva,,Echinoderm,,,1806,,,unknown
+Pyrosome,,Thaliacean,Pyrosoma,spp.,137224,,,unknown
+Podocoryna,,Cnidarian,,,117119,,,unknown
+Echinopluteus,,Echinoderm,,,1806,,,unknown
+Cymbaloporetta spp.,,Foraminifera,Cymbaloporetta,spp.,112138,,,unknown
+Axiidea zoea,,Decapod,,,477324,,,unknown
+Engraulidae egg,,Fish,,,125465,,,unknown
+Diacria danae  ,,Mollusc,Diacria,danae,420557,,,unknown
+Rhincalanus rostrifrons j,,Copepod,Rhincalanus,rostrifrons,356829,,"‘Species j’ (juvenile) (eg. Acartia spp. j or Centropages australiensis j )  the maximum size limit is based on the minimum size of either the smallest male or female of that species or genus and no minimum size limit has been entered",Herbivore
+Dendrobranchiata larvae,,Decapod,,,106669,,,unknown
+Astacidea zoea,,Decapod,,,106672,,,unknown
+Laodicea spp.,,Cnidarian,Laodicea,spp.,117141,,,unknown
+Acantharia,,Radiozoa,,,586732,,,unknown
+Rhincalanus nasutus j,,Copepod,Rhincalanus,nasutus,104543,,,unknown
+Pareucalanus spp. j,,Copepod,Pareucalanus,spp.,237967,,,unknown
+Parapronoe campbelli,,Amphipod,Parapronoe,campbelli,550624,,,unknown
+Radiolarian O,,Radiozoa,,,,,,unknown
+Serratosagitta pacifica ,,Chaetognath,Serratosagitta,pacifica,266268,,,unknown
+Copepod eggs,,Copepod,,,1080,,,unknown
+Miracia efferata f,,Copepod,Miracia ,efferata,116383,,,unknown
+Holothurian larva,,Echinoderm,,,123456,,,unknown
+Pontella aculeata f,,Copepod,Pontella,aculeata,1262429,4.95,,unknown
+Neogloboquadrina pachyderma,,Rotifer,Neogloboquadrina,pachyderma,113458,,,unknown
+Sergestidae,,Decapod,,,106731,,,unknown
+Thysanoessa macrura metanauplius,,Euphausiid,Thysanoessa,macrura,236219,,,unknown
+Travisiopsis levinseni,,Polychaete,Travisiopsis,levinseni,131580,,,unknown
+Aetideus australis,,Copepod,Aetideus,australis,341238,,,unknown
+Calanoides brevicornis,,Copepod,Calanoides,brevicornis,357533,,,unknown
+Cyllopus magellanicus,,Amphipod,Cyllopus,magellanicus,325407,,,unknown
+Euphausiidae metanauplii,,Euphausiid,,,110671,,,unknown
+Hyperoche medusarum,,Amphipod,Hyperoche,medusarum,103256,,,unknown
+Polychaete Owenia larvae ,,Polychaete,,,129427,,,unknown
+Subeucalanus spp. i,,Copepod,Subeucalanus,spp.,104173,,,unknown
+Foram E,,Foraminifera,,,,,,unknown
+Radiolarian C,,Radiozoa,,,,,,unknown
+Radiolarian I,,Radiozoa,,,,,,unknown
+Ctenocalanus spp. f,,Copepod,Ctenocalanus,spp.,104162,,,unknown
+Ctenocalanus spp. m,,Copepod,Ctenocalanus,spp.,104162,,,unknown
+Mimonectes spp.,,Amphipod,Mimonectes,spp.,101802,,,unknown
+Scombridae larvae,,Fish,,,125559,,,unknown
+Pareucalanus langae,,Copepod,Pareucalanus,langae,354594,,,unknown
+Nematobrachion spp.,,Euphausiid,Nematobrachion,spp.,110675,,,unknown
+Pinnotheridae zoea,,Decapod,,,106775,,,unknown
+Pontellina morii m,,Copepod,Pontellina,morii,220928,1.47,Razouls 2012,Carnivore
+Physosomata,,Amphipod,,,155686,,,unknown
+Salpidae agg,,Thaliacean,,,137217,,,unknown
+Metridia lucens f,,Copepod,Metridia,lucens,104633,2.66,Boltovskoy 1999,Omnivore
+Pseudevadne tergestina f,,Cladoceran,Pseudevadne,tergestina,106278,,,unknown
+Oncaea clevei complex,,Copepod,Oncaea,clevei complex,354022,0.585,Bottger-Schnack 2001,Omnivore
+Lucicutia spp. m,,Copepod,Lucicutia,spp.,104183,1.45,‘Species m’ (male) (eg. Acartia spp. m ) size range based on the min & max size range for all the male species of that genus in the database,Omnivore
+Mesocalanus spp.,,Copepod,Mesocalanus,spp.,104153,2.05,Boltovskoy 1999,Herbivore
+Phaenna spinifera,,Copepod,Phaenna,spinifera,104698,1.5,Razouls 2012,Herbivore
+Aetideus acutus f,,Copepod,Aetideus,acutus,104273,1.64,Boltovskoy 1999,Omnivore
+Clytemnestra scutellata m,,Copepod,Clytemnestra,scutellata,115805,1.175,Boltovskoy 1999,Omnivore
+Nauplii copepod,,Copepod,,,1080,0.3,,Herbivore
+Corycaeidae j,,Copepod,,,128569,0.63,"‘Species j’ (juvenile) (eg. Acartia spp. j or Centropages australiensis j )  the maximum size limit is based on the minimum size of either the smallest male or female of that species or genus and no minimum size limit has been entered",Carnivore
+Cosmocalanus darwinii f,,Copepod,Cosmocalanus,darwinii,361259,2,Boltovskoy 1999,Herbivore
+Labidocera cervi m,,Copepod,Labidocera,cervi,346588,2.95,Razouls 2012,Carnivore
+Clausocalanus jobei f (>1.2mm),,Copepod,Clausocalanus,jobei,104504,1.285,Frost & Fleminger 1968,Herbivore
+Acrocalanus gibber f,,Copepod,Acrocalanus,gibber,104645,1.03,Boltovskoy 1999,Herbivore
+Acrocalanus longicornis m,,Copepod,Acrocalanus,longicornis,104646,1.1,Boltovskoy 1999,Herbivore
+Calanoides carinatus m,,Copepod,Calanoides,carinatus,104462,2.525,Boltovskoy 1999,Herbivore
+Candacia truncata f,,Copepod,Candacia,truncata,220916,2.1,Boltovskoy 1999,Carnivore
+Mecynocera clausi f,,Copepod,Mecynocera,clausi,104616,1.065,Boltovskoy 1999,Herbivore
+Microsetella norvegica m,,Copepod,Microsetella,norvegica,116115,0.375,Boltovskoy 1999,Omnivore
+Oncaea mediterranea complex f,,Copepod,Oncaea,mediterranea complex,128939,1.4,Bottger-Schnack 1997,Omnivore
+Oncaea venusta complex m,,Copepod,Oncaea,venusta complex,128954,0.765,Bottger-Schnack & Huys 2004,Omnivore
+Paracalanus aculeatus m,,Copepod,Paracalanus,aculeatus,104681,1.14,Bradford-Grieve 1994,Herbivore
+Paracalanus spp. j,,Copepod,Paracalanus,spp.,104196,0.7,"‘Species j’ (juvenile) (eg. Acartia spp. j or Centropages australiensis j )  the maximum size limit is based on the minimum size of either the smallest male or female of that species or genus and no minimum size limit has been entered",Herbivore
+Pleuromamma spp. j,,Copepod,Pleuromamma,spp.,104191,1.6,"‘Species j’ (juvenile) (eg. Acartia spp. j or Centropages australiensis j )  the maximum size limit is based on the minimum size of either the smallest male or female of that species or genus and no minimum size limit has been entered",Omnivore
+Rhincalanidae j,,Copepod,,,345271,2.4,"‘Species j’ (juvenile) (eg. Acartia spp. j or Centropages australiensis j )  the maximum size limit is based on the minimum size of either the smallest male or female of that species or genus and no minimum size limit has been entered",Herbivore
+Sapphirina auronitens f,,Copepod,Sapphirina,auronitens,129042,2.115,Boltovskoy 1999,Omnivore
+Sapphirina spp. j,,Copepod,Sapphirina,spp.,128722,1.42,"‘Species j’ (juvenile) (eg. Acartia spp. j or Centropages australiensis j )  the maximum size limit is based on the minimum size of either the smallest male or female of that species or genus and no minimum size limit has been entered",Omnivore
+Parvocalanus spp. f,,Copepod,Parvocalanus,spp.,347746,0.67,Razouls 2013,Herbivore
+Appendicularia,,Appendicularian,,,146421,,,unknown
+Barnacle nauplii,,Cirripedia,,,1082,,,unknown
+Nauplii euphausiid,,Euphausiid,,,110671,,,unknown
+Pseudevadne tergestina,,Cladoceran,Pseudevadne,tergestina,106278,,,unknown
+Sipunculid worm larvae,,Sipunculid,,,1296,,,unknown
+Clausocalanus parapergens f,,Copepod,Clausocalanus,parapergens,104507,1.175,Frost & Fleminger 1968,Herbivore
+Rhincalanus nasutus m,,Copepod,Rhincalanus,nasutus,104543,3.5,Boltovskoy 1999,Herbivore
+Limacina,,Mollusc,Limacina,spp.,138122,,,unknown
+Calocalanus spp. j,,Copepod,Calocalanus,spp.,104193,0.5,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Herbivore
+Clausocalanus spp. i,,Copepod,Clausocalanus,spp.,104161,1.28,‘Species i’ (eg. Clausocalanus spp. i) size range based on the min & max size range for all the female species of that genus present in database,Herbivore
+Ditrichocorycaeus andrewsi m,,Copepod,Ditrichocorycaeus,andrewsi,128804,0.845,Razouls 2012,Carnivore
+Metridia spp. f,,Copepod,Metridia,spp.,104190,3.32,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Omnivore
+Calanopia aurivilli m,,Copepod,Calanopia,aurivilli,346200,1.24,Razouls 2013,Carnivore
+Microsetella spp. m,,Copepod,Microsetella,spp.,115341,0.515,‘Species m’ (male) (eg. Acartia spp. m ) size range based on the min & max size range for all the male species of that genus in the database,Omnivore
+Labidocera minuta f,,Copepod,Labidocera,minuta,220921,2,Boltovskoy 1999,Carnivore
+Onychocorycaeus spp. m,,Copepod,Onychocorycaeus,spp.,128638,1.015,‘Species m’ (male) (eg. Acartia spp. m ) size range based on the min & max size range for all the male species of that genus in the database,Carnivore
+Phyllosoma larvae,,Decapod,,,383017,,,unknown
+Copilia hendorffi f,,Copepod,Copilia,hendorffi,346293,4.5,Razouls 2012,Omnivore
+Evadne nordmanni f,,Cladoceran,Evadne,nordmanni,106273,,,unknown
+Leptothecata,,Cnidarian,,,13552,,,unknown
+Candacia bipinnata f,,Copepod,Candacia,bipinnata,104475,2.5,Boltovskoy 1999,Carnivore
+Candacia bipinnata m,,Copepod,Candacia,bipinnata,104475,2.325,Boltovskoy 1999,Carnivore
+Canthocalanus pauper f,,Copepod,Canthocalanus,pauper,220834,1.45,Boltovskoy 1999,Herbivore
+Cosmocalanus darwinii,,Copepod,Cosmocalanus,darwinii,361259,2,Boltovskoy 1999,Herbivore
+Subeucalanus dentatus f,,Copepod,Subeucalanus,dentatus,360662,2.4,Razouls 2013,Herbivore
+Metacalanus aurivillii f,,Copepod,Metacalanus,aurivillii,353392,0.59,Razouls 2013,Herbivore
+Clausocalanus furcatus f,,Copepod,Clausocalanus,furcatus,104503,1.125,Frost & Fleminger 1968,Herbivore
+Ditrichocorycaeus spp. m,,Copepod,Ditrichocorycaeus,spp.,128635,0.955,‘Species m’ (male) (eg. Acartia spp. m ) size range based on the min & max size range for all the male species of that genus in the database,Carnivore
+Onychocorycaeus spp. f,,Copepod,Onychocorycaeus,spp.,128638,1.795,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Carnivore
+Tortanus spp. j,,Copepod,Tortanus,spp.,157683,0.9,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Carnivore
+Paracalanus parvus m,,Copepod,Paracalanus,parvus,104685,1.07,Boltovskoy 1999,Herbivore
+Pleuromamma piseki f,,Copepod,Pleuromamma,piseki,104640,1.85,Boltovskoy 1999,Omnivore
+Hemicyclops spp. j,,Copepod,Hemicyclops,spp.,394447,1.52,Moon S.Y. & I.H. Kim. (2010),Carnivore
+Metridia lucens m,,Copepod,Metridia,lucens,104633,1.96,Boltovskoy 1999,Omnivore
+Onychocorycaeus agilis f,,Copepod,Onychocorycaeus,agilis,359743,1.075,Razouls 2012,Carnivore
+Sapphirina spp. f,,Copepod,Sapphirina,spp.,128722,3.35,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Omnivore
+Oncaea paraclevei f,,Copepod,Oncaea,paraclevei,361875,0.655,Bottger-Schnack 2001,Omnivore
+Labidocera acuta m,,Copepod,Labidocera,acuta,104726,3.05,Boltovskoy 1999,Carnivore
+Oithona attenuata typical f,,Copepod,Oithona,attenuata typical,220944,0.75,Nishida 1985,Herbivore
+Sapphirina stellata j,,Copepod,Sapphirina,stellata,129060,2,Boltovskoy 1999,Omnivore
+Liriope tetraphylla,,Cnidarian,Liriope,tetraphylla,117568,,,unknown
+Ceratocymba spp.,,Cnidarian,Ceratocymba,spp.,135354,,,unknown
+Triconia umerus f,,Copepod,Triconia,umerus,361551,0.595,Bottger-Schnack 1999,Omnivore
+Nauplii zooplankton,,Other,,,1066,0.3,,unknown
+Ditrichocorycaeus subtilis f,,Copepod,Ditrichocorycaeus,subtilis,128809,0.77,Razouls 2012,Carnivore
+Candacia truncata m,,Copepod,Candacia,truncata,220916,1.775,Razouls 2012,Carnivore
+Ditrichocorycaeus andrewsi f,,Copepod,Ditrichocorycaeus,andrewsi,128804,0.86,Razouls 2012,Carnivore
+Pterotracheoidea,,Mollusc,,,387338,,,unknown
+Pareucalanus langae f,,Copepod,Pareucalanus,langae,354594,6.83,Razouls 2012,Herbivore
+Evadne nordmanni m,,Cladoceran,Evadne,nordmanni,106273,,,unknown
+Triconia conifera complex f,,Copepod,Triconia,conifera complex,128957,1.11,Razouls 2012,Omnivore
+Oithona setigera f,,Copepod,Oithona,setigera,106655,1.52,Nishida 1985,Herbivore
+Microsetella spp. j,,Copepod,Microsetella,spp.,115341,0.33,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Omnivore
+Acartia tonsa m,Acanthacartia,Copepod,Acartia,tonsa,345943,1.05,Boltovskoy 1999,Omnivore
+Clausocalanus farrani f (<1.00mm),,Copepod,Clausocalanus,farrani,220843,1.12,Frost & Fleminger 1968,Herbivore
+Phaenna spinifera j,,Copepod,Phaenna,spinifera,104698,1.5,Razouls 2012,Herbivore
+Aetideus armatus f,,Copepod,Aetideus,armatus,104275,1.8,Boltovskoy 1999,Omnivore
+Pleuromamma spp. m,,Copepod,Pleuromamma,spp.,104191,2.55,‘Species m’ (male) (eg. Acartia spp. m ) size range based on the min & max size range for all the male species of that genus in the database,Omnivore
+Clytemnestra spp.,,Copepod,Clytemnestra,spp.,115273,1.115,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Omnivore
+Subeucalanus pileatus f,,Copepod,Subeucalanus,pileatus,104547,2.225,Boltovskoy 1999,Herbivore
+Harpacticoid,,Copepod,,,1102,0.625,,unknown
+Oncaea spp. m,,Copepod,Oncaea,spp.,128690,0.765,‘Species m’ (male) (eg. Acartia spp. m ) size range based on the min & max size range for all the male species of that genus in the database,Omnivore
+Onychocorycaeus giesbrechti m,,Copepod,Onychocorycaeus,giesbrechti,128817,0.855,Razouls 2012,Carnivore
+Squillidae,,Decapod,,,136093,,,unknown
+Oncaea curvata,,Copepod,Oncaea,curvata,344719,0.63,Boltovskoy 1999,Omnivore
+Thalia spp.,,Thaliacean,Thalia,spp.,137236,,,unknown
+Calanus simillimus CV,,Copepod,Calanus,simillimus,342436,3.21,Boltovskoy 1999,Herbivore
+Thysanoessa vicina/macrura calyptopis,,Euphausiid,Thysanoessa,vicina/macrura,110679,,,unknown
+Euchirella spp.,,Copepod,Euchirella,spp.,104120,4.725,Boltovskoy 1999 Based on E. rostrata and E. rostromagna female,Herbivore
+Small copepodite CI-CIII,,Copepod,,,1080,0.6,,Herbivore
+Eucalanus spp. CIV,,Copepod,Eucalanus,spp.,104171,5.85,,Herbivore
+Salpa thompsoni sol,,Thaliacean,Salpa,thompsoni,266545,,,unknown
+Vanadis longissima,,Polychaete,Vanadis,longissima,129766,,,unknown
+Euphausia superba furcilia,,Euphausiid,Euphausia,superba,236217,,,unknown
+Siphonophore / nectophore,,Cnidarian,,,1371,,,unknown
+Rhincalanus spp. CI,,Copepod,Rhincalanus,spp.,104172,3.85,,Herbivore
+Euphausia triacantha furcilia,,Euphausiid,Euphausia,triacantha,236220,,,unknown
+Diphyes chamissonis,,Cnidarian,Diphyes,chamissonis,287246,,,unknown
+Cydippida,,Ctenophore,,,1251,,,unknown
+Paraeuchaeta antarctica,,Copepod,Paraeuchaeta,antarctica,344974,9.15,"Bradford Haakonssen & Jillett 1983",Carnivore
+Clio spp.,,Mollusc,Clio,spp.,137751,,,unknown
+Vibilia antarctica,,Amphipod,Vibilia,antarctica,325408,,,unknown
+Rhincalanus spp. CII,,Copepod,Rhincalanus,spp.,104172,3.85,,Herbivore
+Canthocalanus pauper CV,,Copepod,Canthocalanus,pauper,220834,1.45,Boltovskoy 1999,Herbivore
+Nannocalanus minor CV,,Copepod,Nannocalanus,minor,104469,1.725,Boltovskoy 1999,Herbivore
+Euphausia similis calyptopis,,Euphausiid,Euphausia,similis,221048,,,unknown
+Thysanoessa macrura FI,,Euphausiid,Thysanoessa,macrura,236219,,,unknown
+Alciopid spp.,,Polychaete,Alciopid,spp.,932,,,unknown
+Thysanoessa macrura FVI,,Euphausiid,Thysanoessa,macrura,236219,,,unknown
+Oculosetella gracilis,,Copepod,Oculosetella,gracilis,116384,1.08,Razouls 2012,Omnivore
+Centropages gracilis m,,Copepod,Centropages,gracilis,220903,2.32,Boltovskoy 1999,Omnivore
+Primno spp.,,Amphipod,Primno,spp.,101806,,,unknown
+Calanoides carinatus,,Copepod,Calanoides,carinatus,104462,2.55,Boltovskoy 1999,Herbivore
+Euchirella spp. j,,Copepod,Euchirella,spp.,104120,2.5,Boltovskoy 1999,Herbivore
+Paraeuchaeta exigua m,,Copepod,Paraeuchaeta,exigua,345051,5.65,Boltovskoy 1999,Carnivore
+Paralabidocera antarctica f,,Copepod,Paralabidocera,antarctica,345234,1.8,,Carnivore
+Rhincalanus gigas m,,Copepod,Rhincalanus,gigas,220837,7.05,Boltovskoy 1999,Herbivore
+Stephos longipes m,,Copepod,Stephos,longipes,345365,0.825,Razouls 2012,Omnivore
+Pontella danae,,Copepod,Pontella,danae,354855,3.85,Razouls 2013,Carnivore
+Euchaeta concinna,,Copepod,Euchaeta,concinna,104551,2.995,"Bradford Haakonssen & Jillett 1983",Carnivore
+Oithona australis f,,Copepod,Oithona,australis,353988,0.605,Razouls 2013,Herbivore
+Paraeuchaeta biloba f,,Copepod,Paraeuchaeta,biloba,344996,5.85,"Based on female size Bradford Haakonssen & Jillett 1983",Carnivore
+Microcalanus pygmaeus m,,Copepod,Microcalanus,pygmaeus,104513,0.94,Razouls 2012,Herbivore
+Labidocera kroyeri stylifera,,Copepod,Labidocera,kroyeri stylifera,363402,2.61,Razouls 2013,Carnivore
+Brachycalanus rothlisbergi,,Copepod,Brachycalanus,rothlisbergi,346169,1.625,Razouls 2013,Herbivore
+Euchirella rostromagna m,,Copepod,Euchirella,rostromagna,342468,4.6,Razouls 2012,Herbivore
+Sapphirina stellata,,Copepod,Sapphirina,stellata,129060,2.375,Boltovskoy 1999,Omnivore
+Metridia gerlachei m,,Copepod,Metridia,gerlachei,344689,2.58,Boltovskoy 1999,Omnivore
+Sapphirina angusta,,Copepod,Sapphirina,angusta,129041,5.05,Boltovskoy 1999,Omnivore
+Metridia lucens,,Copepod,Metridia,lucens,104633,2.66,Boltovskoy 1999,Omnivore
+Corycaeus sewelli (invalid),,Copepod,Corycaeus,sewelli (invalid),,,,Carnivore
+Metacalanus aurivillii,,Copepod,Metacalanus,aurivillii,353392,0.595,Razouls 2013,Herbivore
+Oithona plumifera,,Copepod,Oithona,plumifera,106652,1.31,Nishida 1985,Herbivore
+Anawekia bilobata,,Copepod,Anawekia,bilobata,346088,0.85,Razouls 2013,unknown
+Labidocera dakini,,Copepod,Labidocera,dakini,346589,2.32,Razouls 2013,Carnivore
+Oithona attenuata typical,,Copepod,Oithona,attenuata typical,220944,0.75,Nishida 1985,Herbivore
+Lingula spp. larvae,,Brachiopod,Lingula,spp.,235158,,,unknown
+Copilia miribalis j,,Copepod,Copilia,mirabilis,129038,2.2,Boltovskoy 1999,Omnivore
+Oithona attenuata typical j,,Copepod,Oithona,attenuata typical,220944,0.4,Boltovskoy 1999,Herbivore
+Oithona plumifera j,,Copepod,Oithona,plumifera,106652,0.59,Boltovskoy 1999,Herbivore
+Kelleria spp. f,,Copepod,Kelleria,spp.,205653,0.98,Swe Thwin,Carnivore
+Kelleria spp. m,,Copepod,Kelleria,spp.,205653,0.81,Swe Thwin,Carnivore
+Corycaeus sewelli f (invalid),,Copepod,Corycaeus,sewelli (invalid),,,,Carnivore
+Farranula gibbula j,,Copepod,Farranula,gibbula,346477,0.83,Razouls 2013,Carnivore
+Dioithona rigida j,,Copepod,Dioithona,rigida,220943,0.55,Boltovskoy 1999,Herbivore
+Parategastes spp.,,Copepod,Parategastes,spp.,115445,3.05,Saetang Thanida and Supiyanit Maiphae. 2015,Omnivore
+Haloptilus longicornis,,Copepod,Haloptilus,longicornis,104431,1.84,Boltovskoy 1999,Carnivore
+Scolecithrix danae j,,Copepod,Scolecithrix,danae,104821,2.1,Boltovskoy 1999,Herbivore
+Acartia fossae j,Acanthacartia,Copepod,Acartia,fossae,345933,1.03,Razouls 2013,Omnivore
+Subeucalanus pileatus j,,Copepod,Subeucalanus,pileatus,104547,1.8,Boltovskoy 1999,Herbivore
+Undeuchaeta spp.,,Copepod,Undeuchaeta,spp.,104128,4.725,Boltovskoy 1999,Carnivore
+Paraeuchaeta spp. f,,Copepod,Paraeuchaeta,spp.,196874,8.495,,Carnivore
+Ferosagitta robusta,,Chaetognath,Ferosagitta,robusta,266249,,,unknown
+Candacia bipinnata,,Copepod,Candacia,bipinnata,104475,2.4,Boltovskoy 1999,Carnivore
+Euchaeta longicornis f,,Copepod,Euchaeta,longicornis,346439,2.89,Razouls 2013,Carnivore
+Mesocalanus spp. CV,,Copepod,Mesocalanus,spp.,104153,1.7,Boltovskoy 1999,Herbivore
+Macrosetella spp.,,Copepod,Macrosetella,spp.,115408,1.315,Boltovskoy 1999,Herbivore
+Paracalanus nanus f,,Copepod,Paracalanus,nanus,104684,0.6,Boltovskoy 1999,Herbivore
+Candacia bispinosa f,,Copepod,Candacia,bispinosa,220915,2.05,Boltovskoy 1999,Carnivore
+Conaea spp. f,,Copepod,Conaea,spp.,128688,1.005,Boltovskoy 1999,Omnivore
+Epicalymma spp. f,,Copepod,Epicalymma,spp.,128689,0.47,Boltovskoy 1999,Omnivore
+Haloptilus acutifrons f,,Copepod,Haloptilus,acutifrons,104422,2.8,Boltovskoy 1999,Carnivore
+Heterorhabdus papilliger m,,Copepod,Heterorhabdus,papilliger,104580,1.985,Based on female size Boltovskoy 1999,Carnivore
+Lucicutia gemina m,,Copepod,Lucicutia,gemina,104600,1.5,Boltovskoy 1999,Omnivore
+Lucicutia ovalis f,,Copepod,Lucicutia,ovalis,104609,1.65,Boltovskoy 1999,Omnivore
+Oncaea tenuimana f,,Copepod,Oncaea,tenuimana,354035,0.925,Razouls 2013,Omnivore
+Oncaea tenuimana m,,Copepod,Oncaea,tenuimana,354035,0.66,Razouls 2013,Omnivore
+Oncaeidae,,Copepod,,,128586,0.7,,Omnivore
+Pleuromamma indica m,,Copepod,Pleuromamma,indica,220900,2.17,Razouls 2013,Omnivore
+Poecilostomatoida / Cyclopoid m,,Copepod,,,1103,0.5,,unknown
+Acartia fossae m,Acanthacartia,Copepod,Acartia,fossae,345933,1.105,Razouls 2013,Omnivore
+Stephos maculosus f,,Copepod,Stephos,maculosus,355902,0.6,Razouls 2013,Omnivore
+Acrocalanus gracilis,,Copepod,Acrocalanus,gracilis,220838,1.1,Boltovskoy 1999,Herbivore
+Oithona simplex m,,Copepod,Oithona,simplex,106657,0.375,Boltovskoy 1999,Herbivore
+Oncaea paraclevei m,,Copepod,Oncaea,paraclevei,361875,0.655,Bottger-Schnack 2001,Omnivore
+Triconia derivata f,,Copepod,Triconia,derivata,361552,1.135,Razouls 2013,Omnivore
+Pseudodiaptomus spp. f,,Copepod,Pseudodiaptomus,spp.,157680,1.105,,Omnivore
+Oithona aruensis j,,Copepod,Oithona,aruensis,353987,0.43,Razouls 2013,Herbivore
+Triconia furcula f,,Copepod,Triconia,furcula,128959,1.125,Razouls 2013,Omnivore
+Triconia minuta f,,Copepod,Triconia,minuta,128960,0.605,Razouls 2013,Omnivore
+Undeuchaeta plumosa m,,Copepod,Undeuchaeta,plumosa,104343,3.375,Boltovskoy 1999,Carnivore
+Monstrilla spp.,,Copepod,Monstrilla,spp.,119780,2.212,Razouls 2013,unknown
+Paracalanus aculeatus minor m,,Copepod,Paracalanus,aculeatus minor,362834,0.775,unknown,Herbivore
+Lucifer hanseni,,Decapod,Lucifer,hanseni,107121,,,unknown
+Undeuchaeta plumosa,,Copepod,Undeuchaeta,plumosa,104343,3.525,Boltovskoy 1999,Carnivore
+Mesosagitta minima,,Chaetognath,Mesosagitta,minima,105437,,,unknown
+Ctenocalanus spp. j,,Copepod,Ctenocalanus,spp.,104162,0.8,Boltovskoy 1999,Herbivore
+Clausocalanus ingens,,Copepod,Clausocalanus,ingens,345778,1.67,Frost & Fleminger 1968,Herbivore
+Ditrichocorycaeus spp.,,Copepod,Ditrichocorycaeus,spp.,128635,1.025,,Carnivore
+Calanoid copepods (large),,Copepod,,,104079,3,,Omnivore
+Oithona brevicornis,,Copepod,Oithona,brevicornis,106643,0.6,Nishida 1985,Herbivore
+Subeucalanus subtenuis,,Copepod,Subeucalanus,subtenuis,104549,2.875,Boltovskoy 1999,Herbivore
+Centropages calaninus,,Copepod,Centropages,calaninus,104492,1.9,Boltovskoy 1999,Omnivore
+Globorotalia spp.,,Foraminifera,Globorotalia,spp.,112200,,,unknown
+Salpa thompsoni,,Thaliacean,Salpa,thompsoni,266545,,,unknown
+Penaeus semisulcatus,,Decapod,Penaeus,semisulcatus,107112,,,unknown
+Penaeus spp.,,Decapod,Penaeus,spp.,106822,,,unknown
+Pleopis polyphemoides,,Cladoceran,Pleopis,polyphemoides,247981,,,unknown
+Boeckella triarticulata,,Copepod,Boeckella,triarticulata,349268,1.39,Twombly Saran Nancy Clancy and Carolyn W. Burns 1998,Omnivore
+Cyprididae,,Ostracod,,,146873,,,unknown
+Mesochra spp.,,Copepod,Mesochra,spp.,115241,0.45,Hamond R 1971,unknown
+Quinquelaophonte wellsi,,Copepod,Quinquelaophonte,wellsi,356545,0.61,Bjornberg T. 2010.,Omnivore
+Fritillaria borealis,,Appendicularian,Fritillaria,borealis,103375,,,unknown
+Lensia multicristata,,Cnidarian,Lensia,multicristata,135436,,,unknown
+Xystonella spp.,,Ciliophora,Xystonella,spp.,183574,,,unknown
+Bothidae larvae,,Fish,,,125576,,,unknown
+Pseudodiaptomus cornutus m,,Copepod,Pseudodiaptomus,cornutus,355148,1.165,Razouls 2012,Omnivore
+Atlanta spp.,,Mollusc,Atlanta,spp.,137687,,,unknown
+Jasus edwardsii,,Decapod,Jasus,edwardsii,382879,,,unknown
+Pontellina spp. f,,Copepod,Pontellina,spp.,104210,1.6,,Carnivore
+Neocalanus tonsus CV,,Copepod,Neocalanus,tonsus,344701,2.3,,Herbivore
+Ophiuroidea,,Echinoderm,,,1806,,,unknown
+Megamphopus spp.,,Amphipod,Megamphopus,spp.,101560,,,unknown
+Ferosagitta ferox,,Chaetognath,Sagitta,ferox,266247,,,unknown
+Pontella hanloni,,Copepod,Pontella,hanloni,354863,1.45,,Carnivore
+Nanomia spp.,,Cnidarian,Nanomia,spp.,135392,,,unknown
+Acartia bispinosa f,Odontacartia,Copepod,Acartia (Odontacartia),bispinosa,346051,1.4,,Omnivore
+Parundella spp.,,Ciliophora,Parundella,spp.,345911,,,unknown
+Ampithoe spp.,,Amphipod,Ampithoe,spp.,101459,,,unknown
+Tetraleberis brevis,,Ostracod,Tetraleberis,brevis,451064,,,unknown
+Caprella spp.,,Amphipod,Caprella,spp.,101430,,,unknown
+Rhopalophthalmus egregius,,Mysida,Rhopalophthalmus,egregius,161453,,,unknown
+Anchialina grossa,,Mysida,Anchialina,grossa,161483,,,unknown
+Leucothoe spp.,,Amphipod,Leucothoe,spp.,101580,,,unknown
+Eusarsiella springthorpei,,Ostracod,Eusarsiella,springthorpei,451400,,,unknown
+Echinospira larva,,Mollusc,,,101,,,unknown
+Isias uncipes,,Copepod,Isias,uncipes,346573,1.55,Bayly I. A. E. 1964,Omnivore
+Fritillaria formica,,Appendicularian,Fritillaria,formica,103379,,,unknown
+Aoridae,,Amphipod,,,101368,,,unknown
+Scolecitrichidae j,,Copepod,,,104103,2.1,,Herbivore
+Cypris spp.,,Ostracod,Cypris,spp.,415273,,,unknown
+Cylindroleberis spp.,,Ostracod,Cylindroleberis,spp.,146869,,,unknown
+Pelagia noctiluca,,Cnidarian,Pelagia,noctiluca,135305,,,unknown
+Brachionus spp.,,Rotifer,Brachionus,spp.,134937,,,unknown
+Helicosalpa virgula,,Thaliacean,Cyclosalpa,virgula,137262,,,unknown
+Vargula spp.,,Ostracod,Vargula,spp.,127527,,,unknown
+Nematoscelis difficilis,,Euphausiid,Nematoscelis,difficilis,237861,,,unknown
+Longipedia rosea,,Copepod,Longipedia,rosea,116374,0.85,Wells 1980,Omnivore
+Rhincalanus cornutus,,Copepod,Rhincalanus,cornutus,104542,3.35,Boltovskoy 1999,Herbivore
+Streetsia steenstrupi,,Amphipod,Streetsia,steenstrupi,421625,,,unknown
+Oxycephalus clausi,,Amphipod,Oxycephalus,clausi,220731,,,unknown
+Calamorhynchus pellucidus,,Amphipod,Calamorhynchus,pellucidus,236582,,,unknown
+Phronima colletti,,Amphipod,Phronima,colletti,236606,,,unknown
+Cranocephalus scleroticus,,Amphipod,Cranocephalus,scleroticus,236585,,,unknown
+Vibilia cultripes,,Amphipod,Vibilia,cultripes,180767,,,unknown
+Brachyscelus crusculum,,Amphipod,Brachyscelus,crusculum,103241,,,unknown
+Eirene spp.,,Cnidarian,Eirene,spp.,117080,,,unknown
+Rhabdonella spiralis,,Ciliophora,Rhabdonella,spiralis,235763,,,unknown
+Lipmanella dictyoceras,,Radiozoa,Lipmanella,dictyoceras,413077,,,unknown
+Pontellidae f,,Copepod,,,104097,1.69,,Carnivore
+Polynoid polychaeta,,Polychaete,,,883,,,unknown
+Labidocera acutifrons f,,Copepod,Labidocera,acutifrons,104727,3.7,,Carnivore
+Salpingella acuminata,,Ciliophora,Salpingella,acuminata,417228,,,unknown
+Kelleria australiensis,,Copepod,Kelleria,australiensis,352459,1.23,,Carnivore
+Pseudodiaptomus australiensis,,Copepod,Pseudodiaptomus,australiensis,355133,1.25,,Omnivore
+Cyttarocylis ampulla f. cassis,,Ciliophora,Cyttarocylis,ampulla f. cassis,736284,,,unknown
+Thysanoessa gregaria furcilia FIII,,Euphausiid,Thysanoessa,gregaria,110707,,,unknown
+Thysanoessa gregaria furcilia FI,,Euphausiid,Thysanoessa,gregaria,110707,,,unknown
+Euchaeta marinella f,,Copepod,Euchaeta,marinella,346441,2.75,,Carnivore
+Lubbockia aculeata f,,Copepod,Lubbockia,aculeata,128893,2.1,,Omnivore
+Xystonellopsis spp.,,Ciliophora,Xystonellopsis,spp.,416150,,,unknown
+Codonellopsis obesa,,Ciliophora,Codonellopsis,obesa,417161,,,unknown
+Codonella amphorella,,Ciliophora,Codonella,amphorella,417133,,,unknown
+Gebiidea zoea,,Decapod,,,477323,,,unknown
+Paralovenia spp.,,Cnidarian,Paralovenia,spp.,267690,,,unknown
+Candacia curta,,Copepod,Candacia,curta,104476,,Razouls 2012,Carnivore
+Ditrichocorycaeus spp. j,,Copepod,Ditrichocorycaeus,spp.,128635,,,unknown
+Monacanthidae larvae,,Fish,,,125610,,,unknown
+Ocyropsis spp.,,Ctenophore,Ocyropsis,spp.,106356,,,unknown
+Oncaea venusta typica j,,Copepod,Oncaea,venusta typica,363803,,,unknown
+Alpheid zoea,,Decapod,,,106776,,,unknown
+Acartia amboinensis m,Odontacartia,Copepod,Acartia (Odontacartia),amboinensis,346049,,Razouls 2013,Omnivore
+Acartia amboinensis f,Odontacartia,Copepod,Acartia (Odontacartia),amboinensis,346049,,Razouls 2013,Omnivore
+Gazelletta hexanema ,,Radiozoa,Gazelletta ,hexanema,877647,,,unknown
+Oceania armata ,,Cnidarian,Oceania ,armata,117437,,,unknown
+Labidocera detruncata f,,Copepod,Labidocera ,detruncata,104730,2.5,,unknown
+Diacavolinia angulata ,,Mollusc,Diacavolinia,angulata,139038,,,unknown
+Calocalanus longispinus f,,Copepod,Calocalanus,longispinus,104661,,,unknown
+Spongodiscidae (Quadrate),,Radiozoa,,,345858,,,unknown
+Monstrillidae m,,Copepod,,,119777,,,unknown
+Phronimidae,,Amphipod,,,101420,,,unknown
+Zoothamnium pelagicum ,,Ciliophora,Zoothamnium ,pelagicum ,196832,,,unknown
+Platysceloidea,,Amphipod,,,155698,,,unknown
+Themisto australis,,Amphipod,Themisto,australis,325381,,,unknown
+Themisto spp.,,Amphipod,Themisto,spp.,101800,,,unknown
+Decapod j,,Decapod,,,1130,,,unknown
+Decapod megalopa,,Decapod,,,1130,,,unknown
+Globigerinita uvula,,Foraminifera,Globigerinita,uvula,113465,,,unknown
+Lopadorrhynchidae,,Polychaete,,,933,,,unknown
+Teuthida,,Cephalopod,,,11716,,,unknown
+Dioithona oculata,,Copepod,Dioithona,oculata,346358,,,unknown
+Labidocera detruncata m,,Copepod,Labidocera ,detruncata,104730,,,unknown
+Foram A,,Foraminifera,,,,,,unknown
+Foram B,,Foraminifera,,,,,,unknown
+Radiolarian A,,Radiozoa,,,,,,unknown
+Radiolarian E,,Radiozoa,,,,,,unknown
+Radiolarian G,,Radiozoa,,,,,,unknown
+Radiolarian Q,,Radiozoa,,,,,,unknown
+Sapphirina metallina f,,Copepod,Sapphirina,metallina,129052,,,unknown
+Gaetanus spp.,,Copepod,Gaetanus,spp.,104121,,,unknown
+Lestrigonus spp.,,Amphipod,Lestrigonus,,180697,,,unknown
+Onychocorycaeus giesbrechti f,,Copepod,Onychocorycaeus,giesbrechti,128817,0.91,Boltovskoy 1999,Carnivore
+Egg ?,,Egg,,,,,,unknown
+Siphonophore abylidae,,Cnidarian,,,135336,,,unknown
+Centropages australiensis j,,Copepod,Centropages,australiensis,346252,1.4,Razouls 2012,Omnivore
+Calanoides patagoniensis m,,Copepod,Calanoides,patagoniensis,345759,2.205,Razouls 2012,Herbivore
+Oncaea venusta complex,,Copepod,Oncaea,venusta complex,128954,0.975,Bottger-Schnack & Huys 2004,Omnivore
+Calanopia minor f,,Copepod,Calanopia,minor,220919,1.4,Boltovskoy 1999,Carnivore
+Sapphirina nigromaculata f,,Copepod,Sapphirina,nigromaculata,129053,2.495,Razouls 2012,Omnivore
+Candacia cheirura m,,Copepod,Candacia,cheirura,345777,2.19,Boltovskoy 1999,Carnivore
+Paraeuchaeta spp.,,Copepod,Paraeuchaeta,spp.,196874,8.495,,Carnivore
+Clytemnestra spp. j,,Copepod,Clytemnestra,spp.,115273,0.93,"‘Species j’ (juvenile) (eg. Acartia spp. j or Centropages australiensis j )  the maximum size limit is based on the minimum size of either the smallest male or female of that species or genus and no minimum size limit has been entered",Omnivore
+Copilia quadrata f,,Copepod,Copilia,quadrata,129039,3.3,Boltovskoy 1999,Omnivore
+Cosmocalanus darwinii m,,Copepod,Cosmocalanus,darwinii,361259,1.84,Boltovskoy 1999,Herbivore
+Ctenocalanus vanus f,,Copepod,Ctenocalanus,vanus,104510,1.04,Boltovskoy 1999,Herbivore
+Euterpina acutifrons f,,Copepod,Euterpina,acutifrons,116162,0.625,Boltovskoy 1999,Omnivore
+Euterpina acutifrons m,,Copepod,Euterpina,acutifrons,116162,0.53,Boltovskoy 1999,Omnivore
+Scolecithricella nicobarica f,,Copepod,Scolecithricella,nicobarica,360544,1.29,Razouls 2013,Herbivore
+Calanid CIV,,Copepod,,,104079,2.4,,Herbivore
+Calocalanus pavo f,,Copepod,Calocalanus,pavo,104669,1.04,Boltovskoy 1999,Herbivore
+Candacia ethiopica f,,Copepod,Candacia,ethiopica,104478,2.575,Boltovskoy 1999,Carnivore
+Calanid CI,,Copepod,,,104079,2,,Herbivore
+Mesocalanus tenuicornis f,,Copepod,Mesocalanus,tenuicornis,104468,2.1,Boltovskoy 1999,Herbivore
+Microsetella rosea f,,Copepod,Microsetella,rosea,116116,0.625,Boltovskoy 1999,Omnivore
+Oncaea venusta complex f,,Copepod,Oncaea,venusta complex,128954,1.075,Bottger-Schnack & Huys 2004,Omnivore
+Pontellina morii f,,Copepod,Pontellina,morii,220928,1.63,Razouls 2012,Carnivore
+Temora discaudata m,,Copepod,Temora,discaudata,220898,1.735,Razouls 2012,Herbivore
+Temora turbinata m,,Copepod,Temora,turbinata,104880,1.245,Boltovskoy 1999,Herbivore
+Hyperiid amphipod,,Amphipod,,,101796,,,unknown
+Fish j,,Fish,,,11676,,,unknown
+Obelia spp.,,Cnidarian,Obelia,spp.,117034,,,unknown
+Oikopleuridae,,Appendicularian,,,103356,,,unknown
+Salpidae,,Thaliacean,,,137217,,,unknown
+Pteropod,,Mollusc,,,325345,,,unknown
+Agetus spp. f,,Copepod,Agetus,spp.,128633,1.545,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Carnivore
+Eucalanidae j,,Copepod,,,104085,3,,Herbivore
+Euchaeta marina gp m,,Copepod,Euchaeta,marina,104552,3.04,Boltovskoy 1999,Carnivore
+Oithona plumifera f,,Copepod,Oithona,plumifera,106652,1.31,Nishida 1985,Herbivore
+Onychocorycaeus catus m,,Copepod,Onychocorycaeus,catus,128816,0.885,Razouls 2012,Carnivore
+Corycaeus speciosus f,,Copepod,Corycaeus,speciosus,128800,1.99,Boltovskoy 1999,Carnivore
+Microsetella spp.,,Copepod,Microsetella,spp.,115341,0.59,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Omnivore
+Bestiolina spp. f,,Copepod,Bestiolina,spp.,346148,0.8,Bradford-Grieve 1993,Herbivore
+Calanopia aurivilli f,,Copepod,Calanopia,aurivilli,346200,1.305,Razouls 2013,Carnivore
+Ditrichocorycaeus tenuis f,,Copepod,Ditrichocorycaeus,tenuis,128810,0.84,Razouls 2012,Carnivore
+Oncaea venusta typica f,,Copepod,Oncaea,venusta typica,363803,1.2,Bottger-Schnack & Huys 2004,Omnivore
+Euchaeta marina m,,Copepod,Euchaeta,marina,104552,3.04,Boltovskoy 1999,Carnivore
+Euchaeta marina gp f,,Copepod,Euchaeta,marina,104552,3.52,Boltovskoy 1999,Carnivore
+Centropages australiensis m,,Copepod,Centropages,australiensis,346252,1.45,Razouls 2012,Omnivore
+Centropages furcatus m,,Copepod,Centropages,furcatus,104495,1.735,Boltovskoy 1999,Omnivore
+Centropages orsinii m,,Copepod,Centropages,orsinii,220901,1.275,Boltovskoy 1999,Omnivore
+Calocalanus cf. minutus f,,Copepod,Calocalanus,cf. minutus,346221,0.535,Boltovskoy 1999,Herbivore
+Clausocalanus arcuicornis m,,Copepod,Clausocalanus,arcuicornis,104502,1.07,Frost & Fleminger 1968,Herbivore
+Farranula spp.,,Copepod,Farranula,spp.,128636,0.855,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Carnivore
+Pontellina plumata m,,Copepod,Pontellina,plumata,104743,1.63,Boltovskoy 1999,Carnivore
+Facetotecta cyprid,,Thecostraca,,,150305,,,unknown
+Tortanus spp. m,,Copepod,Tortanus,spp.,157683,1.5,‘Species m’ (male) (eg. Acartia spp. m ) size range based on the min & max size range for all the male species of that genus in the database,Carnivore
+Undinula vulgaris CV,,Copepod,Undinula,vulgaris,104473,1.615,Bjornberg 1966,Herbivore
+Flaccisagitta spp.,,Chaetognath,Flaccisagitta,spp.,105406,,,unknown
+Scolecithrix spp. f,,Copepod,Scolecithrix,spp.,104230,2.1,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Herbivore
+Agetus limbatus m,,Copepod,Agetus,limbatus,128796,1.375,Razouls 2012,Carnivore
+Pleuromamma spp.,,Copepod,Pleuromamma,spp.,104191,3.29,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Omnivore
+Pseudodiaptomus aurivillii f,,Copepod,Pseudodiaptomus,aurivillii,220947,1.25,Razouls 2012,Omnivore
+Undinula vulgaris CIII,,Copepod,Undinula,vulgaris,104473,1.615,Bjornberg 1966,Herbivore
+Oncaea venusta venella f,,Copepod,Oncaea,venusta venella,363588,0.85,Bottger-Schnack & Huys 2004,Omnivore
+Labidocera pavo f,,Copepod,Labidocera,pavo,104735,2.11,Razouls 2012,Carnivore
+Ditrichocorycaeus aucklandicus f,,Copepod,Ditrichocorycaeus,aucklandicus,764978,1.135,Razouls 2012,Carnivore
+Pareucalanus langae m,,Copepod,Pareucalanus,langae,354594,6.355,Razouls 2012,Herbivore
+Aglaura hemistoma,,Cnidarian,Aglaura,hemistoma,117851,,,unknown
+Urocorycaeus lautus f,,Copepod,Urocorycaeus,lautus,128822,2.67,Razouls 2012,Carnivore
+Neocalanus spp.,,Copepod,Neocalanus,spp.,104155,3.35,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Herbivore
+Euchirella rostromagna f,,Copepod,Euchirella,rostromagna,342468,6.05,Razouls 2012,Herbivore
+Oithona longispina f,,Copepod,Oithona,longispina,106649,0.995,Nishida 1985,Herbivore
+Triconia elongata f,,Copepod,Triconia,elongata,361555,0.475,Bottger-Schnack 1999,Omnivore
+Eucalanus spp. f,,Copepod,Eucalanus,spp.,104171,6.525,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Herbivore
+Lucifer typus,,Decapod,Lucifer,typus,107122,,,unknown
+Heterorhabdus papilliger f,,Copepod,Heterorhabdus,papilliger,104580,1.985,Boltovskoy 1999,Carnivore
+Subeucalanus spp. m,,Copepod,Subeucalanus,spp.,104173,5.3,‘Species m’ (male) (eg. Acartia spp. m ) size range based on the min & max size range for all the male species of that genus in the database,Herbivore
+Centropages australiensis,,Copepod,Centropages,australiensis,346252,1.5,Razouls 2012,Omnivore
+Ophiurida larvae,,Echinoderm,,,123117,,,unknown
+Doliolum nationalis,,Thaliacean,Doliolum,nationalis,137247,,,unknown
+Poecilostomatoida / Cyclopoid j,,Copepod,,,1103,0.5,,unknown
+Harpacticoid m,,Copepod,,,1102,0.53,,unknown
+Euchaeta indica f,,Copepod,Euchaeta,indica,346438,2.605,"Bradford Haakonssen & Jillett 1983",Carnivore
+Oncaea venusta venella no hump f,,Copepod,Oncaea,venusta venella no hump,363588,0.85,Bottger-Schnack & Huys 2004,Omnivore
+Euchaeta marinella m,,Copepod,Euchaeta,marinella,346441,2.425,"Bradford Haakonssen & Jillett 1983",Carnivore
+Triconia dentipes complex f,,Copepod,Triconia,dentipes complex,128958,0.495,Razouls 2013,Omnivore
+Pleuromamma spp. f,,Copepod,Pleuromamma,spp.,104191,3.34,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Omnivore
+Lucicutia spp.,,Copepod,Lucicutia,spp.,104183,1.65,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Omnivore
+Pontella spp.,,Copepod,Pontella,spp.,104209,1.69,Based on size of female spp. in database.,Carnivore
+Neocalanus spp. j,,Copepod,Neocalanus,spp.,104155,2.3,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Herbivore
+Euchirella rostrata f,,Copepod,Euchirella,rostrata,104303,3.45,Boltovskoy 1999,Herbivore
+Sapphirina spp.,,Copepod,Sapphirina,spp.,128722,4.51,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Omnivore
+Evadne nordmanni f gravid,,Cladoceran,Evadne,nordmanni,106273,,,unknown
+Candacia ethiopica,,Copepod,Candacia,ethiopica,104478,2.525,Boltovskoy 1999,Carnivore
+Copepod j,,Copepod,,,1080,1,,unknown
+Pleuromamma borealis,,Copepod,Pleuromamma,borealis,104638,2.025,Boltovskoy 1999,Omnivore
+Ctenocalanus citer,,Copepod,Ctenocalanus,citer,342449,1.105,Boltovskoy 1999,Herbivore
+Vibilia armata,,Amphipod,Vibilia,armata,236632,,,unknown
+Thysanoessa gregaria,,Euphausiid,Thysanoessa,gregaria,110707,,,unknown
+Vibilia spp.,,Amphipod,Vibilia,spp.,101812,,,unknown
+Euphausia superba calyptopis,,Euphausiid,Euphausia,superba,236217,,,unknown
+Neocalanus tonsus CIV,,Copepod,Neocalanus,tonsus,344701,3.85,Boltovskoy 1999,Herbivore
+Alciopidae,,Polychaete,,,932,,,unknown
+Hyperiella dilatata,,Amphipod,Hyperiella,dilatata,325383,,,unknown
+Scolecithricella spp.,,Copepod,Scolecithricella,spp.,104229,1.27,Based on females of species in database,Herbivore
+Cyllopus lucasii,,Amphipod,Cyllopus,lucasii,325406,,,unknown
+Themisto gaudichaudii,,Amphipod,Themisto,gaudichaudii,325384,,,unknown
+Euphausia triacantha calyptopis,,Euphausiid,Euphausia,triacantha,236220,,,unknown
+Euphausia frigida,,Euphausiid,Euphausia,frigida,236218,,,unknown
+Hyperia spp.,,Amphipod,Hyperia,spp.,101796,,,unknown
+Rhincalanus gigas CIV,,Copepod,Rhincalanus,gigas,220837,7.88,Boltovskoy 1999,Herbivore
+Euphausia longirostris furcilia,,Euphausiid,Euphausia,longirostris,221053,,,unknown
+Euphausia frigida furcilia,,Euphausiid,Euphausia,frigida,236218,,,unknown
+Serratosagitta bierii,,Chaetognath,Serratosagitta,bierii,266267,,,unknown
+Eudoxoides spiralis,,Cnidarian,Eudoxoides,spiralis,135424,,,unknown
+Oithona similis f,,Copepod,Oithona,similis,106656,0.82,Nishida 1985,Herbivore
+Parasagitta spp.,,Chaetognath,Parasagitta,spp.,105408,,,unknown
+Hemichordate larvae,,Hemichordata,,,1818,,,unknown
+Oncaea venusta typica m,,Copepod,Oncaea,venusta typica,363803,0.765,Bottger-Schnack & Huys 2004,Omnivore
+Creseis spp.,,Mollusc,Creseis,spp.,137752,,,unknown
+Candacia maxima m,,Copepod,Candacia,maxima,342438,3.785,Razouls 2012,Carnivore
+Euphausia superba FII,,Euphausiid,Euphausia,superba,236217,,,unknown
+Heterorhabdus lobatus f,,Copepod,Heterorhabdus,lobatus,346538,2.35,Boltovskoy 1999,Carnivore
+Squid j,,Cephalopod,,,11707,,,unknown
+Goniopsyllus rostratus m,,Copepod,Goniopsyllus,rostratus,346510,0.85,Boltovskoy 1999,unknown
+Acartia clausi,Acartiura,Copepod,Acartia,clausi,149755,1.035,Razouls 2013,Omnivore
+Euchirella rostrata j,,Copepod,Euchirella,rostrata,104303,2.5,Boltovskoy 1999,Herbivore
+Paraeuchaeta exigua f,,Copepod,Paraeuchaeta,exigua,345051,6.85,Boltovskoy 1999,Carnivore
+Rhincalanus gigas f,,Copepod,Rhincalanus,gigas,220837,7.88,Boltovskoy 1999,Herbivore
+Calanopia aurivilli,,Copepod,Calanopia,aurivilli,346200,1.27,Razouls 2013,Carnivore
+Calanus propinquus f,,Copepod,Calanus,propinquus,342435,5.375,Boltovskoy 1999,Herbivore
+Paraeuchaeta biloba m,,Copepod,Paraeuchaeta,biloba,344996,5.25,"Based on female size Bradford Haakonssen & Jillett 1983",Carnivore
+Oithona similis m,,Copepod,Oithona,similis,106656,0.685,Nishida 1985,Herbivore
+Candacia bradyi,,Copepod,Candacia,bradyi,346234,1.59,Boltovskoy 1999,Carnivore
+Lucicutia tranteri (invalid),,Copepod,Lucicutia,tranteri (invalid),,,,Omnivore
+Copilia mirabilis,,Copepod,Copilia,mirabilis,129038,4.15,Boltovskoy 1999,Omnivore
+Labidocera laevidentata,,Copepod,Labidocera,laevidentata,220924,1.98,Razouls 2013,Carnivore
+Sapphirina opalina,,Copepod,Sapphirina,opalina,129054,3.245,Boltovskoy 1999,Omnivore
+Calocalanus pavo,,Copepod,Calocalanus,pavo,104669,1.04,Boltovskoy 1999,Herbivore
+Paraeuchaeta barbata f,,Copepod,Paraeuchaeta,barbata,104557,8.495,"Bradford Haakonssen & Jillett 1983",Carnivore
+Pleuromamma gracilis,,Copepod,Pleuromamma,gracilis,104639,1.875,Boltovskoy 1999,Omnivore
+Drepanopus spp.,,Copepod,Drepanopus,spp.,149746,2.14,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,unknown
+Microcalanus pygmaeus,,Copepod,Microcalanus,pygmaeus,104513,0.86,Razouls 2012,Herbivore
+Metridia spp.,,Copepod,Metridia,spp.,104190,3.32,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Omnivore
+Heterorhabdus lobatus,,Copepod,Heterorhabdus,lobatus,346538,2.35,Boltovskoy 1999,Carnivore
+Mesocalanus j,,Copepod,Mesocalanus,spp.,104153,1.7,Boltovskoy 1999,Herbivore
+Sapphirina gastrica,,Copepod,Sapphirina,gastrica,129045,2.44,Razouls 2013,Omnivore
+Anawekia spinosa m,,Copepod,Anawekia,spinosa,346097,0.7,Razouls 2013,unknown
+Calocalanus pavo j,,Copepod,Calocalanus,pavo,104669,0.63,Bradford-Grieve 1993,Herbivore
+Labidocera acuta j,,Copepod,Labidocera,acuta,104726,2.8,Boltovskoy 1999,Carnivore
+Leucosiid zoea,,Decapod,,,106758,,,unknown
+Paracalanus denudatus f,,Copepod,Paracalanus,denudatus,104682,0.815,Boltovskoy 1999,Herbivore
+Labidocera dakini f,,Copepod,Labidocera,dakini,346589,2.44,Razouls 2013,Carnivore
+Oncaea venusta complex j,,Copepod,Oncaea,venusta complex,128954,0.55,Razouls 2013,Omnivore
+Pleuromamma xiphias,,Copepod,Pleuromamma,xiphias,104643,4.5,Boltovskoy 1999,Omnivore
+Rhincalanus rostrifrons,,Copepod,Rhincalanus,rostrifrons,356829,3.105,Bradford-Grieve 1994,Herbivore
+Scaphocalanus spp.,,Copepod,Scaphocalanus,spp.,104228,4.851,Razouls 2013,Herbivore
+Brachiolaria larvae,,Echinoderm,,,148743,,,unknown
+Pseudodiaptomus galleti m,,Copepod,Pseudodiaptomus,galleti,355155,1.025,Razouls 2013,Omnivore
+Temora stylifera,,Copepod,Temora,stylifera,104879,1.725,Boltovskoy 1999,Herbivore
+Limnomedusae,,Cnidarian,,,1370,,,unknown
+Eudoxoides spiralis gonophore,,Cnidarian,Eudoxoides,spiralis,135424,,,unknown
+Brachyuran megalopa,,Decapod,,,106673,,,unknown
+Clausocalanus ingens m,,Copepod,Clausocalanus,ingens,345778,1.67,Frost & Fleminger 1968,Herbivore
+Hormiphora spp.,,Ctenophore,Hormiphora,spp.,106344,,,unknown
+Brachiopoda,,Mollusc,,,1803,,,unknown
+Oithona decipiens f,,Copepod,Oithona,decipiens,106644,0.68,Razouls 2013,Herbivore
+Paramacrochiron spp. m,,Copepod,Paramacrochiron,spp.,347694,1.55,not on worms,unknown
+Paramacrochiron spp. f,,Copepod,Paramacrochiron,spp.,347694,1.75,not on worms,unknown
+Acartia pacifica mertoni f,Odontacartia,Copepod,Acartia,pacifica mertoni,707481,0.98,Razouls 2013,Omnivore
+Calanopia spp.,,Copepod,Calanopia,spp.,104207,1.55,,Carnivore
+Cosmocalanus spp.,,Copepod,Cosmocalanus,spp.,346315,2,Boltovskoy 1999,Herbivore
+Parvocalanus spp.,,Copepod,Parvocalanus,spp.,347746,0.67,Razouls 2013,Herbivore
+Temoropia spp.,,Copepod,Temoropia,spp.,104242,0.7,Razouls 2013,Omnivore
+Aegisthus mucronatus f,,Copepod,Aegisthus,mucronatus,115509,1.94,Razouls 2013,Omnivore
+Arietellus pavoninus f,,Copepod,Arietellus,pavoninus,104350,5.025,Razouls 2013,Omnivore
+Farranula carinata m,,Copepod,Farranula,carinata,128811,0.85,Razouls 2012,Carnivore
+Farranula curta m,,Copepod,Farranula,curta,128812,0.72,Boltovskoy 1999,Carnivore
+Microniscus spp.,,Isopod,Microniscus,spp.,293852,,,unknown
+Lucicutia clausi f,,Copepod,Lucicutia,clausi,104595,1.85,Boltovskoy 1999,Omnivore
+Nullosetigera helgae f,,Copepod,Nullosetigera,helgae,361514,2.515,Razouls 2013,unknown
+Oncaea notopus f,,Copepod,Oncaea,notopus,128943,0.805,Razouls 2013,Omnivore
+Oncaea zernovi complex m,,Copepod,Oncaea,zernovi complex,128955,0.3,Razouls 2013,Omnivore
+Pontoeciella abyssicola f,,Copepod,Pontoeciella,abyssicola,136003,1.175,Razouls 2013,Omnivore
+Scolecithrix bradyi f,,Copepod,Scolecithrix,bradyi,360288,1.355,Boltovskoy 1999,Herbivore
+Oithona fallax m,,Copepod,Oithona,fallax,106645,0.685,Boltovskoy 1999,Herbivore
+Triconia minuta complex f,,Copepod,Triconia,minuta complex,128960,0.605,Razouls 2013,Omnivore
+Triconia spp. m,,Copepod,Triconia,spp.,128691,0.985,,Omnivore
+Paguridae larvae,,Decapod,,,106738,,,unknown
+Eucalanus elongatus,,Copepod,Eucalanus,elongatus,149718,5.85,Razouls 2012,Herbivore
+Euchirella rostrata,,Copepod,Euchirella,rostrata,104303,3.225,Boltovskoy 1999,Herbivore
+Neocalanus robustior,,Copepod,Neocalanus,robustior,104472,3.58,Boltovskoy 1999,Herbivore
+Thetys vagina,,Thaliacean,Thetys,vagina,137281,,,unknown
+Candacia pachydactyla,,Copepod,Candacia,pachydactyla,104483,2.6,Boltovskoy 1999,Carnivore
+Pleuromamma quadrungulata,,Copepod,Pleuromamma,quadrungulata,104641,4.02,Boltovskoy 1999,Omnivore
+Oithona australis,,Copepod,Oithona,australis,353988,0.595,Razouls 2013,Herbivore
+Oithona nishidai,,Copepod,Oithona,nishidai,361662,0.59,Razouls 2013,Herbivore
+Dioithona oculata f,,Copepod,Dioithona,oculata,346358,0.71,Boltovskoy 1999,Herbivore
+Thysanoessa gregaria calyptope,,Euphausiid,Thysanoessa,gregaria,110707,,,unknown
+Thysanoessa macrura FV,,Euphausiid,Thysanoessa,macrura,236219,,,unknown
+Paraeuchaeta spp. j,,Copepod,Paraeuchaeta,spp.,196874,3,,Carnivore
+Isopod j,,Isopod,,,1131,,,unknown
+Euconchoecia spp.,,Ostracod,Euconchoecia,spp.,127538,,,unknown
+Ciliate,,Ciliophora,,,11,,,unknown
+Stegosoma magnum,,Appendicularian,Stegosoma,magnum,103422,,,unknown
+Centropages kroyeri,,Copepod,Centropages,kroyeri,104497,1.275,Boltovskoy 1999,Omnivore
+Dolioletta gegenbauri,,Thaliacean,Dolioletta,gegenbauri,214437,,,unknown
+Labidocera farrani m,,Copepod,Labidocera,farrani,346593,2.775,Razouls 2013,Carnivore
+Copilia lata f,,Copepod,Copilia,lata,129036,4.4,,Omnivore
+Clausocalanus lividus f,,Copepod,Clausocalanus,lividus,104505,1.6,,Herbivore
+Anthoathecata,,Cnidarian,,,13551,,,unknown
+Dadayiella ganymedes,,Ciliophora,Dadayiella,ganymedes,183542,,,unknown
+Oediceroides apicalis,,Amphipod,Oediceroides,apicalis,428739,,,unknown
+Neodoxomysis littoralis,,Mysida,Doxomysis,littoralis,226619,,,unknown
+Pseudodiaptomus inflexus,,Copepod,Pseudodiaptomus,inflexus,355164,1.225,,Omnivore
+Gladioferens spinosus,,Copepod,Gladioferens,spinosus,351945,1.23,,Omnivore
+Oithona robertsoni,,Copepod,Oithona,robertsoni,361663,0.57,,Herbivore
+Mnemiopsis spp.,,Ctenophore,Mnemiopsis,spp.,106355,,,unknown
+Oithona aruensis,,Copepod,Oithona,aruensis,353987,0.43,,Herbivore
+Aorchoides spp.,,Amphipod,Aorchoides,spp.,491906,,,unknown
+Polyonyx transversus,,Copepod,Polyonyx,transversus,410145,1,,unknown
+Cyclosalpa bakeri,,Thaliacean,Cyclosalpa,bakeri,266534,,,unknown
+Krohnitta pacifica,,Chaetognath,Krohnitta,pacifica,105428,,,unknown
+Acartia fancetti,Acartiura,Copepod,Acartia,fancetti,759373,0.9,,Omnivore
+Siriella aequiremis,,Mysida,Siriella,aequiremis,161474,,,unknown
+Paracypria tenuis,,Ostracod,Paracypria,tenuis,460237,,,unknown
+Pareucalanus attenuatus m,,Copepod,Pareucalanus,attenuatus,237968,4.395,Razouls 2013,Herbivore
+Pareucalanus attenuatus j,,Copepod,Pareucalanus,attenuatus,237968,2.75,Razouls 2013,Herbivore
+Paraeuchaeta russelli,,Copepod,Paraeuchaeta,russelli,359874,3.745,Razouls 2013,Carnivore
+Boeckella fluvialis m,,Copepod,Boeckella,fluvialis,349227,1.7,Dwight C. 1924.,Omnivore
+Boeckella fluvialis f,,Copepod,Boeckella,fluvialis,349227,1.8,Dwight C. 1924,Omnivore
+Moina spp. f,,Cladoceran,Moina,spp.,148346,,,unknown
+Parapronoe crustulum,,Amphipod,Parapronoe,crustulum,421616,,,unknown
+Phronima solitaria,,Amphipod,Phronima,solitaria,325385,,,unknown
+Phronimella elongata,,Amphipod,Phronimella,elongata,236611,,,unknown
+Streetsia porcella,,Amphipod,Streetsia,porcella,236593,,,unknown
+Cosmocalanus darwinii CV,,Copepod,Cosmocalanus,darwinii,361259,1.8,,Herbivore
+Oncaea spp. m <0.4mm,,Copepod,Oncaea,spp.,128690,0.3,,Omnivore
+Agalma spp.,,Cnidarian,Agalma,spp.,135385,,,unknown
+Haloptilus spp. j,,Copepod,Haloptilus,spp.,104140,5.37,,Carnivore
+Holothurian auricularia larva,,Echinoderm,,,1806,,,unknown
+Euphausia spp.,,Euphausiid,Euphausia,spp.,110673,,,unknown
+Eudoxoides spp.,,Cnidarian,Eudoxoides,spp.,135364,,,unknown
+Euchirella rostromagna j,,Copepod,Euchirella,rostromagna,342468,4.6,,Herbivore
+Nyctiphanes australis FIV,,Euphausiid,Nyctiphanes,australis,237863,,,unknown
+Euconchoecia aculeata,,Ostracod,Euconchoecia,aculeata,127784,,,unknown
+Euphausiid furcilia FV,,Euphausiid,,,110671,,,unknown
+Spadella cephaloptera,,Chaetognath,Spadella,cephaloptera,105468,,,unknown
+Metacirolana spp.,,Isopod,Matacirolana,spp.,118403,,,unknown
+Protozoea decapod larvae,,Decapod,,,1130,,,unknown
+Centropages violaceus f,,Copepod,Centropages,violaceus,104500,2,,Omnivore
+Codonella galea,,Ciliophora,Codonella,galea,417136,,,unknown
+Schizopera spp. f,,Copepod,Schizopera,spp.,115325,0.37,Karanovic T. and J. McRae. 2013,Omnivore
+Oculosetella gracilis f,,Copepod,Oculosetella,gracilis,116384,1.08,,Omnivore
+Callianassidae zoea,,Decapod,,,477324,,,unknown
+Xystonella lohmanni,,Ciliophora,Xystonella,lohmanni,427625,,,unknown
+Onychocorycaeus spp. ,,Copepod,Onychocorycaeus,spp.,128638,,,unknown
+Parundinella dakini j,,Copepod,Parundinella,dakini,360049,0.8,,unknown
+Phalacrophorus spp.,,Polychaete,Phalacrophorus,spp.,206129,,,unknown
+Candacia curta f,,Copepod,Candacia,curta,104476,,Razouls 2012,Carnivore
+Calanoides breivcornis f,,Copepod,Calanoides,brevicornis,357533,,,unknown
+Subeucalanus subcrassus i,,Copepod,Subeucalanus,subcrassus,104548,,,unknown
+Cunina spp.,,Cnidarian,Cunina,spp.,117072,,,unknown
+Pontella securifer f,,Copepod,Pontella,securifer,104740,,Razouls 2013,Carnivore
+Sulculeolaria biloba ,,Cnidarian,Sulculeolaria,biloba,135445,,,unknown
+Schmidingerella serrata,,Ciliophora,Schmidingerella,serrata,732868,,,unknown
+Bradyidius spp. f,,Copepod,Bradyidius,spp.,104115,,,unknown
+Pisces egg,,Other,,,11676,,,unknown
+Scaphocalanus echinatus,,Copepod,Scaphocalanus,echinatus,104793,,,unknown
+Typhloscolex muelleri,,Polychaete,Typhloscolex,muelleri,131582,,,unknown
+Dairella californica,,Amphipod,Dairella,californica,421612,,,unknown
+Hyperoche spp.,,Amphipod,Hyperoche ,spp.,101798,,,unknown
+Bougainvillia vervoorti ,,Cnidarian,Bougainvillia ,vervoorti,284247,,,unknown
+Euchaeta longicornis j,,Copepod,Euchaeta,longicornis,346439,,,unknown
+Collosphaeridae,,Radiozoa,,,367309,,,unknown
+Clausocalanus farrani i,,Copepod,Clausocalanus,farrani,220843,,,unknown
+Syngnathid ,,Fish,,,125606,,,unknown
+Foram G,,Foraminifera,,,,,,unknown
+Radiolarian D,,Radiozoa,,,,,,unknown
+Radiolarian J,,Radiozoa,,,,,,unknown
+Radiolarian M,,Radiozoa,,,,,,unknown
+Helicostomella,,Ciliophora,Helicostomella,spp.,172434,,,unknown
+Urocorycaeus longistylis f,,Copepod,Urocorycaeus,longistylis,765217,2.535,Boltovskoy 1999,Carnivore
+Monstrillidae j,,Copepod,,,119777,2.212,,Omnivore
+Euchaeta concinna f,,Copepod,Euchaeta,concinna,104551,2.3,Boltovskoy 1999,Carnivore
+Candacia cheirura f,,Copepod,Candacia,cheirura,345777,2.625,Boltovskoy 1999,Carnivore
+Lucicutia flavicornis m,,Copepod,Lucicutia,flavicornis,104597,1.5,Boltovskoy 1999,Omnivore
+Clausocalanus spp. f,,Copepod,Clausocalanus,spp.,104161,1.28,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Herbivore
+Corycaeus spp.,,Copepod,Corycaeus,spp.,128634,1.85,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Carnivore
+Paracalanus spp. f,,Copepod,Paracalanus,spp.,104196,1.03,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Herbivore
+Acartia pacifica f,Odontacartia,Copepod,Acartia,pacifica,346059,1.275,Razouls 2012,Omnivore
+Acartia tranteri m,Acartiura,Copepod,Acartia,tranteri,346042,0.95,Bradford-Grieve 1976,Omnivore
+Acrocalanus gibber m,,Copepod,Acrocalanus,gibber,104645,1.17,Boltovskoy 1999,Herbivore
+Acrocalanus gracilis f,,Copepod,Acrocalanus,gracilis,220838,1.26,Boltovskoy 1999,Herbivore
+Acrocalanus longicornis f,,Copepod,Acrocalanus,longicornis,104646,1.13,Boltovskoy 1999,Herbivore
+Acrocalanus monachus f,,Copepod,Acrocalanus,monachus,220839,0.975,Boltovskoy 1999,Herbivore
+Calanopia elliptica f,,Copepod,Calanopia,elliptica,104724,1.65,Boltovskoy 1999,Carnivore
+Calocalanus plumulosus f,,Copepod,Calocalanus,plumulosus,211848,1.065,Boltovskoy 1999,Herbivore
+Oithona Grp4 (round head) f,,Copepod,Oithona,grp 4,106485,0.45,Size compiled from species in group from Nishida 1985,Herbivore
+Amphipod j,,Amphipod,,,1135,,,unknown
+Candacia catula f,,Copepod,Candacia,catula,220913,1.525,Boltovskoy 1999,Carnivore
+Macrosetella gracilis m,,Copepod,Macrosetella,gracilis,116382,1.145,Boltovskoy 1999,Herbivore
+Oncaea media complex f,,Copepod,Oncaea,media complex,128938,0.755,Bottger-Schnack 2001,Omnivore
+Paracalanus aculeatus f,,Copepod,Paracalanus,aculeatus,104681,1.08,Bradford-Grieve 1994,Herbivore
+Pleuromamma quadrungulata f,,Copepod,Pleuromamma,quadrungulata,104641,4.14,Boltovskoy 1999,Omnivore
+Labidocera laevidentata m,,Copepod,Labidocera,laevidentata,220924,1.9,Razouls 2013,Carnivore
+Gammarid amphipod,,Amphipod,,,1207,,,unknown
+Barnacle cyprid,,Cirripedia,,,1082,,,unknown
+Chaetognatha,,Chaetognath,,,2081,,,unknown
+Doliolum spp.,,Thaliacean,Doliolum,spp.,137222,,,unknown
+Euphausiid calyptope,,Euphausiid,,,110671,,,unknown
+Euphausiid adult,,Euphausiid,,,110671,,,unknown
+Fish egg,,Fish,,,11676,,,unknown
+Gastropod veliger,,Mollusc,,,101,,,unknown
+Megalope,,Decapod,,,1066,,,unknown
+Tortanus spp. f,,Copepod,Tortanus,spp.,157683,1.5,,Carnivore
+Labidocera spp. j,,Copepod,Labidocera,spp.,104208,1.45,"‘Species j’ (juvenile) (eg. Acartia spp. j or Centropages australiensis j )  the maximum size limit is based on the minimum size of either the smallest male or female of that species or genus and no minimum size limit has been entered",Carnivore
+Parvocalanus crassirostris m,,Copepod,Parvocalanus,crassirostris,360051,0.37,Boltovskoy 1999,Herbivore
+Rhincalanus rostrifrons f,,Copepod,Rhincalanus,rostrifrons,356829,3.4,Bradford-Grieve 1994,Herbivore
+Sapphirina nigromaculata m,,Copepod,Sapphirina,nigromaculata,129053,2.375,Boltovskoy 1999,Omnivore
+Scolecithrix danae m,,Copepod,Scolecithrix,danae,104821,2.09,Boltovskoy 1999,Herbivore
+Evadne spinifera f gravid,,Cladoceran,Evadne,spinifera,106274,,,unknown
+Trachymedusae,,Cnidarian,,,16350,,,unknown
+Bestiolina spp. m,,Copepod,Bestiolina,spp.,346148,0.8,Bradford-Grieve 1993,Herbivore
+Oncaea waldemari f,,Copepod,Oncaea,waldemari,360846,0.46,Bottger-Schnack 2001,Omnivore
+Podon spp. f,,Cladoceran,Podon,spp.,106269,,Unknown,unknown
+Candacia ethiopica m,,Copepod,Candacia,ethiopica,104478,2.2,Boltovskoy 1999,Carnivore
+Centropages australiensis f,,Copepod,Centropages,australiensis,346252,1.5,Razouls 2012,Omnivore
+Centropages bradyi f,,Copepod,Centropages,bradyi,104491,2.25,Boltovskoy 1999,Omnivore
+Centropages spp. j,,Copepod,Centropages,spp.,104159,1.25,"‘Species j’ (juvenile) (eg. Acartia spp. j or Centropages australiensis j )  the maximum size limit is based on the minimum size of either the smallest male or female of that species or genus and no minimum size limit has been entered",Omnivore
+Centropages spp.,,Copepod,Centropages,spp.,104159,1.625,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Omnivore
+Lucifer typus f,,Decapod,Lucifer,typus,107122,,,unknown
+Farranula spp. j,,Copepod,Farranula,spp.,128636,0.61,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Carnivore
+Subeucalanus crassus m,,Copepod,Subeucalanus,crassus,104544,3,Boltovskoy 1999,Herbivore
+Aetideus acutus m,,Copepod,Aetideus,acutus,104273,1.4,Boltovskoy 1999,Omnivore
+Evadne spp.,,Cladoceran,Evadne,spp.,106267,,,unknown
+Farranula curta f,,Copepod,Farranula,curta,128812,0.72,Boltovskoy 1999,Carnivore
+Candacia spp. m,,Copepod,Candacia,spp.,104157,1.79,‘Species m’ (male) (eg. Acartia spp. m ) size range based on the min & max size range for all the male species of that genus in the database,Carnivore
+Corycaeus clausi m,,Copepod,Corycaeus,clausi,128798,1.43,Razouls 2012,Carnivore
+Ditrichocorycaeus spp. f,,Copepod,Ditrichocorycaeus,spp.,128635,1.025,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Carnivore
+Scolecithrix spp. j,,Copepod,Scolecithrix,spp.,104230,1.8,"‘Species j’ (juvenile) (eg. Acartia spp. j or Centropages australiensis j )  the maximum size limit is based on the minimum size of either the smallest male or female of that species or genus and no minimum size limit has been entered",Herbivore
+Labidocera cervi f,,Copepod,Labidocera,cervi,346588,3.02,Razouls 2012,Carnivore
+Pontellopsis krameri m,,Copepod,Pontellopsis,krameri,360246,1.885,Razouls 2012,Carnivore
+Agetus flaccus m,,Copepod,Agetus,flaccus,128795,1.415,Razouls 2012,Carnivore
+Ditrichocorycaeus aucklandicus m,,Copepod,Ditrichocorycaeus,aucklandicus,764978,1.01,Razouls 2012,Carnivore
+Oithona simplex f,,Copepod,Oithona,simplex,106657,0.375,Nishida 1985,Herbivore
+Calanoides spp. j,,Copepod,Calanoides,spp.,104151,2.08,"‘Species j’ (juvenile) (eg. Acartia spp. j or Centropages australiensis j )  the maximum size limit is based on the minimum size of either the smallest male or female of that species or genus and no minimum size limit has been entered",Herbivore
+Clytemnestra farrani f,,Copepod,Clytemnestra,farrani,346283,0.94,Razouls 2012,Omnivore
+Agetus spp. m,,Copepod,Agetus,spp.,128633,1.38,‘Species m’ (male) (eg. Acartia spp. m ) size range based on the min & max size range for all the male species of that genus in the database,Carnivore
+Corycaeus vitreus f,,Copepod,Corycaeus,vitreus,346298,1.71,Razouls 2012,Carnivore
+Eucalanus spp.,,Copepod,Eucalanus,spp.,104171,5.85,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Herbivore
+Rhincalanus spp. f,,Copepod,Rhincalanus,spp.,104172,4.1,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Herbivore
+Subeucalanus spp. f,,Copepod,Subeucalanus,spp.,104173,3.425,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Herbivore
+Acartia spp. f,,Copepod,Acartia,spp.,104108,1.18,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Omnivore
+Macrosetella gracilis,,Copepod,Macrosetella,gracilis,116382,1.315,Boltovskoy 1999,Herbivore
+Oithona spp. small m,,Copepod,Oithona,spp.,106485,0.85,‘Species m’ (male) (eg. Acartia spp. m ) size range based on the min & max size range for all the male species of that genus in the database,Herbivore
+Sapphirina ovatolanceolata / gemma m,,Copepod,Sapphirina,ovatolanceolata / gemma,129055,3.22,Razouls 2012,Omnivore
+Paracalanus spp.,,Copepod,Paracalanus,spp.,104196,1.05,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Herbivore
+Neocalanus tonsus f,,Copepod,Neocalanus,tonsus,344701,3.75,Boltovskoy 1999,Herbivore
+Oithona spp.,,Copepod,Oithona,spp.,106485,1.13,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Herbivore
+Calanidae m,,Copepod,,,104079,2.7,,Herbivore
+Ctenophore,,Ctenophore,,,1248,,,unknown
+Calocalanus spp.,,Copepod,Calocalanus,spp.,104193,0.465,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Herbivore
+Thysanoessa vicina/macrura,,Euphausiid,Thysanoessa,vicina/macrura,110679,,,unknown
+Calanus spp.,,Copepod,Calanus,spp.,104152,3.95,Razouls 2013,Herbivore
+Branchiopoda,,Branchiopod,,,1069,,,unknown
+Spongiobranchaea australis,,Mollusc,Spongiobranchaea,australis,533451,,,unknown
+Paraeuchaeta cf. barbata,,Copepod,Paraeuchaeta,cf. barbata,104557,8.495,"Bradford Haakonssen & Jillett 1983",Carnivore
+Limacina retroversa,,Mollusc,Limacina,retroversa,140227,,,unknown
+Pseudosagitta gazellae,,Chaetognath,Pseudosagitta,gazellae,266258,,,unknown
+Pleuromamma CIII,,Copepod,Pleuromamma,spp.,104191,3.29,,Omnivore
+Opisthobranchia,,Mollusc,,,382226,,,unknown
+Soestia zonaria agg,,Thaliacean,Soestia,zonaria,137275,,,unknown
+Gladioferens pectinatus f,,Copepod,Gladioferens,pectinatus,356667,1.42,McKinnon 1985,Omnivore
+Gladioferens inermis m,,Copepod,Gladioferens,inermis,351944,1.1,Nyan Taw 1975,Omnivore
+Ctenocalanus citer m,,Copepod,Ctenocalanus,citer,342449,1.22,Boltovskoy 1999,Herbivore
+Onchocalanus spp. m,,Copepod,Onchocalanus,spp.,104201,6.83,‘Species m’ (male) (eg. Acartia spp. m ) size range based on the min & max size range for all the male species of that genus in the database,Herbivore
+Thysanoessa macrura CIII,,Euphausiid,Thysanoessa,macrura,236219,,,unknown
+Euphausia superba FI,,Euphausiid,Euphausia,superba,236217,,,unknown
+Euphausia similis furcilia,,Euphausiid,Euphausia,similis,221048,,,unknown
+Oithona attenuata j,,Copepod,Oithona,attenuata,220944,0.4,Boltovskoy 1999,Herbivore
+Goniopsyllus rostratus f,,Copepod,Goniopsyllus,rostratus,346510,0.8,Boltovskoy 1999,unknown
+Triconia conifera complex,,Copepod,Triconia,conifera complex,128957,1.11,Razouls 2012,Omnivore
+Calanopia australica f,,Copepod,Calanopia,australica,346201,1.93,Razouls 2013,Carnivore
+Lubbockia spp. m,,Copepod,Lubbockia,spp.,128672,2.075,‘Species m’ (male) (eg. Acartia spp. m ) size range based on the min & max size range for all the male species of that genus in the database,Omnivore
+Pterosagitta draco,,Chaetognath,Pterosagitta,draco,105430,,,unknown
+Pontella securifer,,Copepod,Pontella,securifer,104740,3.985,Boltovskoy 1999,Carnivore
+Acrocalanus longicornis,,Copepod,Acrocalanus,longicornis,104646,1.105,Boltovskoy 1999,Herbivore
+Subeucalanus crassus,,Copepod,Subeucalanus,crassus,104544,3.25,Boltovskoy 1999,Herbivore
+Farranula concinna,,Copepod,Farranula,concinna,346476,0.915,Razouls 2012,Carnivore
+Calanus propinquus m,,Copepod,Calanus,propinquus,342435,4.85,Boltovskoy 1999,Herbivore
+Centropages orsinii,,Copepod,Centropages,orsinii,220901,1.425,Boltovskoy 1999,Omnivore
+Centropages bradyi,,Copepod,Centropages,bradyi,104491,2.25,Boltovskoy 1999,Omnivore
+Neocalanus tonsus,,Copepod,Neocalanus,tonsus,344701,3.75,Boltovskoy 1999,Herbivore
+Onchocalanus spp.,,Copepod,Onchocalanus,spp.,104201,7.54,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Herbivore
+Euchirella rostromagna,,Copepod,Euchirella,rostromagna,342468,6.05,Razouls 2012,Herbivore
+Scolecithricella minor,,Copepod,Scolecithricella,minor,104811,1.27,Boltovskoy 1999,Herbivore
+Farranula gibbula,,Copepod,Farranula,gibbula,346477,0.965,Razouls 2012,Carnivore
+Centropages gracilis,,Copepod,Centropages,gracilis,220903,2.32,Boltovskoy 1999,Omnivore
+Anawekia robusta,,Copepod,Anawekia,robusta,346092,0.85,Razouls 2013,unknown
+Bradyidius styliformis,,Copepod,Bradyidius,styliformis,346181,1.38,Razouls 2013,Omnivore
+Ridgewayia flemingeri,,Copepod,Ridgewayia,flemingeri,355326,0.665,Razouls 2013,Omnivore
+Auricularia spp. larvae,,Echinoderm,Auricularia,spp.,345834,,,unknown
+Doliolidae,,Thaliacean,,,137215,,,unknown
+Pseudodiaptomus mertoni j,,Copepod,Pseudodiaptomus,mertoni,355172,0.91,Razouls 2013,Omnivore
+Thysanoessa spp.,,Euphausiid,Thysanoessa,spp.,110679,,,unknown
+Pseudodiaptomus galleti f,,Copepod,Pseudodiaptomus,galleti,355155,1.26,Razouls 2013,Omnivore
+Undinula spp. f,,Copepod,Undinula,spp.,104156,2.75,Boltovskoy 1999,Herbivore
+Pterosagitta spp.,,Chaetognath,Pterosagitta,spp.,105403,,,unknown
+Gonophores unid,,Cnidarian,,,1267,,,unknown
+Scolecitrichidae m,,Copepod,,,104103,2.1,,Herbivore
+Candacia worthingtoni f,,Copepod,Candacia,worthingtoni,346243,1.95,Razouls 2013,Carnivore
+Cyttarocylis spp.,,Ciliophora,Cyttarocylis,spp.,150205,,,unknown
+Undella spp.,,Ciliophora,Undella,spp.,235764,,,unknown
+Tintinnina ,,Ciliophora,,,732976,,,unknown
+Longipediidae,,Copepod,,,115160,0.85,Wells 1980,Omnivore
+Undinula vulgaris,,Copepod,Undinula,vulgaris,104473,2.03,Boltovskoy 1999,Herbivore
+Aetideidae m,,Copepod,,,104075,1.51,,Omnivore
+Candacia pachydactyla m,,Copepod,Candacia,pachydactyla,104483,2.525,Boltovskoy 1999,Carnivore
+Clausocalanus paululus m,,Copepod,Clausocalanus,paululus,104508,0.73,Frost & Fleminger 1968,Herbivore
+Conaea rapax m,,Copepod,Conaea,rapax,128917,0.935,Boltovskoy 1999,Omnivore
+Euchirella pulchra f,,Copepod,Euchirella,pulchra,104302,3.72,Boltovskoy 1999,Herbivore
+Lucicutia clausi m,,Copepod,Lucicutia,clausi,104595,1.75,Boltovskoy 1999,Omnivore
+Macandrewella spp. f,,Copepod,Macandrewella,spp.,346643,3.42,Razouls 2013,Herbivore
+Oncaea ovalis complex f,,Copepod,Oncaea,ovalis complex,128945,0.475,Razouls 2013,Omnivore
+Oncaeidae m,,Copepod,,,128586,0.5,,Omnivore
+Paracalanidae m,,Copepod,,,104093,0.935,,Herbivore
+Parvocalanus dubia f,,Copepod,Parvocalanus,dubia,360052,0.74,Razouls 2013,Herbivore
+Parvocalanus dubia m,,Copepod,Parvocalanus,dubia,360052,0.74,unknown,Herbivore
+Scolecithricella spp. f,,Copepod,Scolecithricella,spp.,104229,1.27,,Herbivore
+Spinoncaea humesi f,,Copepod,Spinoncaea,humesi,362082,0.315,Razouls 2013,Omnivore
+Pontella novaezealandiae m,,Copepod,Pontella,novaezealandiae,354875,4.95,Razouls 2013,Carnivore
+Acartia erythraea m,Odontacartia,Copepod,Acartia,erythraea,346054,1.2,Razouls 2013,Omnivore
+Labidocera minuta,,Copepod,Labidocera,minuta,220921,1.85,Boltovskoy 1999,Carnivore
+Triconia conifera f,,Copepod,Triconia,conifera,128957,1.11,Razouls 2013,Omnivore
+Dioithona rigida m,,Copepod,Dioithona,rigida,220943,0.805,Nishida 1985,Herbivore
+Triconia giesbrechti f,,Copepod,Triconia,giesbrechti,361556,0.435,Razouls 2013,Omnivore
+Vettoria spp. m,,Copepod,Vettoria,spp.,128723,0.813,Razouls 2013,Omnivore
+Pareucalanus spp.,,Copepod,Pareucalanus,spp.,237967,5.025,Razouls 2013,Herbivore
+Oncaea clevei j,,Copepod,Oncaea,clevei,354022,0.65,Bottger-Schnack 2001,Omnivore
+Oncaea clevei m,,Copepod,Oncaea,clevei,354022,0.65,Bottger-Schnack 2001,Omnivore
+Candacia armata,,Copepod,Candacia,armata,104474,2.6,Boltovskoy 1999,Carnivore
+Acrocalanus monachus,,Copepod,Acrocalanus,monachus,220839,0.92,Boltovskoy 1999,Herbivore
+Parundinella dakini m,,Copepod,Parundinella,dakini,360049,0.8,Razouls 2013,unknown
+Lubbockia squillimana m,,Copepod,Lubbockia,squillimana,128894,1.525,Boltovskoy 1999,Omnivore
+Bosmina meridionalis,,Cladoceran,Bosmina,meridionalis,106265,,,unknown
+Keratella spp.,,Rotifer,Keratella,spp.,134941,,,unknown
+Oikopleura (Coecaria) longicauda,,Appendicularian,Oikopleura (Coecaria),longicauda,103414,,,unknown
+Labidocera kroyeri m,,Copepod,Labidocera,kroyeri,104731,2.325,Razouls 2012,Carnivore
+Labidocera moretoni m,,Copepod,Labidocera,moretoni,220925,1.575,Razouls 2013,Carnivore
+Stephos tropicus,,Copepod,Stephos,tropicus,360650,0.775,,Omnivore
+Pleurobrachia spp.,,Ctenophore,Pleurobrachia,spp.,106346,,,unknown
+Salpingella spp.,,Ciliophora,Salpingella,spp.,183566,,,unknown
+Pseudodiaptomus baylyi,,Copepod,Pseudodiaptomus,baylyi,355135,1.175,,Omnivore
+Erythrops nana,,Mysida,Erythrops,nana,226741,,,unknown
+Fritillaria haplostoma,,Appendicularian,Fritillaria,haplostoma,103382,,,unknown
+Kowalevskia tenuis,,Appendicularian,Kowalevskia,tenuis,103392,,,unknown
+Salpa aspera,,Thaliacean,Salpa,aspera,137270,,,unknown
+Serratosagitta serratodentata atlantica,,Chaetognath,Sagitta,serratodentata atlantica,379365,,,unknown
+Siriella spp.,,Mysida,Siriella,spp.,119906,,,unknown
+Rhizophysa spp.,,Cnidarian,Rhizophysa,spp.,135384,,,unknown
+Keratella quadrata quadrata,,Rotifer,Keratella,quadrata quadrata,148319,,,unknown
+Diacria trispinosa,,Mollusc,Diacria,trispinosa,139045,,,unknown
+Eusarsiella claviformis,,Ostracod,Eusarsiella,claviformis,451362,,,unknown
+Stephos spp.,,Copepod,Stephos,spp.,104239,0.775,,Omnivore
+Naidinae,,Annelid,,,176043,,,unknown
+Oikopleura (Vexillaria) albicans,,Appendicularian,Oikopleura (Vexillaria),albicans,103404,,,unknown
+Codonella spp.,,Ciliophora,Codonella,spp.,150203,,,unknown
+Urothoe spp.,,Amphipod,Urothoe,spp.,101789,,,unknown
+Creseis clava,,Mollusc,Creseis,acicula,605988,,,unknown
+Parasterope spp.,,Ostracod,Parasterope,spp.,127515,,,unknown
+Boeckella spp.,,Copepod,Boeckella,spp.,346853,1.75,,Omnivore
+Stylocheiron carinatum,,Euphausiid,Stylocheiron,carinatum,110701,,,unknown
+Eucalanidae f,,Copepod,,,104085,4.181,,Herbivore
+Metis jousseaumei,,Copepod,Metis,jousseaumei,220672,1,unknown,Omnivore
+Oithona brevicornis j,,Copepod,Oithona,brevicornis,106643,0.47,Boltovskoy 1999,Herbivore
+Diaphanosoma spp.,,Cladoceran,Diaphanosoma,spp.,234062,,,unknown
+Bestiolina similis j,,Copepod,Bestiolina,similis,346152,0.8,Bradford-Grieve 1993,Herbivore
+Acartia ensifera f,Acartiura,Copepod,Acartia,ensifera,345716,1.005,Razouls 2013,Omnivore
+Paracalanus aculeatus j,,Copepod,Paracalanus,aculeatus,104681,0.8,Boltovskoy 1999,Herbivore
+Calamoecia trifida m,,Copepod,Calamoecia,trifida,349519,1,Bayly I.A.E. (1961),Omnivore
+Streetsia challengeri,,Amphipod,Streetsia,challengeri,236592,,,unknown
+Lycaea vincentii,,Amphipod,Lycaea,vincentii,421621,,,unknown
+Oxycephalus latirostris,,Amphipod,Oxycephalus,latirostris,547493,,,unknown
+Physalia physalis,,Cnidarian,Physalia,physalis,135479,,,unknown
+Oncaea venusta typica,,Copepod,Oncaea,venusta typica,363803,,,unknown
+Sergestid zoea,,Decapod,,,106731,,,unknown
+Rhabdonella apophysata,,Ciliophora,Rhabdonella,apophysata,427512,,,unknown
+Anomura megalopa larvae,,Decapod,,,106671,,,unknown
+Clupeidae,,Fish,,,125464,,,unknown
+Triconia dentipes complex m,,Copepod,Triconia,dentipes complex,128958,0.495,,Omnivore
+Bougainvillia spp.,,Cnidarian,Bougainvillia,spp.,117015,,,unknown
+Nematoscelis megalops f,,Euphausiid,Nematoscelis,spp.,110695,,,unknown
+Tintinnopsis lobiancoi,,Ciliophora,Tintinnopsis,lobiancoi,163919,,,unknown
+Tintinnopsis mortensenii,,Ciliophora,Tintinnopsis,mortensenii,417152,,,unknown
+Dictyocysta spp.,,Ciliophora,Dictyocysta,spp.,196834,,,unknown
+Dromiidae larvae,,Decapod,,,106742,,,unknown
+Krohnitta spp.,,Chaetognath,Krohnitta,spp.,105402,,,unknown
+Hydromyles globulosus,,Mollusc,Hydromyles,globulosus,719622,,,unknown
+Corycaeus spp. j,,Copepod,Corycaeus,spp.,128634,,,unknown
+Scolecitrichopsis ctenopus f,,Copepod,Scolecitrichopsis,ctenopus,361576,,,unknown
+Penilia avirostris j,,Cladoceran,Penilia,avirostris,106272,,,unknown
+Scorpaenidae fish Larvae  ,,Fish,,,125595,,,unknown
+Lethrinidae larvae,,Fish,,,151458,,,unknown
+Orbulina spp.,,Foraminifera,Orbulina,,112203,,,unknown
+Pontellina spp. j,,Copepod,Pontellina,spp.,104210,,,unknown
+Oncaea minima complex f,,Copepod,Oncaea,minima complex,128940,0.195,,unknown
+Miracia efferata m,,Copepod,Miracia ,efferata,116383,1.6,,unknown
+Pontella cristata m,,Copepod,Pontella,cristata,360146,4.55,,unknown
+Helicostomella subulata,,Ciliophora,Helicostomella,subulata,240437,,,unknown
+Bracht of physonect,,Cnidarian,,,135335,,,unknown
+Brown spiny egg,,Other,,,,,,unknown
+Centropages brachiatus,,Copepod,Centropages,brachiatus,104490,,,unknown
+Cavoliniidae larvae ,,Mollusc,,,137793,,,unknown
+Calocalanus minutus f,,Copepod,Calocalanus,minutus,346221,,,unknown
+Neogloboquadrina incompta,,Rotifer,Neogloboquadrina,incompta,113474,,,unknown
+Clausocalanus pergens,,Copepod,Clausocalanus,pergens,104509,,,unknown
+Maupasia spp.,,Polychaete,Maupasia,spp.,129327,,,unknown
+Nematocarcinus longirostris,,Decapod,Nematocarcinus,longirostris,514315,,,unknown
+Creseis virgula,,Mollusc,Creseis,virgula,139035,,,unknown
+Anchovy eggs,,Egg,,,,,,unknown
+Spongodiscidae (Trigonal),,Radiozoa,,,345858,,,unknown
+Diacavolinia spp.,,Mollusc,Diacavolinia,spp.,137754,,,unknown
+Scolecitrichidae f,,Copepod,,,104103,,,unknown
+Foram D,,Foraminifera,,,,,,unknown
+Radiolarian B,,Radiozoa,,,,,,unknown
+Euchaetomera spp.,,Mysida,Euchaetomera,spp.,119857,,,unknown
+Melicertissa antrichardsoni,,Cnidarian,Melicertissa ,antrichardsoni,1296958,,,unknown
+Neocalanus spp. f,,Copepod,Neocalanus,spp.,104155,,,unknown
+Euconchoecia aculeata gravid ,,Ostracod,Euconchoecia,aculeata,127784,,,unknown
+Lensia conoidea,,Cnidarian,Lensia,conoidea,135426,,,unknown
+Urocorycaeus furcifer m,,Copepod,Urocorycaeus,furcifer,128821,1.26,Boltovskoy 1999,Carnivore
+Arachnid terrestrial,,Other,,,,,,unknown
+Calocalanus styliremis f,,Copepod,Calocalanus,styliremis,104673,0.655,Boltovskoy 1999,Herbivore
+Ditrichocorycaeus dahli m,,Copepod,Ditrichocorycaeus,dahli,764980,0.835,Razouls 2012,Carnivore
+Corycaeus spp. m,,Copepod,Corycaeus,spp.,128634,1.555,‘Species m’ (male) (eg. Acartia spp. m ) size range based on the min & max size range for all the male species of that genus in the database,Carnivore
+Clytemnestra spp. m,,Copepod,Clytemnestra,spp.,115273,1.175,‘Species m’ (male) (eg. Acartia spp. m ) size range based on the min & max size range for all the male species of that genus in the database,Omnivore
+Lucicutia spp. f,,Copepod,Lucicutia,spp.,104183,1.6,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Omnivore
+Bryozoan (Cyphonaute larvae),,Bryozoan,,,146142,,,unknown
+Calanus australis f,,Copepod,Calanus,australis,345760,3.095,Boltovskoy 1999,Herbivore
+Calanoid j,,Copepod,,,1100,1,,Herbivore
+Farranula spp. f,,Copepod,Farranula,spp.,128636,0.91,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Carnivore
+Farranula spp. m,,Copepod,Farranula,spp.,128636,0.785,‘Species m’ (male) (eg. Acartia spp. m ) size range based on the min & max size range for all the male species of that genus in the database,Carnivore
+Euterpina acutifrons j,,Copepod,Euterpina,acutifrons,116162,0.5,Boltovskoy 1999,Omnivore
+Harpacticoid j,,Copepod,,,1102,0.5,,unknown
+Candacia catula m,,Copepod,Candacia,catula,220913,1.475,Boltovskoy 1999,Carnivore
+Acrocalanus gracilis m,,Copepod,Acrocalanus,gracilis,220838,0.94,Boltovskoy 1999,Herbivore
+Acrocalanus spp. f,,Copepod,Acrocalanus,spp.,104192,1.11,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Herbivore
+Anomuran zoea,,Decapod,,,106671,,,unknown
+Mecynocera clausi m,,Copepod,Mecynocera,clausi,104616,1.03,Boltovskoy 1999,Herbivore
+Microsetella rosea m,,Copepod,Microsetella,rosea,116116,0.515,Razouls 2012,Omnivore
+Nannocalanus minor m,,Copepod,Nannocalanus,minor,104469,1.5,Boltovskoy 1999,Herbivore
+Nauplii poecilostomatoida / cyclopoid,,Copepod,,,1103,0.2,,Herbivore
+Oithona Grp3 (pointy head) f,,Copepod,Oithona,grp 3,106485,1.425,Size compiled from species in group from Nishida 1985,Herbivore
+Oithona Grp2 (diamond) f,,Copepod,Oithona,grp 2,106485,1.2,Size compiled from species in group from Nishida 1985,Herbivore
+Oithona spp. j,,Copepod,Oithona,spp.,106485,0.36,"‘Species j’ (juvenile) (eg. Acartia spp. j or Centropages australiensis j )  the maximum size limit is based on the minimum size of either the smallest male or female of that species or genus and no minimum size limit has been entered",Herbivore
+Oncaea clevei complex m,,Copepod,Oncaea,clevei complex,354022,0.53,Bottger-Schnack 2001,Omnivore
+Paracalanus indicus m,,Copepod,Paracalanus,indicus,104683,0.935,Bradford-Grieve 1994,Herbivore
+Pleuromamma borealis m,,Copepod,Pleuromamma,borealis,104638,1.985,Boltovskoy 1999,Omnivore
+Sapphirina gemma f INVALID USE S.OVATOLANCEOLATA,,Copepod,Sapphirina,gemma,129046,3.15,Boltovskoy 1999,Omnivore
+Temora turbinata f,,Copepod,Temora,turbinata,104880,1.33,Boltovskoy 1999,Herbivore
+Temoropia mayumbaensis f,,Copepod,Temoropia,mayumbaensis,104881,0.875,Boltovskoy 1999,Omnivore
+Undinula vulgaris f,,Copepod,Undinula,vulgaris,104473,2.75,Boltovskoy 1999,Herbivore
+Undinula vulgaris m,,Copepod,Undinula,vulgaris,104473,2.27,Boltovskoy 1999,Herbivore
+Cnidarian larvae,,Cnidarian,,,1267,,,unknown
+Colonial ascidian larvae,,Ascidian,,,1839,,,unknown
+Evadne nordmanni,,Cladoceran,Evadne,nordmanni,106273,,,unknown
+Evadne spinifera,,Cladoceran,Evadne,spinifera,106274,,,unknown
+Hydroid,,Cnidarian,,,19494,,,unknown
+Polychaete,,Polychaete,,,883,,,unknown
+Cavoliniidae body,,Mollusc,,,23000,,,unknown
+Siphonophore,,Cnidarian,,,1371,,,unknown
+Tomopteris spp.,,Polychaete,Tomopteris,spp.,129715,,,unknown
+Bivalve larvae,,Mollusc,,,105,,,unknown
+Acartia sinjiensis m,Acanthacartia,Copepod,Acartia,sinjiensis,345940,0.915,Razouls 2012,Omnivore
+Eucalanus elongatus f,,Copepod,Eucalanus,elongatus,149718,6.525,Razouls 2012,Herbivore
+Labidocera pavo m,,Copepod,Labidocera,pavo,104735,1.88,Razouls 2012,Carnivore
+Pontellina cf. morii f,,Copepod,Pontellina,cf. morii,220928,1.63,"Based on Pontellina morii Razouls 2012",Carnivore
+Urocorycaeus longistylis m,,Copepod,Urocorycaeus,longistylis,765217,2.12,Boltovskoy 1999,Carnivore
+Corycaeus speciosus m,,Copepod,Corycaeus,speciosus,128800,1.67,Boltovskoy 1999,Carnivore
+Urocorycaeus lautus m,,Copepod,Urocorycaeus,lautus,128822,0.935,Boltovskoy 1999,Carnivore
+Microsetella norvegica,,Copepod,Microsetella,norvegica,116115,0.43,Boltovskoy 1999,Omnivore
+Onychocorycaeus latus f,,Copepod,Onychocorycaeus,latus,128818,2.845,Boltovskoy 1999,Carnivore
+Oncaea scottodicarloi f,,Copepod,Oncaea,scottodicarloi,128950,0.545,Bottger-Schnack 2001,Omnivore
+Ditrichocorycaeus anglicus m,,Copepod,Ditrichocorycaeus,anglicus,128805,0.855,Razouls 2012,Carnivore
+Centropages furcatus f,,Copepod,Centropages,furcatus,104495,1.76,Boltovskoy 1999,Omnivore
+Oithona plumifera m,,Copepod,Oithona,plumifera,106652,1.31,Nishida 1985,Herbivore
+Clausocalanus arcuicornis f,,Copepod,Clausocalanus,arcuicornis,104502,1.385,Frost & Fleminger 1968,Herbivore
+Eucalanidae m,,Copepod,,,104085,3.802,Based on average size of males in database,Herbivore
+Thalia democratica,,Thaliacean,Thalia,democratica,137279,,,unknown
+Tortanus (Tortanus) barbatus f,,Copepod,Tortanus (Tortanus),barbatus,220937,1.625,Razouls 2012,Carnivore
+Candacia spp. f,,Copepod,Candacia,spp.,104157,2.2,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Carnivore
+Temora turbinata,,Copepod,Temora,turbinata,104880,1.27,Boltovskoy 1999,Herbivore
+Centropages elegans f,,Copepod,Centropages,elegans,346255,2.045,Razouls 2012,Omnivore
+Euchaeta acuta f,,Copepod,Euchaeta,acuta,104550,3.94,Boltovskoy 1999,Carnivore
+Centropages spp. f,,Copepod,Centropages,spp.,104159,1.95,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Omnivore
+Urocorycaeus furcifer f,,Copepod,Urocorycaeus,furcifer,128821,1.75,Razouls 2012,Carnivore
+Ditrichocorycaeus erythraeus f,,Copepod,Ditrichocorycaeus,erythraeus,764981,0.975,Razouls 2012,Carnivore
+Ditrichocorycaeus dahli f,,Copepod,Ditrichocorycaeus,dahli,764980,1.03,Razouls 2012,Carnivore
+Podon intermedius,,Cladoceran,Podon,intermedius,106276,,,unknown
+Flaccisagitta enflata,,Chaetognath,Flaccisagitta,enflata,105434,,,unknown
+Subeucalanus subcrassus m,,Copepod,Subeucalanus,subcrassus,104548,2.185,Bradford-Grieve 1994,Herbivore
+Onychocorycaeus pumilus m,,Copepod,Onychocorycaeus,pumilus,128820,0.68,Razouls 2012,Carnivore
+Macrosetella gracilis j,,Copepod,Macrosetella,gracilis,116382,1.13,Boltovskoy 1999,Herbivore
+Ditrichocorycaeus lubbocki f,,Copepod,Ditrichocorycaeus,lubbocki,128807,0.89,Razouls 2012,Carnivore
+Physonectae,,Cnidarian,,,135335,,,unknown
+Aidanosagitta neglecta,,Chaetognath,Aidanosagitta,neglecta,266708,,,unknown
+Rhincalanus spp. m,,Copepod,Rhincalanus,spp.,104172,3.35,‘Species m’ (male) (eg. Acartia spp. m ) size range based on the min & max size range for all the male species of that genus in the database,Herbivore
+Agetus typicus m,,Copepod,Agetus,typicus,128797,1.445,Razouls 2012,Carnivore
+Euchaeta concinna m,,Copepod,Euchaeta,concinna,104551,2.62,"Bradford Haakonssen & Jillett 1983",Carnivore
+Lucifer spp. f,,Decapod,Lucifer,spp.,106827,,Unknown,unknown
+Oncaea venusta medium f,,Copepod,Oncaea,venusta medium,128954,1.025,Bottger-Schnack & Huys 2004,Omnivore
+Oncaea mediterranea broad f,,Copepod,Oncaea,mediterranea broad,128939,1.4,Bottger-Schnack 1997,Omnivore
+Neocalanus gracilis f,,Copepod,Neocalanus,gracilis,104471,3.215,Boltovskoy 1999,Herbivore
+Calanoides spp. f,,Copepod,Calanoides,spp.,104151,2.465,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Herbivore
+Tisbidae spp. f,,Copepod,Tisbidae,spp.,115183,1,Johnson M.W. & J.B. Olson. (1948),unknown
+Fritillaria pellucida,,Appendicularian,Fritillaria,pellucida,103386,,,unknown
+Nannocalanus minor,,Copepod,Nannocalanus,minor,104469,1.725,Boltovskoy 1999,Herbivore
+Calanidae,,Copepod,,,104079,2.85,,Herbivore
+Lucifer spp. protozoea,,Decapod,Lucifer,spp.,106827,,,unknown
+Microsetella rosea,,Copepod,Microsetella,rosea,116116,0.745,Boltovskoy 1999,Omnivore
+Euchaeta rimana m,,Copepod,Euchaeta,rimana,346444,3.605,"Bradford Haakonssen & Jillett 1983",Carnivore
+Narcomedusae,,Cnidarian,,,16349,,,unknown
+Clausocalanus farrani/jobei f (1.00mm>x<1.2mm),,Copepod,Clausocalanus,farrani/jobei,104504,1.1,,Herbivore
+Aegisthus spp.,,Copepod,Aegisthus,spp.,115186,1.85,Razouls 2013,Omnivore
+Calanopia elliptica,,Copepod,Calanopia,elliptica,104724,1.65,Boltovskoy 1999,Carnivore
+Oncaea spp.,,Copepod,Oncaea,spp.,128690,0.855,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Omnivore
+Euchaeta spp.,,Copepod,Euchaeta,spp.,104174,3.255,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Carnivore
+Calanidae f,,Copepod,,,104079,2.85,,Herbivore
+Oncaea spp. f,,Copepod,Oncaea,spp.,128690,0.855,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Omnivore
+Oithona Grp5 (orange furcae) f,,Copepod,Oithona,grp 5,106485,0.805,Unknown,Herbivore
+Heterorhabdus austrinus,,Copepod,Heterorhabdus,austrinus,343728,3.355,,Carnivore
+Euphausia recurva,,Euphausiid,Euphausia,recurva,221047,,,unknown
+Large copepodite CII,,Copepod,,,1080,2.2,,Herbivore
+Chelophyes spp.,,Cnidarian,Chelophyes,spp.,135360,,,unknown
+Euphausia hanseni furcilia,,Euphausiid,Euphausia,hanseni,110685,,,unknown
+Iospilidae,,Polychaete,,,155189,,,unknown
+Nematoscelis megalops,,Euphausiid,Nematoscelis,spp.,110695,,,unknown
+Paraeuchaeta biloba,,Copepod,Paraeuchaeta,biloba,344996,5.475,"Based on female size Bradford Haakonssen & Jillett 1983",Carnivore
+Euphausia crystallorophias furcilia,,Euphausiid,Euphausia,crystallorophias,236216,,,unknown
+Euphausia superba,,Euphausiid,Euphausia,superba,236217,,,unknown
+Diphyes dispar,,Cnidarian,Diphyes,dispar,135420,,,unknown
+Eudoxoides mitra,,Cnidarian,Eudoxoides,mitra,135423,,,unknown
+Heterorhabdus papilliger,,Copepod,Heterorhabdus,papilliger,104580,1.985,Based on female size Boltovskoy 1999,Carnivore
+Euphausia longirostris,,Euphausiid,Euphausia,longirostris,221053,,,unknown
+Calanoid copepods (small),,Copepod,,,104079,1,,Herbivore
+Euphausia frigida calyptopis,,Euphausiid,Euphausia,frigida,236218,,,unknown
+Ctenocalanus spp.,,Copepod,Ctenocalanus,spp.,104162,1.125,Boltovskoy 1999,Herbivore
+Nyctiphanes australis calyptopis,,Euphausiid,Nyctiphanes,australis,237863,,,unknown
+Vanadis antarctica,,Polychaete,Vanadis,antarctica,335010,,,unknown
+Candacia falcifera f,,Copepod,Candacia,falcifera,342437,3.81,Razouls 2012,Carnivore
+Candacia maxima f,,Copepod,Candacia,maxima,342438,3.72,Razouls 2012,Carnivore
+Euphausia superba FVI,,Euphausiid,Euphausia,superba,236217,,,unknown
+Triconia antarctica m,,Copepod,Triconia,antarctica,345368,0.61,Boltovskoy 1999,Omnivore
+Oncaea atlantica complex m,,Copepod,Oncaea,atlantica complex,128926,0.24,Boltovskoy 1999,Omnivore
+Hyperia spinigera,,Amphipod,Hyperia,spinigera,103254,,,unknown
+Thysanoessa macrura furcilia,,Euphausiid,Thysanoessa,macrura,236219,,,unknown
+Thysanoessa macrura FIV,,Euphausiid,Thysanoessa,macrura,236219,,,unknown
+Centropages bradyi j,,Copepod,Centropages,bradyi,104491,1.9,Boltovskoy 1999,Omnivore
+Microsetella norvegica j,,Copepod,Microsetella,norvegica,116115,0.33,Boltovskoy 1999,Omnivore
+Clausocalanus arcuicornis,,Copepod,Clausocalanus,arcuicornis,104502,1.295,Frost & Fleminger 1968,Herbivore
+Calanopia australica m,,Copepod,Calanopia,australica,346201,1.845,Razouls 2013,Carnivore
+Calanoides acutus m,,Copepod,Calanoides,acutus,342434,5.25,Boltovskoy 1999,Herbivore
+Paraeuchaeta antarctica m,,Copepod,Paraeuchaeta,antarctica,344974,6.915,"Bradford Haakonssen & Jillett 1983",Carnivore
+Pontellopsis tasmanensis,,Copepod,Pontellopsis,tasmanensis,354898,1.485,Razouls 2013,Carnivore
+Pareucalanus attenuatus,,Copepod,Pareucalanus,attenuatus,237968,5.025,Razouls 2013,Herbivore
+Paramisophria fosshageni,,Copepod,Paramisophria,fosshageni,354297,1.325,Razouls 2013,Omnivore
+Ditrichocorycaeus asiaticus,,Copepod,Ditrichocorycaeus,asiaticus,358328,1.18,Razouls 2012,Carnivore
+Paraeuchaeta tumidula f,,Copepod,Paraeuchaeta,tumidula,104573,4.34,"Bradford Haakonssen & Jillett 1983",Carnivore
+Calanoides macrocarinatus f,,Copepod,Calanoides,macrocarinatus,345758,3.55,Boltovskoy 1999,Herbivore
+Subeucalanus subcrassus,,Copepod,Subeucalanus,subcrassus,104548,2.185,Bradford-Grieve 1994,Herbivore
+Labidocera acuta,,Copepod,Labidocera,acuta,104726,3.1,Boltovskoy 1999,Carnivore
+Dioithona rigida,,Copepod,Dioithona,rigida,220943,0.805,Nishida 1985,Herbivore
+Clausocalanus minor,,Copepod,Clausocalanus,minor,220842,1.17,Frost & Fleminger 1968,Herbivore
+Pleuromamma robusta f,,Copepod,Pleuromamma,robusta,104642,3.65,Boltovskoy 1999,Omnivore
+Acartia danae,Acartia,Copepod,Acartia,danae,346026,1.195,Boltovskoy 1999,Omnivore
+Pleuromamma piseki,,Copepod,Pleuromamma,piseki,104640,1.85,Boltovskoy 1999,Omnivore
+Candacia truncata,,Copepod,Candacia,truncata,220916,1.775,Boltovskoy 1999,Carnivore
+Sapphirina scarlata,,Copepod,Sapphirina,scarlata,129058,4.075,Boltovskoy 1999,Omnivore
+Pseudocyclops minya,,Copepod,Pseudocyclops,minya,355116,0.62,Razouls 2013,Omnivore
+Oithona simplex,,Copepod,Oithona,simplex,106657,0.375,Boltovskoy 1999,Herbivore
+Acartia erythraea f,Odontacartia,Copepod,Acartia,erythraea,346054,1.3,Razouls 2013,Omnivore
+Metacalanus aurivillii m,,Copepod,Metacalanus,aurivillii,353392,0.595,Razouls 2013,Herbivore
+Pinnotheres spp. zoea,,Decapod,Pinnotheres,spp.,106976,,,unknown
+Pontellopsis herdmani f,,Copepod,Pontellopsis,herdmani,220930,1.925,Razouls 2013,Carnivore
+Scolecithrix bradyi,,Copepod,Scolecithrix,bradyi,360288,1.355,Boltovskoy 1999,Herbivore
+Streetsia spp.,,Amphipod,Streetsia,spp.,236591,,,unknown
+Subeucalanus spp.,,Copepod,Subeucalanus,spp.,104173,5.3,,Herbivore
+Parvocalanus crassirostris j,,Copepod,Parvocalanus,crassirostris,360051,0.35,Boltovskoy 1999,Herbivore
+Microsetella rosea j,,Copepod,Microsetella,rosea,116116,0.64,Boltovskoy 1999,Omnivore
+Evadne spinifera m,,Cladoceran,Evadne,spinifera,106274,,,unknown
+Paraeuchaeta spp. m,,Copepod,Paraeuchaeta,spp.,196874,8.495,,Carnivore
+Pseudosagitta lyra,,Chaetognath,Pseudosagitta,lyra,105444,,,unknown
+Calycophoran larvae,,Cnidarian,,,135333,,,unknown
+Synchaeta spp.,,Rotifer,Synchaeta,spp.,134958,,,unknown
+Arietellus pavoninus m,,Copepod,Arietellus,pavoninus,104350,5.025,unknown,Omnivore
+Delibus spp. f,,Copepod,Delibus,spp.,363904,0.61,Boltovskoy 1999,Herbivore
+Euaugaptilus palumboi f,,Copepod,Euaugaptilus,palumboi,221309,2.25,Boltovskoy 1999,Carnivore
+Lucicutia gemina f,,Copepod,Lucicutia,gemina,104600,1.65,Boltovskoy 1999,Omnivore
+Lucicutia ovalis m,,Copepod,Lucicutia,ovalis,104609,1.35,Boltovskoy 1999,Omnivore
+Mormonilla phasma,,Copepod,Mormonilla,phasma,119818,1.45,Razouls 2013,unknown
+Nullosetigera giesbrechti f,,Copepod,Nullosetigera,giesbrechti,361516,2.8,Razouls 2013,unknown
+Oncaea brodskii f,,Copepod,Oncaea,brodskii,128928,0.525,Razouls 2013,Omnivore
+Oncaea cf. oceanica f,,Copepod,Oncaea,cf. oceanica,128690,0.655,Razouls 2013,Omnivore
+Oncaea ornata complex f,,Copepod,Oncaea,ornata complex,128944,0.875,Razouls 2013,Omnivore
+Oncaea ornata f,,Copepod,Oncaea,ornata,128944,0.885,Razouls 2013,Omnivore
+Oncaea prendeli complex f,,Copepod,Oncaea,prendeli complex,128947,0.3,Razouls 2013,Omnivore
+Paraugaptilus similis f,,Copepod,Paraugaptilus,similis,354590,3.535,Razouls 2013,Carnivore
+Spinoncaea ivlevi f,,Copepod,Spinoncaea,ivlevi,362083,0.32,Razouls 2013,Omnivore
+Temoropia minor f,,Copepod,Temoropia,minor,104882,0.734,Razouls 2013,Omnivore
+Triconia conifera complex m,,Copepod,Triconia,conifera complex,128957,1.11,Razouls 2012,Omnivore
+Oithona nishidai f,,Copepod,Oithona,nishidai,361662,0.605,Razouls 2013,Herbivore
+Acartia sinjiensis,Acanthacartia,Copepod,Acartia,sinjiensis,345940,0.95,Razouls 2012,Omnivore
+Oithona robusta f,,Copepod,Oithona,robusta,106654,1.505,Boltovskoy 1999,Herbivore
+Triconia rufa f,,Copepod,Triconia,rufa,361549,0.62,Razouls 2013,Omnivore
+Triconia umerus complex f,,Copepod,Triconia,umerus complex,361551,0.595,Razouls 2013,Omnivore
+Vettoria spp. f,,Copepod,Vettoria,spp.,128723,0.868,Razouls 2013,Omnivore
+Hippidae larvae,,Decapod,,,158390,,,unknown
+Oithona attenuata m,,Copepod,Oithona,attenuata,220944,0.465,Boltovskoy 1999,Herbivore
+Corycaeidae m,,Copepod,,,128569,1.84,,Carnivore
+Gladioferens spp.,,Copepod,Gladioferens,spp.,347183,1.23,Taw 1975,Omnivore
+Sabellaria spp.,,Polychaete,Sabellaria,spp.,129520,,,unknown
+Saphirella tropica,,Copepod,Saphirella,tropica,196788,1.102,Razouls 2013,Carnivore
+Rhincalanus cornutus j,,Copepod,Rhincalanus,cornutus,104542,2.9,Razouls 2013,Herbivore
+Pseudodiaptomus aurivillii,,Copepod,Pseudodiaptomus,aurivillii,220947,1.25,Razouls 2012,Omnivore
+Nyctiphanes spp.,,Euphausiid,Nyctiphanes,spp.,110677,,,unknown
+Hyperiid j,,Amphipod,,,101796,,,unknown
+Travisiopsis spp.,,Polychaete,Travisiopsis,spp.,129721,,,unknown
+Calanus finmarchicus,,Copepod,Calanus,finmarchicus,104464,3.71,Razouls 2013,Herbivore
+Dorippe spp.,,Decapod,Dorippe,spp.,205712,,,unknown
+Candacia worthingtoni m,,Copepod,Candacia,worthingtoni,346243,1.8,Razouls 2013,Carnivore
+Lycaea pachypoda f,,Amphipod,Lycaea,pachypoda,236573,,,unknown
+Ritteriella amboinensis,,Thaliacean,Ritteriella,amboinensis,137268,,,unknown
+Limnocythere,,Ostracod,Limnocythere,,127638,,,unknown
+Candacia bipinnata j,,Copepod,Candacia,bipinnata,104475,2.325,,Carnivore
+Anisomysis (Anisomysis) australis,,Mysida,Anisomysis,australis,226274,,,unknown
+Oikopleura (Vexillaria) cophocerca,,Appendicularian,Oikopleura,cophocerca,103406,,,unknown
+Euphilomedes,,Ostracod,Euphilomedes,,127558,,,unknown
+Gammarus pulex,,Amphipod,Gammarus,pulex,234074,,,unknown
+Amallothrix tenuiserrata,,Copepod,Scolecithricella,tenuiserrata,356949,1.075,,Herbivore
+Ampelisca acinaces,,Amphipod,Ampelisca,acinaces,422964,,,unknown
+Fritillaria venusta,,Appendicularian,Fritillaria,bicornis,103389,,,unknown
+Doxomysis australiensis,,Mysida,Doxomysis,australiensis,161373,,,unknown
+Siriella nodosa,,Mysida,Siriella,nodosa,161464,,,unknown
+Notholca spp.,,Rotifer,Notholca,spp.,134944,,,unknown
+Anisomysis (Anisomysis) laticauda,,Mysida,Anisomysis,laticauda,157800,,,unknown
+Metcalfina hexagona,,Thaliacean,Metcalfina,hexagona,266799,,,unknown
+Zonosagitta bedoti,,Chaetognath,Sagitta,bedoti,266884,,,unknown
+Megalocercus huxleyi,,Appendicularian,Megalocercus,huxleyi,221117,,,unknown
+Parvocalanus spp. j,,Copepod,Parvocalanus,spp.,347746,0.66,Razouls 2013,Herbivore
+Amallothrix tenuiserrata f,,Copepod,Amallothrix,tenuiserrata,356949,1.075,Boltovskoy 1999,Herbivore
+Copilia mediterranea,,Copepod,Copilia,mediterranea,129037,4.65,Boltovskoy 1999,Omnivore
+Sapphirina vorax,,Copepod,Sapphirina,vorax,129061,1.725,Razouls 2013,Omnivore
+Clytemnestra longipes f,,Copepod,Clytemnestra,longipes,346286,1.21,Razouls 2012,Omnivore
+Centropages orsinii j,,Copepod,Centropages,orsinii,220901,1.25,Boltovskoy 1999,Omnivore
+Rhabdosoma whitei,,Amphipod,Rhabdosoma,whitei,220733,,,unknown
+Phronima sedentaria,,Amphipod,Phronima,sedentaria,103272,,,unknown
+Phronima atlantica,,Amphipod,Phronima,atlantica,103271,,,unknown
+Eupronoe armata,,Amphipod,Eupronoe,armata,550618,,,unknown
+Phronima pacifica,,Amphipod,Phronima,pacifica,236608,,,unknown
+Aequorea spp.,,Cnidarian,Aequorea,spp.,116998,,,unknown
+Pareucalanus spp. f,,Copepod,Pareucalanus,spp.,237967,5.025,,Herbivore
+Euphausiid furcilia FIV,,Euphausiid,,,110671,,,unknown
+Euphausiid calyptope CI,,Euphausiid,,,110671,,,unknown
+Euphausiid calyptope CII,,Euphausiid,,,110671,,,unknown
+Euphausiid furcilia FIII,,Euphausiid,,,110671,,,unknown
+Bipinnaria larva,,Echinoderm,,,1806,,,unknown
+Leprotintinnus nordqvisti,,Ciliophora,Leprotintinnus,nordqvisti,427570,,,unknown
+Nyctiphanes australis FII,,Euphausiid,Nyctiphanes,australis,237863,,,unknown
+Hyperiella macronyx,,Amphipod,Hyperiella,macronyx,325387,,,unknown
+Pareucalanus spp. m,,Copepod,Pareucalanus,spp.,237967,5.025,,Herbivore
+Euphysa spp.,,Cnidarian,Euphysa,spp.,117095,,,unknown
+Parascelidae,,Amphipod,,,236598,,,unknown
+Centropages elegans m,,Copepod,Centropages,elegans,346255,1.9,,Omnivore
+Scaphocalanus echinatus f,,Copepod,Scaphocalanus,echinatus,104793,2,,Herbivore
+Pseudoamallothrix ovata f,,Copepod,Pseudoamallothrix,ovata,345251,1.075,,Herbivore
+Fluviolanatus subtortus,,Mollusc,Fluviolanatus,subtortus,504754,,,unknown
+Eutintinnus spp.,,Ciliophora,Eutintinnus,spp.,183543,,,unknown
+Tornaria larva,,Hemichordata,,,391906,,,unknown
+Oculosetella gracilis m,,Copepod,Oculosetella,gracilis,116384,1.08,,Omnivore
+Hyperiidae,,Amphipod,,,101796,,,unknown
+Centropages calaninus j,,Copepod,Centropages,calaninus,104492,1.8,,Omnivore
+Eutima spp.,,Cnidarian,Eutima,spp.,117082,,,unknown
+Orchistoma spp. ,,Cnidarian,Orchistoma,spp.,117176,,,unknown
+Sphaeronectes spp.,,Cnidarian,Sphaeronectes,spp.,135381,,,unknown
+Copilia vitrea f,,Copepod,Copilia,vitrea,129040,,,unknown
+Lubbockia squillimana j,,Copepod,Lubbockia,squillimana,128894,,,unknown
+Mollusc egg,,Mollusc,,,51,,,unknown
+Peltidiinae,,Copepod,,,587513,,,unknown
+Tegastidae,,Copepod,,,115179,,,unknown
+non-colonial ascidian larvae,,Ascidian,,,,,,unknown
+Calanus agulhensis,,Copepod,Calanus,agulhensis,346211,,,unknown
+Calanoides natalis j,,Copepod,Calanoides,natalis,349523,,,unknown
+Acanthostomella spp.,,Ciliophora,Acanthostomella,spp.,183555,,,unknown
+Squilla spp.,,Decapod,Squilla,spp.,136113,,,unknown
+Thysanoessa spp. furcilia,,Euphausiid,Thysanoessa,spp.,110679,,,unknown
+Turborotalita quinqueloba,,Rotifer,Turborotalita,quinqueloba,113462,,,unknown
+Pontella securifer m,,Copepod,Pontella,securifer,104740,3.92,,unknown
+Penaeid eggs,,Egg,,,,,,unknown
+Radiolarian P,,Radiozoa,,,,,,unknown
+Primno latreillei,,Amphipod,Primno,latreillei,421606,,,unknown
+Candacia ethiopica j,,Copepod,Candacia,ethiopica,104478,,,unknown
+Phaenna spp.,,Copepod,Phaenna,spp.,104202,,,unknown
+Acanthephyridae Zoea,,Decapod,,,585943,,,unknown
+Lubbockia spp. j,,Copepod,Lubbockia,spp.,128672,1.45,"‘Species j’ (juvenile) (eg. Acartia spp. j or Centropages australiensis j )  the maximum size limit is based on the minimum size of either the smallest male or female of that species or genus and no minimum size limit has been entered",Omnivore
+Neocalanus spp. CV,,Copepod,Neocalanus,spp.,104155,2.3,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Herbivore
+Thalia democratica sol,,Thaliacean,Thalia,democratica,137279,,,unknown
+Oncaea mediterranea complex,,Copepod,Oncaea,mediterranea complex,128939,1.18,Bottger-Schnack 1997,Omnivore
+Labidocera spp. m,,Copepod,Labidocera,spp.,104208,2.375,‘Species m’ (male) (eg. Acartia spp. m ) size range based on the min & max size range for all the male species of that genus in the database,Carnivore
+Copilia mirabilis m,,Copepod,Copilia,mirabilis,129038,4.65,Boltovskoy 1999,Omnivore
+Oithona atlantica f,,Copepod,Oithona,atlantica,106642,1.285,Nishida 1985,Herbivore
+Calanoides acutus f,,Copepod,Calanoides,acutus,342434,4.6,Boltovskoy 1999,Herbivore
+Candacia falcifera m,,Copepod,Candacia,falcifera,342437,3.415,Razouls 2012,Carnivore
+Candacia catula,,Copepod,Candacia,catula,220913,1.5,Boltovskoy 1999,Carnivore
+Euchaeta marina,,Copepod,Euchaeta,marina,104552,3.26,Boltovskoy 1999,Carnivore
+Clausocalanus pergens f,,Copepod,Clausocalanus,pergens,104509,0.9,Frost & Fleminger 1968,Herbivore
+Delibus nudus m,,Copepod,Delibus,nudus,363905,0.47,New species - ‘Delibus f’ & ‘Delibus m’ size range based on the min & max size range of the female & male of D.nudus and D.Sewelli,Herbivore
+Parvocalanus spp. m,,Copepod,Parvocalanus,spp.,347746,0.66,Razouls 2013,Herbivore
+Prosobranch,,Mollusc,,,102,,,unknown
+Thalia democratica agg,,Thaliacean,Thalia,democratica,137279,,,unknown
+Bestiolina similis f,,Copepod,Bestiolina,similis,346152,0.765,Bradford-Grieve 1993,Herbivore
+Caligus spp.,,Copepod,Caligus,spp.,135566,5.2, Z. Kabata (1965),unknown
+Mesocalanus tenuicornis m,,Copepod,Mesocalanus,tenuicornis,104468,1.95,Boltovskoy 1999,Herbivore
+Nannocalanus minor f,,Copepod,Nannocalanus,minor,104469,2.025,Boltovskoy 1999,Herbivore
+Nauplii calanoid,,Copepod,,,1100,0.3,,Herbivore
+Oncaea spp. j,,Copepod,Oncaea,spp.,128690,0.31,"‘Species j’ (juvenile) (eg. Acartia spp. j or Centropages australiensis j )  the maximum size limit is based on the minimum size of either the smallest male or female of that species or genus and no minimum size limit has been entered",Omnivore
+Parvocalanus crassirostris f,,Copepod,Parvocalanus,crassirostris,360051,0.51,Boltovskoy 1999,Herbivore
+Pleuromamma borealis f,,Copepod,Pleuromamma,borealis,104638,2.025,Boltovskoy 1999,Omnivore
+Oithona spp. m,,Copepod,Oithona,spp.,106485,1.13,,Herbivore
+Subeucalanus spp. j,,Copepod,Subeucalanus,spp.,104173,1.8,"‘Species j’ (juvenile) (eg. Acartia spp. j or Centropages australiensis j )  the maximum size limit is based on the minimum size of either the smallest male or female of that species or genus and no minimum size limit has been entered",Herbivore
+Bivalve,,Mollusc,,,105,,,unknown
+Cubozoan larvae,,Cnidarian,,,135219,,,unknown
+Decapod larvae,,Decapod,,,1130,,,unknown
+Echinoderm larvae,,Echinoderm,,,1806,,,unknown
+Egg,,Egg,,,,,,unknown
+Fish larvae,,Fish,,,11676,,,unknown
+Fritillariidae,,Appendicularian,,,103354,,,unknown
+Hydromedusae,,Cnidarian,,,1337,,,unknown
+Noctiluca scintillans,,Noctilucaceae,Noctiluca,scintillans,109921,,,unknown
+Cavoliniidae shell,,Mollusc,,,23000,,,unknown
+Squid,,Cephalopod,,,11707,,,unknown
+Scolecithricella/Scolecithrix,,Copepod,Scolecithricella/Scolecithrix,spp.,104103,1.572,Razouls 2013,Herbivore
+Corycaeus spp. f,,Copepod,Corycaeus,spp.,128634,1.72,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Carnivore
+Heterorhabdus spp. j,,Copepod,Heterorhabdus,spp.,104178,1.62,"‘Species j’ (juvenile) (eg. Acartia spp. j or Centropages australiensis j )  the maximum size limit is based on the minimum size of either the smallest male or female of that species or genus and no minimum size limit has been entered",Carnivore
+Sapphirina scarlata f,,Copepod,Sapphirina,scarlata,129058,3.975,Boltovskoy 1999,Omnivore
+Rhincalanus cornutus m,,Copepod,Rhincalanus,cornutus,104542,3.04,Razouls 2012,Herbivore
+Acartia fossae f,Acanthacartia,Copepod,Acartia,fossae,345933,1.215,Razouls 2013,Omnivore
+Microsetella spp. f,,Copepod,Microsetella,spp.,115341,0.6,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Omnivore
+Euchaeta indica m,,Copepod,Euchaeta,indica,346438,2.565,"Bradford Haakonssen & Jillett 1983",Carnivore
+Pseudodiaptomus spp.,,Copepod,Pseudodiaptomus,spp.,157680,1.105,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Omnivore
+Eucalanidae,,Copepod,,,104085,4.181,Based on female of species in database,Herbivore
+Evadne spinifera f,,Cladoceran,Evadne,spinifera,106274,,,unknown
+Ihlea magalhanica solitary,,Thaliacean,Ihlea,magalhanica,266541,,,unknown
+Candacia bradyi m,,Copepod,Candacia,bradyi,346234,1.49,Razouls 2012,Carnivore
+Candacia spp. j,,Copepod,Candacia,spp.,104157,1.08,"‘Species j’ (juvenile) (eg. Acartia spp. j or Centropages australiensis j )  the maximum size limit is based on the minimum size of either the smallest male or female of that species or genus and no minimum size limit has been entered",Carnivore
+Centropages orsinii f,,Copepod,Centropages,orsinii,220901,1.55,Boltovskoy 1999,Omnivore
+Pontella novaezealandiae f,,Copepod,Pontella,novaezealandiae,354875,5.465,Razouls 2013,Carnivore
+Clausocalanus spp. j,,Copepod,Clausocalanus,spp.,104161,0.66,"‘Species j’ (juvenile) (eg. Acartia spp. j or Centropages australiensis j )  the maximum size limit is based on the minimum size of either the smallest male or female of that species or genus and no minimum size limit has been entered",Herbivore
+Clausocalanus spp. m,,Copepod,Clausocalanus,spp.,104161,1.03,‘Clausocalanus m’ (male) size range based on the min & max size range all the female species of the Clausocalanus genus in the database (due to the lack of identification of the males in the genus),Herbivore
+Agetus limbatus f,,Copepod,Agetus,limbatus,128796,1.44,Razouls 2012,Carnivore
+Calanopia spp. f,,Copepod,Calanopia,spp.,104207,1.65,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Carnivore
+Palaemonidae,,Decapod,,,106788,,,unknown
+Farranula gracilis f,,Copepod,Farranula,gracilis,128813,1,Boltovskoy 1999,Carnivore
+Harpacticoid f,,Copepod,,,1102,0.625,,unknown
+Pleuromamma piseki m,,Copepod,Pleuromamma,piseki,104640,1.745,Boltovskoy 1999,Omnivore
+Pseudodiaptomus mertoni f,,Copepod,Pseudodiaptomus,mertoni,355172,1.2,Razouls 2012,Omnivore
+Sapphirina spp. m,,Copepod,Sapphirina,spp.,128722,4.51,‘Species m’ (male) (eg. Acartia spp. m ) size range based on the min & max size range for all the male species of that genus in the database,Omnivore
+Pleuromamma abdominalis f,,Copepod,Pleuromamma,abdominalis,104637,3.05,Boltovskoy 1999,Omnivore
+Centropages spp. m,,Copepod,Centropages,spp.,104159,1.585,‘Species m’ (male) (eg. Acartia spp. m ) size range based on the min & max size range for all the male species of that genus in the database,Omnivore
+Paracalanus parvus f,,Copepod,Paracalanus,parvus,104685,1,Boltovskoy 1999,Herbivore
+Dioithona rigida f,,Copepod,Dioithona,rigida,220943,0.805,Nishida 1985,Herbivore
+Thaliacean,,Thaliacean,,,22626,,,unknown
+Serratosagitta tasmanica,,Chaetognath,Serratosagitta,tasmanica,105465,,,unknown
+Trochophore larvae,,Polychaete,,,882,,,unknown
+Onychocorycaeus catus f,,Copepod,Onychocorycaeus,catus,128816,1.025,Razouls 2012,Carnivore
+Eucalanus spp. m,,Copepod,Eucalanus,spp.,104171,4.1,Razouls 2012,Herbivore
+Onychocorycaeus ovalis m,,Copepod,Onychocorycaeus,ovalis,128819,1.1,Razouls 2012,Carnivore
+Acrocalanus spp.,,Copepod,Acrocalanus,spp.,104192,1.095,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Herbivore
+Onychocorycaeus pacificus m,,Copepod,Onychocorycaeus,pacificus,359744,1.07,Razouls 2012,Carnivore
+Onychocorycaeus pumilus f,,Copepod,Onychocorycaeus,pumilus,128820,0.73,Razouls 2012,Carnivore
+Oithona Grp6 (square head) f,,Copepod,Oithona,grp 6,106485,0.6,Size compiled from species in group from Nishida 1985,Herbivore
+Abylidae,,Cnidarian,,,135336,,,unknown
+Cladoceran f,,Cladoceran,,,1076,,,unknown
+Asteroidea larvae,,Echinoderm,,,123080,,,unknown
+Centropages calaninus f,,Copepod,Centropages,calaninus,104492,1.95,Boltovskoy 1999,Omnivore
+Eucalanus hyalinus f,,Copepod,Eucalanus,hyalinus,345781,6.1,Bradford-Grieve 1994,Herbivore
+Oithona decipiens/similis f,,Copepod,Oithona,decipiens/similis,106485,0.785,Nishida 1985,Herbivore
+Candacia discaudata m,,Copepod,Candacia,discaudata,346235,1.65,Razouls 2012,Carnivore
+Corycaeus crassiusculus m,,Copepod,Corycaeus,crassiusculus,128799,1.505,Razouls 2012,Carnivore
+Ditrichocorycaeus asiaticus m,,Copepod,Ditrichocorycaeus,asiaticus,358328,1.11,Razouls 2012,Carnivore
+Oithona spp. f,,Copepod,Oithona,spp.,106485,1.13,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Herbivore
+Augaptilus spp.,,Copepod,Augaptilus,spp.,104137,4.55,Boltovskoy 1999,Carnivore
+Ctenocalanus vanus,,Copepod,Ctenocalanus,vanus,104510,1.09,Boltovskoy 1999,Herbivore
+Sapphirina angusta m,,Copepod,Sapphirina,angusta,129041,5.8,Boltovskoy 1999,Omnivore
+Poecilostomatoida / Cyclopoid,,Copepod,,,1103,0.7,,unknown
+Pontellidae j,,Copepod,,,104097,1.44,,Carnivore
+Euchaeta rimana f,,Copepod,Euchaeta,rimana,346444,3.55,"Bradford Haakonssen & Jillett 1983",Carnivore
+Acartia australis f,Odontacartia,Copepod,Acartia,australis,346050,1.345,Razouls 2012,Omnivore
+Calanus australis,,Copepod,Calanus,australis,345760,3.095,Boltovskoy 1999,Herbivore
+Cladoceran,,Cladoceran,,,1076,,,unknown
+Parvocalanus crassirostris i,,Copepod,Parvocalanus,crassirostris,360051,0.51,‘Species i’ (eg. Clausocalanus spp. i) size range based on the min & max size range for all the female species of that genus present in database,Herbivore
+Rhincalanus gigas,,Copepod,Rhincalanus,gigas,220837,7.88,Boltovskoy 1999,Herbivore
+Pleuromamma robusta,,Copepod,Pleuromamma,robusta,104642,3.65,Boltovskoy 1999,Omnivore
+Euphausia hanseni calyptopis,,Euphausiid,Euphausia,hanseni,110685,,,unknown
+Pleuromamma CIV,,Copepod,Pleuromamma,spp.,104191,3.29,,Omnivore
+Euphausia lucens,,Euphausiid,Euphausia,lucens,221055,,,unknown
+Hyperiella antarctica,,Amphipod,Hyperiella,antarctica,325379,,,unknown
+Limacina helicina,,Mollusc,Limacina,helicina,140223,,,unknown
+Primno macropa,,Amphipod,Primno,macropa,180759,,,unknown
+Scina spp.,,Amphipod,Scina,spp.,101810,,,unknown
+Nyctiphanes australis furcilia,,Euphausiid,Nyctiphanes,australis,237863,,,unknown
+Rhincalanus gigas CIII,,Copepod,Rhincalanus,gigas,220837,7.88,Boltovskoy 1999,Herbivore
+Fish scales,,Other,,,11676,,,unknown
+Euphausia spinifera,,Euphausiid,Euphausia,spinifera,221051,,,unknown
+Chelophyes appendiculata,,Cnidarian,Chelophyes,appendiculata,135417,,,unknown
+Chelophyes contorta,,Cnidarian,Chelophyes,contorta,196554,,,unknown
+Oncaea tregoubovi f,,Copepod,Oncaea,tregoubovi,354036,0.34,Malt 1982,Omnivore
+Abylopsis spp.,,Cnidarian,Abylopsis,spp.,135352,,,unknown
+Lensia spp.,,Cnidarian,Lensia,spp.,135365,,,unknown
+Metridia spp. j,,Copepod,Metridia,spp.,104190,1.62,Boltovskoy 1999,Omnivore
+Salpa thompsoni agg,,Thaliacean,Salpa,thompsoni,266545,,,unknown
+Nauplii calanoid (Rhincalanus?),,Copepod,,,1100,0.5,,Herbivore
+Calocalanus tenuis f,,Copepod,Calocalanus,tenuis,237966,1.245,Boltovskoy 1999,Herbivore
+Thysanoessa gregaria furcilia,,Euphausiid,Thysanoessa,gregaria,110707,,,unknown
+Thysanoessa macrura CI,,Euphausiid,Thysanoessa,macrura,236219,,,unknown
+Euphausia superba CIII,,Euphausiid,Euphausia,superba,236217,,,unknown
+Centropages elongatus f,,Copepod,Centropages,elongatus,220902,1.705,Razouls 2012,Omnivore
+Oithona nana j,,Copepod,Oithona,nana,106651,0.44,Boltovskoy 1999,Herbivore
+Subeucalanus subcrassus j,,Copepod,Subeucalanus,subcrassus,104548,1.67,Bradford-Grieve 1994,Herbivore
+Agetus spp. j,,Copepod,Agetus,spp.,128633,1.15,Boltovskoy 1999,Carnivore
+Subeucalanus dentatus,,Copepod,Subeucalanus,dentatus,360662,1.875,Razouls 2013,Herbivore
+Labidocera carpentariensis,,Copepod,Labidocera,carpentariensis,220920,1.93,Razouls 2013,Carnivore
+Calanopia australica,,Copepod,Calanopia,australica,346201,1.885,Razouls 2013,Carnivore
+Ditrichocorycaeus andrewsi,,Copepod,Ditrichocorycaeus,andrewsi,128804,0.86,Razouls 2012,Carnivore
+Onychocorycaeus agilis,,Copepod,Onychocorycaeus,agilis,359743,1.04,Razouls 2012,Carnivore
+Clausocalanus furcatus,,Copepod,Clausocalanus,furcatus,104503,1.005,Boltovskoy 1999,Herbivore
+Onychocorycaeus catus,,Copepod,Onychocorycaeus,catus,128816,0.98,Razouls 2012,Carnivore
+Paracalanus aculeatus,,Copepod,Paracalanus,aculeatus,104681,1.08,Bradford-Grieve 1994,Herbivore
+Calocalanus plumulosus,,Copepod,Calocalanus,plumulosus,211848,1.015,Boltovskoy 1999,Herbivore
+Clytemnestra scutellata,,Copepod,Clytemnestra,scutellata,115805,1.15,Boltovskoy 1999,Omnivore
+Acartia amboinensis,Odontacartia,Copepod,Acartia,amboinensis,346049,1.36,Razouls 2013,Omnivore
+Oithona tenuis f,,Copepod,Oithona,tenuis,106658,1.18,Nishida 1985,Herbivore
+Clausocalanus brevipes,,Copepod,Clausocalanus,brevipes,342443,1.43,Frost & Fleminger 1968,Herbivore
+Pleuromamma abdominalis,,Copepod,Pleuromamma,abdominalis,104637,3.05,Boltovskoy 1999,Omnivore
+Oithona similis,,Copepod,Oithona,similis,106656,0.82,Nishida 1985,Herbivore
+Calanus propinquus,,Copepod,Calanus,propinquus,342435,5.375,Boltovskoy 1999,Herbivore
+Haloptilus oxycephalus,,Copepod,Haloptilus,oxycephalus,104434,3.555,Boltovskoy 1999,Carnivore
+Calanoides acutus,,Copepod,Calanoides,acutus,342434,4.6,Boltovskoy 1999,Herbivore
+Pontellopsis herdmani,,Copepod,Pontellopsis,herdmani,220930,1.88,Razouls 2013,Carnivore
+Acrocalanus longicornis j,,Copepod,Acrocalanus,longicornis,104646,0.95,Boltovskoy 1999,Herbivore
+Lucicutia tranteri j (invalid),,Copepod,Lucicutia,tranteri (invalid),,,,Omnivore
+Turbellaria,,Platyhelminthes,,,794,,,unknown
+Nematoda,,Nematode,,,799,,,unknown
+Lucicutia tranteri f (invalid),,Copepod,Lucicutia,tranteri (invalid),,,,Omnivore
+Rotalia spp.,,Foraminifera,Rotalia,spp.,112079,,,unknown
+Euchaeta concinna j,,Copepod,Euchaeta,concinna,104551,2.1,Boltovskoy 1999,Carnivore
+Parvocalanus elegans f,,Copepod,Parvocalanus,elegans,354636,0.515,Razouls 2013,Herbivore
+Pareucalanus sewelli,,Copepod,Pareucalanus,sewelli,360047,4.995,Bradford-Grieve 1994,Herbivore
+Spinoncaea spp. m,,Copepod,Spinoncaea,spp.,348050,0.29,Razouls 2013,Omnivore
+Macrosetella spp. f,,Copepod,Macrosetella,spp.,115408,1.45,Boltovskoy 1999,Herbivore
+Paracalanus nanus j,,Copepod,Paracalanus,nanus,104684,0.57,Boltovskoy 1999,Herbivore
+Abylopsis eschscholtzii,,Cnidarian,Abylopsis,eschscholtzii,196656,,,unknown
+Chelophyes appendiculata bract,,Cnidarian,Chelophyes,appendiculata,135417,,,unknown
+Scaphocalanus brevicornis f,,Copepod,Scaphocalanus,brevicornis,104790,4.832,Razouls 2013,Herbivore
+Ostracod gravid,,Ostracod,,,1078,,,unknown
+Ditrichocorycaeus minimus m,,Copepod,Ditrichocorycaeus,minimus,128808,0.75,Razouls 2012,Carnivore
+Rhizostomeae,,Cnidarian,,,135224,,,unknown
+Parastenheliidae,,Copepod,,,115169,0.83,Walker-Smith Genefor K,unknown
+Acartia pacifica mertoni m,Odontacartia,Copepod,Acartia,pacifica mertoni,707481,0.93,Razouls 2013,Omnivore
+Canthocalanus pauper,,Copepod,Canthocalanus,pauper,220834,1.45,Boltovskoy 1999,Herbivore
+Nannocalanus spp.,,Copepod,Nannocalanus,spp.,104154,1.725,Boltovskoy 1999,Herbivore
+Aegisthus mucronatus m,,Copepod,Aegisthus,mucronatus,115509,1.55,Razouls 2013,Omnivore
+Candacia longimana m,,Copepod,Candacia,longimana,104481,2.95,Boltovskoy 1999,Carnivore
+Chiridius poppei f,,Copepod,Chiridius,poppei,104293,1.895,Boltovskoy 1999,Omnivore
+Chirundina streetsii f,,Copepod,Chirundina,streetsii,104294,4.85,Boltovskoy 1999,Omnivore
+Conaea rapax f,,Copepod,Conaea,rapax,128917,1.055,Boltovskoy 1999,Omnivore
+Delibus spp. m,,Copepod,Delibus,spp.,363904,0.47,Boltovskoy 1999,Herbivore
+Farranula gibbula m,,Copepod,Farranula,gibbula,346477,0.965,Razouls 2012,Carnivore
+Gaetanus pungens f,,Copepod,Gaetanus,pungens,342623,3.2,Razouls 2013,Omnivore
+Heterorhabdus spp. m,,Copepod,Heterorhabdus,spp.,104178,1.985,,Carnivore
+Mormonilla phasma f,,Copepod,Mormonilla,phasma,119818,1.575,Razouls 2013,unknown
+Oithona robusta m,,Copepod,Oithona,robusta,106654,1.22,Boltovskoy 1999,Herbivore
+Oncaea notopus complex f,,Copepod,Oncaea,notopus complex,128943,0.805,Razouls 2013,Omnivore
+Oncaea oceanica f,,Copepod,Oncaea,oceanica,354031,0.72,Razouls 2013,Omnivore
+Oncaea zernovi complex f,,Copepod,Oncaea,zernovi complex,128955,0.345,Razouls 2013,Omnivore
+Paracalanus nanus m,,Copepod,Paracalanus,nanus,104684,0.57,Boltovskoy 1999,Herbivore
+Pleuromamma indica f,,Copepod,Pleuromamma,indica,220900,2.21,Razouls 2013,Omnivore
+Scolecithricella spp. m,,Copepod,Scolecithricella,spp.,104229,1.27,,Herbivore
+Sulcanus conflictus j,,Copepod,Sulcanus,conflictus,355934,1.6,Razouls 2013,Carnivore
+Tortanus (Tortanus) barbatus,,Copepod,Tortanus (Tortanus),barbatus,220937,1.5,Razouls 2012,Carnivore
+Paracalanus indicus,,Copepod,Paracalanus,indicus,104683,0.935,Bradford-Grieve 1994,Herbivore
+Triconia dentipes f,,Copepod,Triconia,dentipes,128958,0.495,Razouls 2013,Omnivore
+Palaemonidae j,,Decapod,,,106788,,,unknown
+Triconia similis complex f,,Copepod,Triconia,similis complex,128961,0.745,Razouls 2013,Omnivore
+Aetideus spp. j,,Copepod,Aetideus,spp.,104112,1.48,Boltovskoy 1999,Omnivore
+Labidocera farrani f,,Copepod,Labidocera,farrani,346593,3.16,Razouls 2013,Carnivore
+Calocalanus tenuis,,Copepod,Calocalanus,tenuis,237966,1.245,Boltovskoy 1999,Herbivore
+Centropages elongatus,,Copepod,Centropages,elongatus,220902,1.75,Razouls 2012,Omnivore
+Pontella novaezealandiae,,Copepod,Pontella,novaezealandiae,354875,5.35,Razouls 2013,Carnivore
+Oithona tenuis,,Copepod,Oithona,tenuis,106658,1.18,Nishida 1985,Herbivore
+Goniopsyllus rostratus,,Copepod,Goniopsyllus,rostratus,346510,0.8,Boltovskoy 1999,unknown
+Lucicutia gaussae m,,Copepod,Lucicutia,gaussae,104599,1.35,Boltovskoy 1999,Omnivore
+Parundinella dakini f,,Copepod,Parundinella,dakini,360049,1,Razouls 2013,unknown
+Cyttarocylis ampulla,,Ciliophora,Cyttarocylis,ampulla,723504,,,unknown
+Thysanoessa macrura FIII,,Euphausiid,Thysanoessa,macrura,236219,,,unknown
+Fritillaria borealis sargassi,,Appendicularian,Fritillaria,borealis f. sargassi,342475,,,unknown
+Epiplocylis spp.,,Ciliophora,Epiplocylis,spp.,183562,,,unknown
+Oikopleura (Coecaria) fusiformis cornutogastra,,Appendicularian,Oikopleura (Coecaria),fusiformis cornutogastra,342469,,,unknown
+Fritillaria megachile,,Appendicularian,Fritillaria,megachile,103384,,,unknown
+Pontellopsis tasmanensis m,,Copepod,Pontellopsis,tasmanensis,354898,1.41,Razouls 2013,Carnivore
+Pseudodiaptomus aurivillii m,,Copepod,Pseudodiaptomus,aurivillii,220947,1.25,Razouls 2012,Omnivore
+Labidocera acutifrons m,,Copepod,Labidocera,acutifrons,104727,3.92,,Carnivore
+Lubbockia aculeata j,,Copepod,Lubbockia,aculeata,128893,2.1,,Omnivore
+Pelagosphera larvae,,Sipunculid,,,1296,,,unknown
+Decipisagitta decipiens,,Chaetognath,Sagitta,decipiens,370469,,,unknown
+Catostylus mosaicus,,Cnidarian,Catostylus,mosaicus,220491,,,unknown
+Aurelia labiata,,Cnidarian,Aurelia,labiata,287213,,,unknown
+Pluteus larva,,Echinoderm,,,1806,,,unknown
+Cerianthus spp.,,Cnidarian,Cerianthus,spp.,100782,,,unknown
+Fritillaria fraudax,,Appendicularian,Fritillaria,fraudax,103380,,,unknown
+Pisidia dispar,,Copepod,Pisidia,dispar,425841,,,unknown
+Oikopleura (Vexillaria) parva,,Appendicularian,Oikopleura,parva,103415,,,unknown
+Dexaminidae,,Amphipod,,,101378,,,unknown
+Anisomysis (Anisomysis) pelewensis,,Mysida,Anisomysis,pelewensis,161401,,,unknown
+Spionidae,,Polychaete,,,913,0.31,,unknown
+Euphausia tenera,,Euphausiid,Euphausia,tenera,221052,,,unknown
+Haplostylus indicus,,Mysida,Gastrosaccus,indicus,161446,,,unknown
+Acartia pietschmani f,Acanthacartia,Copepod,Acartia,pietschmani,416442,1.15,,Omnivore
+Anisomysis (Anisomysis) bifurcata,,Mysida,Anisomysis,bifurcata,161397,,,unknown
+Pleurobrachia pileus,,Ctenophore,Pleurobrachia,pileus,106386,,,unknown
+Euphausia mutica,,Euphausiid,Euphausia,mutica,110688,,,unknown
+Pseudodiaptomus marinus,,Copepod,Pseudodiaptomus,marinus,360352,1.44,,Omnivore
+Agalma elegans,,Cnidarian,Agalma,elegans,135484,,,unknown
+Cyanea capillata,,Cnidarian,Cyanea,capillata,135301,,,unknown
+Pareucalanus attenuatus f,,Copepod,Pareucalanus,attenuatus,237968,5.15,Razouls 2013,Herbivore
+Oithona robertsoni f,,Copepod,Oithona,robertsoni,361663,0.57,Razouls 2013,Herbivore
+Metis jousseaumei m,,Copepod,Metis,jousseaumei,220672,1,unknown,Omnivore
+Calamoecia trifida f,,Copepod,Calamoecia,trifida,349519,1,Bayly I.A.E. (1961),Omnivore
+Dioithona oculata m,,Copepod,Dioithona,oculata,346358,0.635,Boltovskoy 1999,Herbivore
+Ceriodaphnia spp.,,Cladoceran,Ceriodaphnia,spp.,148376,,,unknown
+Chydorus spp.,,Cladoceran,Chydorus,spp.,148377,,,unknown
+Mesocyclops spp.,,Copepod,Mesocyclops,spp.,156881,1.113,Swe Thwin,Carnivore
+Oxycephalus piscator,,Amphipod,Oxycephalus,piscator,236589,,,unknown
+Leptocotis tenuirostris,,Amphipod,Leptocotis,tenuirostris,421623,,,unknown
+Anchylomera blossevillei,,Amphipod,Anchylomera,blossevillei,236613,,,unknown
+Parapronoe parva,,Amphipod,Parapronoe,parva,236630,,,unknown
+Oncaea spp. m 0.4<>0.7mm,,Copepod,Oncaea,spp.,128690,0.55,,Omnivore
+Euphausiid furcilia FI,,Euphausiid,,,110671,,,unknown
+Calanoides spp. CIV,,Copepod,Calanoides,spp.,104151,2,,Herbivore
+Ephyra larva,,Cnidarian,,,135220,,,unknown
+Urocorycaeus spp.,,Copepod,Urocorycaeus,spp.,128639,1.75,,Carnivore
+Calanus australis CIV,,Copepod,Calanus,australis,345760,2.4,,Herbivore
+Stylocheiron longicorne,,Euphausiid,Stylocheiron,longicorne,110703,,,unknown
+Hydromylidae,,Mollusc,,,411917,,,unknown
+Clausidiid j,,Copepod,,,128567,0.5,,Carnivore
+Amplectella tricollaria,,Ciliophora,Amplectella,tricollaria,427576,,,unknown
+Triconia denticula f,,Copepod,Triconia,denticula,590076,0.68,,Omnivore
+Scaphocalanus echinatus m,,Copepod,Scaphocalanus,echinatus,104793,1.82,,Herbivore
+Gammaropsis spp.,,Amphipod,Gammaropsis,spp.,101558,,,unknown
+Candacia pachydactyla f,,Copepod,Candacia,pachydactyla,104483,2.6,,Carnivore
+Kuhnia spp. cyst,,Platyhelminthes,Kuhnia,spp.,119369,,,unknown
+Neocalanus spp. CIV,,Copepod,Neocalanus,spp.,104155,2.1,,Herbivore
+Xystonellopsis heros,,Ciliophora,Xystonellopsis,heros,417266,,,unknown
+Climacocylis scalaria,,Ciliophora,Climacocylis,scalaria,183548,,,unknown
+Nyctiphanes australis FI,,Euphausiid,Nyctiphanes,australis,237863,,,unknown
+Thysanoessa gregaria furcilia FII,,Euphausiid,Thysanoessa,gregaria,110707,,,unknown
+Globorotaliidae,,Foraminifera,,,111930,,,unknown
+Scolecithricella globulosa m,,Copepod,Scolecithricella,globulosa,355505,,Razouls 2013,Herbivore
+Eucheilota spp.,,Cnidarian,Eucheilota,spp.,117092,,,unknown
+Parvocalanus cf. serratipes f,,Copepod,Parvocalanus,cf. serratipes,360054,,,unknown
+Xystonellopsis pulchra ,,Ciliophora,Xystonellopsis,pulchra,732674,,,unknown
+Acartia danae j,Acartia,Copepod,Acartia,danae,346026,,,unknown
+Heterorhabdus spinifer f,,Copepod,Heterorhabdus,spinifer,104582,,Razouls 2013,Carnivore
+Pontellopsis macronyx m,,Copepod,Pontellopsis ,macronyx,354893,1.675,,unknown
+Stylocheiron spp.,,Euphausiid,Stylocheiron,spp.,110678,,,unknown
+Radiolarian L,,Radiozoa,,,,,,unknown
+Leptocephalus larvae,,Fish,Leptocephalus,spp.,843623,,,unknown
+Rhabdosoma spp,,Amphipod,Rhabdosoma,whitei,205957,,,unknown
+Calanoides natalis,,Copepod,Calanoides,natalis,349523,,,unknown
+Dadayiella spp.,,Ciliophora,Dadayiella,spp.,183541,,,unknown
+Harcledo spp.,,Amphipod,Harcledo ,spp.,237653,,,unknown
+Pandaridae,,Copepod,,,1104,,,unknown
+Oncaea mediterranea,,Copepod,Oncaea,mediterranea,128939,,,unknown
+Decapod nauplii,,Decapod,,,1130,,,unknown
+Euchaeta rimana,,Copepod,Euchaeta,rimana,346444,,,unknown
+Thysanopoda spp.,,Euphausiid,Thysanopoda,spp.,110680,,,unknown
+Subeucalanus pileatus m,,Copepod,Subeucalanus,pileatus,104547,2.025,Boltovskoy 1999,Herbivore
+Farranula carinata f,,Copepod,Farranula,carinata,128811,0.85,Razouls 2012,Carnivore
+Centropages elongatus m,,Copepod,Centropages,elongatus,220902,1.75,Razouls 2012,Omnivore
+Doliolum oozoid spp.,,Thaliacean,Doliolum,spp.,137222,,,unknown
+Penilia avirostris f,,Cladoceran,Penilia,avirostris,106272,,,unknown
+Oncaea media complex,,Copepod,Oncaea,media complex,128938,0.71,Bottger-Schnack 2001,Omnivore
+Clausocalanus brevipes f,,Copepod,Clausocalanus,brevipes,342443,1.43,Frost & Fleminger 1968,Herbivore
+Phaenna spinifera f,,Copepod,Phaenna,spinifera,104698,1.5,Razouls 2012,Herbivore
+Centropages furcatus,,Copepod,Centropages,furcatus,104495,1.735,Boltovskoy 1999,Omnivore
+Clausocalanus ingens f,,Copepod,Clausocalanus,ingens,345778,1.67,Frost & Fleminger 1968,Herbivore
+Pontellina plumata,,Copepod,Pontellina,plumata,104743,1.64,Boltovskoy 1999,Carnivore
+Tortanus (Tortanus) gracilis f,,Copepod,Tortanus (Tortanus),gracilis,720560,1.81,Razouls 2013,Carnivore
+Rhincalanus spp.,,Copepod,Rhincalanus,spp.,104172,3.85,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Herbivore
+Temora spp.,,Copepod,Temora,spp.,104241,1.49,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Herbivore
+Acartia danae f,Acartia,Copepod,Acartia,danae,346026,1.195,Boltovskoy 1999,Omnivore
+Acartia negligens m,Acartia,Copepod,Acartia,negligens,346030,0.925,Boltovskoy 1999,Omnivore
+Bestiolina similis m,,Copepod,Bestiolina,similis,346152,0.8,Bradford-Grieve 1993,Herbivore
+Calanid CV,,Copepod,,,104079,2.6,,Herbivore
+Calanopia minor m,,Copepod,Calanopia,minor,220919,1.2,Boltovskoy 1999,Carnivore
+Amphipod,,Amphipod,,,1135,,,unknown
+Calanid CII,,Copepod,,,104079,2.2,,Herbivore
+Mecynocera spp. j,,Copepod,Mecynocera,spp.,104184,0.92,"‘Species j’ (juvenile) (eg. Acartia spp. j or Centropages australiensis j )  the maximum size limit is based on the minimum size of either the smallest male or female of that species or genus and no minimum size limit has been entered",Herbivore
+Oncaea clevei f,,Copepod,Oncaea,clevei,354022,0.65,Bottger-Schnack 2001,Omnivore
+Sapphirina cf. nigromaculata f,,Copepod,Sapphirina,cf. nigromaculata,129053,2.18,Boltovskoy 1999,Omnivore
+Euchaeta marina f,,Copepod,Euchaeta,marina,104552,3.26,Boltovskoy 1999,Carnivore
+Temora stylifera m,,Copepod,Temora,stylifera,104879,1.725,Boltovskoy 1999,Herbivore
+Gastropod,,Mollusc,,,101,,,unknown
+Insect terrestrial,,Other,,,,,,unknown
+Lucifer spp.,,Decapod,Lucifer,spp.,106827,,,unknown
+Nyctiphanes australis j,,Euphausiid,Nyctiphanes,australis,237863,,,unknown
+Ostracod,,Ostracod,,,1078,,,unknown
+Pentacrinoid larvae,,Echinoderm,,,1806,,,unknown
+Penilia avirostris,,Cladoceran,Penilia,avirostris,106272,,,unknown
+Podon spp.,,Cladoceran,Podon,spp.,106269,,,unknown
+Oncaea scottodicarloi m,,Copepod,Oncaea,scottodicarloi,128950,0.545,Bottger-Schnack 2001,Omnivore
+Pontellopsis krameri f,,Copepod,Pontellopsis,krameri,360246,2.42,Razouls 2012,Carnivore
+Sapphirina opalina m,,Copepod,Sapphirina,opalina,129054,3.39,Boltovskoy 1999,Omnivore
+Sapphirina stellata m,,Copepod,Sapphirina,stellata,129060,2.375,Boltovskoy 1999,Omnivore
+Mecynocera spp.,,Copepod,Mecynocera,spp.,104184,1.065,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Herbivore
+Oncaea venusta medium no hump f,,Copepod,Oncaea,venusta medium no hump,128954,1.025,Bottger-Schnack & Huys 2004,Omnivore
+Metridia spp. m,,Copepod,Metridia,spp.,104190,1.96,‘Species m’ (male) (eg. Acartia spp. m ) size range based on the min & max size range for all the male species of that genus in the database,Omnivore
+Copilia spp.,,Copepod,Copilia,spp.,128721,5.25,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Omnivore
+Cavoliniidae,,Mollusc,,,23000,,,unknown
+Centropages bradyi m,,Copepod,Centropages,bradyi,104491,2.15,Boltovskoy 1999,Omnivore
+Clytemnestra scutellata f,,Copepod,Clytemnestra,scutellata,115805,1.12,Boltovskoy 1999,Omnivore
+Euterpina acutifrons,,Copepod,Euterpina,acutifrons,116162,0.625,Boltovskoy 1999,Omnivore
+Platyhelminthes j,,Platyhelminthes,,,793,,,unknown
+Acrocalanus gibber,,Copepod,Acrocalanus,gibber,104645,1.165,Boltovskoy 1999,Herbivore
+Ditrichocorycaeus erythraeus m,,Copepod,Ditrichocorycaeus,erythraeus,764981,0.87,Razouls 2012,Carnivore
+Lucicutia flavicornis,,Copepod,Lucicutia,flavicornis,104597,1.65,Boltovskoy 1999,Omnivore
+Calanoides patagoniensis f,,Copepod,Calanoides,patagoniensis,345759,2.415,Razouls 2012,Herbivore
+Penilia avirostris f gravid,,Cladoceran,Penilia,avirostris,106272,,,unknown
+Corycaeus clausi f,,Copepod,Corycaeus,clausi,128798,1.66,Razouls 2012,Carnivore
+Facetotecta nauplii,,Thecostraca,,,150305,,,unknown
+Euchirella rostrata m,,Copepod,Euchirella,rostrata,104303,2.8,Boltovskoy 1999,Herbivore
+Pseudodiaptomus mertoni m,,Copepod,Pseudodiaptomus,mertoni,355172,0.92,Razouls 2012,Omnivore
+Sergestid protozoea,,Decapod,,,106731,,,unknown
+Lensia subtilis,,Cnidarian,Lensia,subtilis,135439,,,unknown
+Calanoides spp. CV,,Copepod,Calanoides,spp.,104151,2.08,"‘Species j’ (juvenile) (eg. Acartia spp. j or Centropages australiensis j )  the maximum size limit is based on the minimum size of either the smallest male or female of that species or genus and no minimum size limit has been entered",Herbivore
+Copilia hendorffi m,,Copepod,Copilia,hendorffi,346293,6.9,Boltovskoy 1999,Omnivore
+Clausocalanus laticeps f,,Copepod,Clausocalanus,laticeps,342444,1.46,Frost & Fleminger 1968,Herbivore
+Candacia simplex f,,Copepod,Candacia,simplex,220914,1.97,Razouls 2012,Carnivore
+Bassia bassensis,,Cnidarian,Bassia,bassensis,135404,,,unknown
+Calocalanus contractus f,,Copepod,Calocalanus,contractus,104651,0.72,Boltovskoy 1999,Herbivore
+Clytemnestra spp. f,,Copepod,Clytemnestra,spp.,115273,1.085,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Omnivore
+Lucifer typus m,,Decapod,Lucifer,typus,107122,,,unknown
+Labidocera kroyeri f,,Copepod,Labidocera,kroyeri,104731,2.325,Razouls 2012,Carnivore
+Pleuromamma xiphias f,,Copepod,Pleuromamma,xiphias,104643,4.5,Boltovskoy 1999,Omnivore
+Urochordate,,Urochordata,,,1822,,,unknown
+Oithona nana f,,Copepod,Oithona,nana,106651,0.54,Nishida 1985,Herbivore
+Tortanus (Tortanus) barbatus m,,Copepod,Tortanus (Tortanus),barbatus,220937,1.05,Razouls 2012,Carnivore
+Acartia spp. m,,Copepod,Acartia,spp.,104108,1.01,‘Species m’ (male) (eg. Acartia spp. m ) size range based on the min & max size range for all the male species of that genus in the database,Omnivore
+Candacia spp.,,Copepod,Candacia,spp.,104157,2.04,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Carnivore
+Temora discaudata j,,Copepod,Temora,discaudata,220898,1.11,Razouls 2012,Herbivore
+Onychocorycaeus ovalis f,,Copepod,Onychocorycaeus,ovalis,128819,1.285,Razouls 2012,Carnivore
+Paroithona spp. f,,Copepod,Paroithona,spp.,106486,0.4,Razouls 2013,Herbivore
+Cladoceran j,,Cladoceran,,,1076,,,unknown
+Aetideus spp.,,Copepod,Aetideus,spp.,104112,1.51,,Omnivore
+Temora spp. m,,Copepod,Temora,spp.,104241,1.45,Razouls 2012,Herbivore
+Pleuromamma gracilis f,,Copepod,Pleuromamma,gracilis,104639,1.875,Boltovskoy 1999,Omnivore
+Metridia gerlachei f,,Copepod,Metridia,gerlachei,344689,3.815,Boltovskoy 1999,Omnivore
+Mollusc,,Mollusc,,,51,,,unknown
+Triconia antarctica,,Copepod,Triconia,antarctica,345368,1.205,Boltovskoy 1999,Omnivore
+Subeucalanus longiceps,,Copepod,Subeucalanus,longiceps,345366,4.55,Based on female of species Bradford-Grieve 1994,Herbivore
+Euphausia crystallorophias calyptopis,,Euphausiid,Euphausia,crystallorophias,236216,,,unknown
+Large copepodite CI,,Copepod,,,1080,2,,Herbivore
+Euphausia triacantha,,Euphausiid,Euphausia,triacantha,236220,,,unknown
+Euphausia vallentini calyptopis,,Euphausiid,Euphausia,vallentini,221054,,,unknown
+Nyctiphanes australis,,Euphausiid,Nyctiphanes,australis,237863,,,unknown
+Pterotracheid,,Mollusc,,,225072,,,unknown
+Paraeuchaeta barbata m,,Copepod,Paraeuchaeta,barbata,104557,7.9,"Bradford Haakonssen & Jillett 1983",Carnivore
+Protomyctophum spp.,,Fish,Protomyctophum,spp.,125832,,,unknown
+Euphausia vallentini furcilia,,Euphausiid,Euphausia,vallentini,221054,,,unknown
+Nauplii crustracean,,Decapod,,,1066,,,unknown
+Euphausia vallentini,,Euphausiid,Euphausia,vallentini,221054,,,unknown
+Magelona spp.,,Polychaete,Magelona,spp.,129341,,,unknown
+Oithona frigida f,,Copepod,Oithona,frigida,344712,1.22,Boltovskoy 1999,Herbivore
+Oncaea curvata f,,Copepod,Oncaea,curvata,344719,0.63,Boltovskoy 1999,Omnivore
+Onchocalanus spp. f,,Copepod,Onchocalanus,spp.,104201,7.54,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Herbivore
+Gladioferens inermis f,,Copepod,Gladioferens,inermis,351944,1,Nyan Taw 1975,Omnivore
+Nauplii Rhincalanus gigas,,Copepod,Rhincalanus,gigas,220837,7.88,Boltovskoy 1999,Herbivore
+Euphausia superba FV,,Euphausiid,Euphausia,superba,236217,,,unknown
+Euphausia superba CI,,Euphausiid,Euphausia,superba,236217,,,unknown
+Thysanoessa macrura CII,,Euphausiid,Thysanoessa,macrura,236219,,,unknown
+Oithona simplex j,,Copepod,Oithona,simplex,106657,0.36,Boltovskoy 1999,Herbivore
+Pareucalanus sewelli m,,Copepod,Pareucalanus,sewelli,360047,4.995,Bradford-Grieve 1994,Herbivore
+Stephos longipes f,,Copepod,Stephos,longipes,345365,0.905,Razouls 2012,Omnivore
+Calanus simillimus f,,Copepod,Calanus,simillimus,342436,3.225,Boltovskoy 1999,Herbivore
+Calanus simillimus m,,Copepod,Calanus,simillimus,342436,3.02,Boltovskoy 1999,Herbivore
+Acartia tranteri,Acartiura,Copepod,Acartia,tranteri,346042,1.04,Based on female size Bradford-Grieve 1976,Omnivore
+Acartia erythraea,Odontacartia,Copepod,Acartia,erythraea,346054,1.25,Razouls 2013,Omnivore
+Ditrichocorycaeus dahli,,Copepod,Ditrichocorycaeus,dahli,764980,0.945,Razouls 2012,Carnivore
+Copilia quadrata,,Copepod,Copilia,quadrata,129039,3.95,Boltovskoy 1999,Omnivore
+Subeucalanus mucronatus,,Copepod,Subeucalanus,mucronatus,104546,3.1,Bradford-Grieve 1994,Herbivore
+Haloptilus oxycephalus m,,Copepod,Haloptilus,oxycephalus,104434,2.5,Boltovskoy 1999,Carnivore
+Candacia discaudata,,Copepod,Candacia,discaudata,346235,1.71,Razouls 2012,Carnivore
+Microcalanus pygmaeus f,,Copepod,Microcalanus,pygmaeus,104513,0.86,Razouls 2012,Herbivore
+Paraeuchaeta exigua,,Copepod,Paraeuchaeta,exigua,345051,6.85,Boltovskoy 1999,Carnivore
+Stephos longipes,,Copepod,Stephos,longipes,345365,0.905,Razouls 2012,Omnivore
+Clausocalanus laticeps,,Copepod,Clausocalanus,laticeps,342444,1.46,Frost & Fleminger 1968,Herbivore
+Clausocalanus spp.,,Copepod,Clausocalanus,spp.,104161,1.28,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Herbivore
+Candacia falcifera,,Copepod,Candacia,falcifera,342437,3.81,Razouls 2012,Carnivore
+Ditrichocorycaeus erythraeus,,Copepod,Ditrichocorycaeus,erythraeus,764981,0.965,Razouls 2012,Carnivore
+Pontellopsis scotti,,Copepod,Pontellopsis,scotti,220929,1.66,Razouls 2013,Carnivore
+Parvocalanus latus,,Copepod,Parvocalanus,latus,354637,0.445,Razouls 2013,Herbivore
+Acartia erythraea j,Odontacartia,Copepod,Acartia,erythraea,346054,1,Razouls 2013,Omnivore
+Branchiostoma spp.,,Cephalochordate,Branchiostoma,spp.,104902,,,unknown
+Kelleria australiensis m,,Copepod,Kelleria,australiensis,352459,1.01,Swe Thwin,Carnivore
+Labidocera dakini m,,Copepod,Labidocera,dakini,346589,2.2,Razouls 2013,Carnivore
+Lucicutia tranteri m (invalid),,Copepod,Lucicutia,tranteri (invalid),,,,Omnivore
+Metacalanus aurivillii j,,Copepod,Metacalanus,aurivillii,353392,0.5,Razouls 2013,Herbivore
+Centropages gracilis j,,Copepod,Centropages,gracilis,220903,1.8,Boltovskoy 1999,Omnivore
+Kelleria australiensis f,,Copepod,Kelleria,australiensis,352459,1.23,Swe Thwin,Carnivore
+Pontellopsis herdmani m,,Copepod,Pontellopsis,herdmani,220930,1.72,Razouls 2013,Carnivore
+Eucalanus hyalinus,,Copepod,Eucalanus,hyalinus,345781,6.1,Bradford-Grieve 1994,Herbivore
+Oithona setigera m,,Copepod,Oithona,setigera,106655,1.52,Nishida 1985,Herbivore
+Pseudocyclops spp. m,,Copepod,Pseudocyclops,spp.,104212,0.667,Razouls 2013,Omnivore
+Spinocalanus spp.,,Copepod,Spinocalanus,spp.,104236,1.993,Razouls 2013,Herbivore
+Serratosagitta serratodentata,,Chaetognath,Serratosagitta,serratodentata,105464,,,unknown
+Abylopsis tetragona,,Cnidarian,Abylopsis,tetragona,135403,,,unknown
+Chelophyes appendiculata gonophore,,Cnidarian,Chelophyes,appendiculata,135417,,,unknown
+Heterorhabdus spinifrons m,,Copepod,Heterorhabdus,spinifrons,104583,3.125,Boltovskoy 1999,Carnivore
+Ascampbelliella spp.,,Ciliophora,Ascampbelliella,spp.,415082,,,unknown
+Codonellopsis orthoceras,,Ciliophora,Codonellopsis,orthoceras,417162,,,unknown
+Farranula rostrata m,,Copepod,Farranula,rostrata,128814,0.785,Razouls 2012,Carnivore
+Trichocerca spp.,,Rotifer,Trichocerca,spp.,134959,,,unknown
+Oithona australis m,,Copepod,Oithona,australis,353988,0.575,Razouls 2013,Herbivore
+Oithona decipiens m,,Copepod,Oithona,decipiens,106644,0.68,unknown,Herbivore
+Pseudodiaptomus spp. m,,Copepod,Pseudodiaptomus,spp.,157680,1.105,,Omnivore
+Aetideus australis f,,Copepod,Aetideus,australis,341238,1.91,Boltovskoy 1999,Omnivore
+Augaptilus longicaudatus f,,Copepod,Augaptilus,longicaudatus,104373,4.8,Boltovskoy 1999,Carnivore
+Chiridius spp. f,,Copepod,Chiridius,spp.,104117,2.875,Boltovskoy 1999,Omnivore
+Clausocalanus farrani m,,Copepod,Clausocalanus,farrani,220843,1.12,Razouls 2012,Herbivore
+Farranula concinna m,,Copepod,Farranula,concinna,346476,0.915,Razouls 2012,Carnivore
+Oithona fallax,,Copepod,Oithona,fallax,106645,0.815,Boltovskoy 1999,Herbivore
+Oncaea atlantica complex f,,Copepod,Oncaea,atlantica complex,128926,0.24,,Omnivore
+Oncaea englishi f,,Copepod,Oncaea,englishi,128931,1.05,Boltovskoy 1999,Omnivore
+Oncaea ornata complex m,,Copepod,Oncaea,ornata complex,128944,0.805,Razouls 2013,Omnivore
+Oncaea tregoubovi complex f,,Copepod,Oncaea,tregoubovi complex,354036,0.34,Razouls 2013,Omnivore
+Scottocalanus helenae m,,Copepod,Scottocalanus,helenae,104831,4.305,Razouls 2013,Herbivore
+Scottocalanus persecans f,,Copepod,Scottocalanus,persecans,104832,4.83,Razouls 2013,Herbivore
+Oithona nana m,,Copepod,Oithona,nana,106651,0.54,Nishida 1985,Herbivore
+Acartia negligens,Acartia,Copepod,Acartia,negligens,346030,1.035,Boltovskoy 1999,Omnivore
+Acartia pacifica,Odontacartia,Copepod,Acartia,pacifica,346059,1.175,Razouls 2012,Omnivore
+Oithona nishidai m,,Copepod,Oithona,nishidai,361662,0.56,Razouls 2013,Herbivore
+Triconia hawii f,,Copepod,Triconia,hawii,361550,0.525,Razouls 2013,Omnivore
+Oncaea venusta medium m,,Copepod,Oncaea,venusta medium,128954,1.025,Bottger-Schnack & Huys 2004,Omnivore
+Pachyptilus spp.,,Copepod,Pachyptilus,spp.,104142,5.31,Boltovskoy 1999,unknown
+Canthocalanus spp.,,Copepod,Canthocalanus,spp.,204079,1.45,Boltovskoy 1999,Herbivore
+Chiridius gracilis,,Copepod,Chiridius,gracilis,104290,2.38,Boltovskoy 1999,Omnivore
+Kowalevskia spp.,,Appendicularian,Kowalevskia,spp.,103360,,,unknown
+Euchaeta acuta,,Copepod,Euchaeta,acuta,104550,3.78,Boltovskoy 1999,Carnivore
+Rostraria spp.,,Polychaete,Rostraria,spp.,324638,,,unknown
+Calocalanus contractus,,Copepod,Calocalanus,contractus,104651,0.625,Boltovskoy 1999,Herbivore
+Soestia zonaria,,Thaliacean,Soestia,zonaria,137275,,,unknown
+Acartia australis,Odontacartia,Copepod,Acartia,australis,346050,1.345,Razouls 2012,Omnivore
+Labidocera cervi,,Copepod,Labidocera,cervi,346588,3.02,Razouls 2012,Carnivore
+Acartia clausi f,Acartiura,Copepod,Acartia,clausi,149755,1.035,Razouls 2013,Omnivore
+Stephos maculosus m,,Copepod,Stephos,maculosus,355902,0.54,Razouls 2013,Omnivore
+Penaeus esculentus,,Decapod,Penaeus,esculentus,377566,,,unknown
+Codonellopsis spp.,,Ciliophora,Codonellopsis,spp.,204197,,,unknown
+Globigerinidae,,Foraminifera,,,111929,,,unknown
+Pycnogonidae,,Pycnogonidae,,,1567,,,unknown
+Pontellidae m,,Copepod,,,104097,1.44,,Carnivore
+Paraeuchaeta longicornis f - UNACCEPTED,,Copepod,Paraeuchaeta,longicornis,,,,Carnivore
+Ritteriella picteti,,Thaliacean,Ritteriella,picteti,266543,,,unknown
+Clytia spp.,,Cnidarian,Clytia,spp.,117030,,,unknown
+Platyias spp.,,Rotifer,Platyias,spp.,148357,,,unknown
+Oikopleura (Coecaria) intermedia,,Appendicularian,Oikopleura,intermedia,103412,,,unknown
+Pseudocyclops spp.,,Copepod,Pseudocyclops,spp.,104212,0.667,,Omnivore
+Leptomedusae,,Cnidarian,,,13552,,,unknown
+Synchaeta baltica,,Rotifer,Synchaeta,baltica,135047,,,unknown
+Euchlanis spp.,,Euphausiid,Euchlanis,spp.,134939,,,unknown
+Hemisiriella parva,,Mysida,Hemisiriella,parva,161454,,,unknown
+Pterocypridina spp.,,Ostracod,Pterocypridina,spp.,415901,,,unknown
+Althoffia tumida,,Appendicularian,Althoffia,tumida,103393,,,unknown
+Pseudodiaptomus colefaxi,,Copepod,Pseudodiaptomus,colefaxi,355146,1.29,,Omnivore
+Peltidium spp.,,Copepod,Peltidium,spp.,115430,1,,unknown
+Metis spp.,,Copepod,Metis,spp.,115406,1,,Omnivore
+Tectillaria fertilis,,Appendicularian,Tectillaria,fertilis,103390,,,unknown
+Nematoscelis microps,,Euphausiid,Nematoscelis,microps,110696,,,unknown
+Stylocheiron suhmi,,Euphausiid,Stylocheiron,suhmi,110706,,,unknown
+Vibilia australis,,Amphipod,Vibilia,australis,325409,,,unknown
+Nematoscelis spp.,,Euphausiid,Nematoscelis,spp.,110676,,,unknown
+Siriella gracilis,,Mysida,Siriella,gracilis,161473,,,unknown
+Synopia ultramarina,,Amphipod,Synopia,ultramarina,211240,,,unknown
+Traustedtia multitentaculata,,Thaliacean,Traustedtia,multitentaculata,137282,,,unknown
+Stylocheiron abbreviatum,,Euphausiid,Stylocheiron,abbreviatum,110699,,,unknown
+Bradyidius spp.,,Copepod,Bradyidius,spp.,104115,1.38,,Omnivore
+Tintinnidium spp.,,Ciliophora,Tintinnidium,spp.,247915,,,unknown
+Munna spp.,,Isopod,Munna,spp.,118374,,,unknown
+Encentrum spp.,,Rotifer,Encentrum,spp.,134949,,,unknown
+Euphausia gibba,,Euphausiid,Euphausia,gibba,237855,,,unknown
+Sapphirina auronitens,,Copepod,Sapphirina,auronitens,129042,2.115,Boltovskoy 1999,Omnivore
+Oncaea media m,,Copepod,Oncaea,media,128938,0.63,Bottger-Schnack 2001,Omnivore
+Brachiopoda larvae,,Brachiopod,,,1803,,,unknown
+Desmopterus spp.,,Mollusc,Desmopterus,spp.,137889,,,unknown
+Paratyphis parvus,,Amphipod,Paratyphis,parvus,421628,,,unknown
+Vibilia stebbingi,,Amphipod,Vibilia,stebbingi,236633,,,unknown
+Vibilia viatrix,,Amphipod,Vibilia,viatrix,236634,,,unknown
+Scina crassicornis,,Amphipod,Scina,crassicornis,103279,,,unknown
+Phrosina semilunata,,Amphipod,Phrosina,semilunata,103273,,,unknown
+Pronoe capito,,Amphipod,Pronoe,capito,421617,,,unknown
+Staurostoma falklandica,,Cnidarian,Staurostoma,falklandica,594014,,,unknown
+Bestiolina similis i,,Copepod,Bestiolina,similis,346152,0.765,,Herbivore
+Diacria spp.,,Mollusc,Diacria,spp.,137755,,,unknown
+Ihlea magalhanica agg,,Thaliacean,Ihlea,magalhanica,266541,,,unknown
+Euphausiid calyptope CIII,,Euphausiid,,,110671,,,unknown
+Nyctiphanes australis FIII,,Euphausiid,Nyctiphanes,australis,237863,,,unknown
+Tintinnopsis radix,,Ciliophora,Tintinnopsis,radix,235757,,,unknown
+Nanomia bijuga,,Cnidarian,Nanomia,bijuga,135495,,,unknown
+Tullbergella cuspidatus ,,Amphipod,Tullbergella ,cuspidatus,547498,,,unknown
+Lysmata spp.,,Decapod,Lysmata,spp.,106992,,,unknown
+Codonellopsis ostenfeldi,,Ciliophora,Codonellopsis,ostenfeldi,427448,,,unknown
+Oxycephalus spp.,,Amphipod,Oxycephalus,spp.,206128,,,unknown
+Radiolarian K,,Radiozoa,,,,,,unknown
+Anapronoe cf. reinhardti,,Amphipod,Anapronoe,cf. reinhardti,488595,,,unknown
+Pontellopsis spp. f,,Copepod,Pontellopsis,spp.,104211,,,unknown
+Calanoides carinatus j,,Copepod,Calanoides,carinatus,104462,,,unknown
+Thecosomata,,Mollusc,,,13703,,,unknown
+Paraeuchaeta barbata,,Copepod,Paraeuchaeta,barbata,104557,,,unknown
+Pisces larvae,,Fish,Pisces,,11676,,,unknown
+Pleuragramma antarctica,,Fish,Pleuragramma,antarctica,712788,,,unknown
+Globigerina bulloides,,Foraminifera,Globigerina,bulloides,113434,,,unknown
+Munida gregaria,,Decapod,Munida,gregaria,392346,,,unknown
+Goniopsyllus spp. m,,Copepod,Goniopsyllus,,346507,,,unknown
+Foram C,,Foraminifera,,,,,,unknown
+Foram F,,Foraminifera,,,,,,unknown
+Radiolarian F,,Radiozoa,,,,,,unknown
+Zonosagitta spp.,,Chaetognath,Sagitta,spp.,264951,,,unknown
+Mollusc larvae,,Mollusc,,,51,,,unknown
+Acrocalanus gibber i,,Copepod,Acrocalanus,gibber,104645,,,unknown
+Clausocalanus paululus f,,Copepod,Clausocalanus,paululus,104508,0.73,Frost & Fleminger 1968,Herbivore
+Triconia spp. f,,Copepod,Triconia,spp.,128691,0.985,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Omnivore
+Oncaea venusta medium hump f,,Copepod,Oncaea,venusta medium hump,128954,1.025,Bottger-Schnack & Huys 2004,Omnivore
+Stomatopod,,Decapod,,,14355,,,unknown
+Sapphirina ovatolanceolata / gemma f,,Copepod,Sapphirina,ovatolanceolata / gemma,129055,2.32,Razouls 2012,Omnivore
+Labidocera spp. f,,Copepod,Labidocera,spp.,104208,2.57,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Carnivore
+Lubbockia spp.,,Copepod,Lubbockia,spp.,128672,1.9,,Omnivore
+Aetideus pseudarmatus f,,Copepod,Aetideus,pseudarmatus,345717,1.725,Boltovskoy 1999,Omnivore
+Calanus australis m,,Copepod,Calanus,australis,345760,3.185,Boltovskoy 1999,Herbivore
+Ctenocalanus vanus m,,Copepod,Ctenocalanus,vanus,104510,1.23,Boltovskoy 1999,Herbivore
+Euchaeta spp. f,,Copepod,Euchaeta,spp.,104174,3.255,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Carnivore
+Penaeidae larvae,,Decapod,,,106727,,,unknown
+Aetideus spp. f,,Copepod,Aetideus,spp.,104112,1.64,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Omnivore
+Acartia spp. j,,Copepod,Acartia,spp.,104108,0.72,"‘Species j’ (juvenile) (eg. Acartia spp. j or Centropages australiensis j )  the maximum size limit is based on the minimum size of either the smallest male or female of that species or genus and no minimum size limit has been entered",Omnivore
+Acartia negligens f,Acartia,Copepod,Acartia,negligens,346030,1.155,Boltovskoy 1999,Omnivore
+Acartia tranteri f,Acartiura,Copepod,Acartia,tranteri,346042,1.04,Bradford-Grieve 1976,Omnivore
+Calanoides carinatus f,,Copepod,Calanoides,carinatus,104462,2.55,Boltovskoy 1999,Herbivore
+Microsetella norvegica f,,Copepod,Microsetella,norvegica,116115,0.44,Boltovskoy 1999,Omnivore
+Oithona Grp1 (flat head) f,,Copepod,Oithona,grp 1,106485,0.675,Size compiled from species in group from Nishida 1985,Herbivore
+Oithona spp. large m,,Copepod,Oithona,spp.,106485,1.005,‘Species m’ (male) (eg. Acartia spp. m ) size range based on the min & max size range for all the male species of that genus in the database,Herbivore
+Rhincalanus cornutus f,,Copepod,Rhincalanus,cornutus,104542,3.35,Boltovskoy 1999,Herbivore
+Sapphirina stellata f,,Copepod,Sapphirina,stellata,129060,2.375,Boltovskoy 1999,Omnivore
+Scolecithrix danae f,,Copepod,Scolecithrix,danae,104821,2.1,Boltovskoy 1999,Herbivore
+Subeucalanus subcrassus f,,Copepod,Subeucalanus,subcrassus,104548,2.515,Bradford-Grieve 1994,Herbivore
+Temora discaudata f,,Copepod,Temora,discaudata,220898,1.58,Razouls 2012,Herbivore
+Temora spp. j,,Copepod,Temora,spp.,104241,0.93,"‘Species j’ (juvenile) (eg. Acartia spp. j or Centropages australiensis j )  the maximum size limit is based on the minimum size of either the smallest male or female of that species or genus and no minimum size limit has been entered",Herbivore
+Temora stylifera f,,Copepod,Temora,stylifera,104879,1.725,Boltovskoy 1999,Herbivore
+Temoropia mayumbaensis m,,Copepod,Temoropia,mayumbaensis,104881,0.975,Boltovskoy 1999,Omnivore
+Egg mass,,Egg,,,,,,unknown
+Euphausiid furcilia larvae,,Euphausiid,,,110671,,,unknown
+Isopod,,Isopod,,,1131,,,unknown
+Porcelain crab zoea,,Decapod,,,106734,,,unknown
+Scottocalanus spp.,,Copepod,Scottocalanus,spp.,104232,4.519,Razouls 2013,Herbivore
+Nauplii pontellidae,,Copepod,,,104097,0.4,,Herbivore
+Acartia sinjiensis f,Acanthacartia,Copepod,Acartia,sinjiensis,345940,0.98,Razouls 2012,Omnivore
+Polychaete larvae,,Polychaete,,,883,,,unknown
+Rhincalanus nasutus f,,Copepod,Rhincalanus,nasutus,104543,4.6,Boltovskoy 1999,Herbivore
+Acrocalanus spp. i,,Copepod,Acrocalanus,spp.,104192,1.11,‘Species i’ (eg. Clausocalanus spp. i) size range based on the min & max size range for all the female species of that genus present in database,Herbivore
+Subeucalanus monachus f,,Copepod,Subeucalanus,monachus,104545,2.24,Boltovskoy 1999,Herbivore
+Mysid,,Mysida,,,2824,,,unknown
+Temora discaudata,,Copepod,Temora,discaudata,220898,1.58,Razouls 2012,Herbivore
+Canthocalanus pauper m,,Copepod,Canthocalanus,pauper,220834,1.4,Boltovskoy 1999,Herbivore
+Calocalanus cf. styliremis f,,Copepod,Calocalanus,cf. styliremis,104193,0.655,Boltovskoy 1999,Herbivore
+Tortanus (Tortanus) gracilis m,,Copepod,Tortanus (Tortanus),gracilis,720560,1.575,Razouls 2013,Carnivore
+Clausocalanus furcatus m,,Copepod,Clausocalanus,furcatus,104503,0.81,Frost & Fleminger 1968,Herbivore
+Aetideus spp. m,,Copepod,Aetideus,spp.,104112,1.4,‘Species m’ (male) (eg. Acartia spp. m ) size range based on the min & max size range for all the male species of that genus in the database,Omnivore
+Subeucalanus monachus m,,Copepod,Subeucalanus,monachus,104545,2.2,Boltovskoy 1999,Herbivore
+Agetus typicus f,,Copepod,Agetus,typicus,128797,1.55,Razouls 2012,Carnivore
+Lucifer spp. m,,Decapod,Lucifer,spp.,106827,,Unknown,unknown
+Pterotracheoidea - atlantid,,Mollusc,,,387338,,,unknown
+Pseudodiaptomus j,,Copepod,Pseudodiaptomus,spp.,157680,1.1,‘Species spp.’ (eg. Acartia spp. or Oncaea venusta (no sex)) size range based on the min & max size range for all the female & male species of that species or genus present in database,Omnivore
+Hemicyclops spp.,,Copepod,Hemicyclops,spp.,394447,1.52,Moon S.Y. & I.H. Kim. (2010),Carnivore
+Farranula gibbula f,,Copepod,Farranula,gibbula,346477,0.965,Razouls 2012,Carnivore
+Onychocorycaeus agilis m,,Copepod,Onychocorycaeus,agilis,359743,0.795,Razouls 2012,Carnivore
+Farranula concinna f,,Copepod,Farranula,concinna,346476,0.915,Razouls 2012,Carnivore
+Sapphirina scarlata m,,Copepod,Sapphirina,scarlata,129058,4.125,Boltovskoy 1999,Omnivore
+Pleuromamma abdominalis m,,Copepod,Pleuromamma,abdominalis,104637,3.125,Boltovskoy 1999,Omnivore
+Ditrichocorycaeus anglicus f,,Copepod,Ditrichocorycaeus,anglicus,128805,1,Razouls 2012,Carnivore
+Oikopleura (Vexillaria) dioica,,Appendicularian,Oikopleura (Vexillaria),dioica,103407,,,unknown
+Tortanus (Tortanus) barbatus j,,Copepod,Tortanus (Tortanus),barbatus,220937,0.9,Razouls 2012,Carnivore
+Triconia redacta f,,Copepod,Triconia,redacta,361554,1.08,Razouls 2012,Omnivore
+Aidanosagitta regularis,,Chaetognath,Aidanosagitta,regularis,266712,,,unknown
+Coelenterata larvae,,Coelenterate,,,152230,,,unknown
+Copilia quadrata m,,Copepod,Copilia,quadrata,129039,4.6,Boltovskoy 1999,Omnivore
+Clausocalanus brevipes m,,Copepod,Clausocalanus,brevipes,342443,1.195,Frost & Fleminger 1968,Herbivore
+Ditrichocorycaeus subtilis m,,Copepod,Ditrichocorycaeus,subtilis,128809,0.75,Razouls 2012,Carnivore
+Subeucalanus subtenuis f,,Copepod,Subeucalanus,subtenuis,104549,2.875,Boltovskoy 1999,Herbivore
+Podon intermedius f gravid,,Cladoceran,Podon,intermedius,106276,,,unknown
+Pontella spp. j,,Copepod,Pontella,spp.,104209,1.44,,Carnivore
+Corycaeus crassiusculus f,,Copepod,Corycaeus,crassiusculus,128799,1.72,Razouls 2012,Carnivore
+Rhincalanus rostrifrons m,,Copepod,Rhincalanus,rostrifrons,356829,2.635,Bradford-Grieve 1994,Herbivore
+Lucifer spp. mysis,,Decapod,Lucifer,spp.,106827,,,unknown
+Centropages furcatus j,,Copepod,Centropages,furcatus,104495,1.55,Boltovskoy 1999,Omnivore
+Calanopia elliptica m,,Copepod,Calanopia,elliptica,104724,1.85,Boltovskoy 1999,Carnivore
+Temora spp. f,,Copepod,Temora,spp.,104241,1.55,‘Species f’ (female) (eg. Acartia spp. f ) size range based on the min & max size range for all the female species of that genus in the database,Herbivore
+Farranula rostrata f,,Copepod,Farranula,rostrata,128814,0.785,Razouls 2012,Carnivore
+Euchaeta spp. m,,Copepod,Euchaeta,spp.,104174,3.155,‘Species m’ (male) (eg. Acartia spp. m ) size range based on the min & max size range for all the male species of that genus in the database,Carnivore
+Paracalanus spp. m,,Copepod,Paracalanus,spp.,104196,1.07,‘Species m’ (male) (eg. Acartia spp. m ) size range based on the min & max size range for all the male species of that genus in the database,Herbivore
+Podon intermedius f,,Cladoceran,Podon,intermedius,106276,,,unknown
+Centropages gracilis f,,Copepod,Centropages,gracilis,220903,1.875,Boltovskoy 1999,Omnivore
+Calocalanus contractus m,,Copepod,Calocalanus,contractus,104651,0.49,Boltovskoy 1999,Herbivore
+Paralabidocera antarctica,,Copepod,Paralabidocera,antarctica,345234,1.8,,Carnivore
+Euphausia crystallorophias,,Euphausiid,Euphausia,crystallorophias,236216,,,unknown
+Large copepodite CIII,,Copepod,,,1080,2.3,,Herbivore
+Euphausia spinifera calyptopis,,Euphausiid,Euphausia,spinifera,221051,,,unknown
+Sagittidae,,Chaetognath,,,5953,,,unknown
+Radiozoa,,Radiozoa,,,196831,,,unknown
+Tomopteris carpenteri,,Polychaete,Tomopteris,carpenteri,332607,,,unknown
+Large copepodite CV,,Copepod,,,1080,2.6,,Herbivore
+Thysanoessa vicina/macrura furcilia,,Euphausiid,Thysanoessa,vicina/macrura,110679,,,unknown
+Phronima spp.,,Amphipod,Phronima,spp.,101804,,,unknown
+Euphausia longirostris calyptopis,,Euphausiid,Euphausia,longirostris,221053,,,unknown
+Clione antarctica,,Mollusc,Clione,antarctica,714164,,,unknown
+Zonosagitta pulchra,,Chaetognath,Zonosagitta,pulchra,266888,,,unknown
+Dolioletta spp.,,Thaliacean,Dolioletta,spp.,137219,,,unknown
+Eukrohnia hamata,,Chaetognath,Eukrohnia,hamata,105416,,,unknown
+Large copepodite CI-CIII,,Copepod,,,1080,2.2,,Herbivore
+Centropages aucklandicus,,Copepod,Centropages,aucklandicus,104489,1.65,Razouls 2012,Omnivore
+Pontellidae,,Copepod,,,104097,1.69,,Carnivore
+Ctenocalanus citer f,,Copepod,Ctenocalanus,citer,342449,1.105,Boltovskoy 1999,Herbivore
+Oithona frigida m,,Copepod,Oithona,frigida,344712,0.84,Boltovskoy 1999,Herbivore
+Oncaea curvata m,,Copepod,Oncaea,curvata,344719,0.485,Boltovskoy 1999,Omnivore
+Solmundella bitentaculata,,Cnidarian,Solmundella,bitentaculata,117267,,,unknown
+Euphausia superba CII,,Euphausiid,Euphausia,superba,236217,,,unknown
+Heterorhabdus spinifrons,,Copepod,Heterorhabdus,spinifrons,104583,3.1,Boltovskoy 1999,Carnivore
+Thysanoessa macrura FII,,Euphausiid,Thysanoessa,macrura,236219,,,unknown
+Euphausia superba FIV,,Euphausiid,Euphausia,superba,236217,,,unknown
+Gastropod operculum,,Mollusc,,,101,,,unknown
+Euchaeta acuta m,,Copepod,Euchaeta,acuta,104550,3.6,"Bradford Haakonssen & Jillett 1983",Carnivore
+Oithona fallax j,,Copepod,Oithona,fallax,106645,0.67,Boltovskoy 1999,Herbivore
+Mesocalanus tenuicornis,,Copepod,Mesocalanus,tenuicornis,104468,2.05,Boltovskoy 1999,Herbivore
+Salpidae sol,,Thaliacean,,,137217,,,unknown
+Labidocera bengalensis,,Copepod,Labidocera,bengalensis,346585,1.545,Razouls 2013,Carnivore
+Corycaeus vitreus m,,Copepod,Corycaeus,vitreus,346298,1.71,Razouls 2012,Carnivore
+Tortanus (Tortanus) gracilis,,Copepod,Tortanus (Tortanus),gracilis,720560,1.725,Razouls 2013,Carnivore
+Corycaeus speciosus,,Copepod,Corycaeus,speciosus,128800,1.845,Boltovskoy 1999,Carnivore
+Paracalanus denudatus,,Copepod,Paracalanus,denudatus,104682,0.815,Boltovskoy 1999,Herbivore
+Pleuromamma robusta m,,Copepod,Pleuromamma,robusta,104642,3.5,Boltovskoy 1999,Omnivore
+Scolecithricella minor f,,Copepod,Scolecithricella,minor,104811,1.27,Boltovskoy 1999,Herbivore
+Oithona attenuata stocky f,,Copepod,Oithona,attenuata stocky,220944,0.69,Nishida 1985,Herbivore
+Candacia maxima,,Copepod,Candacia,maxima,342438,3.72,Razouls 2012,Carnivore
+Oithona frigida,,Copepod,Oithona,frigida,344712,1.22,Boltovskoy 1999,Herbivore
+Calanoides macrocarinatus,,Copepod,Calanoides,macrocarinatus,345758,3.55,Boltovskoy 1999,Herbivore
+Mecynocera clausi,,Copepod,Mecynocera,clausi,104616,1.065,Boltovskoy 1999,Herbivore
+Metridia gerlachei,,Copepod,Metridia,gerlachei,344689,3.815,Boltovskoy 1999,Omnivore
+Scolecithricella orientalis,,Copepod,Scolecithricella,orientalis,104813,1.1,Razouls 2013,Herbivore
+Oithona attenuata,,Copepod,Oithona,attenuata,220944,0.65,Boltovskoy 1999,Herbivore
+Bradyidius styliformis f,,Copepod,Bradyidius,styliformis,346181,1.445,Razouls 2013,Omnivore
+Corycaeus sewelli m (invalid),,Copepod,Corycaeus,sewelli (invalid),,,,Carnivore
+Cumacea,,Cumacean,,,1137,,,unknown
+Calocalanus plumulosus j,,Copepod,Calocalanus,plumulosus,211848,1.015,Boltovskoy 1999,Herbivore
+Paracalanidae j,,Copepod,,,104093,0.8,,Herbivore
+Caridea zoea,,Decapod,,,106674,,,unknown
+Kelleria spp. j,,Copepod,Kelleria,spp.,205653,0.94,Swe Thwin,Carnivore
+Terebellidae,,Polychaete,,,982,,,unknown
+Pontellopsis spp. m,,Copepod,Pontellopsis,spp.,104211,1.64,Razouls 2013,Carnivore
+Rhincalanus nasutus,,Copepod,Rhincalanus,nasutus,104543,4,Boltovskoy 1999,Herbivore
+Acartia negligens j,Acartia,Copepod,Acartia,negligens,346030,0.8,Boltovskoy 1999,Omnivore
+Calocalanus gracilis f,,Copepod,Calocalanus,gracilis,345776,0.65,Razouls 2013,Herbivore
+Pseudodiaptomus galleti j,,Copepod,Pseudodiaptomus,galleti,355155,0.95,Razouls 2013,Omnivore
+Paracalanus spp. i,,Copepod,Paracalanus,spp.,104196,1.05,,Herbivore
+Oxycephalidae,,Amphipod,,,196118,,,unknown
+Sulculeolaria spp.,,Cnidarian,Sulculeolaria,spp.,135367,,,unknown
+Foraminifera,,Foraminifera,,,1410,,,unknown
+Calanidae j,,Copepod,,,104079,2.6,,Herbivore
+Cephalopoda j,,Cephalopod,,,11707,,,unknown
+Oithona attenuata stocky m,,Copepod,Oithona,attenuata stocky,220944,0.69,Nishida 1985,Herbivore
+sp. A unid copepod Ramu,,Copepod,,,1080,,,Herbivore
+Scolecithricella nicobarica m,,Copepod,Scolecithricella,nicobarica,360544,1.29,Razouls 2013,Herbivore
+Clausocalanus pergens m,,Copepod,Clausocalanus,pergens,104509,0.9,Frost & Fleminger 1968,Herbivore
+Euchaeta media f,,Copepod,Euchaeta,media,104553,4.11,Boltovskoy 1999,Carnivore
+Haloptilus longicornis f,,Copepod,Haloptilus,longicornis,104431,2.22,Boltovskoy 1999,Carnivore
+Oithona fallax f,,Copepod,Oithona,fallax,106645,0.905,Boltovskoy 1999,Herbivore
+Oncaea waldemari m,,Copepod,Oncaea,waldemari,360846,0.46,Bottger-Schnack 2001,Omnivore
+Oncaeidae j,,Copepod,,,128586,0.5,,Omnivore
+Paracalanidae f,,Copepod,,,104093,0.9,,Herbivore
+Scottocalanus spp. f,,Copepod,Scottocalanus,spp.,104232,4.487,Razouls 2013,Herbivore
+Spinoncaea spp. f,,Copepod,Spinoncaea,spp.,348050,0.31,Razouls 2013,Omnivore
+Temoropia minor m,,Copepod,Temoropia,minor,104882,0.61,Razouls 2013,Omnivore
+Oithona attenuata typical m,,Copepod,Oithona,attenuata typical,220944,0.75,Nishida 1985,Herbivore
+Neocalanus gracilis CV,,Copepod,Neocalanus,gracilis,104471,3.15,Boltovskoy 1999,Herbivore
+Oithona attenuata f,,Copepod,Oithona,attenuata,220944,0.7,Boltovskoy 1999,Herbivore
+Corycaeidae f,,Copepod,,,128569,1.84,,Carnivore
+Euchirella curticauda,,Copepod,Euchirella,curticauda,104299,3.845,Boltovskoy 1999,Herbivore
+Gladioferens pectinatus,,Copepod,Gladioferens,pectinatus,356667,1.42,McKinnon 1985,Omnivore
+Labidocera tasmanica,,Copepod,Labidocera,tasmanica,346613,2.64,Nyan Taw 1974,Carnivore
+Sulcanus conflictus,,Copepod,Sulcanus,conflictus,355934,1.5,Razouls 2013,Carnivore
+Calocalanus styliremis,,Copepod,Calocalanus,styliremis,104673,0.655,Boltovskoy 1999,Herbivore
+Solidosagitta planctonis,,Chaetognath,Solidosagitta,planctonis,105466,,,unknown
+Oithona nana,,Copepod,Oithona,nana,106651,0.54,Nishida 1985,Herbivore
+Oncaea clevei,,Copepod,Oncaea,clevei,354022,0.65,Bottger-Schnack 2001,Omnivore
+Subeucalanus pileatus,,Copepod,Subeucalanus,pileatus,104547,2.15,Boltovskoy 1999,Herbivore
+Eucalanus hyalinus m,,Copepod,Eucalanus,hyalinus,345781,6.1,Bradford-Grieve 1994,Herbivore
+Thysanoessa macrura calyptopis,,Euphausiid,Thysanoessa,macrura,236219,,,unknown
+Amphinema spp.,,Cnidarian,Amphinema,spp.,117178,,,unknown
+Rhabdonella spp.,,Ciliophora,Rhabdonella,spp.,183576,,,unknown
+Oikopleura (Coecaria) fusiformis,,Appendicularian,Oikopleura (Coecaria),fusiformis,103408,,,unknown
+Oikopleura (Vexillaria) rufescens,,Appendicularian,Oikopleura (Vexillaria),rufescens,103416,,,unknown
+Labidocera moretoni f,,Copepod,Labidocera,moretoni,220925,2.005,Razouls 2013,Carnivore
+Corycaeidae,,Copepod,,,128569,1.84,,Carnivore
+Scaphocalanus curtus f,,Copepod,Scaphocalanus,curtus,104792,1.44,,Herbivore
+Thysanoessa gregaria furcilia FV,,Euphausiid,Thysanoessa,gregaria,110707,,,unknown
+Thysanoessa gregaria furcilia FIV,,Euphausiid,Thysanoessa,gregaria,110707,,,unknown
+Synopia spp.,,Amphipod,Synopia,spp.,205038,,,unknown
+Scolecithricella dentata f,,Copepod,Scolecithricella,dentata,104807,1.64,,Herbivore
+Prionomysis stenolepis,,Mysida,Prionomysis,stenolepis,226995,,,unknown
+Oediceroides spp.,,Amphipod,Oediceroides,spp.,101697,,,unknown
+Metis holothuriae,,Copepod,Metis,holothuriae,116379,1,,Omnivore
+Syllidae,,Polychaete,,,948,,,unknown
+Hexarthra fennica,,Rotifer,Hexarthra,fennica,134971,,,unknown
+Siphonostra spp.,,Ostracod,Siphonostra,spp.,450799,,,unknown
+Cyclosalpa pinnata,,Thaliacean,Cyclosalpa,pinnata,137260,,,unknown
+Cyclosalpa floridana,,Thaliacean,Cyclosalpa,floridana,137258,,,unknown
+Bemlos australis,,Amphipod,Bemlos,australis,488726,,,unknown
+Labidocera moretoni,,Copepod,Labidocera,moretoni,220925,2.005,,Carnivore
+Metacalanus spp.,,Copepod,Metacalanus,spp.,104132,0.59,,Herbivore
+Paracalanus parvus,,Copepod,Paracalanus,parvus,104685,1,,Herbivore
+Krohnitta subtilis,,Chaetognath,Krohnitta,subtilis,105429,,,unknown
+Stephos morii,,Copepod,Stephos,morii,360650,0.85,,Omnivore
+Brooksia rostrata,,Thaliacean,Brooksia,rostrata,137256,,,unknown
+Cyclosalpa spp.,,Thaliacean,Cyclosalpa,spp.,137227,,,unknown
+Pseudanchialina inermis,,Mysida,Pseudanchialina,inermis,161438,,,unknown
+Lycaeopsidae,,Amphipod,,,236577,,,unknown
+Sapphirina darwinii,,Copepod,Sapphirina,darwinii,360445,2.39,Razouls 2013,Omnivore
+Euchaeta longicornis,,Copepod,Euchaeta,longicornis,346439,2.89,Razouls 2013,Carnivore
+Sapphirina metallina,,Copepod,Sapphirina,metallina,129052,2.095,Boltovskoy 1999,Omnivore
+Melitidae,,Amphipod,,,101397,,,unknown
+Nauplii oithonidae,,Copepod,,,106485,0.2,,Herbivore
+Vibilia pyripes,,Amphipod,Vibilia,pyripes,103292,,,unknown
+Platyscelus serratulus,,Amphipod,Platyscelus,serratulus,236623,,,unknown
+Amphithyrus bispinosus,,Amphipod,Amphithyrus,bispinosus,236615,,,unknown
+Phronima curvipes,,Amphipod,Phronima,curvipes,236607,,,unknown
+Primno johnsoni,,Amphipod,Primno,johnsoni,421605,,,unknown
+Oncaea spp. m >0.7mm,,Copepod,Oncaea,spp.,128690,0.8,,Omnivore
+Pontoeciella spp. j,,Copepod,Pontoeciella,spp.,135651,1.175,,Omnivore
+Ambunguipes spp.,,Copepod,Ambunguipes,spp.,115187,0.98,Huys 1990,unknown
+Scolecithricella longifurca m,,Copepod,Scolecithricella,longifurca,360542,2.1,,Herbivore
+Triconia spp. j,,Copepod,Triconia,spp.,128691,0.985,,Omnivore
+Hemityphis spp,,Amphipod,Hemityphis,spp.,236618,,,unknown
+Rhabdonella amor,,Ciliophora,Rhabdonella,amor,341673,,,unknown
+Euphausiid furcilia FII,,Euphausiid,,,110671,,,unknown
+Sapphirina cf. nigromaculata m,,Copepod,Sapphirina,cf. nigromaculata,129053,2.375,,Omnivore
+Ophiopluteus,,Echinoderm,,,1806,,,unknown
+Nyctiphanes australis FV,,Euphausiid,Nyctiphanes,australis,237863,,,unknown
+Caridea megalopa larvae,,Decapod,,,106674,,,unknown
+Aetideidae,,Copepod,,,104075,1.51,,Omnivore
+Sulcanus conflictus f,,Copepod,Sulcanus,conflictus,355934,1.6,,Carnivore
+Xystonella treforti,,Ciliophora,Xystonella,treforti,196855,,,unknown
+Cavolinia inflexa,,Mollusc,Cavolinia,inflexa ,139029,,,unknown
+Calanoides spp. m,,Copepod,Calanoides,spp.,104151,,,unknown
+Nausithoe spp.,,Cnidarian,Nausithoe,spp.,135250,,,unknown
+Acrocalanus gracilis i,,Copepod,Acrocalanus,gracilis,220838,,,unknown
+Engraulid fish larva,,Fish,,,125465,,,unknown
+Diphyes bojani ,,Cnidarian,Diphyes,bojani,135419,,,unknown
+Hyalocylis striata ,,Mollusc,Hyalocylis ,striata,139047,,,unknown
+Paraclione spp.,,Mollusc,Paraclione,spp.,137795,,,unknown
+Monacanthidae (leatherjacket) larvae,,Fish,,,125610,,,unknown
+Pontella fera m,,Copepod,Pontella,fera,360157,2.715,,unknown
+Protoconch,,Mollusc,,,23000,,,unknown
+Radiolarian N,,Radiozoa,,,,,,unknown
+Calanus spp. j,,Copepod,Calanus,spp.,104152,,,unknown
+Parasite,,Other,,,,,,unknown
+Pontella aculeata m,,Copepod,Pontella,aculeata,1262429,4.52,,unknown
+Phalacrophorus pictus,,Polychaete,Phalacrophorus,pictus,209714,,,unknown
+Pseudosagitta spp.,,Chaetognath,Pseudosagitta,spp.,105409,,,unknown
+Scaphocalanus farrani,,Copepod,Scaphocalanus,farrani,345286,,,unknown
+Clione spp. ,,Mollusc,Clione,spp.,137793,,,unknown
+Euterpina spp. ,,Copepod,Euterpina,spp.,115348,,,unknown
+Evadne spp f gravid,,Cladoceran,Evadne,spp.,106267,,,unknown
+Euphausiid furcilia FVI,,Euphausiid,,,110671,,,unknown
+Goniopsyllus spp. f,,Copepod,Goniopsyllus,,346507,,,unknown
+Radiolarian H,,Radiozoa,,,,,,unknown
+Spongodiscidae (Circular),,Radiozoa,,,345858,,,unknown
