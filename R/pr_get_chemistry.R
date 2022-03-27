@@ -11,7 +11,11 @@ pr_get_chemistry <- function(){
   var_names <- c("Silicate_umolL", "Phosphate_umolL", "Ammonium_umolL", "Nitrate_umolL", "Nitrite_umolL",
                  "Oxygen_umolL", "DIC_umolkg", "TAlkalinity_umolkg", "Salinity_psu")
 
-  chemistry <- readr::read_csv(system.file("extdata", "BGC_Chemistry.csv", package = "planktonr", mustWork = TRUE), na = c("", NaN), show_col_types = FALSE,
+  file <- "bgc_chemistry_data"
+
+  chemistry <- readr::read_csv(stringr::str_replace(pr_get_site(), "LAYER_NAME", file),
+                               na = c("", NaN),
+                               show_col_types = FALSE,
                                col_types = readr::cols(DIC_UMOLKG = readr::col_double(),
                                                        OXYGEN_UMOLL = readr::col_double(),
                                                        OXYGEN_COMMENTS = readr::col_character())) %>%

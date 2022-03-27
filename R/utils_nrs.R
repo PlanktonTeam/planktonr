@@ -6,7 +6,7 @@
 #' @param Variable Variable options are: abundance or biovolume (phytoplankton only)
 #' @param Subset Data compilation. Full options are below.
 #'
-#' @return A dataframe with requested plankton data in long form
+#' @return A dataframe with requested plankton data in wide form
 #' @export
 #' @examples
 #' df <- pr_get_NRSData(Type = "phytoplankton", Variable = "abundance", Subset = "raw")
@@ -49,7 +49,7 @@ pr_get_NRSStation <- function(){
 #' @examples
 #' df <- pr_get_NRSTrips()
 #' @importFrom rlang .data
-pr_get_NRSTrips <- function(Type = c("P","Z","F")){
+pr_get_NRSTrips <- function(Type = c("P", "Z", "F")){
 
   NRSTrip <- readr::read_csv(system.file("extdata", "BGC_Trip.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
     pr_rename() %>%
@@ -79,7 +79,6 @@ pr_get_NRSTrips <- function(Type = c("P","Z","F")){
 }
 
 
-
 #' Load zooplankton abundance data
 #' @return A dataframe with zooplankton abundance data
 #' @export
@@ -91,7 +90,6 @@ pr_get_NRSZooData <- function(){
   dat <- readr::read_csv(system.file("extdata", "BGC_Zoop_Raw.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
-
 
 
 #' Load zooplankton NRS Zooplankton changelog
@@ -116,7 +114,10 @@ pr_get_NRSZooChangeLog <- function(){
 #' @examples
 #' df <- pr_get_NRSPigments()
 pr_get_NRSPigments <- function(){
-  dat <- readr::read_csv(system.file("extdata", "BGC_Pigments.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
+  file <- "bgc_pigments_data"
+  dat <- readr::read_csv(
+    stringr::str_replace(pr_get_site(), "LAYER_NAME", file),
+    na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 
@@ -130,7 +131,26 @@ pr_get_NRSPigments <- function(){
 #' df <- pr_get_NRSPico()
 #' @importFrom rlang .data
 pr_get_NRSPico <- function(){
-  dat <- readr::read_csv(system.file("extdata", "BGC_Picoplankton.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
+  file <- "bgc_picoplankton_data"
+  dat <- readr::read_csv(
+    stringr::str_replace(pr_get_site(), "LAYER_NAME", file),
+    na = "", show_col_types = FALSE) %>%
     pr_rename()
 }
 
+
+#' Load Total Suspended Solids (TSS) data
+#'
+#' @return A dataframe with NRS TSS data
+#' @export
+#'
+#' @examples
+#' df <- pr_get_NRSTSS()
+#' @importFrom rlang .data
+pr_get_NRSTSS <- function(){
+  file <- "bgc_tss_data"
+  dat <- readr::read_csv(stringr::str_replace(pr_get_site(), "LAYER_NAME", file),
+                         na = "",
+                         show_col_types = FALSE) %>%
+    pr_rename()
+}

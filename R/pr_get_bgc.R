@@ -35,23 +35,22 @@ pr_get_bgc <- function(){
     pr_apply_flags() %>%
     dplyr::group_by(.data$TripCode, .data$SampleDepth_m) %>%
     dplyr::summarise(Prochlorococcus_Cellsml = mean(.data$Prochlorococcus_Cellsml, na.rm = TRUE), # mean of replicates
-              Synecochoccus_Cellsml = mean(.data$Synecochoccus_Cellsml, na.rm = TRUE),
-              Picoeukaryotes_Cellsml = mean(.data$Picoeukaryotes_Cellsml, na.rm = TRUE),
-              .groups = "drop")
+                     Synecochoccus_Cellsml = mean(.data$Synecochoccus_Cellsml, na.rm = TRUE),
+                     Picoeukaryotes_Cellsml = mean(.data$Picoeukaryotes_Cellsml, na.rm = TRUE),
+                     .groups = "drop")
 
   # Total suspended solid data
-  TSS <- readr::read_csv(system.file("extdata", "BGC_TSS.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
-    pr_rename() %>%
+  TSS <- pr_get_NRSTSS() %>%
     dplyr::mutate(SampleDepth_m = as.character(.data$SampleDepth_m),
-           TripCode = substring(.data$TripCode,4),
-           InorganicFraction_Flag = .data$TSS_Flag, # These flags don't exist but are identical to TSS
-           OrganicFraction_Flag = .data$TSS_Flag) %>%
+                  TripCode = substring(.data$TripCode,4),
+                  InorganicFraction_Flag = .data$TSS_Flag, # These flags don't exist but are identical to TSS
+                  OrganicFraction_Flag = .data$TSS_Flag) %>%
     pr_apply_flags() %>%
     dplyr::group_by(.data$TripCode, .data$SampleDepth_m) %>%
     dplyr::summarise(TSS_mgL = mean(.data$TSS_mgL, na.rm = TRUE), # mean of replicates
-              InorganicFraction_mgL = mean(.data$InorganicFraction_mgL, na.rm = TRUE),
-              OrganicFraction_mgL = mean(.data$OrganicFraction_mgL, na.rm = TRUE),
-              .groups = "drop") %>%
+                     InorganicFraction_mgL = mean(.data$InorganicFraction_mgL, na.rm = TRUE),
+                     OrganicFraction_mgL = mean(.data$OrganicFraction_mgL, na.rm = TRUE),
+                     .groups = "drop") %>%
     tidyr::drop_na(.data$SampleDepth_m)
 
 
@@ -65,10 +64,10 @@ pr_get_bgc <- function(){
 
   # combine for all samples taken
   Samples <- dplyr::bind_rows(Chemistry %>% dplyr::select(.data$TripCode, .data$SampleDepth_m),
-                       Pico %>% dplyr::select(.data$TripCode, .data$SampleDepth_m),
-                       Pigments %>% dplyr::select(.data$TripCode, .data$SampleDepth_m),
-                       TSS %>% dplyr::select(.data$TripCode, .data$SampleDepth_m),
-                       ZBiomass %>% dplyr::select(.data$TripCode, .data$SampleDepth_m)) %>%
+                              Pico %>% dplyr::select(.data$TripCode, .data$SampleDepth_m),
+                              Pigments %>% dplyr::select(.data$TripCode, .data$SampleDepth_m),
+                              TSS %>% dplyr::select(.data$TripCode, .data$SampleDepth_m),
+                              ZBiomass %>% dplyr::select(.data$TripCode, .data$SampleDepth_m)) %>%
     unique()
 
   # Combined BGC data for each station at the sample depth
