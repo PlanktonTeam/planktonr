@@ -263,8 +263,8 @@ pr_get_LTnuts <-  function(){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_pigs()
-pr_get_pigs <-  function(){
+#' df <- pr_get_pigments()
+pr_get_pigments <-  function(){
   Pigs  <- readr::read_csv(system.file("extdata", "BGC_Pigments.csv", package = "planktonr", mustWork = TRUE),
                            show_col_types = FALSE,
                            col_types = list(PROJECTNAME = readr::col_character(),
@@ -289,7 +289,7 @@ pr_get_pigs <-  function(){
                   StationCode = stringr::str_sub(.data$TripCode, 1, 3),
                   Month = lubridate::month(.data$SampleDateLocal)) %>%
     dplyr::filter(.data$TotalChla != 0) %>%
-    dplyr::select(.data$ProjectName:.data$SampleDepth_m, .data$TotalChla:.data$Month, -.data$TripCode)  %>%
+    dplyr::select(.data$ProjectName:.data$SampleDepth_m, .data$TotalChla:.data$Month, -.data$TripCode) %>%
     tidyr::pivot_longer(.data$TotalChla:.data$TDP, values_to = "Values", names_to = 'parameters') %>%
     pr_get_StationName() %>%
     pr_reorder()
@@ -301,9 +301,9 @@ pr_get_pigs <-  function(){
 
 #' Get data for frequency map plots
 #'
-#' @param Type Phyto or zoo, defaults to phyto
+#' @param Type Phytoplankton (P) or Zooplankton (Z), defaults to phyto
 #'
-#' @return dataframe for plotting wiht pr_plot_fmap
+#' @return dataframe for plotting with pr_plot_fmap
 #' @export
 #'
 #' @examples
@@ -316,23 +316,25 @@ pr_get_fMap_data <- function(Type = "Z"){
                                                        "SampleTime", "Year", "Month", "Day", "Time", "SampleDepth_m", "Method", "CTD"), ignore.case = FALSE),
                           names_to = "Taxon", values_to = "Counts") %>%
       dplyr::rename(Sample = .data$TripCode) %>%
-      dplyr::mutate(Survey = "NRS",
-                    SampVol_m3 = 1) %>%
-      dplyr::select(.data$Sample, .data$Survey, .data$Taxon, .data$Counts, .data$SampVol_m3)
+      dplyr::mutate(Counts = as.integer(as.logical(.data$Counts)), # TODO Replace this with actual counts
+                    Survey = "NRS",
+                    SampVol_m3 = 1) %>% # TODO Replace this with actual volume
+      dplyr::select(.data$Sample, .data$Survey, .data$Taxon, .data$Counts, .data$SampVol_m3) #TODO There is no volume data to remove
 
-
-    PhytoCountCPR <- pr_get_CPRPhytoData("Count") %>% # need to think about FOV versus counts
-      dplyr::rename(Counts = .data$FovCount) %>%
-      dplyr::filter(!is.na(.data$Species) & !grepl("cf.|spp.|grp", .data$Species) & .data$Genus != '') %>%
-      dplyr::mutate(Taxon = paste0(stringr::word(.data$Genus,1), " ", stringr::word(.data$Species,1)),
-                    Survey = 'CPR') %>%
-      dplyr::group_by(.data$Sample, .data$Survey, .data$Taxon, .data$SampVol_m3) %>%
-      dplyr::summarise(Counts = sum(.data$Counts, na.rm = TRUE), .groups = "drop")
+    PhytoCountCPR <- pr_get_CPRData(Type = "phytoplankton", Variable = "abundance", Subset = "species") %>%
+      tidyr::pivot_longer(cols = !dplyr::starts_with(c("TripCode", "Region", "Latitude", "Longitude",
+      "SampleDate_UTC", "SampleDate_Local", "Year", "Month", "Day", "Time", "PCI"), ignore.case = FALSE),
+                          names_to = "Taxon", values_to = "Counts") %>%
+      dplyr::mutate(Counts = as.integer(as.logical(.data$Counts)),
+                    Survey = "CPR",
+                    SampVol_m3 = NA) %>% # TODO Replace this with actual volume
+      dplyr::rename(Sample = .data$TripCode) %>%
+      dplyr::select(.data$Sample, .data$Survey, .data$Taxon, .data$Counts, .data$SampVol_m3) #TODO There is no volume data to remove
 
     obs <- dplyr::bind_rows(PhytoCountCPR, PhytoCountNRS) %>%
       dplyr::arrange(.data$Taxon)
 
-  } else {
+  } else if(Type == "Z"){
     ZooCountNRS <- pr_get_NRSData(Type = "zooplankton", Variable = "abundance", Subset = "species") %>%
       tidyr::pivot_longer(cols = !tidyselect::starts_with(c("Project", "StationName", "StationCode", "Latitude", "Longitude", "TripCode",
                                                             "SampleTime", "Year", "Month", "Day", "Time", "SampleDepth_m", "CTD", "Biomass_mgm3", "AshFreeBiomass_mgm3" ), ignore.case = FALSE),
@@ -342,14 +344,15 @@ pr_get_fMap_data <- function(Type = "Z"){
                     SampVol_m3 = 1) %>%
       dplyr::select(.data$Sample, .data$Survey, .data$Taxon, .data$Counts, .data$SampVol_m3)
 
-
-    ZooCountCPR <- pr_get_CPRZooData("Count") %>%
-      dplyr::rename(Counts = .data$TaxonCount) %>%
-      dplyr::filter(!is.na(.data$Species) & !grepl("cf.|spp.|grp", .data$Species) & .data$Genus != '') %>%
-      dplyr::mutate(Taxon = paste0(stringr::word(.data$Genus,1), " ", stringr::word(.data$Species,1)),
-                    Survey = 'CPR') %>%
-      dplyr::group_by(.data$Sample, .data$Survey, .data$Taxon, .data$SampVol_m3) %>%
-      dplyr::summarise(Counts = sum(.data$Counts, na.rm = TRUE), .groups = "drop")
+    ZooCountCPR <- pr_get_CPRData(Type = "zooplankton", Variable = "abundance", Subset = "species") %>%
+      tidyr::pivot_longer(cols = !dplyr::starts_with(c("TripCode", "Region", "Latitude", "Longitude",
+                                                       "SampleDate_UTC", "SampleDate_Local", "Year", "Month", "Day", "Time", "PCI"), ignore.case = FALSE),
+                          names_to = "Taxon", values_to = "Counts") %>%
+      dplyr::mutate(Counts = as.integer(as.logical(.data$Counts)),
+                    Survey = "CPR",
+                    SampVol_m3 = NA) %>% # TODO Replace this with actual volume
+      dplyr::rename(Sample = .data$TripCode) %>%
+      dplyr::select(.data$Sample, .data$Survey, .data$Taxon, .data$Counts, .data$SampVol_m3) #TODO There is no volume data to remove
 
     obs <- dplyr::bind_rows(ZooCountCPR, ZooCountNRS) %>%
       dplyr::arrange(.data$Taxon)

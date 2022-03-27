@@ -500,7 +500,7 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = 'NRS', trans = 'ident
 
 #' Combined timeseries and climatology plots for environmental variables
 #'
-#' @param df A dataframe from pr_get_nuts or pr_get_pigs
+#' @param df A dataframe from pr_get_nuts or pr_get_pigments
 #' @param pal A Palette from cmocean
 #' @param trend Trend line to be used, options None, Smoother, Linear
 #' @param Scale scale on which to plot y axis

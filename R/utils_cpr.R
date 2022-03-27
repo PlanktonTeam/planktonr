@@ -85,35 +85,6 @@ pr_get_CPRSamps <- function(Type = "P"){
   }
 }
 
-#' Get CPR Phytoplankton Abundance or Count data
-#'
-#' @param var A string of either "Abundance" or "Count"
-#' @return A dataframe with CPR Phytoplankton Abundance or Count data
-#' @export
-#'
-#' @examples
-#' df <- pr_get_CPRPhytoData()
-#' @importFrom rlang .data
-pr_get_CPRPhytoData <- function(var = "Abundance"){
-  cprPdat <- readr::read_csv(system.file("extdata", "CPR_Phyto_Raw.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
-    pr_rename()
-
-  if(stringr::str_detect(var, "Abundance")){
-    cprPdat <- cprPdat %>%
-      dplyr::select(-c(.data$FovCount, .data$SampVol_m3, .data$BioVolume_um3m3))
-  } else if(stringr::str_detect(var, "Count")){
-    cprPdat <- cprPdat %>%
-      dplyr::select(-c(.data$BioVolume_um3m3, .data$PhytoAbund_m3))
-  } else if(stringr::str_detect(var, "Biovolume")){
-    cprPdat <- cprPdat %>%
-      dplyr::select(-c(.data$FovCount, .data$SampVol_m3, .data$PhytoAbund_m3))
-  } else if(stringr::str_detect(var, "All")){
-    cprPdat <- cprPdat # Do nothing. Return all variables
-  }
-
-}
-
-
 #' Get Phyto Change Log
 #'
 #' @return A dataframe with the CPR Phytoplankton Changelog
@@ -128,29 +99,6 @@ pr_get_CPRPhytoChangeLog <- function(){
 }
 
 #### CPR Zooplankton #### ################################################################################################################################
-
-#' Get CPR Zooplankton abundance data
-#'
-#' @param var A string of either "Abundance" or "Count"
-#' @return A dataframe with CPR Zooplankton Abundance data
-#' @export
-#'
-#' @examples
-#' df <- pr_get_CPRZooData()
-#' @importFrom rlang .data
-pr_get_CPRZooData <- function(var = "Abundance"){
-
-  cprZdat <- readr::read_csv(system.file("extdata", "CPR_Zoop_Raw.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
-    pr_rename()
-
-  if(stringr::str_detect(var, "Abundance")){
-    cprZdat <- cprZdat %>%
-      dplyr::select(-c(.data$TaxonCount, .data$SampVol_m3))
-  } else if(stringr::str_detect(var, "Count")){
-    cprZdat <- cprZdat %>%
-      dplyr::select(-.data$ZoopAbund_m3)
-  }
-}
 
 #' Get CPR zooplankton Change Log
 #'
