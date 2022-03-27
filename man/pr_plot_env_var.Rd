@@ -7,7 +7,7 @@
 pr_plot_env_var(df, pal = "matter", trend = "None", Scale = "identity")
 }
 \arguments{
-\item{df}{A dataframe from pr_get_nuts or pr_get_pigs}
+\item{df}{A dataframe from pr_get_nuts or pr_get_pigments}
 
 \item{pal}{A Palette from cmocean}
 

@@ -14,7 +14,7 @@ pr_get_NRSData(Type = "phytoplankton", Variable = "abundance", Subset = "raw")
 \item{Subset}{Data compilation. Full options are below.}
 }
 \value{
-A dataframe with requested plankton data in long form
+A dataframe with requested plankton data in wide form
 }
 \description{
 Load NRS station Data
