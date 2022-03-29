@@ -4,10 +4,12 @@
 \alias{pr_apply_flags}
 \title{Remove flagged data in df}
 \usage{
-pr_apply_flags(df)
+pr_apply_flags(df, flag_col)
 }
 \arguments{
 \item{df}{A dataframe containing data with associated flags}
+
+\item{flag_col}{A string specifying the column with the flag. Optional. If specified, all rows will be filter by the flag.}
 }
 \value{
 A dataframe with flagged data removed
