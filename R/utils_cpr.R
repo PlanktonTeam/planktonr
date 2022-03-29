@@ -84,31 +84,3 @@ pr_get_CPRSamps <- function(Type = "P"){
       dplyr::select(-c(.data$PCI, .data$SampleType, .data$Biomass_mgm3))
   }
 }
-
-#' Get Phyto Change Log
-#'
-#' @return A dataframe with the CPR Phytoplankton Changelog
-#' @export
-#'
-#' @examples
-#' df <- pr_get_CPRPhytoChangeLog()
-#' @importFrom rlang .data
-pr_get_CPRPhytoChangeLog <- function(){
-  cprPcl <- readr::read_csv(system.file("extdata", "CPR_Phyto_ChangeLog.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
-    pr_rename()
-}
-
-#### CPR Zooplankton #### ################################################################################################################################
-
-#' Get CPR zooplankton Change Log
-#'
-#' @return A dataframe with the CPR Zooplankton Changelog
-#' @export
-#'
-#' @examples
-#' df <- pr_get_CPRZooChangeLog()
-#' @importFrom rlang .data
-pr_get_CPRZooChangeLog <- function(){
-  cprZcl <- readr::read_csv(system.file("extdata", "CPR_Zoop_ChangeLog.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
-    pr_rename()
-}
