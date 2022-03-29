@@ -168,24 +168,7 @@ pr_get_fg <- function(Survey = 'NRS', Type = "Z"){
   return(df)
 }
 
-#' Get picoplankton time series data
-#'
-#' @return Dataframe for plotting picoplankton time series
-#' @export
-#'
-#' @examples
-#' df <- pr_get_pico()
-pr_get_pico <- function(){
-  pico <- pr_get_NRSPico() %>%
-    dplyr::select(.data$TripCode, .data$SampleDateLocal, .data$SampleDepth_m, .data[["Prochlorococcus_Cellsml"]]:.data[["Picoeukaryotes_Cellsml"]]) %>%
-    dplyr::mutate(StationCode = stringr::str_sub(.data$TripCode, 1, 3),
-                  Year = lubridate::year(.data$SampleDateLocal),
-                  Month = lubridate::month(.data$SampleDateLocal)) %>%
-    pr_get_StationName() %>%
-    tidyr::pivot_longer(.data[["Prochlorococcus_Cellsml"]]:.data[["Picoeukaryotes_Cellsml"]], values_to = "Values", names_to = 'parameters')  %>%
-    dplyr::mutate(Values = .data$Values + min(.data$Values[.data$Values>0], na.rm = TRUE)) %>%
-    pr_reorder()
-}
+
 
 
 #' Get NRS nutrient timeseries data
@@ -255,47 +238,6 @@ pr_get_LTnuts <-  function(){
     dplyr::mutate(anomaly = (.data$Values - .data$means)/.data$sd)
 
 }
-
-
-#' Get NRS pigment timeseries data
-#'
-#' @return dataframe for plotting pigment time series info
-#' @export
-#'
-#' @examples
-#' df <- pr_get_pigments()
-pr_get_pigments <-  function(){
-  Pigs  <- readr::read_csv(system.file("extdata", "BGC_Pigments.csv", package = "planktonr", mustWork = TRUE),
-                           show_col_types = FALSE,
-                           col_types = list(PROJECTNAME = readr::col_character(),
-                                            TRIP_CODE = readr::col_character(),
-                                            SAMPLEDATELOCAL = readr::col_datetime(),
-                                            SAMPLEDEPTH_M = readr::col_character(),
-                                            .default = readr::col_double())) %>%
-    dplyr::select_if(!grepl('FLAG', names(.)) & !grepl('COMMENTS', names(.))) %>%
-    pr_rename() %>%
-    dplyr::filter(.data$ProjectName == 'NRS', .data$SampleDepth_m != 'WC') %>%
-    dplyr::rowwise() %>%
-    dplyr::mutate(SampleDepth_m = as.numeric(.data$SampleDepth_m),
-                  TotalChla = sum(.data$CPHLIDE_A, .data$DV_CPHL_A, .data$CPHL_A, na.rm = TRUE),
-                  TotalChl = sum(.data$CPHLIDE_A, .data$DV_CPHL_A, .data$CPHL_A, .data$DV_CPHL_B, .data$CPHL_B, .data$CPHL_C3, .data$CPHL_C2, .data$CPHL_C1, na.rm = TRUE),
-                  PPC = sum(.data$ALLO, .data$DIADCHR, .data$DIADINO, .data$DIATO, .data$ZEA,  na.rm = TRUE),#+ CARO, #Photoprotective Carotenoids
-                  PSC = sum(.data$BUT_FUCO, .data$HEX_FUCO, .data$PERID,  na.rm = TRUE),#Photosynthetic Carotenoids
-                  PSP = sum(.data$PSC, .data$TotalChl,  na.rm = TRUE),#Photosynthetic pigments
-                  TCaro = sum(.data$PSC, .data$PSP,  na.rm = TRUE),#Total Carotenoids
-                  TAcc = sum(.data$TCaro, .data$DV_CPHL_B, .data$CPHL_B, .data$CPHL_C3, .data$CPHL_C2, .data$CPHL_C1,  na.rm = TRUE),#Total Accessory pigments
-                  TPig = sum(.data$TAcc, .data$TotalChla,  na.rm = TRUE),#Total pigments
-                  TDP = sum(.data$PSC, .data$ALLO, .data$ZEA, .data$DV_CPHL_B, .data$CPHL_B,  na.rm = TRUE),#Total Diagnostic pigments
-                  StationCode = stringr::str_sub(.data$TripCode, 1, 3),
-                  Month = lubridate::month(.data$SampleDateLocal)) %>%
-    dplyr::filter(.data$TotalChla != 0) %>%
-    dplyr::select(.data$ProjectName:.data$SampleDepth_m, .data$TotalChla:.data$Month, -.data$TripCode) %>%
-    tidyr::pivot_longer(.data$TotalChla:.data$TDP, values_to = "Values", names_to = 'parameters') %>%
-    pr_get_StationName() %>%
-    pr_reorder()
-}
-
-
 
 
 
