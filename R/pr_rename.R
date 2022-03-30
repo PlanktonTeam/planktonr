@@ -35,7 +35,7 @@ pr_rename <- function(df){
     "Conductivity_Sm", "CNDC",
     "Conductivity_flag", "CNDC_quality_control",
     "Copepod", "COPEPOD", ##
-    "Date", "SampleDateLocal", ##
+    # "Date", "SampleDate_Local", ##
     "Density_kgm3", "WaterDensity_kgm3",
     "DIC_Comments", "CARBON_COMMENTS",
     "DIC_Flag", "CARBON_FLAG",
@@ -91,10 +91,11 @@ pr_rename <- function(df){
     "SampVol_L", "SAMPVOL_L",
     "SampVol_m3", "SAMPVOL_M3", ###******
     "Sample", "SAMPLE",
-    "SampleDateUTC", "SAMPLEDATEUTC",
-    "SampleDateLocal", "SAMPLEDATELOCAL",
+    "SampleDate_UTC", "SAMPLEDATEUTC",
+    "SampleDate_Local", "SAMPLEDATELOCAL",
     "SampleDepth_m", "SAMPLEDEPTH_M",
     # "SampleDepth_m", "DEPTH",
+    "SampleTime_Local", "SampleTime_local",
     "SampleType", "SAMPLETYPE",
     "ScientificName", "SCIENTIFICNAME",
     # "Secchi_m", "SECCHIDEPTH_M",
@@ -142,17 +143,6 @@ pr_rename <- function(df){
 
   df <- data.table::setnames(df, old = rename_df$Old, new = rename_df$New, skip_absent = TRUE)
 
-
-  # STILL TO DO FROM RAW DATASETS
-  #   LOCAL_TRIP_START_TIME
-  #   UTC_TRIP_START_TIME
-  #   LIFE_STAGE
-  #   TAXON_START_DATE
-  #   TAXON_PER_M3
-  #   SAMPLE_COMMENTS
-  #   TAXON_FIRST_OCCURRENCE
-  #   PARENT_TAXON_NAME
-
   rename_df <- tibble::as_tibble(matrix(c(
     "TaxonGroup","TAXON_ECO_GROUP",
     "TripCode", "NRS_TRIP_CODE",
@@ -160,7 +150,9 @@ pr_rename <- function(df){
     "SampleCode", "NRS_SAMPLE_CODE",
     "SiteCode", "IMOS_SITE_CODE",
     "TaxonTraining", "TAXON_TRAINING",
-    "TaxonComments", "TAXON_COMMENTS"),
+    "TaxonComments", "TAXON_COMMENTS",
+    "SampleDate_UTC", "SampleDateUTC",
+    "SampleDate_Local", "SampleDateLocal"),
     ncol = 2, byrow = TRUE, dimnames = list(NULL, c("New","Old"))))
 
   df <- data.table::setnames(df, old = rename_df$Old, new = rename_df$New, skip_absent = TRUE)

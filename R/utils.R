@@ -29,18 +29,25 @@ pr_get_site <- function(){
 #' dat <- pr_get_raw("bgc_tss_data")
 #'
 pr_get_raw <- function(file){
-
+  # stringr::str_detect(file, "bgc_"
   if (file == "bgc_chemistry_data"){ # additional probs possible in chemistry. No WC.
     col_types = list(Project = readr::col_character(),
                      TripCode = readr::col_character(),
                      SampleDate_Local = readr::col_datetime(),
                      DIC_umolkg = readr::col_double(),
                      Oxygen_umolL = readr::col_double())
-  } else if (stringr::str_detect(file, "bgc_")){ # Add specific filter for bgc files to deal with potential problems from 'WC' depth
+  } else if (file ==  "bgc_pigments_data" |
+             file == "bgc_picoplankton_data" |
+             file == "bgc_tss_data"){ # Add specific filter for bgc files to deal with potential problems from 'WC' depth
     col_types = list(Project = readr::col_character(),
                      TripCode = readr::col_character(),
                      SampleDate_Local = readr::col_datetime(),
                      Depth_m = readr::col_character())
+  } else if(stringr::str_detect(file, "bgc_zooplankton")){
+    col_types = list(Project = readr::col_character(),
+                     TripCode = readr::col_character(),
+                     SampleTime_local = readr::col_datetime(),
+                     SampleDepth_m = readr::col_character())
   } else if(file == "anmn_ctd_profiles_data"){
     col_types = readr::cols(CHLU = readr::col_double(), # columns start with nulls so tidyverse annoyingly assigns col_logical()
                             CHLU_quality_control = readr::col_double(),
@@ -50,8 +57,6 @@ pr_get_raw <- function(file){
   } else {
     col_types = list()
   }
-
-
 
 
   dat <- readr::read_csv(stringr::str_replace(
@@ -222,19 +227,19 @@ pr_apply_flags <- function(df, flag_col){
 #' @export
 #'
 #' @examples
-#' df <- data.frame(SampleDateLocal = lubridate::now(), Latitude = -32, Longitude = 160)
+#' df <- data.frame(SampleDate_Local = lubridate::now(), Latitude = -32, Longitude = 160)
 #' df <- pr_apply_time(df)
 #' @importFrom data.table ":="
 #' @importFrom rlang .data
 pr_apply_time <- function(df){
 
   df <- df %>%
-    dplyr::mutate(Year = lubridate::year(.data$SampleDateLocal),
-                  Month = lubridate::month(.data$SampleDateLocal),
-                  Day = lubridate::day(.data$SampleDateLocal),
-                  Time_24hr = stringr::str_sub(.data$SampleDateLocal, -8, -1), # hms doesn"t seem to work on 00:00:00 times
+    dplyr::mutate(Year = lubridate::year(.data$SampleDate_Local),
+                  Month = lubridate::month(.data$SampleDate_Local),
+                  Day = lubridate::day(.data$SampleDate_Local),
+                  Time_24hr = stringr::str_sub(.data$SampleDate_Local, -8, -1), # hms doesn"t seem to work on 00:00:00 times
                   tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE),
-                  SampleDate_UTC = lubridate::with_tz(lubridate::force_tzs(.data$SampleDateLocal, .data$tz, roll = TRUE), "UTC"))
+                  SampleDate_UTC = lubridate::with_tz(lubridate::force_tzs(.data$SampleDate_Local, .data$tz, roll = TRUE), "UTC"))
 
 }
 

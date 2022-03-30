@@ -60,7 +60,7 @@ pr_relabel <- function(s, style = "ggplot"){
     "PSC", rlang::expr(paste("Photosynthetic Carotenoids (mg m"^-3,")")), "Photosynthetic Carotenoids (mg m<sup>-3</sup>)", "Photosynthetic Carotenoid Abundance",
     "PSP", rlang::expr(paste("Photosynthetic Pigments (mg m"^-3,")")), "Photosynthetic Pigments (mg m<sup>-3</sup>)", "Photosynthetic Pigment Abundance",
     "Salinity_psu", rlang::expr(paste("Salinity (psu)")), "Salinity (psu)", "Salinity",
-    "SampleDateLocal", rlang::expr(paste("Sample Date (Local)")), "Sample Date (Local)", "Sample Date",
+    "SampleDate_Local", rlang::expr(paste("Sample Date (Local)")), "Sample Date (Local)", "Sample Date",
     "SampleDateUTC", rlang::expr(paste("Sample Date (UTC)")), "Sample Date (UTC)", "Sample Date",
     "SampleDepth_m", rlang::expr(paste("Sample Depth (m)")), "Sample Depth (m)", "Sample Depth",
     "SampVol_L", rlang::expr(paste("Sample Volume (L)")), "Sample Volume (L)", "Sample Volume",
