@@ -351,7 +351,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
 
   plotCols <- pr_get_PlotCols(pal, n)
 
- if("SampleDate_UTC" %in% colnames(df)){
+  if("SampleDate_UTC" %in% colnames(df)){
     SampleDate = rlang::sym("SampleDate_UTC")
     station = rlang::sym("BioRegion")
     titlex <- "Sample Date UTC"
@@ -375,7 +375,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
     trend <- SampleDate # Rename trend to match the column with time
   }
 
- if(Scale == "Percent") {
+  if(Scale == "Percent") {
     df <- df %>%
       dplyr::group_by(!!rlang::sym(trend), !!station, .data$parameters) %>%
       dplyr::summarise(n = sum(.data$Values, na.rm = TRUE)) %>%
@@ -411,7 +411,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
       ggplot2::xlab("Sample Date")
   }
   return(p1)
-  }
+}
 
 #' Policy plot
 #'
@@ -509,7 +509,9 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = 'NRS', trans = 'ident
 #' @export
 #'
 #' @examples
-#' df <- pr_get_nuts() %>% pr_plot_env_var()
+#' '\dontrun{df <- pr_get_NRSChemistry() %>%
+#'            pr_plot_env_var()
+#'            }
 pr_plot_env_var <- function(df, pal = 'matter', trend = 'None', Scale = 'identity') {
   n <- length(unique(df$StationName))
   plotCols <- pr_get_PlotCols(pal, n)
@@ -523,9 +525,9 @@ pr_plot_env_var <- function(df, pal = 'matter', trend = 'None', Scale = 'identit
     ggplot2::facet_grid(SampleDepth_m ~., scales = "free") +
     ggplot2::theme_bw() +
     ggplot2::theme(strip.background = ggplot2::element_blank(),
-                                         strip.text = ggplot2::element_blank(),
-                                         legend.position = "bottom",
-                                         legend.title = ggplot2::element_blank()) +
+                   strip.text = ggplot2::element_blank(),
+                   legend.position = "bottom",
+                   legend.title = ggplot2::element_blank()) +
     ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
     ggplot2::scale_y_continuous(trans = Scale) +
     ggplot2::scale_colour_manual(values = plotCols)
@@ -542,10 +544,10 @@ pr_plot_env_var <- function(df, pal = 'matter', trend = 'None', Scale = 'identit
   mdat <- df %>%
     dplyr::group_by(.data$StationName, .data$Month, .data$SampleDepth_m, .data$parameters) %>%
     dplyr::summarise(MonValues = mean(.data$Values, na.rm = TRUE),
-              N = length(.data$Values),
-              sd = stats::sd(.data$Values, na.rm = TRUE),
-              se = sd / sqrt(.data$N),
-              .groups = "drop")
+                     N = length(.data$Values),
+                     sd = stats::sd(.data$Values, na.rm = TRUE),
+                     se = sd / sqrt(.data$N),
+                     .groups = "drop")
 
   m <- ggplot2::ggplot(mdat, aes(.data$Month, .data$MonValues, colour = .data$StationName)) +
     ggplot2::geom_point() +
@@ -558,8 +560,10 @@ pr_plot_env_var <- function(df, pal = 'matter', trend = 'None', Scale = 'identit
                    legend.title = ggplot2::element_blank(),
                    strip.text.y = ggplot2::element_text(face = "bold", size = 12, angle = 0))
 
-  m <- plotly::ggplotly(m) %>% plotly::layout(legend = list(orientation = "h", xanchor = "center",  # use center of legend as anchor
-                                                            x = 0.5, y = -0.1))
+  m <- plotly::ggplotly(m) %>%
+    plotly::layout(legend = list(orientation = "h",
+                                 xanchor = "center",  # use center of legend as anchor
+                                 x = 0.5, y = -0.1))
 
   plot <- plotly::subplot(plotly::style(p, showlegend = FALSE), m, widths = c(0.75,0.25)) %>%
     plotly::layout(title = list(text = titley),
@@ -692,9 +696,9 @@ pr_plot_sti <-  function(df){
   z <- data.frame(kernTemps, y = kernOut$y)
   STI <- round(z[which.max(z[,2]),]$kernTemps,1)
 
-# looks at these lines if we want to plot on an abundance scale instead of 0 - 1 scale
-#  kern_yp[,i] <- kernOut$y/sum(kernOut$y) * 100 * mean(sti$relab)
-#  kypout[,i] <- kernOut$y
+  # looks at these lines if we want to plot on an abundance scale instead of 0 - 1 scale
+  #  kern_yp[,i] <- kernOut$y/sum(kernOut$y) * 100 * mean(sti$relab)
+  #  kypout[,i] <- kernOut$y
 
   xlabel <- pr_relabel("Temperature_degC", style = "ggplot")
   subtit <- rlang::expr(paste("STI = ",!!STI, "\U00B0","C"))
