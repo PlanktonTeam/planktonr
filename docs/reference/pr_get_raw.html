@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="">0.0.0.9005</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="">0.0.1.0000</span>
       </span>
     </div>
 
@@ -78,7 +78,20 @@
     <h2>Value</h2>
     
     </div>
+    <div id="details">
+    <h2>Details</h2>
+    <p>Options for <code>file</code> include: "bgc_chemistry_data", "bgc_pigments_data", "bgc_picoplankton_data", "bgc_tss_data".</p>
+    </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">pr_get_raw</span><span class="op">(</span><span class="st">"bgc_chemistry_data"</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">pr_get_raw</span><span class="op">(</span><span class="st">"bgc_pigments_data"</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">pr_get_raw</span><span class="op">(</span><span class="st">"bgc_picoplankton_data"</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">pr_get_raw</span><span class="op">(</span><span class="st">"bgc_tss_data"</span><span class="op">)</span></span>
+<span class="r-in"></span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

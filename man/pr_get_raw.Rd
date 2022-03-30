@@ -15,3 +15,13 @@ pr_get_raw(file)
 \description{
 This function is not intended for use by most people. It downloads the raw data file from IMOS with NO QC or data manipulation done. User beware. It can be used to view the raw data that IMOS provides behind the scenes.
 }
+\details{
+Options for \code{file} include: "bgc_chemistry_data", "bgc_pigments_data", "bgc_picoplankton_data", "bgc_tss_data".
+}
+\examples{
+dat <- pr_get_raw("bgc_chemistry_data")
+dat <- pr_get_raw("bgc_pigments_data")
+dat <- pr_get_raw("bgc_picoplankton_data")
+dat <- pr_get_raw("bgc_tss_data")
+
+}

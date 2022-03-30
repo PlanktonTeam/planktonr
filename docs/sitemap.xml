@@ -319,6 +319,12 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_add_LocalTime.html</loc>
   </url>
   <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_add_StationCode.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_add_StationName.html</loc>
+  </url>
+  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_add_bioregions.html</loc>
   </url>
   <url>
@@ -436,6 +442,12 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_LTnuts.html</loc>
   </url>
   <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSCTD.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSChemistry.html</loc>
+  </url>
+  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSData.html</loc>
   </url>
   <url>
@@ -524,6 +536,9 @@
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_SppCount.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_StationCode.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_StationName.html</loc>
