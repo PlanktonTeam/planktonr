@@ -2,6 +2,22 @@
 #'
 #' Load NRS station Data
 #'
+#' nrs_phytoplankton_abundance_raw_data
+#' nrs_phytoplankton_abundance_htg_data
+#' nrs_phytoplankton_abundance_genus_data
+#' nrs_phytoplankton_abundance_species_data
+#'
+#' nrs_phytoplankton_biovolume_raw_data
+#' nrs_phytoplankton_biovolume_htg_data
+#' nrs_phytoplankton_biovolume_genus_data
+#' nrs_phytoplankton_biovolume_species_data
+#'
+#' nrs_zooplankton_abundance_copepods_data
+#' nrs_zooplankton_abundance_non_copepods_data
+#' nrs_zooplankton_abundance_genus_data
+#' nrs_zooplankton_abundance_htg_data
+#' nrs_zooplankton_abundance_raw_data
+#'
 #' @param Type The data of interest: Phytoplankton or Zooplankton
 #' @param Variable Variable options are: abundance or biovolume (phytoplankton only)
 #' @param Subset Data compilation. Full options are below.
@@ -17,10 +33,23 @@ pr_get_NRSData <- function(Type = "phytoplankton", Variable = "abundance", Subse
   if (Type == "p"){Type = "phytoplankton"}
   if (Type == "z"){Type = "zooplankton"}
 
-  file = paste("bgc", Type, Variable, Subset, "data", sep = "_")
+  if (Type == "zooplankton" & Subset == "species"){ # Specific case for zooplankton species
 
-  dat <- readr::read_csv(stringr::str_replace(pr_get_site(), "LAYER_NAME", file), na = "", show_col_types = FALSE, comment = "#") %>%
-    pr_rename()
+    datc <- pr_get_raw("bgc_zooplankton_abundance_copepods_data") %>%
+      pr_rename()
+    datnc <-pr_get_raw("bgc_zooplankton_abundance_non_copepods_data") %>%
+      pr_rename() %>%
+      dplyr::select(-c(.data$Project:.data$Longitude, .data$SampleTime_UTC:.data$AshFreeBiomass_mgm3))
+
+    # Add together and COPEPODS and NON-COPEPODS
+    dat <- dplyr::left_join(datc, datnc, by = "TripCode")
+
+  } else {
+
+    file = paste("bgc", Type, Variable, Subset, "data", sep = "_")
+    dat <-pr_get_raw(file) %>%
+      pr_rename()
+  }
 }
 
 

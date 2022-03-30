@@ -33,10 +33,26 @@ pr_get_CPRData <- function(Type = "phytoplankton", Variable = "abundance", Subse
   if (Type == "p"){Type = "phytoplankton"}
   if (Type == "z"){Type = "zooplankton"}
 
-  file = paste("cpr", Type, Variable, Subset, "data", sep = "_")
+  if (Type == "zooplankton" & Subset == "species"){ # Specific case for zooplankton species
 
-  dat <- readr::read_csv(stringr::str_replace(pr_get_site(), "LAYER_NAME", file), na = "", show_col_types = FALSE, comment = "#") %>%
-    pr_rename()
+    datc <- pr_get_raw("cpr_zooplankton_abundance_copepods_data") %>%
+      pr_rename()
+    datnc <-pr_get_raw("cpr_zooplankton_abundance_non_copepods_data") %>%
+      pr_rename() %>%
+      dplyr::select(-c(.data$Region:.data$BiomassIndex_mgm3))
+
+
+    # Add together and COPEPODS and NON-COPEPODS
+    dat <- dplyr::left_join(datc, datnc, by = "TripCode")
+
+  } else {
+    file = paste("cpr", Type, Variable, Subset, "data", sep = "_")
+
+    dat <- readr::read_csv(stringr::str_replace(pr_get_site(), "LAYER_NAME", file), na = "", show_col_types = FALSE, comment = "#") %>%
+      pr_rename()
+    # %>%
+    # dplyr::rename()
+  }
 }
 
 
@@ -69,12 +85,12 @@ pr_get_CPRSamps <- function(Type = "P"){
   CPRSamps <- readr::read_csv(system.file("extdata", "CPR_Samp.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
     pr_rename() %>%
     dplyr::filter(stringr::str_detect(.data$SampleType, paste(Type, collapse = "|"))) %>%
-    dplyr::mutate(Year = lubridate::year(.data$SampleDateUTC),
-                  Month = lubridate::month(.data$SampleDateUTC),
-                  Day = lubridate::day(.data$SampleDateUTC),
-                  Time_24hr = stringr::str_sub(.data$SampleDateUTC, -8, -1)) %>%
+    dplyr::mutate(Year = lubridate::year(.data$SampleDate_UTC),
+                  Month = lubridate::month(.data$SampleDate_UTC),
+                  Day = lubridate::day(.data$SampleDate_UTC),
+                  Time_24hr = stringr::str_sub(.data$SampleDate_UTC, -8, -1)) %>%
     pr_add_Bioregions() %>%
-    dplyr::select(c(.data$TripCode, .data$Sample, .data$Latitude:.data$SampleDateLocal, .data$Year:.data$BioRegion, .data$PCI, .data$Biomass_mgm3, .data$SampleType))
+    dplyr::select(c(.data$TripCode, .data$Sample, .data$Latitude:.data$SampleDate_Local, .data$Year:.data$BioRegion, .data$PCI, .data$Biomass_mgm3, .data$SampleType))
 
   if("B" %in% Type){ # Return Biomass if its requested. Otherwise not.
     CPRSamps <- CPRSamps %>%
