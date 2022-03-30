@@ -15,35 +15,51 @@ pr_get_site <- function(){
 #'
 #' This function is not intended for use by most people. It downloads the raw data file from IMOS with NO QC or data manipulation done. User beware. It can be used to view the raw data that IMOS provides behind the scenes.
 #'
+#'Options for `file` include: "bgc_chemistry_data", "bgc_pigments_data", "bgc_picoplankton_data", "bgc_tss_data".
+#'
 #' @param file The filename of the requested data
 #'
 #' @return
 #' @export
 #'
 #' @examples
+#' dat <- pr_get_raw("bgc_chemistry_data")
+#' dat <- pr_get_raw("bgc_pigments_data")
+#' dat <- pr_get_raw("bgc_picoplankton_data")
+#' dat <- pr_get_raw("bgc_tss_data")
+#'
 pr_get_raw <- function(file){
 
-  if (stringr::str_detect(file, "bgc_")){ # Add specific filter for bgc files to deal with potential problems from 'WC' depth
+  if (file == "bgc_chemistry_data"){ # additional probs possible in chemistry. No WC.
     col_types = list(Project = readr::col_character(),
                      TripCode = readr::col_character(),
                      SampleDate_Local = readr::col_datetime(),
-                     Depth_m = readr::col_character(),
-                     .default = readr::col_double())
+                     DIC_umolkg = readr::col_double(),
+                     Oxygen_umolL = readr::col_double())
+  } else if (stringr::str_detect(file, "bgc_")){ # Add specific filter for bgc files to deal with potential problems from 'WC' depth
+    col_types = list(Project = readr::col_character(),
+                     TripCode = readr::col_character(),
+                     SampleDate_Local = readr::col_datetime(),
+                     Depth_m = readr::col_character())
+  } else if(file == "anmn_ctd_profiles_data"){
+    col_types = readr::cols(CHLU = readr::col_double(), # columns start with nulls so tidyverse annoyingly assigns col_logical()
+                            CHLU_quality_control = readr::col_double(),
+                            CPHL = readr::col_double(),
+                            CPHL_quality_control = readr::col_double(),
+                            cruise_id = readr::col_skip())
   } else {
     col_types = list()
   }
 
-  if (file == "bgc_chemistry_data"){ # additional probs possible in chemistry
-    col_types = append(col_types, list(DIC_umolkg = readr::col_double(),
-                                       Oxygen_umolL = readr::col_double()))
-  }
+
+
 
   dat <- readr::read_csv(stringr::str_replace(
     pr_get_site(), "LAYER_NAME", file),
     na = c("", NaN),
     show_col_types = FALSE,
+    comment = "#",
     col_types = col_types)
-
 }
 
 #' Load copepod information table with sizes etc.
@@ -61,7 +77,7 @@ pr_get_ZooInfo <- function(){
 
 
 
-#' Add StationName to data
+#' Add NRS StationName to data
 #'
 #' @param df A dataframe that contains `StationCode` but no `StationName`
 #' @return A dataframe with StationName added
@@ -69,9 +85,9 @@ pr_get_ZooInfo <- function(){
 #'
 #' @examples
 #' df <- pr_get_NRSStation() %>%
-#'     pr_get_StationName()
+#'     pr_add_StationName()
 #' @importFrom rlang .data
-pr_get_StationName <- function(df){
+pr_add_StationName <- function(df){
   df <- df %>%
     dplyr::mutate(StationName = dplyr::case_when(
       StationCode == "DAR" ~ "Darwin",
@@ -82,8 +98,38 @@ pr_get_StationName <- function(df){
       StationCode == "KAI" ~ "Kangaroo Island",
       StationCode == "ESP" ~ "Esperance",
       StationCode == "ROT" ~ "Rottnest Island",
-      StationCode == "NIN" ~ "Ningaloo"))
+      StationCode == "NIN" ~ "Ningaloo")) %>%
+    dplyr::relocate(.data$StationCode, .after = .data$StationName)
 }
+
+
+
+#' Add NRS StationCode to data
+#'
+#' @param df A dataframe that contains `StationName` but no `StationCode`
+#' @return A dataframe with StationCode added
+#' @export
+#'
+#' @examples
+#' df <- pr_get_NRSStation() %>%
+#'     pr_add_StationCode()
+#' @importFrom rlang .data
+pr_add_StationCode <- function(df){
+  df <- df %>%
+    dplyr::mutate(StationCode = dplyr::case_when(
+      StationName == "Darwin" ~ "DAR",
+      StationName == "Yongala" ~ "YON",
+      StationName == "North Stradbroke Island" ~ "NSI",
+      StationName == "Port Hacking" ~ "PHB",
+      StationName == "Maria Island" ~ "MAI",
+      StationName == "Kangaroo Island" ~ "KAI",
+      StationName == "Esperance" ~ "ESP",
+      StationName == "Rottnest Island" ~ "ROT",
+      StationName == "Ningaloo" ~ "NIN")) %>%
+    dplyr::relocate(.data$StationCode, .after = .data$StationName)
+}
+
+
 
 #' Order the Station or region in the df by latitude for consistent plotting
 #'
