@@ -73,7 +73,7 @@ pr_get_CPRSamps <- function(Type = "P"){
                   Month = lubridate::month(.data$SampleDateUTC),
                   Day = lubridate::day(.data$SampleDateUTC),
                   Time_24hr = stringr::str_sub(.data$SampleDateUTC, -8, -1)) %>%
-    pr_add_bioregions() %>%
+    pr_add_Bioregions() %>%
     dplyr::select(c(.data$TripCode, .data$Sample, .data$Latitude:.data$SampleDateLocal, .data$Year:.data$BioRegion, .data$PCI, .data$Biomass_mgm3, .data$SampleType))
 
   if("B" %in% Type){ # Return Biomass if its requested. Otherwise not.
