@@ -128,7 +128,7 @@ pr_get_fg <- function(Survey = 'NRS', Type = "Z"){
 
   if(Survey == 'CPR'){
     df <- df %>%
-      pr_add_bioregions() %>%
+      pr_add_Bioregions() %>%
       dplyr::select(.data$BioRegion, .data$SampleDate_UTC, .data$Month, .data$Year, .data[[parameter1]]:.data[[parameter2]]) %>%
       dplyr::filter(!is.na(.data$BioRegion), !.data$BioRegion %in% c('North', 'North-west')) %>%
       droplevels()
@@ -171,29 +171,6 @@ pr_get_fg <- function(Survey = 'NRS', Type = "Z"){
 
 
 
-#' Get NRS nutrient timeseries data
-#'
-#' @return dataframe for plotting nutrient time series info
-#' @export
-#'
-#' @examples
-#' df <- pr_get_nuts()
-pr_get_nuts <-  function(){
-
-  Nuts <- readr::read_csv(system.file("extdata", "BGC_Chemistry.csv", package = "planktonr", mustWork = TRUE),
-                          col_types = list(SAMPLEDATELOCAL = readr::col_datetime()),
-                          show_col_types = FALSE) %>%
-    dplyr::select_if(!grepl('FLAG', names(.)) & !grepl('COMMENTS', names(.)) & !grepl('MICROB', names(.))) %>%
-    dplyr::filter(.data$PROJECTNAME == 'NRS') %>%
-    pr_rename() %>%
-    dplyr::mutate(StationCode = stringr::str_sub(.data$TripCode, 1, 3),
-                  Month = lubridate::month(.data$SampleDateLocal)) %>%
-    dplyr::select(-.data$TripCode) %>%
-    tidyr::pivot_longer(.data$Salinity_psu:.data$Oxygen_umolL, values_to = "Values", names_to = 'parameters') %>%
-    pr_get_StationName() %>%
-    pr_reorder()
-}
-
 #' Get NRS long term nutrient timeseries data
 #'
 #' @return dataframe for plotting long term nutrient time series info
@@ -202,29 +179,40 @@ pr_get_nuts <-  function(){
 #' @examples
 #' df <- pr_get_LTnuts()
 pr_get_LTnuts <-  function(){
+
   NutsLT <- readr::read_csv(system.file("extdata", "nuts_longterm_clean2.csv", package = "planktonr", mustWork = TRUE),
                             show_col_types = FALSE) %>%
     tidyr::pivot_longer(-c(.data$StationCode:.data$SampleDepth_m), values_to = "Values", names_to = 'parameters') %>%
+    dplyr::rename(SampleDate_Local = .data$SampleDateLocal) %>%
     dplyr::mutate(ProjectName = 'LTM',
-                  SampleDateLocal = strptime(as.POSIXct(.data$SampleDateLocal), "%Y-%m-%d")) %>%
-    pr_get_StationName() %>%
+                  SampleDate_Local = strptime(as.POSIXct(.data$SampleDate_Local), "%Y-%m-%d")) %>%
+    pr_add_StationName() %>%
+    dplyr::relocate(c("ProjectName", "StationName", "StationCode", tidyselect::everything())) %>%
     pr_reorder()
 
-  Nuts <- pr_get_nuts() %>%
-    dplyr::mutate(SampleDateLocal = strptime(.data$SampleDateLocal, "%Y-%m-%d")) %>%
-    dplyr::filter(.data$StationCode %in% c('MAI', 'ROT', 'PHB'))
+  Nuts <- pr_get_NRSChemistry() %>%
+    dplyr::mutate(SampleDate_Local = strptime(.data$SampleDate_Local, "%Y-%m-%d")) %>%
+    dplyr::select(-.data$MicroBiomeSample_id) %>%
+    dplyr::filter(.data$StationCode %in% c('MAI', 'ROT', 'PHB')) %>%
+    tidyr::pivot_longer(-c(.data$FID:.data$SampleDepth_m), values_to = "Values", names_to = 'parameters') %>%
+    dplyr::mutate(ProjectName = "NRS",
+                  SampleDate_Local = strptime(as.POSIXct(.data$SampleDate_Local), "%Y-%m-%d")) %>%  # TODO Not sure why this is here
+    dplyr::select(colnames(NutsLT))
 
-  Temp <- pr_get_CTD() %>%
+  CTD <- pr_get_NRSCTD() %>%
     dplyr::mutate(StationCode = stringr::str_sub(.data$TripCode, 1, 3)) %>%
-    dplyr::select(.data$StationCode, .data$StationName, .data$SampleDateLocal, .data$SampleDepth_m, .data$Temperature_degC) %>%
+    dplyr::select(.data$StationCode, .data$StationName, .data$SampleDate_Local, .data$SampleDepth_m, .data$Temperature_degC) %>%
     dplyr::filter(.data$StationCode %in% c('MAI', 'ROT', 'PHB')) %>%
     tidyr::pivot_longer(-c(.data$StationCode:.data$SampleDepth_m), values_to = "Values", names_to = 'parameters') %>%
     dplyr::mutate(ProjectName = 'NRS',
-                  SampleDateLocal = strptime(as.POSIXct(.data$SampleDateLocal), "%Y-%m-%d"))
+                  SampleDate_Local = strptime(as.POSIXct(.data$SampleDate_Local), "%Y-%m-%d")) %>%
+    dplyr::select(colnames(NutsLT))
 
-  LTnuts <- dplyr::bind_rows(NutsLT, Nuts, Temp) %>%
-    dplyr::mutate(Year = lubridate::year(.data$SampleDateLocal),
-                  Month = lubridate::month(.data$SampleDateLocal))
+  LTnuts <- dplyr::bind_rows(NutsLT, Nuts, CTD) %>%
+    dplyr::mutate(Year = lubridate::year(.data$SampleDate_Local),
+                  Month = lubridate::month(.data$SampleDate_Local))
+
+  rm(NutsLT, Nuts, CTD)
 
   means <- LTnuts %>%
     dplyr::select(.data$StationName, .data$parameters, .data$Values) %>%
