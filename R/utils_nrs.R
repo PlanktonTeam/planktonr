@@ -79,16 +79,16 @@ pr_get_NRSTrips <- function(Type = c("P", "Z", "F")){
 }
 
 
-#' Load zooplankton abundance data
-#' @return A dataframe with zooplankton abundance data
-#' @export
-#'
-#' @examples
-#' df <- pr_get_NRSZooData()
-#' @importFrom rlang .data
-pr_get_NRSZooData <- function(){
-  dat <- readr::read_csv(system.file("extdata", "BGC_Zoop_Raw.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
-    pr_rename()
-}
+# Load zooplankton abundance data
+# @return A dataframe with zooplankton abundance data
+# @export
+#
+# @examples
+# df <- pr_get_NRSZooData()
+# @importFrom rlang .data
+# pr_get_NRSZooData <- function(){
+#   dat <- readr::read_csv(system.file("extdata", "BGC_Zoop_Raw.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
+#     pr_rename()
+# }
 
 
