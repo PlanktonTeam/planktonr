@@ -8,18 +8,15 @@
 #' @importFrom rlang .data
 pr_get_NRSChemistry <- function(){
 
-  var_names <- c("Silicate_umolL", "Phosphate_umolL", "Ammonium_umolL", "Nitrate_umolL", "Nitrite_umolL",
-                 "Oxygen_umolL", "DIC_umolkg", "TAlkalinity_umolkg", "Salinity_psu")
-
+  var_names <- c("SiO4_umolL", "PO4_umolL", "NH4_umolL", "NO3_umolL", "N02_umolL",
+                 "Oxygen_umolL", "DIC_umolkg", "Alkalinity_umolkg", "Salinity_psu")
   file <- "bgc_chemistry_data"
 
   chemistry <- pr_get_raw(file) %>%
     pr_rename() %>%
     pr_apply_flags() %>%
+    pr_add_StationCode() %>%
     dplyr::rename(SampleDepth_m = .data$Depth_m) %>%
-    dplyr::mutate(SampleDepth_m = as.character(.data$SampleDepth_m)) %>%
-    dplyr::group_by(.data$TripCode, .data$SampleDepth_m) %>%
-    dplyr::summarise(dplyr::across(dplyr::matches(var_names), ~ mean(.x, na.rm = TRUE)), .groups = "drop") %>%
     dplyr::mutate_all(~ replace(., is.na(.), NA))
 }
 
@@ -60,7 +57,7 @@ pr_get_NRSPigments <- function(){
     dplyr::filter(.data$TotalChla != 0) %>%
     dplyr::select(.data$Project:.data$SampleDepth_m, .data$TotalChla:.data$Month, -.data$TripCode) %>%
     tidyr::pivot_longer(.data$TotalChla:.data$TDP, values_to = "Values", names_to = 'parameters') %>%
-    pr_get_StationName() %>%
+    pr_add_StationName() %>%
     pr_reorder()
 
 
@@ -91,7 +88,7 @@ pr_get_NRSPico <- function(){
     dplyr::mutate(StationCode = stringr::str_sub(.data$TripCode, 1, 3),
                   Year = lubridate::year(.data$SampleDate_Local),
                   Month = lubridate::month(.data$SampleDate_Local)) %>%
-    pr_get_StationName() %>%
+    pr_add_StationName() %>%
     tidyr::pivot_longer(.data[["Prochlorococcus_Cellsml"]]:.data[["Picoeukaryotes_Cellsml"]], values_to = "Values", names_to = 'parameters')  %>%
     dplyr::mutate(Values = .data$Values + min(.data$Values[.data$Values>0], na.rm = TRUE)) %>%
     pr_reorder()
@@ -114,6 +111,114 @@ pr_get_NRSTSS <- function(){
     dplyr::rename(SampleDepth_m = .data$Depth_m) %>%
     pr_apply_flags("TSSall_flag")
 }
+
+
+#' Load NRS CTD data
+#'
+#' @return A dataframe with NRS CTD data
+#' @export
+#'
+#' @examples
+#' df <- pr_get_NRSCTD()
+#' @importFrom rlang .data
+pr_get_NRSCTD <- function(){
+
+  file = "anmn_ctd_profiles_data"
+
+  rawCTD <- pr_get_raw(file) %>%
+    pr_rename() %>%
+    dplyr::rename(SampleDepth_m = .data$DEPTH, Salinity_psu = .data$PSAL, Salinity_flag = .data$PSAL_quality_control,
+                  SampleDate_UTC = .data$time_coverage_start, StationCode = .data$site_code, Temperature_degC = .data$TEMP,
+                  ChlF_mgm3 = .data$Chla_mgm3, ChlF_flag = .data$Chla_flag) %>% # Can't rename this in pr_rename due to replicate name
+    pr_add_StationName() %>%
+    dplyr::filter(grepl("NRS", .data$StationCode)) %>% # Subset to NRS only
+    dplyr::mutate(TripCode = dplyr::if_else(.data$StationCode == 'NRSDAR', paste0(substr(.data$StationCode,4,6), format(.data$SampleDate_UTC, "%Y%m%d_%H:%M")),
+                                            paste0(substr(.data$StationCode,4,6), format(.data$SampleDate_UTC, "%Y%m%d"))),
+                  ChlF_mgm3 = dplyr::if_else(!is.na(.data$ChlF_mgm3), .data$ChlF_mgm3, .data$CHLF),
+                  StationCode = stringr::str_sub(.data$StationCode, 4, 6)) %>%
+    dplyr::select(.data$file_id, .data$StationName, .data$TripCode, .data$SampleDate_UTC, .data$Latitude, .data$Longitude,
+                  .data$SampleDepth_m, .data$Salinity_psu, .data$Salinity_flag, .data$Temperature_degC, .data$Temperature_flag,
+                  .data$DissolvedOxygen_umolkg, .data$DissolvedOxygen_flag, .data$ChlF_mgm3, .data$ChlF_flag,
+                  .data$Turbidity_NTU, .data$Turbidity_flag, .data$Pressure_dbar, .data$Conductivity_Sm,
+                  .data$Conductivity_flag, .data$WaterDensity_kgm3, .data$WaterDensity_flag) %>%
+    pr_apply_flags() %>%
+    dplyr::mutate(tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE),
+                  SampleDate_Local = dplyr::case_when(
+                    .data$tz == "Australia/Darwin" ~ format(.data$SampleDate_UTC, tz = "Australia/Darwin"),
+                    .data$tz == "Australia/Brisbane" ~ format(.data$SampleDate_UTC, tz = "Australia/Brisbane"),
+                    .data$tz == "Australia/Adelaide" ~ format(.data$SampleDate_UTC, tz = "Australia/Adelaide"),
+                    .data$tz == "Australia/Hobart" ~ format(.data$SampleDate_UTC, tz = "Australia/Hobart"),
+                    .data$tz == "Australia/Sydney" ~ format(.data$SampleDate_UTC, tz = "Australia/Sydney"),
+                    .data$tz == "Australia/Perth" ~ format(.data$SampleDate_UTC, tz = "Australia/Perth"))) %>%
+    dplyr::filter(!.data$file_id %in% c(2117, 2184, 2186, 2187))
+
+  NRSSamp <- pr_get_NRSTrips() %>%
+    dplyr::filter(stringr::str_detect(.data$TripCode, "PH4", negate = TRUE))
+
+  Stations <- rawCTD %>%
+    dplyr::select(.data$TripCode) %>%
+    dplyr::mutate(stations = as.factor(substr(.data$TripCode, 1, 3))) %>%
+    dplyr::select(.data$stations) %>%
+    dplyr::distinct()
+
+  df <- data.frame(file_id = NA, TripCode = NA)
+
+  for (y in 1:nlevels(Stations$stations)){
+
+    station <- levels(Stations$stations)[[y]]
+
+    rawCTDCast <- rawCTD %>%
+      dplyr::select(.data$file_id, .data$SampleDate_UTC, .data$TripCode) %>%
+      dplyr::filter(substr(.data$TripCode, 1, 3) == station) %>%
+      dplyr::distinct()
+
+    CastTimes <- rawCTDCast$SampleDate_UTC
+
+    Samps <- NRSSamp %>%
+      dplyr::filter(substr(.data$TripCode, 1, 3) == station) %>%
+      dplyr::select(.data$SampleDate_UTC, .data$TripCode) %>%
+      dplyr::distinct()
+
+    dateSelect <- function(x){
+      which.min(abs(x - CastTimes))
+    }
+
+    DateMatch <- sapply(Samps$SampleDate_UTC, dateSelect)
+    Samps$SampLevel <- DateMatch
+    Samps$SampleDate_UTC <- Samps$SampleDate_UTC
+
+    for (i in 1:nrow(Samps)){
+      j <- Samps$SampLevel[[i]]
+      Samps$SampleDate_UTC[i] <- CastTimes[[j]]
+    }
+
+    Samps <- Samps %>%
+      dplyr::mutate(DateDiff = as.numeric(abs(.data$SampleDate_UTC - .data$SampleDate_UTC) / 3600),
+                    DateDiff = dplyr::case_when(.data$DateDiff > 3 & station != "NSI" ~ NA_real_,
+                                                .data$DateDiff > 15 & station %in% c("NSI", "KAI") ~ NA_real_,
+                                                TRUE ~ .data$DateDiff))
+
+    SampsMatch <- rawCTDCast %>%
+      dplyr::filter(substr(.data$TripCode, 1, 3) == station) %>%
+      dplyr::select(.data$SampleDate_UTC, .data$file_id) %>%
+      dplyr::distinct()
+
+    CastMatch <- Samps %>%
+      tidyr::drop_na(.data$DateDiff) %>%
+      dplyr::inner_join(SampsMatch, by = "SampleDate_UTC") %>%
+      dplyr::select(.data$file_id, .data$TripCode)
+
+    df <- df %>%
+      dplyr::bind_rows(CastMatch) %>%
+      tidyr::drop_na()
+  }
+
+  rawCTD <- rawCTD %>%
+    dplyr::select(-.data$TripCode) %>%
+    dplyr::left_join(df, by = "file_id")
+
+}
+
 
 
 
@@ -170,7 +275,7 @@ pr_get_NRSTSS <- function(){
 #
 #   # CTD Cast Data
 #   var_names <- c("Density_kgm3", "Temperature_degC", "Conductivity_Sm", "Salinity_psu", "Turbidity_NTU", "CTDChlF_mgm3")
-#   CTD <- pr_get_CTD() %>%
+#   CTD <- pr_get_NRSCTD() %>%
 #     dplyr::mutate(SampleDepth_m = as.character(round(.data$SampleDepth_m, 0))) %>%
 #     dplyr::select(-c(.data$Pressure_dbar)) %>%
 #     dplyr::group_by(.data$TripCode, .data$SampleDepth_m) %>%
