@@ -120,4 +120,20 @@ pr_get_NRSTrips <- function(Type = c("P", "Z", "F")){
 #     pr_rename()
 # }
 
+#' Filter dataframe on `StationCode` to return only NRS stations
+#'
+#'
+#' @param df Dataframe to filter
+#'
+#' @return Dataframe with only NRS Stations
+#' @export
+#'
+#' @examples
+#' \dontrun{df <- pr_filter_NRSStations(df)}
+pr_filter_NRSStations <- function(df){
+
+  df <- df %>%
+    dplyr::filter(.data$StationCode %in% c("DAR", "ESP", "KAI", "MAI", "NIN", "NSI", "PHB", "ROT", "YON"))
+}
+
 
