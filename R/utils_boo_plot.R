@@ -509,9 +509,9 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = 'NRS', trans = 'ident
 #' @export
 #'
 #' @examples
-#' '\dontrun{df <- pr_get_NRSChemistry() %>%
-#'            pr_plot_env_var()
-#'            }
+#' \dontrun{df <- pr_get_NRSChemistry() %>%
+#'            pr_plot_env_var()}
+#'
 pr_plot_env_var <- function(df, pal = 'matter', trend = 'None', Scale = 'identity') {
   n <- length(unique(df$StationName))
   plotCols <- pr_get_PlotCols(pal, n)
