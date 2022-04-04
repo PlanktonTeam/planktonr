@@ -28,10 +28,13 @@ pr_get_tsdata <- function(Survey = "CPR", Type = "P"){
 
   if(Survey == 'CPR'){
 
-    dat <- readr::read_csv(system.file("extdata", "CPR_Indices.csv", package = "planktonr", mustWork = TRUE), na = "NA", show_col_types = FALSE) %>%
-      dplyr::select(.data$SampleDateUTC, .data$Year, .data$Month, .data$Day, .data$BioRegion, .data$Biomass_mgm3,
+    dat <- readr::read_csv(system.file("extdata", "CPR_Indices.csv", package = "planktonr", mustWork = TRUE),
+                           na = c("NA", ""),
+                           show_col_types = FALSE) %>%
+      pr_rename() %>%
+      dplyr::select(.data$SampleDate_UTC, .data$Year, .data$Month, .data$Day, .data$BioRegion, .data$Biomass_mgm3,
                     .data[[parameter1]]:.data[[parameter2]]) %>%
-      dplyr::rename(SampleDate_UTC = .data$SampleDateUTC) %>%
+      dplyr::rename(SampleDate_UTC = .data$SampleDate_UTC) %>%
       dplyr::mutate(Biomass_mgm3 = suppressWarnings(replace(.data$Biomass_mgm3, which(.data$Biomass_mgm3  < 0), 0)),
                     SampleDate_UTC = lubridate::round_date(.data$SampleDate_UTC, "month"),
                     YearMon = paste(.data$Year, .data$Month)) %>% # this step can be improved when nesting supports data pronouns
@@ -45,20 +48,25 @@ pr_get_tsdata <- function(Survey = "CPR", Type = "P"){
       pr_reorder() %>%
       dplyr::filter(!is.na(.data$BioRegion), !.data$BioRegion %in% c('North', 'North-west')) %>%
       droplevels()
+
     return(dat)
+
   } else if(Survey == "NRS"){
-    dat <- readr::read_csv(system.file("extdata", "NRS_Indices.csv", package = "planktonr", mustWork = TRUE), na = "NA", show_col_types = FALSE) %>%
-      dplyr::mutate(Month = lubridate::month(.data$SampleDateLocal),
-                    Year = lubridate::year(.data$SampleDateLocal),
+    dat <- readr::read_csv(system.file("extdata", "NRS_Indices.csv", package = "planktonr", mustWork = TRUE),
+                           na = c("NA", ""),
+                           show_col_types = FALSE) %>%
+      pr_rename() %>%
+      dplyr::mutate(Month = lubridate::month(.data$SampleDate_Local),
+                    Year = lubridate::year(.data$SampleDate_Local),
                     StationCode = paste(.data$StationName, .data$StationCode),
-                    SampleDateLocal = as.POSIXct(.data$SampleDateLocal, format = '%Y-%m-%d')) %>%
+                    SampleDate_Local = as.POSIXct(.data$SampleDate_Local, format = '%Y-%m-%d')) %>%
       #tidyr::complete(.data$Year, tidyr::nesting(Station, Code)) %>% # Nesting doesn't support data pronouns at this time
       tidyr::complete(.data$Year, .data$StationCode) %>%
       dplyr::relocate(.data$AshFreeBiomass_mgm3, .after = .data$Time_24hr) %>%
       dplyr::relocate(.data$Biomass_mgm3, .after = .data$Time_24hr) %>%
       dplyr::mutate(StationName = stringr::str_sub(.data$StationCode, 1, -5),
                     StationCode = stringr::str_sub(.data$StationCode, -3, -1)) %>%
-      dplyr::select(.data$Year, .data$Month, .data$SampleDateLocal, .data$StationName, .data$StationCode,
+      dplyr::select(.data$Year, .data$Month, .data$SampleDate_Local, .data$StationName, .data$StationCode,
                     .data[[parameter1]]:.data[[parameter2]]) %>%
       # dplyr::select(-c(.data$Day, .data$Time_24hr)) %>%
       tidyr::pivot_longer(-c(.data$Year:.data$StationCode), values_to = 'Values', names_to = "parameters") %>%
@@ -135,8 +143,8 @@ pr_get_fg <- function(Survey = 'NRS', Type = "Z"){
   }
   else {
     df <- df %>%
-      dplyr::select(.data$StationName, .data$StationCode, .data$SampleTime_local, .data$Month, .data$Year, .data[[parameter1]]:.data[[parameter2]])
-    # dplyr::select(.data$StationName, .data$StationCode, .data$SampleDateLocal, .data$Month, .data$Year, .data[[parameter1]]:.data[[parameter2]])
+      dplyr::select(.data$StationName, .data$StationCode, .data$SampleTime_Local,
+                    .data$Month, .data$Year, .data[[parameter1]]:.data[[parameter2]])
   }
 
   df <- df %>%
@@ -181,31 +189,27 @@ pr_get_fg <- function(Survey = 'NRS', Type = "Z"){
 pr_get_LTnuts <-  function(){
 
   NutsLT <- readr::read_csv(system.file("extdata", "nuts_longterm_clean2.csv", package = "planktonr", mustWork = TRUE),
-                            show_col_types = FALSE) %>%
+                            show_col_types = FALSE,
+                            na = c("NA", "")) %>%
+    pr_rename() %>%
     tidyr::pivot_longer(-c(.data$StationCode:.data$SampleDepth_m), values_to = "Values", names_to = 'parameters') %>%
-    dplyr::rename(SampleDate_Local = .data$SampleDateLocal) %>%
-    dplyr::mutate(ProjectName = 'LTM',
+    dplyr::rename(SampleDate_Local = .data$SampleDate_Local) %>%
+    dplyr::mutate(Project = 'LTM',
                   SampleDate_Local = strptime(as.POSIXct(.data$SampleDate_Local), "%Y-%m-%d")) %>%
     pr_add_StationName() %>%
-    dplyr::relocate(c("ProjectName", "StationName", "StationCode", tidyselect::everything())) %>%
+    dplyr::relocate(c("Project", "StationName", "StationCode", tidyselect::everything())) %>%
     pr_reorder()
 
   Nuts <- pr_get_NRSChemistry() %>%
-    dplyr::mutate(SampleDate_Local = strptime(.data$SampleDate_Local, "%Y-%m-%d")) %>%
-    dplyr::select(-.data$MicroBiomeSample_id) %>%
     dplyr::filter(.data$StationCode %in% c('MAI', 'ROT', 'PHB')) %>%
-    tidyr::pivot_longer(-c(.data$FID:.data$SampleDepth_m), values_to = "Values", names_to = 'parameters') %>%
-    dplyr::mutate(ProjectName = "NRS",
-                  SampleDate_Local = strptime(as.POSIXct(.data$SampleDate_Local), "%Y-%m-%d")) %>%  # TODO Not sure why this is here
-    dplyr::select(colnames(NutsLT))
+    dplyr::select(colnames(NutsLT)) # Ensure columns are in the same order
 
   CTD <- pr_get_NRSCTD() %>%
-    dplyr::mutate(StationCode = stringr::str_sub(.data$TripCode, 1, 3)) %>%
-    dplyr::select(.data$StationCode, .data$StationName, .data$SampleDate_Local, .data$SampleDepth_m, .data$Temperature_degC) %>%
+    dplyr::select(.data$Project, .data$StationCode, .data$StationName,
+                  .data$SampleDate_Local, .data$SampleDepth_m, .data$Temperature_degC) %>%
     dplyr::filter(.data$StationCode %in% c('MAI', 'ROT', 'PHB')) %>%
-    tidyr::pivot_longer(-c(.data$StationCode:.data$SampleDepth_m), values_to = "Values", names_to = 'parameters') %>%
-    dplyr::mutate(ProjectName = 'NRS',
-                  SampleDate_Local = strptime(as.POSIXct(.data$SampleDate_Local), "%Y-%m-%d")) %>%
+    tidyr::pivot_longer(-c(.data$Project:.data$SampleDepth_m), values_to = "Values", names_to = 'parameters') %>%
+    dplyr::mutate(SampleDate_Local = strptime(as.POSIXct(.data$SampleDate_Local), "%Y-%m-%d")) %>%
     dplyr::select(colnames(NutsLT))
 
   LTnuts <- dplyr::bind_rows(NutsLT, Nuts, CTD) %>%
@@ -253,7 +257,7 @@ pr_get_fMap_data <- function(Type = "Z"){
 
     PhytoCountCPR <- pr_get_CPRData(Type = "phytoplankton", Variable = "abundance", Subset = "species") %>%
       tidyr::pivot_longer(cols = !dplyr::starts_with(c("TripCode", "Region", "Latitude", "Longitude",
-      "SampleDate_UTC", "SampleDate_Local", "Year", "Month", "Day", "Time", "PCI"), ignore.case = FALSE),
+                                                       "SampleDate_UTC", "SampleDate_Local", "Year", "Month", "Day", "Time", "PCI"), ignore.case = FALSE),
                           names_to = "Taxon", values_to = "Counts") %>%
       dplyr::mutate(Counts = as.integer(as.logical(.data$Counts)),
                     Survey = "CPR",
@@ -265,6 +269,7 @@ pr_get_fMap_data <- function(Type = "Z"){
       dplyr::arrange(.data$Taxon)
 
   } else if(Type == "Z"){
+
     ZooCountNRS <- pr_get_NRSData(Type = "zooplankton", Variable = "abundance", Subset = "species") %>%
       tidyr::pivot_longer(cols = !tidyselect::starts_with(c("Project", "StationName", "StationCode", "Latitude", "Longitude", "TripCode",
                                                             "SampleTime", "Year", "Month", "Day", "Time", "SampleDepth_m", "CTD", "Biomass_mgm3", "AshFreeBiomass_mgm3" ), ignore.case = FALSE),
@@ -276,7 +281,8 @@ pr_get_fMap_data <- function(Type = "Z"){
 
     ZooCountCPR <- pr_get_CPRData(Type = "zooplankton", Variable = "abundance", Subset = "species") %>%
       tidyr::pivot_longer(cols = !dplyr::starts_with(c("TripCode", "Region", "Latitude", "Longitude",
-                                                       "SampleDate_UTC", "SampleDate_Local", "Year", "Month", "Day", "Time", "PCI"), ignore.case = FALSE),
+                                                       "SampleDate_UTC", "SampleDate_Local", "Year", "Month",
+                                                       "Day", "Time", "PCI", "BiomassIndex_mgm3"), ignore.case = FALSE),
                           names_to = "Taxon", values_to = "Counts") %>%
       dplyr::mutate(Counts = as.integer(as.logical(.data$Counts)),
                     Survey = "CPR",
@@ -289,7 +295,7 @@ pr_get_fMap_data <- function(Type = "Z"){
   }
 
   NRSSamp <- pr_get_NRSTrips(Type) %>%
-    dplyr::rename(Sample = .data$TripCode, Date = .data$SampleDateLocal) %>%
+    dplyr::rename(Sample = .data$TripCode, Date = .data$SampleDate_Local) %>%
     dplyr::mutate(DOY = lubridate::yday(.data$Date),
                   Start = as.Date(paste0(min(lubridate::year(.data$Date))-1, "-12-31")),
                   days = difftime(as.Date(.data$Date), .data$Start, units = "days") %>% as.numeric(),
@@ -298,7 +304,7 @@ pr_get_fMap_data <- function(Type = "Z"){
     dplyr::select(.data$Sample, .data$Survey, .data$Date, .data$DOY, .data$Latitude, .data$Longitude, .data$thetadoy)
 
   CPRSamp <- pr_get_CPRSamps(Type) %>%
-    dplyr::rename(Date = .data$SampleDateUTC) %>%
+    dplyr::rename(Date = .data$SampleDate_UTC) %>%
     dplyr::mutate(DOY = lubridate::yday(.data$Date),
                   Start = as.Date(paste0(min(lubridate::year(.data$Date))-1, "-12-31")),
                   days = difftime(as.Date(.data$Date), .data$Start, units = "days") %>% as.numeric(),
@@ -351,6 +357,7 @@ pr_get_fMap_data <- function(Type = "Z"){
 #' @examples
 #' df <- pr_get_daynight("Z")
 pr_get_daynight <- function(Type = c("P", "Z")){
+
   if(Type == "Z"){
     dat <- pr_get_CPRData(Type = "zooplankton", Variable = "abundance", Subset = "copepods")
   } else {
@@ -370,7 +377,9 @@ pr_get_daynight <- function(Type = c("P", "Z")){
 
   dat2 <- dat %>%
     dplyr::bind_cols(daynight["daynight"]) %>%
-    dplyr::select(.data[["TripCode"]]:.data[["BiomassIndex_mgm3"]], .data$daynight, tidyselect::everything()) %>%
+    dplyr::select(tidyselect::any_of(c("TripCode","Region", "Latitude", "Longitude", "SampleDate_UTC",
+                                       "SampleDate_Local","Year", "Month", "Day", "Time", "PCI", "BiomassIndex_mgm3")),
+                  .data$daynight, tidyselect::everything()) %>%
     tidyr::pivot_longer(-c(.data[["TripCode"]]:.data[["daynight"]]), values_to = "Species_m3", names_to = 'Species') %>%
     dplyr::group_by(.data$Month, .data$daynight, .data$Species) %>%
     dplyr::summarise(Species_m3 = mean(.data$Species_m3, na.rm = TRUE),
@@ -405,9 +414,10 @@ pr_get_sti <-  function(Type = "P"){
 
   ## These will be replace with proper satellite data from extractions in time
   nrssat <- readr::read_csv(system.file("extdata", "NRS_SatData.csv", package = "planktonr", mustWork = TRUE),
-                            show_col_types = FALSE) %>%
+                            show_col_types = FALSE,
+                            na = c("NA", "")) %>%
     pr_rename() %>%
-    dplyr::rename(SampleTime_local = .data$SAMPLEDATE_LOCAL)
+    dplyr::rename(SampleTime_Local = .data$SAMPLEDATE_LOCAL)
 
   cprsat <- readr::read_csv(system.file("extdata", "CPR_SatData.csv", package = "planktonr", mustWork = TRUE),
                             show_col_types = FALSE) %>%
@@ -424,7 +434,7 @@ pr_get_sti <-  function(Type = "P"){
 
   nrs <- nrsdat %>%
     tidyr::pivot_longer(-c(.data[["Project"]]:.data[["Method"]]), names_to = 'Species', values_to = parameter) %>%
-    dplyr::left_join(nrssat, by = c("Latitude", "Longitude", "SampleTime_local")) %>%
+    dplyr::left_join(nrssat, by = c("Latitude", "Longitude", "SampleTime_Local")) %>%
     dplyr::select(.data$Species, .data$SST, .data[[parameter]]) %>%
     dplyr::filter(!is.na(.data$SST) & .data[[parameter]] > 0) %>%
     dplyr::mutate(Project = 'nrs',
