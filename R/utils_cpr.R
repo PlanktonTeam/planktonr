@@ -48,7 +48,10 @@ pr_get_CPRData <- function(Type = "phytoplankton", Variable = "abundance", Subse
   } else {
     file = paste("cpr", Type, Variable, Subset, "data", sep = "_")
 
-    dat <- readr::read_csv(stringr::str_replace(pr_get_site(), "LAYER_NAME", file), na = "", show_col_types = FALSE, comment = "#") %>%
+    dat <- readr::read_csv(stringr::str_replace(pr_get_site(), "LAYER_NAME", file),
+                           na = "",
+                           show_col_types = FALSE,
+                           comment = "#") %>%
       pr_rename()
     # %>%
     # dplyr::rename()
@@ -82,7 +85,9 @@ pr_get_CPRTrips <- function(){
 #' @importFrom rlang .data
 pr_get_CPRSamps <- function(Type = "P"){
 
-  CPRSamps <- readr::read_csv(system.file("extdata", "CPR_Samp.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
+  CPRSamps <- readr::read_csv(system.file("extdata", "CPR_Samp.csv", package = "planktonr", mustWork = TRUE),
+                              na = "",
+                              show_col_types = FALSE) %>%
     pr_rename() %>%
     dplyr::filter(stringr::str_detect(.data$SampleType, paste(Type, collapse = "|"))) %>%
     dplyr::mutate(Year = lubridate::year(.data$SampleDate_UTC),
@@ -90,7 +95,8 @@ pr_get_CPRSamps <- function(Type = "P"){
                   Day = lubridate::day(.data$SampleDate_UTC),
                   Time_24hr = stringr::str_sub(.data$SampleDate_UTC, -8, -1)) %>%
     pr_add_Bioregions() %>%
-    dplyr::select(c(.data$TripCode, .data$Sample, .data$Latitude:.data$SampleDate_Local, .data$Year:.data$BioRegion, .data$PCI, .data$Biomass_mgm3, .data$SampleType))
+    dplyr::select(c(.data$TripCode, .data$Sample, .data$Latitude:.data$SampleDate_Local,
+                    .data$Year:.data$BioRegion, .data$PCI, .data$Biomass_mgm3, .data$SampleType))
 
   if("B" %in% Type){ # Return Biomass if its requested. Otherwise not.
     CPRSamps <- CPRSamps %>%

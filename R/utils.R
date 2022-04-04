@@ -120,19 +120,30 @@ pr_add_StationName <- function(df){
 #'     pr_add_StationCode()
 #' @importFrom rlang .data
 pr_add_StationCode <- function(df){
-  df <- df %>%
-    dplyr::mutate(StationCode = dplyr::case_when(
-      StationName == "Darwin" ~ "DAR",
-      StationName == "Yongala" ~ "YON",
-      StationName == "North Stradbroke Island" ~ "NSI",
-      StationName == "Port Hacking" ~ "PHB",
-      StationName == "Maria Island" ~ "MAI",
-      StationName == "Kangaroo Island" ~ "KAI",
-      StationName == "Esperance" ~ "ESP",
-      StationName == "Rottnest Island" ~ "ROT",
-      StationName == "Ningaloo" ~ "NIN")) %>%
-    dplyr::relocate(.data$StationCode, .after = .data$StationName)
+
+  if("TripCode" %in% colnames(df)){
+    df <- df %>%
+      dplyr::mutate(StationCode = stringr::str_sub(.data$TripCode, start = 1, end = 3)) %>%
+      dplyr::relocate(.data$StationCode, .after = .data$TripCode)
+  } else if("StationName" %in% colnames(df)){
+    df <- df %>%
+      dplyr::mutate(StationCode = dplyr::case_when(
+        StationName == "Darwin" ~ "DAR",
+        StationName == "Yongala" ~ "YON",
+        StationName == "North Stradbroke Island" ~ "NSI",
+        StationName == "Port Hacking" ~ "PHB",
+        StationName == "Maria Island" ~ "MAI",
+        StationName == "Kangaroo Island" ~ "KAI",
+        StationName == "Esperance" ~ "ESP",
+        StationName == "Rottnest Island" ~ "ROT",
+        StationName == "Ningaloo" ~ "NIN")) %>%
+      dplyr::relocate(.data$StationCode, .after = .data$StationName)
+  }
+  return(df)
 }
+
+
+
 
 
 
@@ -320,9 +331,7 @@ pr_add_Carbon <- function(df, meth){
 #'                SampleDate_UTC = c(lubridate::now(), lubridate::now()))
 #' df <- pr_add_LocalTime(df)
 pr_add_LocalTime <- function(df){
-
   df <- purrr::map2(df$SampleDate_UTC, df$tz, function(x,y) lubridate::with_tz(x, tzone = y))
-
 }
 
 #' For use in models to create a circular predictor

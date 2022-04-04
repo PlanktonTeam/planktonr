@@ -8,16 +8,24 @@
 #' @importFrom rlang .data
 pr_get_NRSChemistry <- function(){
 
-  var_names <- c("SiO4_umolL", "PO4_umolL", "NH4_umolL", "NO3_umolL", "N02_umolL",
+  var_names <- c("SecchiDepth_m", "SiO4_umolL", "PO4_umolL", "NH4_umolL", "NO3_umolL", "N02_umolL",
                  "Oxygen_umolL", "DIC_umolkg", "Alkalinity_umolkg", "Salinity_psu")
   file <- "bgc_chemistry_data"
 
-  chemistry <- pr_get_raw(file) %>%
+  dat <- pr_get_raw(file) %>%
     pr_rename() %>%
     pr_apply_flags() %>%
     pr_add_StationCode() %>%
+    pr_add_StationName() %>%
+    pr_filter_NRSStations() %>%
     dplyr::rename(SampleDepth_m = .data$Depth_m) %>%
-    dplyr::mutate_all(~ replace(., is.na(.), NA))
+    dplyr::mutate_all(~ replace(., is.na(.), NA)) %>%
+    dplyr::mutate(Month = lubridate::month(.data$SampleDate_Local)) %>%
+    dplyr::select(.data$Project, .data$SampleDate_Local, .data$Month, .data$SampleDepth_m, .data$StationName, .data$StationCode,
+                  tidyselect::any_of(var_names)) %>%
+    tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = 'parameters') %>%
+    pr_reorder()
+
 }
 
 
@@ -32,34 +40,35 @@ pr_get_NRSChemistry <- function(){
 pr_get_NRSPigments <- function(){
 
   file <- "bgc_pigments_data"
+  var_names <- c("TotalChla", "TotalChl", "PPC", "PSC", "PSP", "TCaro", "TAcc", "TPig", "TDP")
 
   dat <- pr_get_raw(file) %>%
     pr_rename() %>%
+    dplyr::mutate(CphlC3_mgm3 = 0) %>% #TODO Need to remove this when AODN fixes up.
     pr_apply_flags("Pigments_flag") %>%
-    dplyr::select_if(!grepl('FLAG', names(.)) & !grepl('COMMENTS', names(.))) %>%
-    pr_rename() %>%
+    dplyr::select(-.data$Pigments_flag) %>%
     dplyr::rename(SampleDepth_m = .data$Depth_m) %>%
     dplyr::filter(.data$Project == "NRS", .data$SampleDepth_m != "WC") %>%
+    pr_add_StationCode() %>%
+    pr_add_StationName() %>%
     dplyr::rowwise() %>%
-    dplyr::mutate(CphlC3_mgm3 = 0) %>%
     dplyr::mutate(SampleDepth_m = as.numeric(.data$SampleDepth_m),
                   TotalChla = sum(.data$CphlideA_mgm3, .data$DvCphlA_mgm3, .data$CphlA_mgm3, na.rm = TRUE),
                   TotalChl = sum(.data$TotalChla, .data$DvCphlB_mgm3, .data$CphlB_mgm3, .data$CphlC3_mgm3, .data$CphlC2_mgm3, .data$CphlC1_mgm3, na.rm = TRUE),
                   PPC = sum(.data$Allo_mgm3, .data$Diadchr_mgm3, .data$Diadino_mgm3, .data$Diato_mgm3, .data$Zea_mgm3,  na.rm = TRUE), # CARO, #Photoprotective Carotenoids
                   PSC = sum(.data$Butfuco_mgm3, .data$Hexfuco_mgm3, .data$Perid_mgm3,  na.rm = TRUE), # Photosynthetic Carotenoids
-                  PSP = sum(.data$PSC, .data$TotalChl,  na.rm = TRUE), # Photosynthetic pigments
-                  TCaro = sum(.data$PSC, .data$PSP,  na.rm = TRUE), # Total Carotenoids
+                  PSP = sum(.data$PSC, .data$TotalChl, na.rm = TRUE), # Photosynthetic pigments
+                  TCaro = sum(.data$PSC, .data$PSP, na.rm = TRUE), # Total Carotenoids
                   TAcc = sum(.data$TCaro, .data$DvCphlB_mgm3, .data$CphlB_mgm3, .data$CphlC3_mgm3, .data$CphlC2_mgm3, .data$CphlC1_mgm3,  na.rm = TRUE), # Total Accessory pigments
                   TPig = sum(.data$TAcc, .data$TotalChla,  na.rm = TRUE), # Total pigments
                   TDP = sum(.data$PSC, .data$Allo_mgm3, .data$Zea_mgm3, .data$DvCphlB_mgm3, .data$CphlB_mgm3,  na.rm = TRUE), # Total Diagnostic pigments
                   StationCode = stringr::str_sub(.data$TripCode, 1, 3),
                   Month = lubridate::month(.data$SampleDate_Local)) %>%
     dplyr::filter(.data$TotalChla != 0) %>%
-    dplyr::select(.data$Project:.data$SampleDepth_m, .data$TotalChla:.data$Month, -.data$TripCode) %>%
-    tidyr::pivot_longer(.data$TotalChla:.data$TDP, values_to = "Values", names_to = 'parameters') %>%
-    pr_add_StationName() %>%
+    dplyr::select(.data$Project, .data$SampleDate_Local, .data$Month, .data$SampleDepth_m, .data$StationName, .data$StationCode,
+                  tidyselect::any_of(var_names)) %>%
+    tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = 'parameters') %>%
     pr_reorder()
-
 
 }
 
@@ -76,20 +85,18 @@ pr_get_NRSPico <- function(){
 
   file <- "bgc_picoplankton_data"
 
+  var_names <- c("Prochlorococcus_Cellsml", "Synecochoccus_Cellsml", "Picoeukaryotes_Cellsml")
+
   dat <- pr_get_raw(file) %>%
     pr_rename() %>%
     pr_apply_flags() %>%
-    dplyr::rename(SampleDepth_m = .data$Depth_m,
-                  Synecochoccus_Cellsml = .data$Synechoc_cellsmL,
-                  Prochlorococcus_Cellsml = .data$Prochlorc_cellsmL,
-                  Picoeukaryotes_Cellsml = .data$Picoeukar_cellsmL) %>%
-    dplyr::select(.data$TripCode, .data$SampleDate_Local, .data$SampleDepth_m,
-                  .data[["Prochlorococcus_Cellsml"]]:.data[["Picoeukaryotes_Cellsml"]]) %>%
-    dplyr::mutate(StationCode = stringr::str_sub(.data$TripCode, 1, 3),
-                  Year = lubridate::year(.data$SampleDate_Local),
-                  Month = lubridate::month(.data$SampleDate_Local)) %>%
+    pr_add_StationCode() %>%
     pr_add_StationName() %>%
-    tidyr::pivot_longer(.data[["Prochlorococcus_Cellsml"]]:.data[["Picoeukaryotes_Cellsml"]], values_to = "Values", names_to = 'parameters')  %>%
+    dplyr::rename(SampleDepth_m = .data$Depth_m) %>%
+    dplyr::mutate(Month = lubridate::month(.data$SampleDate_Local)) %>%
+    dplyr::select(.data$Project, .data$SampleDate_Local, .data$Month, .data$SampleDepth_m, .data$StationName, .data$StationCode,
+                  tidyselect::any_of(var_names)) %>%
+    tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = 'parameters') %>%
     dplyr::mutate(Values = .data$Values + min(.data$Values[.data$Values>0], na.rm = TRUE)) %>%
     pr_reorder()
 }
@@ -127,16 +134,15 @@ pr_get_NRSCTD <- function(){
 
   rawCTD <- pr_get_raw(file) %>%
     pr_rename() %>%
-    dplyr::rename(SampleDepth_m = .data$DEPTH, Salinity_psu = .data$PSAL, Salinity_flag = .data$PSAL_quality_control,
-                  SampleDate_UTC = .data$time_coverage_start, StationCode = .data$site_code, Temperature_degC = .data$TEMP,
-                  ChlF_mgm3 = .data$Chla_mgm3, ChlF_flag = .data$Chla_flag) %>% # Can't rename this in pr_rename due to replicate name
+    dplyr::rename(SampleDepth_m = .data$Depth_m) %>% # TODO Hopefully this will be fixed by AODN
+    dplyr::mutate(StationCode = stringr::str_remove(.data$site_code, "NRS"), # Have to do this manually due to `NRS` in code
+                  Project = "NRS") %>%
     pr_add_StationName() %>%
-    dplyr::filter(grepl("NRS", .data$StationCode)) %>% # Subset to NRS only
-    dplyr::mutate(TripCode = dplyr::if_else(.data$StationCode == 'NRSDAR', paste0(substr(.data$StationCode,4,6), format(.data$SampleDate_UTC, "%Y%m%d_%H:%M")),
-                                            paste0(substr(.data$StationCode,4,6), format(.data$SampleDate_UTC, "%Y%m%d"))),
-                  ChlF_mgm3 = dplyr::if_else(!is.na(.data$ChlF_mgm3), .data$ChlF_mgm3, .data$CHLF),
-                  StationCode = stringr::str_sub(.data$StationCode, 4, 6)) %>%
-    dplyr::select(.data$file_id, .data$StationName, .data$TripCode, .data$SampleDate_UTC, .data$Latitude, .data$Longitude,
+    pr_filter_NRSStations() %>%
+    dplyr::mutate(TripCode = dplyr::if_else(.data$StationCode == "DAR", paste0(substr(.data$StationCode,1,3), format(.data$SampleDate_UTC, "%Y%m%d_%H:%M")),
+                                            paste0(substr(.data$StationCode,1,3), format(.data$SampleDate_UTC, "%Y%m%d"))),
+                  ChlF_mgm3 = dplyr::if_else(!is.na(.data$Chla_mgm3), .data$Chla_mgm3, .data$ChlF_mgm3)) %>%
+    dplyr::select(.data$Project, .data$file_id, .data$StationName, .data$StationCode, .data$TripCode, .data$SampleDate_UTC, .data$Latitude, .data$Longitude,
                   .data$SampleDepth_m, .data$Salinity_psu, .data$Salinity_flag, .data$Temperature_degC, .data$Temperature_flag,
                   .data$DissolvedOxygen_umolkg, .data$DissolvedOxygen_flag, .data$ChlF_mgm3, .data$ChlF_flag,
                   .data$Turbidity_NTU, .data$Turbidity_flag, .data$Pressure_dbar, .data$Conductivity_Sm,
@@ -156,35 +162,33 @@ pr_get_NRSCTD <- function(){
     dplyr::filter(stringr::str_detect(.data$TripCode, "PH4", negate = TRUE))
 
   Stations <- rawCTD %>%
-    dplyr::select(.data$TripCode) %>%
-    dplyr::mutate(stations = as.factor(substr(.data$TripCode, 1, 3))) %>%
+    dplyr::mutate(stations = as.factor(.data$StationCode)) %>%
     dplyr::select(.data$stations) %>%
     dplyr::distinct()
 
-  df <- data.frame(file_id = NA, TripCode = NA)
+  df <- data.frame(file_id = NA, StationCode = NA)
 
   for (y in 1:nlevels(Stations$stations)){
 
     station <- levels(Stations$stations)[[y]]
 
     rawCTDCast <- rawCTD %>%
-      dplyr::select(.data$file_id, .data$SampleDate_UTC, .data$TripCode) %>%
-      dplyr::filter(substr(.data$TripCode, 1, 3) == station) %>%
+      dplyr::select(.data$file_id, .data$SampleDate_UTC, .data$StationCode) %>%
+      dplyr::filter(.data$StationCode == station) %>%
       dplyr::distinct()
 
     CastTimes <- rawCTDCast$SampleDate_UTC
 
     Samps <- NRSSamp %>%
-      dplyr::filter(substr(.data$TripCode, 1, 3) == station) %>%
-      dplyr::select(.data$SampleDate_UTC, .data$TripCode) %>%
+      dplyr::filter(.data$StationCode == station) %>%
+      dplyr::select(.data$SampleDate_UTC, .data$StationCode) %>%
       dplyr::distinct()
 
     dateSelect <- function(x){
       which.min(abs(x - CastTimes))
     }
 
-    DateMatch <- sapply(Samps$SampleDate_UTC, dateSelect)
-    Samps$SampLevel <- DateMatch
+    Samps$SampLevel <- sapply(Samps$SampleDate_UTC, dateSelect) #DateMatch
     Samps$SampleDate_UTC <- Samps$SampleDate_UTC
 
     for (i in 1:nrow(Samps)){
@@ -199,14 +203,14 @@ pr_get_NRSCTD <- function(){
                                                 TRUE ~ .data$DateDiff))
 
     SampsMatch <- rawCTDCast %>%
-      dplyr::filter(substr(.data$TripCode, 1, 3) == station) %>%
+      dplyr::filter(.data$StationCode == station) %>%
       dplyr::select(.data$SampleDate_UTC, .data$file_id) %>%
       dplyr::distinct()
 
     CastMatch <- Samps %>%
       tidyr::drop_na(.data$DateDiff) %>%
       dplyr::inner_join(SampsMatch, by = "SampleDate_UTC") %>%
-      dplyr::select(.data$file_id, .data$TripCode)
+      dplyr::select(.data$file_id, .data$StationCode)
 
     df <- df %>%
       dplyr::bind_rows(CastMatch) %>%
@@ -214,8 +218,7 @@ pr_get_NRSCTD <- function(){
   }
 
   rawCTD <- rawCTD %>%
-    dplyr::select(-.data$TripCode) %>%
-    dplyr::left_join(df, by = "file_id")
+    dplyr::left_join(df, by = c("file_id", "StationCode"))
 
 }
 
