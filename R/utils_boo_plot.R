@@ -117,8 +117,8 @@ pr_plot_timeseries <- function(df, Survey = "NRS", pal = "matter", Scale = "iden
       dplyr::rename(SampleDate = .data$SampleDate_Local) %>%
       dplyr::group_by(.data$SampleDate, .data$StationCode, .data$parameters) %>% # accounting for microbial data different depths
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
-                       .groups = 'drop')
-    titlex <- 'Sample Date (Local)'
+                       .groups = "drop")
+    titlex <- "Sample Date (Local)"
   }
 
   n <- length(unique(df$StationCode))
@@ -190,7 +190,7 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
     df <- df %>%
       dplyr::group_by(!!time, !!site, .data$parameters) %>% # accounting for microbial data different depths
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
-                       .groups = 'drop')%>%
+                       .groups = "drop")%>%
       dplyr::rename(value = .data$Values)
   }
 
@@ -514,9 +514,11 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = 'NRS', trans = 'ident
 #'
 pr_plot_env_var <- function(df, pal = 'matter', trend = 'None', Scale = 'identity') {
   n <- length(unique(df$StationName))
+
   plotCols <- pr_get_PlotCols(pal, n)
-  # titley <- unique(df$parameters)
+
   titley <- pr_relabel(unique(df$parameters), style = "plotly")
+
   np <- length(unique(df$SampleDepth_m))
 
   p <- ggplot2::ggplot(df, ggplot2::aes(.data$SampleDate_Local, .data$Values, colour = .data$StationName)) +

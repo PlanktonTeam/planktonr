@@ -9,7 +9,7 @@
 pr_get_NRSChemistry <- function(){
 
   var_names <- c("SecchiDepth_m", "SiO4_umolL", "PO4_umolL", "NH4_umolL", "NO3_umolL", "N02_umolL",
-                 "Oxygen_umolL", "DIC_umolkg", "Alkalinity_umolkg", "Salinity_psu")
+                 "Oxygen_umolL", "DIC_umolkg", "Alkalinity_umolkg", "Salinity_psu") #TODO Check if it is Alk or Total Alk. Our code used to say Total Alk.
   file <- "bgc_chemistry_data"
 
   dat <- pr_get_raw(file) %>%
@@ -93,10 +93,11 @@ pr_get_NRSPico <- function(){
     pr_add_StationCode() %>%
     pr_add_StationName() %>%
     dplyr::rename(SampleDepth_m = .data$Depth_m) %>%
-    dplyr::mutate(Month = lubridate::month(.data$SampleDate_Local)) %>%
-    dplyr::select(.data$Project, .data$SampleDate_Local, .data$Month, .data$SampleDepth_m, .data$StationName, .data$StationCode,
+    dplyr::mutate(Month = lubridate::month(.data$SampleDate_Local),
+                  Year = lubridate::year(.data$SampleDate_Local)) %>%
+    dplyr::select(.data$Project, .data$SampleDate_Local, .data$Month, .data$Year, .data$SampleDepth_m, .data$StationName, .data$StationCode,
                   tidyselect::any_of(var_names)) %>%
-    tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = 'parameters') %>%
+    tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "parameters") %>%
     dplyr::mutate(Values = .data$Values + min(.data$Values[.data$Values>0], na.rm = TRUE)) %>%
     pr_reorder()
 }
@@ -142,8 +143,9 @@ pr_get_NRSCTD <- function(){
     dplyr::mutate(TripCode = dplyr::if_else(.data$StationCode == "DAR", paste0(substr(.data$StationCode,1,3), format(.data$SampleDate_UTC, "%Y%m%d_%H:%M")),
                                             paste0(substr(.data$StationCode,1,3), format(.data$SampleDate_UTC, "%Y%m%d"))),
                   ChlF_mgm3 = dplyr::if_else(!is.na(.data$Chla_mgm3), .data$Chla_mgm3, .data$ChlF_mgm3)) %>%
-    dplyr::select(.data$Project, .data$file_id, .data$StationName, .data$StationCode, .data$TripCode, .data$SampleDate_UTC, .data$Latitude, .data$Longitude,
-                  .data$SampleDepth_m, .data$Salinity_psu, .data$Salinity_flag, .data$Temperature_degC, .data$Temperature_flag,
+    dplyr::select(.data$Project, .data$file_id, .data$StationName, .data$StationCode, .data$TripCode,
+                  .data$SampleDate_UTC, .data$Latitude, .data$Longitude, .data$SampleDepth_m,
+                  .data$Salinity_psu, .data$Salinity_flag, .data$Temperature_degC, .data$Temperature_flag,
                   .data$DissolvedOxygen_umolkg, .data$DissolvedOxygen_flag, .data$ChlF_mgm3, .data$ChlF_flag,
                   .data$Turbidity_NTU, .data$Turbidity_flag, .data$Pressure_dbar, .data$Conductivity_Sm,
                   .data$Conductivity_flag, .data$WaterDensity_kgm3, .data$WaterDensity_flag) %>%
