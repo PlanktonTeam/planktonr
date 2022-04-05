@@ -346,6 +346,9 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_export_nrs.html</loc>
   </url>
   <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_filter_NRSStations.html</loc>
+  </url>
+  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_filter_species.html</loc>
   </url>
   <url>
@@ -584,6 +587,12 @@
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_pigs.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_pol.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_polInfo.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_raw.html</loc>

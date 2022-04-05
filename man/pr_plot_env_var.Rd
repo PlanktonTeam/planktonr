@@ -21,3 +21,8 @@ A plotly plot with timeseries and climatology at depths
 \description{
 Combined timeseries and climatology plots for environmental variables
 }
+\examples{
+\dontrun{df <- pr_get_NRSChemistry() \%>\%
+           pr_plot_env_var()}
+
+}

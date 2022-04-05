@@ -7,7 +7,7 @@
 pr_plot_timeseries(df, Survey = "NRS", pal = "matter", Scale = "identity")
 }
 \arguments{
-\item{df}{dataframe with SampleDateLocal, station code and parameter name and values}
+\item{df}{dataframe with SampleDate_Local, station code and parameter name and values}
 
 \item{Survey}{CPR or NRS data}
 
@@ -22,11 +22,11 @@ a plotly timeseries plot
 Plot basic timeseries
 }
 \examples{
-df <- data.frame(SampleDateLocal = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
+df <- data.frame(SampleDate_Local = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
 StationCode = 'NSI', parameters = 'Biomass_mgm3', Values = runif(4, min=0, max=10),
 Survey = 'NRS')
 df <- df \%>\%
-      dplyr::mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
+      dplyr::mutate(SampleDate_Local = as.POSIXct(paste(SampleDate_Local, "00:00:00"),
       format = "\%Y-\%m-\%d \%H:\%M:\%S"))
 timeseries <- pr_plot_timeseries(df, 'NRS', 'matter')
 }
