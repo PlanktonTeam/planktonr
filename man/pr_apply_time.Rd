@@ -16,6 +16,6 @@ A dataframe with extra date columns
 Remove flagged data in df
 }
 \examples{
-df <- data.frame(SampleDateLocal = lubridate::now(), Latitude = -32, Longitude = 160)
+df <- data.frame(SampleDate_Local = lubridate::now(), Latitude = -32, Longitude = 160)
 df <- pr_apply_time(df)
 }

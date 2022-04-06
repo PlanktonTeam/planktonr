@@ -7,9 +7,9 @@
 #'
 #' @examples
 #' df <- pr_get_NRSStation() %>%
-#'   pr_add_bioregions()
+#'   pr_add_Bioregions()
 #' @importFrom rlang .data
-pr_add_bioregions <- function(df){
+pr_add_Bioregions <- function(df){
 
   # First add Marine Bioregions
   df <- df %>%

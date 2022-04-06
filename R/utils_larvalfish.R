@@ -13,7 +13,7 @@ pr_get_LFTrips <- function(){
                             col_types = readr::cols(FLAG_COMMENT = readr::col_character())) %>%
     pr_rename() %>%
     pr_apply_time() %>%
-    dplyr::select(.data$i_Sample:.data$SampleDateLocal, .data$Year:.data$SampleDateLocal, .data$Latitude:.data$Comments)
+    dplyr::select(.data$i_Sample:.data$SampleDate_Local, .data$Year:.data$SampleDate_Local, .data$Latitude:.data$Comments)
 }
 
 
@@ -49,7 +49,7 @@ pr_get_LFCountAll <- function(){
     dplyr::select(-.data$ScientificName, -.data$SPCode) %>%
     dplyr::arrange(.data$Header) %>%
     tidyr::pivot_wider(names_from = .data$Header, values_from = .data$TaxonCount, values_fill = 0) %>%
-    dplyr::arrange(.data$SampleDateLocal)
+    dplyr::arrange(.data$SampleDate_Local)
 }
 
 
@@ -71,5 +71,5 @@ pr_get_LFCountBGC <- function(){
     dplyr::select(-c(.data$ScientificName, .data$SPCode, .data$Temperature_degC, .data$Salinity_psu, .data$FlagComments)) %>%
     dplyr::arrange(.data$Header) %>%
     tidyr::pivot_wider(names_from = .data$Header, values_from = .data$TaxonCount, values_fill = 0) %>%
-    dplyr::arrange(.data$SampleDateLocal)
+    dplyr::arrange(.data$SampleDate_Local)
 }

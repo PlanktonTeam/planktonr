@@ -85,7 +85,7 @@ pr_plot_CPRmap <-  function(df){
 
 #' Plot basic timeseries
 #'
-#' @param df dataframe with SampleDateLocal, station code and parameter name and values
+#' @param df dataframe with SampleDate_Local, station code and parameter name and values
 #' @param pal is the palette name from cmocean
 #' @param Survey CPR or NRS data
 #' @param Scale scale of y axis on plot, whatever scale_y_continuous trans accepts
@@ -96,11 +96,11 @@ pr_plot_CPRmap <-  function(df){
 #' @importFrom ggplot2 aes
 #'
 #' @examples
-#' df <- data.frame(SampleDateLocal = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
+#' df <- data.frame(SampleDate_Local = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
 #' StationCode = 'NSI', parameters = 'Biomass_mgm3', Values = runif(4, min=0, max=10),
 #' Survey = 'NRS')
 #' df <- df %>%
-#'       dplyr::mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
+#'       dplyr::mutate(SampleDate_Local = as.POSIXct(paste(SampleDate_Local, "00:00:00"),
 #'       format = "%Y-%m-%d %H:%M:%S"))
 #' timeseries <- pr_plot_timeseries(df, 'NRS', 'matter')
 pr_plot_timeseries <- function(df, Survey = "NRS", pal = "matter", Scale = "identity"){
@@ -114,11 +114,11 @@ pr_plot_timeseries <- function(df, Survey = "NRS", pal = "matter", Scale = "iden
 
   if(Survey == "NRS"){
     df <- df %>%
-      dplyr::rename(SampleDate = .data$SampleDateLocal) %>%
+      dplyr::rename(SampleDate = .data$SampleDate_Local) %>%
       dplyr::group_by(.data$SampleDate, .data$StationCode, .data$parameters) %>% # accounting for microbial data different depths
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
-                       .groups = 'drop')
-    titlex <- 'Sample Date (Local)'
+                       .groups = "drop")
+    titlex <- "Sample Date (Local)"
   }
 
   n <- length(unique(df$StationCode))
@@ -165,7 +165,7 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
     time = rlang::sym("SampleDate_UTC")
     site = rlang::sym("BioRegion")
   } else if (survey == "NRS"){
-    time = rlang::sym("SampleDateLocal")
+    time = rlang::sym("SampleDate_Local")
     site = rlang::sym("StationName")
   }
 
@@ -190,7 +190,7 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
     df <- df %>%
       dplyr::group_by(!!time, !!site, .data$parameters) %>% # accounting for microbial data different depths
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
-                       .groups = 'drop')%>%
+                       .groups = "drop")%>%
       dplyr::rename(value = .data$Values)
   }
 
@@ -293,7 +293,7 @@ pr_plot_climate <- function(df, Survey = "NRS", x, pal = "matter", Scale = "iden
 
 #' Combined timeseries and climatology plots
 #'
-#' @param df data frame with SampleDateLocal, time period and parameter
+#' @param df data frame with SampleDate_Local, time period and parameter
 #' @param pal is the palette name from cmocean
 #' @param Survey CPR or NRS data
 #' @param Scale scale of y axis on plot, whatever scale_y_continuous trans accepts
@@ -302,13 +302,13 @@ pr_plot_climate <- function(df, Survey = "NRS", x, pal = "matter", Scale = "iden
 #' @export
 #'
 #' @examples
-#' df <- data.frame(SampleDateLocal = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
+#' df <- data.frame(SampleDate_Local = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
 #'                  Month = sample(1:12, 4), Year = c(2012, 2013, 2014, 2015),
 #'                  StationCode = c('NSI', 'NSI', 'PHB', 'PHB'),
 #'                  parameters = 'Biomass_mgm3',
 #'                  Values = runif(4, min=0, max=10))
 #' df <- df %>%
-#'       dplyr::mutate(SampleDateLocal = as.POSIXct(paste(SampleDateLocal, "00:00:00"),
+#'       dplyr::mutate(SampleDate_Local = as.POSIXct(paste(SampleDate_Local, "00:00:00"),
 #'                     format = "%Y-%m-%d %H:%M:%S"))
 #' monthly <- pr_plot_tsclimate(df, 'NRS', 'matter')
 
@@ -351,16 +351,16 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
 
   plotCols <- pr_get_PlotCols(pal, n)
 
- if("SampleDate_UTC" %in% colnames(df)){
+  if("SampleDate_UTC" %in% colnames(df)){
     SampleDate = rlang::sym("SampleDate_UTC")
     station = rlang::sym("BioRegion")
     titlex <- "Sample Date UTC"
   } else {
-    SampleDate = rlang::sym("SampleTime_local")
+    SampleDate = rlang::sym("SampleTime_Local")
     station = rlang::sym("StationName")
     titlex <- "Sample Date Local" #TODO
   }
-  # StationName StationCode SampleDateLocal     Month  Year parameters      Values
+  # StationName StationCode SampleDate_Local     Month  Year parameters      Values
   if (trend %in% c("Year", "Month")){
     df <- df %>%
       dplyr::filter(!is.na(!!SampleDate))  %>%
@@ -375,7 +375,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
     trend <- SampleDate # Rename trend to match the column with time
   }
 
- if(Scale == "Percent") {
+  if(Scale == "Percent") {
     df <- df %>%
       dplyr::group_by(!!rlang::sym(trend), !!station, .data$parameters) %>%
       dplyr::summarise(n = sum(.data$Values, na.rm = TRUE)) %>%
@@ -411,7 +411,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
       ggplot2::xlab("Sample Date")
   }
   return(p1)
-  }
+}
 
 #' Policy plot
 #'
@@ -500,7 +500,7 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = 'NRS', trans = 'ident
 
 #' Combined timeseries and climatology plots for environmental variables
 #'
-#' @param df A dataframe from pr_get_nuts or pr_get_pigs
+#' @param df A dataframe from pr_get_nuts or pr_get_pigments
 #' @param pal A Palette from cmocean
 #' @param trend Trend line to be used, options None, Smoother, Linear
 #' @param Scale scale on which to plot y axis
@@ -509,23 +509,27 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = 'NRS', trans = 'ident
 #' @export
 #'
 #' @examples
-#' df <- pr_get_nuts() %>% pr_plot_env_var()
+#' \dontrun{df <- pr_get_NRSChemistry() %>%
+#'            pr_plot_env_var()}
+#'
 pr_plot_env_var <- function(df, pal = 'matter', trend = 'None', Scale = 'identity') {
   n <- length(unique(df$StationName))
+
   plotCols <- pr_get_PlotCols(pal, n)
-  # titley <- unique(df$parameters)
+
   titley <- pr_relabel(unique(df$parameters), style = "plotly")
+
   np <- length(unique(df$SampleDepth_m))
 
-  p <- ggplot2::ggplot(df, ggplot2::aes(.data$SampleDateLocal, .data$Values, colour = .data$StationName)) +
+  p <- ggplot2::ggplot(df, ggplot2::aes(.data$SampleDate_Local, .data$Values, colour = .data$StationName)) +
     ggplot2::geom_line() +
     ggplot2::labs(x = "Time", y = titley) +
     ggplot2::facet_grid(SampleDepth_m ~., scales = "free") +
     ggplot2::theme_bw() +
     ggplot2::theme(strip.background = ggplot2::element_blank(),
-                                         strip.text = ggplot2::element_blank(),
-                                         legend.position = "bottom",
-                                         legend.title = ggplot2::element_blank()) +
+                   strip.text = ggplot2::element_blank(),
+                   legend.position = "bottom",
+                   legend.title = ggplot2::element_blank()) +
     ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
     ggplot2::scale_y_continuous(trans = Scale) +
     ggplot2::scale_colour_manual(values = plotCols)
@@ -542,10 +546,10 @@ pr_plot_env_var <- function(df, pal = 'matter', trend = 'None', Scale = 'identit
   mdat <- df %>%
     dplyr::group_by(.data$StationName, .data$Month, .data$SampleDepth_m, .data$parameters) %>%
     dplyr::summarise(MonValues = mean(.data$Values, na.rm = TRUE),
-              N = length(.data$Values),
-              sd = stats::sd(.data$Values, na.rm = TRUE),
-              se = sd / sqrt(.data$N),
-              .groups = "drop")
+                     N = length(.data$Values),
+                     sd = stats::sd(.data$Values, na.rm = TRUE),
+                     se = sd / sqrt(.data$N),
+                     .groups = "drop")
 
   m <- ggplot2::ggplot(mdat, aes(.data$Month, .data$MonValues, colour = .data$StationName)) +
     ggplot2::geom_point() +
@@ -558,8 +562,10 @@ pr_plot_env_var <- function(df, pal = 'matter', trend = 'None', Scale = 'identit
                    legend.title = ggplot2::element_blank(),
                    strip.text.y = ggplot2::element_text(face = "bold", size = 12, angle = 0))
 
-  m <- plotly::ggplotly(m) %>% plotly::layout(legend = list(orientation = "h", xanchor = "center",  # use center of legend as anchor
-                                                            x = 0.5, y = -0.1))
+  m <- plotly::ggplotly(m) %>%
+    plotly::layout(legend = list(orientation = "h",
+                                 xanchor = "center",  # use center of legend as anchor
+                                 x = 0.5, y = -0.1))
 
   plot <- plotly::subplot(plotly::style(p, showlegend = FALSE), m, widths = c(0.75,0.25)) %>%
     plotly::layout(title = list(text = titley),
@@ -692,9 +698,9 @@ pr_plot_sti <-  function(df){
   z <- data.frame(kernTemps, y = kernOut$y)
   STI <- round(z[which.max(z[,2]),]$kernTemps,1)
 
-# looks at these lines if we want to plot on an abundance scale instead of 0 - 1 scale
-#  kern_yp[,i] <- kernOut$y/sum(kernOut$y) * 100 * mean(sti$relab)
-#  kypout[,i] <- kernOut$y
+  # looks at these lines if we want to plot on an abundance scale instead of 0 - 1 scale
+  #  kern_yp[,i] <- kernOut$y/sum(kernOut$y) * 100 * mean(sti$relab)
+  #  kypout[,i] <- kernOut$y
 
   xlabel <- pr_relabel("Temperature_degC", style = "ggplot")
   subtit <- rlang::expr(paste("STI = ",!!STI, "\U00B0","C"))

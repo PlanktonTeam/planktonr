@@ -7,10 +7,10 @@
 pr_get_fMap_data(Type = "Z")
 }
 \arguments{
-\item{Type}{Phyto or zoo, defaults to phyto}
+\item{Type}{Phytoplankton (P) or Zooplankton (Z), defaults to phyto}
 }
 \value{
-dataframe for plotting wiht pr_plot_fmap
+dataframe for plotting with pr_plot_fmap
 }
 \description{
 Get data for frequency map plots

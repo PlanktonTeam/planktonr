@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="">0.0.0.9002</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="">0.0.1.0000</span>
       </span>
     </div>
 
@@ -64,6 +64,10 @@
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
+          <p><code><a href="pr_add_Bioregions.html">pr_add_Bioregions()</a></code> </p>
+        </td>
+        <td><p>Add bioregions data to existing df</p></td>
+      </tr><tr><td>
           <p><code><a href="pr_add_Carbon.html">pr_add_Carbon()</a></code> </p>
         </td>
         <td><p>Add Carbon concentration to phytoplankton dataframe</p></td>
@@ -72,9 +76,13 @@
         </td>
         <td><p>Add local Time</p></td>
       </tr><tr><td>
-          <p><code><a href="pr_add_bioregions.html">pr_add_bioregions()</a></code> </p>
+          <p><code><a href="pr_add_StationCode.html">pr_add_StationCode()</a></code> </p>
         </td>
-        <td><p>Add bioregions data to existing df</p></td>
+        <td><p>Add NRS StationCode to data</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_add_StationName.html">pr_add_StationName()</a></code> </p>
+        </td>
+        <td><p>Add NRS StationName to data</p></td>
       </tr><tr><td>
           <p><code><a href="pr_apply_flags.html">pr_apply_flags()</a></code> </p>
         </td>
@@ -88,6 +96,10 @@
         </td>
         <td><p>Create all processed data products for Larval Fish</p></td>
       </tr><tr><td>
+          <p><code><a href="pr_filter_NRSStations.html">pr_filter_NRSStations()</a></code> </p>
+        </td>
+        <td><p>Filter dataframe on <code>StationCode</code> to return only NRS stations</p></td>
+      </tr><tr><td>
           <p><code><a href="pr_filter_species.html">pr_filter_species()</a></code> </p>
         </td>
         <td><p>Remove incorrect species names from dataframe</p></td>
@@ -96,14 +108,6 @@
         </td>
         <td><p>Import CPR Data</p></td>
       </tr><tr><td>
-          <p><code><a href="pr_get_CPRPhytoChangeLog.html">pr_get_CPRPhytoChangeLog()</a></code> </p>
-        </td>
-        <td><p>Get Phyto Change Log</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_CPRPhytoData.html">pr_get_CPRPhytoData()</a></code> </p>
-        </td>
-        <td><p>Get CPR Phytoplankton Abundance or Count data</p></td>
-      </tr><tr><td>
           <p><code><a href="pr_get_CPRSamps.html">pr_get_CPRSamps()</a></code> </p>
         </td>
         <td><p>Get CPR samples</p></td>
@@ -111,18 +115,6 @@
           <p><code><a href="pr_get_CPRTrips.html">pr_get_CPRTrips()</a></code> </p>
         </td>
         <td><p>Get CPR trips</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_CPRZooChangeLog.html">pr_get_CPRZooChangeLog()</a></code> </p>
-        </td>
-        <td><p>Get CPR zooplankton Change Log</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_CPRZooData.html">pr_get_CPRZooData()</a></code> </p>
-        </td>
-        <td><p>Get CPR Zooplankton abundance data</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_CTD.html">pr_get_CTD()</a></code> </p>
-        </td>
-        <td><p>Load CTD data</p></td>
       </tr><tr><td>
           <p><code><a href="pr_get_LFCountAll.html">pr_get_LFCountAll()</a></code> </p>
         </td>
@@ -144,6 +136,14 @@
         </td>
         <td><p>Get NRS long term nutrient timeseries data</p></td>
       </tr><tr><td>
+          <p><code><a href="pr_get_NRSCTD.html">pr_get_NRSCTD()</a></code> </p>
+        </td>
+        <td><p>Load NRS CTD data</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_NRSChemistry.html">pr_get_NRSChemistry()</a></code> </p>
+        </td>
+        <td><p>Load chemistry data</p></td>
+      </tr><tr><td>
           <p><code><a href="pr_get_NRSData.html">pr_get_NRSData()</a></code> </p>
         </td>
         <td><p>Import NRS Data</p></td>
@@ -160,17 +160,13 @@
         </td>
         <td><p>Import NRS Station information</p></td>
       </tr><tr><td>
+          <p><code><a href="pr_get_NRSTSS.html">pr_get_NRSTSS()</a></code> </p>
+        </td>
+        <td><p>Load Total Suspended Solids (TSS) data</p></td>
+      </tr><tr><td>
           <p><code><a href="pr_get_NRSTrips.html">pr_get_NRSTrips()</a></code> </p>
         </td>
         <td><p>Import NRS BGC information</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_NRSZooChangeLog.html">pr_get_NRSZooChangeLog()</a></code> </p>
-        </td>
-        <td><p>Load zooplankton NRS Zooplankton changelog</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_NRSZooData.html">pr_get_NRSZooData()</a></code> </p>
-        </td>
-        <td><p>Load zooplankton abundance data</p></td>
       </tr><tr><td>
           <p><code><a href="pr_get_PlotCols.html">pr_get_PlotCols()</a></code> </p>
         </td>
@@ -180,21 +176,9 @@
         </td>
         <td><p>Get the summary plankton observations</p></td>
       </tr><tr><td>
-          <p><code><a href="pr_get_StationName.html">pr_get_StationName()</a></code> </p>
-        </td>
-        <td><p>Add StationName to data</p></td>
-      </tr><tr><td>
           <p><code><a href="pr_get_ZooInfo.html">pr_get_ZooInfo()</a></code> </p>
         </td>
         <td><p>Load copepod information table with sizes etc.</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_bgc.html">pr_get_bgc()</a></code> </p>
-        </td>
-        <td><p>Create Biogeochemical data</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_chemistry.html">pr_get_chemistry()</a></code> </p>
-        </td>
-        <td><p>Load chemistry data</p></td>
       </tr><tr><td>
           <p><code><a href="pr_get_coeffs.html">pr_get_coeffs()</a></code> </p>
         </td>
@@ -216,25 +200,21 @@
         </td>
         <td><p>Get functional group data</p></td>
       </tr><tr><td>
-          <p><code><a href="pr_get_indices_cpr.html">pr_get_indices_cpr()</a></code> </p>
-        </td>
-        <td><p>Create a range of indices</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_nuts.html">pr_get_nuts()</a></code> </p>
-        </td>
-        <td><p>Get NRS nutrient timeseries data</p></td>
-      </tr><tr><td>
           <p><code><a href="pr_get_papers.html">pr_get_papers()</a></code> </p>
         </td>
         <td><p>Random scientific papers using IMOS data</p></td>
       </tr><tr><td>
-          <p><code><a href="pr_get_pico.html">pr_get_pico()</a></code> </p>
+          <p><code><a href="pr_get_pol.html">pr_get_pol()</a></code> </p>
         </td>
-        <td><p>Get picoplankton time series data</p></td>
+        <td><p>Get Policy data set</p></td>
       </tr><tr><td>
-          <p><code><a href="pr_get_pigs.html">pr_get_pigs()</a></code> </p>
+          <p><code><a href="pr_get_polInfo.html">pr_get_polInfo()</a></code> </p>
         </td>
-        <td><p>Get NRS pigment timeseries data</p></td>
+        <td><p>Get policy information</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_raw.html">pr_get_raw()</a></code> </p>
+        </td>
+        <td><p>Download Raw Data from IMOS</p></td>
       </tr><tr><td>
           <p><code><a href="pr_get_site.html">pr_get_site()</a></code> </p>
         </td>

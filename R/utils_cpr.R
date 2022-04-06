@@ -33,10 +33,29 @@ pr_get_CPRData <- function(Type = "phytoplankton", Variable = "abundance", Subse
   if (Type == "p"){Type = "phytoplankton"}
   if (Type == "z"){Type = "zooplankton"}
 
-  file = paste("cpr", Type, Variable, Subset, "data", sep = "_")
+  if (Type == "zooplankton" & Subset == "species"){ # Specific case for zooplankton species
 
-  dat <- readr::read_csv(stringr::str_replace(pr_get_site(), "LAYER_NAME", file), na = "", show_col_types = FALSE, comment = "#") %>%
-    pr_rename()
+    datc <- pr_get_raw("cpr_zooplankton_abundance_copepods_data") %>%
+      pr_rename()
+    datnc <-pr_get_raw("cpr_zooplankton_abundance_non_copepods_data") %>%
+      pr_rename() %>%
+      dplyr::select(-c(.data$Region:.data$BiomassIndex_mgm3))
+
+
+    # Add together and COPEPODS and NON-COPEPODS
+    dat <- dplyr::left_join(datc, datnc, by = "TripCode")
+
+  } else {
+    file = paste("cpr", Type, Variable, Subset, "data", sep = "_")
+
+    dat <- readr::read_csv(stringr::str_replace(pr_get_site(), "LAYER_NAME", file),
+                           na = "",
+                           show_col_types = FALSE,
+                           comment = "#") %>%
+      pr_rename()
+    # %>%
+    # dplyr::rename()
+  }
 }
 
 
@@ -66,15 +85,18 @@ pr_get_CPRTrips <- function(){
 #' @importFrom rlang .data
 pr_get_CPRSamps <- function(Type = "P"){
 
-  CPRSamps <- readr::read_csv(system.file("extdata", "CPR_Samp.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
+  CPRSamps <- readr::read_csv(system.file("extdata", "CPR_Samp.csv", package = "planktonr", mustWork = TRUE),
+                              na = "",
+                              show_col_types = FALSE) %>%
     pr_rename() %>%
     dplyr::filter(stringr::str_detect(.data$SampleType, paste(Type, collapse = "|"))) %>%
-    dplyr::mutate(Year = lubridate::year(.data$SampleDateUTC),
-                  Month = lubridate::month(.data$SampleDateUTC),
-                  Day = lubridate::day(.data$SampleDateUTC),
-                  Time_24hr = stringr::str_sub(.data$SampleDateUTC, -8, -1)) %>%
-    pr_add_bioregions() %>%
-    dplyr::select(c(.data$TripCode, .data$Sample, .data$Latitude:.data$SampleDateLocal, .data$Year:.data$BioRegion, .data$PCI, .data$Biomass_mgm3, .data$SampleType))
+    dplyr::mutate(Year = lubridate::year(.data$SampleDate_UTC),
+                  Month = lubridate::month(.data$SampleDate_UTC),
+                  Day = lubridate::day(.data$SampleDate_UTC),
+                  Time_24hr = stringr::str_sub(.data$SampleDate_UTC, -8, -1)) %>%
+    pr_add_Bioregions() %>%
+    dplyr::select(c(.data$TripCode, .data$Sample, .data$Latitude:.data$SampleDate_Local,
+                    .data$Year:.data$BioRegion, .data$PCI, .data$Biomass_mgm3, .data$SampleType))
 
   if("B" %in% Type){ # Return Biomass if its requested. Otherwise not.
     CPRSamps <- CPRSamps %>%
@@ -83,84 +105,4 @@ pr_get_CPRSamps <- function(Type = "P"){
     CPRSamps <- CPRSamps %>%
       dplyr::select(-c(.data$PCI, .data$SampleType, .data$Biomass_mgm3))
   }
-}
-
-#' Get CPR Phytoplankton Abundance or Count data
-#'
-#' @param var A string of either "Abundance" or "Count"
-#' @return A dataframe with CPR Phytoplankton Abundance or Count data
-#' @export
-#'
-#' @examples
-#' df <- pr_get_CPRPhytoData()
-#' @importFrom rlang .data
-pr_get_CPRPhytoData <- function(var = "Abundance"){
-  cprPdat <- readr::read_csv(system.file("extdata", "CPR_Phyto_Raw.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
-    pr_rename()
-
-  if(stringr::str_detect(var, "Abundance")){
-    cprPdat <- cprPdat %>%
-      dplyr::select(-c(.data$FovCount, .data$SampVol_m3, .data$BioVolume_um3m3))
-  } else if(stringr::str_detect(var, "Count")){
-    cprPdat <- cprPdat %>%
-      dplyr::select(-c(.data$BioVolume_um3m3, .data$PhytoAbund_m3))
-  } else if(stringr::str_detect(var, "Biovolume")){
-    cprPdat <- cprPdat %>%
-      dplyr::select(-c(.data$FovCount, .data$SampVol_m3, .data$PhytoAbund_m3))
-  } else if(stringr::str_detect(var, "All")){
-    cprPdat <- cprPdat # Do nothing. Return all variables
-  }
-
-}
-
-
-#' Get Phyto Change Log
-#'
-#' @return A dataframe with the CPR Phytoplankton Changelog
-#' @export
-#'
-#' @examples
-#' df <- pr_get_CPRPhytoChangeLog()
-#' @importFrom rlang .data
-pr_get_CPRPhytoChangeLog <- function(){
-  cprPcl <- readr::read_csv(system.file("extdata", "CPR_Phyto_ChangeLog.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
-    pr_rename()
-}
-
-#### CPR Zooplankton #### ################################################################################################################################
-
-#' Get CPR Zooplankton abundance data
-#'
-#' @param var A string of either "Abundance" or "Count"
-#' @return A dataframe with CPR Zooplankton Abundance data
-#' @export
-#'
-#' @examples
-#' df <- pr_get_CPRZooData()
-#' @importFrom rlang .data
-pr_get_CPRZooData <- function(var = "Abundance"){
-
-  cprZdat <- readr::read_csv(system.file("extdata", "CPR_Zoop_Raw.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
-    pr_rename()
-
-  if(stringr::str_detect(var, "Abundance")){
-    cprZdat <- cprZdat %>%
-      dplyr::select(-c(.data$TaxonCount, .data$SampVol_m3))
-  } else if(stringr::str_detect(var, "Count")){
-    cprZdat <- cprZdat %>%
-      dplyr::select(-.data$ZoopAbund_m3)
-  }
-}
-
-#' Get CPR zooplankton Change Log
-#'
-#' @return A dataframe with the CPR Zooplankton Changelog
-#' @export
-#'
-#' @examples
-#' df <- pr_get_CPRZooChangeLog()
-#' @importFrom rlang .data
-pr_get_CPRZooChangeLog <- function(){
-  cprZcl <- readr::read_csv(system.file("extdata", "CPR_Zoop_ChangeLog.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
-    pr_rename()
 }

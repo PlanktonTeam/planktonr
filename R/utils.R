@@ -11,6 +11,62 @@ pr_get_site <- function(){
 }
 
 
+#' Download Raw Data from IMOS
+#'
+#' This function is not intended for use by most people. It downloads the raw data file from IMOS with NO QC or data manipulation done. User beware. It can be used to view the raw data that IMOS provides behind the scenes.
+#'
+#'Options for `file` include: "bgc_chemistry_data", "bgc_pigments_data", "bgc_picoplankton_data", "bgc_tss_data".
+#'
+#' @param file The filename of the requested data
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' dat <- pr_get_raw("bgc_chemistry_data")
+#' dat <- pr_get_raw("bgc_pigments_data")
+#' dat <- pr_get_raw("bgc_picoplankton_data")
+#' dat <- pr_get_raw("bgc_tss_data")
+#'
+pr_get_raw <- function(file){
+  # stringr::str_detect(file, "bgc_"
+  if (file == "bgc_chemistry_data"){ # additional probs possible in chemistry. No WC.
+    col_types = list(Project = readr::col_character(),
+                     TripCode = readr::col_character(),
+                     SampleDate_Local = readr::col_datetime(),
+                     DIC_umolkg = readr::col_double(),
+                     Oxygen_umolL = readr::col_double())
+  } else if (file ==  "bgc_pigments_data" |
+             file == "bgc_picoplankton_data" |
+             file == "bgc_tss_data"){ # Add specific filter for bgc files to deal with potential problems from 'WC' depth
+    col_types = list(Project = readr::col_character(),
+                     TripCode = readr::col_character(),
+                     SampleDate_Local = readr::col_datetime(),
+                     Depth_m = readr::col_character())
+  } else if(stringr::str_detect(file, "bgc_zooplankton")){
+    col_types = list(Project = readr::col_character(),
+                     TripCode = readr::col_character(),
+                     SampleTime_local = readr::col_datetime(),
+                     SampleDepth_m = readr::col_character())
+  } else if(file == "anmn_ctd_profiles_data"){
+    col_types = readr::cols(CHLU = readr::col_double(), # columns start with nulls so tidyverse annoyingly assigns col_logical()
+                            CHLU_quality_control = readr::col_double(),
+                            CPHL = readr::col_double(),
+                            CPHL_quality_control = readr::col_double(),
+                            cruise_id = readr::col_skip())
+  } else {
+    col_types = list()
+  }
+
+
+  dat <- readr::read_csv(stringr::str_replace(
+    pr_get_site(), "LAYER_NAME", file),
+    na = c("", NaN),
+    show_col_types = FALSE,
+    comment = "#",
+    col_types = col_types)
+}
+
 #' Load copepod information table with sizes etc.
 #'
 #' @return A dataframe with NRS zooplankton information
@@ -26,7 +82,7 @@ pr_get_ZooInfo <- function(){
 
 
 
-#' Add StationName to data
+#' Add NRS StationName to data
 #'
 #' @param df A dataframe that contains `StationCode` but no `StationName`
 #' @return A dataframe with StationName added
@@ -34,9 +90,9 @@ pr_get_ZooInfo <- function(){
 #'
 #' @examples
 #' df <- pr_get_NRSStation() %>%
-#'     pr_get_StationName()
+#'     pr_add_StationName()
 #' @importFrom rlang .data
-pr_get_StationName <- function(df){
+pr_add_StationName <- function(df){
   df <- df %>%
     dplyr::mutate(StationName = dplyr::case_when(
       StationCode == "DAR" ~ "Darwin",
@@ -47,8 +103,49 @@ pr_get_StationName <- function(df){
       StationCode == "KAI" ~ "Kangaroo Island",
       StationCode == "ESP" ~ "Esperance",
       StationCode == "ROT" ~ "Rottnest Island",
-      StationCode == "NIN" ~ "Ningaloo"))
+      StationCode == "NIN" ~ "Ningaloo")) %>%
+    dplyr::relocate(.data$StationCode, .after = .data$StationName)
 }
+
+
+
+#' Add NRS StationCode to data
+#'
+#' @param df A dataframe that contains `StationName` but no `StationCode`
+#' @return A dataframe with StationCode added
+#' @export
+#'
+#' @examples
+#' df <- pr_get_NRSStation() %>%
+#'     pr_add_StationCode()
+#' @importFrom rlang .data
+pr_add_StationCode <- function(df){
+
+  if("TripCode" %in% colnames(df)){
+    df <- df %>%
+      dplyr::mutate(StationCode = stringr::str_sub(.data$TripCode, start = 1, end = 3)) %>%
+      dplyr::relocate(.data$StationCode, .after = .data$TripCode)
+  } else if("StationName" %in% colnames(df)){
+    df <- df %>%
+      dplyr::mutate(StationCode = dplyr::case_when(
+        StationName == "Darwin" ~ "DAR",
+        StationName == "Yongala" ~ "YON",
+        StationName == "North Stradbroke Island" ~ "NSI",
+        StationName == "Port Hacking" ~ "PHB",
+        StationName == "Maria Island" ~ "MAI",
+        StationName == "Kangaroo Island" ~ "KAI",
+        StationName == "Esperance" ~ "ESP",
+        StationName == "Rottnest Island" ~ "ROT",
+        StationName == "Ningaloo" ~ "NIN")) %>%
+      dplyr::relocate(.data$StationCode, .after = .data$StationName)
+  }
+  return(df)
+}
+
+
+
+
+
 
 #' Order the Station or region in the df by latitude for consistent plotting
 #'
@@ -66,8 +163,8 @@ pr_reorder <- function(df){
   if("StationName" %in% colnames(df)){
     df <- df %>%
       dplyr::mutate(StationName = factor(.data$StationName, levels = c("Darwin", "Yongala", 'Ningaloo', 'North Stradbroke Island',
-                                                               'Rottnest Island', 'Esperance', 'Port Hacking', 'Kangaroo Island',
-                                                               'Maria Island')))
+                                                                       'Rottnest Island', 'Esperance', 'Port Hacking', 'Kangaroo Island',
+                                                                       'Maria Island')))
   }
   if("StationCode" %in% colnames(df) & !"StationName" %in% colnames(df)){
     df <- df %>%
@@ -84,6 +181,7 @@ pr_reorder <- function(df){
 #' Remove flagged data in df
 #'
 #' @param df A dataframe containing data with associated flags
+#' @param flag_col A string specifying the column with the flag. Optional. If specified, all rows will be filter by the flag.
 #' @return A dataframe with flagged data removed
 #' @export
 #'
@@ -92,7 +190,7 @@ pr_reorder <- function(df){
 #' df <- pr_apply_flags(df)
 #' @importFrom data.table ":="
 #' @importFrom rlang .data
-pr_apply_flags <- function(df){
+pr_apply_flags <- function(df, flag_col){
 
   # qc_scheme_short_name,flag_value,flag_meaning,flag_description
   # IMOS IODE,0,No QC performed,The level at which all data enter the working archive. They have not yet been quality controlled
@@ -108,17 +206,25 @@ pr_apply_flags <- function(df){
 
   bad_flags <- c(3, 4, 6, 9)
 
-  var_names <- stringr::str_remove(stringr::str_subset(colnames(df),"_Flag"), "_Flag") # Get all the variables from the df that contain a flag (*_Flag)
+  if (missing(flag_col)){
 
-  for(v in 1:length(var_names)){ # Loop through and apply the flag to all
+    # Find and filter flagged data individually
+    var_names <- stringr::str_remove(stringr::str_subset(colnames(df),"(?i)_Flag"), "(?i)_Flag") # Get all the variables from the df that contain a flag (*_Flag)
 
-    out <- colnames(df)[stringr::str_detect(colnames(df), var_names[v])]
-    var_units <- stringr::str_subset(stringr::str_subset(out, "_Flag", negate = TRUE), "_Comments", negate = TRUE) # Find the full variable variable name
-    var_flags <- stringr::str_subset(out,"_Flag") # Find the flag
+    for(v in 1:length(var_names)){ # Loop through and apply the flag to all
 
+      out <- colnames(df)[stringr::str_detect(colnames(df), var_names[v])]
+      var_units <- stringr::str_subset(stringr::str_subset(out, "(?i)_Flag", negate = TRUE), "(?i)_Comments", negate = TRUE) # Find the full variable variable name
+      var_flags <- stringr::str_subset(out,"(?i)_Flag") # Find the flag
+
+      df <- df %>%
+        dplyr::mutate(!!var_units := dplyr::if_else(eval(rlang::sym(var_flags)) %in% bad_flags, NA_real_, eval(rlang::sym(var_units))))
+      rm(out, var_units, var_flags)
+    }
+  } else {
+    # Filter all rows based on 1 flagged column
     df <- df %>%
-      dplyr::mutate(!!var_units := dplyr::if_else(eval(rlang::sym(var_flags)) %in% bad_flags, NA_real_, eval(rlang::sym(var_units))))
-    rm(out, var_units, var_flags)
+      dplyr::filter(!(eval(rlang::sym(flag_col)) %in% bad_flags))
   }
   return(df)
 }
@@ -132,19 +238,19 @@ pr_apply_flags <- function(df){
 #' @export
 #'
 #' @examples
-#' df <- data.frame(SampleDateLocal = lubridate::now(), Latitude = -32, Longitude = 160)
+#' df <- data.frame(SampleDate_Local = lubridate::now(), Latitude = -32, Longitude = 160)
 #' df <- pr_apply_time(df)
 #' @importFrom data.table ":="
 #' @importFrom rlang .data
 pr_apply_time <- function(df){
 
   df <- df %>%
-    dplyr::mutate(Year = lubridate::year(.data$SampleDateLocal),
-           Month = lubridate::month(.data$SampleDateLocal),
-           Day = lubridate::day(.data$SampleDateLocal),
-           Time_24hr = stringr::str_sub(.data$SampleDateLocal, -8, -1), # hms doesn"t seem to work on 00:00:00 times
-           tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE),
-           SampleDate_UTC = lubridate::with_tz(lubridate::force_tzs(.data$SampleDateLocal, .data$tz, roll = TRUE), "UTC"))
+    dplyr::mutate(Year = lubridate::year(.data$SampleDate_Local),
+                  Month = lubridate::month(.data$SampleDate_Local),
+                  Day = lubridate::day(.data$SampleDate_Local),
+                  Time_24hr = stringr::str_sub(.data$SampleDate_Local, -8, -1), # hms doesn"t seem to work on 00:00:00 times
+                  tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE),
+                  SampleDate_UTC = lubridate::with_tz(lubridate::force_tzs(.data$SampleDate_Local, .data$tz, roll = TRUE), "UTC"))
 
 }
 
@@ -189,10 +295,10 @@ pr_add_Carbon <- function(df, meth){
   if (meth %in% "CPR"){
     df <- df %>%
       dplyr::mutate(BV_Cell = .data$BioVolume_um3m3 / .data$PhytoAbund_m3, # biovolume of one cell
-             Carbon = ifelse(.data$TaxonGroup == "Dinoflagellate", 0.76*(.data$BV_Cell)^0.819, # conversion to Carbon based on taxongroup and biovolume of cell
-                             ifelse(.data$TaxonGroup == 'Ciliate', 0.22*(.data$BV_Cell)^0.939,
-                                    ifelse(.data$TaxonGroup == 'Cyanobacteria', 0.2, 0.288*(.data$BV_Cell)^0.811 ))),
-             Carbon_m3 = .data$PhytoAbund_m3 * .data$Carbon) # Carbon per m3
+                    Carbon = ifelse(.data$TaxonGroup == "Dinoflagellate", 0.76*(.data$BV_Cell)^0.819, # conversion to Carbon based on taxongroup and biovolume of cell
+                                    ifelse(.data$TaxonGroup == 'Ciliate', 0.22*(.data$BV_Cell)^0.939,
+                                           ifelse(.data$TaxonGroup == 'Cyanobacteria', 0.2, 0.288*(.data$BV_Cell)^0.811 ))),
+                    Carbon_m3 = .data$PhytoAbund_m3 * .data$Carbon) # Carbon per m3
     return(df)
   }
 
@@ -200,11 +306,11 @@ pr_add_Carbon <- function(df, meth){
   if (meth %in% "NRS"){
     df <- df %>%
       dplyr::mutate(BV_Cell = .data$Biovolume_um3L / .data$Cells_L, # biovolume of one cell
-             Carbon = dplyr::case_when(.data$TaxonGroup == "Dinoflagellate" ~ 0.76*(.data$BV_Cell)^0.819, # conversion to Carbon based on taxongroup and biovolume of cell
-                                .data$TaxonGroup == "Ciliate" ~ 0.22*(.data$BV_Cell)^0.939,
-                                .data$TaxonGroup == "Cyanobacteria" ~ 0.2,
-                                TRUE ~ 0.288*(.data$BV_Cell)^0.811),
-             Carbon_L = .data$Cells_L * .data$Carbon) # Carbon per litre
+                    Carbon = dplyr::case_when(.data$TaxonGroup == "Dinoflagellate" ~ 0.76*(.data$BV_Cell)^0.819, # conversion to Carbon based on taxongroup and biovolume of cell
+                                              .data$TaxonGroup == "Ciliate" ~ 0.22*(.data$BV_Cell)^0.939,
+                                              .data$TaxonGroup == "Cyanobacteria" ~ 0.2,
+                                              TRUE ~ 0.288*(.data$BV_Cell)^0.811),
+                    Carbon_L = .data$Cells_L * .data$Carbon) # Carbon per litre
     return(df)
   }
 
@@ -225,9 +331,7 @@ pr_add_Carbon <- function(df, meth){
 #'                SampleDate_UTC = c(lubridate::now(), lubridate::now()))
 #' df <- pr_add_LocalTime(df)
 pr_add_LocalTime <- function(df){
-
   df <- purrr::map2(df$SampleDate_UTC, df$tz, function(x,y) lubridate::with_tz(x, tzone = y))
-
 }
 
 #' For use in models to create a circular predictor

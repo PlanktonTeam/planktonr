@@ -7,7 +7,7 @@
 pr_plot_env_var(df, pal = "matter", trend = "None", Scale = "identity")
 }
 \arguments{
-\item{df}{A dataframe from pr_get_nuts or pr_get_pigs}
+\item{df}{A dataframe from pr_get_nuts or pr_get_pigments}
 
 \item{pal}{A Palette from cmocean}
 
@@ -22,5 +22,7 @@ A plotly plot with timeseries and climatology at depths
 Combined timeseries and climatology plots for environmental variables
 }
 \examples{
-df <- pr_get_nuts() \%>\% pr_plot_env_var()
+\dontrun{df <- pr_get_NRSChemistry() \%>\%
+           pr_plot_env_var()}
+
 }
