@@ -3,8 +3,6 @@
 
 # planktonr <a href='https://github.com/PlanktonTeam/planktonr'><img src='man/figures/planktonr.png' align="right" height="25" /></a>
 
-# tidyverse <a href='https://tidyverse.tidyverse.org'><img src='man/figures/logo.png' align="right" height="138.5" /></a>
-
 <!-- badges: start -->
 
 [![Lifecycle:
