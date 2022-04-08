@@ -67,6 +67,48 @@ pr_get_raw <- function(file){
     col_types = col_types)
 }
 
+#' Download and write csv file
+#'
+#'Function to download plankton csv files from the AODN. Options are:
+#'
+#' cpr_derived_indices_data
+#' nrs_derived_indices_data
+#'
+#' bgc_chemistry_data,
+#' bgc_pigments_data,
+#' bgc_picoplankton_data,
+#' bgc_tss_data,
+#'
+#' cpr_phytoplankton_abundance_raw_data
+#' cpr_phytoplankton_abundance_htg_data
+#' cpr_phytoplankton_abundance_genus_data
+#' cpr_phytoplankton_abundance_species_data
+#'
+#' cpr_phytoplankton_biovolume_raw_data
+#' cpr_phytoplankton_biovolume_htg_data
+#' cpr_phytoplankton_biovolume_genus_data
+#' cpr_phytoplankton_biovolume_species_data
+#'
+#' cpr_zooplankton_abundance_copepods_data
+#' cpr_zooplankton_abundance_non_copepods_data
+#' cpr_zooplankton_abundance_genus_data
+#' cpr_zooplankton_abundance_htg_data
+#' cpr_zooplankton_abundance_raw_data
+#'
+#' @param file
+#' @param di
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' pr_get_csv("bgc_chemistry_data", "~/Downloads")
+pr_get_csv <- function(file, di){
+  download.file(stringr::str_replace(pr_get_site(), "LAYER_NAME", file), file.path(di, paste0(file, ".csv")))
+}
+
+
+
 #' Load copepod information table with sizes etc.
 #'
 #' @return A dataframe with NRS zooplankton information
