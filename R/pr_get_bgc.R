@@ -103,6 +103,44 @@ pr_get_NRSPico <- function(){
 }
 
 
+
+#' Load microbial data
+#'
+#' @return A dataframe with NRS microbial data
+#' @export
+#'
+#' @examples
+#' df <- pr_get_NRSMicro()
+#' @importFrom rlang .data
+pr_get_NRSMicro <- function(){
+
+  # file <- "bgc_picoplankton_data"
+
+  var_names <- c("Prochlorococcus_Cellsml", "Synecochoccus_Cellsml", "Picoeukaryotes_Cellsml", "Bacterial_Richness",
+                 "Archaeal_Richness", "Eukaryote_Richness", "Bacterial_Niche_Cluster", "Eukaryote_Niche_Cluster", "Archaea_Niche_Cluster",
+                 "Bacterial_Chlorophyll_Index", "Bacterial_Nitrogen_Index", "Bacterial_Oxygen_Index", "Bacterial_Phosphate_Index", "Bacterial_Salinity_Index",
+                 "Bacterial_Silicate_Index", "Bacterial_Temperature_Index", "Archaeal_Temperature_Index", "Archaeal_Salinity_Index", "Archaeal_Nitrogen_Index",
+                 "Archaeal_Phosphate_Index", "Archaeal_Silicate_Index", "Archaeal_Oxygen_Index", "Archaeal_Chlorophyll_Index", "Eukaryote_Temperature_Index",
+                 "Eukaryote_Salinity_Index", "Eukaryote_Nitrogen_Index", "Eukaryote_Phosphate_Index", "Eukaryote_Silicate_Index", "Eukaryote_Oxygen_Diversity",
+                 "Eukaryote_Chlorophyll_Index")
+
+  dat <- readr::read_csv(system.file("extdata", "datNRSm.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
+    pr_rename() %>%
+    dplyr::mutate(SampleDepth_m = as.numeric(stringr::str_sub(.data$TripCode_depth, -3, -1))) %>%
+    dplyr::rename(Prochlorococcus_Cellsml = .data$Prochlorococcus_cells_ml,
+                  Synecochoccus_Cellsml = .data$Synecochoccus_cells_ml,
+                  Picoeukaryotes_Cellsml = .data$Picoeukaryotes_cells_ml) %>%
+    dplyr::mutate(dplyr::across(tidyselect::all_of(var_names), as.numeric)) %>%
+    dplyr::select(.data$StationName, .data$SampleDepth_m, .data$StationCode, .data$SampleDate_Local, .data$Year, .data$Month,
+                  tidyselect::any_of(var_names)) %>%
+    tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "parameters") %>%
+    pr_reorder()
+
+}
+
+
+
+
 #' Load Total Suspended Solids (TSS) data
 #'
 #' @return A dataframe with NRS TSS data
