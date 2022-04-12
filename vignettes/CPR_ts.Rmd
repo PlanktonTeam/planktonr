@@ -50,7 +50,7 @@ First we get the data then we filter it for the desired parameters.
 
 ```{r,include=TRUE}
 datCPR_p <- pr_get_tsdata("CPR", "P") %>%
-  filter(parameters == "PhytoAbund_Cellsm3") %>%
+  filter(parameters == "PhytoAbundance_Cellsm3") %>%
   droplevels()
 ```
 
@@ -97,7 +97,7 @@ The South-west region has more dinoflagellates than the eastern regions with the
 Look to see if zooplankton abundance is changing in the tropical Coral Sea region.
 ```{r,include=TRUE}
 datNRSz <- pr_get_tsdata("CPR", "Z") %>%
-  filter(parameters == "ZoopAbund_m3" & BioRegion == "Coral Sea") %>%
+  filter(parameters == "ZoopAbundance_m3" & BioRegion == "Coral Sea") %>%
   droplevels()
 ```
 
