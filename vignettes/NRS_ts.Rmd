@@ -46,7 +46,7 @@ Lets look at zooplankton abundance at Yongala and Maria Island, a tropical and a
 First we get the data then we filter it for the desired parameters.
 
 ```{r,include=TRUE}
-datNRS_zoo <- pr_get_tsdata("NRS", "Z")
+datNRS_zoo <- pr_get_indices("NRS", "Z")
 ```
 
 ## Plot Sitemap
@@ -86,7 +86,7 @@ pr_plot_tsclimate(datNRS_zoo, Survey = "NRS", Scale = "log10", pal = "algae")
 The data analysis and plotting functions are pipeable so we can select additional sites on the fly.
 
 ```{r,include=TRUE}
-pr_get_tsdata("NRS", "Z") %>% 
+pr_get_indices("NRS", "Z") %>% 
   filter(StationName %in% c("Yongala", "Port Hacking", "Maria Island") & 
          parameters == "ZoopAbundance_m3") %>% 
   droplevels() %>% 
@@ -99,7 +99,7 @@ The zooplankton abundance at Yongala is consistently greater than at Maria Islan
 There may be more zooplankton at Yongala, but is there a difference in copepod size between tropical Yongala and temperate Maria Island.
 
 ```{r,include=TRUE}
-datSize <- pr_get_tsdata("NRS", "Z") %>%
+datSize <- pr_get_indices("NRS", "Z") %>%
   filter(StationName %in% c("Yongala", "Maria Island"),
          parameters == "AvgTotalLengthCopepod_mm") %>%
   droplevels()
@@ -117,7 +117,7 @@ So whilst Maria Island has less zooplankton abundance the copepods are larger, a
 ## Trends in Biomass Data
 Look to see if zooplankton biomass is changing at Maria Island.
 ```{r,include=TRUE}
-datNRS_zoo <- pr_get_tsdata("NRS", "Z") %>%
+datNRS_zoo <- pr_get_indices("NRS", "Z") %>%
   filter(parameters == "Biomass_mgm3" & 
            StationName == "Maria Island") %>%
   droplevels()

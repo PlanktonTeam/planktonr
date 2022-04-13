@@ -157,7 +157,7 @@ pr_plot_timeseries <- function(df, Survey = "NRS", pal = "matter", Scale = "iden
 #' @export
 #'
 #' @examples
-#' df <- pr_get_tsdata("NRS", "Z") %>% dplyr::filter(parameters == 'Biomass_mgm3')
+#' df <- pr_get_indices("NRS", "Z") %>% dplyr::filter(parameters == 'Biomass_mgm3')
 #' plot <- pr_plot_trends(df, survey = "NRS")
 pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal = "matter", y_trans = "identity", output = "ggplot"){
 

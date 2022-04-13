@@ -37,6 +37,6 @@ a timeseries plot
 Plot temporal trends in plankton data
 }
 \examples{
-df <- pr_get_tsdata("NRS", "Z") \%>\% dplyr::filter(parameters == 'Biomass_mgm3')
+df <- pr_get_indices("NRS", "Z") \%>\% dplyr::filter(parameters == 'Biomass_mgm3')
 plot <- pr_plot_trends(df, survey = "NRS")
 }
