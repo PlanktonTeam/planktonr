@@ -1,105 +1,3 @@
-#' Access data for timeseries and climatology plots
-#'
-#' @param Survey CPR or NRS, defaults to NRS
-#' @param Type Phyto or zoo, defaults to phyto
-#'
-#' @return dataframe to use in pr_plot functions
-#' @export
-#'
-#' @examples
-#' df <- pr_get_tsdata("NRS", "P")
-#' df <- pr_get_tsdata("NRS", "Z")
-#' df <- pr_get_tsdata("CPR", "P")
-#' df <- pr_get_tsdata("CPR", "Z")
-pr_get_tsdata <- function(Survey = "CPR", Type = "P"){
-
-  if(Type == "Z"){
-    parameter1 <- "Biomass_mgm3"
-    parameter2 <- "CopepodEvenness"
-  }
-  if(Type == "P" & Survey == "CPR"){
-    parameter1 <- "PhytoBiomassCarbon_pgm3"
-    parameter2 <- "DinoflagellateEvenness"
-  }
-  if(Type == "P" & Survey == "NRS"){
-    parameter1 <- "PhytoBiomassCarbon_pgL"
-    parameter2 <- "DinoflagellateEvenness"
-  }
-
-  if(Survey == "CPR"){
-
-    dat <- readr::read_csv(system.file("extdata", "CPR_Indices.csv", package = "planktonr", mustWork = TRUE),
-                           na = c("NA", ""),
-                           show_col_types = FALSE) %>%
-      pr_rename() %>%
-      dplyr::select(.data$SampleDate_UTC, .data$Year, .data$Month, .data$Day, .data$BioRegion, .data$Biomass_mgm3,
-                    .data[[parameter1]]:.data[[parameter2]]) %>%
-      dplyr::rename(SampleDate_UTC = .data$SampleDate_UTC) %>%
-      dplyr::mutate(Biomass_mgm3 = suppressWarnings(replace(.data$Biomass_mgm3, which(.data$Biomass_mgm3  < 0), 0)),
-                    SampleDate_UTC = lubridate::round_date(.data$SampleDate_UTC, "month"),
-                    YearMon = paste(.data$Year, .data$Month)) %>% #TODO this step can be improved when nesting supports data pronouns
-      tidyr::complete(.data$BioRegion, .data$YearMon) %>%
-      dplyr::mutate(Year = as.numeric(stringr::str_sub(.data$YearMon, 1, 4)),
-                    Month = as.numeric(stringr::str_sub(.data$YearMon, -2, -1))) %>%
-      tidyr::pivot_longer(.data[[parameter1]]:.data[[parameter2]], values_to = "Values", names_to = "parameters") %>%
-      dplyr::group_by(.data$SampleDate_UTC, .data$Year, .data$Month, .data$BioRegion, .data$parameters) %>%
-      dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
-                       .groups = "drop") %>%
-      pr_reorder() %>%
-      dplyr::filter(!is.na(.data$BioRegion), !.data$BioRegion %in% c("North", "North-west")) %>%
-      droplevels()
-
-    return(dat)
-
-  } else if(Survey == "NRS"){
-    dat <- readr::read_csv(system.file("extdata", "NRS_Indices.csv", package = "planktonr", mustWork = TRUE),
-                           na = c("NA", ""),
-                           show_col_types = FALSE) %>%
-      pr_rename() %>%
-      dplyr::mutate(Month = lubridate::month(.data$SampleDate_Local),
-                    Year = lubridate::year(.data$SampleDate_Local),
-                    StationCode = paste(.data$StationName, .data$StationCode),
-                    SampleDate_Local = as.POSIXct(.data$SampleDate_Local, format = "%Y-%m-%d")) %>%
-      #tidyr::complete(.data$Year, tidyr::nesting(Station, Code)) %>% # Nesting doesn't support data pronouns at this time
-      tidyr::complete(.data$Year, .data$StationCode) %>%
-      dplyr::relocate(.data$AshFreeBiomass_mgm3, .after = .data$Time_24hr) %>%
-      dplyr::relocate(.data$Biomass_mgm3, .after = .data$Time_24hr) %>%
-      dplyr::mutate(StationName = stringr::str_sub(.data$StationCode, 1, -5),
-                    StationCode = stringr::str_sub(.data$StationCode, -3, -1)) %>%
-      dplyr::select(.data$Year, .data$Month, .data$SampleDate_Local, .data$StationName, .data$StationCode,
-                    .data[[parameter1]]:.data[[parameter2]]) %>%
-      # dplyr::select(-c(.data$Day, .data$Time_24hr)) %>%
-      tidyr::pivot_longer(-c(.data$Year:.data$StationCode), values_to = "Values", names_to = "parameters") %>%
-      pr_reorder()
-    return(dat)
-  }
-}
-
-#' To produce the climatology for plotting
-#'
-#' @param df output of pr_get_tsdata
-#' @param x Year, Month, Day, time period of climatology
-#'
-#' @return dataframe to use in pr_plot_climate functions
-#' @export
-#'
-#' @examples
-#' df <- data.frame(Month = rep(1:12,10), StationCode = 'NSI', Values = runif(120, min=0, max=10))
-#' pr_make_climatology(df, Month)
-#' @importFrom stats sd
-#' @importFrom rlang .data
-pr_make_climatology <- function(df, x){
-  x <- dplyr::enquo(arg = x)
-  df_climate <- df %>% dplyr::filter(!!x != "NA") %>% # need to drop NA from month, added to dataset by complete(Year, StationCode)
-    dplyr::group_by(!!x, .data$StationCode) %>%
-    dplyr::summarise(mean = mean(.data$Values, na.rm = TRUE),
-                     N = length(.data$Values),
-                     sd = stats::sd(.data$Values, na.rm = TRUE),
-                     se = sd / sqrt(.data$N),
-                     .groups = "drop")
-  return(df_climate)
-}
-
 #' Get functional group data
 #'
 #' @param Survey CPR or NRS data
@@ -327,7 +225,10 @@ pr_get_fMap_data <- function(Type = "Z"){
     tidyr::drop_na() %>%
     dplyr::group_by(.data$Season, .data$Taxon, .data$Lat, .data$Long) %>%
     dplyr::summarise(freq = dplyr::n(), .groups = "drop") %>%
-    dplyr::left_join(SampLocs %>%  dplyr::group_by(.data$Lat, .data$Long, .data$Season) %>% dplyr::summarise(samples = dplyr::n(), .groups = "drop"), by=c("Lat", "Long", "Season")) %>%
+    dplyr::left_join(SampLocs %>%
+                       dplyr::group_by(.data$Lat, .data$Long, .data$Season) %>%
+                       dplyr::summarise(samples = dplyr::n(), .groups = "drop"),
+                     by = c("Lat", "Long", "Season")) %>%
     dplyr::ungroup() %>%
     dplyr::mutate(freqsamp = .data$freq/.data$samples,
                   freqfac = as.factor(ifelse(.data$freqsamp<0.375, "Seen in 25%",

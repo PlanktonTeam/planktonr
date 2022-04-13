@@ -65,6 +65,41 @@ pr_get_raw <- function(file){
     show_col_types = FALSE,
     comment = "#",
     col_types = col_types)
+
+  if (file == "cpr_derived_indices_data"){ #TODO TEmp fix until AODN fixes files
+    dat <- dat %>%
+      dplyr::rename(SampleTime_UTC = .data$SampleDate_UTC,
+                    SampleTime_Local = .data$SampleDate_Local)
+  }
+
+  return(dat)
+}
+
+
+#' Add the SampleDate to dataframes that only have SampleTime
+#'
+#' @param df
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' df <- pr_add_SampleDate(data.frame(SampleTime_Local = Sys.time()))
+pr_add_SampleDate <- function(df){
+
+  if("SampleTime_Local" %in% colnames(df)) {
+    df <- df %>%
+      dplyr::mutate(SampleDate_Local = lubridate::as_date(.data$SampleTime_Local)) %>%
+      dplyr::relocate(.data$SampleDate_Local, .after = .data$SampleTime_Local)
+  }
+
+  if("SampleTime_UTC" %in% colnames(df)) {
+    df <- df %>%
+      dplyr::mutate(SampleDate_UTC = lubridate::as_date(.data$SampleTime_UTC)) %>%
+      dplyr::relocate(.data$SampleDate_UTC, .after = .data$SampleTime_UTC)
+  }
+
+  return(df)
 }
 
 #' Download and write csv file
