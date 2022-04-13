@@ -7,7 +7,7 @@
 pr_add_SampleDate(df)
 }
 \arguments{
-\item{df}{}
+\item{df}{Dataframe containing \code{SampleTime_Local} or \code{SampleTime_UTC}}
 }
 \value{
 
