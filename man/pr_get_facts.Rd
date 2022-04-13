@@ -7,7 +7,7 @@
 pr_get_facts()
 }
 \value{
-
+A random plankton fact as a string
 }
 \description{
 This function randomly returns a fun fact about plankton.

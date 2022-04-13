@@ -371,7 +371,7 @@ pr_get_SppCount <- function(gp){
 #'
 #' This function randomly returns a fun fact about plankton.
 #'
-#' @return
+#' @return A random plankton fact as a string
 #' @export
 #'
 #' @examples
@@ -416,7 +416,7 @@ pr_get_facts <- function(){
 #'
 #' This function randomly returns a publication that uses the IMOS plankton data
 #'
-#' @return
+#' @return A random publication reference as a string
 #' @export
 #'
 #' @examples

@@ -17,7 +17,7 @@ pr_add_Bioregions <- function(df){
     sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = "+proj=longlat +datum=WGS84") %>%
     sf::st_join(mbr, join = sf::st_within) %>%
     dplyr::select(.data$REGION) %>%
-    dplyr::bind_cols(df, .) %>%
+    dplyr::bind_cols(df) %>%
     dplyr::rename(BioRegion = .data$REGION) %>%  # Below is temporary fix for state-based waters near bioregions
     dplyr::mutate(BioRegion = dplyr::case_when(.data$Longitude >= sf::st_bbox(mbr[mbr$OBJECTID==17,])$xmin &
                                                  .data$Longitude <= sf::st_bbox(mbr[mbr$OBJECTID==17,])$xmax &
@@ -39,7 +39,8 @@ pr_add_Bioregions <- function(df){
                                                  .data$Latitude >= sf::st_bbox(mbr[mbr$OBJECTID==13,])$ymin &
                                                  .data$Latitude <= sf::st_bbox(mbr[mbr$OBJECTID==13,])$ymax &
                                                  rlang::are_na(.data$BioRegion) == TRUE ~ "South-east",
-                                               TRUE ~ .data$BioRegion))
+                                               TRUE ~ .data$BioRegion)) %>%
+    dplyr::relocate(.data$BioRegion, .after = .data$Latitude)
 
   # Then lets do IMCRA Provinvial Bioregions
   df <- df %>%
@@ -47,8 +48,9 @@ pr_add_Bioregions <- function(df){
     sf::st_join(imcra_pb, join = sf::st_within) %>%
     tibble::as_tibble() %>%
     dplyr::select(.data$WATER_TYPE) %>%
-    dplyr::bind_cols(df, .) %>%
-    dplyr::rename(IMCRA_pb = .data$WATER_TYPE)
+    dplyr::bind_cols(df) %>%
+    dplyr::rename(IMCRA_pb = .data$WATER_TYPE) %>%
+    dplyr::relocate(.data$IMCRA_pb, .after = .data$BioRegion)
 
   # Then lets do IMCRA Mesoscale Bioregions
   df <- df %>%
@@ -57,7 +59,8 @@ pr_add_Bioregions <- function(df){
     sf::st_join(imcra_meso, join = sf::st_within) %>%
     tibble::as_tibble() %>%
     dplyr::select(.data$WATER_TYPE) %>%
-    dplyr::bind_cols(df, .) %>%
-    dplyr::rename(IMCRA_meso = .data$WATER_TYPE)
+    dplyr::bind_cols(df) %>%
+    dplyr::rename(IMCRA_meso = .data$WATER_TYPE) %>%
+    dplyr::relocate(.data$IMCRA_meso, .after = .data$IMCRA_pb)
 
 }

@@ -3,7 +3,7 @@
 #'
 #' @param Survey "NRS" or "CPR"
 #'
-#' @return
+#' @return A dataframe with policy data
 #' @export
 #'
 #' @examples
@@ -74,7 +74,7 @@ pr_get_pol <- function(Survey = "NRS"){
 #'
 #' @param Survey "NRS" or "CPR"
 #'
-#' @return
+#' @return A dataframe with policy information
 #' @export
 #'
 #' @examples

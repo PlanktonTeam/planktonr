@@ -19,7 +19,7 @@ pr_get_site <- function(){
 #'
 #' @param file The filename of the requested data
 #'
-#' @return
+#' @return A dataframe of raw IMOS data
 #' @export
 #'
 #' @examples
@@ -33,7 +33,7 @@ pr_get_raw <- function(file){
   if (file == "bgc_chemistry_data"){ # additional probs possible in chemistry. No WC.
     col_types = list(Project = readr::col_character(),
                      TripCode = readr::col_character(),
-                     SampleDate_Local = readr::col_datetime(),
+                     SampleDate_Local = readr::col_date(),
                      DIC_umolkg = readr::col_double(),
                      Oxygen_umolL = readr::col_double())
   } else if (file ==  "bgc_pigments_data" |
@@ -41,7 +41,7 @@ pr_get_raw <- function(file){
              file == "bgc_tss_data"){ # Add specific filter for bgc files to deal with potential problems from 'WC' depth
     col_types = list(Project = readr::col_character(),
                      TripCode = readr::col_character(),
-                     SampleDate_Local = readr::col_datetime(),
+                     SampleDate_Local = readr::col_date(),
                      Depth_m = readr::col_character())
   } else if(stringr::str_detect(file, "bgc_zooplankton")){
     col_types = list(Project = readr::col_character(),
@@ -78,9 +78,9 @@ pr_get_raw <- function(file){
 
 #' Add the SampleDate to dataframes that only have SampleTime
 #'
-#' @param df
+#' @param df Dataframe containing `SampleTime_Local` or `SampleTime_UTC`
 #'
-#' @return
+#' @return A dataframe with `SampleDate` included.
 #' @export
 #'
 #' @examples
@@ -130,16 +130,15 @@ pr_add_SampleDate <- function(df){
 #' cpr_zooplankton_abundance_htg_data
 #' cpr_zooplankton_abundance_raw_data
 #'
-#' @param file
-#' @param di
+#' @param file The name of the file to download.
+#' @param di The directory to save it to
 #'
-#' @return
 #' @export
 #'
 #' @examples
 #' pr_get_csv("bgc_chemistry_data", "~/Downloads")
 pr_get_csv <- function(file, di){
-  download.file(stringr::str_replace(pr_get_site(), "LAYER_NAME", file), file.path(di, paste0(file, ".csv")))
+  utils::download.file(stringr::str_replace(pr_get_site(), "LAYER_NAME", file), file.path(di, paste0(file, ".csv")))
 }
 
 
@@ -239,17 +238,22 @@ pr_add_StationCode <- function(df){
 pr_reorder <- function(df){
   if("StationName" %in% colnames(df)){
     df <- df %>%
-      dplyr::mutate(StationName = factor(.data$StationName, levels = c("Darwin", "Yongala", 'Ningaloo', 'North Stradbroke Island',
-                                                                       'Rottnest Island', 'Esperance', 'Port Hacking', 'Kangaroo Island',
-                                                                       'Maria Island')))
+      dplyr::mutate(StationName = factor(.data$StationName,
+                                         levels = c("Darwin", "Yongala", "Ningaloo", "North Stradbroke Island",
+                                                    "Rottnest Island", "Esperance", "Port Hacking", "Kangaroo Island",
+                                                    "Maria Island")))
   }
   if("StationCode" %in% colnames(df) & !"StationName" %in% colnames(df)){
     df <- df %>%
-      dplyr::mutate(StationCode = factor(.data$StationCode, levels = c("DAR", "YON", 'NIN', 'NSI', 'ROT', 'ESP', 'PHB', 'KAI', 'MAI')))
+      dplyr::mutate(StationCode = factor(.data$StationCode,
+                                         levels = c("DAR", "YON", "NIN", "NSI", "ROT",
+                                                    "ESP", "PHB", "KAI", "MAI")))
   }
   if("BioRegion" %in% colnames(df)){
     df <- df %>%
-      dplyr::mutate(BioRegion = factor(.data$BioRegion, levels = c("North", "North-west", 'Coral Sea', 'Temperate East', 'South-east', 'South-west')))
+      dplyr::mutate(BioRegion = factor(.data$BioRegion,
+                                       levels = c("North", "North-west", "Coral Sea",
+                                                  "Temperate East", "South-east", "South-west")))
   }
   return(df)
 }
