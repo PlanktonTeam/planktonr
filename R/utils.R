@@ -33,7 +33,7 @@ pr_get_raw <- function(file){
   if (file == "bgc_chemistry_data"){ # additional probs possible in chemistry. No WC.
     col_types = list(Project = readr::col_character(),
                      TripCode = readr::col_character(),
-                     SampleDate_Local = readr::col_datetime(),
+                     SampleDate_Local = readr::col_date(),
                      DIC_umolkg = readr::col_double(),
                      Oxygen_umolL = readr::col_double())
   } else if (file ==  "bgc_pigments_data" |
@@ -41,7 +41,7 @@ pr_get_raw <- function(file){
              file == "bgc_tss_data"){ # Add specific filter for bgc files to deal with potential problems from 'WC' depth
     col_types = list(Project = readr::col_character(),
                      TripCode = readr::col_character(),
-                     SampleDate_Local = readr::col_datetime(),
+                     SampleDate_Local = readr::col_date(),
                      Depth_m = readr::col_character())
   } else if(stringr::str_detect(file, "bgc_zooplankton")){
     col_types = list(Project = readr::col_character(),
@@ -78,7 +78,7 @@ pr_get_raw <- function(file){
 
 #' Add the SampleDate to dataframes that only have SampleTime
 #'
-#' @param df
+#' @param df Dataframe containing `SampleTime_Local` or `SampleTime_UTC`
 #'
 #' @return
 #' @export
@@ -130,8 +130,8 @@ pr_add_SampleDate <- function(df){
 #' cpr_zooplankton_abundance_htg_data
 #' cpr_zooplankton_abundance_raw_data
 #'
-#' @param file
-#' @param di
+#' @param file The name of the file to download.
+#' @param di The directory to save it to
 #'
 #' @return
 #' @export
@@ -139,7 +139,7 @@ pr_add_SampleDate <- function(df){
 #' @examples
 #' pr_get_csv("bgc_chemistry_data", "~/Downloads")
 pr_get_csv <- function(file, di){
-  download.file(stringr::str_replace(pr_get_site(), "LAYER_NAME", file), file.path(di, paste0(file, ".csv")))
+  utils::download.file(stringr::str_replace(pr_get_site(), "LAYER_NAME", file), file.path(di, paste0(file, ".csv")))
 }
 
 

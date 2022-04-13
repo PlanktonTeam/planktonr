@@ -126,6 +126,10 @@ pr_get_NRSMicro <- function(){
 
   dat <- readr::read_csv(system.file("extdata", "datNRSm.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
     pr_rename() %>%
+    dplyr::rename(SampleTime_Local = .data$SampleDate_Local,
+                  SampleTime_UTC = .data$SampleDate_UTC) %>%
+    pr_add_StationCode() %>%
+    pr_add_SampleDate() %>%
     dplyr::mutate(SampleDepth_m = as.numeric(stringr::str_sub(.data$TripCode_depth, -3, -1))) %>%
     dplyr::rename(Prochlorococcus_Cellsml = .data$Prochlorococcus_cells_ml,
                   Synecochoccus_Cellsml = .data$Synecochoccus_cells_ml,
