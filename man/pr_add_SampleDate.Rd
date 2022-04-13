@@ -10,7 +10,7 @@ pr_add_SampleDate(df)
 \item{df}{Dataframe containing \code{SampleTime_Local} or \code{SampleTime_UTC}}
 }
 \value{
-
+A dataframe with \code{SampleDate} included.
 }
 \description{
 Add the SampleDate to dataframes that only have SampleTime

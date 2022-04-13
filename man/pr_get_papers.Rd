@@ -7,7 +7,7 @@
 pr_get_papers()
 }
 \value{
-
+A random publication reference as a string
 }
 \description{
 This function randomly returns a publication that uses the IMOS plankton data

@@ -10,7 +10,7 @@ pr_get_pol(Survey = "NRS")
 \item{Survey}{"NRS" or "CPR"}
 }
 \value{
-
+A dataframe with policy data
 }
 \description{
 Get Policy data set

@@ -11,9 +11,6 @@ pr_get_csv(file, di)
 
 \item{di}{The directory to save it to}
 }
-\value{
-
-}
 \description{
 Function to download plankton csv files from the AODN. Options are:
 }
