@@ -30,7 +30,8 @@ MapOz <- rnaturalearth::ne_countries(scale = "medium", country = "Australia",
                                        returnclass = "sf")
 
 meta_sf <- pr_get_NRSTrips("Z") %>%
-  dplyr::select(StationName, StationCode, Longitude, Latitude) %>% unique() %>%
+  dplyr::select(StationName, StationCode, Longitude, Latitude) %>%
+  dplyr::distinct() %>%
   dplyr::rename(Code = StationCode, Station = StationName) %>%
   dplyr::filter(Station != 'Port Hacking 4') %>%
   sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326)
