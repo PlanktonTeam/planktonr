@@ -100,7 +100,7 @@
 <span class="r-in"><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
 <span class="r-in">      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>SampleDate_Local <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">SampleDate_Local</span>, <span class="st">"00:00:00"</span><span class="op">)</span>,</span>
 <span class="r-in">                    format <span class="op">=</span> <span class="st">"%Y-%m-%d %H:%M:%S"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">monthly</span> <span class="op">&lt;-</span> <span class="fu">pr_plot_tsclimate</span><span class="op">(</span><span class="va">df</span>, <span class="st">'NRS'</span>, <span class="st">'matter'</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">monthly</span> <span class="op">&lt;-</span> <span class="fu">pr_plot_tsclimate</span><span class="op">(</span><span class="va">df</span>, <span class="st">"NRS"</span><span class="op">)</span></span>
 </code></pre></div>
     </div>
   </div>

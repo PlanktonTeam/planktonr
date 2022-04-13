@@ -128,7 +128,7 @@ pr_plot_timeseries <- function(df, Survey = "NRS", pal = "matter", Scale = "iden
   p1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$SampleDate, y = .data$Values)) +
     ggplot2::geom_line(ggplot2::aes(group = .data$StationCode, color = .data$StationCode)) +
     ggplot2::geom_point(ggplot2::aes(group = .data$StationCode, color = .data$StationCode)) +
-    ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
+    ggplot2::scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
     ggplot2::scale_y_continuous(trans = Scale) +
     ggplot2::labs(y = titley,
                   x = titlex) +
@@ -157,7 +157,7 @@ pr_plot_timeseries <- function(df, Survey = "NRS", pal = "matter", Scale = "iden
 #' @export
 #'
 #' @examples
-#' df <- pr_get_tsdata("NRS", "Z") %>% dplyr::filter(parameters == 'Biomass_mgm3')
+#' df <- pr_get_indices("NRS", "Z") %>% dplyr::filter(parameters == 'Biomass_mgm3')
 #' plot <- pr_plot_trends(df, survey = "NRS")
 pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal = "matter", y_trans = "identity", output = "ggplot"){
 
@@ -217,7 +217,7 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
       ggplot2::xlab("Year")
   } else if (!rlang::as_string(trend) %in% c("Month", "Year")){
     p1 <- p1 +
-      ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
+      ggplot2::scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
       ggplot2::xlab("Year")
   }
 
@@ -310,7 +310,7 @@ pr_plot_climate <- function(df, Survey = "NRS", x, pal = "matter", Scale = "iden
 #' df <- df %>%
 #'       dplyr::mutate(SampleDate_Local = as.POSIXct(paste(SampleDate_Local, "00:00:00"),
 #'                     format = "%Y-%m-%d %H:%M:%S"))
-#' monthly <- pr_plot_tsclimate(df, 'NRS', 'matter')
+#' monthly <- pr_plot_tsclimate(df, "NRS")
 
 
 pr_plot_tsclimate <- function(df, Survey = c("CPR", "NRS"), pal = "matter", Scale = "identity"){
@@ -407,7 +407,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
       ggplot2::xlab("Year")
   } else if (rlang::as_string(trend) %in% c("SampleDate")){
     p1 <- p1 +
-      ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
+      ggplot2::scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
       ggplot2::xlab("Sample Date")
   }
   return(p1)
@@ -429,21 +429,22 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
 #' df <- data.frame(SampleDate = c("2010-01-01","2010-02-25","2010-06-21","2010-04-11","2010-08-05"),
 #'              StationName = 'Port Hacking', parameters = 'Biomass_mgm3', Values = runif(5, 1, 50),
 #'              fv = runif(5, 1, 50), anomaly = runif(5, 1, 3), Month = runif(5, 1, 6)) %>%
-#'              dplyr::mutate(SampleDate = as.POSIXct(SampleDate))
+#'              dplyr::mutate(SampleDate = lubridate::as_date(SampleDate))
 #' plot <-  pr_plot_EOV(df, 'Biomass_mgm3', 'NRS', 'identity', 'matter', 'yes')
-pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = 'NRS', trans = 'identity', pal = 'matter', labels = "yes") {
+pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "identity", pal = "matter", labels = "yes") {
 
   titley <- pr_relabel(EOV, style = "ggplot")
 
   pals <- pr_get_PlotCols(pal = pal, n = 20)
   col <- pals[15]
   colin <- pals[5]
+
   if(Survey == "LTM"){
-    lims <- as.POSIXct(strptime(c("1944-01-01","2020-31-31"), format = "%Y-%m-%d"))
+    lims <- lubridate::as_date(c("1944-01-01","2021-12-31")) #TODO I don't think this should be hardwired
     df <- df %>%
       dplyr::filter(.data$parameters == EOV)
   } else {
-    lims <- as.POSIXct(strptime(c("2010-01-01","2020-31-31"), format = "%Y-%m-%d"))
+    lims <- lubridate::as_date(c("2010-01-01","2021-12-31")) #TODO I don't think this should be hardwired
     df <- df %>%
       dplyr::filter(.data$parameters == EOV) %>%
       dplyr::rename(SampleDate = 1)
@@ -451,7 +452,7 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = 'NRS', trans = 'ident
 
   p1 <- ggplot2::ggplot(df) +
     ggplot2::geom_point(ggplot2::aes(x = .data$SampleDate, y = .data$Values), colour = col) +
-    ggplot2::geom_smooth(ggplot2::aes(x = .data$SampleDate, y = .data$fv), method = "lm", formula = 'y ~ x', colour = col, fill = colin) +
+    ggplot2::geom_smooth(ggplot2::aes(x = .data$SampleDate, y = .data$fv), method = "lm", formula = "y ~ x", colour = col, fill = colin) +
     ggplot2::labs(x = "Year", y = rlang::enexpr(titley)) +
     ggplot2::scale_y_continuous(trans = trans) +
     ggplot2::theme(legend.position = "none")
@@ -459,10 +460,10 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = 'NRS', trans = 'ident
   if(labels == "no"){
     p1 <- p1 + ggplot2::theme(axis.title.x = ggplot2::element_blank())
   }
-  if(Survey == 'LTM'){
-    p1 <-  p1 + ggplot2::scale_x_datetime(date_breaks = "10 years", date_labels = "%Y", limits = lims)
+  if(Survey == "LTM"){
+    p1 <-  p1 + ggplot2::scale_x_date(date_breaks = "10 years", date_labels = "%Y", limits = lims)
   } else {
-    p1 <-  p1 + ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", limits = lims)
+    p1 <-  p1 + ggplot2::scale_x_date(date_breaks = "2 years", date_labels = "%Y", limits = lims)
   }
 
   p2 <- ggplot2::ggplot(df, ggplot2::aes(.data$SampleDate, .data$anomaly)) +
@@ -473,15 +474,15 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = 'NRS', trans = 'ident
   if(labels == "no"){
     p2 <- p2 + ggplot2::theme(axis.title.x = ggplot2::element_blank())
   }
-  if(Survey == 'LTM'){
-    p2 <-  p2 + ggplot2::scale_x_datetime(date_breaks = "10 years", date_labels = "%Y", limits = lims)
+  if(Survey == "LTM"){
+    p2 <-  p2 + ggplot2::scale_x_date(date_breaks = "10 years", date_labels = "%Y", limits = lims)
   } else {
-    p2 <-  p2 + ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", limits = lims)
+    p2 <-  p2 + ggplot2::scale_x_date(date_breaks = "2 years", date_labels = "%Y", limits = lims)
   }
 
   p3 <- ggplot2::ggplot(df) +
     ggplot2::geom_point(ggplot2::aes(x = .data$Month, y = .data$Values), colour = col) +
-    ggplot2::geom_smooth(ggplot2::aes(x = .data$Month, y = .data$fv), method = "loess", formula = 'y ~ x', colour = col, fill = colin) +
+    ggplot2::geom_smooth(ggplot2::aes(x = .data$Month, y = .data$fv), method = "loess", formula = "y ~ x", colour = col, fill = colin) +
     ggplot2::scale_y_continuous(trans = trans) +
     ggplot2::scale_x_continuous(breaks = seq(0.5, 6.3, length.out = 12), labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
     ggplot2::xlab("Month") +
@@ -512,7 +513,7 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = 'NRS', trans = 'ident
 #' \dontrun{df <- pr_get_NRSChemistry() %>%
 #'            pr_plot_env_var()}
 #'
-pr_plot_env_var <- function(df, pal = 'matter', trend = 'None', Scale = 'identity') {
+pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identity") {
   n <- length(unique(df$StationName))
 
   plotCols <- pr_get_PlotCols(pal, n)
@@ -530,7 +531,7 @@ pr_plot_env_var <- function(df, pal = 'matter', trend = 'None', Scale = 'identit
                    strip.text = ggplot2::element_blank(),
                    legend.position = "bottom",
                    legend.title = ggplot2::element_blank()) +
-    ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
+    ggplot2::scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
     ggplot2::scale_y_continuous(trans = Scale) +
     ggplot2::scale_colour_manual(values = plotCols)
 

@@ -35,5 +35,5 @@ df <- data.frame(SampleDate_Local = c("2012-08-21", "2012-09-01", "2012-08-15", 
 df <- df \%>\%
       dplyr::mutate(SampleDate_Local = as.POSIXct(paste(SampleDate_Local, "00:00:00"),
                     format = "\%Y-\%m-\%d \%H:\%M:\%S"))
-monthly <- pr_plot_tsclimate(df, 'NRS', 'matter')
+monthly <- pr_plot_tsclimate(df, "NRS")
 }
