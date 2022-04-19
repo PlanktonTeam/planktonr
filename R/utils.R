@@ -197,11 +197,7 @@ pr_add_StationName <- function(df){
 #' @importFrom rlang .data
 pr_add_StationCode <- function(df){
 
-  if("TripCode" %in% colnames(df)){
-    df <- df %>%
-      dplyr::mutate(StationCode = stringr::str_sub(.data$TripCode, start = 1, end = 3)) %>%
-      dplyr::relocate(.data$StationCode, .after = .data$TripCode)
-  } else if("StationName" %in% colnames(df)){
+  if("StationName" %in% colnames(df)){
     df <- df %>%
       dplyr::mutate(StationCode = dplyr::case_when(
         StationName == "Darwin" ~ "DAR",
@@ -214,6 +210,10 @@ pr_add_StationCode <- function(df){
         StationName == "Rottnest Island" ~ "ROT",
         StationName == "Ningaloo" ~ "NIN")) %>%
       dplyr::relocate(.data$StationCode, .after = .data$StationName)
+  } else if("TripCode" %in% colnames(df)){
+    df <- df %>%
+      dplyr::mutate(StationCode = stringr::str_sub(.data$TripCode, start = 1, end = 3)) %>%
+      dplyr::relocate(.data$StationCode, .after = .data$TripCode)
   }
   return(df)
 }
