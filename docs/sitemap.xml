@@ -457,6 +457,9 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSData.html</loc>
   </url>
   <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSMicro.html</loc>
+  </url>
+  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSPhytoChangeLog.html</loc>
   </url>
   <url>
@@ -557,6 +560,9 @@
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_coeffs.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_csv.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_daynight.html</loc>
