@@ -4,7 +4,7 @@
 \alias{pr_get_daynight}
 \title{Get data for plots of species abundance by day and night using CPR data}
 \usage{
-pr_get_daynight(Type = c("P", "Z"))
+pr_get_daynight(Type = "Z")
 }
 \arguments{
 \item{Type}{Phyto or zoo, defaults to phyto}

@@ -269,6 +269,61 @@ pr_get_NRSCTD <- function(){
 
 
 
+#' Get NRS long term nutrient timeseries data
+#'
+#' @return dataframe for plotting long term nutrient time series info
+#' @export
+#'
+#' @examples
+#' df <- pr_get_LTnuts()
+pr_get_LTnuts <-  function(){
+
+  NutsLT <- readr::read_csv(system.file("extdata", "nuts_longterm_clean2.csv", package = "planktonr", mustWork = TRUE),
+                            show_col_types = FALSE,
+                            na = c("NA", "")) %>%
+    pr_rename() %>%
+    tidyr::pivot_longer(-c(.data$StationCode:.data$SampleDepth_m), values_to = "Values", names_to = "parameters") %>%
+    dplyr::rename(SampleDate_Local = .data$SampleDate_Local) %>%
+    dplyr::mutate(Project = "LTM",
+                  SampleDate_Local = strptime(as.POSIXct(.data$SampleDate_Local), "%Y-%m-%d")) %>%
+    pr_add_StationName() %>%
+    dplyr::relocate(c("Project", "StationName", "StationCode", tidyselect::everything())) %>%
+    pr_reorder()
+
+  Nuts <- pr_get_NRSChemistry() %>%
+    dplyr::filter(.data$StationCode %in% c("MAI", "ROT", "PHB")) %>%
+    dplyr::select(colnames(NutsLT)) # Ensure columns are in the same order
+
+  CTD <- pr_get_NRSCTD() %>%
+    dplyr::select(.data$Project, .data$StationCode, .data$StationName,
+                  .data$SampleDate_Local, .data$SampleDepth_m, .data$Temperature_degC) %>%
+    dplyr::filter(.data$StationCode %in% c("MAI", "ROT", "PHB")) %>%
+    tidyr::pivot_longer(-c(.data$Project:.data$SampleDepth_m), values_to = "Values", names_to = "parameters") %>%
+    dplyr::mutate(SampleDate_Local = strptime(as.POSIXct(.data$SampleDate_Local), "%Y-%m-%d")) %>%
+    dplyr::select(colnames(NutsLT))
+
+  LTnuts <- dplyr::bind_rows(NutsLT, Nuts, CTD) %>%
+    dplyr::mutate(Year = lubridate::year(.data$SampleDate_Local),
+                  Month = lubridate::month(.data$SampleDate_Local))
+
+  rm(NutsLT, Nuts, CTD)
+
+  means <- LTnuts %>%
+    dplyr::select(.data$StationName, .data$parameters, .data$Values) %>%
+    dplyr::group_by(.data$StationName, .data$parameters) %>%
+    dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
+                     sd = stats::sd(.data$Values, na.rm = TRUE),
+                     .groups = "drop")
+
+  Pol <- LTnuts %>%
+    dplyr::left_join(means, by = c("StationName", "parameters")) %>%
+    dplyr::mutate(anomaly = (.data$Values - .data$means)/.data$sd)
+
+}
+
+
+
+
 # # Create Biogeochemical data
 # #
 # # @return A dataframe with BGC data
