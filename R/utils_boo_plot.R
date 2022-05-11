@@ -44,7 +44,7 @@ pr_plot_NRSmap <- function(df){
                    plot.background = ggplot2::element_rect(fill = NA),
                    axis.line = ggplot2::element_blank())
 
-  pmap <- plotly::ggplotly(pmap)
+  #pmap <- plotly::ggplotly(pmap)
 
   return(pmap)
 }
