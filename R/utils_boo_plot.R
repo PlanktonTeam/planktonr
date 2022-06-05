@@ -25,7 +25,7 @@ pr_get_PlotCols <- function(pal = "matter", n){
 #' @examples
 #' df <- data.frame(StationCode = c("NSI", "PHB"))
 #' pmap <- pr_plot_NRSmap(df)
-pr_plot_NRSmap <- function(df){
+pr_plot_NRSmap <- function(df, output = "ggplot"){
 
   # meta2_sf <- subset(meta_sf, meta_sf$Code %in% df$StationCode)
   meta2_sf <- meta_sf %>%
@@ -44,7 +44,9 @@ pr_plot_NRSmap <- function(df){
                    plot.background = ggplot2::element_rect(fill = NA),
                    axis.line = ggplot2::element_blank())
 
-  #pmap <- plotly::ggplotly(pmap)
+  if(output == "plotly"){
+    pmap <- plotly::ggplotly(pmap)
+  }
 
   return(pmap)
 }
@@ -60,7 +62,7 @@ pr_plot_NRSmap <- function(df){
 #' @examples
 #' df <- data.frame(BioRegion = c("Temperate East", "South-west"))
 #' cprmap <- pr_plot_CPRmap(df)
-pr_plot_CPRmap <-  function(df){
+pr_plot_CPRmap <-  function(df, output = "ggplot"){
 
   bioregionSelection <- mbr %>%
     dplyr::filter(.data$REGION %in% df$BioRegion) %>%
@@ -80,6 +82,11 @@ pr_plot_CPRmap <-  function(df){
                    plot.background = ggplot2::element_rect(fill = NA),
                    panel.background = ggplot2::element_rect(fill = NA),
                    axis.line = ggplot2::element_blank())
+
+  if(output == "plotly"){
+    gg <- plotly::ggplotly(gg)
+  }
+
   return(gg)
 }
 
