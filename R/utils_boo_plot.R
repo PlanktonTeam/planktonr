@@ -517,15 +517,15 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
 #' @export
 #'
 #' @examples
-#' \dontrun{df <- pr_get_NRSChemistry() %>%
-#'            pr_plot_env_var()}
+#' \dontrun{df <- pr_get_NRSChemistry() %>% dplyr::filter(parameters == "SecchiDepth_m")
+#'          plot <- pr_plot_env_var(df)}
 #'
-pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identity") {
+pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identity", output = 'ggplot') {
   n <- length(unique(df$StationName))
 
   plotCols <- pr_get_PlotCols(pal, n)
 
-  titley <- pr_relabel(unique(df$parameters), style = "plotly")
+  titley <- pr_relabel(unique(df$parameters), style = output)
 
   np <- length(unique(df$SampleDepth_m))
 
@@ -549,7 +549,9 @@ pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identit
     p <- p + ggplot2::geom_smooth(method = "lm", formula = y ~ x)
   }
 
-  p <- plotly::ggplotly(p, height = 150 * np)
+  if(output == 'plotly'){
+    p <- plotly::ggplotly(p, height = 150 * np)
+  }
 
   mdat <- df %>%
     dplyr::group_by(.data$StationName, .data$Month, .data$SampleDepth_m, .data$parameters) %>%
@@ -570,15 +572,22 @@ pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identit
                    legend.title = ggplot2::element_blank(),
                    strip.text.y = ggplot2::element_text(face = "bold", size = 12, angle = 0))
 
-  m <- plotly::ggplotly(m) %>%
+  if(output == 'plotly'){
+    m <- plotly::ggplotly(m) %>%
     plotly::layout(legend = list(orientation = "h",
                                  xanchor = "center",  # use center of legend as anchor
                                  x = 0.5, y = -0.1))
+    }
 
+  if(output == 'plotly'){
   plot <- plotly::subplot(plotly::style(p, showlegend = FALSE), m, widths = c(0.75,0.25)) %>%
     plotly::layout(title = list(text = titley),
                    annotations = list( x = 0.97, y = 1.0, text = "Depth (m)", xref = "paper", yref = "paper",
                                        xanchor = "center", yanchor = "bottom", showarrow = FALSE))
+  } else {
+    p + m + patchwork::plot_layout(widths = c(3,1), guides = 'collect')
+  }
+
 }
 
 #' Frequency plot of the selected species
