@@ -531,7 +531,7 @@ pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identit
 
   p <- ggplot2::ggplot(df, ggplot2::aes(.data$SampleDate_Local, .data$Values, colour = .data$StationName)) +
     ggplot2::geom_line() +
-    ggplot2::labs(x = "Time", y = titley) +
+    ggplot2::labs(x = "Year", y = titley) +
     ggplot2::facet_grid(SampleDepth_m ~., scales = "free") +
     ggplot2::theme_bw() +
     ggplot2::theme(strip.background = ggplot2::element_blank(),
@@ -569,7 +569,7 @@ pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identit
     ggplot2::scale_colour_manual(values = plotCols) +
     ggplot2::theme_bw() +
     ggplot2::theme(strip.background = ggplot2::element_blank(),
-                   legend.title = ggplot2::element_blank(),
+                   legend.position = 'none',
                    strip.text.y = ggplot2::element_text(face = "bold", size = 12, angle = 0))
 
   if(output == 'plotly'){
@@ -585,7 +585,7 @@ pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identit
                    annotations = list( x = 0.97, y = 1.0, text = "Depth (m)", xref = "paper", yref = "paper",
                                        xanchor = "center", yanchor = "bottom", showarrow = FALSE))
   } else {
-    p + m + patchwork::plot_layout(widths = c(3,1), guides = 'collect')
+    p + m + patchwork::plot_layout(widths = c(3,1), guides = 'collect', heights = np * 200)
   }
 
 }
