@@ -36,17 +36,21 @@ pr_get_raw <- function(file){
                      SampleDate_Local = readr::col_date(),
                      DIC_umolkg = readr::col_double(),
                      Oxygen_umolL = readr::col_double())
-  } else if (file ==  "bgc_pigments_data" |
-             file == "bgc_picoplankton_data" |
-             file == "bgc_tss_data"){ # Add specific filter for bgc files to deal with potential problems from 'WC' depth
+  } else if (file == "bgc_tss_data" |
+             file == "bgc_picoplankton_data"){ # Add specific filter for bgc files to deal with potential problems from 'WC' depth
     col_types = list(Project = readr::col_character(),
                      TripCode = readr::col_character(),
                      SampleDate_Local = readr::col_date(),
-                     Depth_m = readr::col_character())
+                     SampleDepth_m = readr::col_character())
+  } else if (file ==  "bgc_pigments_data"){ # Add specific filter for bgc files to deal with potential problems from 'WC' depth
+    col_types = list(Project = readr::col_character(),
+                     TripCode = readr::col_character(),
+                     SampleDate_Local = readr::col_date(),
+                     SampleDepth_m = readr::col_character())
   } else if(stringr::str_detect(file, "bgc_zooplankton")){
     col_types = list(Project = readr::col_character(),
                      TripCode = readr::col_character(),
-                     SampleTime_local = readr::col_datetime(),
+                     SampleTime_Local = readr::col_datetime(),
                      SampleDepth_m = readr::col_character())
   } else if(file == "anmn_ctd_profiles_data"){
     col_types = readr::cols(CHLU = readr::col_double(), # columns start with nulls so tidyverse annoyingly assigns col_logical()
@@ -66,41 +70,35 @@ pr_get_raw <- function(file){
     comment = "#",
     col_types = col_types)
 
-  if (file == "cpr_derived_indices_data"){ #TODO TEmp fix until AODN fixes files
-    dat <- dat %>%
-      dplyr::rename(SampleTime_UTC = .data$SampleDate_UTC,
-                    SampleTime_Local = .data$SampleDate_Local)
-  }
-
   return(dat)
 }
 
 
-#' Add the SampleDate to dataframes that only have SampleTime
-#'
-#' @param df Dataframe containing `SampleTime_Local` or `SampleTime_UTC`
-#'
-#' @return A dataframe with `SampleDate` included.
-#' @export
-#'
-#' @examples
-#' df <- pr_add_SampleDate(data.frame(SampleTime_Local = Sys.time()))
-pr_add_SampleDate <- function(df){
-
-  if("SampleTime_Local" %in% colnames(df)) {
-    df <- df %>%
-      dplyr::mutate(SampleDate_Local = lubridate::as_date(.data$SampleTime_Local)) %>%
-      dplyr::relocate(.data$SampleDate_Local, .after = .data$SampleTime_Local)
-  }
-
-  if("SampleTime_UTC" %in% colnames(df)) {
-    df <- df %>%
-      dplyr::mutate(SampleDate_UTC = lubridate::as_date(.data$SampleTime_UTC)) %>%
-      dplyr::relocate(.data$SampleDate_UTC, .after = .data$SampleTime_UTC)
-  }
-
-  return(df)
-}
+# Add the SampleDate to dataframes that only have SampleTime
+#
+# @param df Dataframe containing `SampleTime_Local` or `SampleTime_UTC`
+#
+# @return A dataframe with `SampleDate` included.
+# @export
+#
+# @examples
+# df <- # pr_add_SampleDate(data.frame(SampleTime_Local = Sys.time()))
+# # pr_add_SampleDate <- function(df){
+#
+#   if("SampleTime_Local" %in% colnames(df)) {
+#     df <- df %>%
+#       dplyr::mutate(SampleDate_Local = lubridate::as_date(.data$SampleTime_Local)) %>%
+#       dplyr::relocate(.data$SampleDate_Local, .after = .data$SampleTime_Local)
+#   }
+#
+#   if("SampleTime_UTC" %in% colnames(df)) {
+#     df <- df %>%
+#       dplyr::mutate(SampleDate_UTC = lubridate::as_date(.data$SampleTime_UTC)) %>%
+#       dplyr::relocate(.data$SampleDate_UTC, .after = .data$SampleTime_UTC)
+#   }
+#
+#   return(df)
+# }
 
 #' Download and write csv file
 #'
@@ -185,7 +183,7 @@ pr_add_StationName <- function(df){
 
 
 
-#' Add NRS StationCode to data
+#' Add NRS StationName to data
 #'
 #' @param df A dataframe that contains `StationName` but no `StationCode`
 #' @return A dataframe with StationCode added
@@ -319,19 +317,19 @@ pr_apply_flags <- function(df, flag_col){
 #' @export
 #'
 #' @examples
-#' df <- data.frame(SampleDate_Local = lubridate::now(), Latitude = -32, Longitude = 160)
+#' df <- data.frame(SampleTime_Local = lubridate::now(), Latitude = -32, Longitude = 160)
 #' df <- pr_apply_time(df)
-#' @importFrom data.table ":="
 #' @importFrom rlang .data
 pr_apply_time <- function(df){
 
   df <- df %>%
-    dplyr::mutate(Year = lubridate::year(.data$SampleDate_Local),
-                  Month = lubridate::month(.data$SampleDate_Local),
-                  Day = lubridate::day(.data$SampleDate_Local),
-                  Time_24hr = stringr::str_sub(.data$SampleDate_Local, -8, -1), # hms doesn"t seem to work on 00:00:00 times
-                  tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE),
-                  SampleDate_UTC = lubridate::with_tz(lubridate::force_tzs(.data$SampleDate_Local, .data$tz, roll = TRUE), "UTC"))
+    dplyr::mutate(Year_Local = lubridate::year(.data$SampleTime_Local),
+                  Month_Local = lubridate::month(.data$SampleTime_Local),
+                  Day_Local = lubridate::day(.data$SampleTime_Local))
+  # Removed 21st June 2022
+  # Time_24hr = stringr::str_sub(.data$SampleTime_Local, -8, -1), # hms doesn"t seem to work on 00:00:00 times
+  # tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE),
+  # SampleDate_UTC = lubridate::with_tz(lubridate::force_tzs(.data$SampleTime_Local, .data$tz, roll = TRUE), "UTC"))
 
 }
 

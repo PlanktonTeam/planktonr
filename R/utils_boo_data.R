@@ -35,13 +35,13 @@ pr_get_fg <- function(Survey = "NRS", Type = "Z"){
   if(Survey == "CPR"){
     df <- df %>%
       pr_add_Bioregions() %>%
-      dplyr::select(.data$BioRegion, .data$SampleDate_UTC, .data$Month, .data$Year, tidyselect::any_of(var_names)) %>%
+      dplyr::select(.data$BioRegion, .data$SampleTime_Local, .data$Month, .data$Year, tidyselect::any_of(var_names)) %>%
       dplyr::filter(!is.na(.data$BioRegion), !.data$BioRegion %in% c("North", "North-west")) %>%
       droplevels()
   } else if(Survey == "NRS"){
     df <- df %>%
-      dplyr::select(.data$StationName, .data$StationCode, .data$SampleTime_Local, .data$SampleDate_Local,
-                    .data$Month, .data$Year, tidyselect::any_of(var_names))
+      dplyr::select(.data$StationName, .data$StationCode, .data$SampleTime_Local,
+                    .data$Month_Local, .data$Year_Local, tidyselect::any_of(var_names))
   }
 
   df <- df %>%
@@ -86,9 +86,11 @@ pr_get_fMap_data <- function(Type = "Z"){
 
   if(Type == "P"){
     PhytoCountNRS <- pr_get_NRSData(Type = "phytoplankton", Variable = "abundance", Subset = "species") %>%
-      tidyr::pivot_longer(cols = !dplyr::starts_with(c("Project", "StationName", "StationCode", "Latitude", "Longitude", "TripCode",
-                                                       "SampleTime", "SampleDate", "Year", "Month", "Day", "Time", "SampleDepth_m", "Method", "CTD"), ignore.case = FALSE),
-                          names_to = "Taxon", values_to = "Counts") %>%
+      tidyr::pivot_longer(cols = !dplyr::all_of(
+        c("Project", "StationName", "StationCode", "Latitude", "Longitude", "TripCode",
+          "SampleTime_Local", "SampleTime_UTC", "Year_Local", "Month_Local", "Day_Local", "Time_Local24hr",
+          "SampleDepth_m", "Method", "CTDSST_degC", "CTDChlaSurf_mgm3", "CTDSalinity_psu")),
+        names_to = "Taxon", values_to = "Counts") %>%
       dplyr::rename(Sample = .data$TripCode) %>%
       dplyr::mutate(Counts = as.integer(as.logical(.data$Counts)), # TODO Replace this with actual counts
                     Survey = "NRS",
@@ -96,14 +98,15 @@ pr_get_fMap_data <- function(Type = "Z"){
       dplyr::select(.data$Sample, .data$Survey, .data$Taxon, .data$Counts, .data$SampVol_m3) #TODO There is no volume data to remove
 
     PhytoCountCPR <- pr_get_CPRData(Type = "phytoplankton", Variable = "abundance", Subset = "species") %>%
-      tidyr::pivot_longer(cols = !dplyr::starts_with(c("TripCode", "Region", "Latitude", "Longitude",
-                                                       "SampleTime", "SampleDate", "Year", "Month", "Day", "Time", "PCI"), ignore.case = FALSE),
+      tidyr::pivot_longer(cols = !dplyr::all_of(
+        c("TripCode", "Region", "Latitude", "Longitude", "SampleTime_Local", "SampleTime_UTC",
+          "Year_Local", "Month_Local", "Day_Local", "Time_Local24hr",  "SampleVolume_m3", "PCI",
+          "SatSST_degC", "SatChlaSurf_mgm3")),
                           names_to = "Taxon", values_to = "Counts") %>%
       dplyr::mutate(Counts = as.integer(as.logical(.data$Counts)),
-                    Survey = "CPR",
-                    SampVol_m3 = NA) %>% # TODO Replace this with actual volume
+                    Survey = "CPR") %>% # TODO Replace this with actual volume
       dplyr::rename(Sample = .data$TripCode) %>%
-      dplyr::select(.data$Sample, .data$Survey, .data$Taxon, .data$Counts, .data$SampVol_m3) #TODO There is no volume data to remove
+      dplyr::select(.data$Sample, .data$Survey, .data$Taxon, .data$Counts, .data$SampleVolume_m3) #TODO There is no volume data to remove
 
     obs <- dplyr::bind_rows(PhytoCountCPR, PhytoCountNRS) %>%
       dplyr::arrange(.data$Taxon)
@@ -111,26 +114,26 @@ pr_get_fMap_data <- function(Type = "Z"){
   } else if(Type == "Z"){
 
     ZooCountNRS <- pr_get_NRSData(Type = "zooplankton", Variable = "abundance", Subset = "species") %>%
-      tidyr::pivot_longer(cols = !tidyselect::starts_with(c("Project", "StationName", "StationCode", "Latitude", "Longitude",
-                                                            "TripCode", "SampleTime", "SampleDate", "Year", "Month", "Day", "Time",
-                                                            "SampleDepth_m", "CTD", "Biomass_mgm3", "AshFreeBiomass_mgm3" ),
-                                                          ignore.case = FALSE),
-                          names_to = "Taxon", values_to = "Counts") %>%
+      tidyr::pivot_longer(cols = !tidyselect::all_of(
+        c("Project", "StationName", "StationCode", "Latitude", "Longitude",
+          "TripCode", "SampleTime_Local", "SampleTime_UTC", "Year_Local", "Month_Local", "Day_Local", "Time_Local24hr",
+          "SampleDepth_m", "Biomass_mgm3", "AshFreeBiomass_mgm3", "CTDSST_degC", "CTDChlaSurf_mgm3", "CTDSalinity_psu")),
+        names_to = "Taxon", values_to = "Counts") %>%
       dplyr::rename(Sample = .data$TripCode) %>%
       dplyr::mutate(Survey = "NRS",
                     SampVol_m3 = 1) %>%
       dplyr::select(.data$Sample, .data$Survey, .data$Taxon, .data$Counts, .data$SampVol_m3)
 
     ZooCountCPR <- pr_get_CPRData(Type = "zooplankton", Variable = "abundance", Subset = "species") %>%
-      tidyr::pivot_longer(cols = !dplyr::starts_with(c("TripCode", "Region", "Latitude", "Longitude",
-                                                       "SampleTime", "SampleDate", "Year", "Month",
-                                                       "Day", "Time", "PCI", "BiomassIndex_mgm3"), ignore.case = FALSE),
-                          names_to = "Taxon", values_to = "Counts") %>%
+      tidyr::pivot_longer(cols = !dplyr::all_of(
+        c("TripCode", "Region", "Latitude", "Longitude",
+          "SampleTime_Local", "SampleTime_UTC", "Year_Local", "Month_Local",
+          "Day_Local", "Time_Local24hr", "SampleVolume_m3", "PCI", "BiomassIndex_mgm3")),
+        names_to = "Taxon", values_to = "Counts") %>%
       dplyr::mutate(Counts = as.integer(as.logical(.data$Counts)),
-                    Survey = "CPR",
-                    SampVol_m3 = NA) %>% # TODO Replace this with actual volume
+                    Survey = "CPR") %>%
       dplyr::rename(Sample = .data$TripCode) %>%
-      dplyr::select(.data$Sample, .data$Survey, .data$Taxon, .data$Counts, .data$SampVol_m3) #TODO There is no volume data to remove
+      dplyr::select(.data$Sample, .data$Survey, .data$Taxon, .data$Counts, .data$SampleVolume_m3)
 
     obs <- dplyr::bind_rows(ZooCountCPR, ZooCountNRS) %>%
       dplyr::arrange(.data$Taxon)
@@ -158,7 +161,7 @@ pr_get_fMap_data <- function(Type = "Z"){
     dplyr::mutate(Lat = round(.data$Latitude), #/0.5, 0)*0.5,
                   Long = round(.data$Longitude), #/0.5, 0)*0.5,
                   Month = lubridate::month(.data$Date),
-                  Season = ifelse(.data$Month >2 & .data$Month < 6, "March - May",
+                  Season = ifelse(.data$Month >2 & .data$Month < 6, "March - May", #TODO update to case_when
                                   ifelse(.data$Month >5 & .data$Month < 9, "June - August",
                                          ifelse(.data$Month > 8 & .data$Month < 12, "September - November", "December - February")))) %>%
     dplyr::select(.data$Sample, .data$Survey, .data$Lat, .data$Long, .data$Season)
@@ -175,7 +178,7 @@ pr_get_fMap_data <- function(Type = "Z"){
                      by = c("Lat", "Long", "Season")) %>%
     dplyr::ungroup() %>%
     dplyr::mutate(freqsamp = .data$freq/.data$samples,
-                  freqfac = as.factor(ifelse(.data$freqsamp<0.375, "Seen in 25%",
+                  freqfac = as.factor(ifelse(.data$freqsamp<0.375, "Seen in 25%", # TODO Update to case_when
                                              ifelse(.data$freqsamp>0.875, "100 % of Samples",
                                                     ifelse(.data$freqsamp>0.375 & .data$freqsamp<0.625, "50%", "75%")))),
                   Season = factor(.data$Season, levels = c("December - February","March - May","June - August","September - November")),
@@ -222,11 +225,11 @@ pr_get_daynight <- function(Type = "Z"){
 
   dat2 <- dat %>%
     dplyr::bind_cols(daynight["daynight"]) %>%
-    dplyr::select(tidyselect::any_of(c("TripCode","Region", "Latitude", "Longitude", "SampleTime_UTC", "SampleTime_Local",
-                                       "SampleDate_UTC", "SampleDate_Local", "Year", "Month", "Day", "Time", "PCI",
-                                       "BiomassIndex_mgm3", "daynight")), tidyselect::everything()) %>%
+    dplyr::select(tidyselect::any_of(c("TripCode", "Region", "Latitude", "Longitude", "SampleTime_UTC", "SampleTime_Local",
+                                       "SampleDate_UTC", "SampleDate_Local", "Year_Local", "Month_Local", "Day_Local",
+                                       "Time_Local24hr", "PCI", "BiomassIndex_mgm3", "daynight")), tidyselect::everything()) %>%
     tidyr::pivot_longer(-c(.data[["TripCode"]]:.data[["daynight"]]), values_to = "Species_m3", names_to = "Species") %>%
-    dplyr::group_by(.data$Month, .data$daynight, .data$Species) %>%
+    dplyr::group_by(.data$Month_Local, .data$daynight, .data$Species) %>%
     dplyr::summarise(Species_m3 = mean(.data$Species_m3, na.rm = TRUE),
                      .groups = "drop")
 }

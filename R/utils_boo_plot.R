@@ -105,30 +105,35 @@ pr_plot_CPRmap <-  function(df){
 #' timeseries <- pr_plot_timeseries(df, 'NRS', 'matter')
 pr_plot_timeseries <- function(df, Survey = "NRS", pal = "matter", Scale = "identity"){
 
+
+
   if(Survey == "CPR"){
     df <- df %>%
-      dplyr::rename(SampleDate = .data$SampleDate_UTC,
-                    StationCode = .data$BioRegion)
-    titlex <- "Sample Date (UTC)"
+      dplyr::rename(#SampleTime = .data$SampleTime_Local,
+        StationCode = .data$BioRegion)
+    # titlex <- "Sample Date (UTC)"
   }
 
   if(Survey == "NRS"){
+
     df <- df %>%
-      dplyr::rename(SampleDate = .data$SampleDate_Local) %>%
-      dplyr::group_by(.data$SampleDate, .data$StationCode, .data$parameters) %>% # accounting for microbial data different depths
+      # dplyr::rename(SampleDate = .data$SampleTime_Local) %>%
+      dplyr::group_by(.data$SampleTime_Local, .data$StationCode, .data$parameters) %>% # accounting for microbial data different depths
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                        .groups = "drop")
-    titlex <- "Sample Date (Local)"
+    # titlex <- "Sample Date (Local)"
   }
+
+  titlex <- "Sample Date (Local)"
 
   n <- length(unique(df$StationCode))
   plotCols <- pr_get_PlotCols(pal, n)
   titley <- pr_relabel(unique(df$parameters), style = "ggplot")
 
-  p1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$SampleDate, y = .data$Values)) +
+  p1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$SampleTime_Local, y = .data$Values)) +
     ggplot2::geom_line(ggplot2::aes(group = .data$StationCode, color = .data$StationCode)) +
     ggplot2::geom_point(ggplot2::aes(group = .data$StationCode, color = .data$StationCode)) +
-    ggplot2::scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
+    ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
     ggplot2::scale_y_continuous(trans = Scale) +
     ggplot2::labs(y = titley,
                   x = titlex) +
@@ -162,13 +167,11 @@ pr_plot_timeseries <- function(df, Survey = "NRS", pal = "matter", Scale = "iden
 pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal = "matter", y_trans = "identity", output = "ggplot"){
 
   if (survey == "CPR"){
-    time = rlang::sym("SampleDate_UTC")
     site = rlang::sym("BioRegion")
   } else if (survey == "NRS"){
-    time = rlang::sym("SampleDate_Local")
     site = rlang::sym("StationName")
   }
-
+  time = rlang::sym("SampleTime_Local")
   titley <- pr_relabel(unique(df$parameters), style = output)
 
   # Averaging based on `trend` ----------------------------------------------
@@ -196,7 +199,7 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
 
   # Do the plotting ---------------------------------------------------------
 
-  p1 <- ggplot2::ggplot(df, ggplot2::aes(x = !!rlang::sym(trend), y = .data$value)) + # do this logging as in pr_plot_tsclimate
+  p1 <- ggplot2::ggplot(df, ggplot2::aes(x = lubridate::as_date(!!rlang::sym(trend)), y = .data$value)) + # do this logging as in pr_plot_tsclimate
     ggplot2::geom_smooth(method = method, formula = y ~ x) +
     ggplot2::geom_point() +
     ggplot2::facet_wrap(rlang::enexpr(site), scales = "free_y", ncol = 1) +
@@ -313,16 +316,16 @@ pr_plot_climate <- function(df, Survey = "NRS", x, pal = "matter", Scale = "iden
 #' monthly <- pr_plot_tsclimate(df, "NRS")
 
 
-pr_plot_tsclimate <- function(df, Survey = c("CPR", "NRS"), pal = "matter", Scale = "identity"){
+pr_plot_tsclimate <- function(df, Survey = "NRS", pal = "matter", Scale = "identity"){
 
   p1 <- pr_plot_timeseries(df, Survey, pal, Scale) +
     ggplot2::theme(legend.position = "none",
                    axis.title.y = ggplot2::element_blank())
 
-  p2 <- pr_plot_climate(df, Survey, .data$Month, pal, Scale) +
+  p2 <- pr_plot_climate(df, Survey, .data$Month_Local, pal, Scale) +
     ggplot2::theme(legend.position = "none")
 
-  p3 <- pr_plot_climate(df, Survey, .data$Year, pal, Scale) +
+  p3 <- pr_plot_climate(df, Survey, .data$Year_Local, pal, Scale) +
     ggplot2::theme(axis.title.y = ggplot2::element_blank(),
                    legend.title = ggplot2::element_blank())
 
@@ -351,17 +354,29 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
 
   plotCols <- pr_get_PlotCols(pal, n)
 
-  if("SampleDate_UTC" %in% colnames(df)){
+  if("SampleDate_UTC" %in% colnames(df)){ # If CPR data
     SampleDate = rlang::sym("SampleDate_UTC")
     station = rlang::sym("BioRegion")
-    titlex <- "Sample Date UTC"
-  } else {
+    titlex <- "Sample Date (UTC)"
+  } else { # If NRS data
     SampleDate = rlang::sym("SampleTime_Local")
     station = rlang::sym("StationName")
-    titlex <- "Sample Date Local" #TODO
+    titlex <- "Sample Date (Local)" #TODO
   }
-  # StationName StationCode SampleDate_Local     Month  Year parameters      Values
+
   if (trend %in% c("Year", "Month")){
+
+    if ("Year_Local" %in% colnames(df)){ #NRS
+      df <- df %>%
+        dplyr::rename(Month = .data$Month_Local,
+                      Year = .data$Year_Local)
+
+    } else if ("Year_UTC" %in% colnames(df)){ #CPR
+      df <- df %>%
+        dplyr::rename(Month = .data$Month_UTC,
+                      Year = .data$Year_UTC)
+    }
+
     df <- df %>%
       dplyr::filter(!is.na(!!SampleDate))  %>%
       dplyr::group_by(!!rlang::sym(trend), !!station, .data$parameters) %>%

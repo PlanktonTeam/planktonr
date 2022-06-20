@@ -36,34 +36,37 @@ pr_get_indices <- function(Survey = "CPR", Type = "P"){
 
     dat <- pr_get_raw("cpr_derived_indices_data") %>%
       pr_rename() %>%
-      pr_add_SampleDate() %>%
+      # # pr_add_SampleDate() %>%
       pr_add_Bioregions() %>%
-      dplyr::select(.data$SampleDate_UTC, .data$Year, .data$Month, .data$Day, .data$BioRegion,
+      dplyr::select(.data$SampleTime_Local, .data$Year_Local, .data$Month_Local, .data$BioRegion,
                     tidyselect::all_of(var_names)) %>%
-      dplyr::mutate(SampleDate_UTC = lubridate::round_date(.data$SampleDate_UTC, "month"), #TODO Check with Claire about this rounding
-                    YearMon = paste(.data$Year, .data$Month)) %>% #TODO this step can be improved when nesting supports data pronouns
-      tidyr::complete(.data$BioRegion, .data$YearMon) %>%
-      dplyr::mutate(Year = as.numeric(stringr::str_sub(.data$YearMon, 1, 4)), #TODO Not sure why Year/Month is redefined here
-                    Month = as.numeric(stringr::str_sub(.data$YearMon, -2, -1))) %>%
-      tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "parameters") %>%
-      dplyr::group_by(.data$SampleDate_UTC, .data$Year, .data$Month, .data$BioRegion, .data$parameters) %>%
+      dplyr::mutate(SampleTime_Local = lubridate::round_date(.data$SampleTime_Local, "month"), #TODO Check with Claire about this rounding
+                    YearMon = paste(.data$Year_Local, .data$Month_Local)) %>% #TODO this step can be improved when nesting supports data pronouns
+      tidyr::complete(.data$BioRegion, .data$Year_Local, .data$Month_Local) %>% # TODO Do we need complete here? C
+      dplyr::mutate(Year_Local = as.numeric(stringr::str_sub(.data$YearMon, 1, 4)), #TODO Not sure why Year/Month is redefined here - because it is NA otherwise?
+                    Month_Local = as.numeric(stringr::str_sub(.data$YearMon, -2, -1))) %>%
+      # pr_add_SampleDate() %>%
+      dplyr::select(-.data$YearMon) %>%
+      tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "parameters") %>%
+      dplyr::group_by(.data$SampleTime_Local, .data$Year_Local, .data$Month_Local, .data$BioRegion, .data$parameters) %>%
+      # dplyr::group_by(.data$SampleDate_Local, .data$Year_Local, .data$Month_Local, .data$BioRegion, .data$parameters) %>% # TODO Check with Claire
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                        .groups = "drop") %>%
       pr_reorder() %>%
       dplyr::filter(!is.na(.data$BioRegion), !.data$BioRegion %in% c("North", "North-west")) %>%
       droplevels()
-
+    # 2925
     return(dat)
 
   } else if(Survey == "NRS"){
 
-    dat <- pr_get_raw("nrs_derived_indices_data") %>%
+    dat <- pr_get_raw("nrs_derived_indices_data") %>% # TODO No Month/Year categories in NRS data. Its there in CPR
       pr_rename() %>%
       pr_add_StationCode() %>%
-      dplyr::mutate(Month = lubridate::month(.data$SampleDate_Local),
-                    Year = lubridate::year(.data$SampleDate_Local)) %>%
-      tidyr::complete(.data$Year, .data$StationCode) %>% #TODO Nesting doesn't support data pronouns at this time
-      dplyr::select(.data$Year, .data$Month, .data$SampleDate_Local, .data$StationName, .data$StationCode,
+      dplyr::mutate(Month_Local = lubridate::month(.data$SampleTime_Local),
+                    Year_Local = lubridate::year(.data$SampleTime_Local)) %>%  #TODO Remove Month/Year?
+      tidyr::complete(.data$Year_Local, .data$StationCode) %>% #TODO Nesting doesn't support data pronouns at this time
+      dplyr::select(.data$Year_Local, .data$Month_Local, .data$SampleTime_Local, .data$StationName, .data$StationCode,
                     tidyselect::all_of(var_names)) %>%
       tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "parameters") %>%
       pr_reorder()
