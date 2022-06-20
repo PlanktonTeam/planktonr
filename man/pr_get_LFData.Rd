@@ -14,5 +14,4 @@ Get Larval Fish Sample Data
 }
 \examples{
 df <- pr_get_LFData()
-#' @import dplyr
 }

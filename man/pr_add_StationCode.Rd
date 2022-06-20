@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{pr_add_StationCode}
 \alias{pr_add_StationCode}
-\title{Add NRS StationCode to data}
+\title{Add NRS StationName to data}
 \usage{
 pr_add_StationCode(df)
 }
@@ -13,7 +13,7 @@ pr_add_StationCode(df)
 A dataframe with StationCode added
 }
 \description{
-Add NRS StationCode to data
+Add NRS StationName to data
 }
 \examples{
 df <- pr_get_NRSStation() \%>\%
