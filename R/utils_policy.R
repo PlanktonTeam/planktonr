@@ -17,7 +17,6 @@ pr_get_pol <- function(Survey = "NRS"){
 
     Polr <- pr_get_raw("cpr_derived_indices_data") %>%
       pr_rename() %>%
-      # pr_add_SampleDate() %>%
       pr_add_Bioregions()
 
     Pol <- Polr %>%

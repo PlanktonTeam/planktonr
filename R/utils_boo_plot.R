@@ -542,10 +542,10 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
 #'          plot <- pr_plot_env_var(df)}
 #'
 pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identity") {
+
   n <- length(unique(df$StationName))
 
   plotCols <- pr_get_PlotCols(pal, n)
-
 
   titley <- pr_relabel(unique(df$parameters))
 
@@ -586,7 +586,8 @@ pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identit
     ggplot2::geom_point() +
     ggplot2::facet_grid(.data$SampleDepth_m ~., scales = "free") +
     ggplot2::geom_smooth(method = "loess", formula = y ~ x) +
-    ggplot2::scale_x_continuous(breaks= seq(1,12,length.out = 12), labels=c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
+    ggplot2::scale_x_continuous(breaks = seq(1,12,length.out = 12),
+                                labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
     ggplot2::scale_colour_manual(values = plotCols) +
     ggplot2::theme_bw() +
     ggplot2::theme(strip.background = ggplot2::element_blank(),
@@ -742,12 +743,15 @@ pr_plot_sti <-  function(df){
   xlabel <- pr_relabel("Temperature_degC", style = "ggplot")
   subtit <- rlang::expr(paste("STI = ",!!STI, "\U00B0","C"))
 
-  stiplot <- ggplot2::ggplot(z, aes(kernTemps, .data$y)) + ggplot2::geom_point() +
+  stiplot <- ggplot2::ggplot(z, aes(kernTemps, .data$y)) +
+    ggplot2::geom_point() +
     ggplot2::geom_vline(xintercept = STI, colour = "blue", lty = 4) +
     ggplot2::theme_bw() +
     ggplot2::labs(x=xlabel, y="Relative kernel density") +
     ggplot2::ggtitle(taxon, subtitle = subtit) +
     ggplot2::theme(plot.title = ggplot2::element_text(face = "italic"))
+
+  return(stiplot)
 
 }
 
