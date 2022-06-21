@@ -162,6 +162,13 @@ pr_plot_timeseries <- function(df, Survey = "NRS", pal = "matter", Scale = "iden
 #' plot <- pr_plot_trends(df, survey = "NRS")
 pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal = "matter", y_trans = "identity"){
 
+  if (trend == "Month"){
+    trend = "Month_Local"
+  }
+  if (trend == "Year"){
+    trend = "Year_Local"
+  }
+
   if (survey == "CPR"){
     site = rlang::sym("BioRegion")
   } else if (survey == "NRS"){
@@ -172,11 +179,11 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
 
   # Averaging based on `trend` ----------------------------------------------
 
-  if (trend %in% c("Year", "Month")){
+  if (trend %in% c("Year_Local", "Month_Local")){
     df <- df %>%
       dplyr::filter(!is.na(!!time))  %>% # need to drop NA from month, added to dataset by complete(Year, Code)
-      dplyr::mutate(Year = lubridate::year(!!time), # I don't need both each time but probably quicker to just do it
-                    Month = lubridate::month(!!time)) %>%
+      dplyr::mutate(Year_Local = lubridate::year(!!time), # I don't need both each time but probably quicker to just do it
+                    Month_Local = lubridate::month(!!time)) %>%
       dplyr::group_by(!!rlang::sym(trend), !!site) %>%
       dplyr::summarise(value = mean(.data$Values, na.rm = TRUE),
                        N = dplyr::n(),
@@ -195,7 +202,7 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
 
   # Do the plotting ---------------------------------------------------------
 
-  p1 <- ggplot2::ggplot(df, ggplot2::aes(x = lubridate::as_date(!!rlang::sym(trend)), y = .data$value)) + # do this logging as in pr_plot_tsclimate
+  p1 <- ggplot2::ggplot(df, ggplot2::aes(x = !!rlang::sym(trend), y = .data$value)) + # do this logging as in pr_plot_tsclimate
     ggplot2::geom_smooth(method = method, formula = y ~ x) +
     ggplot2::geom_point() +
     ggplot2::facet_wrap(rlang::enexpr(site), scales = "free_y", ncol = 1) +
@@ -206,17 +213,17 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
                    strip.background = ggplot2::element_blank(),
                    strip.text = ggplot2::element_text(hjust = 0))
 
-  if (rlang::as_string(trend) %in% c("Month")){
+  if (rlang::as_string(trend) %in% c("Month_Local")){
     p1 <- p1 +
       ggplot2::scale_x_continuous(breaks = seq(1, 12, length.out = 12), labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
       ggplot2::xlab("Month")
-  } else if (rlang::as_string(trend) %in% c("Year")){
+  } else if (rlang::as_string(trend) %in% "Year_Local"){
     p1 <- p1 +
       ggplot2::scale_x_continuous(breaks = 2) +
       ggplot2::xlab("Year")
-  } else if (!rlang::as_string(trend) %in% c("Month", "Year")){
+  } else if (!rlang::as_string(trend) %in% c("Month_Local", "Year_Local")){
     p1 <- p1 +
-      ggplot2::scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
+      ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
       ggplot2::xlab("Year")
   }
 
@@ -298,7 +305,8 @@ pr_plot_climate <- function(df, Survey = "NRS", x, pal = "matter", Scale = "iden
 #'
 #' @examples
 #' df <- data.frame(SampleTime_Local = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
-#'                  Month_Local = sample(1:12, 4), Year = c(2012, 2013, 2014, 2015),
+#'                  Month_Local = sample(1:12, 4),
+#'                  Year_Local = c(2012, 2013, 2014, 2015),
 #'                  StationCode = c('NSI', 'NSI', 'PHB', 'PHB'),
 #'                  parameters = 'Biomass_mgm3',
 #'                  Values = runif(4, min=0, max=10))
@@ -442,9 +450,10 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
 #' @export
 #'
 #' @examples
-#' df <- data.frame(SampleTime_Local = c("2010-01-01","2010-02-25","2010-06-21","2010-04-11","2010-08-05"),
+#' df <- data.frame(SampleTime_Local = c("2010-01-01","2010-02-25",
+#'                                       "2010-06-21","2010-04-11","2010-08-05"),
 #'              StationName = "Port Hacking", parameters = "Biomass_mgm3", Values = runif(5, 1, 50),
-#'              fv = runif(5, 1, 50), anomaly = runif(5, 1, 3), Month = runif(5, 1, 6)) # %>% dplyr::mutate(SampleTimeLocal = lubridate::as_date(SampleDate))
+#'              fv = runif(5, 1, 50), anomaly = runif(5, 1, 3), Month_Local = runif(5, 1, 6))
 #' plot <-  pr_plot_EOV(df, "Biomass_mgm3", "NRS", "identity", "matter", "yes")
 pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "identity", pal = "matter", labels = "yes") {
 
