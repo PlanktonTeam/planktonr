@@ -325,7 +325,8 @@ pr_apply_time <- function(df){
   df <- df %>%
     dplyr::mutate(Year_Local = lubridate::year(.data$SampleTime_Local),
                   Month_Local = lubridate::month(.data$SampleTime_Local),
-                  Day_Local = lubridate::day(.data$SampleTime_Local))
+                  Day_Local = lubridate::day(.data$SampleTime_Local)) %>%
+    dplyr::relocate(tidyselect::all_of(c("Year_Local", "Month_Local", "Day_Local")), .after = .data$SampleTime_Local)
   # Removed 21st June 2022
   # Time_24hr = stringr::str_sub(.data$SampleTime_Local, -8, -1), # hms doesn"t seem to work on 00:00:00 times
   # tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE),
@@ -407,10 +408,10 @@ pr_add_Carbon <- function(df, meth){
 #'
 #' @examples
 #' df <- data.frame(tz = c("Australia/Perth", "Australia/Brisbane"),
-#'                SampleDate_UTC = c(lubridate::now(), lubridate::now()))
+#'                SampleTime_UTC = c(lubridate::now(), lubridate::now()))
 #' df <- pr_add_LocalTime(df)
 pr_add_LocalTime <- function(df){
-  df <- purrr::map2(df$SampleDate_UTC, df$tz, function(x,y) lubridate::with_tz(x, tzone = y))
+  df <- purrr::map2(df$SampleTime_UTC, df$tz, function(x,y) lubridate::with_tz(x, tzone = y))
 }
 
 #' For use in models to create a circular predictor
@@ -447,8 +448,8 @@ pr_harmonic <- function (theta, k = 4) {
 #' @export
 #'
 #' @examples
-#' df <- data.frame(Year = runif(10, 2000, 2003),
-#'                  Month = runif(10, 1, 6),
+#' df <- data.frame(Year_Local = runif(10, 2000, 2003),
+#'                  Month_Local = runif(10, 1, 6),
 #'                  parameters = c('Biomasss_mgm3', 'Diversity'),
 #' Values = runif(10, 1, 5))
 #' pr <- pr_get_coeffs(df)
@@ -460,17 +461,22 @@ pr_get_coeffs <-  function(df){
   params <- params$parameters
 
   coeffs <- function(params){
-    lmdat <-  df %>%
+    lmdat <- df %>%
       dplyr::filter(.data$parameters == params) %>%
       tidyr::drop_na()
 
-    m <- stats::lm(Values ~ Year + pr_harmonic(Month, k = 1), data = lmdat)
-    lmdat <- data.frame(lmdat %>% dplyr::bind_cols(fv = m$fitted.values))
+    m <- stats::lm(Values ~ Year_Local + pr_harmonic(Month_Local, k = 1), data = lmdat)
+
+    lmdat <- tibble::tibble(lmdat %>%
+                          dplyr::bind_cols(fv = m$fitted.values))
     ms <- summary(m)
     slope <- ifelse(ms$coefficients[2,1] < 0, 'decreasing', 'increasing')
     p <- ifelse(ms$coefficients[2,4] < 0.005, 'significantly', 'but not significantly')
-    df <- data.frame(slope = slope, p = p, parameters = params)
-    df <- lmdat %>% dplyr::inner_join(df, by = 'parameters')
+
+    df <- dplyr::tibble(slope = slope, p = p, parameters = params)
+
+    df <- lmdat %>%
+      dplyr::inner_join(df, by = 'parameters')
   }
 
   outputs <- purrr::map_dfr(params, coeffs)

@@ -19,7 +19,7 @@ pr_get_PlotCols <- function(pal = "matter", n){
 #'
 #' @param df dataframe containing station codes to plot
 #'
-#' @return is a plotly map of the selected stations
+#' @return a map of the selected stations
 #' @export
 #'
 #' @examples
@@ -32,7 +32,7 @@ pr_plot_NRSmap <- function(df){
     sf::st_as_sf() %>% # This seems to strip away some of the tibble stuff that makes the filter not work...
     dplyr::filter(.data$Code %in% df$StationCode)
 
-  pmap <- ggplot2::ggplot() +
+  p1 <- ggplot2::ggplot() +
     ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
     ggplot2::geom_sf(data = meta_sf, colour = "blue", size = 1.5) +
     ggplot2::geom_sf(data = meta2_sf, colour = "red", size = 1.5) +
@@ -44,16 +44,14 @@ pr_plot_NRSmap <- function(df){
                    plot.background = ggplot2::element_rect(fill = NA),
                    axis.line = ggplot2::element_blank())
 
-  pmap <- plotly::ggplotly(pmap)
-
-  return(pmap)
+  return(p1)
 }
 
 #' Title Sidebar panel plot of selected CPR bioregions
 #'
 #' @param df dataframe containing CPR bioregions to plot
 #'
-#' @return is a plotly map of the selected bioregions
+#' @return a map of the selected bioregions
 #' @export
 #'
 #'
@@ -68,7 +66,7 @@ pr_plot_CPRmap <-  function(df){
 
   n <- length(unique(bioregionSelection$REGION))
 
-  gg <- ggplot2::ggplot() +
+  p1 <- ggplot2::ggplot() +
     ggplot2::geom_sf(data = mbr, colour = "black", fill = "white") +
     ggplot2::geom_sf(data = bioregionSelection, colour = "black", ggplot2::aes(fill = .data$REGION)) +
     ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
@@ -80,7 +78,8 @@ pr_plot_CPRmap <-  function(df){
                    plot.background = ggplot2::element_rect(fill = NA),
                    panel.background = ggplot2::element_rect(fill = NA),
                    axis.line = ggplot2::element_blank())
-  return(gg)
+
+  return(p1)
 }
 
 #' Plot basic timeseries
@@ -90,22 +89,20 @@ pr_plot_CPRmap <-  function(df){
 #' @param Survey CPR or NRS data
 #' @param Scale scale of y axis on plot, whatever scale_y_continuous trans accepts
 #'
-#' @return a plotly timeseries plot
+#' @return a timeseries plot
 #' @export
 #'
 #' @importFrom ggplot2 aes
 #'
 #' @examples
-#' df <- data.frame(SampleDate_Local = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
+#' df <- data.frame(SampleTime_Local = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
 #' StationCode = 'NSI', parameters = 'Biomass_mgm3', Values = runif(4, min=0, max=10),
 #' Survey = 'NRS')
 #' df <- df %>%
-#'       dplyr::mutate(SampleDate_Local = as.POSIXct(paste(SampleDate_Local, "00:00:00"),
+#'       dplyr::mutate(SampleTime_Local = as.POSIXct(paste(SampleTime_Local, "00:00:00"),
 #'       format = "%Y-%m-%d %H:%M:%S"))
 #' timeseries <- pr_plot_timeseries(df, 'NRS', 'matter')
 pr_plot_timeseries <- function(df, Survey = "NRS", pal = "matter", Scale = "identity"){
-
-
 
   if(Survey == "CPR"){
     df <- df %>%
@@ -153,7 +150,6 @@ pr_plot_timeseries <- function(df, Survey = "NRS", pal = "matter", Scale = "iden
 #' @param method Any method accepted by `geom_smooth()`
 #' @param pal is the palette name from `cmocean()`
 #' @param y_trans transformation of y axis on plot, whatever `scale_y_continuous()` trans accepts
-#' @param output is the plot style - "ggplot" or "plotly"
 #' #'
 #' @return a timeseries plot
 #'
@@ -164,7 +160,7 @@ pr_plot_timeseries <- function(df, Survey = "NRS", pal = "matter", Scale = "iden
 #' @examples
 #' df <- pr_get_indices("NRS", "Z") %>% dplyr::filter(parameters == 'Biomass_mgm3')
 #' plot <- pr_plot_trends(df, survey = "NRS")
-pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal = "matter", y_trans = "identity", output = "ggplot"){
+pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal = "matter", y_trans = "identity"){
 
   if (survey == "CPR"){
     site = rlang::sym("BioRegion")
@@ -172,7 +168,7 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
     site = rlang::sym("StationName")
   }
   time = rlang::sym("SampleTime_Local")
-  titley <- pr_relabel(unique(df$parameters), style = output)
+  titley <- pr_relabel(unique(df$parameters))
 
   # Averaging based on `trend` ----------------------------------------------
 
@@ -224,10 +220,6 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
       ggplot2::xlab("Year")
   }
 
-  if (output %in% "plotly"){
-    p1 <- plotly::ggplotly(p1)
-  }
-
   return(p1)
 }
 
@@ -271,7 +263,7 @@ pr_plot_climate <- function(df, Survey = "NRS", x, pal = "matter", Scale = "iden
                      se = sd / sqrt(.data$N),
                      .groups = "drop")
 
-  p2 <- ggplot2::ggplot(df_climate, ggplot2::aes(x = !!x, y = .data$mean, fill = .data$StationCode)) +
+  p1 <- ggplot2::ggplot(df_climate, ggplot2::aes(x = !!x, y = .data$mean, fill = .data$StationCode)) +
     ggplot2::geom_col(position = ggplot2::position_dodge()) +
     ggplot2::geom_errorbar(ggplot2::aes(ymin = .data$mean-.data$se, ymax = .data$mean+.data$se),
                            width = .2,                    # Width of the error bars
@@ -283,15 +275,15 @@ pr_plot_climate <- function(df, Survey = "NRS", x, pal = "matter", Scale = "iden
     ggplot2::theme(legend.position = "bottom")
 
   if("Month" %in% colnames(df_climate)){
-    p2 <- p2 +
+    p1 <- p1 +
       ggplot2::scale_x_continuous(breaks = seq(1,12,length.out = 12), labels=c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"))
   }
   if("Year" %in% colnames(df_climate)){
-    p2 <- p2 +
+    p1 <- p1 +
       ggplot2::scale_x_continuous(breaks = scales::breaks_width(1))
   }
 
-  return(p2)
+  return(p1)
 }
 
 #' Combined timeseries and climatology plots
@@ -301,17 +293,17 @@ pr_plot_climate <- function(df, Survey = "NRS", x, pal = "matter", Scale = "iden
 #' @param Survey CPR or NRS data
 #' @param Scale scale of y axis on plot, whatever scale_y_continuous trans accepts
 #'
-#' @return plotly combined plot
+#' @return a combined plot
 #' @export
 #'
 #' @examples
-#' df <- data.frame(SampleDate_Local = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
-#'                  Month = sample(1:12, 4), Year = c(2012, 2013, 2014, 2015),
+#' df <- data.frame(SampleTime_Local = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
+#'                  Month_Local = sample(1:12, 4), Year = c(2012, 2013, 2014, 2015),
 #'                  StationCode = c('NSI', 'NSI', 'PHB', 'PHB'),
 #'                  parameters = 'Biomass_mgm3',
 #'                  Values = runif(4, min=0, max=10))
 #' df <- df %>%
-#'       dplyr::mutate(SampleDate_Local = as.POSIXct(paste(SampleDate_Local, "00:00:00"),
+#'       dplyr::mutate(SampleTime_Local = as.POSIXct(paste(SampleTime_Local, "00:00:00"),
 #'                     format = "%Y-%m-%d %H:%M:%S"))
 #' monthly <- pr_plot_tsclimate(df, "NRS")
 
@@ -348,34 +340,42 @@ pr_plot_tsclimate <- function(df, Survey = "NRS", pal = "matter", Scale = "ident
 #' df <- pr_get_fg('NRS', 'P')
 #' plot <- pr_plot_tsfg(df, 'Actual')
 pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
+
+  if (trend == "Month"){
+    trend = "Month_Local"
+  }
+  if (trend == "Year"){
+    trend = "Year_Local"
+  }
+
   titley <- pr_relabel("FunctionalGroup", style = "ggplot")
 
   n <- length(unique(df$parameters))
 
   plotCols <- pr_get_PlotCols(pal, n)
 
-  if("SampleDate_UTC" %in% colnames(df)){ # If CPR data
-    SampleDate = rlang::sym("SampleDate_UTC")
+  if("Bioregion" %in% colnames(df)){ # If CPR data
+    SampleDate = rlang::sym("SampleTime_Local")
     station = rlang::sym("BioRegion")
-    titlex <- "Sample Date (UTC)"
+
   } else { # If NRS data
     SampleDate = rlang::sym("SampleTime_Local")
     station = rlang::sym("StationName")
-    titlex <- "Sample Date (Local)" #TODO
   }
 
-  if (trend %in% c("Year", "Month")){
+  titlex <- "Sample Time (Local)"
+  if (trend %in% c("Year_Local", "Month_Local")){
 
-    if ("Year_Local" %in% colnames(df)){ #NRS
-      df <- df %>%
-        dplyr::rename(Month = .data$Month_Local,
-                      Year = .data$Year_Local)
-
-    } else if ("Year_UTC" %in% colnames(df)){ #CPR
-      df <- df %>%
-        dplyr::rename(Month = .data$Month_UTC,
-                      Year = .data$Year_UTC)
-    }
+    # if ("Year_Local" %in% colnames(df)){ #NRS
+    #   df <- df %>%
+    #     dplyr::rename(Month = .data$Month_Local,
+    #                   Year = .data$Year_Local)
+    #
+    # } else if ("Year_UTC" %in% colnames(df)){ #CPR
+    #   df <- df %>%
+    #     dplyr::rename(Month = .data$Month_UTC,
+    #                   Year = .data$Year_UTC)
+    # }
 
     df <- df %>%
       dplyr::filter(!is.na(!!SampleDate))  %>%
@@ -412,19 +412,20 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
                    strip.background = ggplot2::element_blank(),
                    strip.text = ggplot2::element_text(hjust = 0))
 
-  if (rlang::as_string(trend) %in% c("Month")){
+  if (rlang::as_string(trend) %in% c("Month_Local")){
     p1 <- p1 +
       ggplot2::scale_x_continuous(breaks = seq(1, 12, length.out = 12), labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
       ggplot2::xlab("Month")
-  } else if (rlang::as_string(trend) %in% c("Year")){
+  } else if (rlang::as_string(trend) %in% c("Year_Local")){
     p1 <- p1 +
       ggplot2::scale_x_continuous(breaks = 2) +
       ggplot2::xlab("Year")
-  } else if (rlang::as_string(trend) %in% c("SampleDate")){
+  } else if (rlang::as_string(trend) %in% c("SampleTime_Local")){
     p1 <- p1 +
-      ggplot2::scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
+      ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
       ggplot2::xlab("Sample Date")
   }
+
   return(p1)
 }
 
@@ -441,11 +442,10 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
 #' @export
 #'
 #' @examples
-#' df <- data.frame(SampleDate = c("2010-01-01","2010-02-25","2010-06-21","2010-04-11","2010-08-05"),
-#'              StationName = 'Port Hacking', parameters = 'Biomass_mgm3', Values = runif(5, 1, 50),
-#'              fv = runif(5, 1, 50), anomaly = runif(5, 1, 3), Month = runif(5, 1, 6)) %>%
-#'              dplyr::mutate(SampleDate = lubridate::as_date(SampleDate))
-#' plot <-  pr_plot_EOV(df, 'Biomass_mgm3', 'NRS', 'identity', 'matter', 'yes')
+#' df <- data.frame(SampleTime_Local = c("2010-01-01","2010-02-25","2010-06-21","2010-04-11","2010-08-05"),
+#'              StationName = "Port Hacking", parameters = "Biomass_mgm3", Values = runif(5, 1, 50),
+#'              fv = runif(5, 1, 50), anomaly = runif(5, 1, 3), Month = runif(5, 1, 6)) # %>% dplyr::mutate(SampleTimeLocal = lubridate::as_date(SampleDate))
+#' plot <-  pr_plot_EOV(df, "Biomass_mgm3", "NRS", "identity", "matter", "yes")
 pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "identity", pal = "matter", labels = "yes") {
 
   titley <- pr_relabel(EOV, style = "ggplot")
@@ -455,11 +455,11 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
   colin <- pals[5]
 
   if(Survey == "LTM"){
-    lims <- lubridate::as_date(c("1944-01-01","2021-12-31")) #TODO I don't think this should be hardwired
+    lims <- lubridate::as_datetime(c("1944-01-01","2021-12-31")) #TODO I don't think this should be hardwired
     df <- df %>%
       dplyr::filter(.data$parameters == EOV)
   } else {
-    lims <- lubridate::as_date(c("2010-01-01","2021-12-31")) #TODO I don't think this should be hardwired
+    lims <- lubridate::as_datetime(c("2010-01-01","2021-12-31")) #TODO I don't think this should be hardwired
     df <- df %>%
       dplyr::filter(.data$parameters == EOV) %>%
       dplyr::rename(SampleDate = 1)
@@ -475,10 +475,11 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
   if(labels == "no"){
     p1 <- p1 + ggplot2::theme(axis.title.x = ggplot2::element_blank())
   }
+
   if(Survey == "LTM"){
-    p1 <-  p1 + ggplot2::scale_x_date(date_breaks = "10 years", date_labels = "%Y", limits = lims)
+    p1 <-  p1 + ggplot2::scale_x_datetime(date_breaks = "10 years", date_labels = "%Y", limits = lims)
   } else {
-    p1 <-  p1 + ggplot2::scale_x_date(date_breaks = "2 years", date_labels = "%Y", limits = lims)
+    p1 <-  p1 + ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", limits = lims)
   }
 
   p2 <- ggplot2::ggplot(df, ggplot2::aes(.data$SampleDate, .data$anomaly)) +
@@ -490,14 +491,14 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
     p2 <- p2 + ggplot2::theme(axis.title.x = ggplot2::element_blank())
   }
   if(Survey == "LTM"){
-    p2 <-  p2 + ggplot2::scale_x_date(date_breaks = "10 years", date_labels = "%Y", limits = lims)
+    p2 <-  p2 + ggplot2::scale_x_datetime(date_breaks = "10 years", date_labels = "%Y", limits = lims)
   } else {
-    p2 <-  p2 + ggplot2::scale_x_date(date_breaks = "2 years", date_labels = "%Y", limits = lims)
+    p2 <-  p2 + ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", limits = lims)
   }
 
   p3 <- ggplot2::ggplot(df) +
-    ggplot2::geom_point(ggplot2::aes(x = .data$Month, y = .data$Values), colour = col) +
-    ggplot2::geom_smooth(ggplot2::aes(x = .data$Month, y = .data$fv), method = "loess", formula = "y ~ x", colour = col, fill = colin) +
+    ggplot2::geom_point(ggplot2::aes(x = .data$Month_Local, y = .data$Values), colour = col) +
+    ggplot2::geom_smooth(ggplot2::aes(x = .data$Month_Local, y = .data$fv), method = "loess", formula = "y ~ x", colour = col, fill = colin) +
     ggplot2::scale_y_continuous(trans = trans) +
     ggplot2::scale_x_continuous(breaks = seq(0.5, 6.3, length.out = 12), labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
     ggplot2::xlab("Month") +
@@ -508,7 +509,10 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
     p3 <- p3 + ggplot2::theme(axis.title.x = ggplot2::element_blank())
   }
 
-  patchwork::wrap_plots(p1, p2, p3, widths = c(3,3,2))
+  plots <- patchwork::wrap_plots(p1, p2, p3, widths = c(3,3,2))
+
+  return(plots)
+
 
 }
 
@@ -521,7 +525,7 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
 #' @param trend Trend line to be used, options None, Smoother, Linear
 #' @param Scale scale on which to plot y axis
 #'
-#' @return A plotly plot with timeseries and climatology at depths
+#' @return A plot with timeseries and climatology at depths
 #' @export
 #'
 #' @examples
@@ -533,11 +537,11 @@ pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identit
 
   plotCols <- pr_get_PlotCols(pal, n)
 
-  titley <- pr_relabel(unique(df$parameters), style = "plotly")
+  titley <- pr_relabel(unique(df$parameters))
 
   np <- length(unique(df$SampleDepth_m))
 
-  p <- ggplot2::ggplot(df, ggplot2::aes(.data$SampleDate_Local, .data$Values, colour = .data$StationName)) +
+  p <- ggplot2::ggplot(df, ggplot2::aes(.data$SampleTime_Local, .data$Values, colour = .data$StationName)) +
     ggplot2::geom_line() +
     ggplot2::labs(x = "Time", y = titley) +
     ggplot2::facet_grid(SampleDepth_m ~., scales = "free") +
@@ -546,7 +550,7 @@ pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identit
                    strip.text = ggplot2::element_blank(),
                    legend.position = "bottom",
                    legend.title = ggplot2::element_blank()) +
-    ggplot2::scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
+    ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
     ggplot2::scale_y_continuous(trans = Scale) +
     ggplot2::scale_colour_manual(values = plotCols)
 
@@ -557,7 +561,7 @@ pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identit
     p <- p + ggplot2::geom_smooth(method = "lm", formula = y ~ x)
   }
 
-  p <- plotly::ggplotly(p, height = 150 * np)
+  # p <- plotly::ggplotly(p, height = 150 * np)
 
   mdat <- df %>%
     dplyr::group_by(.data$StationName, .data$Month, .data$SampleDepth_m, .data$parameters) %>%
@@ -578,15 +582,17 @@ pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identit
                    legend.title = ggplot2::element_blank(),
                    strip.text.y = ggplot2::element_text(face = "bold", size = 12, angle = 0))
 
-  m <- plotly::ggplotly(m) %>%
-    plotly::layout(legend = list(orientation = "h",
-                                 xanchor = "center",  # use center of legend as anchor
-                                 x = 0.5, y = -0.1))
+  # m <- plotly::ggplotly(m) %>%
+  #   plotly::layout(legend = list(orientation = "h",
+  #                                xanchor = "center",  # use center of legend as anchor
+  #                                x = 0.5, y = -0.1))
 
-  plot <- plotly::subplot(plotly::style(p, showlegend = FALSE), m, widths = c(0.75,0.25)) %>%
-    plotly::layout(title = list(text = titley),
-                   annotations = list( x = 0.97, y = 1.0, text = "Depth (m)", xref = "paper", yref = "paper",
-                                       xanchor = "center", yanchor = "bottom", showarrow = FALSE))
+  # plot <- plotly::subplot(plotly::style(p, showlegend = FALSE), m, widths = c(0.75,0.25)) %>%
+  #   plotly::layout(title = list(text = titley),
+  #                  annotations = list( x = 0.97, y = 1.0, text = "Depth (m)", xref = "paper", yref = "paper",
+  #                                      xanchor = "center", yanchor = "bottom", showarrow = FALSE))
+
+  plots <- patchwork::wrap_plots(p, m)
 }
 
 #' Frequency plot of the selected species

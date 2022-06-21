@@ -25,7 +25,7 @@ pr_get_indices <- function(Survey = "CPR", Type = "P"){
                     "NoDiatomSpecies_Sample", "ShannonDiatomDiversity", "DiatomEvenness", "NoDinoSpecies_Sample",
                     "ShannonDinoDiversity", "DinoflagellateEvenness")
   } else if(Type == "P" & Survey == "NRS"){
-    var_names <- c( "PhytoBiomassCarbon_pgL", "PhytoAbund_CellsL", "DiatomDinoflagellateRatio",
+    var_names <- c( "PhytoBiomassCarbon_pgL", "PhytoAbundance_CellsL", "DiatomDinoflagellateRatio",
                     "AvgCellVol_um3", "NoPhytoSpecies_Sample", "ShannonPhytoDiversity", "PhytoEvenness",
                     "NoDiatomSpecies_Sample", "ShannonDiatomDiversity", "DiatomEvenness", "NoDinoSpecies_Sample",
                     "ShannonDinoDiversity", "DinoflagellateEvenness")
@@ -73,6 +73,7 @@ pr_get_indices <- function(Survey = "CPR", Type = "P"){
 
     return(dat)
   }
+
 }
 
 #' To produce the climatology for plotting

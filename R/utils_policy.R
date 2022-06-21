@@ -15,13 +15,13 @@ pr_get_pol <- function(Survey = "NRS"){
     var_names <- c("BiomassIndex_mgm3", "PhytoBiomassCarbon_pgm3",
                     "ShannonCopepodDiversity", "ShannonPhytoDiversity")
 
-    Polr <- dat <- pr_get_raw("cpr_derived_indices_data") %>%
+    Polr <- pr_get_raw("cpr_derived_indices_data") %>%
       pr_rename() %>%
       # pr_add_SampleDate() %>%
       pr_add_Bioregions()
 
     Pol <- Polr %>%
-      dplyr::select(.data$SampleDate_UTC, .data$Year, .data$Month, .data$BioRegion,
+      dplyr::select(.data$SampleTime_Local, .data$Year_Local, .data$Month_Local, .data$BioRegion,
                     tidyselect::all_of(var_names)) %>%
       dplyr::filter(!.data$BioRegion %in% c("North", "North-west")) %>%
       tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "parameters")
@@ -47,11 +47,11 @@ pr_get_pol <- function(Survey = "NRS"){
     Polr <- pr_get_raw("nrs_derived_indices_data") %>%
       pr_rename() %>%
       pr_add_StationCode() %>%
-      dplyr::mutate(Month = lubridate::month(.data$SampleTime_Local),
-                    Year = lubridate::year(.data$SampleTime_Local))
+      dplyr::mutate(Month_Local = lubridate::month(.data$SampleTime_Local),
+                    Year_Local = lubridate::year(.data$SampleTime_Local))
 
     Pol <- Polr %>%
-      dplyr::select(.data$SampleTime_Local, .data$Year, .data$Month, .data$StationName,
+      dplyr::select(.data$SampleTime_Local, .data$Year_Local, .data$Month_Local, .data$StationName,
                     .data$StationCode, tidyselect::all_of(var_names)) %>%
       tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "parameters")
 

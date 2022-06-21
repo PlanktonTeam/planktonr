@@ -37,6 +37,7 @@ pr_get_CPRData <- function(Type = "phytoplankton", Variable = "abundance", Subse
 
     datc <- pr_get_raw("cpr_zooplankton_abundance_copepods_data") %>%
       pr_rename()
+
     datnc <-pr_get_raw("cpr_zooplankton_abundance_non_copepods_data") %>%
       pr_rename() %>%
       dplyr::select(-c(.data$Region:.data$SampleVolume_m3))

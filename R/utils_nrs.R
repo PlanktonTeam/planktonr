@@ -88,12 +88,12 @@ pr_get_NRSTrips <- function(Type = c("P", "Z", "F")){
     dplyr::rename(ZSampleDepth_m = .data$ZOOPSAMPLEDEPTH_M,
                   PSampleDepth_m = .data$PHYTOSAMPLEDEPTH_M,
                   SampleTime_Local = .data$SampleDate_Local,
-                  SampleTIme_UTC = .data$SampleDate_UTC) %>%
+                  SampleTime_UTC = .data$SampleDate_UTC) %>%
     dplyr::filter(.data$ProjectName == "NRS" &
                     (stringr::str_detect(.data$SampleType, paste("P", collapse = "|")) |
                        is.na(.data$SampleType))) %>%
     pr_apply_time() %>%
-    dplyr::select(-c(.data$tz, .data$ProjectName))
+    dplyr::select(-.data$ProjectName)
 
 
   if("P" %in% Type & !"Z" %in% Type){ # Only Phytoplankton
