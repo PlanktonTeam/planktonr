@@ -43,7 +43,7 @@ pr_plot_NRSmap <- function(df){
                    panel.background = ggplot2::element_rect(fill = NA, colour = NA),
                    plot.background = ggplot2::element_rect(fill = NA),
                    axis.line = ggplot2::element_blank())
-
+  
   return(p1)
 }
 
@@ -538,13 +538,14 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
 #' @export
 #'
 #' @examples
-#' \dontrun{df <- pr_get_NRSChemistry() %>%
-#'            pr_plot_env_var()}
+#' \dontrun{df <- pr_get_NRSChemistry() %>% dplyr::filter(parameters == "SecchiDepth_m")
+#'          plot <- pr_plot_env_var(df)}
 #'
-pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identity") {
+pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identity", output = 'ggplot') {
   n <- length(unique(df$StationName))
 
   plotCols <- pr_get_PlotCols(pal, n)
+
 
   titley <- pr_relabel(unique(df$parameters))
 
@@ -552,7 +553,7 @@ pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identit
 
   p <- ggplot2::ggplot(df, ggplot2::aes(.data$SampleTime_Local, .data$Values, colour = .data$StationName)) +
     ggplot2::geom_line() +
-    ggplot2::labs(x = "Time", y = titley) +
+    ggplot2::labs(x = "Year", y = titley) +
     ggplot2::facet_grid(SampleDepth_m ~., scales = "free") +
     ggplot2::theme_bw() +
     ggplot2::theme(strip.background = ggplot2::element_blank(),
@@ -572,6 +573,7 @@ pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identit
 
   # p <- plotly::ggplotly(p, height = 150 * np)
 
+
   mdat <- df %>%
     dplyr::group_by(.data$StationName, .data$Month, .data$SampleDepth_m, .data$parameters) %>%
     dplyr::summarise(MonValues = mean(.data$Values, na.rm = TRUE),
@@ -588,8 +590,9 @@ pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identit
     ggplot2::scale_colour_manual(values = plotCols) +
     ggplot2::theme_bw() +
     ggplot2::theme(strip.background = ggplot2::element_blank(),
-                   legend.title = ggplot2::element_blank(),
+                   legend.position = 'none',
                    strip.text.y = ggplot2::element_text(face = "bold", size = 12, angle = 0))
+
 
   # m <- plotly::ggplotly(m) %>%
   #   plotly::layout(legend = list(orientation = "h",
@@ -601,7 +604,10 @@ pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identit
   #                  annotations = list( x = 0.97, y = 1.0, text = "Depth (m)", xref = "paper", yref = "paper",
   #                                      xanchor = "center", yanchor = "bottom", showarrow = FALSE))
 
-  plots <- patchwork::wrap_plots(p, m)
+  plots <- p + m + patchwork::plot_layout(widths = c(3,1), guides = 'collect', heights = np * 200)
+ 
+  return(plots)
+  
 }
 
 #' Frequency plot of the selected species
