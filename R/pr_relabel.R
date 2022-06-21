@@ -4,7 +4,7 @@
 #' @param s A string for reformatting
 #' @param style The style of plotting the string will be used for
 #'
-#' @return A reformatted string (plotly) or a reformatted expression call (ggplot)
+#' @return A reformatted expression call (ggplot)
 #' @export
 #'
 #' @examples
@@ -15,6 +15,7 @@ pr_relabel <- function(s, style = "ggplot"){
   relabel_df <- tibble::as_tibble(matrix(c(
     "AbundancePhyto_CellsL", rlang::expr(paste("Phytoplankton Abundance (cells L"^-1,")")), "Phytoplankton Abundance (cells L<sup>-1</sup>)", "Phytoplankton Abundance",
     "Alkalinity_umolkg", rlang::expr(paste("TAlkalinity (","\U00B5","mol kg"^-1,")")), "Total Alkalinity (&#181; mol kg<sup>-1</sup>)", "Total Alkalinity",
+    "Ammonium_umolL", rlang::expr(paste("Ammonium (","\U00B5","mol L"^-1,")")), "Ammonium (&#181; mol L<sup>-1</sup>)", "Ammonium",
     "Archaea_Niche_Cluster", rlang::expr(paste("Archaea Niche Cluster")), "Archaea Niche Cluster", "Archaea Niche Cluster",
     "Archaeal_Chlorophyll_Index", rlang::expr(paste("Archaeal Chlorophyll Index")), "Archaeal Chlorophyll Index", "Archaeal Chlorophyll Index",
     "Archaeal_Nitrogen_Index", rlang::expr(paste("Archaeal Nitrogen Index")), "Archaeal Nitrogen Index", "Archaeal Nitrogen Index",
@@ -70,9 +71,8 @@ pr_relabel <- function(s, style = "ggplot"){
     "HerbivoreCarnivoreCopepodRatio", rlang::expr(paste("Copepod Herbivore:Carnivore Ratio")), "Copepod Herbivore:Carnivore Ratio", "Copepod Herbivore:Carnivore Ratio",
     "InorganicFraction_mgL", rlang::expr(paste("Inorganic Fraction (mg L"^-1,")")), "Inorganic Fraction (mg L<sup>-1</sup>)", "Inorganic Fraction",
     "Length_mm", rlang::expr(paste("Length (mm)")), "Length (mm)", "Length",
-    "NH4_umolL", rlang::expr(paste("Ammonium (","\U00B5","mol L"^-1,")")), "Ammonium (&#181; mol L<sup>-1</sup>)", "Ammonium",
-    "NO2_umolL", rlang::expr(paste("Nitrite (","\U00B5","mol L"^-1,")")), "Nitrite (&#181; mol L<sup>-1</sup>)", "Nitrite",
-    "NO3_umolL", rlang::expr(paste("Nitrate (","\U00B5","mol L"^-1,")")), "Nitrate (&#181; mol L<sup>-1</sup>)", "Nitrate",
+    "Nitrite_umolL", rlang::expr(paste("Nitrite (","\U00B5","mol L"^-1,")")), "Nitrite (&#181; mol L<sup>-1</sup>)", "Nitrite",
+    "Nitrate_umolL", rlang::expr(paste("Nitrate (","\U00B5","mol L"^-1,")")), "Nitrate (&#181; mol L<sup>-1</sup>)", "Nitrate",
     "NoCopepodSpecies_Sample", rlang::expr(paste("Copepod Species (Sample "^-1,")")), "Copepod Species (Sample <sup>-1</sup>)", "Copepod Species Count",
     "NoDiatomSpecies_Sample", rlang::expr(paste("Diatom Species (Sample "^-1,")")), "Diatom Species (Sample <sup>-1</sup>)", "Diatom Species Count",
     "NoDinoSpecies_Sample", rlang::expr(paste("Dinoflagellate Species (Sample "^-1,")")), "Dinoflagellate Species (Sample <sup>-1</sup>)", "Dinoflagellate Species Count",
@@ -88,22 +88,22 @@ pr_relabel <- function(s, style = "ggplot"){
     "PhytoBiomassCarbon_pgL", rlang::expr(paste("Phytoplankton Biomass (pg C L"^-1,")")), "Phytoplankton Biomass (pg C L<sup>-1</sup>)", "Phytoplankton Biomass",
     "PhytoBiomassCarbon_pgm3", rlang::expr(paste("Phytoplankton Biomass (pg C m"^-3,")")), "Phytoplankton Biomass (pg C m<sup>-3</sup>)", "Phytoplankton Biomass",
     "PhytoEvenness", rlang::expr(paste("Phytoplankton Evenness")), "Phytoplankton Evenness", "Phytoplankton Evenness",
-    "Picoeukaryotes_Cellsml", rlang::expr(paste("Picoeukaryotes (cells ml"^-1,")")), "Picoeukaryotes (cells ml<sup>-1</sup>)", "Picoeukaryote Abundance",
+    "Picoeukaryotes_CellsmL", rlang::expr(paste("Picoeukaryotes (cells ml"^-1,")")), "Picoeukaryotes (cells ml<sup>-1</sup>)", "Picoeukaryote Abundance",
     "Picoplankton_Cellsml", rlang::expr(paste("Picoplankton (cells ml"^-1,")")), "Picoplankton (cells ml<sup>-1</sup>)", "Picoplankton Abundance",
     "PigmentChla_mgm3", rlang::expr(paste("Chla (mg m"^-3,")")), "Chlorophyll <i>a</i> (mg m<sup>-3</sup>)", "Chlorophyll a",
     "PPC", rlang::expr(paste("Photoprotective Carotenoids (mg m"^-3,")")), "Photoprotective Carotenoids (mg m<sup>-3</sup>)", "Photoprotective Carotenoid Abundance",
     "Pressure_dbar", rlang::expr(paste("Pressure (dbar)")), "Pressure (dbar)", "Pressure",
-    "Prochlorococcus_Cellsml", rlang::expr(paste("Prochlorococcus (cells ml"^-1,")")), "Prochlorococcus (cells ml<sup>-1</sup>)", "Prochlorococcus Abundance",
+    "Prochlorococcus_CellsmL", rlang::expr(paste("Prochlorococcus (cells ml"^-1,")")), "Prochlorococcus (cells ml<sup>-1</sup>)", "Prochlorococcus Abundance",
     "PSC", rlang::expr(paste("Photosynthetic Carotenoids (mg m"^-3,")")), "Photosynthetic Carotenoids (mg m<sup>-3</sup>)", "Photosynthetic Carotenoid Abundance",
     "PSP", rlang::expr(paste("Photosynthetic Pigments (mg m"^-3,")")), "Photosynthetic Pigments (mg m<sup>-3</sup>)", "Photosynthetic Pigment Abundance",
-    "Salinity_psu", rlang::expr(paste("Salinity (psu)")), "Salinity (psu)", "Salinity",
+    "Salinity", rlang::expr(paste("Salinity (psu)")), "Salinity (psu)", "Salinity",
     "SampleDate_Local", rlang::expr(paste("Sample Date (Local)")), "Sample Date (Local)", "Sample Date",
     "SampleDate_UTC", rlang::expr(paste("Sample Date (UTC)")), "Sample Date (UTC)", "Sample Date",
     "SampleTime_Local", rlang::expr(paste("Sample Date (Local)")), "Sample Date (Local)", "Sample Date",
     "SampleTime_UTC", rlang::expr(paste("Sample Date (UTC)")), "Sample Date (UTC)", "Sample Date",
     "SampleDepth_m", rlang::expr(paste("Sample Depth (m)")), "Sample Depth (m)", "Sample Depth",
     "SampVol_L", rlang::expr(paste("Sample Volume (L)")), "Sample Volume (L)", "Sample Volume",
-    "SampVol_m3", rlang::expr(paste("Sample Volume (m"^-3,")")), "Sample Volume (m<sup>-3</sup>)", "Sample Volume",
+    "SampleVolume_m3", rlang::expr(paste("Sample Volume (m"^-3,")")), "Sample Volume (m<sup>-3</sup>)", "Sample Volume",
     "SecchiDepth_m", rlang::expr(paste("Secchi Depth (m)")), "Secchi Depth (m)", "Secchi Depth",
     "ShannonCopepodDiversity", rlang::expr(paste("Copepod Diversity")), "Copepod Diversity", "Copepod Diversity",
     "ShannonCopepodDiversityCPR", rlang::expr(paste("Copepod Diversity")), "Copepod Diversity", "Copepod Diversity",
@@ -113,10 +113,10 @@ pr_relabel <- function(s, style = "ggplot"){
     "ShannonDinoDiversitycpr", rlang::expr(paste("Dinoflagellate Diversity")), "Dinoflagellate Diversity", "Dinoflagellate Diversity",
     "ShannonPhytoDiversity", rlang::expr(paste("Phytoplankton Diversity")), "Phytoplankton Diversity", "Phytoplankton Diversity",
     "ShannonPhytoDiversitycpr", rlang::expr(paste("Phytoplankton Diversity")), "Phytoplankton Diversity", "Phytoplankton Diversity",
-    "SiO4_umolL", rlang::expr(paste("Silicate (","\U00B5","mol L"^-1,")")), "Silicate (&#181; mol L<sup>-1</sup>)", "Silicate",
+    "Silicate_umolL", rlang::expr(paste("Silicate (","\U00B5","mol L"^-1,")")), "Silicate (&#181; mol L<sup>-1</sup>)", "Silicate",
     "StationCode", rlang::expr(paste("Station Code")), "Station Code", "Station Code",
     "StationName", rlang::expr(paste("Station Name")), "Station Name", "Station Name",
-    "Synecochoccus_Cellsml", rlang::expr(paste("Synecochoccus (cells ml"^-1,")")), "Synecochoccus (cells ml<sup>-1</sup>)", "Synecochoccus Abundance",
+    "Synecochoccus_CellsmL", rlang::expr(paste("Synecochoccus (cells ml"^-1,")")), "Synecochoccus (cells ml<sup>-1</sup>)", "Synecochoccus Abundance",
     "TAcc", rlang::expr(paste("Total Accessory Pigments (mg m"^-3,")")), "Total Accessory Pigments (mg m<sup>-3</sup>)", "Total Accessory Pigments",
     "TaxonCount", rlang::expr(paste("Taxon Count")), "Taxon Count", "Taxon Count",
     "TaxonGroup", rlang::expr(paste("Taxon Group")), "Taxon Group", "Taxon Group",

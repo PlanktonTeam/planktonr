@@ -9,20 +9,21 @@
 pr_get_NRSChemistry <- function(){
 
   var_names <- c("SecchiDepth_m", "Silicate_umolL", "Phosphate_umolL", "Ammonium_umolL", "Nitrate_umolL", "Nitrite_umolL",
-                 "Oxygen_umolL", "DIC_umolkg", "Alkalinity_umolkg", "Salinity_psu") #TODO Check if it is Alk or Total Alk. Our code used to say Total Alk.
+                 "Oxygen_umolL", "DIC_umolkg", "Alkalinity_umolkg", "Salinity") #TODO Check if it is Alk or Total Alk. Our code used to say Total Alk.
 
   file <- "bgc_chemistry_data"
 
   dat <- pr_get_raw(file) %>%
+    dplyr::rename(Phosphate_umolL = .data$Phosphate_umoL) %>%
     pr_rename() %>%
     pr_apply_flags() %>%
     pr_add_StationCode() %>%
     pr_filter_NRSStations() %>%
     dplyr::mutate_all(~ replace(., is.na(.), NA)) %>%
     dplyr::mutate(Month_Local = lubridate::month(.data$SampleDate_Local)) %>%
-    dplyr::select(.data$Project, .data$SampleDate_Local, .data$Month_Local, .data$SampleDepth_m, .data$StationName, .data$StationCode,
-                  tidyselect::any_of(var_names)) %>%
-    tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = 'parameters') %>%
+    dplyr::select(.data$Project, .data$SampleDate_Local, .data$Month_Local, .data$SampleDepth_m,
+                  .data$StationName, .data$StationCode, tidyselect::all_of(var_names)) %>%
+    tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = 'parameters') %>%
     pr_reorder()
 
 }
@@ -43,7 +44,6 @@ pr_get_NRSPigments <- function(){
 
   dat <- pr_get_raw(file) %>%
     pr_rename() %>%
-    dplyr::mutate(CphlC3_mgm3 = 0) %>% #TODO Need to remove this when AODN fixes up.
     pr_apply_flags("Pigments_flag") %>%
     dplyr::select(-.data$Pigments_flag) %>%
     dplyr::filter(.data$Project == "NRS", .data$SampleDepth_m != "WC") %>%

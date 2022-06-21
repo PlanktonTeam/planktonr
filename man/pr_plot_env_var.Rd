@@ -4,7 +4,13 @@
 \alias{pr_plot_env_var}
 \title{Combined timeseries and climatology plots for environmental variables}
 \usage{
-pr_plot_env_var(df, pal = "matter", trend = "None", Scale = "identity")
+pr_plot_env_var(
+  df,
+  pal = "matter",
+  trend = "None",
+  Scale = "identity",
+  output = "ggplot"
+)
 }
 \arguments{
 \item{df}{A dataframe from pr_get_nuts or pr_get_pigments}
@@ -22,7 +28,7 @@ A plot with timeseries and climatology at depths
 Combined timeseries and climatology plots for environmental variables
 }
 \examples{
-\dontrun{df <- pr_get_NRSChemistry() \%>\%
-           pr_plot_env_var()}
+\dontrun{df <- pr_get_NRSChemistry() \%>\% dplyr::filter(parameters == "SecchiDepth_m")
+         plot <- pr_plot_env_var(df)}
 
 }
