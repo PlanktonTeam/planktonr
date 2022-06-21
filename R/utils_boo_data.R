@@ -122,13 +122,12 @@ pr_get_fMap_data <- function(Type = "Z"){
       dplyr::rename(Sample = .data$TripCode) %>%
       dplyr::mutate(Survey = "NRS",
                     SampVol_m3 = 1) %>%
-      dplyr::select(.data$Sample, .data$Survey, .data$Taxon, .data$Counts, .data$SampVol_m3)
+      dplyr::select(.data$Sample, .data$Survey, .data$Taxon, .data$Counts)
 
     ZooCountCPR <- pr_get_CPRData(Type = "zooplankton", Variable = "abundance", Subset = "species") %>%
       tidyr::pivot_longer(cols = !dplyr::all_of(
-        c("TripCode", "Region", "Latitude", "Longitude",
-          "SampleTime_Local", "SampleTime_UTC", "Year_Local", "Month_Local",
-          "Day_Local", "Time_Local24hr", "SampleVolume_m3", "SatSST_degC",
+        c("TripCode", "Region", "Latitude", "Longitude", "SampleTime_Local", "SampleTime_UTC",
+          "Year_Local", "Month_Local", "Day_Local", "Time_Local24hr", "SampleVolume_m3", "SatSST_degC",
           "SatChlaSurf_mgm3", "PCI", "BiomassIndex_mgm3")),
         names_to = "Taxon", values_to = "Counts") %>%
       dplyr::mutate(Counts = as.integer(as.logical(.data$Counts)),
@@ -142,7 +141,7 @@ pr_get_fMap_data <- function(Type = "Z"){
 
   NRSSamp <- pr_get_NRSTrips(Type) %>%
     dplyr::rename(Sample = .data$TripCode) %>% #TODO Why do we rename TripCode to Sample
-                  # Date = .data$SampleDate_Local #TODO Why do we rename Time to Date
+    # Date = .data$SampleDate_Local #TODO Why do we rename Time to Date
     dplyr::mutate(DOY = lubridate::yday(.data$SampleTime_Local),
                   Start = as.Date(paste0(min(lubridate::year(.data$SampleTime_Local))-1, "-12-31")),
                   days = difftime(as.Date(.data$SampleTime_Local), .data$Start, units = "days") %>% as.numeric(),
@@ -210,10 +209,17 @@ pr_get_fMap_data <- function(Type = "Z"){
 #' df <- pr_get_daynight("Z")
 pr_get_daynight <- function(Type = "Z"){
 
+  cpr_vars <- c("TripCode", "Region", "Latitude", "Longitude", "SampleTime_UTC", "SampleTime_Local",
+                "Year_Local", "Month_Local", "Day_Local", "Time_Local24hr", "SatSST_degC", "SatChlaSurf_mgm3",
+                "PCI", "SampleVolume_m3")
+
   if(Type == "Z"){
     dat <- pr_get_CPRData(Type = "zooplankton", Variable = "abundance", Subset = "copepods")
+    cpr_vars <- c(cpr_vars, "BiomassIndex_mgm3")
+
   } else if (Type == "P"){
     dat <- pr_get_CPRData(Type = "phytoplankton", Variable = "abundance", Subset = "species")
+
   }
 
   dates <- dat %>%
@@ -223,22 +229,21 @@ pr_get_daynight <- function(Type = "Z"){
                   lon = .data$Longitude) %>%
     dplyr::mutate(date = lubridate::as_date(.data$date))
 
-  daynight <- suncalc::getSunlightTimes(data = dates, #TODO quicker to change to Local now that it exists.
+  daynight_df <- suncalc::getSunlightTimes(data = dates, #TODO quicker to change to Local now that it exists.
                                         keep = c("sunrise", "sunset"),
                                         tz = "UTC") %>%
     dplyr::bind_cols(dat["SampleTime_UTC"]) %>%
     dplyr::mutate(daynight = ifelse(.data$SampleTime_UTC > .data$sunrise & .data$SampleTime_UTC < .data$sunset, "Day", "Night"))
 
-  dat2 <- dat %>%
-    dplyr::bind_cols(daynight["daynight"]) %>%
-    dplyr::select(tidyselect::all_of(c("TripCode", "Region", "Latitude", "Longitude", "SampleTime_UTC", "SampleTime_Local",
-                                      "Year_Local", "Month_Local", "Day_Local",
-                                       "Time_Local24hr", "PCI", "BiomassIndex_mgm3", "daynight")), tidyselect::everything()) %>%
-    tidyr::pivot_longer(-c(.data[["TripCode"]]:.data[["daynight"]]), values_to = "Species_m3", names_to = "Species") %>%
+  dat <- dat %>%
+    dplyr::bind_cols(daynight_df["daynight"]) %>%
+    dplyr::select(tidyselect::any_of(cpr_vars), tidyselect::everything()) %>%
+    tidyr::pivot_longer(-tidyselect::any_of(c(cpr_vars, "daynight")), values_to = "Species_m3", names_to = "Species") %>%
     dplyr::group_by(.data$Month_Local, .data$daynight, .data$Species) %>%
     dplyr::summarise(Species_m3 = mean(.data$Species_m3, na.rm = TRUE),
                      .groups = "drop")
-}
+
+  }
 
 #' Get data for STI plots of species abundance
 #' @param Type Phyto or zoo, defaults to phyto
@@ -255,8 +260,8 @@ pr_get_sti <-  function(Type = "P"){
     cprdat <- pr_get_CPRData(Type, Variable = "abundance", Subset = "copepods")
 
     nrsdat <- pr_get_NRSData(Type, Variable = "abundance", Subset = "copepods") #%>%
-      # dplyr::mutate(Method = NA) %>%
-      # dplyr::relocate(.data$Method, .after = .data$AshFreeBiomass_mgm3) # Method is missing in Z so we add a dummy variable to allow the code below to run.
+    # dplyr::mutate(Method = NA) %>%
+    # dplyr::relocate(.data$Method, .after = .data$AshFreeBiomass_mgm3) # Method is missing in Z so we add a dummy variable to allow the code below to run.
     parameter <- "CopeAbundance_m3"
 
   } else if(Type == "P"){

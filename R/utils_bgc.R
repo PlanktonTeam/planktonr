@@ -14,7 +14,7 @@ pr_get_NRSChemistry <- function(){
   file <- "bgc_chemistry_data"
 
   dat <- pr_get_raw(file) %>%
-    dplyr::rename(Phosphate_umolL = Phosphate_umoL) %>%
+    dplyr::rename(Phosphate_umolL = .data$Phosphate_umoL) %>%
     pr_rename() %>%
     pr_apply_flags() %>%
     pr_add_StationCode() %>%

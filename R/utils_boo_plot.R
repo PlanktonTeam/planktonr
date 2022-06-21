@@ -43,7 +43,7 @@ pr_plot_NRSmap <- function(df){
                    panel.background = ggplot2::element_rect(fill = NA, colour = NA),
                    plot.background = ggplot2::element_rect(fill = NA),
                    axis.line = ggplot2::element_blank())
-  
+
   return(p1)
 }
 
@@ -239,7 +239,7 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
 #' @param Survey CPR or NRS data
 #' @param Scale scale of y axis on plot, whatever scale_y_continuous trans accepts
 #'
-#' @return a plotly climatology plot
+#' @return a climatology plot
 #' @export
 #' @importFrom stats sd
 #' @importFrom ggplot2 aes
@@ -541,7 +541,7 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
 #' \dontrun{df <- pr_get_NRSChemistry() %>% dplyr::filter(parameters == "SecchiDepth_m")
 #'          plot <- pr_plot_env_var(df)}
 #'
-pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identity", output = 'ggplot') {
+pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identity") {
   n <- length(unique(df$StationName))
 
   plotCols <- pr_get_PlotCols(pal, n)
@@ -605,9 +605,9 @@ pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identit
   #                                      xanchor = "center", yanchor = "bottom", showarrow = FALSE))
 
   plots <- p + m + patchwork::plot_layout(widths = c(3,1), guides = 'collect', heights = np * 200)
- 
+
   return(plots)
-  
+
 }
 
 #' Frequency plot of the selected species

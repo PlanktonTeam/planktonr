@@ -2,22 +2,6 @@
 #'
 #' Load CPR Data
 #'
-#' cpr_phytoplankton_abundance_raw_data
-#' cpr_phytoplankton_abundance_htg_data
-#' cpr_phytoplankton_abundance_genus_data
-#' cpr_phytoplankton_abundance_species_data
-#'
-#' cpr_phytoplankton_biovolume_raw_data
-#' cpr_phytoplankton_biovolume_htg_data
-#' cpr_phytoplankton_biovolume_genus_data
-#' cpr_phytoplankton_biovolume_species_data
-#'
-#' cpr_zooplankton_abundance_copepods_data
-#' cpr_zooplankton_abundance_non_copepods_data
-#' cpr_zooplankton_abundance_genus_data
-#' cpr_zooplankton_abundance_htg_data
-#' cpr_zooplankton_abundance_raw_data
-#'
 #' @param Type The data of interest: Phytoplankton or Zooplankton
 #' @param Variable Variable options are: abundance or biovolume (phytoplankton only)
 #' @param Subset Data compilation. Full options are below.
@@ -36,14 +20,16 @@ pr_get_CPRData <- function(Type = "phytoplankton", Variable = "abundance", Subse
   if (Type == "zooplankton" & Subset == "species"){ # Specific case for zooplankton species
 
     datc <- pr_get_raw("cpr_zooplankton_abundance_copepods_data") %>%
-      pr_rename()
-
-    datnc <-pr_get_raw("cpr_zooplankton_abundance_non_copepods_data") %>%
       pr_rename() %>%
-      dplyr::select(-c(.data$Region:.data$SampleVolume_m3))
+      dplyr::arrange(.data$TripCode, .data$SampleTime_Local)
+
+    datnc <- pr_get_raw("cpr_zooplankton_abundance_non_copepods_data") %>%
+      pr_rename() %>%
+      dplyr::arrange(.data$TripCode, .data$SampleTime_Local) %>%
+      dplyr::select(-c(.data$TripCode:.data$SampleVolume_m3))
 
     # Add together and COPEPODS and NON-COPEPODS
-    dat <- dplyr::left_join(datc, datnc, by = "TripCode")
+    dat <- dplyr::bind_cols(datc, datnc)
 
   } else {
     file = paste("cpr", Type, Variable, Subset, "data", sep = "_")
