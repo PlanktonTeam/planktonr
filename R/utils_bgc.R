@@ -48,7 +48,6 @@ pr_get_NRSPigments <- function(){
     dplyr::select(-.data$Pigments_flag) %>%
     dplyr::filter(.data$Project == "NRS", .data$SampleDepth_m != "WC") %>%
     pr_add_StationCode() %>%
-    # pr_add_StationName() %>%
     dplyr::rowwise() %>%
     dplyr::mutate(TotalChla = sum(.data$CphlideA_mgm3, .data$DvCphlA_mgm3, .data$CphlA_mgm3, na.rm = TRUE),
                   TotalChl = sum(.data$TotalChla, .data$DvCphlB_mgm3, .data$CphlB_mgm3, .data$CphlC3_mgm3, .data$CphlC2_mgm3, .data$CphlC1_mgm3, na.rm = TRUE),
@@ -60,7 +59,8 @@ pr_get_NRSPigments <- function(){
                   TPig = sum(.data$TAcc, .data$TotalChla,  na.rm = TRUE), # Total pigments
                   TDP = sum(.data$PSC, .data$Allo_mgm3, .data$Zea_mgm3, .data$DvCphlB_mgm3, .data$CphlB_mgm3,  na.rm = TRUE), # Total Diagnostic pigments
                   StationCode = stringr::str_sub(.data$TripCode, 1, 3),
-                  Month_Local = lubridate::month(.data$SampleDate_Local)) %>%
+                  Month_Local = lubridate::month(.data$SampleDate_Local),
+                  SampleDepth_m = as.numeric(.data$SampleDepth_m)) %>%
     dplyr::filter(.data$TotalChla != 0) %>%
     dplyr::select(.data$Project, .data$SampleDate_Local, .data$Month_Local, .data$SampleDepth_m, .data$StationName, .data$StationCode,
                   tidyselect::any_of(var_names)) %>%
@@ -88,7 +88,6 @@ pr_get_NRSPico <- function(){
     pr_rename() %>%
     pr_apply_flags() %>%
     pr_add_StationCode() %>%
-    # pr_add_StationName() %>%
     dplyr::mutate(Month_Local = lubridate::month(.data$SampleDate_Local),
                   Year_Local = lubridate::year(.data$SampleDate_Local)) %>%
     dplyr::select(.data$Project, .data$SampleDate_Local, .data$Month_Local, .data$Year_Local,
@@ -126,7 +125,6 @@ pr_get_NRSMicro <- function(){
                   Year_Local = .data$Year,
                   SampleTime_UTC = .data$SampleDateUTC) %>%
     pr_add_StationCode() %>%
-    # pr_add_SampleDate() %>%
     dplyr::mutate(SampleDepth_m = as.numeric(stringr::str_sub(.data$TripCode_depth, -3, -1))) %>%
     dplyr::rename(Prochlorococcus_Cellsml = .data$Prochlorococcus_cells_ml,
                   Synecochoccus_Cellsml = .data$Synecochoccus_cells_ml,
