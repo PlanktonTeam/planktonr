@@ -12,7 +12,7 @@ pr_relabel(s, style = "ggplot")
 \item{style}{The style of plotting the string will be used for}
 }
 \value{
-A reformatted string (plotly) or a reformatted expression call (ggplot)
+A reformatted expression call (ggplot)
 }
 \description{
 Format a parameter string for plotting

@@ -19,23 +19,6 @@ A dataframe with requested plankton data in long form
 \description{
 Load CPR Data
 }
-\details{
-cpr_phytoplankton_abundance_raw_data
-cpr_phytoplankton_abundance_htg_data
-cpr_phytoplankton_abundance_genus_data
-cpr_phytoplankton_abundance_species_data
-
-cpr_phytoplankton_biovolume_raw_data
-cpr_phytoplankton_biovolume_htg_data
-cpr_phytoplankton_biovolume_genus_data
-cpr_phytoplankton_biovolume_species_data
-
-cpr_zooplankton_abundance_copepods_data
-cpr_zooplankton_abundance_non_copepods_data
-cpr_zooplankton_abundance_genus_data
-cpr_zooplankton_abundance_htg_data
-cpr_zooplankton_abundance_raw_data
-}
 \examples{
 df <- pr_get_CPRData(Type = "phytoplankton", Variable = "abundance", Subset = "raw")
 }
