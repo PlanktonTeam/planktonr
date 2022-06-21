@@ -16,7 +16,7 @@ pr_plot_env_var(df, pal = "matter", trend = "None", Scale = "identity")
 \item{Scale}{scale on which to plot y axis}
 }
 \value{
-A plotly plot with timeseries and climatology at depths
+A plot with timeseries and climatology at depths
 }
 \description{
 Combined timeseries and climatology plots for environmental variables
