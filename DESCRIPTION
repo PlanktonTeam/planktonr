@@ -30,7 +30,6 @@ Imports:
     lutz,
     magrittr,
     patchwork,
-    plotly,
     png,
     purrr,
     readr (>= 2.0.0),
