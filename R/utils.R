@@ -468,7 +468,7 @@ pr_get_coeffs <-  function(df){
     m <- stats::lm(Values ~ Year_Local + pr_harmonic(Month_Local, k = 1), data = lmdat)
 
     lmdat <- tibble::tibble(lmdat %>%
-                          dplyr::bind_cols(fv = m$fitted.values))
+                              dplyr::bind_cols(fv = m$fitted.values))
     ms <- summary(m)
     slope <- ifelse(ms$coefficients[2,1] < 0, 'decreasing', 'increasing')
     p <- ifelse(ms$coefficients[2,4] < 0.005, 'significantly', 'but not significantly')
@@ -484,5 +484,40 @@ pr_get_coeffs <-  function(df){
 }
 
 
+#' Return columns that are not taxonomic
+#'
+#' @param Survey `NRS` or `CPR`
+#' @param Type `Z` or `P`
+#'
+#' @return a string vector of column name
+#' @export
+#'
+#' @examples
+#' str <- pr_get_nonTaxaColumns(Survey = "NRS", Type = "Z")
+pr_get_nonTaxaColumns <- function(Survey = "NRS", Type = "Z"){
 
+  if (Survey == "NRS" & Type == "Z"){
+    vars <- c("Project", "StationName", "StationCode", "TripCode", "Latitude", "Longitude",
+              "SampleTime_Local", "SampleTime_UTC", "Year_Local", "Month_Local", "Day_Local", "Time_Local24hr",
+              "SampleDepth_m", "CTDSST_degC", "CTDChlaSurf_mgm3", "CTDSalinity_psu", "Biomass_mgm3", "AshFreeBiomass_mgm3")
+
+  } else if (Survey == "NRS" & Type == "P"){
+    vars <- c("Project", "StationName", "StationCode", "TripCode", "Latitude", "Longitude",
+              "SampleTime_Local", "SampleTime_UTC", "Year_Local", "Month_Local", "Day_Local", "Time_Local24hr",
+              "SampleDepth_m", "Method", "CTDSST_degC", "CTDChlaSurf_mgm3", "CTDSalinity_psu")
+
+  } else if (Survey == "CPR" & Type == "Z"){
+    vars <- c("TripCode", "Region", "Latitude", "Longitude", "SampleTime_UTC", "SampleTime_Local",
+              "Year_Local", "Month_Local", "Day_Local", "Time_Local24hr", "SatSST_degC", "SatChlaSurf_mgm3",
+              "PCI", "SampleVolume_m3", "BiomassIndex_mgm3")
+
+  } else if (Survey == "CPR" & Type == "P"){
+    vars <- c("TripCode", "Region", "Latitude", "Longitude", "SampleTime_Local", "SampleTime_UTC",
+              "Year_Local", "Month_Local", "Day_Local", "Time_Local24hr", "SatSST_degC", "SatChlaSurf_mgm3",
+              "PCI", "SampleVolume_m3")
+  }
+
+  return(vars)
+
+}
 
