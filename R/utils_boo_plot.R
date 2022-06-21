@@ -575,14 +575,14 @@ pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identit
 
 
   mdat <- df %>%
-    dplyr::group_by(.data$StationName, .data$Month, .data$SampleDepth_m, .data$parameters) %>%
+    dplyr::group_by(.data$StationName, .data$Month_Local, .data$SampleDepth_m, .data$parameters) %>%
     dplyr::summarise(MonValues = mean(.data$Values, na.rm = TRUE),
                      N = length(.data$Values),
                      sd = stats::sd(.data$Values, na.rm = TRUE),
                      se = sd / sqrt(.data$N),
                      .groups = "drop")
 
-  m <- ggplot2::ggplot(mdat, aes(.data$Month, .data$MonValues, colour = .data$StationName)) +
+  m <- ggplot2::ggplot(mdat, aes(.data$Month_Local, .data$MonValues, colour = .data$StationName)) +
     ggplot2::geom_point() +
     ggplot2::facet_grid(.data$SampleDepth_m ~., scales = "free") +
     ggplot2::geom_smooth(method = "loess", formula = y ~ x) +
@@ -667,7 +667,7 @@ pr_plot_daynight <-  function(df){
     ylabel <- pr_relabel("PhytoAbund_m3", style = "ggplot")
   }
 
-  plots <- ggplot2::ggplot(df, ggplot2::aes(.data$Month, .data$Species_m3)) +
+  plots <- ggplot2::ggplot(df, ggplot2::aes(.data$Month_Local, .data$Species_m3)) +
     ggplot2::geom_point() +
     ggplot2::geom_smooth(formula = "y ~ x", method = "loess") +
     ggplot2::facet_grid(~ .data$daynight, scales = "free_y") +
