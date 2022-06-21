@@ -86,23 +86,17 @@ pr_get_fMap_data <- function(Type = "Z"){
 
   if(Type == "P"){
     PhytoCountNRS <- pr_get_NRSData(Type = "phytoplankton", Variable = "abundance", Subset = "species") %>%
-      tidyr::pivot_longer(cols = !dplyr::all_of(
-        c("Project", "StationName", "StationCode", "Latitude", "Longitude", "TripCode",
-          "SampleTime_Local", "SampleTime_UTC", "Year_Local", "Month_Local", "Day_Local", "Time_Local24hr",
-          "SampleDepth_m", "Method", "CTDSST_degC", "CTDChlaSurf_mgm3", "CTDSalinity_psu")),
-        names_to = "Taxon", values_to = "Counts") %>%
+      tidyr::pivot_longer(cols = !dplyr::all_of(pr_get_nonTaxaColumns(Survey = "NRS", Type = "P")),
+                          names_to = "Taxon", values_to = "Counts") %>%
       dplyr::rename(Sample = .data$TripCode) %>%
       dplyr::mutate(Counts = as.integer(as.logical(.data$Counts)), # TODO Replace this with actual counts
                     Survey = "NRS",
-                    SampVol_m3 = 1) %>% # TODO Replace this with actual volume
-      dplyr::select(.data$Sample, .data$Survey, .data$Taxon, .data$Counts, .data$SampVol_m3) #TODO There is no volume data to remove
+                    SampleVolume_m3 = 1) %>% # TODO Replace this with actual volume
+      dplyr::select(.data$Sample, .data$Survey, .data$Taxon, .data$Counts, .data$SampleVolume_m3) #TODO There is no volume data to remove
 
     PhytoCountCPR <- pr_get_CPRData(Type = "phytoplankton", Variable = "abundance", Subset = "species") %>%
-      tidyr::pivot_longer(cols = !dplyr::all_of(
-        c("TripCode", "Region", "Latitude", "Longitude", "SampleTime_Local", "SampleTime_UTC",
-          "Year_Local", "Month_Local", "Day_Local", "Time_Local24hr",  "SampleVolume_m3", "PCI",
-          "SatSST_degC", "SatChlaSurf_mgm3")),
-        names_to = "Taxon", values_to = "Counts") %>%
+      tidyr::pivot_longer(cols = !dplyr::all_of(pr_get_nonTaxaColumns(Survey = "CPR", Type = "P")),
+                          names_to = "Taxon", values_to = "Counts") %>%
       dplyr::mutate(Counts = as.integer(as.logical(.data$Counts)),
                     Survey = "CPR") %>% # TODO Replace this with actual volume
       dplyr::rename(Sample = .data$TripCode) %>%
@@ -114,22 +108,16 @@ pr_get_fMap_data <- function(Type = "Z"){
   } else if(Type == "Z"){
 
     ZooCountNRS <- pr_get_NRSData(Type = "zooplankton", Variable = "abundance", Subset = "species") %>%
-      tidyr::pivot_longer(cols = !tidyselect::all_of(
-        c("Project", "StationName", "StationCode", "Latitude", "Longitude",
-          "TripCode", "SampleTime_Local", "SampleTime_UTC", "Year_Local", "Month_Local", "Day_Local", "Time_Local24hr",
-          "SampleDepth_m", "Biomass_mgm3", "AshFreeBiomass_mgm3", "CTDSST_degC", "CTDChlaSurf_mgm3", "CTDSalinity_psu")),
-        names_to = "Taxon", values_to = "Counts") %>%
+      tidyr::pivot_longer(cols = !tidyselect::all_of(pr_get_nonTaxaColumns(Survey = "NRS", Type = "Z")),
+                          names_to = "Taxon", values_to = "Counts") %>%
       dplyr::rename(Sample = .data$TripCode) %>%
       dplyr::mutate(Survey = "NRS",
                     SampVol_m3 = 1) %>%
       dplyr::select(.data$Sample, .data$Survey, .data$Taxon, .data$Counts)
 
     ZooCountCPR <- pr_get_CPRData(Type = "zooplankton", Variable = "abundance", Subset = "species") %>%
-      tidyr::pivot_longer(cols = !dplyr::all_of(
-        c("TripCode", "Region", "Latitude", "Longitude", "SampleTime_Local", "SampleTime_UTC",
-          "Year_Local", "Month_Local", "Day_Local", "Time_Local24hr", "SampleVolume_m3", "SatSST_degC",
-          "SatChlaSurf_mgm3", "PCI", "BiomassIndex_mgm3")),
-        names_to = "Taxon", values_to = "Counts") %>%
+      tidyr::pivot_longer(cols = !tidyselect::all_of(pr_get_nonTaxaColumns(Survey = "CPR", Type = "Z")),
+                          names_to = "Taxon", values_to = "Counts") %>%
       dplyr::mutate(Counts = as.integer(as.logical(.data$Counts)),
                     Survey = "CPR") %>%
       dplyr::rename(Sample = .data$TripCode) %>%
@@ -209,13 +197,8 @@ pr_get_fMap_data <- function(Type = "Z"){
 #' df <- pr_get_daynight("Z")
 pr_get_daynight <- function(Type = "Z"){
 
-  cpr_vars <- c("TripCode", "Region", "Latitude", "Longitude", "SampleTime_UTC", "SampleTime_Local",
-                "Year_Local", "Month_Local", "Day_Local", "Time_Local24hr", "SatSST_degC", "SatChlaSurf_mgm3",
-                "PCI", "SampleVolume_m3")
-
   if(Type == "Z"){
     dat <- pr_get_CPRData(Type = "zooplankton", Variable = "abundance", Subset = "copepods")
-    cpr_vars <- c(cpr_vars, "BiomassIndex_mgm3")
 
   } else if (Type == "P"){
     dat <- pr_get_CPRData(Type = "phytoplankton", Variable = "abundance", Subset = "species")
@@ -230,20 +213,20 @@ pr_get_daynight <- function(Type = "Z"){
     dplyr::mutate(date = lubridate::as_date(.data$date))
 
   daynight_df <- suncalc::getSunlightTimes(data = dates, #TODO quicker to change to Local now that it exists.
-                                        keep = c("sunrise", "sunset"),
-                                        tz = "UTC") %>%
+                                           keep = c("sunrise", "sunset"),
+                                           tz = "UTC") %>%
     dplyr::bind_cols(dat["SampleTime_UTC"]) %>%
     dplyr::mutate(daynight = ifelse(.data$SampleTime_UTC > .data$sunrise & .data$SampleTime_UTC < .data$sunset, "Day", "Night"))
 
   dat <- dat %>%
     dplyr::bind_cols(daynight_df["daynight"]) %>%
-    dplyr::select(tidyselect::any_of(cpr_vars), tidyselect::everything()) %>%
-    tidyr::pivot_longer(-tidyselect::any_of(c(cpr_vars, "daynight")), values_to = "Species_m3", names_to = "Species") %>%
+    dplyr::select(tidyselect::all_of(pr_get_nonTaxaColumns(Survey = "CPR", Type = Type)), tidyselect::everything()) %>%
+    tidyr::pivot_longer(-tidyselect::any_of(c(pr_get_nonTaxaColumns(Survey = "CPR", Type = Type), "daynight")), values_to = "Species_m3", names_to = "Species") %>%
     dplyr::group_by(.data$Month_Local, .data$daynight, .data$Species) %>%
     dplyr::summarise(Species_m3 = mean(.data$Species_m3, na.rm = TRUE),
                      .groups = "drop")
 
-  }
+}
 
 #' Get data for STI plots of species abundance
 #' @param Type Phyto or zoo, defaults to phyto
@@ -266,8 +249,8 @@ pr_get_sti <-  function(Type = "P"){
 
   } else if(Type == "P"){
     cprdat <- pr_get_CPRData(Type, Variable = "abundance", Subset = "species")
-    nrsdat <- pr_get_NRSData(Type, Variable = "abundance", Subset = "species") %>%
-      dplyr::select(-.data$Method)
+
+    nrsdat <- pr_get_NRSData(Type, Variable = "abundance", Subset = "species")
     parameter <- "PhytoAbundance_m3"
   }
 
@@ -283,16 +266,16 @@ pr_get_sti <-  function(Type = "P"){
     pr_rename() %>%
     dplyr::rename(SampleTime_UTC = .data$SAMPLEDATE_UTC)
 
-  cpr_vars <- c("TripCode", "Region", "Latitude", "Longitude", "SampleTime_UTC", "SampleTime_Local",
-                "Year_Local", "Month_Local", "Day_Local", "Time_Local24hr", "SatSST_degC", "SatChlaSurf_mgm3",
-                "PCI", "SampleVolume_m3")
-
-  nrs_vars <- c("Project", "StationName", "StationCode", "TripCode", "Latitude", "Longitude", "SampleTime_UTC", "SampleTime_Local",
-                "Year_Local", "Month_Local", "Day_Local", "Time_Local24hr", "SampleDepth_m", "CTDSST_degC",
-                "CTDChlaSurf_mgm3", "CTDSalinity_psu")
+  # cpr_vars <- c("TripCode", "Region", "Latitude", "Longitude", "SampleTime_UTC", "SampleTime_Local",
+  #               "Year_Local", "Month_Local", "Day_Local", "Time_Local24hr", "SatSST_degC", "SatChlaSurf_mgm3",
+  #               "PCI", "SampleVolume_m3")
+  #
+  # nrs_vars <- c("Project", "StationName", "StationCode", "TripCode", "Latitude", "Longitude", "SampleTime_UTC", "SampleTime_Local",
+  #               "Year_Local", "Month_Local", "Day_Local", "Time_Local24hr", "SampleDepth_m", "CTDSST_degC",
+  #               "CTDChlaSurf_mgm3", "CTDSalinity_psu")
 
   cpr <- cprdat %>%
-    tidyr::pivot_longer(-tidyselect::all_of(cpr_vars), names_to = "Species", values_to = parameter) %>%
+    tidyr::pivot_longer(-tidyselect::all_of(pr_get_nonTaxaColumns(Survey = "CPR", Type = Type)), names_to = "Species", values_to = parameter) %>%
     dplyr::left_join(cprsat, by = c("Latitude", "Longitude", "SampleTime_UTC")) %>%
     dplyr::select(.data$Species, .data$SST, .data[[parameter]]) %>%
     dplyr::filter(!is.na(.data$SST) & .data[[parameter]] > 0) %>%
@@ -300,7 +283,7 @@ pr_get_sti <-  function(Type = "P"){
                   Species_m3 = .data[[parameter]] + min(.data[[parameter]][.data[[parameter]]>0], na.rm = TRUE))
 
   nrs <- nrsdat %>%
-    tidyr::pivot_longer(-tidyselect::all_of(nrs_vars), names_to = "Species", values_to = parameter) %>%
+    tidyr::pivot_longer(-tidyselect::all_of(pr_get_nonTaxaColumns(Survey = "NRS", Type = Type)), names_to = "Species", values_to = parameter) %>%
     dplyr::left_join(nrssat, by = c("Latitude", "Longitude", "SampleTime_Local")) %>%
     dplyr::select(.data$Species, .data$SST, .data[[parameter]]) %>%
     dplyr::filter(!is.na(.data$SST) & .data[[parameter]] > 0) %>%

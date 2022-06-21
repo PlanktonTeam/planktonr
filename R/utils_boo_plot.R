@@ -362,7 +362,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
 
   plotCols <- pr_get_PlotCols(pal, n)
 
-  if("Bioregion" %in% colnames(df)){ # If CPR data
+  if("BioRegion" %in% colnames(df)){ # If CPR data
     SampleDate = rlang::sym("SampleTime_Local")
     station = rlang::sym("BioRegion")
 

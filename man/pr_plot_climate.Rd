@@ -18,7 +18,7 @@ pr_plot_climate(df, Survey = "NRS", x, pal = "matter", Scale = "identity")
 \item{Scale}{scale of y axis on plot, whatever scale_y_continuous trans accepts}
 }
 \value{
-a plotly climatology plot
+a climatology plot
 }
 \description{
 Plot single climatology
