@@ -51,8 +51,8 @@ pr_get_NRSData <- function(Type = "phytoplankton", Variable = "abundance", Subse
       pr_rename()
   }
 
-  dat <- dat %>%
-    pr_add_SampleDate()
+  # dat <- dat %>%
+    # pr_add_SampleDate()
 }
 
 
@@ -86,12 +86,14 @@ pr_get_NRSTrips <- function(Type = c("P", "Z", "F")){
   NRSTrip <- readr::read_csv(system.file("extdata", "BGC_Trip.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
     pr_rename() %>%
     dplyr::rename(ZSampleDepth_m = .data$ZOOPSAMPLEDEPTH_M,
-                  PSampleDepth_m = .data$PHYTOSAMPLEDEPTH_M) %>%
+                  PSampleDepth_m = .data$PHYTOSAMPLEDEPTH_M,
+                  SampleTime_Local = .data$SampleDate_Local,
+                  SampleTime_UTC = .data$SampleDate_UTC) %>%
     dplyr::filter(.data$ProjectName == "NRS" &
                     (stringr::str_detect(.data$SampleType, paste("P", collapse = "|")) |
                        is.na(.data$SampleType))) %>%
     pr_apply_time() %>%
-    dplyr::select(-c(.data$tz, .data$ProjectName))
+    dplyr::select(-.data$ProjectName)
 
 
   if("P" %in% Type & !"Z" %in% Type){ # Only Phytoplankton

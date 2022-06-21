@@ -32,8 +32,7 @@ pr_rename <- function(df){
     "Comments", "COMMENTS",
     "Conductivity_Sm", "CNDC",
     "Conductivity_flag", "CNDC_quality_control",
-    "Copepod", "COPEPOD",
-    # "Density_kgm3", "WaterDensity_kgm3",
+    "Copepod", "COPEPOD", # "Density_kgm3", "WaterDensity_kgm3",
     "Depth_m", "DEPTH",
     "Depth_flag", "DEPTH_quality_control",
     "DIC_Comments", "CARBON_COMMENTS",
@@ -88,8 +87,7 @@ pr_rename <- function(df){
     "Sample", "SAMPLE",
     "SampleDate_UTC", "SAMPLEDATEUTC",
     "SampleDate_Local", "SAMPLEDATELOCAL",
-    "SampleDepth_m", "SAMPLEDEPTH_M",
-    "SampleTime_Local", "SampleTime_local",
+    "SampleDepth_m", "SAMPLEDEPTH_M", # "SampleTime_Local", "SampleTime_local",
     "SampleType", "SAMPLETYPE",
     "ScientificName", "SCIENTIFICNAME",
     "Secchi_m", "SECCHI_M",
@@ -140,9 +138,7 @@ pr_rename <- function(df){
     "TaxonTraining", "TAXON_TRAINING",
     "TaxonComments", "TAXON_COMMENTS",
     "Salinity_psu", "PSAL",
-    "Salinity_flag", "PSAL_quality_control",
-    "SampleDate_UTC", "SampleDateUTC",
-    "SampleDate_Local", "SampleDateLocal"),
+    "Salinity_flag", "PSAL_quality_control"), # "SampleDate_UTC", "SampleDateUTC", # "SampleDate_Local", "SampleDateLocal"
     ncol = 2, byrow = TRUE, dimnames = list(NULL, c("New","Old"))))
 
   df <- data.table::setnames(df, old = rename_df$Old, new = rename_df$New, skip_absent = TRUE)

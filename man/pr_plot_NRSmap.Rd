@@ -10,7 +10,7 @@ pr_plot_NRSmap(df)
 \item{df}{dataframe containing station codes to plot}
 }
 \value{
-is a plotly map of the selected stations
+a map of the selected stations
 }
 \description{
 Sidebar panel plot of selected NRS stations

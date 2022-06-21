@@ -10,7 +10,7 @@ pr_plot_CPRmap(df)
 \item{df}{dataframe containing CPR bioregions to plot}
 }
 \value{
-is a plotly map of the selected bioregions
+a map of the selected bioregions
 }
 \description{
 Title Sidebar panel plot of selected CPR bioregions

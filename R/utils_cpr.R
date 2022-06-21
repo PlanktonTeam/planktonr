@@ -37,9 +37,10 @@ pr_get_CPRData <- function(Type = "phytoplankton", Variable = "abundance", Subse
 
     datc <- pr_get_raw("cpr_zooplankton_abundance_copepods_data") %>%
       pr_rename()
+
     datnc <-pr_get_raw("cpr_zooplankton_abundance_non_copepods_data") %>%
       pr_rename() %>%
-      dplyr::select(-c(.data$Region:.data$BiomassIndex_mgm3))
+      dplyr::select(-c(.data$Region:.data$SampleVolume_m3))
 
     # Add together and COPEPODS and NON-COPEPODS
     dat <- dplyr::left_join(datc, datnc, by = "TripCode")
@@ -54,10 +55,11 @@ pr_get_CPRData <- function(Type = "phytoplankton", Variable = "abundance", Subse
       pr_rename()
   }
 
-  dat <- dat %>%
-    dplyr::rename(SampleTime_UTC = .data$SampleDate_UTC,
-                  SampleTime_Local = .data$SampleDate_Local) %>%  #TODO Fix this when AODN fixes the headers
-    pr_add_SampleDate()
+  # TODO Removed on Monday 20th June 2022 - Don't think we need this anymore.
+  # dat <- dat %>%
+    # dplyr::rename(SampleTime_UTC = .data$SampleDate_UTC,
+                  # SampleTime_Local = .data$SampleDate_Local) %>%  #TODO Fix this when AODN fixes the headers
+    # # pr_add_SampleDate()
 
 }
 
@@ -89,7 +91,7 @@ pr_get_CPRSamps <- function(){
 
   df <- pr_get_raw("cpr_derived_indices_data") %>%
     pr_rename() %>%
-    pr_add_SampleDate() %>%
+    # pr_add_SampleDate() %>%
     pr_add_Bioregions() %>%
     dplyr::select(tidyselect::starts_with(c("geometry", "FID", "TripCode", "Latitude", "Longitude", "BioRegion",
                                           "IMCRA", "SampleTime", "SampleDate", "Year", "Month", "Day", "Time", "Region")))

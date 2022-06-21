@@ -16,17 +16,17 @@ pr_plot_timeseries(df, Survey = "NRS", pal = "matter", Scale = "identity")
 \item{Scale}{scale of y axis on plot, whatever scale_y_continuous trans accepts}
 }
 \value{
-a plotly timeseries plot
+a timeseries plot
 }
 \description{
 Plot basic timeseries
 }
 \examples{
-df <- data.frame(SampleDate_Local = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
+df <- data.frame(SampleTime_Local = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
 StationCode = 'NSI', parameters = 'Biomass_mgm3', Values = runif(4, min=0, max=10),
 Survey = 'NRS')
 df <- df \%>\%
-      dplyr::mutate(SampleDate_Local = as.POSIXct(paste(SampleDate_Local, "00:00:00"),
+      dplyr::mutate(SampleTime_Local = as.POSIXct(paste(SampleTime_Local, "00:00:00"),
       format = "\%Y-\%m-\%d \%H:\%M:\%S"))
 timeseries <- pr_plot_timeseries(df, 'NRS', 'matter')
 }

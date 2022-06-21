@@ -4,12 +4,7 @@
 \alias{pr_plot_tsclimate}
 \title{Combined timeseries and climatology plots}
 \usage{
-pr_plot_tsclimate(
-  df,
-  Survey = c("CPR", "NRS"),
-  pal = "matter",
-  Scale = "identity"
-)
+pr_plot_tsclimate(df, Survey = "NRS", pal = "matter", Scale = "identity")
 }
 \arguments{
 \item{df}{data frame with SampleDate_Local, time period and parameter}
@@ -21,19 +16,20 @@ pr_plot_tsclimate(
 \item{Scale}{scale of y axis on plot, whatever scale_y_continuous trans accepts}
 }
 \value{
-plotly combined plot
+a combined plot
 }
 \description{
 Combined timeseries and climatology plots
 }
 \examples{
-df <- data.frame(SampleDate_Local = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
-                 Month = sample(1:12, 4), Year = c(2012, 2013, 2014, 2015),
+df <- data.frame(SampleTime_Local = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
+                 Month_Local = sample(1:12, 4),
+                 Year_Local = c(2012, 2013, 2014, 2015),
                  StationCode = c('NSI', 'NSI', 'PHB', 'PHB'),
                  parameters = 'Biomass_mgm3',
                  Values = runif(4, min=0, max=10))
 df <- df \%>\%
-      dplyr::mutate(SampleDate_Local = as.POSIXct(paste(SampleDate_Local, "00:00:00"),
+      dplyr::mutate(SampleTime_Local = as.POSIXct(paste(SampleTime_Local, "00:00:00"),
                     format = "\%Y-\%m-\%d \%H:\%M:\%S"))
 monthly <- pr_plot_tsclimate(df, "NRS")
 }
