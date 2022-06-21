@@ -4,7 +4,7 @@
 #' @param s A string for reformatting
 #' @param style The style of plotting the string will be used for
 #'
-#' @return A reformatted string (plotly) or a reformatted expression call (ggplot)
+#' @return A reformatted expression call (ggplot)
 #' @export
 #'
 #' @examples
