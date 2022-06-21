@@ -542,10 +542,10 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
 #'          plot <- pr_plot_env_var(df)}
 #'
 pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identity") {
+
   n <- length(unique(df$StationName))
 
   plotCols <- pr_get_PlotCols(pal, n)
-
 
   titley <- pr_relabel(unique(df$parameters))
 
@@ -575,18 +575,19 @@ pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identit
 
 
   mdat <- df %>%
-    dplyr::group_by(.data$StationName, .data$Month, .data$SampleDepth_m, .data$parameters) %>%
+    dplyr::group_by(.data$StationName, .data$Month_Local, .data$SampleDepth_m, .data$parameters) %>%
     dplyr::summarise(MonValues = mean(.data$Values, na.rm = TRUE),
                      N = length(.data$Values),
                      sd = stats::sd(.data$Values, na.rm = TRUE),
                      se = sd / sqrt(.data$N),
                      .groups = "drop")
 
-  m <- ggplot2::ggplot(mdat, aes(.data$Month, .data$MonValues, colour = .data$StationName)) +
+  m <- ggplot2::ggplot(mdat, aes(.data$Month_Local, .data$MonValues, colour = .data$StationName)) +
     ggplot2::geom_point() +
     ggplot2::facet_grid(.data$SampleDepth_m ~., scales = "free") +
     ggplot2::geom_smooth(method = "loess", formula = y ~ x) +
-    ggplot2::scale_x_continuous(breaks= seq(1,12,length.out = 12), labels=c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
+    ggplot2::scale_x_continuous(breaks = seq(1,12,length.out = 12),
+                                labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
     ggplot2::scale_colour_manual(values = plotCols) +
     ggplot2::theme_bw() +
     ggplot2::theme(strip.background = ggplot2::element_blank(),
@@ -666,7 +667,7 @@ pr_plot_daynight <-  function(df){
     ylabel <- pr_relabel("PhytoAbund_m3", style = "ggplot")
   }
 
-  plots <- ggplot2::ggplot(df, ggplot2::aes(.data$Month, .data$Species_m3)) +
+  plots <- ggplot2::ggplot(df, ggplot2::aes(.data$Month_Local, .data$Species_m3)) +
     ggplot2::geom_point() +
     ggplot2::geom_smooth(formula = "y ~ x", method = "loess") +
     ggplot2::facet_grid(~ .data$daynight, scales = "free_y") +
@@ -742,12 +743,15 @@ pr_plot_sti <-  function(df){
   xlabel <- pr_relabel("Temperature_degC", style = "ggplot")
   subtit <- rlang::expr(paste("STI = ",!!STI, "\U00B0","C"))
 
-  stiplot <- ggplot2::ggplot(z, aes(kernTemps, .data$y)) + ggplot2::geom_point() +
+  stiplot <- ggplot2::ggplot(z, aes(kernTemps, .data$y)) +
+    ggplot2::geom_point() +
     ggplot2::geom_vline(xintercept = STI, colour = "blue", lty = 4) +
     ggplot2::theme_bw() +
     ggplot2::labs(x=xlabel, y="Relative kernel density") +
     ggplot2::ggtitle(taxon, subtitle = subtit) +
     ggplot2::theme(plot.title = ggplot2::element_text(face = "italic"))
+
+  return(stiplot)
 
 }
 
