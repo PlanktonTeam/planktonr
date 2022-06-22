@@ -591,7 +591,7 @@ pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identit
     ggplot2::theme_bw() +
     ggplot2::theme(strip.background = ggplot2::element_blank(),
                    legend.position = 'none',
-                   axis.title.y = element_blank(),
+                   axis.title.y = ggplot2::element_blank(),
                    strip.text.y = ggplot2::element_text(face = "bold", size = 12, angle = 0))
 
 
