@@ -34,14 +34,12 @@ pr_plot_NRSmap <- function(df){
 
   p1 <- ggplot2::ggplot() +
     ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
-    ggplot2::geom_sf(data = meta_sf, colour = "blue", size = 1.5) +
-    ggplot2::geom_sf(data = meta2_sf, colour = "red", size = 1.5) +
+    ggplot2::geom_sf(data = meta_sf, colour = "blue", size = 5) +
+    ggplot2::geom_sf(data = meta2_sf, colour = "red", size = 5) +
     ggplot2::scale_x_continuous(expand = c(0, 0), limits = c(112, 155)) +
     ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(-45, -9)) +
     ggplot2::theme_void() +
     ggplot2::theme(axis.title = ggplot2::element_blank(),
-                   panel.background = ggplot2::element_rect(fill = NA, colour = NA),
-                   plot.background = ggplot2::element_rect(fill = NA),
                    axis.line = ggplot2::element_blank())
 
   return(p1)
@@ -593,6 +591,7 @@ pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identit
     ggplot2::theme_bw() +
     ggplot2::theme(strip.background = ggplot2::element_blank(),
                    legend.position = 'none',
+                   axis.title.y = element_blank(),
                    strip.text.y = ggplot2::element_text(face = "bold", size = 12, angle = 0))
 
 
