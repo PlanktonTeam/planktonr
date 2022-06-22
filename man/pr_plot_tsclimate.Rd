@@ -22,14 +22,7 @@ a combined plot
 Combined timeseries and climatology plots
 }
 \examples{
-df <- data.frame(SampleTime_Local = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
-                 Month_Local = sample(1:12, 4),
-                 Year_Local = c(2012, 2013, 2014, 2015),
-                 StationCode = c('NSI', 'NSI', 'PHB', 'PHB'),
-                 parameters = 'Biomass_mgm3',
-                 Values = runif(4, min=0, max=10))
-df <- df \%>\%
-      dplyr::mutate(SampleTime_Local = as.POSIXct(paste(SampleTime_Local, "00:00:00"),
-                    format = "\%Y-\%m-\%d \%H:\%M:\%S"))
-monthly <- pr_plot_tsclimate(df, "NRS")
+df <- pr_get_indices(Survey = "NRS", Type = "P") \%>\%
+  dplyr::filter(parameters == "PhytoAbundance_CellsL")
+pr_plot_tsclimate(df, "NRS")
 }

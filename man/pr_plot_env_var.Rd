@@ -22,7 +22,7 @@ A plot with timeseries and climatology at depths
 Combined timeseries and climatology plots for environmental variables
 }
 \examples{
-\dontrun{df <- pr_get_NRSChemistry() \%>\% dplyr::filter(parameters == "SecchiDepth_m")
-         plot <- pr_plot_env_var(df)}
+df <- pr_get_NRSChemistry() \%>\% dplyr::filter(parameters == "SecchiDepth_m")
+pr_plot_env_var(df)
 
 }

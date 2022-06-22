@@ -22,11 +22,7 @@ a timeseries plot
 Plot basic timeseries
 }
 \examples{
-df <- data.frame(SampleTime_Local = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
-StationCode = 'NSI', parameters = 'Biomass_mgm3', Values = runif(4, min=0, max=10),
-Survey = 'NRS')
-df <- df \%>\%
-      dplyr::mutate(SampleTime_Local = as.POSIXct(paste(SampleTime_Local, "00:00:00"),
-      format = "\%Y-\%m-\%d \%H:\%M:\%S"))
+df <- pr_get_indices("NRS", "Z") \%>\%
+  dplyr::filter(parameters == "Biomass_mgm3")
 timeseries <- pr_plot_timeseries(df, 'NRS', 'matter')
 }

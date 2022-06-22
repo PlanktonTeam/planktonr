@@ -91,12 +91,8 @@ pr_plot_CPRmap <-  function(df){
 #' @export
 #'
 #' @examples
-#' df <- data.frame(SampleTime_Local = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
-#' StationCode = 'NSI', parameters = 'Biomass_mgm3', Values = runif(4, min=0, max=10),
-#' Survey = 'NRS')
-#' df <- df %>%
-#'       dplyr::mutate(SampleTime_Local = as.POSIXct(paste(SampleTime_Local, "00:00:00"),
-#'       format = "%Y-%m-%d %H:%M:%S"))
+#' df <- pr_get_indices("NRS", "Z") %>%
+#'   dplyr::filter(parameters == "Biomass_mgm3")
 #' timeseries <- pr_plot_timeseries(df, 'NRS', 'matter')
 pr_plot_timeseries <- function(df, Survey = "NRS", pal = "matter", Scale = "identity"){
 
@@ -150,7 +146,8 @@ pr_plot_timeseries <- function(df, Survey = "NRS", pal = "matter", Scale = "iden
 #' @export
 #'
 #' @examples
-#' df <- pr_get_indices("NRS", "Z") %>% dplyr::filter(parameters == 'Biomass_mgm3')
+#' df <- pr_get_indices("NRS", "Z") %>%
+#'   dplyr::filter(parameters == 'Biomass_mgm3')
 #' pr_plot_trends(df, trend = "Month", survey = "NRS")
 #' pr_plot_trends(df, trend = "Year", survey = "NRS")
 #' pr_plot_trends(df, trend = "Raw", survey = "NRS")
@@ -236,9 +233,13 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
 #' @export
 #'
 #' @examples
-#' df <- data.frame(Month_Local = rep(1:12,10), StationCode = c("NSI", "NSI", "PHB", "PHB"),
-#' parameters = 'Biomass_mgm3', Values = runif(120, min=0, max=10))
+#' df <- pr_get_indices(Survey = "NRS", Type = "P") %>%
+#'         dplyr::filter(parameters == "PhytoBiomassCarbon_pgL")
 #' monthly <- pr_plot_climate(df, "NRS", "Month", "matter")
+#'
+#' df <- pr_get_indices(Survey = "CPR", Type = "Z") %>%
+#'         dplyr::filter(parameters == "ZoopAbundance_m3")
+#' annual <- pr_plot_climate(df, "CPR", "Year", "matter")
 pr_plot_climate <- function(df, Survey = "NRS", trend = "Month", pal = "matter", Scale = "identity"){
 
   if (trend == "Month"){
@@ -304,17 +305,9 @@ pr_plot_climate <- function(df, Survey = "NRS", trend = "Month", pal = "matter",
 #' @export
 #'
 #' @examples
-#' df <- data.frame(SampleTime_Local = c("2012-08-21", "2012-09-01", "2012-08-15", "2012-09-18"),
-#'                  Month_Local = sample(1:12, 4),
-#'                  Year_Local = c(2012, 2013, 2014, 2015),
-#'                  StationCode = c('NSI', 'NSI', 'PHB', 'PHB'),
-#'                  parameters = 'Biomass_mgm3',
-#'                  Values = runif(4, min=0, max=10))
-#' df <- df %>%
-#'       dplyr::mutate(SampleTime_Local = as.POSIXct(paste(SampleTime_Local, "00:00:00"),
-#'                     format = "%Y-%m-%d %H:%M:%S"))
-#' monthly <- pr_plot_tsclimate(df, "NRS")
-
+#' df <- pr_get_indices(Survey = "NRS", Type = "P") %>%
+#'   dplyr::filter(parameters == "PhytoAbundance_CellsL")
+#' pr_plot_tsclimate(df, "NRS")
 pr_plot_tsclimate <- function(df, Survey = "NRS", pal = "matter", Scale = "identity"){
 
   p1 <- pr_plot_timeseries(df, Survey, pal, Scale) +
@@ -344,8 +337,8 @@ pr_plot_tsclimate <- function(df, Survey = "NRS", pal = "matter", Scale = "ident
 #' @export
 #'
 #' @examples
-#' df <- pr_get_fg('NRS', 'P')
-#' plot <- pr_plot_tsfg(df, 'Actual')
+#' df <- pr_get_fg("NRS", "P")
+#' plot <- pr_plot_tsfg(df, "Actual")
 pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
 
   if (trend == "Month"){
@@ -537,8 +530,8 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
 #' @export
 #'
 #' @examples
-#' \dontrun{df <- pr_get_NRSChemistry() %>% dplyr::filter(parameters == "SecchiDepth_m")
-#'          plot <- pr_plot_env_var(df)}
+#' df <- pr_get_NRSChemistry() %>% dplyr::filter(parameters == "SecchiDepth_m")
+#' pr_plot_env_var(df)
 #'
 pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identity") {
 
@@ -593,17 +586,6 @@ pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identit
                    legend.position = 'none',
                    axis.title.y = ggplot2::element_blank(),
                    strip.text.y = ggplot2::element_text(face = "bold", size = 12, angle = 0))
-
-
-  # m <- plotly::ggplotly(m) %>%
-  #   plotly::layout(legend = list(orientation = "h",
-  #                                xanchor = "center",  # use center of legend as anchor
-  #                                x = 0.5, y = -0.1))
-
-  # plot <- plotly::subplot(plotly::style(p, showlegend = FALSE), m, widths = c(0.75,0.25)) %>%
-  #   plotly::layout(title = list(text = titley),
-  #                  annotations = list( x = 0.97, y = 1.0, text = "Depth (m)", xref = "paper", yref = "paper",
-  #                                      xanchor = "center", yanchor = "bottom", showarrow = FALSE))
 
   plots <- p + m + patchwork::plot_layout(widths = c(3,1), guides = 'collect', heights = np * 200)
 
