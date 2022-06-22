@@ -245,12 +245,19 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
 #' @importFrom ggplot2 aes
 #'
 #' @examples
-#' df <- data.frame(Month = rep(1:12,10), StationCode = c('NSI', 'NSI', 'PHB', 'PHB'),
+#' df <- data.frame(Month = rep(1:12,10), StationCode = c("NSI", "NSI", "PHB", "PHB"),
 #' parameters = 'Biomass_mgm3', Values = runif(120, min=0, max=10))
-#' monthly <- pr_plot_climate(df, "NRS", Month, 'matter')
-pr_plot_climate <- function(df, Survey = "NRS", x, pal = "matter", Scale = "identity"){
+#' monthly <- pr_plot_climate(df, "NRS", "Month", "matter")
+pr_plot_climate <- function(df, Survey = "NRS", trend = "Month", pal = "matter", Scale = "identity"){
 
-  x <- dplyr::enquo(arg = x)
+  if (trend == "Month"){
+    trend = "Month_Local"
+  }
+  if (trend == "Year"){
+    trend = "Year_Local"
+  }
+
+  trend <- dplyr::enquo(arg = trend)
 
   if(Survey == "CPR"){
     df <- df %>%
@@ -262,15 +269,15 @@ pr_plot_climate <- function(df, Survey = "NRS", x, pal = "matter", Scale = "iden
   title <- pr_relabel(unique(df$parameters), style = "ggplot")
 
   df_climate <- df %>%
-    dplyr::filter(!!x != "NA") %>% # need to drop NA from month, added to dataset by complete(Year, StationCode)
-    dplyr::group_by(!!x, .data$StationCode) %>%
+    dplyr::filter(!!trend != "NA") %>% # need to drop NA from month, added to dataset by complete(Year, StationCode)
+    dplyr::group_by(!!trend, .data$StationCode) %>%
     dplyr::summarise(mean = mean(.data$Values, na.rm = TRUE),
                      N = length(.data$Values),
                      sd = stats::sd(.data$Values, na.rm = TRUE),
                      se = sd / sqrt(.data$N),
                      .groups = "drop")
 
-  p1 <- ggplot2::ggplot(df_climate, ggplot2::aes(x = !!x, y = .data$mean, fill = .data$StationCode)) +
+  p1 <- ggplot2::ggplot(df_climate, ggplot2::aes(x = !!trend, y = .data$mean, fill = .data$StationCode)) +
     ggplot2::geom_col(position = ggplot2::position_dodge()) +
     ggplot2::geom_errorbar(ggplot2::aes(ymin = .data$mean-.data$se, ymax = .data$mean+.data$se),
                            width = .2,                    # Width of the error bars
