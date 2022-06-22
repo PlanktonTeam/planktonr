@@ -118,7 +118,7 @@ pr_get_NRSPico <- function(){
 #' @importFrom rlang .data
 pr_get_NRSMicro <- function(){
 
-  var_names <- c("Prochlorococcus_Cellsml", "Synecochoccus_Cellsml", "Picoeukaryotes_Cellsml", "Bacterial_Richness",
+  var_names <- c("Prochlorococcus_CellsmL", "Synecochoccus_CellsmL", "Picoeukaryotes_CellsmL", "Bacterial_Richness",
                  "Archaeal_Richness", "Eukaryote_Richness", "Bacterial_Niche_Cluster", "Eukaryote_Niche_Cluster", "Archaea_Niche_Cluster",
                  "Bacterial_Chlorophyll_Index", "Bacterial_Nitrogen_Index", "Bacterial_Oxygen_Index", "Bacterial_Phosphate_Index", "Bacterial_Salinity_Index",
                  "Bacterial_Silicate_Index", "Bacterial_Temperature_Index", "Archaeal_Temperature_Index", "Archaeal_Salinity_Index", "Archaeal_Nitrogen_Index",
@@ -134,9 +134,9 @@ pr_get_NRSMicro <- function(){
                   SampleTime_UTC = .data$SampleDateUTC) %>%
     pr_add_StationCode() %>%
     dplyr::mutate(SampleDepth_m = as.numeric(stringr::str_sub(.data$TripCode_depth, -3, -1))) %>%
-    dplyr::rename(Prochlorococcus_Cellsml = .data$Prochlorococcus_cells_ml,
-                  Synecochoccus_Cellsml = .data$Synecochoccus_cells_ml,
-                  Picoeukaryotes_Cellsml = .data$Picoeukaryotes_cells_ml) %>%
+    dplyr::rename(Prochlorococcus_CellsmL = .data$Prochlorococcus_cells_ml,
+                  Synecochoccus_CellsmL = .data$Synecochoccus_cells_ml,
+                  Picoeukaryotes_CellsmL = .data$Picoeukaryotes_cells_ml) %>%
     dplyr::mutate(dplyr::across(tidyselect::all_of(var_names), as.numeric)) %>%
     dplyr::select(.data$StationName, .data$SampleDepth_m, .data$StationCode, .data$SampleTime_Local,
                   .data$Year_Local, .data$Month_Local, tidyselect::any_of(var_names)) %>%
