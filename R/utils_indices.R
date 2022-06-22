@@ -38,7 +38,7 @@ pr_get_indices <- function(Survey = "CPR", Type = "P"){
       pr_rename() %>%
       pr_add_Bioregions() %>%
       dplyr::select(.data$SampleTime_Local, .data$Year_Local, .data$Month_Local, .data$BioRegion,
-                    tidyselect::all_of(var_names)) %>%
+                    .data$Latitude, .data$Longitude, tidyselect::all_of(var_names)) %>%
       dplyr::mutate(SampleTime_Local = lubridate::round_date(.data$SampleTime_Local, "month"), #TODO Check with Claire about this rounding
                     YearMon = paste(.data$Year_Local, .data$Month_Local)) %>% #TODO this step can be improved when nesting supports data pronouns
       tidyr::complete(.data$BioRegion, .data$Year_Local, .data$Month_Local) %>% # TODO Do we need complete here? C
@@ -61,11 +61,10 @@ pr_get_indices <- function(Survey = "CPR", Type = "P"){
     dat <- pr_get_raw("nrs_derived_indices_data") %>% # TODO No Month/Year categories in NRS data. Its there in CPR
       pr_rename() %>%
       pr_add_StationCode() %>%
-      dplyr::mutate(Month_Local = lubridate::month(.data$SampleTime_Local),
-                    Year_Local = lubridate::year(.data$SampleTime_Local)) %>%  #TODO Remove Month/Year?
+      pr_apply_time() %>%
       tidyr::complete(.data$Year_Local, .data$StationCode) %>% #TODO Nesting doesn't support data pronouns at this time
-      dplyr::select(.data$Year_Local, .data$Month_Local, .data$SampleTime_Local, .data$StationName, .data$StationCode,
-                    tidyselect::all_of(var_names)) %>%
+      dplyr::select(.data$Year_Local, .data$Month_Local, .data$SampleTime_Local, .data$Latitude, .data$Longitude,
+                    .data$StationName, .data$StationCode, tidyselect::all_of(var_names)) %>%
       tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "parameters") %>%
       pr_reorder()
 

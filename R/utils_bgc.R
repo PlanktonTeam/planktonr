@@ -63,8 +63,8 @@ pr_get_NRSPigments <- function(){
                   TPig = sum(.data$TAcc, .data$TotalChla,  na.rm = TRUE), # Total pigments
                   TDP = sum(.data$PSC, .data$Allo_mgm3, .data$Zea_mgm3, .data$DvCphlB_mgm3, .data$CphlB_mgm3,  na.rm = TRUE), # Total Diagnostic pigments
                   StationCode = stringr::str_sub(.data$TripCode, 1, 3),
-                  Month_Local = lubridate::month(.data$SampleTime_Local),
                   SampleDepth_m = as.numeric(.data$SampleDepth_m)) %>%
+    pr_apply_time() %>%
     dplyr::filter(.data$TotalChla != 0) %>%
     dplyr::select(.data$Project, .data$SampleTime_Local, .data$Month_Local, .data$SampleDepth_m, .data$StationName, .data$StationCode,
                   tidyselect::any_of(var_names)) %>%
@@ -95,9 +95,8 @@ pr_get_NRSPico <- function(){
     dplyr::filter(.data$SampleDepth_m != "WC") %>%
     pr_apply_flags() %>%
     pr_add_StationCode() %>%
-    dplyr::mutate(Month_Local = lubridate::month(.data$SampleTime_Local),
-                  Year_Local = lubridate::year(.data$SampleTime_Local),
-                  SampleDepth_m = as.numeric(.data$SampleDepth_m)) %>%
+    pr_apply_time() %>%
+    dplyr::mutate(SampleDepth_m = as.numeric(.data$SampleDepth_m)) %>%
     dplyr::select(.data$Project, .data$SampleTime_Local, .data$Month_Local, .data$Year_Local,
                   .data$SampleDepth_m, .data$StationName, .data$StationCode,
                   tidyselect::any_of(var_names)) %>%
