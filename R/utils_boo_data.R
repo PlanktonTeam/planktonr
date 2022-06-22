@@ -266,14 +266,6 @@ pr_get_sti <-  function(Type = "P"){
     pr_rename() %>%
     dplyr::rename(SampleTime_UTC = .data$SAMPLEDATE_UTC)
 
-  # cpr_vars <- c("TripCode", "Region", "Latitude", "Longitude", "SampleTime_UTC", "SampleTime_Local",
-  #               "Year_Local", "Month_Local", "Day_Local", "Time_Local24hr", "SatSST_degC", "SatChlaSurf_mgm3",
-  #               "PCI", "SampleVolume_m3")
-  #
-  # nrs_vars <- c("Project", "StationName", "StationCode", "TripCode", "Latitude", "Longitude", "SampleTime_UTC", "SampleTime_Local",
-  #               "Year_Local", "Month_Local", "Day_Local", "Time_Local24hr", "SampleDepth_m", "CTDSST_degC",
-  #               "CTDChlaSurf_mgm3", "CTDSalinity_psu")
-
   cpr <- cprdat %>%
     tidyr::pivot_longer(-tidyselect::all_of(pr_get_nonTaxaColumns(Survey = "CPR", Type = Type)), names_to = "Species", values_to = parameter) %>%
     dplyr::left_join(cprsat, by = c("Latitude", "Longitude", "SampleTime_UTC")) %>%

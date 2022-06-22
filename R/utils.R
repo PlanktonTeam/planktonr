@@ -325,12 +325,10 @@ pr_apply_time <- function(df){
   df <- df %>%
     dplyr::mutate(Year_Local = lubridate::year(.data$SampleTime_Local),
                   Month_Local = lubridate::month(.data$SampleTime_Local),
-                  Day_Local = lubridate::day(.data$SampleTime_Local)) %>%
-    dplyr::relocate(tidyselect::all_of(c("Year_Local", "Month_Local", "Day_Local")), .after = .data$SampleTime_Local)
-  # Removed 21st June 2022
-  # Time_24hr = stringr::str_sub(.data$SampleTime_Local, -8, -1), # hms doesn"t seem to work on 00:00:00 times
-  # tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE),
-  # SampleDate_UTC = lubridate::with_tz(lubridate::force_tzs(.data$SampleTime_Local, .data$tz, roll = TRUE), "UTC"))
+                  # Day_Local = lubridate::day(.data$SampleTime_Local),
+                  # tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE)
+                  ) %>%
+    dplyr::relocate(tidyselect::all_of(c("Year_Local", "Month_Local")), .after = .data$SampleTime_Local)
 
 }
 
@@ -375,13 +373,13 @@ pr_add_Carbon <- function(df, meth){
   if (meth %in% "CPR"){
     df <- df %>%
       dplyr::mutate(BV_Cell = .data$BioVolume_um3m3 / .data$PhytoAbund_m3, # biovolume of one cell
-                    Carbon = ifelse(.data$TaxonGroup == "Dinoflagellate", 0.76*(.data$BV_Cell)^0.819, # conversion to Carbon based on taxongroup and biovolume of cell
-                                    ifelse(.data$TaxonGroup == 'Ciliate', 0.22*(.data$BV_Cell)^0.939,
-                                           ifelse(.data$TaxonGroup == 'Cyanobacteria', 0.2, 0.288*(.data$BV_Cell)^0.811 ))),
+                    Carbon = dplyr::case_when(.data$TaxonGroup == "Dinoflagellate" ~ 0.76*(.data$BV_Cell)^0.819, # conversion to Carbon based on taxongroup and biovolume of cell
+                                              .data$TaxonGroup == 'Ciliate' ~ 0.22*(.data$BV_Cell)^0.939,
+                                              .data$TaxonGroup == 'Cyanobacteria'~ 0.2,
+                                              TRUE ~ 0.288*(.data$BV_Cell)^0.811),
                     Carbon_m3 = .data$PhytoAbund_m3 * .data$Carbon) # Carbon per m3
     return(df)
   }
-
 
   if (meth %in% "NRS"){
     df <- df %>%
@@ -398,21 +396,21 @@ pr_add_Carbon <- function(df, meth){
 
 
 
-#' Add local Time
-#'
-#' This function adds the local time based on timezone.
-#' @param df Dataframe with UTC Time
-#'
-#' @return A datafrane with local time added
-#' @export
-#'
-#' @examples
-#' df <- data.frame(tz = c("Australia/Perth", "Australia/Brisbane"),
-#'                SampleTime_UTC = c(lubridate::now(), lubridate::now()))
-#' df <- pr_add_LocalTime(df)
-pr_add_LocalTime <- function(df){
-  df <- purrr::map2(df$SampleTime_UTC, df$tz, function(x,y) lubridate::with_tz(x, tzone = y))
-}
+# Add local Time
+#
+# This function adds the local time based on timezone.
+# @param df Dataframe with UTC Time
+#
+# @return A datafrane with local time added
+# @export
+#
+# @examples
+# df <- data.frame(tz = c("Australia/Perth", "Australia/Brisbane"),
+#                SampleTime_UTC = c(lubridate::now(), lubridate::now()))
+# df <- pr_add_LocalTime(df)
+# pr_add_LocalTime <- function(df){
+#   df <- purrr::map2(df$SampleTime_UTC, df$tz, function(x,y) lubridate::with_tz(x, tzone = y))
+# }
 
 #' For use in models to create a circular predictor
 #'
