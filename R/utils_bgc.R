@@ -14,14 +14,16 @@ pr_get_NRSChemistry <- function(){
   file <- "bgc_chemistry_data"
 
   dat <- pr_get_raw(file) %>%
-    dplyr::rename(Phosphate_umolL = .data$Phosphate_umoL) %>%
+    dplyr::rename(Phosphate_umolL = .data$Phosphate_umoL,
+                  SampleTime_Local = .data$SampleDate_Local) %>%
+    dplyr::mutate(SampleTime_Local = lubridate::as_datetime(.data$SampleTime_Local)) %>%
     pr_rename() %>%
     pr_apply_flags() %>%
     pr_add_StationCode() %>%
     pr_filter_NRSStations() %>%
     dplyr::mutate_all(~ replace(., is.na(.), NA)) %>%
-    dplyr::mutate(Month_Local = lubridate::month(.data$SampleDate_Local)) %>%
-    dplyr::select(.data$Project, .data$SampleDate_Local, .data$Month_Local, .data$SampleDepth_m,
+    dplyr::mutate(Month_Local = lubridate::month(.data$SampleTime_Local)) %>%
+    dplyr::select(.data$Project, .data$SampleTime_Local, .data$Month_Local, .data$SampleDepth_m,
                   .data$StationName, .data$StationCode, tidyselect::all_of(var_names)) %>%
     tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = 'parameters') %>%
     pr_reorder()
@@ -43,6 +45,8 @@ pr_get_NRSPigments <- function(){
   var_names <- c("TotalChla", "TotalChl", "PPC", "PSC", "PSP", "TCaro", "TAcc", "TPig", "TDP")
 
   dat <- pr_get_raw(file) %>%
+    dplyr::rename(SampleTime_Local = .data$SampleDate_Local) %>%
+    dplyr::mutate(SampleTime_Local = lubridate::as_datetime(.data$SampleTime_Local)) %>%
     pr_rename() %>%
     pr_apply_flags("Pigments_flag") %>%
     dplyr::select(-.data$Pigments_flag) %>%
@@ -59,10 +63,10 @@ pr_get_NRSPigments <- function(){
                   TPig = sum(.data$TAcc, .data$TotalChla,  na.rm = TRUE), # Total pigments
                   TDP = sum(.data$PSC, .data$Allo_mgm3, .data$Zea_mgm3, .data$DvCphlB_mgm3, .data$CphlB_mgm3,  na.rm = TRUE), # Total Diagnostic pigments
                   StationCode = stringr::str_sub(.data$TripCode, 1, 3),
-                  Month_Local = lubridate::month(.data$SampleDate_Local),
+                  Month_Local = lubridate::month(.data$SampleTime_Local),
                   SampleDepth_m = as.numeric(.data$SampleDepth_m)) %>%
     dplyr::filter(.data$TotalChla != 0) %>%
-    dplyr::select(.data$Project, .data$SampleDate_Local, .data$Month_Local, .data$SampleDepth_m, .data$StationName, .data$StationCode,
+    dplyr::select(.data$Project, .data$SampleTime_Local, .data$Month_Local, .data$SampleDepth_m, .data$StationName, .data$StationCode,
                   tidyselect::any_of(var_names)) %>%
     tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = 'parameters') %>%
     pr_reorder()
@@ -85,12 +89,16 @@ pr_get_NRSPico <- function(){
   var_names <- c("Prochlorococcus_cellsmL", "Synecochoccus_cellsmL", "Picoeukaryotes_cellsmL")
 
   dat <- pr_get_raw(file) %>%
+    dplyr::rename(SampleTime_Local = .data$SampleDate_Local) %>%
+    dplyr::mutate(SampleTime_Local = lubridate::as_datetime(.data$SampleTime_Local)) %>%
     pr_rename() %>%
+    dplyr::filter(.data$SampleDepth_m != "WC") %>%
     pr_apply_flags() %>%
     pr_add_StationCode() %>%
-    dplyr::mutate(Month_Local = lubridate::month(.data$SampleDate_Local),
-                  Year_Local = lubridate::year(.data$SampleDate_Local)) %>%
-    dplyr::select(.data$Project, .data$SampleDate_Local, .data$Month_Local, .data$Year_Local,
+    dplyr::mutate(Month_Local = lubridate::month(.data$SampleTime_Local),
+                  Year_Local = lubridate::year(.data$SampleTime_Local),
+                  SampleDepth_m = as.numeric(.data$SampleDepth_m)) %>%
+    dplyr::select(.data$Project, .data$SampleTime_Local, .data$Month_Local, .data$Year_Local,
                   .data$SampleDepth_m, .data$StationName, .data$StationCode,
                   tidyselect::any_of(var_names)) %>%
     tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "parameters") %>%
@@ -152,6 +160,8 @@ pr_get_NRSTSS <- function(){
   file <- "bgc_tss_data"
 
   dat <- pr_get_raw(file) %>%
+    dplyr::rename(SampleTime_Local = .data$SampleDate_Local) %>%
+    dplyr::mutate(SampleTime_Local = lubridate::as_datetime(.data$SampleTime_Local)) %>%
     pr_rename() %>%
     pr_apply_flags("TSSall_flag")
 }
@@ -171,8 +181,7 @@ pr_get_NRSCTD <- function(){
 
   rawCTD <- pr_get_raw(file) %>%
     pr_rename() %>%
-    dplyr::rename(SampleDepth_m = .data$Depth_m,
-                  SampleTime_UTC = .data$SampleDate_UTC) %>% # TODO Hopefully this will be fixed by AODN
+    dplyr::rename(SampleDepth_m = .data$Depth_m) %>%
     dplyr::mutate(StationCode = stringr::str_remove(.data$site_code, "NRS"), # Have to do this manually due to `NRS` in code
                   Project = "NRS") %>%
     pr_add_StationName() %>%
@@ -279,7 +288,7 @@ pr_get_NRSCTD <- function(){
 #                             na = c("NA", "")) %>%
 #     pr_rename() %>%
 #     tidyr::pivot_longer(-c(.data$StationCode:.data$SampleDepth_m), values_to = "Values", names_to = "parameters") %>%
-#     dplyr::rename(SampleTime_Local = .data$SampleDateLocal) %>%
+#     dplyr::rename(SampleTime_Local = .data$SampleTimeLocal) %>%
 #     dplyr::mutate(Project = "LTM",
 #                   SampleTime_Local = strptime(as.POSIXct(.data$SampleTime_Local), "%Y-%m-%d")) %>%
 #     pr_add_StationName() %>%
@@ -295,13 +304,13 @@ pr_get_NRSCTD <- function(){
 #                   .data$SampleTime_Local, .data$SampleDepth_m, .data$Temperature_degC) %>%
 #     dplyr::filter(.data$StationCode %in% c("MAI", "ROT", "PHB")) %>%
 #     tidyr::pivot_longer(-c(.data$Project:.data$SampleDepth_m), values_to = "Values", names_to = "parameters") %>%
-#     # dplyr::mutate(SampleDate_Local = strptime(as.POSIXct(.data$SampleDate_Local), "%Y-%m-%d")) %>% # Commented 21/6/22
+#     # dplyr::mutate(SampleTime_Local = strptime(as.POSIXct(.data$SampleTime_Local), "%Y-%m-%d")) %>% # Commented 21/6/22
 #     dplyr::select(colnames(NutsLT))
 #
 #   LTnuts <- dplyr::bind_rows(NutsLT, Nuts, CTD) %>% #TODO I don't think this is used?
 #     pr_apply_time()
-#     # dplyr::mutate(Year = lubridate::year(.data$SampleDate_Local),
-#     #               Month = lubridate::month(.data$SampleDate_Local))
+#     # dplyr::mutate(Year = lubridate::year(.data$SampleTime_Local),
+#     #               Month = lubridate::month(.data$SampleTime_Local))
 #
 #   rm(NutsLT, Nuts, CTD)
 #

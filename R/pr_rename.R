@@ -134,7 +134,7 @@ pr_rename <- function(df){
     "StationCode", "STATIONCODE",
     "SampleCode", "NRS_SAMPLE_CODE",
     "SiteCode", "IMOS_SITE_CODE",
-    "SampleDate_UTC", "time_coverage_start",
+    "SampleTime_UTC", "time_coverage_start",
     "TaxonTraining", "TAXON_TRAINING",
     "TaxonComments", "TAXON_COMMENTS",
     "Salinity_psu", "PSAL",
