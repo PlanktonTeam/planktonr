@@ -17,11 +17,11 @@ pr_plot_climate(
 
 \item{Survey}{CPR or NRS data}
 
+\item{trend}{specified time period}
+
 \item{pal}{is the palette name from cmocean}
 
 \item{Scale}{scale of y axis on plot, whatever scale_y_continuous trans accepts}
-
-\item{x}{specified time period}
 }
 \value{
 a climatology plot
@@ -30,7 +30,11 @@ a climatology plot
 Plot single climatology
 }
 \examples{
-df <- data.frame(Month_Local = rep(1:12,10), StationCode = c("NSI", "NSI", "PHB", "PHB"),
-parameters = 'Biomass_mgm3', Values = runif(120, min=0, max=10))
+df <- pr_get_indices(Survey = "NRS", Type = "P") \%>\%
+        dplyr::filter(parameters == "PhytoBiomassCarbon_pgL")
 monthly <- pr_plot_climate(df, "NRS", "Month", "matter")
+
+df <- pr_get_indices(Survey = "CPR", Type = "Z") \%>\%
+        dplyr::filter(parameters == "ZoopAbundance_m3")
+annual <- pr_plot_climate(df, "CPR", "Year", "matter")
 }

@@ -22,6 +22,6 @@ plot of fg timseries
 Time series plot of functional groups
 }
 \examples{
-df <- pr_get_fg('NRS', 'P')
-plot <- pr_plot_tsfg(df, 'Actual')
+df <- pr_get_fg("NRS", "P")
+plot <- pr_plot_tsfg(df, "Actual")
 }

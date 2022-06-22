@@ -10,7 +10,7 @@ pr_get_daynight(Type = "Z")
 \item{Type}{Phyto or zoo, defaults to phyto}
 }
 \value{
-df to be sued with pr_plot_daynight
+df to be used with pr_plot_daynight
 }
 \description{
 Get data for plots of species abundance by day and night using CPR data
