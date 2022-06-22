@@ -36,7 +36,6 @@ pr_get_indices <- function(Survey = "CPR", Type = "P"){
 
     dat <- pr_get_raw("cpr_derived_indices_data") %>%
       pr_rename() %>%
-      # # pr_add_SampleDate() %>%
       pr_add_Bioregions() %>%
       dplyr::select(.data$SampleTime_Local, .data$Year_Local, .data$Month_Local, .data$BioRegion,
                     tidyselect::all_of(var_names)) %>%
@@ -45,7 +44,6 @@ pr_get_indices <- function(Survey = "CPR", Type = "P"){
       tidyr::complete(.data$BioRegion, .data$Year_Local, .data$Month_Local) %>% # TODO Do we need complete here? C
       dplyr::mutate(Year_Local = as.numeric(stringr::str_sub(.data$YearMon, 1, 4)), #TODO Not sure why Year/Month is redefined here - because it is NA otherwise?
                     Month_Local = as.numeric(stringr::str_sub(.data$YearMon, -2, -1))) %>%
-      # pr_add_SampleDate() %>%
       dplyr::select(-.data$YearMon) %>%
       tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "parameters") %>%
       dplyr::group_by(.data$SampleTime_Local, .data$Year_Local, .data$Month_Local, .data$BioRegion, .data$parameters) %>%
