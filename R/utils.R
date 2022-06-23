@@ -316,40 +316,41 @@ pr_apply_flags <- function(df, flag_col){
 #' @return A dataframe with extra date columns
 #' @export
 #'
-#' @examples
-#' df <- data.frame(SampleTime_Local = lubridate::now(), Latitude = -32, Longitude = 160)
-#' df <- pr_apply_time(df)
 #' @importFrom rlang .data
+#'
+#' @examples
+# df <- pr_get_indices("NRS", "P") %>%
+#   pr_apply_time(df)
 pr_apply_time <- function(df){
 
   df <- df %>%
     dplyr::mutate(Year_Local = lubridate::year(.data$SampleTime_Local),
                   Month_Local = lubridate::month(.data$SampleTime_Local),
                   # Day_Local = lubridate::day(.data$SampleTime_Local),
-                  # tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE)
-                  ) %>%
-    dplyr::relocate(tidyselect::all_of(c("Year_Local", "Month_Local")), .after = .data$SampleTime_Local)
+                  tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE)) %>%
+    dplyr::relocate(tidyselect::all_of(c("Year_Local", "Month_Local", "tz")), .after = .data$SampleTime_Local)
 
 }
 
 
-#' Remove incorrect species names from dataframe
-#'
-#' @param df A dataframe with species names
-#'
-#' @return A dataframe with all correct species names
-#' @export
-#'
-#' @examples
-#' df <- data.frame(Species = c("IncorrectSpecies cf.", "CorrectSpcies1", NA,
-#'               "CorrectSpecies2", "Incorrect spp., Incorrect/Species"))
-#' df <- pr_filter_species(df)
-#' @importFrom rlang .data
-pr_filter_species <- function(df){
-  pat <- c("spp.", "cf.", "/", "grp", "complex", "type")
-  df <- df %>%
-    dplyr::filter(stringr::str_detect(.data$Species, paste(pat, collapse = "|"), negate = TRUE))
-}
+# Remove incorrect species names from dataframe
+#
+# @param df A dataframe with species names
+#
+# @return A dataframe with all correct species names
+# @export
+#
+# @importFrom rlang .data
+#
+# @examples
+# df <- data.frame(Species = c("IncorrectSpecies cf.", "CorrectSpcies1", NA,
+#               "CorrectSpecies2", "Incorrect spp., Incorrect/Species"))
+# df <- pr_filter_species(df)
+# pr_filter_species <- function(df){
+#   pat <- c("spp.", "cf.", "/", "grp", "complex", "type")
+#   df <- df %>%
+#     dplyr::filter(stringr::str_detect(.data$Species, paste(pat, collapse = "|"), negate = TRUE))
+# }
 
 
 #' Add Carbon concentration to phytoplankton dataframe
