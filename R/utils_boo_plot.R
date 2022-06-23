@@ -173,7 +173,7 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
   if (trend %in% c("Year_Local", "Month_Local")){
     df <- df %>%
       dplyr::filter(!is.na(.data$SampleTime_Local))  %>% # need to drop NA from month, added to dataset by complete(Year, Code)
-      pr_apply_time() %>%
+      # pr_apply_time() %>%
       dplyr::group_by(!!rlang::sym(trend), !!site) %>%
       dplyr::summarise(value = mean(.data$Values, na.rm = TRUE),
                        N = dplyr::n(),
