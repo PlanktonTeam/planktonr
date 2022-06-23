@@ -179,7 +179,7 @@ pr_get_NRSCTD <- function(){
   file = "anmn_ctd_profiles_data"
 
   ctd_vars <- c("Project", "file_id", "StationName", "StationCode", "TripCode",
-                "SampleTime_Local", "Latitude", "Longitude", "SampleDepth_m",
+                "SampleTime_Local", "SampleTime_UTC", "Latitude", "Longitude", "SampleDepth_m",
                 "Salinity_psu", "Temperature_degC", "DissolvedOxygen_umolkg", "ChlF_mgm3",
                 "Turbidity_NTU", "Pressure_dbar", "Conductivity_Sm", "WaterDensity_kgm3")
 
