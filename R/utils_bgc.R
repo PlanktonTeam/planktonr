@@ -216,28 +216,28 @@ pr_get_LTnuts <-  function(){
                                              NITRITE_QC_FLAG = readr::col_number(),
                                              AMMONIA_VALUE = readr::col_number(),
                                              AMMONIA_QC_FLAG = readr::col_number())) %>%
-    dplyr::mutate(StationCode = gsub(".*[-]([^.]+)[-].*", "\\1", SURVEY_NAME),
+    dplyr::mutate(StationCode = gsub(".*[-]([^.]+)[-].*", "\\1", .data$SURVEY_NAME),
                   Project = 'LTM',
-                  Month_Local = lubridate::month(START_TIME),
-                  Year_Local = lubridate::year(START_TIME)) %>%
-    dplyr::select(StationCode, Project, START_TIME, Month_Local, Year_Local, PRESSURE, NITRATE_VALUE:AMMONIA_QC_FLAG) %>%
-    dplyr::rename(SampleTime_Local = START_TIME, SampleDepth_m = PRESSURE,
-                  Nitrate_umolL = NITRATE_VALUE,
-                  Nitrate_Flag = NITRATE_QC_FLAG,
-                  Nitrite_umolL = NITRITE_VALUE,
-                  Nitrite_Flag = NITRITE_QC_FLAG,
-                  Oxygen_umolL = OXYGEN_VALUE,
-                  Oxygen_Flag = OXYGEN_QC_FLAG,
-                  Phosphate_umolL = PHOSPHATE_VALUE,
-                  Phosphate_Flag = PHOSPHATE_QC_FLAG,
-                  Salinity = SALINITY_VALUE,
-                  Salinity_Flag = SALINITY_QC_FLAG,
-                  Silicate_umolL = SILICATE_VALUE,
-                  Silicate_Flag = SILICATE_QC_FLAG,
-                  Temperature_degC = TEMPERATURE_VALUE,
-                  Temperature_Flag = TEMPERATURE_QC_FLAG,
-                  Ammonium_umolL = AMMONIA_VALUE,
-                  Ammonium_Flag = AMMONIA_QC_FLAG) %>%
+                  Month_Local = lubridate::month(.data$START_TIME),
+                  Year_Local = lubridate::year(.data$START_TIME)) %>%
+    dplyr::select(.data$StationCode, .data$Project, .data$START_TIME, .data$Month_Local, .data$Year_Local, .data$PRESSURE, .data$NITRATE_VALUE:.data$AMMONIA_QC_FLAG) %>%
+    dplyr::rename(SampleTime_Local = .data$START_TIME, SampleDepth_m = .data$PRESSURE,
+                  Nitrate_umolL = .data$NITRATE_VALUE,
+                  Nitrate_Flag = .data$NITRATE_QC_FLAG,
+                  Nitrite_umolL = .data$NITRITE_VALUE,
+                  Nitrite_Flag = .data$NITRITE_QC_FLAG,
+                  Oxygen_umolL = .data$OXYGEN_VALUE,
+                  Oxygen_Flag = .data$OXYGEN_QC_FLAG,
+                  Phosphate_umolL = .data$PHOSPHATE_VALUE,
+                  Phosphate_Flag = .data$PHOSPHATE_QC_FLAG,
+                  Salinity = .data$SALINITY_VALUE,
+                  Salinity_Flag = .data$SALINITY_QC_FLAG,
+                  Silicate_umolL = .data$SILICATE_VALUE,
+                  Silicate_Flag = .data$SILICATE_QC_FLAG,
+                  Temperature_degC = .data$TEMPERATURE_VALUE,
+                  Temperature_Flag = .data$TEMPERATURE_QC_FLAG,
+                  Ammonium_umolL = .data$AMMONIA_VALUE,
+                  Ammonium_Flag = .data$AMMONIA_QC_FLAG) %>%
     planktonr::pr_apply_flags() %>%
     dplyr::select(-contains("Flag")) %>%
     planktonr::pr_add_StationName() %>%
