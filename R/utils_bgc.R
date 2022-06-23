@@ -176,160 +176,93 @@ pr_get_NRSTSS <- function(){
 #' @importFrom rlang .data
 pr_get_NRSCTD <- function(){
 
-  file = "anmn_ctd_profiles_data"
+  file = "nrs_depth_binned_ctd_data"
 
   ctd_vars <- c("Project", "file_id", "StationName", "StationCode", "TripCode",
                 "SampleTime_Local", "SampleTime_UTC", "Latitude", "Longitude", "SampleDepth_m",
                 "Salinity_psu", "Temperature_degC", "DissolvedOxygen_umolkg", "ChlF_mgm3",
-                "Turbidity_NTU", "Pressure_dbar", "Conductivity_Sm", "WaterDensity_kgm3")
+                "Turbidity_NTU", "Conductivity_Sm", "WaterDensity_kgm3")
 
   rawCTD <- pr_get_raw(file) %>%
     pr_rename() %>%
-    dplyr::rename(SampleDepth_m = .data$Depth_m,
-                  SampleDepth_flag = .data$Depth_flag) %>%
-    dplyr::mutate(StationCode = stringr::str_remove(.data$site_code, "NRS")) %>% # Have to do this manually due to `NRS` in code
-    pr_add_StationName() %>%
-    pr_filter_NRSStations() %>%
-    dplyr::mutate(Project = "NRS",
-                  TripCode = dplyr::if_else(.data$StationCode == "DAR", paste0(substr(.data$StationCode,1,3), format(.data$SampleTime_UTC, "%Y%m%d_%H:%M")),
-                                            paste0(substr(.data$StationCode,1,3), format(.data$SampleTime_UTC, "%Y%m%d"))),
-                  ChlF_mgm3 = dplyr::if_else(!is.na(.data$Chla_mgm3), .data$Chla_mgm3, .data$ChlF_mgm3)) %>%
-    pr_apply_flags() %>%
-    dplyr::mutate(tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE),
-                  SampleTime_Local = dplyr::case_when(
-                    .data$tz == "Australia/Darwin" ~ format(.data$SampleTime_UTC, tz = "Australia/Darwin"),
-                    .data$tz == "Australia/Brisbane" ~ format(.data$SampleTime_UTC, tz = "Australia/Brisbane"),
-                    .data$tz == "Australia/Adelaide" ~ format(.data$SampleTime_UTC, tz = "Australia/Adelaide"),
-                    .data$tz == "Australia/Hobart" ~ format(.data$SampleTime_UTC, tz = "Australia/Hobart"),
-                    .data$tz == "Australia/Sydney" ~ format(.data$SampleTime_UTC, tz = "Australia/Sydney"),
-                    .data$tz == "Australia/Perth" ~ format(.data$SampleTime_UTC, tz = "Australia/Perth"))) %>%
+    pr_add_StationCode() %>%
+    dplyr::rename(ChlF_mgm3 = .data$Chla_mgm3) %>%
+    #pr_apply_flags() %>%  #TODO flags are small f, make function work with both
     dplyr::filter(!.data$file_id %in% c(2117, 2184, 2186, 2187)) %>% #TODO Check with Claire
     dplyr::select(tidyselect::all_of(ctd_vars)) %>%
     pr_apply_time()
 
-  NRSSamp <- pr_get_NRSTrips() %>%
-    dplyr::filter(stringr::str_detect(.data$TripCode, "PH4", negate = TRUE))
-
-  Stations <- rawCTD %>%
-    dplyr::mutate(stations = as.factor(.data$StationCode)) %>%
-    dplyr::select(.data$stations) %>%
-    dplyr::distinct()
-
-  df <- data.frame(file_id = NA, StationCode = NA)
-
-  for (y in 1:nlevels(Stations$stations)){
-
-    station <- levels(Stations$stations)[[y]]
-
-    rawCTDCast <- rawCTD %>%
-      dplyr::select(.data$file_id, .data$SampleTime_Local, .data$StationCode) %>%
-      dplyr::filter(.data$StationCode == station) %>%
-      dplyr::distinct()
-
-    CastTimes <- lubridate::as_datetime(rawCTDCast$SampleTime_Local)
-
-    Samps <- NRSSamp %>%
-      dplyr::filter(.data$StationCode == station) %>%
-      dplyr::select(.data$SampleTime_Local, .data$StationCode) %>%
-      dplyr::distinct()
-
-    dateSelect <- function(x){
-      which.min(abs(x - CastTimes))
-    }
-
-    Samps$SampLevel <- sapply(Samps$SampleTime_Local, dateSelect) #DateMatch
-    # Samps$SampleTime_UTC <- Samps$SampleTime_UTC #TODO Check with Claire - something that was overwritten earlier?
-
-    for (i in 1:nrow(Samps)){
-      j <- Samps$SampLevel[[i]]
-      Samps$SampleTime_Local[i] <- CastTimes[[j]]
-    }
-
-    Samps <- Samps %>%
-      dplyr::mutate(DateDiff = as.numeric(abs(.data$SampleTime_Local - .data$SampleTime_Local) / 3600),
-                    DateDiff = dplyr::case_when(.data$DateDiff > 3 & station != "NSI" ~ NA_real_,
-                                                .data$DateDiff > 15 & station %in% c("NSI", "KAI") ~ NA_real_,
-                                                TRUE ~ .data$DateDiff))
-
-    SampsMatch <- rawCTDCast %>%
-      dplyr::filter(.data$StationCode == station) %>%
-      dplyr::select(.data$SampleTime_Local, .data$file_id) %>%
-      dplyr::distinct() %>%
-      dplyr::mutate(SampleTime_Local = lubridate::as_datetime(.data$SampleTime_Local))
-
-    CastMatch <- Samps %>%
-      tidyr::drop_na(.data$DateDiff) %>%
-      dplyr::inner_join(SampsMatch, by = "SampleTime_Local") %>%
-      dplyr::select(.data$file_id, .data$StationCode)
-
-    df <- df %>%
-      dplyr::bind_rows(CastMatch) %>%
-      tidyr::drop_na()
-  }
-
-  rawCTD <- rawCTD %>%
-    dplyr::left_join(df, by = c("file_id", "StationCode"))
-
 }
-
 
 
 ## COMMENTING OUT FOR THE MOMENT. THERE ARE DISCREPANCIES IN THE DATE/TIME NAMES FOR THE GROUPS NEEDED TO MERGE
 
-# Get NRS long term nutrient timeseries data
-#
-# @return dataframe for plotting long term nutrient time series info
-# @export
-#
-# @examples
-# df <- pr_get_LTnuts()
-# pr_get_LTnuts <-  function(){
-#
-#   NutsLT <- readr::read_csv(system.file("extdata", "nuts_longterm_clean2.csv", package = "planktonr", mustWork = TRUE),
-#                             show_col_types = FALSE,
-#                             na = c("NA", "")) %>%
-#     pr_rename() %>%
-#     tidyr::pivot_longer(-c(.data$StationCode:.data$SampleDepth_m), values_to = "Values", names_to = "parameters") %>%
-#     dplyr::rename(SampleTime_Local = .data$SampleTimeLocal) %>%
-#     dplyr::mutate(Project = "LTM",
-#                   SampleTime_Local = strptime(as.POSIXct(.data$SampleTime_Local), "%Y-%m-%d")) %>%
-#     pr_add_StationName() %>%
-#     dplyr::relocate(c("Project", "StationName", "StationCode", tidyselect::everything())) %>%
-#     pr_reorder()
-#
-#   Nuts <- pr_get_NRSChemistry() %>%
-#     dplyr::filter(.data$StationCode %in% c("MAI", "ROT", "PHB")) %>%
-#     dplyr::select(colnames(NutsLT)) # Ensure columns are in the same order
-#
-#   CTD <- pr_get_NRSCTD() %>%
-#     dplyr::select(.data$Project, .data$StationCode, .data$StationName,
-#                   .data$SampleTime_Local, .data$SampleDepth_m, .data$Temperature_degC) %>%
-#     dplyr::filter(.data$StationCode %in% c("MAI", "ROT", "PHB")) %>%
-#     tidyr::pivot_longer(-c(.data$Project:.data$SampleDepth_m), values_to = "Values", names_to = "parameters") %>%
-#     # dplyr::mutate(SampleTime_Local = strptime(as.POSIXct(.data$SampleTime_Local), "%Y-%m-%d")) %>% # Commented 21/6/22
-#     dplyr::select(colnames(NutsLT))
-#
-#   LTnuts <- dplyr::bind_rows(NutsLT, Nuts, CTD) %>% #TODO I don't think this is used?
-#     pr_apply_time()
-#     # dplyr::mutate(Year = lubridate::year(.data$SampleTime_Local),
-#     #               Month = lubridate::month(.data$SampleTime_Local))
-#
-#   rm(NutsLT, Nuts, CTD)
-#
-#   means <- LTnuts %>%
-#     dplyr::select(.data$StationName, .data$parameters, .data$Values) %>%
-#     dplyr::group_by(.data$StationName, .data$parameters) %>%
-#     dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
-#                      sd = stats::sd(.data$Values, na.rm = TRUE),
-#                      .groups = "drop")
-#
-#   Pol <- LTnuts %>%
-#     dplyr::left_join(means, by = c("StationName", "parameters")) %>%
-#     dplyr::mutate(anomaly = (.data$Values - .data$means)/.data$sd)
-#
-# }
+#' Get NRS long term nutrient timeseries data
 
+#' @return dataframe for plotting long term nutrient time series info
+#' @export
 
+#' @examples
+#' df <- pr_get_LTnuts()
+pr_get_LTnuts <-  function(){
+
+  var_names <- c("Silicate_umolL", "Phosphate_umolL", "Ammonium_umolL", "Nitrate_umolL", "Nitrite_umolL",
+                 "Oxygen_umolL", "Salinity", "Temperature_degC")
+
+  NutsLT <- readr::read_csv(system.file("extdata", "LongTermMonitoringData.csv", package = "planktonr", mustWork = TRUE),
+                            show_col_types = FALSE,
+                            na = c("NA", ""),
+                            col_types = cols(NITRITE_VALUE = col_number(),
+                                             NITRITE_QC_FLAG = col_number(),
+                                             AMMONIA_VALUE = col_number(),
+                                             AMMONIA_QC_FLAG = col_number())) %>%
+    dplyr::mutate(StationCode = gsub(".*[-]([^.]+)[-].*", "\\1", SURVEY_NAME),
+                  Project = 'LTM',
+                  Month_Local = lubridate::month(START_TIME),
+                  Year_Local = lubridate::year(START_TIME)) %>%
+    dplyr::select(StationCode, Project, START_TIME, Month_Local, Year_Local, PRESSURE, NITRATE_VALUE:AMMONIA_QC_FLAG) %>%
+    dplyr::rename(SampleTime_Local = START_TIME, SampleDepth_m = PRESSURE,
+                  Nitrate_umolL = NITRATE_VALUE,
+                  Nitrate_Flag = NITRATE_QC_FLAG,
+                  Nitrite_umolL = NITRITE_VALUE,
+                  Nitrite_Flag = NITRITE_QC_FLAG,
+                  Oxygen_umolL = OXYGEN_VALUE,
+                  Oxygen_Flag = OXYGEN_QC_FLAG,
+                  Phosphate_umolL = PHOSPHATE_VALUE,
+                  Phosphate_Flag = PHOSPHATE_QC_FLAG,
+                  Salinity = SALINITY_VALUE,
+                  Salinity_Flag = SALINITY_QC_FLAG,
+                  Silicate_umolL = SILICATE_VALUE,
+                  Silicate_Flag = SILICATE_QC_FLAG,
+                  Temperature_degC = TEMPERATURE_VALUE,
+                  Temperature_Flag = TEMPERATURE_QC_FLAG,
+                  Ammonium_umolL = AMMONIA_VALUE,
+                  Ammonium_Flag = AMMONIA_QC_FLAG) %>%
+    planktonr::pr_apply_flags() %>%
+    dplyr::select(-contains("Flag")) %>%
+    planktonr::pr_add_StationName() %>%
+    tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = 'parameters') %>%
+    dplyr::filter(Values != -999) %>%
+    dplyr::relocate(c("Project", "StationName", "StationCode", tidyselect::everything())) %>%
+    pr_reorder()
+
+  Nuts <- pr_get_NRSChemistry() %>%
+    dplyr::filter(.data$StationCode %in% c("MAI", "ROT", "PHB"),
+                  parameters != 'SecchiDepth_m') %>%
+    dplyr::mutate(Year_Local = lubridate::year(SampleTime_Local)) %>%
+    dplyr::select(colnames(NutsLT)) # Ensure columns are in the same order
+
+  CTD <- pr_get_NRSCTD() %>%
+    dplyr::select(.data$Project, .data$StationCode, .data$StationName, .data$Month_Local, .data$Year_Local,
+                  .data$SampleTime_Local, .data$SampleDepth_m, .data$Temperature_degC) %>%
+    dplyr::filter(.data$StationCode %in% c("MAI", "ROT", "PHB")) %>%
+    tidyr::pivot_longer(-c(.data$Project:.data$SampleDepth_m), values_to = "Values", names_to = "parameters") %>%
+    # dplyr::mutate(SampleTime_Local = strptime(as.POSIXct(.data$SampleTime_Local), "%Y-%m-%d")) %>% # Commented 21/6/22
+    dplyr::select(colnames(NutsLT))
+
+  LTnuts <- dplyr::bind_rows(NutsLT, Nuts, CTD)  #TODO I don't think this is used? It is used on the policy page for LTM
+
+}
 
 
 # # Create Biogeochemical data

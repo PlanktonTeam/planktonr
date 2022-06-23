@@ -1,13 +1,13 @@
 
 #' Get Policy data set
 #'
-#' @param Survey "NRS" or "CPR"
+#' @param Survey "NRS" or "CPR" or "LTM"
 #'
 #' @return A dataframe with policy data
 #' @export
 #'
 #' @examples
-#' dat <- pr_get_pol("NRS")
+#' dat <- pr_get_pol("LTM")
 pr_get_pol <- function(Survey = "NRS"){
 
   if(Survey == "CPR") {
@@ -65,6 +65,21 @@ pr_get_pol <- function(Survey = "NRS"){
     Pol <- Pol %>%
       dplyr::left_join(means, by = c("StationName", "parameters")) %>%
       dplyr::mutate(anomaly = (.data$Values - means)/sd)
+
+  } else if (Survey == "LTM"){
+
+    LTnuts <- pr_get_LTnuts()
+
+    means <- LTnuts %>%
+      dplyr::select(.data$StationName, .data$parameters, .data$Values) %>%
+      dplyr::group_by(.data$StationName, .data$parameters) %>%
+      dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
+                       sd = stats::sd(.data$Values, na.rm = TRUE),
+                       .groups = "drop")
+
+    Pol <- LTnuts %>%
+      dplyr::left_join(means, by = c("StationName", "parameters")) %>%
+      dplyr::mutate(anomaly = (.data$Values - .data$means)/.data$sd)
 
   }
 }
