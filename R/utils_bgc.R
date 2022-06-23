@@ -212,7 +212,7 @@ pr_get_LTnuts <-  function(){
   NutsLT <- readr::read_csv(system.file("extdata", "LongTermMonitoringData.csv", package = "planktonr", mustWork = TRUE),
                             show_col_types = FALSE,
                             na = c("NA", ""),
-                            col_types = cols(NITRITE_VALUE = col_number(),
+                            col_types = readr::cols(NITRITE_VALUE = col_number(),
                                              NITRITE_QC_FLAG = col_number(),
                                              AMMONIA_VALUE = col_number(),
                                              AMMONIA_QC_FLAG = col_number())) %>%
