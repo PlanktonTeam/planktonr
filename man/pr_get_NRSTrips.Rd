@@ -16,5 +16,5 @@ A dataframe with NRS BGC information
 Load NRS station BGC information
 }
 \examples{
-df <- pr_get_NRSTrips()
+df <- pr_get_NRSTrips(Type = "Z")
 }

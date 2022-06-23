@@ -79,11 +79,11 @@ pr_get_NRSStation <- function(){
 #' @return A dataframe with NRS BGC information
 #' @export
 #' @examples
-#' df <- pr_get_NRSTrips()
+#' df <- pr_get_NRSTrips(Type = "Z")
 #' @importFrom rlang .data
 pr_get_NRSTrips <- function(Type = c("P", "Z", "F")){
 
-  NRSTrip <- readr::read_csv(system.file("extdata", "BGC_Trip.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
+  NRSTrip <- pr_get_s3("bgc_trip") %>%
     pr_rename() %>%
     dplyr::rename(ZSampleDepth_m = .data$ZOOPSAMPLEDEPTH_M,
                   PSampleDepth_m = .data$PHYTOSAMPLEDEPTH_M,

@@ -10,6 +10,19 @@ pr_get_site <- function(){
   raw <-"http://geoserver-123.aodn.org.au/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=imos:LAYER_NAME&outputFormat=csv-with-metadata-header"
 }
 
+#' Get location of s3 plankton data
+#'
+#' Internal function to load the location of the s3 plankton data files.
+#' @return A string with location of s3 plankton data
+#' @export
+#' @examples
+#' file_loc <- pr_get_s3site()
+#' @importFrom rlang .data
+pr_get_s3site <- function(){
+  raw <-"https://s3-ap-southeast-2.amazonaws.com/imos-data/IMOS/BGC_DB/harvested_from_CSIRO/"
+}
+
+
 
 #' Download Raw Data from IMOS
 #'
@@ -71,6 +84,32 @@ pr_get_raw <- function(file){
     col_types = col_types)
 
   return(dat)
+}
+
+#' Download Raw Data from IMOS
+#'
+#' This function is not intended for use by most people. It downloads the raw data file from IMOS with NO QC or data manipulation done. User beware. It can be used to view the raw data that IMOS provides behind the scenes.
+#'
+#' Options for `file` include: "bgc_chemistry_data", "bgc_pigments_data", "bgc_picoplankton_data", "bgc_tss_data".
+#'
+#' @param file The filename of the requested data
+#'
+#' @return A dataframe of raw IMOS data
+#' @export
+#'
+#' @examples
+#' dat <- pr_get_s3("bgc_trip")
+pr_get_s3 <- function(file){
+
+    col_types = list()
+
+    dat <- readr::read_csv(paste0(pr_get_s3site(), file, ".csv"),
+                           na = c("", NaN),
+                           show_col_types = FALSE,
+                           comment = "#",
+                           col_types = col_types)
+
+    return(dat)
 }
 
 
@@ -141,17 +180,27 @@ pr_get_csv <- function(file, di){
 
 
 
-#' Load copepod information table with sizes etc.
+#' Load plankton information table with sizes etc.
+#'
+#' @param Type Get info for Phytoplankton (`P`) or Zooplankton(`Z`)
 #'
 #' @return A dataframe with NRS zooplankton information
 #' @export
 #'
 #' @examples
-#' df <- pr_get_ZooInfo()
+#' df <- pr_get_PlanktonInfo(Type = "P")
+#' df <- pr_get_PlanktonInfo(Type = "Z")
 #' @importFrom rlang .data
-pr_get_ZooInfo <- function(){
-  ZInfo <- readr::read_csv(system.file("extdata", "ZoopInfo.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
-    pr_rename()
+pr_get_PlanktonInfo <- function(Type = "Z"){
+
+  if (Type == "Z"){
+    df <- pr_get_s3("zoopinfo") %>%
+      pr_rename()
+  } else if (Type == "P"){
+    df <- pr_get_s3("phytoinfo") %>%
+      pr_rename()
+  }
+return(df)
 }
 
 
@@ -319,8 +368,8 @@ pr_apply_flags <- function(df, flag_col){
 #' @importFrom rlang .data
 #'
 #' @examples
-# df <- pr_get_indices("NRS", "P") %>%
-#   pr_apply_time(df)
+#' df <- pr_get_indices("NRS", "P") %>%
+#'   pr_apply_time()
 pr_apply_time <- function(df){
 
   df <- df %>%
