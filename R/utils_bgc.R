@@ -198,10 +198,10 @@ pr_get_NRSCTD <- function(){
 ## COMMENTING OUT FOR THE MOMENT. THERE ARE DISCREPANCIES IN THE DATE/TIME NAMES FOR THE GROUPS NEEDED TO MERGE
 
 #' Get NRS long term nutrient timeseries data
-
+#'
 #' @return dataframe for plotting long term nutrient time series info
 #' @export
-
+#'
 #' @examples
 #' df <- pr_get_LTnuts()
 pr_get_LTnuts <-  function(){

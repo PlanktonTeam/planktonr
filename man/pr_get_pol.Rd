@@ -7,7 +7,7 @@
 pr_get_pol(Survey = "NRS")
 }
 \arguments{
-\item{Survey}{"NRS" or "CPR"}
+\item{Survey}{"NRS" or "CPR" or "LTM"}
 }
 \value{
 A dataframe with policy data
@@ -16,5 +16,5 @@ A dataframe with policy data
 Get Policy data set
 }
 \examples{
-dat <- pr_get_pol("NRS")
+dat <- pr_get_pol("LTM")
 }
