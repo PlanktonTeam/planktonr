@@ -178,22 +178,22 @@ pr_get_NRSCTD <- function(){
 
   file = "anmn_ctd_profiles_data"
 
+  ctd_vars <- c("Project", "file_id", "StationName", "StationCode", "TripCode",
+                "SampleTime_Local", "SampleTime_UTC", "Latitude", "Longitude", "SampleDepth_m",
+                "Salinity_psu", "Temperature_degC", "DissolvedOxygen_umolkg", "ChlF_mgm3",
+                "Turbidity_NTU", "Pressure_dbar", "Conductivity_Sm", "WaterDensity_kgm3")
+
   rawCTD <- pr_get_raw(file) %>%
     pr_rename() %>%
-    dplyr::rename(SampleDepth_m = .data$Depth_m) %>%
-    dplyr::mutate(StationCode = stringr::str_remove(.data$site_code, "NRS"), # Have to do this manually due to `NRS` in code
-                  Project = "NRS") %>%
+    dplyr::rename(SampleDepth_m = .data$Depth_m,
+                  SampleDepth_flag = .data$Depth_flag) %>%
+    dplyr::mutate(StationCode = stringr::str_remove(.data$site_code, "NRS")) %>% # Have to do this manually due to `NRS` in code
     pr_add_StationName() %>%
     pr_filter_NRSStations() %>%
-    dplyr::mutate(TripCode = dplyr::if_else(.data$StationCode == "DAR", paste0(substr(.data$StationCode,1,3), format(.data$SampleTime_UTC, "%Y%m%d_%H:%M")),
+    dplyr::mutate(Project = "NRS",
+                  TripCode = dplyr::if_else(.data$StationCode == "DAR", paste0(substr(.data$StationCode,1,3), format(.data$SampleTime_UTC, "%Y%m%d_%H:%M")),
                                             paste0(substr(.data$StationCode,1,3), format(.data$SampleTime_UTC, "%Y%m%d"))),
                   ChlF_mgm3 = dplyr::if_else(!is.na(.data$Chla_mgm3), .data$Chla_mgm3, .data$ChlF_mgm3)) %>%
-    dplyr::select(.data$Project, .data$file_id, .data$StationName, .data$StationCode, .data$TripCode,
-                  .data$SampleTime_UTC, .data$Latitude, .data$Longitude, .data$SampleDepth_m,
-                  .data$Salinity_psu, .data$Salinity_flag, .data$Temperature_degC, .data$Temperature_flag,
-                  .data$DissolvedOxygen_umolkg, .data$DissolvedOxygen_flag, .data$ChlF_mgm3, .data$ChlF_flag,
-                  .data$Turbidity_NTU, .data$Turbidity_flag, .data$Pressure_dbar, .data$Conductivity_Sm,
-                  .data$Conductivity_flag, .data$WaterDensity_kgm3, .data$WaterDensity_flag) %>%
     pr_apply_flags() %>%
     dplyr::mutate(tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE),
                   SampleTime_Local = dplyr::case_when(
@@ -203,7 +203,9 @@ pr_get_NRSCTD <- function(){
                     .data$tz == "Australia/Hobart" ~ format(.data$SampleTime_UTC, tz = "Australia/Hobart"),
                     .data$tz == "Australia/Sydney" ~ format(.data$SampleTime_UTC, tz = "Australia/Sydney"),
                     .data$tz == "Australia/Perth" ~ format(.data$SampleTime_UTC, tz = "Australia/Perth"))) %>%
-    dplyr::filter(!.data$file_id %in% c(2117, 2184, 2186, 2187))
+    dplyr::filter(!.data$file_id %in% c(2117, 2184, 2186, 2187)) %>% #TODO Check with Claire
+    dplyr::select(tidyselect::all_of(ctd_vars)) %>%
+    pr_apply_time()
 
   NRSSamp <- pr_get_NRSTrips() %>%
     dplyr::filter(stringr::str_detect(.data$TripCode, "PH4", negate = TRUE))
@@ -220,43 +222,44 @@ pr_get_NRSCTD <- function(){
     station <- levels(Stations$stations)[[y]]
 
     rawCTDCast <- rawCTD %>%
-      dplyr::select(.data$file_id, .data$SampleTime_UTC, .data$StationCode) %>%
+      dplyr::select(.data$file_id, .data$SampleTime_Local, .data$StationCode) %>%
       dplyr::filter(.data$StationCode == station) %>%
       dplyr::distinct()
 
-    CastTimes <- rawCTDCast$SampleTime_UTC
+    CastTimes <- lubridate::as_datetime(rawCTDCast$SampleTime_Local)
 
     Samps <- NRSSamp %>%
       dplyr::filter(.data$StationCode == station) %>%
-      dplyr::select(.data$SampleTime_UTC, .data$StationCode) %>%
+      dplyr::select(.data$SampleTime_Local, .data$StationCode) %>%
       dplyr::distinct()
 
     dateSelect <- function(x){
       which.min(abs(x - CastTimes))
     }
 
-    Samps$SampLevel <- sapply(Samps$SampleTime_UTC, dateSelect) #DateMatch
-    Samps$SampleTime_UTC <- Samps$SampleTime_UTC
+    Samps$SampLevel <- sapply(Samps$SampleTime_Local, dateSelect) #DateMatch
+    # Samps$SampleTime_UTC <- Samps$SampleTime_UTC #TODO Check with Claire - something that was overwritten earlier?
 
     for (i in 1:nrow(Samps)){
       j <- Samps$SampLevel[[i]]
-      Samps$SampleTime_UTC[i] <- CastTimes[[j]]
+      Samps$SampleTime_Local[i] <- CastTimes[[j]]
     }
 
     Samps <- Samps %>%
-      dplyr::mutate(DateDiff = as.numeric(abs(.data$SampleTime_UTC - .data$SampleTime_UTC) / 3600),
+      dplyr::mutate(DateDiff = as.numeric(abs(.data$SampleTime_Local - .data$SampleTime_Local) / 3600),
                     DateDiff = dplyr::case_when(.data$DateDiff > 3 & station != "NSI" ~ NA_real_,
                                                 .data$DateDiff > 15 & station %in% c("NSI", "KAI") ~ NA_real_,
                                                 TRUE ~ .data$DateDiff))
 
     SampsMatch <- rawCTDCast %>%
       dplyr::filter(.data$StationCode == station) %>%
-      dplyr::select(.data$SampleTime_UTC, .data$file_id) %>%
-      dplyr::distinct()
+      dplyr::select(.data$SampleTime_Local, .data$file_id) %>%
+      dplyr::distinct() %>%
+      dplyr::mutate(SampleTime_Local = lubridate::as_datetime(.data$SampleTime_Local))
 
     CastMatch <- Samps %>%
       tidyr::drop_na(.data$DateDiff) %>%
-      dplyr::inner_join(SampsMatch, by = "SampleTime_UTC") %>%
+      dplyr::inner_join(SampsMatch, by = "SampleTime_Local") %>%
       dplyr::select(.data$file_id, .data$StationCode)
 
     df <- df %>%

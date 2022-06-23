@@ -59,7 +59,7 @@ pr_get_CPRData <- function(Type = "phytoplankton", Variable = "abundance", Subse
 #' df <- pr_get_CPRTrips()
 #' @importFrom rlang .data
 pr_get_CPRTrips <- function(){
-  CPRTrips <- readr::read_csv(system.file("extdata", "CPR_Trip.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
+  CPRTrips <- pr_get_s3("cpr_samp")  %>%
     pr_rename()
 }
 
