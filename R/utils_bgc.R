@@ -212,10 +212,10 @@ pr_get_LTnuts <-  function(){
   NutsLT <- readr::read_csv(system.file("extdata", "LongTermMonitoringData.csv", package = "planktonr", mustWork = TRUE),
                             show_col_types = FALSE,
                             na = c("NA", ""),
-                            col_types = readr::cols(NITRITE_VALUE = col_number(),
-                                             NITRITE_QC_FLAG = col_number(),
-                                             AMMONIA_VALUE = col_number(),
-                                             AMMONIA_QC_FLAG = col_number())) %>%
+                            col_types = readr::cols(NITRITE_VALUE = readr::col_number(),
+                                             NITRITE_QC_FLAG = readr::col_number(),
+                                             AMMONIA_VALUE = readr::col_number(),
+                                             AMMONIA_QC_FLAG = readr::col_number())) %>%
     dplyr::mutate(StationCode = gsub(".*[-]([^.]+)[-].*", "\\1", SURVEY_NAME),
                   Project = 'LTM',
                   Month_Local = lubridate::month(START_TIME),
