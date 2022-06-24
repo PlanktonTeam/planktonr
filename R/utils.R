@@ -90,7 +90,7 @@ pr_get_raw <- function(file){
 #'
 #' This function is not intended for use by most people. It downloads the raw data file from IMOS with NO QC or data manipulation done. User beware. It can be used to view the raw data that IMOS provides behind the scenes.
 #'
-#' Options for `file` include: "bgc_chemistry_data", "bgc_pigments_data", "bgc_picoplankton_data", "bgc_tss_data".
+#' Options for `file` include: "bgc_trip"
 #'
 #' @param file The filename of the requested data
 #'
@@ -382,24 +382,24 @@ pr_apply_time <- function(df){
 }
 
 
-# Remove incorrect species names from dataframe
-#
-# @param df A dataframe with species names
-#
-# @return A dataframe with all correct species names
-# @export
-#
-# @importFrom rlang .data
-#
-# @examples
-# df <- data.frame(Species = c("IncorrectSpecies cf.", "CorrectSpcies1", NA,
-#               "CorrectSpecies2", "Incorrect spp., Incorrect/Species"))
-# df <- pr_filter_species(df)
-# pr_filter_species <- function(df){
-#   pat <- c("spp.", "cf.", "/", "grp", "complex", "type")
-#   df <- df %>%
-#     dplyr::filter(stringr::str_detect(.data$Species, paste(pat, collapse = "|"), negate = TRUE))
-# }
+#' Remove incorrect species names from dataframe
+#'
+#' @param df A dataframe with species names
+#'
+#' @return A dataframe with all correct species names
+#' @export
+#'
+#' @importFrom rlang .data
+#'
+#' @examples
+#' df <- data.frame(Species = c("IncorrectSpecies cf.", "CorrectSpcies1", NA,
+#'               "CorrectSpecies2", "Incorrect spp., Incorrect/Species"))
+#' df <- pr_filter_species(df)
+pr_filter_species <- function(df){
+  pat <- c("spp.", "cf.", "/", "grp", "complex", "type")
+  df <- df %>%
+    dplyr::filter(stringr::str_detect(.data$Species, paste(pat, collapse = "|"), negate = TRUE))
+}
 
 
 #' Add Carbon concentration to phytoplankton dataframe
