@@ -16,7 +16,7 @@ A dataframe of raw IMOS data
 This function is not intended for use by most people. It downloads the raw data file from IMOS with NO QC or data manipulation done. User beware. It can be used to view the raw data that IMOS provides behind the scenes.
 }
 \details{
-Options for \code{file} include: "bgc_chemistry_data", "bgc_pigments_data", "bgc_picoplankton_data", "bgc_tss_data".
+Options for \code{file} include: "bgc_trip"
 }
 \examples{
 dat <- pr_get_s3("bgc_trip")
