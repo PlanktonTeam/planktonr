@@ -238,18 +238,18 @@ pr_get_LTnuts <-  function(){
                   Temperature_Flag = .data$TEMPERATURE_QC_FLAG,
                   Ammonium_umolL = .data$AMMONIA_VALUE,
                   Ammonium_Flag = .data$AMMONIA_QC_FLAG) %>%
-    planktonr::pr_apply_flags() %>%
-    dplyr::select(-contains("Flag")) %>%
-    planktonr::pr_add_StationName() %>%
+    pr_apply_flags() %>%
+    dplyr::select(-dplyr::contains("Flag")) %>%
+    pr_add_StationName() %>%
     tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = 'parameters') %>%
-    dplyr::filter(Values != -999) %>%
+    dplyr::filter(.data$Values != -999) %>%
     dplyr::relocate(c("Project", "StationName", "StationCode", tidyselect::everything())) %>%
     pr_reorder()
 
   Nuts <- pr_get_NRSChemistry() %>%
     dplyr::filter(.data$StationCode %in% c("MAI", "ROT", "PHB"),
-                  parameters != 'SecchiDepth_m') %>%
-    dplyr::mutate(Year_Local = lubridate::year(SampleTime_Local)) %>%
+                  .data$parameters != 'SecchiDepth_m') %>%
+    dplyr::mutate(Year_Local = lubridate::year(.data$SampleTime_Local)) %>%
     dplyr::select(colnames(NutsLT)) # Ensure columns are in the same order
 
   CTD <- pr_get_NRSCTD() %>%
@@ -257,7 +257,6 @@ pr_get_LTnuts <-  function(){
                   .data$SampleTime_Local, .data$SampleDepth_m, .data$Temperature_degC) %>%
     dplyr::filter(.data$StationCode %in% c("MAI", "ROT", "PHB")) %>%
     tidyr::pivot_longer(-c(.data$Project:.data$SampleDepth_m), values_to = "Values", names_to = "parameters") %>%
-    # dplyr::mutate(SampleTime_Local = strptime(as.POSIXct(.data$SampleTime_Local), "%Y-%m-%d")) %>% # Commented 21/6/22
     dplyr::select(colnames(NutsLT))
 
   LTnuts <- dplyr::bind_rows(NutsLT, Nuts, CTD)  #TODO I don't think this is used? It is used on the policy page for LTM
