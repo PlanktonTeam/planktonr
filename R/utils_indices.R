@@ -39,31 +39,18 @@ pr_get_indices <- function(Survey = "CPR", Type = "P"){
       pr_add_Bioregions() %>%
       dplyr::select(.data$SampleTime_Local, .data$Year_Local, .data$Month_Local, .data$BioRegion,
                     .data$Latitude, .data$Longitude, tidyselect::all_of(var_names)) %>%
-      dplyr::mutate(SampleTime_Local = lubridate::round_date(.data$SampleTime_Local, "month"), #TODO Check with Claire about this rounding
-                    YearMon = paste(.data$Year_Local, .data$Month_Local)) %>% #TODO this step can be improved when nesting supports data pronouns
-      tidyr::complete(.data$BioRegion, .data$Year_Local, .data$Month_Local) %>% # TODO Do we need complete here? C
-      dplyr::mutate(Year_Local = as.numeric(stringr::str_sub(.data$YearMon, 1, 4)), #TODO Not sure why Year/Month is redefined here - because it is NA otherwise?
-                    Month_Local = as.numeric(stringr::str_sub(.data$YearMon, -2, -1))) %>%
-      dplyr::select(-.data$YearMon) %>%
       tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "parameters") %>%
-      dplyr::group_by(.data$SampleTime_Local, .data$Year_Local, .data$Month_Local, .data$BioRegion, .data$parameters) %>%
-      # dplyr::group_by(.data$SampleDate_Local, .data$Year_Local, .data$Month_Local, .data$BioRegion, .data$parameters) %>% # TODO Check with Claire
-      dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
-                       .groups = "drop") %>%
-      pr_reorder() %>%
-      dplyr::filter(!is.na(.data$BioRegion), !.data$BioRegion %in% c("North", "North-west")) %>%
-      droplevels()
-    # 2925
+      pr_reorder()
+
     return(dat)
 
   } else if(Survey == "NRS"){
 
-    dat <- pr_get_raw("nrs_derived_indices_data") %>% # TODO No Month/Year categories in NRS data. Its there in CPR
+    dat <- pr_get_raw("nrs_derived_indices_data") %>%
       pr_rename() %>%
       pr_add_StationCode() %>%
       pr_apply_time() %>%
-      tidyr::complete(.data$Year_Local, .data$StationCode) %>% #TODO Nesting doesn't support data pronouns at this time
-      dplyr::select(.data$Year_Local, .data$Month_Local, .data$SampleTime_Local, .data$Latitude, .data$Longitude,
+      dplyr::select(.data$Year_Local, .data$Month_Local, .data$SampleTime_Local, .data$tz, .data$Latitude, .data$Longitude,
                     .data$StationName, .data$StationCode, tidyselect::all_of(var_names)) %>%
       tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "parameters") %>%
       pr_reorder()
