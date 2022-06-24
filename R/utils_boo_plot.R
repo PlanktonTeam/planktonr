@@ -498,8 +498,8 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
   }
 
   p3 <- ggplot2::ggplot(df) +
-    ggplot2::geom_point(ggplot2::aes(x = .data$Month_Local, y = .data$Values), colour = col) +
-    ggplot2::geom_smooth(ggplot2::aes(x = .data$Month_Local, y = .data$fv), method = "loess", formula = "y ~ x", colour = col, fill = colin) +
+    ggplot2::geom_point(ggplot2::aes(x = .data$Month, y = .data$Values), colour = col) +
+    ggplot2::geom_smooth(ggplot2::aes(x = .data$Month, y = .data$fv), method = "loess", formula = "y ~ x", colour = col, fill = colin) +
     ggplot2::scale_y_continuous(trans = trans) +
     ggplot2::scale_x_continuous(breaks = seq(0.5, 6.3, length.out = 12), labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
     ggplot2::xlab("Month") +
