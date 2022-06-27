@@ -12,6 +12,8 @@ pr_rename <- function(df){
 
   ##TODO - Check and remvoe any uneeded renames
   rename_df <- tibble::as_tibble(matrix(c(
+    "Sample", "SAMPLE",
+    "Region", "REGION",
     "AshFreeBiomass_mgm3", "ASHFREEBIOMASS_MGM3",
     "Biomass_mgm3", "BIOMASS_MGM3",
     "Latitude", "LATITUDE",

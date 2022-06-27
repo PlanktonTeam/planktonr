@@ -115,10 +115,8 @@ pr_get_polInfo <- function(Survey = "NRS"){
   } else {
 
     CPRinfo <- pr_get_CPRTrips() %>%
-      dplyr::mutate(Latitude = .data$STARTLATITUDE,
-                    Longitude = .data$ENDLONGITUDE) %>%
       pr_add_Bioregions() %>%
-      dplyr::select(.data$BioRegion, .data$STARTSAMPLEDATEUTC, .data$MILES) %>%
+      dplyr::select(.data$BioRegion, .data$SampleTime_UTC) %>%
       dplyr::mutate(Features = dplyr::case_when(.data$BioRegion %in% c("South-east") ~ "narrow shelf intensifying currents, eddies and upwellings with low nutrient and primary productivity",
                                                 .data$BioRegion %in% c("South-west") ~ "temperate and subtropical habitats influenced by the nutrient deplete Leeuwin Current.",
                                                 .data$BioRegion %in% c("Temperate East") ~ "temperate and subtropical habitats influenced by the East Australian Current and its eddies.",
