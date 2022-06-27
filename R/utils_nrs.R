@@ -69,6 +69,8 @@ pr_get_NRSStation <- function(){
   dat <- readr::read_csv(system.file("extdata", "BGC_StationInfo.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
     pr_rename() %>%
     dplyr::filter(.data$ProjectName == "NRS")
+
+  return(dat)
 }
 
 
