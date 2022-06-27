@@ -220,24 +220,12 @@ pr_get_LTnuts <-  function(){
                   Project = 'LTM',
                   Month_Local = lubridate::month(.data$START_TIME),
                   Year_Local = lubridate::year(.data$START_TIME)) %>%
-    dplyr::select(.data$StationCode, .data$Project, .data$START_TIME, .data$Month_Local, .data$Year_Local, .data$PRESSURE, .data$NITRATE_VALUE:.data$AMMONIA_QC_FLAG) %>%
-    dplyr::rename(SampleTime_Local = .data$START_TIME, SampleDepth_m = .data$PRESSURE,
-                  Nitrate_umolL = .data$NITRATE_VALUE,
-                  Nitrate_Flag = .data$NITRATE_QC_FLAG,
-                  Nitrite_umolL = .data$NITRITE_VALUE,
-                  Nitrite_Flag = .data$NITRITE_QC_FLAG,
-                  Oxygen_umolL = .data$OXYGEN_VALUE,
-                  Oxygen_Flag = .data$OXYGEN_QC_FLAG,
-                  Phosphate_umolL = .data$PHOSPHATE_VALUE,
-                  Phosphate_Flag = .data$PHOSPHATE_QC_FLAG,
-                  Salinity = .data$SALINITY_VALUE,
-                  Salinity_Flag = .data$SALINITY_QC_FLAG,
-                  Silicate_umolL = .data$SILICATE_VALUE,
-                  Silicate_Flag = .data$SILICATE_QC_FLAG,
-                  Temperature_degC = .data$TEMPERATURE_VALUE,
-                  Temperature_Flag = .data$TEMPERATURE_QC_FLAG,
-                  Ammonium_umolL = .data$AMMONIA_VALUE,
-                  Ammonium_Flag = .data$AMMONIA_QC_FLAG) %>%
+    pr_rename() %>%
+    dplyr::rename(SampleTime_Local = .data$START_TIME,
+                  SampleDepth_m = .data$PRESSURE) %>%
+    dplyr::select(.data$StationCode, .data$Project, .data$SampleTime_Local, .data$Month_Local, .data$Year_Local,
+                  .data$SampleDepth_m, tidyselect::all_of(var_names), tidyselect::contains("_Flag"),
+                  -tidyselect::contains("ROSETTE_POSITION")) %>%
     pr_apply_flags() %>%
     dplyr::select(-dplyr::contains("Flag")) %>%
     pr_add_StationName() %>%
