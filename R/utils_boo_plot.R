@@ -172,7 +172,7 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
 
   if (trend %in% c("Year_Local", "Month_Local")){
     df <- df %>%
-      dplyr::filter(!is.na(.data$SampleTime_Local))  %>% # need to drop NA from month, added to dataset by complete(Year, Code)
+      dplyr::filter(!is.na(.data$SampleTime_Local))  %>% # TODO Can I remove this now I have removed complete? # need to drop NA from month, added to dataset by complete(Year, Code)
       # pr_apply_time() %>%
       dplyr::group_by(!!rlang::sym(trend), !!site) %>%
       dplyr::summarise(value = mean(.data$Values, na.rm = TRUE),
@@ -262,7 +262,7 @@ pr_plot_climate <- function(df, Survey = "NRS", trend = "Month", pal = "matter",
   title <- pr_relabel(unique(df$parameters), style = "ggplot")
 
   df_climate <- df %>%
-    dplyr::filter(!!trend != "NA") %>% # need to drop NA from month, added to dataset by complete(Year, StationCode)
+    dplyr::filter(!!trend != "NA") %>% # TODO Can I remove this now I have removed complete? # need to drop NA from month, added to dataset by complete(Year, StationCode)
     dplyr::group_by(!!trend, .data$StationCode) %>%
     dplyr::summarise(mean = mean(.data$Values, na.rm = TRUE),
                      N = length(.data$Values),
@@ -498,8 +498,8 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
   }
 
   p3 <- ggplot2::ggplot(df) +
-    ggplot2::geom_point(ggplot2::aes(x = .data$Month_Local, y = .data$Values), colour = col) +
-    ggplot2::geom_smooth(ggplot2::aes(x = .data$Month_Local, y = .data$fv), method = "loess", formula = "y ~ x", colour = col, fill = colin) +
+    ggplot2::geom_point(ggplot2::aes(x = .data$Month, y = .data$Values), colour = col) +
+    ggplot2::geom_smooth(ggplot2::aes(x = .data$Month, y = .data$fv), method = "loess", formula = "y ~ x", colour = col, fill = colin) +
     ggplot2::scale_y_continuous(trans = trans) +
     ggplot2::scale_x_continuous(breaks = seq(0.5, 6.3, length.out = 12), labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
     ggplot2::xlab("Month") +

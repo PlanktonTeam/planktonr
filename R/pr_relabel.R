@@ -46,7 +46,7 @@ pr_relabel <- function(s, style = "ggplot"){
     "Conductivity_Sm", rlang::expr(paste("Conductivity (Sm")), "Conductivity (Sm)", "Conductivity (Sm)",
     "CopeAbundance_m3", rlang::expr(paste("Copepod Abundance (m"^-3,")")), "Copepod Abundance (m<sup>-3</sup>)", "Copepod Abundance",
     "CopepodEvenness", rlang::expr(paste("Copepod Evenness")), "Copepod Evenness", "Copepod Evenness",
-    "CTDSalinity_psu", rlang::expr(paste("Salinity (psu)")), "Salinity (psu)", "Salinity",
+    "CTDSalinity_PSU", rlang::expr(paste("Salinity")), "Salinity", "Salinity",
     "CTDTemperature_degC", rlang::expr(paste("Temperature (","\U00B0","C)")), "Temperature (&#8451;)", "Temperature",
     "Density_kgm3", rlang::expr(paste("Density (kg m"^-3,")")), "Density (kg m<sup>-3</sup>)", "Density",
     "DiatomDinoflagellateRatio", rlang::expr(paste("Diatom:Dinoflagellate Ratio")), "Diatom:Dinoflagellate Ratio", "Diatom:Dinoflagellate Ratio",

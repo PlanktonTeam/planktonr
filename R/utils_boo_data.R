@@ -82,6 +82,7 @@ pr_get_fg <- function(Survey = "NRS", Type = "Z"){
 #'
 #' @examples
 #' df <- pr_get_fMap_data("P")
+#' df <- pr_get_fMap_data("Z")
 pr_get_fMap_data <- function(Type = "Z"){
 
   if(Type == "P"){
@@ -187,6 +188,36 @@ pr_get_fMap_data <- function(Type = "Z"){
 
 }
 
+# Add day/night marker to dataframe
+# @param Type Phyto or zoo, defaults to phyto
+#
+# @return df to be used with pr_plot_daynight
+# @export
+#
+# @examples
+# df <- pr_get_indices(Survey = "NRS", Type = "Z")
+# df <- pr_add_daynight(df)
+# pr_add_daynight <- function(df){
+#
+#   dates <- df %>%
+#     dplyr::select(.data$SampleTime_Local, .data$Latitude, .data$Longitude) %>%
+#     dplyr::rename(date = .data$SampleTime_Local,
+#                   lat = .data$Latitude,
+#                   lon = .data$Longitude) %>%
+#     dplyr::mutate(date = lubridate::as_date(.data$date))
+#
+#   daynight_df <- suncalc::getSunlightTimes(data = dates, #TODO quicker to change to Local now that it exists.
+#                                            keep = c("sunrise", "sunset"),
+#                                            tz = lutz::tz_lookup_coords(dates$lat, dates$lon, method = "fast", warn = FALSE)) %>% # TODO remove this when we can get tz into all dataframes
+#     dplyr::bind_cols(df["SampleTime_Local"]) %>%
+#     dplyr::mutate(daynight = dplyr::if_else(.data$SampleTime_Local > .data$sunrise &
+#                                       .data$SampleTime_Local < .data$sunset, "Day", "Night"))
+#
+#   df <- df %>%
+#     dplyr::bind_cols(daynight_df["daynight"])
+#
+# }
+
 #' Get data for plots of species abundance by day and night using CPR data
 #' @param Type Phyto or zoo, defaults to phyto
 #'
@@ -228,6 +259,9 @@ pr_get_daynight <- function(Type = "Z"){
 
 }
 
+
+
+
 #' Get data for STI plots of species abundance
 #' @param Type Phyto or zoo, defaults to phyto
 #'
@@ -242,9 +276,7 @@ pr_get_sti <-  function(Type = "P"){
   if(Type == "Z"){
     cprdat <- pr_get_CPRData(Type, Variable = "abundance", Subset = "copepods")
 
-    nrsdat <- pr_get_NRSData(Type, Variable = "abundance", Subset = "copepods") #%>%
-    # dplyr::mutate(Method = NA) %>%
-    # dplyr::relocate(.data$Method, .after = .data$AshFreeBiomass_mgm3) # Method is missing in Z so we add a dummy variable to allow the code below to run.
+    nrsdat <- pr_get_NRSData(Type, Variable = "abundance", Subset = "copepods")
     parameter <- "CopeAbundance_m3"
 
   } else if(Type == "P"){

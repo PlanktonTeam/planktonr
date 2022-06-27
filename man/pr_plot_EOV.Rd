@@ -18,7 +18,7 @@ pr_plot_EOV(
 
 \item{EOV}{Essential OCean Variable as a parameter}
 
-\item{Survey}{NRS, CPR or LTM 'Long term monitoring'}
+\item{Survey}{NRS, CPR or Long term monitoring}
 
 \item{trans}{scale for y axis}
 
