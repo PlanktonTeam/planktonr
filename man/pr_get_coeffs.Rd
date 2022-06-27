@@ -7,7 +7,7 @@
 pr_get_coeffs(df)
 }
 \arguments{
-\item{df}{datafram containing Year, Month, parameters, values}
+\item{df}{dataframe containing Year, Month, parameters, values}
 }
 \value{
 coefficients from linear model
@@ -19,6 +19,6 @@ Get coefficients from linear model
 df <- data.frame(Year_Local = runif(10, 2000, 2003),
                  Month_Local = runif(10, 1, 6),
                  parameters = c('Biomasss_mgm3', 'Diversity'),
-Values = runif(10, 1, 5))
+                 Values = runif(10, 1, 5))
 pr <- pr_get_coeffs(df)
 }

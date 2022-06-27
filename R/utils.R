@@ -139,44 +139,7 @@ pr_get_s3 <- function(file){
 #   return(df)
 # }
 
-#' Download and write csv file
-#'
-#'Function to download plankton csv files from the AODN. Options are:
-#'
-#' cpr_derived_indices_data
-#' nrs_derived_indices_data
-#'
-#' bgc_chemistry_data,
-#' bgc_pigments_data,
-#' bgc_picoplankton_data,
-#' bgc_tss_data,
-#'
-#' cpr_phytoplankton_abundance_raw_data
-#' cpr_phytoplankton_abundance_htg_data
-#' cpr_phytoplankton_abundance_genus_data
-#' cpr_phytoplankton_abundance_species_data
-#'
-#' cpr_phytoplankton_biovolume_raw_data
-#' cpr_phytoplankton_biovolume_htg_data
-#' cpr_phytoplankton_biovolume_genus_data
-#' cpr_phytoplankton_biovolume_species_data
-#'
-#' cpr_zooplankton_abundance_copepods_data
-#' cpr_zooplankton_abundance_non_copepods_data
-#' cpr_zooplankton_abundance_genus_data
-#' cpr_zooplankton_abundance_htg_data
-#' cpr_zooplankton_abundance_raw_data
-#'
-#' @param file The name of the file to download.
-#' @param di The directory to save it to
-#'
-#' @export
-#'
-#' @examples
-#' pr_get_csv("bgc_chemistry_data", "~/Downloads")
-pr_get_csv <- function(file, di){
-  utils::download.file(stringr::str_replace(pr_get_site(), "LAYER_NAME", file), file.path(di, paste0(file, ".csv")))
-}
+
 
 
 
@@ -232,7 +195,7 @@ pr_add_StationName <- function(df){
 
 
 
-#' Add NRS StationName to data
+#' Add NRS StationCode to data
 #'
 #' @param df A dataframe that contains `StationName` but no `StationCode`
 #' @return A dataframe with StationCode added
@@ -392,7 +355,7 @@ pr_apply_time <- function(df){
 #' @importFrom rlang .data
 #'
 #' @examples
-#' df <- data.frame(Species = c("IncorrectSpecies cf.", "CorrectSpcies1", NA,
+#' df <- data.frame(Species = c("IncorrectSpecies cf.", "CorrectSpecies1", NA,
 #'               "CorrectSpecies2", "Incorrect spp., Incorrect/Species"))
 #' df <- pr_filter_species(df)
 pr_filter_species <- function(df){
@@ -490,7 +453,7 @@ pr_harmonic <- function (theta, k = 4) {
 
 #' Get coefficients from linear model
 #'
-#' @param df datafram containing Year, Month, parameters, values
+#' @param df dataframe containing Year, Month, parameters, values
 #'
 #' @return coefficients from linear model
 #' @export
@@ -499,7 +462,7 @@ pr_harmonic <- function (theta, k = 4) {
 #' df <- data.frame(Year_Local = runif(10, 2000, 2003),
 #'                  Month_Local = runif(10, 1, 6),
 #'                  parameters = c('Biomasss_mgm3', 'Diversity'),
-#' Values = runif(10, 1, 5))
+#'                  Values = runif(10, 1, 5))
 #' pr <- pr_get_coeffs(df)
 pr_get_coeffs <-  function(df){
 
