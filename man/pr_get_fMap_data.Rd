@@ -17,4 +17,5 @@ Get data for frequency map plots
 }
 \examples{
 df <- pr_get_fMap_data("P")
+df <- pr_get_fMap_data("Z")
 }

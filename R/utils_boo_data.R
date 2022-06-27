@@ -82,6 +82,7 @@ pr_get_fg <- function(Survey = "NRS", Type = "Z"){
 #'
 #' @examples
 #' df <- pr_get_fMap_data("P")
+#' df <- pr_get_fMap_data("Z")
 pr_get_fMap_data <- function(Type = "Z"){
 
   if(Type == "P"){
@@ -261,14 +262,6 @@ pr_get_daynight <- function(Type = "Z"){
 
 
 
-
-
-
-
-
-
-
-
 #' Get data for STI plots of species abundance
 #' @param Type Phyto or zoo, defaults to phyto
 #'
@@ -283,9 +276,7 @@ pr_get_sti <-  function(Type = "P"){
   if(Type == "Z"){
     cprdat <- pr_get_CPRData(Type, Variable = "abundance", Subset = "copepods")
 
-    nrsdat <- pr_get_NRSData(Type, Variable = "abundance", Subset = "copepods") #%>%
-    # dplyr::mutate(Method = NA) %>%
-    # dplyr::relocate(.data$Method, .after = .data$AshFreeBiomass_mgm3) # Method is missing in Z so we add a dummy variable to allow the code below to run.
+    nrsdat <- pr_get_NRSData(Type, Variable = "abundance", Subset = "copepods")
     parameter <- "CopeAbundance_m3"
 
   } else if(Type == "P"){

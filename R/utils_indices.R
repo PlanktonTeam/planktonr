@@ -75,7 +75,7 @@ pr_get_indices <- function(Survey = "CPR", Type = "P"){
 #' @importFrom rlang .data
 pr_make_climatology <- function(df, x){
   x <- dplyr::enquo(arg = x)
-  df_climate <- df %>% dplyr::filter(!!x != "NA") %>% # need to drop NA from month, added to dataset by complete(Year, StationCode)
+  df_climate <- df %>% dplyr::filter(!!x != "NA") %>% # TODO Can I remove this now I have removed complete?  # need to drop NA from month, added to dataset by complete(Year, StationCode)
     dplyr::group_by(!!x, .data$StationCode) %>%
     dplyr::summarise(mean = mean(.data$Values, na.rm = TRUE),
                      N = length(.data$Values),
