@@ -3,9 +3,15 @@ testthat::test_that("Correct function output", {
                                  pr_plot_NRSmap())[1], "gg")
   testthat::expect_equal(class(data.frame(BioRegion = c("Temperate East", "South-west")) %>%
                                  pr_plot_CPRmap())[1], "gg")
+
   testthat::expect_equal(class(pr_get_indices("NRS", "Z") %>%
                                  dplyr::filter(parameters == "Biomass_mgm3") %>%
                                  pr_plot_timeseries('NRS', 'matter'))[1], "gg")
+
+  testthat::expect_equal(class(pr_get_indices("CPR", "Z") %>%
+                                 dplyr::filter(parameters == "Biomass_mgm3") %>%
+                                 pr_plot_timeseries("CPR", "matter"))[1], "gg")
+
   testthat::expect_equal(class(pr_get_indices("NRS", "Z") %>%
                                  dplyr::filter(parameters == 'Biomass_mgm3') %>%
                                  pr_plot_trends(trend = "Month", survey = "NRS"))[1], "gg")
