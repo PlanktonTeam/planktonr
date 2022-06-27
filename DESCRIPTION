@@ -33,7 +33,6 @@ Imports:
     readr (>= 2.0.0),
     rlang,
     rnaturalearth,
-    rnaturalearthdata,
     scales,
     sf,
     stats,
