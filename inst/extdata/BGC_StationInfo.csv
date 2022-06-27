@@ -1,4 +1,4 @@
-PROJECTNAME,STATIONCODE,STATIONNAME,NODE,STATECODE,LONGITUDE,LATITUDE,STATIONSTARTDATE,STATIONDEPTH_M,SAMPLINGEFFORT,IMCRA,IMCRA_PB,MANAGEMENTREGION
+ProjectName,StationCode,StationName,Node,StateCode,Longitude,Latitude,StationStartDate,StationDepth_m,SamplingEffort,IMCRA,IMCRA_PB,ManagementRegion
 NRS,MAI,Maria Island,TASIMOS,TAS,148.23333,-42.59667,1944-10-01,88,Monthly,FRT,Tasmanian Shelf Province,South-east
 NRS,KAI,Kangaroo Island,SAIMOS,SA,136.44733,-35.83217,2009-11-16,108.088,Monthly,EYR,Spencer Gulf Shelf Province,South-west
 NRS,ESP,Esperance,WAIMOS,WA,121.85,-33.93333,2009-05-12,49.3207,Quarterly,WSC,Southwest Shelf Province,South-west
