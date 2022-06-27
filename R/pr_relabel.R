@@ -159,35 +159,3 @@ pr_relabel <- function(s, style = "ggplot"){
   }
 
 }
-
-# s <- c("Temperature_degC", "WaterDensity_kgm3")
-# s <- c("Temperature_degC")
-# e <- pr_relabel(s, style = "ggplot")
-# ggplot() + ggtitle(enexpr(e)) + ylab(enexpr(e)) + xlab(enexpr(e))
-
-# Working prototype
-#
-# pr_relabel2 <- function(s){
-#   relabel_df <- tibble::as_tibble(matrix(c(
-#     "TotalChla", rlang::expr(paste("Total Chlorophyll ",italic(a)," (mg m"^-3,")")),
-#     "PPC", rlang::expr(paste("Photoprotective Carotenoids (mg m"^-3,")")),
-#     "PSC", rlang::expr(paste("Photosynthetic Carotenoids (mg m"^-3,")"))),
-#     ncol = 2, byrow = TRUE, dimnames = list(NULL, c("St","Ex"))))
-#
-#   i <- which(stringr::str_detect(relabel_df$St, s))
-#
-#   return(relabel_df$Ex[[i]])
-# }
-#
-# s <- "TotalChla"
-# e <- pr_relabel2(s)
-# ggplot2::ggplot() + ggplot2::ggtitle(e) + ggplot2::ylab(e) + ggplot2::xlab(e)
-# class(e)
-#
-# s <- "PSC"
-# e <- pr_relabel(s, "ggplot")
-# ggplot2::ggplot() + ggplot2::ggtitle(e) + ggplot2::ylab(e) + ggplot2::xlab(e)
-#
-# s <- "ZoopAbund_m3"
-# e <- pr_relabel(s, "ggplot")
-# ggplot2::ggplot() + ggplot2::ggtitle(e) + ggplot2::ylab(e) + ggplot2::xlab(e)
