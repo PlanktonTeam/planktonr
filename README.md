@@ -9,7 +9,7 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/PlanktonTeam/planktonr/workflows/R-CMD-check/badge.svg)](https://github.com/PlanktonTeam/planktonr/actions)
 [![Codecov test
-coverage](https://codecov.io/gh/PlanktonTeam/planktonr/branch/master/graph/badge.svg)](https://codecov.io/gh/PlanktonTeam/planktonr?branch=master)
+coverage](https://codecov.io/gh/PlanktonTeam/planktonr/branch/master/graph/badge.svg)](https://app.codecov.io/gh/PlanktonTeam/planktonr?branch=master)
 <!-- badges: end -->
 
 planktonr is an r package that facilitates the download, analysis and
