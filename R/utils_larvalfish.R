@@ -25,7 +25,6 @@
 #'
 #' @examples
 #' df <- pr_get_LFData()
-#' @importFrom rlang .data
 pr_get_LFData <- function(){
 
   df <- planktonr::pr_get_raw("bgc_larval_fish_count_raw_data") %>%

@@ -3,15 +3,22 @@ testthat::test_that("Correct function output", {
   testthat::expect_type(pr_get_s3site(), "character")
   testthat::expect_type(pr_get_raw("bgc_tss_data"), "list")
   testthat::expect_type(pr_get_s3("bgc_trip"), "list")
+  testthat::expect_type(pr_get_PlanktonInfo(Type = "P"), "list")
   testthat::expect_type(pr_get_PlanktonInfo(Type = "Z"), "list")
 
   testthat::expect_type(pr_get_NRSStation() %>%
                           pr_add_StationName(), "list")
 
+  testthat::expect_type(data.frame(TripCode = "MAI20220628") %>%
+                          pr_add_StationCode(), "list")
+
   testthat::expect_type(pr_get_NRSStation() %>%
                           pr_add_StationCode(), "list")
 
   testthat::expect_type(pr_get_NRSStation() %>%
+                          pr_reorder(), "list")
+
+  testthat::expect_type(data.frame(StationCode = c("MAI", "NSI", "PHB")) %>%
                           pr_reorder(), "list")
 
   testthat::expect_type(data.frame(SST = c(27.4, 45), SST_Flag = c(1, 4)) %>%
@@ -34,6 +41,13 @@ testthat::test_that("Correct function output", {
                                    BioVolume_um3m3 = c(100, 150),
                                    PhytoAbund_m3 = c(10, 8)) %>%
                           pr_add_Carbon("CPR") %>%
+                          colnames() %in% "Carbon" %>%
+                          any())
+
+  testthat::expect_true(data.frame(TaxonGroup = c("Dinoflagellate", "Cyanobacteria"),
+                                   Biovolume_um3L = c(100, 150),
+                                   Cells_L = c(10, 8)) %>%
+                          pr_add_Carbon("NRS") %>%
                           colnames() %in% "Carbon" %>%
                           any())
 

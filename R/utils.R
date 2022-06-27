@@ -65,13 +65,7 @@ pr_get_raw <- function(file){
                      TripCode = readr::col_character(),
                      SampleTime_Local = readr::col_datetime(),
                      SampleDepth_m = readr::col_character())
-  } else if(file == "anmn_ctd_profiles_data"){
-    col_types = readr::cols(CHLU = readr::col_double(), # columns start with nulls so tidyverse annoyingly assigns col_logical()
-                            CHLU_quality_control = readr::col_double(),
-                            CPHL = readr::col_double(),
-                            CPHL_quality_control = readr::col_double(),
-                            cruise_id = readr::col_skip())
-  } else {
+   } else {
     col_types = list()
   }
 
