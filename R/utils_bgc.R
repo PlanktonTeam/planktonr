@@ -28,6 +28,8 @@ pr_get_NRSChemistry <- function(){
     tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = 'parameters') %>%
     pr_reorder()
 
+  return(dat)
+
 }
 
 
@@ -71,6 +73,7 @@ pr_get_NRSPigments <- function(){
     tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = 'parameters') %>%
     pr_reorder()
 
+  return(dat)
 }
 
 
@@ -103,6 +106,8 @@ pr_get_NRSPico <- function(){
     tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "parameters") %>%
     dplyr::mutate(Values = .data$Values + min(.data$Values[.data$Values>0], na.rm = TRUE)) %>%
     pr_reorder()
+
+  return(dat)
 }
 
 
@@ -142,6 +147,7 @@ pr_get_NRSMicro <- function(){
     tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "parameters") %>%
     pr_reorder()
 
+  return(dat)
 }
 
 
@@ -163,6 +169,8 @@ pr_get_NRSTSS <- function(){
     dplyr::mutate(SampleTime_Local = lubridate::as_datetime(.data$SampleTime_Local)) %>%
     pr_rename() %>%
     pr_apply_flags("TSSall_flag")
+
+  return(dat)
 }
 
 
@@ -183,7 +191,7 @@ pr_get_NRSCTD <- function(){
                 "Salinity_psu", "Temperature_degC", "DissolvedOxygen_umolkg", "ChlF_mgm3",
                 "Turbidity_NTU", "Conductivity_Sm", "WaterDensity_kgm3")
 
-  rawCTD <- pr_get_raw(file) %>%
+  dat <- pr_get_raw(file) %>%
     pr_rename() %>%
     pr_add_StationCode() %>%
     dplyr::rename(ChlF_mgm3 = .data$Chla_mgm3) %>%
@@ -192,10 +200,9 @@ pr_get_NRSCTD <- function(){
     dplyr::select(tidyselect::all_of(ctd_vars)) %>%
     pr_apply_time()
 
+  return(dat)
 }
 
-
-## COMMENTING OUT FOR THE MOMENT. THERE ARE DISCREPANCIES IN THE DATE/TIME NAMES FOR THE GROUPS NEEDED TO MERGE
 
 #' Get NRS long term nutrient timeseries data
 #'
@@ -213,9 +220,9 @@ pr_get_LTnuts <-  function(){
                             show_col_types = FALSE,
                             na = c("NA", ""),
                             col_types = readr::cols(NITRITE_VALUE = readr::col_number(),
-                                             NITRITE_QC_FLAG = readr::col_number(),
-                                             AMMONIA_VALUE = readr::col_number(),
-                                             AMMONIA_QC_FLAG = readr::col_number())) %>%
+                                                    NITRITE_QC_FLAG = readr::col_number(),
+                                                    AMMONIA_VALUE = readr::col_number(),
+                                                    AMMONIA_QC_FLAG = readr::col_number())) %>%
     dplyr::mutate(StationCode = gsub(".*[-]([^.]+)[-].*", "\\1", .data$SURVEY_NAME),
                   Project = 'LTM',
                   Month_Local = lubridate::month(.data$START_TIME),
@@ -247,8 +254,9 @@ pr_get_LTnuts <-  function(){
     tidyr::pivot_longer(-c(.data$Project:.data$SampleDepth_m), values_to = "Values", names_to = "parameters") %>%
     dplyr::select(colnames(NutsLT))
 
-  LTnuts <- dplyr::bind_rows(NutsLT, Nuts, CTD)  #TODO I don't think this is used? It is used on the policy page for LTM
+  dat <- dplyr::bind_rows(NutsLT, Nuts, CTD)
 
+  return(dat)
 }
 
 
