@@ -17,8 +17,8 @@ Frequency plot of the selected species
 }
 \examples{
 df <- data.frame(Long = c(110, 130, 155, 150), Lat = c(-10, -35, -27, -45),
-freqfac = c("Absent", "Seen in 25\%",'50\%', '75\%'),
-Season = c("December - February","March - May","June - August","September - November"),
-Taxon = 'Acartia danae')
+                 freqfac = c("Absent", "Seen in 25\%",'50\%', '75\%'),
+                 Season = c("December - February","March - May","June - August","September - November"),
+                 Taxon = 'Acartia danae')
 plot <- pr_plot_fmap(df)
 }

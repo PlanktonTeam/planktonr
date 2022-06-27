@@ -380,6 +380,8 @@ pr_get_facts <- function(){
 
   out <- facts[[r]]
 
+  return(out)
+
 }
 
 
@@ -420,5 +422,7 @@ pr_get_papers <- function(){
   r <- round(stats::runif(1, min = 1, max = length(papers)))
 
   out <- papers[[r]]
+
+  return(out)
 
 }
