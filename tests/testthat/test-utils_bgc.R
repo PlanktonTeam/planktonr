@@ -1,0 +1,10 @@
+testthat::test_that("Correct function output", {
+  testthat::expect_type(pr_get_NRSChemistry(), "list")
+  testthat::expect_type(pr_get_NRSPigments(), "list")
+  testthat::expect_type(pr_get_NRSPico(), "list")
+  testthat::expect_type(pr_get_NRSMicro(), "list")
+  testthat::expect_type(pr_get_NRSTSS(), "list")
+  testthat::expect_type(pr_get_NRSCTD(), "list")
+  testthat::expect_type(pr_get_LTnuts(), "list")
+  # testthat::expect_type(, "list")
+})

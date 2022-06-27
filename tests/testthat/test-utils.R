@@ -55,10 +55,5 @@ test_that("Correct function output", {
                            "Month_Local", "Day_Local", "Time_Local24hr", "SampleDepth_m",
                            "CTDSST_degC", "CTDChlaSurf_mgm3", "CTDSalinity_psu",
                            "Biomass_mgm3", "AshFreeBiomass_mgm3"))
-  # testthat::expect_type(, "list")
-  # testthat::expect_type(, "list")
-  # testthat::expect_type(, "list")
-  # testthat::expect_type(, "list")
-  # testthat::expect_type(, "list")
 })
 
