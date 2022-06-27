@@ -1,5 +1,4 @@
-
-test_that("Correct function output", {
+testthat::test_that("Correct function output", {
   testthat::expect_type(pr_get_site(), "character")
   testthat::expect_type(pr_get_s3site(), "character")
   testthat::expect_type(pr_get_raw("bgc_tss_data"), "list")
