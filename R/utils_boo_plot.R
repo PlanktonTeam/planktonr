@@ -93,7 +93,7 @@ pr_plot_CPRmap <-  function(df){
 #' @examples
 #' df <- pr_get_indices("NRS", "Z") %>%
 #'   dplyr::filter(parameters == "Biomass_mgm3")
-#' timeseries <- pr_plot_timeseries(df, 'NRS', 'matter')
+#' timeseries <- pr_plot_timeseries(df, "NRS", "matter")
 pr_plot_timeseries <- function(df, Survey = "NRS", pal = "matter", Scale = "identity"){
 
   if(Survey == "CPR"){
@@ -602,9 +602,10 @@ pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identit
 #'
 #' @examples
 #' df <- data.frame(Long = c(110, 130, 155, 150), Lat = c(-10, -35, -27, -45),
-#' freqfac = c("Absent", "Seen in 25%",'50%', '75%'),
-#' Season = c("December - February","March - May","June - August","September - November"),
-#' Taxon = 'Acartia danae')
+#'                  freqfac = c("Absent", "Seen in 25%",'50%', '75%'),
+#'                  Season = c("December - February","March - May",
+#'                  "June - August","September - November"),
+#'                  Taxon = 'Acartia danae')
 #' plot <- pr_plot_fmap(df)
 pr_plot_fmap <- function(df){
   cols <- c("lightblue1" ,"skyblue3", "dodgerblue2","blue1", "navyblue")
@@ -671,8 +672,10 @@ pr_plot_daynight <-  function(df){
 #' @export
 #'
 #' @examples
-#' df <- data.frame(sst = runif(24, 5, 25), Project = c(rep('cpr', 12), rep('nrs', 12)),
-#' Species_m3 = runif(24, 0.1, 10), Species = 'Acartia danae')
+#' df <- data.frame(sst = runif(24, 5, 25),
+#'                  Project = c(rep('cpr', 12), rep('nrs', 12)),
+#'                  Species_m3 = runif(24, 0.1, 10),
+#'                  Species = 'Acartia danae')
 #' plot <- pr_plot_sti(df)
 pr_plot_sti <-  function(df){
   means <- df %>%

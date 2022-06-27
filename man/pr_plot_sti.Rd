@@ -16,7 +16,9 @@ plot of STI kernel density
 Plot of STI kernel density for species
 }
 \examples{
-df <- data.frame(sst = runif(24, 5, 25), Project = c(rep('cpr', 12), rep('nrs', 12)),
-Species_m3 = runif(24, 0.1, 10), Species = 'Acartia danae')
+df <- data.frame(sst = runif(24, 5, 25),
+                 Project = c(rep('cpr', 12), rep('nrs', 12)),
+                 Species_m3 = runif(24, 0.1, 10),
+                 Species = 'Acartia danae')
 plot <- pr_plot_sti(df)
 }

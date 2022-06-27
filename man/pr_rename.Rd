@@ -15,3 +15,7 @@ Dataframe with new column names
 \description{
 Rename variables within dataframe
 }
+\examples{
+df <- data.frame(LATITUDE = -32, LONGITUDE = 160) \%>\%
+            pr_rename()
+}
