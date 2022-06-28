@@ -39,7 +39,7 @@ testthat::test_that("Correct function output", {
   testthat::expect_equal(class(pr_get_fg("NRS", "P") %>%
                                  pr_plot_tsfg(Scale = "Percent", trend = "Month", pal = "matter"))[1], "gg")
 
-  testthat::expect_equal(class(pr_get_fg("NRS", "P") %>%
+  testthat::expect_equal(class(pr_get_fg("CPR", "P") %>%
                                  pr_plot_tsfg(Scale = "Actual", trend = "Year", pal = "matter"))[1], "gg")
 
   testthat::expect_equal(class(data.frame(SampleTime_Local = c("2010-01-01","2010-02-25",
