@@ -1,11 +1,11 @@
 pandoc: 2.17.1.1
-pkgdown: 2.0.2
+pkgdown: 2.0.5
 pkgdown_sha: ~
 articles:
   CPR_ts: CPR_ts.html
   NRS_ts: NRS_ts.html
   planktonr: planktonr.html
-last_built: 2022-04-19T02:51Z
+last_built: 2022-06-28T02:03Z
 urls:
   reference: https://planktonteam.github.io/planktonr/reference
   article: https://planktonteam.github.io/planktonr/articles

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="">0.0.1.0005</span>
+        <span class="version label label-warning" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.0000</span>
       </span>
     </div>
 
@@ -29,7 +29,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -60,54 +60,10 @@
     </div>
 
     <table class="ref-index"><colgroup><col class="alias"><col class="title"></colgroup><tbody><tr><th colspan="2">
-          <h2 id="all-functions">All functions <a href="#all-functions" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p>
+          <h2 id="load-data">Load Data <a href="#load-data" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>Functions to access data from the AODN.</p>
         </th>
       </tr></tbody><tbody><tr><td>
-          <p><code><a href="pr_add_Bioregions.html">pr_add_Bioregions()</a></code> </p>
-        </td>
-        <td><p>Add bioregions data to existing df</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_add_Carbon.html">pr_add_Carbon()</a></code> </p>
-        </td>
-        <td><p>Add Carbon concentration to phytoplankton dataframe</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_add_LocalTime.html">pr_add_LocalTime()</a></code> </p>
-        </td>
-        <td><p>Add local Time</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_add_SampleDate.html">pr_add_SampleDate()</a></code> </p>
-        </td>
-        <td><p>Add the SampleDate to dataframes that only have SampleTime</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_add_StationCode.html">pr_add_StationCode()</a></code> </p>
-        </td>
-        <td><p>Add NRS StationCode to data</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_add_StationName.html">pr_add_StationName()</a></code> </p>
-        </td>
-        <td><p>Add NRS StationName to data</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_apply_flags.html">pr_apply_flags()</a></code> </p>
-        </td>
-        <td><p>Remove flagged data in df</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_apply_time.html">pr_apply_time()</a></code> </p>
-        </td>
-        <td><p>Remove flagged data in df</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_export_larvalfish.html">pr_export_larvalfish()</a></code> </p>
-        </td>
-        <td><p>Create all processed data products for Larval Fish</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_filter_NRSStations.html">pr_filter_NRSStations()</a></code> </p>
-        </td>
-        <td><p>Filter dataframe on <code>StationCode</code> to return only NRS stations</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_filter_species.html">pr_filter_species()</a></code> </p>
-        </td>
-        <td><p>Remove incorrect species names from dataframe</p></td>
-      </tr><tr><td>
           <p><code><a href="pr_get_CPRData.html">pr_get_CPRData()</a></code> </p>
         </td>
         <td><p>Import CPR Data</p></td>
@@ -120,21 +76,9 @@
         </td>
         <td><p>Get CPR trips</p></td>
       </tr><tr><td>
-          <p><code><a href="pr_get_LFCountAll.html">pr_get_LFCountAll()</a></code> </p>
-        </td>
-        <td><p>Make count data of all larval fish</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_LFCountBGC.html">pr_get_LFCountBGC()</a></code> </p>
-        </td>
-        <td><p>Make BGC data for larval fish</p></td>
-      </tr><tr><td>
           <p><code><a href="pr_get_LFData.html">pr_get_LFData()</a></code> </p>
         </td>
         <td><p>Get Larval Fish Sample Data</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_LFTrips.html">pr_get_LFTrips()</a></code> </p>
-        </td>
-        <td><p>Get Larval Fish Trip Data</p></td>
       </tr><tr><td>
           <p><code><a href="pr_get_LTnuts.html">pr_get_LTnuts()</a></code> </p>
         </td>
@@ -176,6 +120,10 @@
         </td>
         <td><p>Import NRS BGC information</p></td>
       </tr><tr><td>
+          <p><code><a href="pr_get_PlanktonInfo.html">pr_get_PlanktonInfo()</a></code> </p>
+        </td>
+        <td><p>Load plankton information table with sizes etc.</p></td>
+      </tr><tr><td>
           <p><code><a href="pr_get_PlotCols.html">pr_get_PlotCols()</a></code> </p>
         </td>
         <td><p>Setting the colours for plots using cmocean</p></td>
@@ -184,17 +132,9 @@
         </td>
         <td><p>Get the summary plankton observations</p></td>
       </tr><tr><td>
-          <p><code><a href="pr_get_ZooInfo.html">pr_get_ZooInfo()</a></code> </p>
-        </td>
-        <td><p>Load copepod information table with sizes etc.</p></td>
-      </tr><tr><td>
           <p><code><a href="pr_get_coeffs.html">pr_get_coeffs()</a></code> </p>
         </td>
         <td><p>Get coefficients from linear model</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_csv.html">pr_get_csv()</a></code> </p>
-        </td>
-        <td><p>Download and write csv file</p></td>
       </tr><tr><td>
           <p><code><a href="pr_get_daynight.html">pr_get_daynight()</a></code> </p>
         </td>
@@ -216,6 +156,10 @@
         </td>
         <td><p>Access data for timeseries and climatology plots</p></td>
       </tr><tr><td>
+          <p><code><a href="pr_get_nonTaxaColumns.html">pr_get_nonTaxaColumns()</a></code> </p>
+        </td>
+        <td><p>Return columns that are not taxonomic</p></td>
+      </tr><tr><td>
           <p><code><a href="pr_get_papers.html">pr_get_papers()</a></code> </p>
         </td>
         <td><p>Random scientific papers using IMOS data</p></td>
@@ -232,6 +176,14 @@
         </td>
         <td><p>Download Raw Data from IMOS</p></td>
       </tr><tr><td>
+          <p><code><a href="pr_get_s3.html">pr_get_s3()</a></code> </p>
+        </td>
+        <td><p>Download Raw Data from IMOS</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_s3site.html">pr_get_s3site()</a></code> </p>
+        </td>
+        <td><p>Get location of s3 plankton data</p></td>
+      </tr><tr><td>
           <p><code><a href="pr_get_site.html">pr_get_site()</a></code> </p>
         </td>
         <td><p>Get location of raw plankton data</p></td>
@@ -239,15 +191,11 @@
           <p><code><a href="pr_get_sti.html">pr_get_sti()</a></code> </p>
         </td>
         <td><p>Get data for STI plots of species abundance</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_harmonic.html">pr_harmonic()</a></code> </p>
-        </td>
-        <td><p>For use in models to create a circular predictor</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_make_climatology.html">pr_make_climatology()</a></code> </p>
-        </td>
-        <td><p>To produce the climatology for plotting</p></td>
-      </tr><tr><td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="plotting">Plotting <a href="#plotting" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>Functions for plotting.</p>
+        </th>
+      </tr></tbody><tbody><tr><td>
           <p><code><a href="pr_plot_CPRmap.html">pr_plot_CPRmap()</a></code> </p>
         </td>
         <td><p>Title Sidebar panel plot of selected CPR bioregions</p></td>
@@ -295,6 +243,50 @@
           <p><code><a href="pr_plot_tsfg.html">pr_plot_tsfg()</a></code> </p>
         </td>
         <td><p>Time series plot of functional groups</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="utilities">Utilities <a href="#utilities" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="pr_add_Bioregions.html">pr_add_Bioregions()</a></code> </p>
+        </td>
+        <td><p>Add bioregions data to existing df</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_add_Carbon.html">pr_add_Carbon()</a></code> </p>
+        </td>
+        <td><p>Add Carbon concentration to phytoplankton dataframe</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_add_StationCode.html">pr_add_StationCode()</a></code> </p>
+        </td>
+        <td><p>Add NRS StationCode to data</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_add_StationName.html">pr_add_StationName()</a></code> </p>
+        </td>
+        <td><p>Add NRS StationName to data</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_apply_flags.html">pr_apply_flags()</a></code> </p>
+        </td>
+        <td><p>Remove flagged data in df</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_apply_time.html">pr_apply_time()</a></code> </p>
+        </td>
+        <td><p>Remove flagged data in df</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_filter_NRSStations.html">pr_filter_NRSStations()</a></code> </p>
+        </td>
+        <td><p>Filter dataframe on <code>StationCode</code> to return only NRS stations</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_filter_species.html">pr_filter_species()</a></code> </p>
+        </td>
+        <td><p>Remove incorrect species names from dataframe</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_harmonic.html">pr_harmonic()</a></code> </p>
+        </td>
+        <td><p>For use in models to create a circular predictor</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_make_climatology.html">pr_make_climatology()</a></code> </p>
+        </td>
+        <td><p>To produce the climatology for plotting</p></td>
       </tr><tr><td>
           <p><code><a href="pr_relabel.html">pr_relabel()</a></code> </p>
         </td>
@@ -320,8 +312,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

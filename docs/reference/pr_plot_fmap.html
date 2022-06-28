@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="">0.0.1.0005</span>
+        <span class="version label label-warning" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.0000</span>
       </span>
     </div>
 
@@ -29,7 +29,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -66,26 +66,30 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">pr_plot_fmap</span><span class="op">(</span><span class="va">df</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pr_plot_fmap</span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>df</dt>
 <dd><p>dataframe of format similar to output of pr_get_fmap_data()</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a plot of frequency of occurence of chosen species</p>
+    
+
+<p>a plot of frequency of occurence of chosen species</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Long <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">110</span>, <span class="fl">130</span>, <span class="fl">155</span>, <span class="fl">150</span><span class="op">)</span>, Lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">10</span>, <span class="op">-</span><span class="fl">35</span>, <span class="op">-</span><span class="fl">27</span>, <span class="op">-</span><span class="fl">45</span><span class="op">)</span>,</span>
-<span class="r-in">freqfac <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Absent"</span>, <span class="st">"Seen in 25%"</span>,<span class="st">'50%'</span>, <span class="st">'75%'</span><span class="op">)</span>,</span>
-<span class="r-in">Season <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"December - February"</span>,<span class="st">"March - May"</span>,<span class="st">"June - August"</span>,<span class="st">"September - November"</span><span class="op">)</span>,</span>
-<span class="r-in">Taxon <span class="op">=</span> <span class="st">'Acartia danae'</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu">pr_plot_fmap</span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Long <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">110</span>, <span class="fl">130</span>, <span class="fl">155</span>, <span class="fl">150</span><span class="op">)</span>, Lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">10</span>, <span class="op">-</span><span class="fl">35</span>, <span class="op">-</span><span class="fl">27</span>, <span class="op">-</span><span class="fl">45</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                 freqfac <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Absent"</span>, <span class="st">"Seen in 25%"</span>,<span class="st">'50%'</span>, <span class="st">'75%'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                 Season <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"December - February"</span>,<span class="st">"March - May"</span>,</span></span>
+<span class="r-in"><span>                 <span class="st">"June - August"</span>,<span class="st">"September - November"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                 Taxon <span class="op">=</span> <span class="st">'Acartia danae'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu">pr_plot_fmap</span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -100,8 +104,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>
