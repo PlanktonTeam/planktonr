@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="">0.0.1.0005</span>
+        <span class="version label label-warning" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.0000</span>
       </span>
     </div>
 
@@ -29,7 +29,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -66,43 +66,56 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">pr_plot_EOV</span><span class="op">(</span>
-  <span class="va">df</span>,
-  EOV <span class="op">=</span> <span class="st">"Biomass_mgm3"</span>,
-  Survey <span class="op">=</span> <span class="st">"NRS"</span>,
-  trans <span class="op">=</span> <span class="st">"identity"</span>,
-  pal <span class="op">=</span> <span class="st">"matter"</span>,
-  labels <span class="op">=</span> <span class="st">"yes"</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pr_plot_EOV</span><span class="op">(</span></span>
+<span>  <span class="va">df</span>,</span>
+<span>  EOV <span class="op">=</span> <span class="st">"Biomass_mgm3"</span>,</span>
+<span>  Survey <span class="op">=</span> <span class="st">"NRS"</span>,</span>
+<span>  trans <span class="op">=</span> <span class="st">"identity"</span>,</span>
+<span>  pal <span class="op">=</span> <span class="st">"matter"</span>,</span>
+<span>  labels <span class="op">=</span> <span class="st">"yes"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>df</dt>
 <dd><p>dataframe containing timeseries data with parameters and Values</p></dd>
+
+
 <dt>EOV</dt>
 <dd><p>Essential OCean Variable as a parameter</p></dd>
+
+
 <dt>Survey</dt>
 <dd><p>NRS, CPR or Long term monitoring</p></dd>
+
+
 <dt>trans</dt>
 <dd><p>scale for y axis</p></dd>
+
+
 <dt>pal</dt>
 <dd><p>colour pallet from cmocean</p></dd>
+
+
 <dt>labels</dt>
 <dd><p>do you want to print labels on the x axes</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>plot of timeseries, anomalies and climatology</p>
+    
+
+<p>plot of timeseries, anomalies and climatology</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>SampleDate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2010-01-01"</span>,<span class="st">"2010-02-25"</span>,<span class="st">"2010-06-21"</span>,<span class="st">"2010-04-11"</span>,<span class="st">"2010-08-05"</span><span class="op">)</span>,</span>
-<span class="r-in">             StationName <span class="op">=</span> <span class="st">'Port Hacking'</span>, parameters <span class="op">=</span> <span class="st">'Biomass_mgm3'</span>, Values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">1</span>, <span class="fl">50</span><span class="op">)</span>,</span>
-<span class="r-in">             fv <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">1</span>, <span class="fl">50</span><span class="op">)</span>, anomaly <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span>, Month <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">1</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
-<span class="r-in">             <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>SampleDate <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_date</a></span><span class="op">(</span><span class="va">SampleDate</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">plot</span> <span class="op">&lt;-</span>  <span class="fu">pr_plot_EOV</span><span class="op">(</span><span class="va">df</span>, <span class="st">'Biomass_mgm3'</span>, <span class="st">'NRS'</span>, <span class="st">'identity'</span>, <span class="st">'matter'</span>, <span class="st">'yes'</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>SampleTime_Local <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2010-01-01"</span>,<span class="st">"2010-02-25"</span>,</span></span>
+<span class="r-in"><span>                                      <span class="st">"2010-06-21"</span>,<span class="st">"2010-04-11"</span>,<span class="st">"2010-08-05"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>             StationName <span class="op">=</span> <span class="st">"Port Hacking"</span>, parameters <span class="op">=</span> <span class="st">"Biomass_mgm3"</span>, Values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">1</span>, <span class="fl">50</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>             fv <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">1</span>, <span class="fl">50</span><span class="op">)</span>, anomaly <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span>, Month_Local <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">1</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">plot</span> <span class="op">&lt;-</span>  <span class="fu">pr_plot_EOV</span><span class="op">(</span><span class="va">df</span>, <span class="st">"Biomass_mgm3"</span>, <span class="st">"NRS"</span>, <span class="st">"identity"</span>, <span class="st">"matter"</span>, <span class="st">"yes"</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -117,8 +130,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

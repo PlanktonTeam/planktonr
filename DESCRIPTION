@@ -1,6 +1,6 @@
 Package: planktonr
 Title: Analysis and visualisation of plankton data
-Version: 0.0.1.0005
+Version: 0.0.5.0000
 Authors@R: 
     c(person(given = "Jason D.",
              family = "Everett",
