@@ -431,9 +431,9 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
 
 #' Policy plot
 #'
-#' @param df dataframe containing timeseries data with parameters and Values
+#' @param df dataframe containing timeseries data with parameters and Values, output of pr_get_pol and pr_get_coeffs
 #' @param EOV Essential OCean Variable as a parameter
-#' @param Survey NRS, CPR or Long term monitoring
+#' @param Survey NRS, CPR or LTM 'Long term monitoring'
 #' @param trans scale for y axis
 #' @param pal colour pallet from cmocean
 #' @param labels do you want to print labels on the x axes

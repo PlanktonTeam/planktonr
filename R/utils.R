@@ -460,6 +460,14 @@ pr_harmonic <- function (theta, k = 4) {
 #' pr <- pr_get_coeffs(df)
 pr_get_coeffs <-  function(df){
 
+  df <- df %>%
+    dplyr::group_by(.data$StationCode, .data$StationName, .data$SampleTime_Local, .data$anomaly, .data$Year_Local, .data$Month_Local, .data$parameters) %>%
+    dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
+                     .groups = 'drop') %>%
+    dplyr::rename(SampleDate = .data$SampleTime_Local) %>%
+    dplyr::mutate(Month = .data$Month_Local * 2 * 3.142 / 12) %>%
+    droplevels()
+
   params <- df %>%
     dplyr::select(.data$parameters) %>%
     unique()
