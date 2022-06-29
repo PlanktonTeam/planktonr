@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-#' dat <- pr_get_pol("LTM")
+#' df <- pr_get_pol("CPR")
 pr_get_pol <- function(Survey = "NRS"){
 
   if(Survey == "CPR") {
@@ -35,7 +35,8 @@ pr_get_pol <- function(Survey = "NRS"){
 
     Pol <- Pol %>%
       dplyr::left_join(means, by = c("BioRegion", "parameters")) %>%
-      dplyr::mutate(anomaly = (.data$Values - means)/sd)
+      dplyr::mutate(anomaly = (.data$Values - means)/sd,
+                    Survey = 'CPR')
 
   } else if (Survey == "NRS"){
 
@@ -64,7 +65,8 @@ pr_get_pol <- function(Survey = "NRS"){
 
     Pol <- Pol %>%
       dplyr::left_join(means, by = c("StationName", "parameters")) %>%
-      dplyr::mutate(anomaly = (.data$Values - means)/sd)
+      dplyr::mutate(anomaly = (.data$Values - means)/sd,
+                    Survey = 'NRS')
 
   } else if (Survey == "LTM"){
 
@@ -79,7 +81,8 @@ pr_get_pol <- function(Survey = "NRS"){
 
     Pol <- LTnuts %>%
       dplyr::left_join(means, by = c("StationName", "parameters")) %>%
-      dplyr::mutate(anomaly = (.data$Values - .data$means)/.data$sd)
+      dplyr::mutate(anomaly = (.data$Values - .data$means)/.data$sd,
+                    Survey = 'LTM')
 
   }
 }
