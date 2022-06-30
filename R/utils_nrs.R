@@ -87,8 +87,6 @@ pr_get_NRSTrips <- function(Type = c("P", "Z", "F")){
 
   NRSTrip <- pr_get_s3("bgc_trip") %>%
     pr_rename() %>%
-    dplyr::rename(SampleTime_Local = .data$SAMPLEDATELOCAL,
-                  SampleTime_UTC = .data$SAMPLEDATEUTC) %>%
     dplyr::filter(.data$ProjectName == "NRS" &
                     (stringr::str_detect(.data$SampleType, paste("P", collapse = "|")) |
                        is.na(.data$SampleType))) %>%
