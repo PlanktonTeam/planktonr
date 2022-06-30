@@ -39,6 +39,11 @@ pr_add_Bioregions <- function(df){
                                                  .data$Latitude >= sf::st_bbox(mbr[mbr$OBJECTID==13,])$ymin &
                                                  .data$Latitude <= sf::st_bbox(mbr[mbr$OBJECTID==13,])$ymax &
                                                  rlang::are_na(.data$BioRegion) == TRUE ~ "South-east",
+                                               .data$Longitude >= sf::st_bbox(mbr[mbr$OBJECTID==1,])$xmin &
+                                                 .data$Longitude <= sf::st_bbox(mbr[mbr$OBJECTID==1,])$xmax &
+                                                 .data$Latitude >= sf::st_bbox(mbr[mbr$OBJECTID==1,])$ymin &
+                                                 .data$Latitude <= sf::st_bbox(mbr[mbr$OBJECTID==1,])$ymax &
+                                                 rlang::are_na(.data$BioRegion) == TRUE ~ "North",
                                                TRUE ~ .data$BioRegion)) %>%
     dplyr::relocate(.data$BioRegion, .after = .data$Latitude)
 

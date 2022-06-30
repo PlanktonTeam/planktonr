@@ -61,8 +61,8 @@ pr_get_CPRData <- function(Type = "phytoplankton", Variable = "abundance", Subse
 pr_get_CPRTrips <- function(){
   CPRTrips <- pr_get_s3("cpr_samp")  %>%
     pr_rename() %>%
-    dplyr::rename("SampleTime_UTC" = "SAMPLEDATEUTC",
-                  "SampleTime_Local" = "SAMPLEDATELOCAL")
+    dplyr::rename("SampleTime_UTC" = "SampleDate_UTC",
+                  "SampleTime_Local" = "SampleDate_Local")
 }
 
 
