@@ -426,3 +426,47 @@ pr_get_papers <- function(){
   return(out)
 
 }
+
+#' Data for IMOS progress map
+#'
+#' @param Survey one of NRS, CPR, Both
+#'
+#' @return A dataframe for input into pr_plot_Progress()
+#' @export
+#'
+#' @examples
+#' df <- pr_get_ProgressMap("Both")
+
+pr_get_ProgressMap <- function(Survey = c("NRS", "CPR", "Both")){
+
+  if(Survey == "NRS") {
+
+    PMapDataNRS <- planktonr::pr_get_NRSTrips(Type = c("P", "Z")) %>%
+      dplyr::select(.data$StationCode, .data$Longitude, .data$Latitude) %>%
+      dplyr::rename(Region = .data$StationCode) %>%
+      dplyr::mutate(Survey = 'NRS') %>%
+      dplyr::filter(.data$Region != 'PH4')
+
+  } else if (Survey == "CPR") {
+
+    PMapDataNRS <- readr::read_csv("https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/deprecated/CPR_Samp.csv")  %>%
+      dplyr::select(.data$REGION, .data$LONGITUDE, .data$LATITUDE) %>%
+      dplyr::rename(Region = .data$REGION, Longitude = .data$LONGITUDE, Latitude = .data$LATITUDE) %>%
+      dplyr::mutate(Survey = 'CPR')
+
+  } else if (Survey == "Both") {
+
+    PMapData <- dplyr::bind_rows(planktonr::pr_get_NRSTrips(Type = c("P", "Z")) %>%
+                                   dplyr::select(.data$StationCode, .data$Longitude, .data$Latitude) %>%
+                                   dplyr::rename(Region = .data$StationCode) %>%
+                                   dplyr::mutate(Survey = 'NRS',
+                                                 Region = ifelse(Region == 'PH4', 'PHB', .data$Region)),
+                                 readr::read_csv("https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/deprecated/CPR_Samp.csv",
+                                                 show_col_types = FALSE)  %>%
+                                   dplyr::select(.data$REGION, .data$LONGITUDE, .data$LATITUDE) %>%
+                                   dplyr::rename(Region = .data$REGION, Longitude = .data$LONGITUDE, Latitude = .data$LATITUDE) %>%
+                                   dplyr::mutate(Survey = 'CPR'))
+  }
+}
+
+

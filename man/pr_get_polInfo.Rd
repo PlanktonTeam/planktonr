@@ -16,5 +16,5 @@ A dataframe with policy information
 Get policy information
 }
 \examples{
-df <- pr_get_polInfo("NRS")
+df <- pr_get_polInfo("CPR")
 }

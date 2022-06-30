@@ -14,11 +14,11 @@ pr_plot_EOV(
 )
 }
 \arguments{
-\item{df}{dataframe containing timeseries data with parameters and Values}
+\item{df}{dataframe containing timeseries data with parameters and Values, output of pr_get_pol and pr_get_coeffs}
 
 \item{EOV}{Essential OCean Variable as a parameter}
 
-\item{Survey}{NRS, CPR or Long term monitoring}
+\item{Survey}{NRS, CPR or LTM 'Long term monitoring'}
 
 \item{trans}{scale for y axis}
 
@@ -36,6 +36,8 @@ Policy plot
 df <- data.frame(SampleTime_Local = c("2010-01-01","2010-02-25",
                                       "2010-06-21","2010-04-11","2010-08-05"),
              StationName = "Port Hacking", parameters = "Biomass_mgm3", Values = runif(5, 1, 50),
-             fv = runif(5, 1, 50), anomaly = runif(5, 1, 3), Month_Local = runif(5, 1, 6))
-plot <-  pr_plot_EOV(df, "Biomass_mgm3", "NRS", "identity", "matter", "yes")
+             fv = runif(5, 1, 50), anomaly = runif(5, 1, 3), Month_Local = runif(5, 1, 6)) \%>\%
+             dplyr::mutate(SampleTime_Local = as.Date(SampleTime_Local, format = "\%Y-\%m-\%d"))
+
+plot <-  pr_plot_EOV(df, "Biomass_mgm3", "CPR", "identity", "matter", "yes")
 }

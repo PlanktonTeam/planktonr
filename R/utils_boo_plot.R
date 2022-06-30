@@ -741,4 +741,59 @@ pr_plot_sti <-  function(df){
 
 }
 
+#' IMOS progress plot
+#'
+#' @param df output from pr_get_ProgressMap
+#'
+#' @return a plot of IMOS progress
+#' @export
+#'
+#' @examples
+#' df <- pr_get_ProgressMap("CPR")
+#' plot <- pr_plot_Progress(df)
+pr_plot_Progress <- function(df){
 
+  PMapData2 <- df %>%
+    sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326) %>%
+    sf::st_as_sf()
+
+  PMapSum <- merge(df %>% dplyr::group_by(.data$Region, .data$Survey) %>% dplyr::summarise(Sums = dplyr::n(),
+                                                                                     .groups = 'drop') %>%
+                     dplyr::mutate(label = paste0(.data$Region, ' = ', .data$Sums)),
+                   df %>% dplyr::group_by(.data$Region, .data$Survey) %>% dplyr::summarise(Lats = mean(.data$Latitude),
+                                                                                     Lons = mean(.data$Longitude),
+                                                                                     .groups = 'drop')) %>%
+    sf::st_as_sf(coords = c("Lons", "Lats"), crs = 4326)
+
+  nudgex = c(-2,5.5,2,8.5,9.5,0,0,4)
+  nudgey = c(-3,0,1,0,0,7,-2,10)
+  # GAB, GBR, NA, NEAC, SEAC, SO, Tas, WA
+
+  Survey <- df %>% dplyr::select(.data$Survey) %>% dplyr::distinct()
+
+  gg <- ggplot2::ggplot() +
+    ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
+    ggplot2::scale_x_continuous(expand = c(0, 0), limits = c(105, 170)) +
+    ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(-54, -7)) +
+    ggplot2::theme_void() +
+    ggplot2::theme(axis.title = ggplot2::element_blank(),
+                   axis.line = ggplot2::element_blank())
+
+  if ("NRS" %in% Survey$Survey) {
+
+  gg <-  gg + ggplot2::geom_sf(data = PMapData2 %>% dplyr::filter(.data$Survey == 'NRS'), size = 5) +
+    ggplot2::geom_sf_text(data = PMapSum %>% dplyr::filter(.data$Survey == 'NRS'), size = 5, ggplot2::aes(label = .data$label),
+                          show.legend = FALSE, nudge_x = 3)
+  }
+
+  if ("CPR" %in% Survey$Survey) {
+
+    gg <-  gg + ggplot2::geom_sf(data = PMapData2 %>% dplyr::filter(.data$Survey == 'CPR'), size = 1, ggplot2::aes(color =.data$Region),
+                                 show.legend = FALSE) +
+      ggplot2::geom_sf_text(data = PMapSum %>% dplyr::filter(.data$Survey == 'CPR'), size = 5, ggplot2::aes(label = .data$label, color = .data$Region),
+                            show.legend = FALSE, check_overlap = TRUE, nudge_x = nudgex, nudge_y = nudgey)
+  }
+
+  gg
+
+}

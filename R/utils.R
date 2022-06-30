@@ -431,7 +431,7 @@ pr_add_Carbon <- function(df, meth){
 #' @examples
 #' theta = 2
 #' k = 1
-#' df <- pr_harmonic(theta, k)
+#' df <- pr_harmonic(theta = 2, k = 1)
 
 pr_harmonic <- function (theta, k = 4) {
   X <- matrix(0, length(theta), 2 * k)

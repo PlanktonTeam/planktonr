@@ -16,5 +16,5 @@ A dataframe with policy data
 Get Policy data set
 }
 \examples{
-dat <- pr_get_pol("LTM")
+df <- pr_get_pol("CPR")
 }
