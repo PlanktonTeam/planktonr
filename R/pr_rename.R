@@ -27,7 +27,7 @@ pr_rename <- function(df){
     "Oxygen_Flag", "OXYGEN_QC_FLAG",
     "Phosphate_umolL", "PHOSPHATE_VALUE",
     "Phosphate_Flag", "PHOSPHATE_QC_FLAG",
-    "SampleTime_UTC", "SAMPLEDATEUTC",  # put these back as they come from S3
+    "SampleTime_UTC", "SAMPLEDATEUTC",  # put these back as they come from S3 pr_get_CPRtrips()
     "SampleTime_Local", "SAMPLEDATELOCAL",
     "Salinity", "SALINITY_VALUE",
     "Salinity_Flag", "SALINITY_QC_FLAG",

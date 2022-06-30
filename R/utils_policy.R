@@ -121,7 +121,7 @@ pr_get_polInfo <- function(Survey = "NRS"){
       pr_add_Bioregions() %>%
       dplyr::group_by(BioRegion) %>%
       dplyr::summarise(SampleStartDate = as.Date(min(SampleTime_UTC)),
-                       Miles = n() * 4 * 5) %>%
+                       Miles = dplyr::n() * 4 * 5) %>%
       dplyr::mutate(Features = dplyr::case_when(.data$BioRegion %in% c("South-east") ~ "narrow shelf intensifying currents, eddies and upwellings with low nutrient and primary productivity",
                                                 .data$BioRegion %in% c("South-west") ~ "temperate and subtropical habitats influenced by the nutrient deplete Leeuwin Current.",
                                                 .data$BioRegion %in% c("Temperate East") ~ "temperate and subtropical habitats influenced by the East Australian Current and its eddies.",
