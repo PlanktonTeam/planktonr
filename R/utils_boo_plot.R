@@ -456,11 +456,11 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
   colin <- pals[5]
 
   if(Survey == "LTM"){
-    lims <- lubridate::as_datetime(c("1944-01-01","2021-12-31")) #TODO I don't think this should be hardwired
+    lims <- lubridate::as_datetime(c("1944-01-01", lubridate::ceiling_date(Sys.Date(), "year")))
     df <- df %>%
       dplyr::filter(.data$parameters == EOV)
   } else {
-    lims <- lubridate::as_datetime(c("2010-01-01","2021-12-31")) #TODO I don't think this should be hardwired
+    lims <- lubridate::as_datetime(c("2010-01-01", lubridate::ceiling_date(Sys.Date(), "year")))
     df <- df %>%
       dplyr::filter(.data$parameters == EOV) %>%
       dplyr::rename(SampleDate = 1)
