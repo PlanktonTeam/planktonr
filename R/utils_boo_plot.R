@@ -445,8 +445,10 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
 #' df <- data.frame(SampleTime_Local = c("2010-01-01","2010-02-25",
 #'                                       "2010-06-21","2010-04-11","2010-08-05"),
 #'              StationName = "Port Hacking", parameters = "Biomass_mgm3", Values = runif(5, 1, 50),
-#'              fv = runif(5, 1, 50), anomaly = runif(5, 1, 3), Month_Local = runif(5, 1, 6))
-#' plot <-  pr_plot_EOV(df, "Biomass_mgm3", "NRS", "identity", "matter", "yes")
+#'              fv = runif(5, 1, 50), anomaly = runif(5, 1, 3), Month_Local = runif(5, 1, 6)) %>%
+#'              dplyr::mutate(SampleTime_Local = as.Date(SampleTime_Local, format = "%Y-%m-%d"))
+#'
+#' plot <-  pr_plot_EOV(df, "Biomass_mgm3", "CPR", "identity", "matter", "yes")
 pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "identity", pal = "matter", labels = "yes") {
 
   titley <- pr_relabel(EOV, style = "ggplot")
@@ -456,14 +458,13 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
   colin <- pals[5]
 
   if(Survey == "LTM"){
-    lims <- lubridate::as_datetime(c("1944-01-01", lubridate::ceiling_date(Sys.Date(), "year")))
+    lims <- c(lubridate::floor_date(min(df$SampleDate), "year"), lubridate::ceiling_date(Sys.Date(), "year"))
     df <- df %>%
       dplyr::filter(.data$parameters == EOV)
   } else {
-    lims <- lubridate::as_datetime(c("2010-01-01", lubridate::ceiling_date(Sys.Date(), "year")))
+    lims <- c(lubridate::floor_date(min(df$SampleDate), "year"), lubridate::ceiling_date(Sys.Date(), "year"))
     df <- df %>%
-      dplyr::filter(.data$parameters == EOV) %>%
-      dplyr::rename(SampleDate = 1)
+      dplyr::filter(.data$parameters == EOV)
   }
 
   p1 <- ggplot2::ggplot(df) +
