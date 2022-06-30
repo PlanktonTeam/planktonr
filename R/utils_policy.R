@@ -95,7 +95,7 @@ pr_get_pol <- function(Survey = "NRS"){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_polInfo("NRS")
+#' df <- pr_get_polInfo("CPR")
 pr_get_polInfo <- function(Survey = "NRS"){
 
   if(Survey == "NRS"){

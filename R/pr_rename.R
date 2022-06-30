@@ -10,7 +10,7 @@
 #'             pr_rename()
 pr_rename <- function(df){
 
-  ##TODO - Check and remvoe any uneeded renames
+  ##TODO - Check and remvoe any uneeded renames - note the capitals are needed for files grabbed from S3
   rename_df <- tibble::as_tibble(matrix(c(
     "Sample", "SAMPLE",
     "Region", "REGION",
@@ -27,6 +27,8 @@ pr_rename <- function(df){
     "Oxygen_Flag", "OXYGEN_QC_FLAG",
     "Phosphate_umolL", "PHOSPHATE_VALUE",
     "Phosphate_Flag", "PHOSPHATE_QC_FLAG",
+    "SampleDate_UTC", "SAMPLEDATEUTC",  # put these back as they come from S3
+    "SampleDate_Local", "SAMPLEDATELOCAL",
     "Salinity", "SALINITY_VALUE",
     "Salinity_Flag", "SALINITY_QC_FLAG",
     "Silicate_umolL", "SILICATE_VALUE",
