@@ -55,10 +55,10 @@ testthat::test_that("Correct function output", {
     testthat::expect_type("double") %>%
     testthat::expect_length(4)
 
-  testthat::expect_type(data.frame(Year_Local = runif(10, 2000, 2003),
-                                   Month_Local = runif(10, 1, 6),
-                                   parameters = c('Biomasss_mgm3', 'Diversity'),
-                                   Values = runif(10, 1, 5)) %>%
+  testthat::expect_type(planktonr::pr_get_pol("NRS") %>%
+                          pr_get_coeffs(), "list")
+
+  testthat::expect_type(planktonr::pr_get_pol("LTM") %>%
                           pr_get_coeffs(), "list")
 
   testthat::expect_type(pr_get_nonTaxaColumns(Survey = "NRS", Type = "Z"), "character")
