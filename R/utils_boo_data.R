@@ -435,38 +435,39 @@ pr_get_papers <- function(){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_ProgressMap("Both")
+#' df <- pr_get_ProgressMap(c("NRS", "CPR"))
 
-pr_get_ProgressMap <- function(Survey = c("NRS", "CPR", "Both")){
+pr_get_ProgressMap <- function(Survey = c("NRS", "CPR")){
 
-  if(Survey == "NRS") {
+  if ("Both" %in% Survey){ #TODO Kept here for backwards compatability. Remove when "Both" is removed from BOO
+    Survey = c("NRS", "CPR") # Reset Survey
+  }
 
+  if("NRS" %in% Survey) {
     PMapDataNRS <- planktonr::pr_get_NRSTrips(Type = c("P", "Z")) %>%
       dplyr::select(.data$StationCode, .data$Longitude, .data$Latitude) %>%
       dplyr::rename(Region = .data$StationCode) %>%
-      dplyr::mutate(Survey = 'NRS') %>%
-      dplyr::filter(.data$Region != 'PH4')
-
-  } else if (Survey == "CPR") {
-
-    PMapDataNRS <- readr::read_csv("https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/deprecated/CPR_Samp.csv")  %>%
-      dplyr::select(.data$REGION, .data$LONGITUDE, .data$LATITUDE) %>%
-      dplyr::rename(Region = .data$REGION, Longitude = .data$LONGITUDE, Latitude = .data$LATITUDE) %>%
-      dplyr::mutate(Survey = 'CPR')
-
-  } else if (Survey == "Both") {
-
-    PMapData <- dplyr::bind_rows(planktonr::pr_get_NRSTrips(Type = c("P", "Z")) %>%
-                                   dplyr::select(.data$StationCode, .data$Longitude, .data$Latitude) %>%
-                                   dplyr::rename(Region = .data$StationCode) %>%
-                                   dplyr::mutate(Survey = 'NRS',
-                                                 Region = ifelse(Region == 'PH4', 'PHB', .data$Region)),
-                                 readr::read_csv("https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/deprecated/CPR_Samp.csv",
-                                                 show_col_types = FALSE)  %>%
-                                   dplyr::select(.data$REGION, .data$LONGITUDE, .data$LATITUDE) %>%
-                                   dplyr::rename(Region = .data$REGION, Longitude = .data$LONGITUDE, Latitude = .data$LATITUDE) %>%
-                                   dplyr::mutate(Survey = 'CPR'))
+      dplyr::mutate(Survey = "NRS") %>%
+      dplyr::filter(.data$Region != "PH4")
+    if (("CPR" %in% Survey) == FALSE){ # Return data if no CPR
+      return(PMapDataNRS)
+    }
   }
+
+  if ("CPR" %in% Survey) {
+    # PMapDataCPR <- readr::read_csv("https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/deprecated/CPR_Samp.csv", show_col_types = FALSE)  %>%
+    PMapDataCPR <- pr_get_s3("cpr_samp") %>%
+      dplyr::select(.data$REGION, .data$LONGITUDE, .data$LATITUDE) %>%
+      pr_rename() %>%
+      dplyr::mutate(Survey = "CPR")
+    if (("NRS" %in% Survey) == FALSE){ # Return data if no NRS
+      return(PMapDataCPR)
+    }
+  }
+
+  if(("NRS" %in% Survey & "CPR" %in% Survey) | "Both" %in% Survey) {
+    PMapData <- dplyr::bind_rows(PMapDataNRS, PMapDataCPR)
+    return(PMapData)
+  }
+
 }
-
-
