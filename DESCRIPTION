@@ -23,7 +23,6 @@ Imports:
     cmocean,
     data.table,
     dplyr,
-    forcats,
     ggplot2,
     lubridate,
     lutz,
@@ -32,7 +31,6 @@ Imports:
     purrr,
     readr (>= 2.0.0),
     rlang,
-    rnaturalearth,
     scales,
     sf,
     stats,
@@ -40,8 +38,7 @@ Imports:
     suncalc,
     tibble,
     tidyr,
-    tidyselect,
-    vegan
+    tidyselect
 Depends: 
     R (>= 2.10)
 Suggests: 

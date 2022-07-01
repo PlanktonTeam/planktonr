@@ -4,7 +4,7 @@
 \alias{pr_get_ProgressMap}
 \title{Data for IMOS progress map}
 \usage{
-pr_get_ProgressMap(Survey = c("NRS", "CPR", "Both"))
+pr_get_ProgressMap(Survey = c("NRS", "CPR"))
 }
 \arguments{
 \item{Survey}{one of NRS, CPR, Both}
@@ -16,5 +16,5 @@ A dataframe for input into pr_plot_Progress()
 Data for IMOS progress map
 }
 \examples{
-df <- pr_get_ProgressMap("Both")
+df <- pr_get_ProgressMap(c("NRS", "CPR"))
 }

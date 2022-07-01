@@ -42,26 +42,20 @@ testthat::test_that("Correct function output", {
   testthat::expect_equal(class(pr_get_fg("CPR", "P") %>%
                                  pr_plot_tsfg(Scale = "Actual", trend = "Year", pal = "matter"))[1], "gg")
 
-  testthat::expect_equal(class(data.frame(SampleTime_Local = c("2010-01-01","2010-02-25",
-                                                               "2010-06-21","2010-04-11","2010-08-05"),
-                                          StationName = "Port Hacking", parameters = "Biomass_mgm3",
-                                          Values = runif(5, 1, 50), fv = runif(5, 1, 50),
-                                          anomaly = runif(5, 1, 3), Month_Local = runif(5, 1, 6)) %>%
-                                 pr_plot_EOV("Biomass_mgm3", "NRS", "identity", "matter", "yes"))[1], "patchwork")
+  testthat::expect_equal(class(planktonr::pr_get_pol("NRS") %>%
+                                 pr_get_coeffs() %>%
+                                 pr_plot_EOV(EOV = "Biomass_mgm3", Survey = "NRS", trans = "identity",
+                                             pal = "matter", labels = "yes"))[1], "patchwork")
 
-  testthat::expect_equal(class(data.frame(SampleTime_Local = c("2010-01-01","2010-02-25",
-                                                               "2010-06-21","2010-04-11","2010-08-05"),
-                                          StationName = "Port Hacking", parameters = "Biomass_mgm3",
-                                          Values = runif(5, 1, 50), fv = runif(5, 1, 50),
-                                          anomaly = runif(5, 1, 3), Month_Local = runif(5, 1, 6)) %>%
-                                 pr_plot_EOV("Biomass_mgm3", "CPR", "identity", "matter", "no"))[1], "patchwork")
+  testthat::expect_equal(class(planktonr::pr_get_pol("CPR") %>%
+                                 pr_get_coeffs() %>%
+                                 pr_plot_EOV(EOV = "Biomass_mgm3", Survey = "CPR", trans = "identity",
+                                             pal = "matter", labels = "no"))[1], "patchwork")
 
-  testthat::expect_equal(class(data.frame(SampleTime_Local = c("2010-01-01","2010-02-25",
-                                                               "2010-06-21","2010-04-11","2010-08-05"),
-                                          StationName = "Port Hacking", parameters = "Biomass_mgm3",
-                                          Values = runif(5, 1, 50), fv = runif(5, 1, 50),
-                                          anomaly = runif(5, 1, 3), Month_Local = runif(5, 1, 6)) %>%
-                                 pr_plot_EOV("Biomass_mgm3", "LTM", "identity", "matter", "no"))[1], "patchwork")
+  testthat::expect_equal(class(planktonr::pr_get_pol("LTM") %>%
+                                 pr_get_coeffs() %>%
+                                 pr_plot_EOV(EOV = "Biomass_mgm3", Survey = "LTM", trans = "identity",
+                                             pal = "matter", labels = "no"))[1], "patchwork")
 
   testthat::expect_equal(class(pr_get_NRSChemistry() %>%
                                  dplyr::filter(parameters == "SecchiDepth_m") %>%

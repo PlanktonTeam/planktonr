@@ -130,12 +130,13 @@ pr_get_NRSMicro <- function(){
                  "Eukaryote_Salinity_Index", "Eukaryote_Nitrogen_Index", "Eukaryote_Phosphate_Index", "Eukaryote_Silicate_Index", "Eukaryote_Oxygen_Diversity",
                  "Eukaryote_Chlorophyll_Index")
 
-  dat <- readr::read_csv(system.file("extdata", "datNRSm.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
+  dat <- readr::read_csv(system.file("extdata", "datNRSm.csv", package = "planktonr", mustWork = TRUE), na = c("", NA, "NA"), show_col_types = FALSE) %>%
     pr_rename() %>%
     dplyr::rename(SampleTime_Local = .data$SampleDateLocal,
                   Month_Local = .data$Month,
                   Year_Local = .data$Year,
                   SampleTime_UTC = .data$SampleDateUTC) %>%
+    dplyr::mutate(StationName = dplyr::if_else(.data$StationName == "North Stradbroke", "North Stradbroke Island", .data$StationName)) %>%
     pr_add_StationCode() %>%
     dplyr::mutate(SampleDepth_m = as.numeric(stringr::str_sub(.data$TripCode_depth, -3, -1))) %>%
     dplyr::rename(Prochlorococcus_CellsmL = .data$Prochlorococcus_cells_ml,

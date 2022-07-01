@@ -16,9 +16,6 @@ coefficients from linear model
 Get coefficients from linear model
 }
 \examples{
-df <- data.frame(Year_Local = runif(10, 2000, 2003),
-                 Month_Local = runif(10, 1, 6),
-                 parameters = c('Biomasss_mgm3', 'Diversity'),
-                 Values = runif(10, 1, 5))
-pr <- pr_get_coeffs(df)
+df <- planktonr::pr_get_pol("NRS") \%>\%
+  pr_get_coeffs()
 }

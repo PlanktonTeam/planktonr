@@ -12,7 +12,8 @@ pr_get_site <- function(){
 
 #' Get location of s3 plankton data
 #'
-#' Internal function to load the location of the s3 plankton data files.
+#' Internal function to load the location of the s3 plankton data files. Browse files here:
+#' http://imos-data.s3-website-ap-southeast-2.amazonaws.com/?prefix=IMOS/BGC_DB/harvested_from_CSIRO/
 #' @return A string with location of s3 plankton data
 #' @export
 #' @examples
@@ -65,14 +66,14 @@ pr_get_raw <- function(file){
                      TripCode = readr::col_character(),
                      SampleTime_Local = readr::col_datetime(),
                      SampleDepth_m = readr::col_character())
-   } else {
+  } else {
     col_types = list()
   }
 
 
   dat <- readr::read_csv(stringr::str_replace(
     pr_get_site(), "LAYER_NAME", file),
-    na = c("", NaN),
+    na = c("", NaN, "NaN", NA, "NA"),
     show_col_types = FALSE,
     comment = "#",
     col_types = col_types)
@@ -95,15 +96,15 @@ pr_get_raw <- function(file){
 #' dat <- pr_get_s3("bgc_trip")
 pr_get_s3 <- function(file){
 
-    col_types = list()
+  col_types = list()
 
-    dat <- readr::read_csv(paste0(pr_get_s3site(), file, ".csv"),
-                           na = c("", NaN),
-                           show_col_types = FALSE,
-                           comment = "#",
-                           col_types = col_types)
+  dat <- readr::read_csv(paste0(pr_get_s3site(), file, ".csv"),
+                         na = c("", NaN),
+                         show_col_types = FALSE,
+                         comment = "#",
+                         col_types = col_types)
 
-    return(dat)
+  return(dat)
 }
 
 
@@ -157,7 +158,7 @@ pr_get_PlanktonInfo <- function(Type = "Z"){
     df <- pr_get_s3("phytoinfo") %>%
       pr_rename()
   }
-return(df)
+  return(df)
 }
 
 
@@ -207,6 +208,7 @@ pr_add_StationCode <- function(df){
         StationName == "Darwin" ~ "DAR",
         StationName == "Yongala" ~ "YON",
         StationName == "North Stradbroke Island" ~ "NSI",
+        StationName == "North Stradbroke" ~ "NSI",
         StationName == "Port Hacking" ~ "PHB",
         StationName == "Maria Island" ~ "MAI",
         StationName == "Kangaroo Island" ~ "KAI",
@@ -453,21 +455,18 @@ pr_harmonic <- function (theta, k = 4) {
 #' @export
 #'
 #' @examples
-#' df <- data.frame(Year_Local = runif(10, 2000, 2003),
-#'                  Month_Local = runif(10, 1, 6),
-#'                  parameters = c('Biomasss_mgm3', 'Diversity'),
-#'                  Values = runif(10, 1, 5))
-#' pr <- pr_get_coeffs(df)
+#' df <- planktonr::pr_get_pol("NRS") %>%
+#'   pr_get_coeffs()
 pr_get_coeffs <-  function(df){
 
   if(unique(df$Survey == 'LTM')) {
     df <- df %>%
-    dplyr::group_by(.data$StationCode, .data$StationName, .data$SampleTime_Local, .data$anomaly, .data$Year_Local, .data$Month_Local, .data$parameters) %>%
-    dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
-                     .groups = 'drop')
-    }
+      dplyr::group_by(.data$StationCode, .data$StationName, .data$SampleTime_Local, .data$anomaly, .data$Year_Local, .data$Month_Local, .data$parameters) %>%
+      dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
+                       .groups = 'drop')
+  }
 
-    df <-  df %>%
+  df <-  df %>%
     dplyr::rename(SampleDate = .data$SampleTime_Local) %>%
     dplyr::mutate(Month = .data$Month_Local * 2 * 3.142 / 12) %>%
     droplevels()
