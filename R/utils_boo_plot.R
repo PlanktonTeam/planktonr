@@ -442,13 +442,10 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
 #' @export
 #'
 #' @examples
-#' df <- data.frame(SampleTime_Local = c("2010-01-01","2010-02-25",
-#'                                       "2010-06-21","2010-04-11","2010-08-05"),
-#'              StationName = "Port Hacking", parameters = "Biomass_mgm3", Values = runif(5, 1, 50),
-#'              fv = runif(5, 1, 50), anomaly = runif(5, 1, 3), Month_Local = runif(5, 1, 6)) %>%
-#'              dplyr::mutate(SampleTime_Local = as.Date(SampleTime_Local, format = "%Y-%m-%d"))
-#'
-#' plot <-  pr_plot_EOV(df, "Biomass_mgm3", "CPR", "identity", "matter", "yes")
+#' pr_get_pol("CPR") %>%
+#'   pr_get_coeffs() %>%
+#'   pr_plot_EOV(EOV = "Biomass_mgm3", Survey = "CPR",
+#'       trans = "identity", pal = "matter", labels = "no")
 pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "identity", pal = "matter", labels = "yes") {
 
   titley <- pr_relabel(EOV, style = "ggplot")
@@ -769,7 +766,9 @@ pr_plot_Progress <- function(df){
   nudgey = c(-3,0,1,0,0,7,-2,10)
   # GAB, GBR, NA, NEAC, SEAC, SO, Tas, WA
 
-  Survey <- df %>% dplyr::select(.data$Survey) %>% dplyr::distinct()
+  Survey <- df %>%
+    dplyr::select(.data$Survey) %>%
+    dplyr::distinct()
 
   gg <- ggplot2::ggplot() +
     ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
@@ -780,17 +779,20 @@ pr_plot_Progress <- function(df){
                    axis.line = ggplot2::element_blank())
 
   if ("NRS" %in% Survey$Survey) {
-
-  gg <-  gg + ggplot2::geom_sf(data = PMapData2 %>% dplyr::filter(.data$Survey == 'NRS'), size = 5) +
-    ggplot2::geom_sf_text(data = PMapSum %>% dplyr::filter(.data$Survey == 'NRS'), size = 5, ggplot2::aes(label = .data$label),
+  gg <-  gg +
+    ggplot2::geom_sf(data = PMapData2 %>% dplyr::filter(.data$Survey == 'NRS'), size = 5) +
+    ggplot2::geom_sf_text(data = PMapSum %>% dplyr::filter(.data$Survey == 'NRS'),
+                          size = 5, ggplot2::aes(label = .data$label),
                           show.legend = FALSE, nudge_x = 3)
   }
 
   if ("CPR" %in% Survey$Survey) {
 
-    gg <-  gg + ggplot2::geom_sf(data = PMapData2 %>% dplyr::filter(.data$Survey == 'CPR'), size = 1, ggplot2::aes(color =.data$Region),
-                                 show.legend = FALSE) +
-      ggplot2::geom_sf_text(data = PMapSum %>% dplyr::filter(.data$Survey == 'CPR'), size = 5, ggplot2::aes(label = .data$label, color = .data$Region),
+    gg <-  gg +
+      ggplot2::geom_sf(data = PMapData2 %>% dplyr::filter(.data$Survey == 'CPR'),
+                       size = 1, ggplot2::aes(color =.data$Region), show.legend = FALSE) +
+      ggplot2::geom_sf_text(data = PMapSum %>% dplyr::filter(.data$Survey == 'CPR'),
+                            size = 5, ggplot2::aes(label = .data$label, color = .data$Region),
                             show.legend = FALSE, check_overlap = TRUE, nudge_x = nudgex, nudge_y = nudgey)
   }
 
