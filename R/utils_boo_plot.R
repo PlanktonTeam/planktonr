@@ -751,8 +751,8 @@ pr_plot_sti <-  function(df){
 pr_plot_Progress <- function(df){
 
   PMapData2 <- df %>%
-    sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326) %>%
-    sf::st_as_sf()
+    sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326) #%>%
+    # sf::st_as_sf()
 
   PMapSum <- merge(df %>% dplyr::group_by(.data$Region, .data$Survey) %>% dplyr::summarise(Sums = dplyr::n(),
                                                                                      .groups = 'drop') %>%
@@ -772,8 +772,9 @@ pr_plot_Progress <- function(df){
 
   gg <- ggplot2::ggplot() +
     ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
-    ggplot2::scale_x_continuous(expand = c(0, 0), limits = c(105, 170)) +
-    ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(-54, -7)) +
+    ggplot2::coord_sf(xlim = c(105, 170), ylim = c(-54, -7)) +
+    # ggplot2::scale_x_continuous(expand = c(0, 0), limits = c(105, 170)) +
+    # ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(-54, -7)) +
     ggplot2::theme_void() +
     ggplot2::theme(axis.title = ggplot2::element_blank(),
                    axis.line = ggplot2::element_blank())
@@ -796,6 +797,6 @@ pr_plot_Progress <- function(df){
                             show.legend = FALSE, check_overlap = TRUE, nudge_x = nudgex, nudge_y = nudgey)
   }
 
-  gg
+  return(gg)
 
 }
