@@ -83,7 +83,6 @@ pr_plot_CPRmap <-  function(df){
 #' Plot basic timeseries
 #'
 #' @param df dataframe with SampleDate_Local, station code and parameter name and values
-#' @param pal is the palette name from cmocean
 #' @param Survey CPR or NRS data
 #' @param Scale scale of y axis on plot, whatever scale_y_continuous trans accepts
 #'
@@ -93,8 +92,8 @@ pr_plot_CPRmap <-  function(df){
 #' @examples
 #' df <- pr_get_indices("NRS", "Z") %>%
 #'   dplyr::filter(parameters == "Biomass_mgm3")
-#' timeseries <- pr_plot_timeseries(df, "NRS", "matter")
-pr_plot_timeseries <- function(df, Survey = "NRS", pal = "matter", Scale = "identity"){
+#' timeseries <- pr_plot_timeseries(df, "NRS")
+pr_plot_timeseries <- function(df, Survey = "NRS", Scale = "identity"){
 
   if(Survey == "CPR"){
     df <- df %>%
@@ -112,7 +111,7 @@ pr_plot_timeseries <- function(df, Survey = "NRS", pal = "matter", Scale = "iden
   titlex <- "Sample Date (Local)"
 
   n <- length(unique(df$StationCode))
-  plotCols <- pr_get_PlotCols(pal, n)
+  #plotCols <- pr_get_PlotCols(pal, n)
   titley <- pr_relabel(unique(df$parameters), style = "ggplot")
 
   p1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$SampleTime_Local, y = .data$Values)) +
@@ -122,7 +121,7 @@ pr_plot_timeseries <- function(df, Survey = "NRS", pal = "matter", Scale = "iden
     ggplot2::scale_y_continuous(trans = Scale) +
     ggplot2::labs(y = titley,
                   x = titlex) +
-    ggplot2::scale_colour_manual(values = plotCols) +
+    #ggplot2::scale_colour_manual(values = plotCols) +
     ggplot2::theme_bw(base_size = 12) +
     ggplot2::theme(legend.position = "bottom")
 
@@ -136,7 +135,6 @@ pr_plot_timeseries <- function(df, Survey = "NRS", pal = "matter", Scale = "iden
 #' @param trend Over what timescale to fit the trend - "Raw", "Month" or "Year"
 #' @param survey "NRS" or "CPR" data
 #' @param method Any method accepted by `geom_smooth()`
-#' @param pal is the palette name from `cmocean()`
 #' @param y_trans transformation of y axis on plot, whatever `scale_y_continuous()` trans accepts
 #' #'
 #' @return a timeseries plot
@@ -151,7 +149,7 @@ pr_plot_timeseries <- function(df, Survey = "NRS", pal = "matter", Scale = "iden
 #' pr_plot_trends(df, trend = "Month", survey = "NRS")
 #' pr_plot_trends(df, trend = "Year", survey = "NRS")
 #' pr_plot_trends(df, trend = "Raw", survey = "NRS")
-pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal = "matter", y_trans = "identity"){
+pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm",  y_trans = "identity"){
 
   if (trend == "Month"){
     trend = "Month_Local"
@@ -225,7 +223,6 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
 #'
 #' @param df dataframe with specified time period, station code and parameter
 #' @param trend specified time period
-#' @param pal is the palette name from cmocean
 #' @param Survey CPR or NRS data
 #' @param Scale scale of y axis on plot, whatever scale_y_continuous trans accepts
 #'
@@ -235,12 +232,12 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm", pal
 #' @examples
 #' df <- pr_get_indices(Survey = "NRS", Type = "P") %>%
 #'         dplyr::filter(parameters == "PhytoBiomassCarbon_pgL")
-#' monthly <- pr_plot_climate(df, "NRS", "Month", "matter")
+#' monthly <- pr_plot_climate(df, "NRS", "Month")
 #'
 #' df <- pr_get_indices(Survey = "CPR", Type = "Z") %>%
 #'         dplyr::filter(parameters == "ZoopAbundance_m3")
-#' annual <- pr_plot_climate(df, "CPR", "Year", "matter")
-pr_plot_climate <- function(df, Survey = "NRS", trend = "Month", pal = "matter", Scale = "identity"){
+#' annual <- pr_plot_climate(df, "CPR", "Year")
+pr_plot_climate <- function(df, Survey = "NRS", trend = "Month", Scale = "identity"){
 
   if (trend == "Month"){
     trend = "Month_Local"
@@ -258,7 +255,7 @@ pr_plot_climate <- function(df, Survey = "NRS", trend = "Month", pal = "matter",
   }
 
   n <- length(unique(df$StationCode))
-  plotCols <- pr_get_PlotCols(pal, n)
+  #plotCols <- pr_get_PlotCols(pal, n)
   title <- pr_relabel(unique(df$parameters), style = "ggplot")
 
   df_climate <- df %>%
@@ -277,7 +274,7 @@ pr_plot_climate <- function(df, Survey = "NRS", trend = "Month", pal = "matter",
                            position = ggplot2::position_dodge(.9)) +
     ggplot2::labs(y = title) +
     ggplot2::scale_y_continuous(trans = Scale) +
-    ggplot2::scale_fill_manual(values = plotCols)  +
+    #ggplot2::scale_fill_manual(values = plotCols)  +
     ggplot2::theme_bw(base_size = 12) +
     ggplot2::theme(legend.position = "bottom")
 
@@ -297,7 +294,6 @@ pr_plot_climate <- function(df, Survey = "NRS", trend = "Month", pal = "matter",
 #' Combined timeseries and climatology plots
 #'
 #' @param df data frame with SampleDate_Local, time period and parameter
-#' @param pal is the palette name from cmocean
 #' @param Survey CPR or NRS data
 #' @param Scale scale of y axis on plot, whatever scale_y_continuous trans accepts
 #'
@@ -331,7 +327,7 @@ pr_plot_tsclimate <- function(df, Survey = "NRS", pal = "matter", Scale = "ident
 #' @param df dataframe in format of output from pr_get_fg
 #' @param Scale y axis scale Actual or Percent
 #' @param trend Over what timescale to fit the trend - "Raw", "Month" or "Year"
-#' @param pal is the palette name from cmocean
+#'
 #'
 #' @return plot of fg timseries
 #' @export
@@ -339,7 +335,7 @@ pr_plot_tsclimate <- function(df, Survey = "NRS", pal = "matter", Scale = "ident
 #' @examples
 #' df <- pr_get_fg("NRS", "P")
 #' plot <- pr_plot_tsfg(df, "Actual")
-pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
+pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw"){
 
   if (trend == "Month"){
     trend = "Month_Local"
@@ -352,7 +348,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
 
   n <- length(unique(df$parameters))
 
-  plotCols <- pr_get_PlotCols(pal, n)
+  #plotCols <- pr_get_PlotCols(pal, n)
 
   if("BioRegion" %in% colnames(df)){ # If CPR data
     SampleDate = rlang::sym("SampleTime_Local")
@@ -405,7 +401,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw", pal = "matter"){
     ggplot2::geom_area(alpha=0.6 , size=1, colour="white") +
     ggplot2::facet_wrap(rlang::enexpr(station), scales = "free", ncol = 1) +
     ggplot2::labs(y = titley) +
-    ggplot2::scale_fill_manual(values = plotCols) +
+    #ggplot2::scale_fill_manual(values = plotCols) +
     ggplot2::theme_bw() +
     ggplot2::theme(legend.position = "bottom",
                    legend.title = ggplot2::element_blank(),
@@ -520,7 +516,6 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
 #' Combined timeseries and climatology plots for environmental variables
 #'
 #' @param df A dataframe from pr_get_nuts or pr_get_pigments
-#' @param pal A Palette from cmocean
 #' @param trend Trend line to be used, options None, Smoother, Linear
 #' @param Scale scale on which to plot y axis
 #'
@@ -531,11 +526,11 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
 #' df <- pr_get_NRSChemistry() %>% dplyr::filter(parameters == "SecchiDepth_m")
 #' pr_plot_env_var(df)
 #'
-pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identity") {
+pr_plot_env_var <- function(df, trend = "None", Scale = "identity") {
 
   n <- length(unique(df$StationName))
 
-  plotCols <- pr_get_PlotCols(pal, n)
+  #plotCols <- pr_get_PlotCols(pal, n)
 
   titley <- pr_relabel(unique(df$parameters))
 
@@ -551,8 +546,8 @@ pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identit
                    legend.position = "bottom",
                    legend.title = ggplot2::element_blank()) +
     ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
-    ggplot2::scale_y_continuous(trans = Scale) +
-    ggplot2::scale_colour_manual(values = plotCols)
+    ggplot2::scale_y_continuous(trans = Scale)
+    #ggplot2::scale_colour_manual(values = plotCols)
 
   if(trend == "Smoother"){
     p <- p + ggplot2::geom_smooth(method = "loess", formula = y ~ x)
@@ -578,7 +573,7 @@ pr_plot_env_var <- function(df, pal = "matter", trend = "None", Scale = "identit
     ggplot2::geom_smooth(method = "loess", formula = y ~ x) +
     ggplot2::scale_x_continuous(breaks = seq(1,12,length.out = 12),
                                 labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
-    ggplot2::scale_colour_manual(values = plotCols) +
+   #ggplot2::scale_colour_manual(values = plotCols) +
     ggplot2::theme_bw() +
     ggplot2::theme(strip.background = ggplot2::element_blank(),
                    legend.position = 'none',

@@ -4,14 +4,12 @@
 \alias{pr_plot_timeseries}
 \title{Plot basic timeseries}
 \usage{
-pr_plot_timeseries(df, Survey = "NRS", pal = "matter", Scale = "identity")
+pr_plot_timeseries(df, Survey = "NRS", Scale = "identity")
 }
 \arguments{
 \item{df}{dataframe with SampleDate_Local, station code and parameter name and values}
 
 \item{Survey}{CPR or NRS data}
-
-\item{pal}{is the palette name from cmocean}
 
 \item{Scale}{scale of y axis on plot, whatever scale_y_continuous trans accepts}
 }
@@ -24,5 +22,5 @@ Plot basic timeseries
 \examples{
 df <- pr_get_indices("NRS", "Z") \%>\%
   dplyr::filter(parameters == "Biomass_mgm3")
-timeseries <- pr_plot_timeseries(df, "NRS", "matter")
+timeseries <- pr_plot_timeseries(df, "NRS")
 }

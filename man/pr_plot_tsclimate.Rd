@@ -11,8 +11,6 @@ pr_plot_tsclimate(df, Survey = "NRS", pal = "matter", Scale = "identity")
 
 \item{Survey}{CPR or NRS data}
 
-\item{pal}{is the palette name from cmocean}
-
 \item{Scale}{scale of y axis on plot, whatever scale_y_continuous trans accepts}
 }
 \value{

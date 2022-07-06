@@ -4,13 +4,7 @@
 \alias{pr_plot_climate}
 \title{Plot single climatology}
 \usage{
-pr_plot_climate(
-  df,
-  Survey = "NRS",
-  trend = "Month",
-  pal = "matter",
-  Scale = "identity"
-)
+pr_plot_climate(df, Survey = "NRS", trend = "Month", Scale = "identity")
 }
 \arguments{
 \item{df}{dataframe with specified time period, station code and parameter}
@@ -18,8 +12,6 @@ pr_plot_climate(
 \item{Survey}{CPR or NRS data}
 
 \item{trend}{specified time period}
-
-\item{pal}{is the palette name from cmocean}
 
 \item{Scale}{scale of y axis on plot, whatever scale_y_continuous trans accepts}
 }
@@ -32,9 +24,9 @@ Plot single climatology
 \examples{
 df <- pr_get_indices(Survey = "NRS", Type = "P") \%>\%
         dplyr::filter(parameters == "PhytoBiomassCarbon_pgL")
-monthly <- pr_plot_climate(df, "NRS", "Month", "matter")
+monthly <- pr_plot_climate(df, "NRS", "Month")
 
 df <- pr_get_indices(Survey = "CPR", Type = "Z") \%>\%
         dplyr::filter(parameters == "ZoopAbundance_m3")
-annual <- pr_plot_climate(df, "CPR", "Year", "matter")
+annual <- pr_plot_climate(df, "CPR", "Year")
 }

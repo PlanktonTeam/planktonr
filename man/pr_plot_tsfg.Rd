@@ -4,7 +4,7 @@
 \alias{pr_plot_tsfg}
 \title{Time series plot of functional groups}
 \usage{
-pr_plot_tsfg(df, Scale = "Actual", trend = "Raw", pal = "matter")
+pr_plot_tsfg(df, Scale = "Actual", trend = "Raw")
 }
 \arguments{
 \item{df}{dataframe in format of output from pr_get_fg}
@@ -12,8 +12,6 @@ pr_plot_tsfg(df, Scale = "Actual", trend = "Raw", pal = "matter")
 \item{Scale}{y axis scale Actual or Percent}
 
 \item{trend}{Over what timescale to fit the trend - "Raw", "Month" or "Year"}
-
-\item{pal}{is the palette name from cmocean}
 }
 \value{
 plot of fg timseries

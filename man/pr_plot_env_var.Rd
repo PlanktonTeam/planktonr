@@ -4,12 +4,10 @@
 \alias{pr_plot_env_var}
 \title{Combined timeseries and climatology plots for environmental variables}
 \usage{
-pr_plot_env_var(df, pal = "matter", trend = "None", Scale = "identity")
+pr_plot_env_var(df, trend = "None", Scale = "identity")
 }
 \arguments{
 \item{df}{A dataframe from pr_get_nuts or pr_get_pigments}
-
-\item{pal}{A Palette from cmocean}
 
 \item{trend}{Trend line to be used, options None, Smoother, Linear}
 

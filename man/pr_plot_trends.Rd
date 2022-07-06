@@ -9,7 +9,6 @@ pr_plot_trends(
   trend = "Raw",
   survey = "NRS",
   method = "lm",
-  pal = "matter",
   y_trans = "identity"
 )
 }
@@ -21,8 +20,6 @@ pr_plot_trends(
 \item{survey}{"NRS" or "CPR" data}
 
 \item{method}{Any method accepted by \code{geom_smooth()}}
-
-\item{pal}{is the palette name from \code{cmocean()}}
 
 \item{y_trans}{transformation of y axis on plot, whatever \code{scale_y_continuous()} trans accepts
 #'}
