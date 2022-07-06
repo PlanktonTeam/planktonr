@@ -574,6 +574,7 @@ pr_plot_env_var <- function(df, trend = "None", Scale = "identity") {
     ggplot2::scale_x_continuous(breaks = seq(1,12,length.out = 12),
                                 labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
    #ggplot2::scale_colour_manual(values = plotCols) +
+    ggplot2::labs(x = "Month") +
     ggplot2::theme_bw() +
     ggplot2::theme(strip.background = ggplot2::element_blank(),
                    legend.position = 'none',
