@@ -9,7 +9,7 @@ pr_plot_EOV(
   EOV = "Biomass_mgm3",
   Survey = "NRS",
   trans = "identity",
-  pal = "matter",
+  col = "blue",
   labels = "yes"
 )
 }
@@ -22,7 +22,7 @@ pr_plot_EOV(
 
 \item{trans}{scale for y axis}
 
-\item{pal}{colour pallet from cmocean}
+\item{col}{colour selection}
 
 \item{labels}{do you want to print labels on the x axes}
 }
@@ -33,8 +33,8 @@ plot of timeseries, anomalies and climatology
 Policy plot
 }
 \examples{
-pr_get_pol("CPR") \%>\%
-  pr_get_coeffs() \%>\%
-  pr_plot_EOV(EOV = "Biomass_mgm3", Survey = "CPR",
-      trans = "identity", pal = "matter", labels = "no")
+df <- pr_get_pol("CPR") \%>\%
+  pr_get_coeffs()
+pr_plot_EOV(df, EOV = "BiomassIndex_mgm3", Survey = "CPR",
+      trans = "identity", col = "blue", labels = "no")
 }

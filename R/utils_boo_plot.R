@@ -431,24 +431,20 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw"){
 #' @param EOV Essential OCean Variable as a parameter
 #' @param Survey NRS, CPR or LTM 'Long term monitoring'
 #' @param trans scale for y axis
-#' @param pal colour pallet from cmocean
+#' @param col colour selection
 #' @param labels do you want to print labels on the x axes
 #'
 #' @return plot of timeseries, anomalies and climatology
 #' @export
 #'
 #' @examples
-#' pr_get_pol("CPR") %>%
-#'   pr_get_coeffs() %>%
-#'   pr_plot_EOV(EOV = "Biomass_mgm3", Survey = "CPR",
-#'       trans = "identity", pal = "matter", labels = "no")
-pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "identity", pal = "matter", labels = "yes") {
+#' df <- pr_get_pol("CPR") %>%
+#'   pr_get_coeffs()
+#' pr_plot_EOV(df, EOV = "BiomassIndex_mgm3", Survey = "CPR",
+#'       trans = "identity", col = "blue", labels = "no")
+pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "identity", col = "blue", labels = "yes") {
 
   titley <- pr_relabel(EOV, style = "ggplot")
-
-  pals <- pr_get_PlotCols(pal = pal, n = 20)
-  col <- pals[15]
-  colin <- pals[5]
 
   if(Survey == "LTM"){
     lims <- c(lubridate::floor_date(min(df$SampleDate), "year"), lubridate::ceiling_date(Sys.Date(), "year"))
@@ -462,7 +458,7 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
 
   p1 <- ggplot2::ggplot(df) +
     ggplot2::geom_point(ggplot2::aes(x = .data$SampleDate, y = .data$Values), colour = col) +
-    ggplot2::geom_smooth(ggplot2::aes(x = .data$SampleDate, y = .data$fv), method = "lm", formula = "y ~ x", colour = col, fill = colin) +
+    ggplot2::geom_smooth(ggplot2::aes(x = .data$SampleDate, y = .data$fv), method = "lm", formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
     ggplot2::labs(x = "Year", y = rlang::enexpr(titley)) +
     ggplot2::scale_y_continuous(trans = trans) +
     ggplot2::theme(legend.position = "none")
@@ -478,7 +474,7 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
   }
 
   p2 <- ggplot2::ggplot(df, ggplot2::aes(.data$SampleDate, .data$anomaly)) +
-    ggplot2::geom_col(fill = colin, colour = col) +
+    ggplot2::geom_col(fill = col, colour = col, alpha = 0.5) +
     ggplot2::xlab("Year") +
     ggplot2::labs(y = "Anomaly")
 
@@ -493,7 +489,7 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
 
   p3 <- ggplot2::ggplot(df) +
     ggplot2::geom_point(ggplot2::aes(x = .data$Month, y = .data$Values), colour = col) +
-    ggplot2::geom_smooth(ggplot2::aes(x = .data$Month, y = .data$fv), method = "loess", formula = "y ~ x", colour = col, fill = colin) +
+    ggplot2::geom_smooth(ggplot2::aes(x = .data$Month, y = .data$fv), method = "loess", formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
     ggplot2::scale_y_continuous(trans = trans) +
     ggplot2::scale_x_continuous(breaks = seq(0.5, 6.3, length.out = 12), labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
     ggplot2::xlab("Month") +
@@ -532,7 +528,7 @@ pr_plot_env_var <- function(df, trend = "None", Scale = "identity") {
 
   #plotCols <- pr_get_PlotCols(pal, n)
 
-  titley <- pr_relabel(unique(df$parameters))
+  titley <- pr_relabel(unique(df$parameters), style = 'ggplot')
 
   np <- length(unique(df$SampleDepth_m))
 
