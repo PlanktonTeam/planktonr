@@ -1,19 +1,19 @@
-#' Setting the colours for plots using cmocean
-#'
-#' @param pal is the palette name
-#' @param n is the number of colours required
-#'
-#' @return is a list of colours of length n from palette pal
-#' @export
-#'
-#' @importFrom cmocean cmocean
-#'
-#' @examples
-#' plotCols <- pr_get_PlotCols('matter', 5)
-pr_get_PlotCols <- function(pal = "matter", n){
-  plotCols <- cmocean::cmocean(pal)(n)
-  return(plotCols)
-}
+#' #' Setting the colours for plots using cmocean
+#' #'
+#' #' @param pal is the palette name
+#' #' @param n is the number of colours required
+#' #'
+#' #' @return is a list of colours of length n from palette pal
+#' #' @export
+#' #'
+#' #' @importFrom cmocean cmocean
+#' #'
+#' #' @examples
+#' #' plotCols <- pr_get_PlotCols('matter', 5)
+#' pr_get_PlotCols <- function(pal = "matter", n){
+#'   plotCols <- cmocean::cmocean(pal)(n)
+#'   return(plotCols)
+#' }
 
 #' Sidebar panel plot of selected NRS stations
 #'
@@ -304,16 +304,16 @@ pr_plot_climate <- function(df, Survey = "NRS", trend = "Month", Scale = "identi
 #' df <- pr_get_indices(Survey = "NRS", Type = "P") %>%
 #'   dplyr::filter(parameters == "PhytoAbundance_CellsL")
 #' pr_plot_tsclimate(df, "NRS")
-pr_plot_tsclimate <- function(df, Survey = "NRS", pal = "matter", Scale = "identity"){
+pr_plot_tsclimate <- function(df, Survey = "NRS", Scale = "identity"){
 
-  p1 <- pr_plot_timeseries(df, Survey, pal, Scale) +
+  p1 <- pr_plot_timeseries(df, Survey, Scale) +
     ggplot2::theme(legend.position = "none",
                    axis.title.y = ggplot2::element_blank())
 
-  p2 <- pr_plot_climate(df, Survey, "Month", pal, Scale) +
+  p2 <- pr_plot_climate(df, Survey, "Month", Scale) +
     ggplot2::theme(legend.position = "none")
 
-  p3 <- pr_plot_climate(df, Survey, "Year", pal, Scale) +
+  p3 <- pr_plot_climate(df, Survey, "Year", Scale) +
     ggplot2::theme(axis.title.y = ggplot2::element_blank(),
                    legend.title = ggplot2::element_blank())
 

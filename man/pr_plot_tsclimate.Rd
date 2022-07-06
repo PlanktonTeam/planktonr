@@ -4,7 +4,7 @@
 \alias{pr_plot_tsclimate}
 \title{Combined timeseries and climatology plots}
 \usage{
-pr_plot_tsclimate(df, Survey = "NRS", pal = "matter", Scale = "identity")
+pr_plot_tsclimate(df, Survey = "NRS", Scale = "identity")
 }
 \arguments{
 \item{df}{data frame with SampleDate_Local, time period and parameter}
