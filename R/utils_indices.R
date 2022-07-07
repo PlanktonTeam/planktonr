@@ -1,7 +1,7 @@
 #' Access data for timeseries and climatology plots
 #'
 #' @param Survey CPR or NRS, defaults to NRS
-#' @param Type Phyto or zoo, defaults to phyto
+#' @param Type Phyto, zoo or physical water props, defaults to phyto
 #'
 #' @return dataframe to use in pr_plot functions
 #' @export
@@ -9,6 +9,7 @@
 #' @examples
 #' df <- pr_get_indices("NRS", "P")
 #' df <- pr_get_indices("NRS", "Z")
+#' df <- pr_get_indices("NRS", "W")
 #' df <- pr_get_indices("CPR", "P")
 #' df <- pr_get_indices("CPR", "Z")
 pr_get_indices <- function(Survey = "CPR", Type = "P"){
@@ -29,8 +30,12 @@ pr_get_indices <- function(Survey = "CPR", Type = "P"){
                     "AvgCellVol_um3", "NoPhytoSpecies_Sample", "ShannonPhytoDiversity", "PhytoEvenness",
                     "NoDiatomSpecies_Sample", "ShannonDiatomDiversity", "DiatomEvenness", "NoDinoSpecies_Sample",
                     "ShannonDinoDiversity", "DinoflagellateEvenness")
+  } else if(Type == "W" & Survey == "NRS"){
+    var_names <- c("Secchi_m", "MLDtemp_m", "MLDsal_m", "DCM_m",
+                   "CTDTemperature_degC", "CTDSalinity_PSU", "CTDChlaF_mgm3")
+  } else if(Type == "W" & Survey == "CPR"){
+    var_names <- c("PCI")
   }
-
 
   if(Survey == "CPR"){
 

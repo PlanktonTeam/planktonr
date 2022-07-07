@@ -9,7 +9,7 @@ pr_get_indices(Survey = "CPR", Type = "P")
 \arguments{
 \item{Survey}{CPR or NRS, defaults to NRS}
 
-\item{Type}{Phyto or zoo, defaults to phyto}
+\item{Type}{Phyto, zoo or physical water props, defaults to phyto}
 }
 \value{
 dataframe to use in pr_plot functions
@@ -20,6 +20,7 @@ Access data for timeseries and climatology plots
 \examples{
 df <- pr_get_indices("NRS", "P")
 df <- pr_get_indices("NRS", "Z")
+df <- pr_get_indices("NRS", "W")
 df <- pr_get_indices("CPR", "P")
 df <- pr_get_indices("CPR", "Z")
 }

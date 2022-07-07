@@ -65,13 +65,13 @@ This data is structured by bioregion. Lets look at where the bioregions are.
 Then we can plot the data as a timeseries
 
 ```{r,include=TRUE}
-pr_plot_tsclimate(datCPR_p, "CPR", "matter") 
+pr_plot_tsclimate(datCPR_p, "CPR") 
 ```
 
 Perhaps the story will be clearer using a log scale
 
 ```{r,include=TRUE}
-pr_plot_tsclimate(datCPR_p, "CPR", "matter", "log10")
+pr_plot_tsclimate(datCPR_p, "CPR", "log10")
 ```
 
 ## Examine Diatom:Dinoflagellate Ratio
@@ -87,7 +87,7 @@ datRat <- pr_get_indices("CPR", "P") %>%
 And then plot the total timeseries
 
 ```{r,include=TRUE}
-pr_plot_tsclimate(datRat, "CPR", "matter")
+pr_plot_tsclimate(datRat, "CPR")
 ```
 
 
