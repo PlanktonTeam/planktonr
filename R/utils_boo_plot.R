@@ -153,8 +153,6 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm",  y_
 
   if (trend %in% c("Year_Local", "Month_Local")){
     df <- df %>%
-      dplyr::filter(!is.na(.data$SampleTime_Local))  %>% # TODO Can I remove this now I have removed complete? # need to drop NA from month, added to dataset by complete(Year, Code)
-      # pr_apply_time() %>%
       dplyr::group_by(!!rlang::sym(trend), !!site) %>%
       dplyr::summarise(value = mean(.data$Values, na.rm = TRUE),
                        N = dplyr::n(),
@@ -242,7 +240,6 @@ pr_plot_climate <- function(df, Survey = "NRS", trend = "Month", Scale = "identi
   title <- pr_relabel(unique(df$parameters), style = "ggplot")
 
   df_climate <- df %>%
-    dplyr::filter(!!trend != "NA") %>% # TODO Can I remove this now I have removed complete? # need to drop NA from month, added to dataset by complete(Year, StationCode)
     dplyr::group_by(!!trend, .data$StationCode) %>%
     dplyr::summarise(mean = mean(.data$Values, na.rm = TRUE),
                      N = length(.data$Values),
@@ -345,19 +342,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw"){
   titlex <- "Sample Time (Local)"
   if (trend %in% c("Year_Local", "Month_Local")){
 
-    # if ("Year_Local" %in% colnames(df)){ #NRS
-    #   df <- df %>%
-    #     dplyr::rename(Month = .data$Month_Local,
-    #                   Year = .data$Year_Local)
-    #
-    # } else if ("Year_UTC" %in% colnames(df)){ #CPR
-    #   df <- df %>%
-    #     dplyr::rename(Month = .data$Month_UTC,
-    #                   Year = .data$Year_UTC)
-    # }
-
     df <- df %>%
-      dplyr::filter(!is.na(!!SampleDate))  %>%
       dplyr::group_by(!!rlang::sym(trend), !!station, .data$parameters) %>%
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                        N = dplyr::n(),
@@ -646,7 +631,7 @@ pr_plot_daynight <-  function(df){
 #'
 #' @examples
 #' df <- data.frame(sst = runif(24, 5, 25),
-#'                  Project = c(rep('cpr', 12), rep('nrs', 12)),
+#'                  Project = c(rep("CPR", 12), rep("NRS", 12)),
 #'                  Species_m3 = runif(24, 0.1, 10),
 #'                  Species = 'Acartia danae')
 #' plot <- pr_plot_sti(df)
@@ -730,11 +715,11 @@ pr_plot_Progress <- function(df){
     # sf::st_as_sf()
 
   PMapSum <- merge(df %>% dplyr::group_by(.data$Region, .data$Survey) %>% dplyr::summarise(Sums = dplyr::n(),
-                                                                                     .groups = 'drop') %>%
+                                                                                     .groups = "drop") %>%
                      dplyr::mutate(label = paste0(.data$Region, ' = ', .data$Sums)),
                    df %>% dplyr::group_by(.data$Region, .data$Survey) %>% dplyr::summarise(Lats = mean(.data$Latitude),
                                                                                      Lons = mean(.data$Longitude),
-                                                                                     .groups = 'drop')) %>%
+                                                                                     .groups = "drop")) %>%
     sf::st_as_sf(coords = c("Lons", "Lats"), crs = 4326)
 
   nudgex = c(-2,5.5,2,8.5,9.5,0,0,4)
@@ -756,8 +741,8 @@ pr_plot_Progress <- function(df){
 
   if ("NRS" %in% Survey$Survey) {
   gg <-  gg +
-    ggplot2::geom_sf(data = PMapData2 %>% dplyr::filter(.data$Survey == 'NRS'), size = 5) +
-    ggplot2::geom_sf_text(data = PMapSum %>% dplyr::filter(.data$Survey == 'NRS'),
+    ggplot2::geom_sf(data = PMapData2 %>% dplyr::filter(.data$Survey == "NRS"), size = 5) +
+    ggplot2::geom_sf_text(data = PMapSum %>% dplyr::filter(.data$Survey == "NRS"),
                           size = 5, ggplot2::aes(label = .data$label),
                           show.legend = FALSE, nudge_x = 3)
   }
@@ -765,9 +750,9 @@ pr_plot_Progress <- function(df){
   if ("CPR" %in% Survey$Survey) {
 
     gg <-  gg +
-      ggplot2::geom_sf(data = PMapData2 %>% dplyr::filter(.data$Survey == 'CPR'),
+      ggplot2::geom_sf(data = PMapData2 %>% dplyr::filter(.data$Survey == "CPR"),
                        size = 1, ggplot2::aes(color =.data$Region), show.legend = FALSE) +
-      ggplot2::geom_sf_text(data = PMapSum %>% dplyr::filter(.data$Survey == 'CPR'),
+      ggplot2::geom_sf_text(data = PMapSum %>% dplyr::filter(.data$Survey == "CPR"),
                             size = 5, ggplot2::aes(label = .data$label, color = .data$Region),
                             show.legend = FALSE, check_overlap = TRUE, nudge_x = nudgex, nudge_y = nudgey)
   }
