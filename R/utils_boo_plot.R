@@ -1,19 +1,3 @@
-#' #' Setting the colours for plots using cmocean
-#' #'
-#' #' @param pal is the palette name
-#' #' @param n is the number of colours required
-#' #'
-#' #' @return is a list of colours of length n from palette pal
-#' #' @export
-#' #'
-#' #' @importFrom cmocean cmocean
-#' #'
-#' #' @examples
-#' #' plotCols <- pr_get_PlotCols('matter', 5)
-#' pr_get_PlotCols <- function(pal = "matter", n){
-#'   plotCols <- cmocean::cmocean(pal)(n)
-#'   return(plotCols)
-#' }
 
 #' Sidebar panel plot of selected NRS stations
 #'
@@ -68,7 +52,6 @@ pr_plot_CPRmap <-  function(df){
     ggplot2::geom_sf(data = mbr, colour = "black", fill = "white") +
     ggplot2::geom_sf(data = bioregionSelection, colour = "black", ggplot2::aes(fill = .data$REGION)) +
     ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
-    ggplot2::scale_fill_manual(values = cmocean::cmocean("matter")(n)) +
     ggplot2::scale_x_continuous(expand = c(0, 0)) +
     ggplot2::scale_y_continuous(expand = c(0, 0)) +
     ggplot2::theme_void() +
