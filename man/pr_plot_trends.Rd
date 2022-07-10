@@ -2,38 +2,38 @@
 % Please edit documentation in R/utils_boo_plot.R
 \name{pr_plot_trends}
 \alias{pr_plot_trends}
-\title{Plot temporal trends in plankton data}
+\title{Plot temporal Trends in plankton data}
 \usage{
 pr_plot_trends(
   df,
-  trend = "Raw",
-  survey = "NRS",
-  method = "lm",
-  y_trans = "identity"
+  Trend = "Raw",
+  Survey = "NRS",
+  Method = "lm",
+  Scale = "identity"
 )
 }
 \arguments{
 \item{df}{A dataframe containing the plankton timeseries data.}
 
-\item{trend}{Over what timescale to fit the trend - "Raw", "Month" or "Year"}
+\item{Trend}{Over what timescale to fit the Trend - "Raw", "Month" or "Year"}
 
-\item{survey}{"NRS" or "CPR" data}
+\item{Survey}{"NRS" or "CPR" data}
 
-\item{method}{Any method accepted by \code{geom_smooth()}}
+\item{Method}{Any Method accepted by \code{geom_smooth()}}
 
-\item{y_trans}{transformation of y axis on plot, whatever \code{scale_y_continuous()} trans accepts
+\item{Scale}{transformation of y axis on plot, whatever \code{scale_y_continuous()} trans accepts
 #'}
 }
 \value{
 a timeseries plot
 }
 \description{
-Plot temporal trends in plankton data
+Plot temporal Trends in plankton data
 }
 \examples{
 df <- pr_get_indices("NRS", "Z") \%>\%
   dplyr::filter(parameters == 'Biomass_mgm3')
-pr_plot_trends(df, trend = "Month", survey = "NRS")
-pr_plot_trends(df, trend = "Year", survey = "NRS")
-pr_plot_trends(df, trend = "Raw", survey = "NRS")
+pr_plot_trends(df, Trend = "Month", Survey = "NRS")
+pr_plot_trends(df, Trend = "Year", Survey = "NRS")
+pr_plot_trends(df, Trend = "Raw", Survey = "NRS")
 }

@@ -2,23 +2,7 @@
 % Please edit documentation in R/utils_boo_plot.R
 \name{pr_plot_NRSmap}
 \alias{pr_plot_NRSmap}
-\title{#' Setting the colours for plots using cmocean
-#'
-#' @param pal is the palette name
-#' @param n is the number of colours required
-#'
-#' @return is a list of colours of length n from palette pal
-#' @export
-#'
-#' @importFrom cmocean cmocean
-#'
-#' @examples
-#' plotCols <- pr_get_PlotCols('matter', 5)
-pr_get_PlotCols <- function(pal = "matter", n){
-plotCols <- cmocean::cmocean(pal)(n)
-return(plotCols)
-}
-Sidebar panel plot of selected NRS stations}
+\title{Sidebar panel plot of selected NRS stations}
 \usage{
 pr_plot_NRSmap(df)
 }
@@ -29,22 +13,6 @@ pr_plot_NRSmap(df)
 a map of the selected stations
 }
 \description{
-#' Setting the colours for plots using cmocean
-#'
-#' @param pal is the palette name
-#' @param n is the number of colours required
-#'
-#' @return is a list of colours of length n from palette pal
-#' @export
-#'
-#' @importFrom cmocean cmocean
-#'
-#' @examples
-#' plotCols <- pr_get_PlotCols('matter', 5)
-pr_get_PlotCols <- function(pal = "matter", n){
-plotCols <- cmocean::cmocean(pal)(n)
-return(plotCols)
-}
 Sidebar panel plot of selected NRS stations
 }
 \examples{
