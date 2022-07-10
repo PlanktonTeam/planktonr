@@ -67,7 +67,7 @@ pr_plot_CPRmap <-  function(df){
 #'
 #' @param df dataframe with SampleDate_Local, station code and parameter name and values
 #' @param Survey CPR or NRS data
-#' @param Scale scale of y axis on plot, whatever scale_y_continuous trans accepts
+#' @param trans scale of y axis on plot, whatever scale_y_continuous trans accepts
 #'
 #' @return a timeseries plot
 #' @export
@@ -76,7 +76,7 @@ pr_plot_CPRmap <-  function(df){
 #' df <- pr_get_indices("NRS", "Z") %>%
 #'   dplyr::filter(parameters == "Biomass_mgm3")
 #' timeseries <- pr_plot_timeseries(df, "NRS")
-pr_plot_timeseries <- function(df, Survey = "NRS", Scale = "identity"){
+pr_plot_timeseries <- function(df, Survey = "NRS", trans = "identity"){
 
   if(Survey == "CPR"){
     df <- df %>%
@@ -101,7 +101,7 @@ pr_plot_timeseries <- function(df, Survey = "NRS", Scale = "identity"){
     ggplot2::geom_line(ggplot2::aes(group = .data$StationCode, color = .data$StationCode)) +
     ggplot2::geom_point(ggplot2::aes(group = .data$StationCode, color = .data$StationCode)) +
     ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
-    ggplot2::scale_y_continuous(trans = Scale) +
+    ggplot2::scale_y_continuous(trans = trans) +
     ggplot2::labs(y = titley,
                   x = titlex) +
     #ggplot2::scale_colour_manual(values = plotCols) +
@@ -117,8 +117,8 @@ pr_plot_timeseries <- function(df, Survey = "NRS", Scale = "identity"){
 #' @param df A dataframe containing the plankton timeseries data.
 #' @param Trend Over what timescale to fit the Trend - "Raw", "Month" or "Year"
 #' @param Survey "NRS" or "CPR" data
-#' @param Method Any Method accepted by `geom_smooth()`
-#' @param Scale transformation of y axis on plot, whatever `scale_y_continuous()` trans accepts
+#' @param method Any method accepted by `geom_smooth()`
+#' @param trans transformation of y axis on plot, whatever `scale_y_continuous()` trans accepts
 #' #'
 #' @return a timeseries plot
 #'
@@ -132,7 +132,7 @@ pr_plot_timeseries <- function(df, Survey = "NRS", Scale = "identity"){
 #' pr_plot_trends(df, Trend = "Month", Survey = "NRS")
 #' pr_plot_trends(df, Trend = "Year", Survey = "NRS")
 #' pr_plot_trends(df, Trend = "Raw", Survey = "NRS")
-pr_plot_trends <- function(df, Trend = "Raw", Survey = "NRS", Method = "lm",  Scale = "identity"){
+pr_plot_trends <- function(df, Trend = "Raw", Survey = "NRS", method = "lm",  trans = "identity"){
 
   if (Trend == "Month"){
     Trend = "Month_Local"
@@ -172,11 +172,11 @@ pr_plot_trends <- function(df, Trend = "Raw", Survey = "NRS", Method = "lm",  Sc
   # Do the plotting ---------------------------------------------------------
 
   p1 <- ggplot2::ggplot(df, ggplot2::aes(x = !!rlang::sym(Trend), y = .data$value)) + # do this logging as in pr_plot_tsclimate
-    ggplot2::geom_smooth(Method = Method, formula = y ~ x) +
+    ggplot2::geom_smooth(method = method, formula = y ~ x) +
     ggplot2::geom_point() +
     ggplot2::facet_wrap(rlang::enexpr(site), scales = "free_y", ncol = 1) +
     ggplot2::ylab(rlang::enexpr(titley)) +
-    ggplot2::scale_y_continuous(trans = Scale) +
+    ggplot2::scale_y_continuous(trans = trans) +
     ggplot2::theme_bw() +
     ggplot2::theme(legend.position = "bottom",
                    strip.background = ggplot2::element_blank(),
@@ -205,7 +205,7 @@ pr_plot_trends <- function(df, Trend = "Raw", Survey = "NRS", Method = "lm",  Sc
 #' @param df dataframe with specified time period, station code and parameter
 #' @param Trend specified time period
 #' @param Survey CPR or NRS data
-#' @param Scale scale of y axis on plot, whatever scale_y_continuous trans accepts
+#' @param trans scale of y axis on plot, whatever scale_y_continuous trans accepts
 #'
 #' @return a climatology plot
 #' @export
@@ -218,7 +218,7 @@ pr_plot_trends <- function(df, Trend = "Raw", Survey = "NRS", Method = "lm",  Sc
 #' df <- pr_get_indices(Survey = "CPR", Type = "Z") %>%
 #'         dplyr::filter(parameters == "ZoopAbundance_m3")
 #' annual <- pr_plot_climate(df, "CPR", "Year")
-pr_plot_climate <- function(df, Survey = "NRS", Trend = "Month", Scale = "identity"){
+pr_plot_climate <- function(df, Survey = "NRS", Trend = "Month", trans = "identity"){
 
   if (Trend == "Month"){
     Trend = "Month_Local"
@@ -253,7 +253,7 @@ pr_plot_climate <- function(df, Survey = "NRS", Trend = "Month", Scale = "identi
                            width = .2,                    # Width of the error bars
                            position = ggplot2::position_dodge(.9)) +
     ggplot2::labs(y = title) +
-    ggplot2::scale_y_continuous(trans = Scale) +
+    ggplot2::scale_y_continuous(trans = trans) +
     #ggplot2::scale_fill_manual(values = plotCols)  +
     ggplot2::theme_bw(base_size = 12) +
     ggplot2::theme(legend.position = "bottom")
@@ -275,7 +275,7 @@ pr_plot_climate <- function(df, Survey = "NRS", Trend = "Month", Scale = "identi
 #'
 #' @param df data frame with SampleDate_Local, time period and parameter
 #' @param Survey CPR or NRS data
-#' @param Scale scale of y axis on plot, whatever scale_y_continuous trans accepts
+#' @param trans scale of y axis on plot, whatever scale_y_continuous trans accepts
 #'
 #' @return a combined plot
 #' @export
@@ -284,16 +284,16 @@ pr_plot_climate <- function(df, Survey = "NRS", Trend = "Month", Scale = "identi
 #' df <- pr_get_indices(Survey = "NRS", Type = "P") %>%
 #'   dplyr::filter(parameters == "PhytoAbundance_CellsL")
 #' pr_plot_tsclimate(df, "NRS")
-pr_plot_tsclimate <- function(df, Survey = "NRS", Scale = "identity"){
+pr_plot_tsclimate <- function(df, Survey = "NRS", trans = "identity"){
 
-  p1 <- pr_plot_timeseries(df, Survey, Scale) +
+  p1 <- pr_plot_timeseries(df, Survey, trans) +
     ggplot2::theme(legend.position = "none",
                    axis.title.y = ggplot2::element_blank())
 
-  p2 <- pr_plot_climate(df, Survey, "Month", Scale) +
+  p2 <- pr_plot_climate(df, Survey, "Month", trans) +
     ggplot2::theme(legend.position = "none")
 
-  p3 <- pr_plot_climate(df, Survey, "Year", Scale) +
+  p3 <- pr_plot_climate(df, Survey, "Year", trans) +
     ggplot2::theme(axis.title.y = ggplot2::element_blank(),
                    legend.title = ggplot2::element_blank())
 
@@ -426,7 +426,7 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
 
   p1 <- ggplot2::ggplot(df) +
     ggplot2::geom_point(ggplot2::aes(x = .data$SampleDate, y = .data$Values), colour = col) +
-    ggplot2::geom_smooth(ggplot2::aes(x = .data$SampleDate, y = .data$fv), Method = "lm", formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
+    ggplot2::geom_smooth(ggplot2::aes(x = .data$SampleDate, y = .data$fv), method = "lm", formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
     ggplot2::labs(x = "Year", y = rlang::enexpr(titley)) +
     ggplot2::scale_y_continuous(trans = trans) +
     ggplot2::theme(legend.position = "none")
@@ -457,7 +457,7 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
 
   p3 <- ggplot2::ggplot(df) +
     ggplot2::geom_point(ggplot2::aes(x = .data$Month, y = .data$Values), colour = col) +
-    ggplot2::geom_smooth(ggplot2::aes(x = .data$Month, y = .data$fv), Method = "loess", formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
+    ggplot2::geom_smooth(ggplot2::aes(x = .data$Month, y = .data$fv), method = "loess", formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
     ggplot2::scale_y_continuous(trans = trans) +
     ggplot2::scale_x_continuous(breaks = seq(0.5, 6.3, length.out = 12), labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
     ggplot2::xlab("Month") +
@@ -481,7 +481,7 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
 #'
 #' @param df A dataframe from pr_get_nuts or pr_get_pigments
 #' @param Trend Trend line to be used, options None, Smoother, Linear
-#' @param Scale scale on which to plot y axis
+#' @param trans scale on which to plot y axis
 #'
 #' @return A plot with timeseries and climatology at depths
 #' @export
@@ -490,7 +490,7 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
 #' df <- pr_get_NRSChemistry() %>% dplyr::filter(parameters == "SecchiDepth_m")
 #' pr_plot_env_var(df)
 #'
-pr_plot_env_var <- function(df, Trend = "None", Scale = "identity") {
+pr_plot_env_var <- function(df, Trend = "None", trans = "identity") {
 
   n <- length(unique(df$StationName))
 
@@ -510,14 +510,14 @@ pr_plot_env_var <- function(df, Trend = "None", Scale = "identity") {
                    legend.position = "bottom",
                    legend.title = ggplot2::element_blank()) +
     ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
-    ggplot2::scale_y_continuous(trans = Scale)
-    #ggplot2::scale_colour_manual(values = plotCols)
+    ggplot2::scale_y_continuous(trans = trans)
+  #ggplot2::scale_colour_manual(values = plotCols)
 
   if(Trend == "Smoother"){
-    p <- p + ggplot2::geom_smooth(Method = "loess", formula = y ~ x)
+    p <- p + ggplot2::geom_smooth(method = "loess", formula = y ~ x)
   }
   if(Trend == "Linear"){
-    p <- p + ggplot2::geom_smooth(Method = "lm", formula = y ~ x)
+    p <- p + ggplot2::geom_smooth(method = "lm", formula = y ~ x)
   }
 
   # p <- plotly::ggplotly(p, height = 150 * np)
@@ -534,10 +534,10 @@ pr_plot_env_var <- function(df, Trend = "None", Scale = "identity") {
   m <- ggplot2::ggplot(mdat, ggplot2::aes(.data$Month_Local, .data$MonValues, colour = .data$StationName)) +
     ggplot2::geom_point() +
     ggplot2::facet_grid(.data$SampleDepth_m ~., scales = "free") +
-    ggplot2::geom_smooth(Method = "loess", formula = y ~ x) +
+    ggplot2::geom_smooth(method = "loess", formula = y ~ x) +
     ggplot2::scale_x_continuous(breaks = seq(1,12,length.out = 12),
                                 labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
-   #ggplot2::scale_colour_manual(values = plotCols) +
+    #ggplot2::scale_colour_manual(values = plotCols) +
     ggplot2::labs(x = "Month") +
     ggplot2::theme_bw() +
     ggplot2::theme(strip.background = ggplot2::element_blank(),
@@ -610,7 +610,7 @@ pr_plot_daynight <-  function(df){
 
   plots <- ggplot2::ggplot(df, ggplot2::aes(.data$Month_Local, .data$Species_m3)) +
     ggplot2::geom_point() +
-    ggplot2::geom_smooth(formula = "y ~ x", Method = "loess") +
+    ggplot2::geom_smooth(formula = "y ~ x", method = "loess") +
     ggplot2::facet_grid(~ .data$daynight, scales = "free_y") +
     ggplot2::scale_x_continuous(breaks= seq(1,12,length.out = 12), labels=c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
     ggplot2::theme_bw(base_size = 12) +
@@ -707,19 +707,23 @@ pr_plot_sti <-  function(df){
 #'
 #' @examples
 #' df <- pr_get_ProgressMap("CPR")
-#' plot <- pr_plot_Progress(df)
-pr_plot_Progress <- function(df){
+#' plot <- pr_plot_ProgressMap(df)
+pr_plot_ProgressMap <- function(df){
+
+  MapOz <- rnaturalearth::ne_countries(scale = "medium", country = "Australia",
+                                       returnclass = "sf")
 
   PMapData2 <- df %>%
-    sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326) #%>%
-    # sf::st_as_sf()
+    sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326)
 
-  PMapSum <- merge(df %>% dplyr::group_by(.data$Region, .data$Survey) %>% dplyr::summarise(Sums = dplyr::n(),
-                                                                                     .groups = "drop") %>%
+  PMapSum <- merge(df %>% dplyr::group_by(.data$Region, .data$Survey) %>%
+                     dplyr::summarise(Sums = dplyr::n(),
+                                      .groups = "drop") %>%
                      dplyr::mutate(label = paste0(.data$Region, ' = ', .data$Sums)),
-                   df %>% dplyr::group_by(.data$Region, .data$Survey) %>% dplyr::summarise(Lats = mean(.data$Latitude),
-                                                                                     Lons = mean(.data$Longitude),
-                                                                                     .groups = "drop")) %>%
+                   df %>% dplyr::group_by(.data$Region, .data$Survey) %>%
+                     dplyr::summarise(Lats = mean(.data$Latitude),
+                                      Lons = mean(.data$Longitude),
+                                      .groups = "drop")) %>%
     sf::st_as_sf(coords = c("Lons", "Lats"), crs = 4326)
 
   nudgex = c(-2,5.5,2,8.5,9.5,0,0,4)
@@ -732,19 +736,17 @@ pr_plot_Progress <- function(df){
 
   gg <- ggplot2::ggplot() +
     ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
-    ggplot2::coord_sf(xlim = c(105, 170), ylim = c(-54, -7)) +
-    # ggplot2::scale_x_continuous(expand = c(0, 0), limits = c(105, 170)) +
-    # ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(-54, -7)) +
+    ggplot2::coord_sf(xlim = c(105, 170), ylim = c(-54, -7), expand = FALSE) +
     ggplot2::theme_void() +
     ggplot2::theme(axis.title = ggplot2::element_blank(),
                    axis.line = ggplot2::element_blank())
 
   if ("NRS" %in% Survey$Survey) {
-  gg <-  gg +
-    ggplot2::geom_sf(data = PMapData2 %>% dplyr::filter(.data$Survey == "NRS"), size = 5) +
-    ggplot2::geom_sf_text(data = PMapSum %>% dplyr::filter(.data$Survey == "NRS"),
-                          size = 5, ggplot2::aes(label = .data$label),
-                          show.legend = FALSE, nudge_x = 3)
+    gg <-  gg +
+      ggplot2::geom_sf(data = PMapData2 %>% dplyr::filter(.data$Survey == "NRS"), size = 5) +
+      ggplot2::geom_sf_text(data = PMapSum %>% dplyr::filter(.data$Survey == "NRS"),
+                            size = 5, ggplot2::aes(label = .data$label),
+                            show.legend = FALSE, nudge_x = 3)
   }
 
   if ("CPR" %in% Survey$Survey) {
