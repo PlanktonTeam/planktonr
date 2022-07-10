@@ -219,13 +219,13 @@ pr_get_fMap_data <- function(Type = "Z"){
 # }
 
 #' Get data for plots of species abundance by day and night using CPR data
-#' @param Type Phyto or zoo, defaults to phyto
+#' @param Type "P" or "Z" (default)
 #'
 #' @return df to be used with pr_plot_daynight
 #' @export
 #'
 #' @examples
-#' df <- pr_get_daynight("Z")
+#' df <- pr_get_daynight(Type = "Z")
 pr_get_daynight <- function(Type = "Z"){
 
   if(Type == "Z"){
