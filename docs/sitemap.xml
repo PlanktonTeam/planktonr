@@ -547,6 +547,9 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_PlotCols.html</loc>
   </url>
   <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_ProgressMap.html</loc>
+  </url>
+  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_SppCount.html</loc>
   </url>
   <url>
@@ -628,6 +631,9 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_site2.html</loc>
   </url>
   <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_site_bgc.html</loc>
+  </url>
+  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_sti.html</loc>
   </url>
   <url>
@@ -647,6 +653,9 @@
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_NRSmap.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_ProgressMap.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_climate.html</loc>

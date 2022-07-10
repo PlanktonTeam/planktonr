@@ -85,7 +85,7 @@
                         <h4 data-toc-skip class="author">Claire H.
 Davies and Jason D. Everett</h4>
             
-            <h4 data-toc-skip class="date">Tuesday 28 June 2022</h4>
+            <h4 data-toc-skip class="date">Sunday 10 July 2022</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/PlanktonTeam/planktonr/blob/HEAD/vignettes/CPR_ts.Rmd" class="external-link"><code>vignettes/CPR_ts.Rmd</code></a></small>
       <div class="hidden name"><code>CPR_ts.Rmd</code></div>
@@ -126,11 +126,11 @@ bioregions are.</p>
 <code class="sourceCode R"><span><span class="co"># pr_plot_CPRmap(datCPR_p)</span></span></code></pre></div>
 <p>Then we can plot the data as a timeseries</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pr_plot_tsclimate.html">pr_plot_tsclimate</a></span><span class="op">(</span><span class="va">datCPR_p</span>, <span class="st">"CPR"</span>, <span class="st">"matter"</span><span class="op">)</span> </span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/pr_plot_tsclimate.html">pr_plot_tsclimate</a></span><span class="op">(</span><span class="va">datCPR_p</span>, <span class="st">"CPR"</span><span class="op">)</span> </span></code></pre></div>
 <p><img src="CPR_ts_files/figure-html/unnamed-chunk-5-1.png" width="576"></p>
 <p>Perhaps the story will be clearer using a log scale</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pr_plot_tsclimate.html">pr_plot_tsclimate</a></span><span class="op">(</span><span class="va">datCPR_p</span>, <span class="st">"CPR"</span>, <span class="st">"matter"</span>, <span class="st">"log10"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/pr_plot_tsclimate.html">pr_plot_tsclimate</a></span><span class="op">(</span><span class="va">datCPR_p</span>, <span class="st">"CPR"</span>, <span class="st">"log10"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="CPR_ts_files/figure-html/unnamed-chunk-6-1.png" width="576"></p>
 </div>
 <div class="section level3">
@@ -146,7 +146,7 @@ dinoflagellate rations across the regions?</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>And then plot the total timeseries</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pr_plot_tsclimate.html">pr_plot_tsclimate</a></span><span class="op">(</span><span class="va">datRat</span>, <span class="st">"CPR"</span>, <span class="st">"matter"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/pr_plot_tsclimate.html">pr_plot_tsclimate</a></span><span class="op">(</span><span class="va">datRat</span>, <span class="st">"CPR"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="CPR_ts_files/figure-html/unnamed-chunk-8-1.png" width="576"></p>
 <p>The South-west region has more dinoflagellates than the eastern
 regions with the highest abundances of diatoms seen in the South-east
@@ -162,11 +162,11 @@ Coral Sea region.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">parameters</span> <span class="op">==</span> <span class="st">"ZoopAbundance_m3"</span> <span class="op">&amp;</span> <span class="va">BioRegion</span> <span class="op">==</span> <span class="st">"Coral Sea"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span>  <span class="fu"><a href="../reference/pr_plot_trends.html">pr_plot_trends</a></span><span class="op">(</span><span class="va">datNRSz</span>, trend <span class="op">=</span> <span class="st">"Raw"</span>, survey <span class="op">=</span> <span class="st">"CPR"</span>, method <span class="op">=</span> <span class="st">"lm"</span>, y_trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span>  <span class="fu"><a href="../reference/pr_plot_trends.html">pr_plot_trends</a></span><span class="op">(</span><span class="va">datNRSz</span>, Trend <span class="op">=</span> <span class="st">"Raw"</span>, Survey <span class="op">=</span> <span class="st">"CPR"</span>, method <span class="op">=</span> <span class="st">"lm"</span>, trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="CPR_ts_files/figure-html/unnamed-chunk-10-1.png" width="576"></p>
 <p>Now lets check the seasonal cycle.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span>    <span class="fu"><a href="../reference/pr_plot_trends.html">pr_plot_trends</a></span><span class="op">(</span><span class="va">datNRSz</span>, trend <span class="op">=</span> <span class="st">"Month"</span>, survey <span class="op">=</span> <span class="st">"CPR"</span>, method <span class="op">=</span> <span class="st">"loess"</span>, y_trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span>    <span class="fu"><a href="../reference/pr_plot_trends.html">pr_plot_trends</a></span><span class="op">(</span><span class="va">datNRSz</span>, Trend <span class="op">=</span> <span class="st">"Month"</span>, Survey <span class="op">=</span> <span class="st">"CPR"</span>, method <span class="op">=</span> <span class="st">"loess"</span>, trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="CPR_ts_files/figure-html/unnamed-chunk-11-1.png" width="576"></p>
 </div>
 </div>
