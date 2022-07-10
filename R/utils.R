@@ -7,7 +7,8 @@
 #' file_loc <- pr_get_site()
 #' @importFrom rlang .data
 pr_get_site <- function(){
-  raw <-"http://geoserver-123.aodn.org.au/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=imos:LAYER_NAME&outputFormat=csv-with-metadata-header"
+  # raw <-"http://geoserver-123.aodn.org.au/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=imos:LAYER_NAME&outputFormat=csv-with-metadata-header"
+  raw = "https://geoserver-portal.aodn.org.au/geoserver/ows?typeName=LAYER_NAME&SERVICE=WFS&outputFormat=csv&REQUEST=GetFeature&VERSION=1.0.0&userId=Guest"
 }
 
 #' Get location of s3 plankton data
@@ -47,19 +48,19 @@ pr_get_raw <- function(file){
   if (file == "bgc_chemistry_data"){ # additional probs possible in chemistry. No WC.
     col_types = list(Project = readr::col_character(),
                      TripCode = readr::col_character(),
-                     SampleDate_Local = readr::col_date(),
+                     SampleTime_Local = readr::col_datetime(),
                      DIC_umolkg = readr::col_double(),
                      Oxygen_umolL = readr::col_double())
   } else if (file == "bgc_tss_data" |
              file == "bgc_picoplankton_data"){ # Add specific filter for bgc files to deal with potential problems from 'WC' depth
     col_types = list(Project = readr::col_character(),
                      TripCode = readr::col_character(),
-                     SampleDate_Local = readr::col_date(),
+                     SampleTime_Local = readr::col_datetime(),
                      SampleDepth_m = readr::col_character())
   } else if (file ==  "bgc_pigments_data"){ # Add specific filter for bgc files to deal with potential problems from 'WC' depth
     col_types = list(Project = readr::col_character(),
                      TripCode = readr::col_character(),
-                     SampleDate_Local = readr::col_date(),
+                     SampleTime_Local = readr::col_datetime(),
                      SampleDepth_m = readr::col_character())
   } else if(stringr::str_detect(file, "bgc_zooplankton")){
     col_types = list(Project = readr::col_character(),
