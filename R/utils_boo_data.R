@@ -229,10 +229,10 @@ pr_get_fMap_data <- function(Type = "Z"){
 pr_get_daynight <- function(Type = "Z"){
 
   if(Type == "Z"){
-    dat <- pr_get_CPRData(Type = "zooplankton", Variable = "abundance", Subset = "copepods")
+    dat <- pr_get_CPRData(Type = "Z", Variable = "abundance", Subset = "copepods")
 
   } else if (Type == "P"){
-    dat <- pr_get_CPRData(Type = "phytoplankton", Variable = "abundance", Subset = "species")
+    dat <- pr_get_CPRData(Type = "P", Variable = "abundance", Subset = "species")
 
   }
 
@@ -326,16 +326,23 @@ pr_get_sti <-  function(Type = "P"){
 #' Get the summary plankton observations from the NRS and CPR.
 #' @return a dataframe with a species summary
 #'
-#' @param gp The group of plankton requested. Either "Zooplankton" or "Phytoplankton"
+#' @param Type The group of plankton requested. Either "Z" or "P"
 #'
 #' @export
 #'
 #' @examples
-#' df <- pr_get_SppCount("Zooplankton")
-pr_get_SppCount <- function(gp){
+#' df <- pr_get_SppCount("P")
+#' df <- pr_get_SppCount("Z")
+pr_get_SppCount <- function(Type = "Z"){
 
-  out <- sppSummary %>%
-    dplyr::filter(.data$Group == gp)
+  if (Type == "P"){
+    gp <- "Phytoplankton"
+  } else if (Type == "Z"){
+    gp <- "Zooplankton"
+  }
+
+out <- sppSummary %>%
+  dplyr::filter(.data$Group == gp)
 
 }
 

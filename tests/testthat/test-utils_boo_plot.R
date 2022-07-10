@@ -15,15 +15,15 @@ testthat::test_that("Correct function output", {
 
   testthat::expect_equal(class(pr_get_indices("NRS", "Z") %>%
                                  dplyr::filter(parameters == "Biomass_mgm3") %>%
-                                 pr_plot_trends(trend = "Year", survey = "NRS"))[1], "gg")
+                                 pr_plot_trends(Trend = "Year", Survey = "NRS"))[1], "gg")
 
   testthat::expect_equal(class(pr_get_indices("CPR", "Z") %>%
                                  dplyr::filter(parameters == "BiomassIndex_mgm3") %>%
-                                 pr_plot_trends(trend = "Month", survey = "CPR"))[1], "gg")
+                                 pr_plot_trends(Trend = "Month", Survey = "CPR"))[1], "gg")
 
   testthat::expect_equal(class(pr_get_indices("CPR", "Z") %>%
                                  dplyr::filter(parameters == "Biomass_mgm3") %>%
-                                 pr_plot_trends(trend = "Raw", survey = "CPR"))[1], "gg")
+                                 pr_plot_trends(Trend = "Raw", Survey = "CPR"))[1], "gg")
 
   testthat::expect_equal(class(pr_get_indices(Survey = "CPR", Type = "Z") %>%
                                  dplyr::filter(parameters == "ZoopAbundance_m3") %>%
@@ -34,13 +34,13 @@ testthat::test_that("Correct function output", {
                                  pr_plot_tsclimate("NRS"))[1], "patchwork")
 
   testthat::expect_equal(class(pr_get_fg("NRS", "P") %>%
-                                 pr_plot_tsfg(Scale = "Actual", trend = "Raw"))[1], "gg")
+                                 pr_plot_tsfg(Scale = "Actual", Trend = "Raw"))[1], "gg")
 
   testthat::expect_equal(class(pr_get_fg("NRS", "P") %>%
-                                 pr_plot_tsfg(Scale = "Percent", trend = "Month"))[1], "gg")
+                                 pr_plot_tsfg(Scale = "Percent", Trend = "Month"))[1], "gg")
 
   testthat::expect_equal(class(pr_get_fg("CPR", "P") %>%
-                                 pr_plot_tsfg(Scale = "Actual", trend = "Year"))[1], "gg")
+                                 pr_plot_tsfg(Scale = "Actual", Trend = "Year"))[1], "gg")
 
   testthat::expect_equal(class(planktonr::pr_get_pol("NRS") %>%
                                  pr_get_coeffs() %>%
@@ -59,15 +59,15 @@ testthat::test_that("Correct function output", {
 
   testthat::expect_equal(class(pr_get_NRSChemistry() %>%
                                  dplyr::filter(parameters == "SecchiDepth_m") %>%
-                                 pr_plot_env_var(trend = "None", Scale = "identity"))[1], "patchwork")
+                                 pr_plot_env_var(Trend = "None", Scale = "identity"))[1], "patchwork")
 
   testthat::expect_equal(class(pr_get_NRSChemistry() %>%
                                  dplyr::filter(parameters == "SecchiDepth_m") %>%
-                                 pr_plot_env_var(trend = "Smoother", Scale = "identity"))[1], "patchwork")
+                                 pr_plot_env_var(Trend = "Smoother", Scale = "identity"))[1], "patchwork")
 
   testthat::expect_equal(class(pr_get_NRSChemistry() %>%
                                  dplyr::filter(parameters == "SecchiDepth_m") %>%
-                                 pr_plot_env_var(trend = "Linear", Scale = "identity"))[1], "patchwork")
+                                 pr_plot_env_var(Trend = "Linear", Scale = "identity"))[1], "patchwork")
 
   testthat::expect_equal(class(data.frame(Long = c(110, 130, 155, 150), Lat = c(-10, -35, -27, -45),
                                           freqfac = c("Absent", "Seen in 25%","50%", "75%"),

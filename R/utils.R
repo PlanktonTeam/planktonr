@@ -562,3 +562,25 @@ pr_get_nonTaxaColumns <- function(Survey = "NRS", Type = "Z"){
 
 }
 
+
+# Internal function to check Type
+#
+# @param Type Character string
+#
+# @return "Z" or "P"
+#
+# @examples
+# pr_get_Type("phytoplankton")
+# pr_get_Type("z")
+# pr_get_Type <- function(Type){
+#
+#   zoop_type <- c("Z", "z", "zooplankton", "Zooplankton")
+#   phyto_type <- c("P", "p", "phytoplankton", "Phytoplankton")
+#
+#   if(Type %in% zoop_type){
+#     Type = "Z"
+#   } else if (Type %in% phyto_type){
+#     Type = "P"
+#   }
+#
+# }

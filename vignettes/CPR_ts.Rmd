@@ -103,11 +103,11 @@ datNRSz <- pr_get_indices("CPR", "Z") %>%
 
 
 ```{r,include=TRUE, warning=FALSE}
-  pr_plot_trends(datNRSz, trend = "Raw", survey = "CPR", method = "lm", y_trans = "log10")
+  pr_plot_trends(datNRSz, Trend = "Raw", Survey = "CPR", Method = "lm", Scale = "log10")
 ```
 
 
 Now lets check the seasonal cycle.
 ```{r,include=TRUE}
-    pr_plot_trends(datNRSz, trend = "Month", survey = "CPR", method = "loess", y_trans = "log10")
+    pr_plot_trends(datNRSz, Trend = "Month", Survey = "CPR", Method = "loess", Scale = "log10")
 ```

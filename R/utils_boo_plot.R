@@ -112,13 +112,13 @@ pr_plot_timeseries <- function(df, Survey = "NRS", Scale = "identity"){
 }
 
 
-#' Plot temporal trends in plankton data
+#' Plot temporal Trends in plankton data
 #'
 #' @param df A dataframe containing the plankton timeseries data.
-#' @param trend Over what timescale to fit the trend - "Raw", "Month" or "Year"
-#' @param survey "NRS" or "CPR" data
-#' @param method Any method accepted by `geom_smooth()`
-#' @param y_trans transformation of y axis on plot, whatever `scale_y_continuous()` trans accepts
+#' @param Trend Over what timescale to fit the Trend - "Raw", "Month" or "Year"
+#' @param Survey "NRS" or "CPR" data
+#' @param Method Any Method accepted by `geom_smooth()`
+#' @param Scale transformation of y axis on plot, whatever `scale_y_continuous()` trans accepts
 #' #'
 #' @return a timeseries plot
 #'
@@ -129,31 +129,31 @@ pr_plot_timeseries <- function(df, Survey = "NRS", Scale = "identity"){
 #' @examples
 #' df <- pr_get_indices("NRS", "Z") %>%
 #'   dplyr::filter(parameters == 'Biomass_mgm3')
-#' pr_plot_trends(df, trend = "Month", survey = "NRS")
-#' pr_plot_trends(df, trend = "Year", survey = "NRS")
-#' pr_plot_trends(df, trend = "Raw", survey = "NRS")
-pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm",  y_trans = "identity"){
+#' pr_plot_trends(df, Trend = "Month", Survey = "NRS")
+#' pr_plot_trends(df, Trend = "Year", Survey = "NRS")
+#' pr_plot_trends(df, Trend = "Raw", Survey = "NRS")
+pr_plot_trends <- function(df, Trend = "Raw", Survey = "NRS", Method = "lm",  Scale = "identity"){
 
-  if (trend == "Month"){
-    trend = "Month_Local"
+  if (Trend == "Month"){
+    Trend = "Month_Local"
   }
-  if (trend == "Year"){
-    trend = "Year_Local"
+  if (Trend == "Year"){
+    Trend = "Year_Local"
   }
 
-  if (survey == "CPR"){
+  if (Survey == "CPR"){
     site = rlang::sym("BioRegion")
-  } else if (survey == "NRS"){
+  } else if (Survey == "NRS"){
     site = rlang::sym("StationName")
   }
 
   titley <- pr_relabel(unique(df$parameters))
 
-  # Averaging based on `trend` ----------------------------------------------
+  # Averaging based on `Trend` ----------------------------------------------
 
-  if (trend %in% c("Year_Local", "Month_Local")){
+  if (Trend %in% c("Year_Local", "Month_Local")){
     df <- df %>%
-      dplyr::group_by(!!rlang::sym(trend), !!site) %>%
+      dplyr::group_by(!!rlang::sym(Trend), !!site) %>%
       dplyr::summarise(value = mean(.data$Values, na.rm = TRUE),
                        N = dplyr::n(),
                        sd = sd(.data$Values, na.rm = TRUE),
@@ -161,7 +161,7 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm",  y_
                        .groups = "drop")
 
   } else {
-    trend <- "SampleTime_Local" # Rename trend to match the column with time
+    Trend <- "SampleTime_Local" # Rename Trend to match the column with time
     df <- df %>%
       dplyr::group_by(.data$SampleTime_Local, !!site, .data$parameters) %>% # accounting for microbial data different depths
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
@@ -171,26 +171,26 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm",  y_
 
   # Do the plotting ---------------------------------------------------------
 
-  p1 <- ggplot2::ggplot(df, ggplot2::aes(x = !!rlang::sym(trend), y = .data$value)) + # do this logging as in pr_plot_tsclimate
-    ggplot2::geom_smooth(method = method, formula = y ~ x) +
+  p1 <- ggplot2::ggplot(df, ggplot2::aes(x = !!rlang::sym(Trend), y = .data$value)) + # do this logging as in pr_plot_tsclimate
+    ggplot2::geom_smooth(Method = Method, formula = y ~ x) +
     ggplot2::geom_point() +
     ggplot2::facet_wrap(rlang::enexpr(site), scales = "free_y", ncol = 1) +
     ggplot2::ylab(rlang::enexpr(titley)) +
-    ggplot2::scale_y_continuous(trans = y_trans) +
+    ggplot2::scale_y_continuous(trans = Scale) +
     ggplot2::theme_bw() +
     ggplot2::theme(legend.position = "bottom",
                    strip.background = ggplot2::element_blank(),
                    strip.text = ggplot2::element_text(hjust = 0))
 
-  if (rlang::as_string(trend) %in% c("Month_Local")){
+  if (rlang::as_string(Trend) %in% c("Month_Local")){
     p1 <- p1 +
       ggplot2::scale_x_continuous(breaks = seq(1, 12, length.out = 12), labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
       ggplot2::xlab("Month")
-  } else if (rlang::as_string(trend) %in% "Year_Local"){
+  } else if (rlang::as_string(Trend) %in% "Year_Local"){
     p1 <- p1 +
       ggplot2::scale_x_continuous(breaks = 2) +
       ggplot2::xlab("Year")
-  } else if (!rlang::as_string(trend) %in% c("Month_Local", "Year_Local")){
+  } else if (!rlang::as_string(Trend) %in% c("Month_Local", "Year_Local")){
     p1 <- p1 +
       ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
       ggplot2::xlab("Year")
@@ -203,7 +203,7 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm",  y_
 #' Plot single climatology
 #'
 #' @param df dataframe with specified time period, station code and parameter
-#' @param trend specified time period
+#' @param Trend specified time period
 #' @param Survey CPR or NRS data
 #' @param Scale scale of y axis on plot, whatever scale_y_continuous trans accepts
 #'
@@ -218,17 +218,17 @@ pr_plot_trends <- function(df, trend = "Raw", survey = "NRS", method = "lm",  y_
 #' df <- pr_get_indices(Survey = "CPR", Type = "Z") %>%
 #'         dplyr::filter(parameters == "ZoopAbundance_m3")
 #' annual <- pr_plot_climate(df, "CPR", "Year")
-pr_plot_climate <- function(df, Survey = "NRS", trend = "Month", Scale = "identity"){
+pr_plot_climate <- function(df, Survey = "NRS", Trend = "Month", Scale = "identity"){
 
-  if (trend == "Month"){
-    trend = "Month_Local"
+  if (Trend == "Month"){
+    Trend = "Month_Local"
   }
-  if (trend == "Year"){
-    trend = "Year_Local"
+  if (Trend == "Year"){
+    Trend = "Year_Local"
   }
 
-  # trend <- dplyr::enquo(arg = trend)
-  trend <- rlang::sym(trend)
+  # Trend <- dplyr::enquo(arg = Trend)
+  Trend <- rlang::sym(Trend)
 
   if(Survey == "CPR"){
     df <- df %>%
@@ -240,14 +240,14 @@ pr_plot_climate <- function(df, Survey = "NRS", trend = "Month", Scale = "identi
   title <- pr_relabel(unique(df$parameters), style = "ggplot")
 
   df_climate <- df %>%
-    dplyr::group_by(!!trend, .data$StationCode) %>%
+    dplyr::group_by(!!Trend, .data$StationCode) %>%
     dplyr::summarise(mean = mean(.data$Values, na.rm = TRUE),
                      N = length(.data$Values),
                      sd = stats::sd(.data$Values, na.rm = TRUE),
                      se = sd / sqrt(.data$N),
                      .groups = "drop")
 
-  p1 <- ggplot2::ggplot(df_climate, ggplot2::aes(x = !!trend, y = .data$mean, fill = .data$StationCode)) +
+  p1 <- ggplot2::ggplot(df_climate, ggplot2::aes(x = !!Trend, y = .data$mean, fill = .data$StationCode)) +
     ggplot2::geom_col(position = ggplot2::position_dodge()) +
     ggplot2::geom_errorbar(ggplot2::aes(ymin = .data$mean-.data$se, ymax = .data$mean+.data$se),
                            width = .2,                    # Width of the error bars
@@ -306,7 +306,7 @@ pr_plot_tsclimate <- function(df, Survey = "NRS", Scale = "identity"){
 #'
 #' @param df dataframe in format of output from pr_get_fg
 #' @param Scale y axis scale Actual or Percent
-#' @param trend Over what timescale to fit the trend - "Raw", "Month" or "Year"
+#' @param Trend Over what timescale to fit the Trend - "Raw", "Month" or "Year"
 #'
 #'
 #' @return plot of fg timseries
@@ -315,13 +315,13 @@ pr_plot_tsclimate <- function(df, Survey = "NRS", Scale = "identity"){
 #' @examples
 #' df <- pr_get_fg("NRS", "P")
 #' plot <- pr_plot_tsfg(df, "Actual")
-pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw"){
+pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 
-  if (trend == "Month"){
-    trend = "Month_Local"
+  if (Trend == "Month"){
+    Trend = "Month_Local"
   }
-  if (trend == "Year"){
-    trend = "Year_Local"
+  if (Trend == "Year"){
+    Trend = "Year_Local"
   }
 
   titley <- pr_relabel("FunctionalGroup", style = "ggplot")
@@ -340,10 +340,10 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw"){
   }
 
   titlex <- "Sample Time (Local)"
-  if (trend %in% c("Year_Local", "Month_Local")){
+  if (Trend %in% c("Year_Local", "Month_Local")){
 
     df <- df %>%
-      dplyr::group_by(!!rlang::sym(trend), !!station, .data$parameters) %>%
+      dplyr::group_by(!!rlang::sym(Trend), !!station, .data$parameters) %>%
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                        N = dplyr::n(),
                        sd = sd(.data$Values, na.rm = TRUE),
@@ -351,12 +351,12 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw"){
                        .groups = "drop")
 
   } else {
-    trend <- SampleDate # Rename trend to match the column with time
+    Trend <- SampleDate # Rename Trend to match the column with time
   }
 
   if(Scale == "Percent") {
     df <- df %>%
-      dplyr::group_by(!!rlang::sym(trend), !!station, .data$parameters) %>%
+      dplyr::group_by(!!rlang::sym(Trend), !!station, .data$parameters) %>%
       dplyr::summarise(n = sum(.data$Values, na.rm = TRUE)) %>%
       dplyr::mutate(Values = .data$n / sum(.data$n, na.rm = TRUE)) %>%
       dplyr::ungroup()
@@ -365,7 +365,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw"){
       dplyr::mutate(Values = log10(.data$Values))
   }
 
-  p1 <- ggplot2::ggplot(df, ggplot2::aes(x = !!rlang::sym(trend), y = .data$Values, fill = .data$parameters)) +
+  p1 <- ggplot2::ggplot(df, ggplot2::aes(x = !!rlang::sym(Trend), y = .data$Values, fill = .data$parameters)) +
     ggplot2::geom_area(alpha=0.6 , size=1, colour="white") +
     ggplot2::facet_wrap(rlang::enexpr(station), scales = "free", ncol = 1) +
     ggplot2::labs(y = titley) +
@@ -376,15 +376,15 @@ pr_plot_tsfg <- function(df, Scale = "Actual", trend = "Raw"){
                    strip.background = ggplot2::element_blank(),
                    strip.text = ggplot2::element_text(hjust = 0))
 
-  if (rlang::as_string(trend) %in% c("Month_Local")){
+  if (rlang::as_string(Trend) %in% c("Month_Local")){
     p1 <- p1 +
       ggplot2::scale_x_continuous(breaks = seq(1, 12, length.out = 12), labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
       ggplot2::xlab("Month")
-  } else if (rlang::as_string(trend) %in% c("Year_Local")){
+  } else if (rlang::as_string(Trend) %in% c("Year_Local")){
     p1 <- p1 +
       ggplot2::scale_x_continuous(breaks = 2) +
       ggplot2::xlab("Year")
-  } else if (rlang::as_string(trend) %in% c("SampleTime_Local")){
+  } else if (rlang::as_string(Trend) %in% c("SampleTime_Local")){
     p1 <- p1 +
       ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
       ggplot2::xlab("Sample Date")
@@ -426,7 +426,7 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
 
   p1 <- ggplot2::ggplot(df) +
     ggplot2::geom_point(ggplot2::aes(x = .data$SampleDate, y = .data$Values), colour = col) +
-    ggplot2::geom_smooth(ggplot2::aes(x = .data$SampleDate, y = .data$fv), method = "lm", formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
+    ggplot2::geom_smooth(ggplot2::aes(x = .data$SampleDate, y = .data$fv), Method = "lm", formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
     ggplot2::labs(x = "Year", y = rlang::enexpr(titley)) +
     ggplot2::scale_y_continuous(trans = trans) +
     ggplot2::theme(legend.position = "none")
@@ -457,7 +457,7 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
 
   p3 <- ggplot2::ggplot(df) +
     ggplot2::geom_point(ggplot2::aes(x = .data$Month, y = .data$Values), colour = col) +
-    ggplot2::geom_smooth(ggplot2::aes(x = .data$Month, y = .data$fv), method = "loess", formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
+    ggplot2::geom_smooth(ggplot2::aes(x = .data$Month, y = .data$fv), Method = "loess", formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
     ggplot2::scale_y_continuous(trans = trans) +
     ggplot2::scale_x_continuous(breaks = seq(0.5, 6.3, length.out = 12), labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
     ggplot2::xlab("Month") +
@@ -480,7 +480,7 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
 #' Combined timeseries and climatology plots for environmental variables
 #'
 #' @param df A dataframe from pr_get_nuts or pr_get_pigments
-#' @param trend Trend line to be used, options None, Smoother, Linear
+#' @param Trend Trend line to be used, options None, Smoother, Linear
 #' @param Scale scale on which to plot y axis
 #'
 #' @return A plot with timeseries and climatology at depths
@@ -490,7 +490,7 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
 #' df <- pr_get_NRSChemistry() %>% dplyr::filter(parameters == "SecchiDepth_m")
 #' pr_plot_env_var(df)
 #'
-pr_plot_env_var <- function(df, trend = "None", Scale = "identity") {
+pr_plot_env_var <- function(df, Trend = "None", Scale = "identity") {
 
   n <- length(unique(df$StationName))
 
@@ -513,11 +513,11 @@ pr_plot_env_var <- function(df, trend = "None", Scale = "identity") {
     ggplot2::scale_y_continuous(trans = Scale)
     #ggplot2::scale_colour_manual(values = plotCols)
 
-  if(trend == "Smoother"){
-    p <- p + ggplot2::geom_smooth(method = "loess", formula = y ~ x)
+  if(Trend == "Smoother"){
+    p <- p + ggplot2::geom_smooth(Method = "loess", formula = y ~ x)
   }
-  if(trend == "Linear"){
-    p <- p + ggplot2::geom_smooth(method = "lm", formula = y ~ x)
+  if(Trend == "Linear"){
+    p <- p + ggplot2::geom_smooth(Method = "lm", formula = y ~ x)
   }
 
   # p <- plotly::ggplotly(p, height = 150 * np)
@@ -534,7 +534,7 @@ pr_plot_env_var <- function(df, trend = "None", Scale = "identity") {
   m <- ggplot2::ggplot(mdat, ggplot2::aes(.data$Month_Local, .data$MonValues, colour = .data$StationName)) +
     ggplot2::geom_point() +
     ggplot2::facet_grid(.data$SampleDepth_m ~., scales = "free") +
-    ggplot2::geom_smooth(method = "loess", formula = y ~ x) +
+    ggplot2::geom_smooth(Method = "loess", formula = y ~ x) +
     ggplot2::scale_x_continuous(breaks = seq(1,12,length.out = 12),
                                 labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
    #ggplot2::scale_colour_manual(values = plotCols) +
@@ -610,7 +610,7 @@ pr_plot_daynight <-  function(df){
 
   plots <- ggplot2::ggplot(df, ggplot2::aes(.data$Month_Local, .data$Species_m3)) +
     ggplot2::geom_point() +
-    ggplot2::geom_smooth(formula = "y ~ x", method = "loess") +
+    ggplot2::geom_smooth(formula = "y ~ x", Method = "loess") +
     ggplot2::facet_grid(~ .data$daynight, scales = "free_y") +
     ggplot2::scale_x_continuous(breaks= seq(1,12,length.out = 12), labels=c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
     ggplot2::theme_bw(base_size = 12) +
