@@ -4,14 +4,14 @@
 \alias{pr_plot_tsfg}
 \title{Time series plot of functional groups}
 \usage{
-pr_plot_tsfg(df, Scale = "Actual", trend = "Raw")
+pr_plot_tsfg(df, Scale = "Actual", Trend = "Raw")
 }
 \arguments{
 \item{df}{dataframe in format of output from pr_get_fg}
 
 \item{Scale}{y axis scale Actual or Percent}
 
-\item{trend}{Over what timescale to fit the trend - "Raw", "Month" or "Year"}
+\item{Trend}{Over what timescale to fit the Trend - "Raw", "Month" or "Year"}
 }
 \value{
 plot of fg timseries

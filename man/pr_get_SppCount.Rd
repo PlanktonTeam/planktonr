@@ -4,7 +4,7 @@
 \alias{pr_get_SppCount}
 \title{Get the summary plankton observations}
 \usage{
-pr_get_SppCount(gp)
+pr_get_SppCount(Type = "Z")
 }
 \arguments{
 \item{gp}{The group of plankton requested. Either "Zooplankton" or "Phytoplankton"}
@@ -16,5 +16,6 @@ a dataframe with a species summary
 Get the summary plankton observations from the NRS and CPR.
 }
 \examples{
-df <- pr_get_SppCount("Zooplankton")
+df <- pr_get_SppCount("P")
+df <- pr_get_SppCount("Z")
 }

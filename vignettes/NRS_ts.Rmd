@@ -125,12 +125,12 @@ datNRS_zoo <- pr_get_indices("NRS", "Z") %>%
 
 
 ```{r,include=TRUE, warning=FALSE}
-pr_plot_trends(datNRS_zoo, trend = "Raw", survey = "NRS", method = "lm", y_trans = "log10")
+pr_plot_trends(datNRS_zoo, Trend = "Raw", Survey = "NRS", Method = "lm", Scale = "log10")
 ```
 
 Now lets check the seasonal cycle.
 ```{r,include=TRUE}
-pr_plot_trends(datNRS_zoo, trend = "Month", survey = "NRS", method = "loess", y_trans = "log10")
+pr_plot_trends(datNRS_zoo, Trend = "Month", Survey = "NRS", Method = "loess", Scale = "log10")
 ```
 
 ## Examine functional groups
@@ -138,7 +138,7 @@ pr_plot_trends(datNRS_zoo, trend = "Month", survey = "NRS", method = "loess", y_
 We can also look at the change in functional groups through time. Firstly by annual averages
 
 ```{r,include=TRUE}
-NRSfgz <- pr_get_fg("NRS", "Z") %>% 
+NRSfgz <- pr_get_fg(Survey = "NRS", Type = "Z") %>% 
   filter(StationName %in% c("Yongala", "Maria Island")) %>% 
   droplevels()
 
@@ -147,10 +147,10 @@ pr_plot_tsfg(df = NRSfgz, Scale = "Actual")
 
 And also by Month.  
 ```{r,include=TRUE}  
-pr_plot_tsfg(df = NRSfgz, trend = "Month")
+pr_plot_tsfg(df = NRSfgz, Trend = "Month")
 ```
 
 It may be better to analyse the data by proportion.
 ```{r,include=TRUE}  
-pr_plot_tsfg(df = NRSfgz, trend = "Month", Scale = "Percent")
+pr_plot_tsfg(df = NRSfgz, Trend = "Month", Scale = "Percent")
 ```

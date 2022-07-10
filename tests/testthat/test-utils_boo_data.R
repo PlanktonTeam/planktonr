@@ -14,7 +14,7 @@ testthat::test_that("Correct function output", {
   testthat::expect_type(pr_get_sti("P"), "list")
   testthat::expect_type(pr_get_sti("Z"), "list")
 
-  testthat::expect_type(pr_get_SppCount("Zooplankton"), "list")
+  testthat::expect_type(pr_get_SppCount("Z"), "list")
 
   testthat::expect_type(pr_get_facts(), "character")
 

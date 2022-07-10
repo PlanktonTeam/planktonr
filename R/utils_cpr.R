@@ -9,13 +9,13 @@
 #' @return A dataframe with requested plankton data in long form
 #' @export
 #' @examples
-#' df <- pr_get_CPRData(Type = "phytoplankton", Variable = "abundance", Subset = "raw")
+#' df <- pr_get_CPRData(Type = "P", Variable = "abundance", Subset = "raw")
 #' @importFrom rlang .data
-pr_get_CPRData <- function(Type = "phytoplankton", Variable = "abundance", Subset = "raw"){
+pr_get_CPRData <- function(Type = "P", Variable = "abundance", Subset = "raw"){
 
   Type = stringr::str_to_lower(Type)
-  if (Type == "p"){Type = "phytoplankton"}
-  if (Type == "z"){Type = "zooplankton"}
+  if (Type %in% c("p", "P", "Phytoplankton", "phytoplankton")){Type = "phytoplankton"}
+  if (Type %in% c("z", "Z", "Zooplankton", "zooplankton")){Type = "zooplankton"}
 
   if (Type == "zooplankton" & Subset == "species"){ # Specific case for zooplankton species
 
@@ -40,12 +40,6 @@ pr_get_CPRData <- function(Type = "phytoplankton", Variable = "abundance", Subse
                            comment = "#") %>%
       pr_rename()
   }
-
-  # TODO Removed on Monday 20th June 2022 - Don't think we need this anymore.
-  # dat <- dat %>%
-    # dplyr::rename(SampleTime_UTC = .data$SampleDate_UTC,
-                  # SampleTime_Local = .data$SampleDate_Local) %>%  #TODO Fix this when AODN fixes the headers
-    # # pr_add_SampleDate()
 
 }
 
@@ -77,9 +71,8 @@ pr_get_CPRSamps <- function(){
 
   df <- pr_get_raw("cpr_derived_indices_data") %>%
     pr_rename() %>%
-    # pr_add_SampleDate() %>%
     pr_add_Bioregions() %>%
     dplyr::select(tidyselect::starts_with(c("geometry", "FID", "TripCode", "Latitude", "Longitude", "BioRegion",
-                                          "IMCRA", "SampleTime", "SampleDate", "Year", "Month", "Day", "Time", "Region")))
+                                            "IMCRA", "SampleTime", "SampleDate", "Year", "Month", "Day", "Time", "Region")))
 
 }

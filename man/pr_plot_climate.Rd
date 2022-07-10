@@ -4,14 +4,14 @@
 \alias{pr_plot_climate}
 \title{Plot single climatology}
 \usage{
-pr_plot_climate(df, Survey = "NRS", trend = "Month", Scale = "identity")
+pr_plot_climate(df, Survey = "NRS", Trend = "Month", Scale = "identity")
 }
 \arguments{
 \item{df}{dataframe with specified time period, station code and parameter}
 
 \item{Survey}{CPR or NRS data}
 
-\item{trend}{specified time period}
+\item{Trend}{specified time period}
 
 \item{Scale}{scale of y axis on plot, whatever scale_y_continuous trans accepts}
 }

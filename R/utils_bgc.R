@@ -13,10 +13,8 @@ pr_get_NRSChemistry <- function(){
 
   file <- "bgc_chemistry_data"
 
+
   dat <- pr_get_raw(file) %>%
-    dplyr::rename(Phosphate_umolL = .data$Phosphate_umoL,
-                  SampleTime_Local = .data$SampleDate_Local) %>%
-    dplyr::mutate(SampleTime_Local = lubridate::as_datetime(.data$SampleTime_Local)) %>%
     pr_rename() %>%
     pr_apply_flags() %>%
     pr_add_StationCode() %>%
@@ -47,8 +45,6 @@ pr_get_NRSPigments <- function(){
   var_names <- c("TotalChla", "TotalChl", "PPC", "PSC", "PSP", "TCaro", "TAcc", "TPig", "TDP")
 
   dat <- pr_get_raw(file) %>%
-    dplyr::rename(SampleTime_Local = .data$SampleDate_Local) %>%
-    dplyr::mutate(SampleTime_Local = lubridate::as_datetime(.data$SampleTime_Local)) %>%
     pr_rename() %>%
     pr_apply_flags("Pigments_flag") %>%
     dplyr::select(-.data$Pigments_flag) %>%
@@ -92,8 +88,6 @@ pr_get_NRSPico <- function(){
   var_names <- c("Prochlorococcus_cellsmL", "Synecochoccus_cellsmL", "Picoeukaryotes_cellsmL")
 
   dat <- pr_get_raw(file) %>%
-    dplyr::rename(SampleTime_Local = .data$SampleDate_Local) %>%
-    dplyr::mutate(SampleTime_Local = lubridate::as_datetime(.data$SampleTime_Local)) %>%
     pr_rename() %>%
     dplyr::filter(.data$SampleDepth_m != "WC") %>%
     pr_apply_flags() %>%
@@ -166,8 +160,6 @@ pr_get_NRSTSS <- function(){
   file <- "bgc_tss_data"
 
   dat <- pr_get_raw(file) %>%
-    dplyr::rename(SampleTime_Local = .data$SampleDate_Local) %>%
-    dplyr::mutate(SampleTime_Local = lubridate::as_datetime(.data$SampleTime_Local)) %>%
     pr_rename() %>%
     pr_apply_flags("TSSall_flag")
 
