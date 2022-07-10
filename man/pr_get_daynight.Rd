@@ -7,7 +7,7 @@
 pr_get_daynight(Type = "Z")
 }
 \arguments{
-\item{Type}{Phyto or zoo, defaults to phyto}
+\item{Type}{"P" or "Z" (default)}
 }
 \value{
 df to be used with pr_plot_daynight
@@ -16,5 +16,5 @@ df to be used with pr_plot_daynight
 Get data for plots of species abundance by day and night using CPR data
 }
 \examples{
-df <- pr_get_daynight("Z")
+df <- pr_get_daynight(Type = "Z")
 }
