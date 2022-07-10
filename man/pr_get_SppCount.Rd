@@ -7,7 +7,7 @@
 pr_get_SppCount(Type = "Z")
 }
 \arguments{
-\item{gp}{The group of plankton requested. Either "Zooplankton" or "Phytoplankton"}
+\item{Type}{The group of plankton requested. Either "Z" or "P"}
 }
 \value{
 a dataframe with a species summary

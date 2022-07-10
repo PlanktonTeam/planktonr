@@ -59,15 +59,15 @@ testthat::test_that("Correct function output", {
 
   testthat::expect_equal(class(pr_get_NRSChemistry() %>%
                                  dplyr::filter(parameters == "SecchiDepth_m") %>%
-                                 pr_plot_env_var(Trend = "None", Scale = "identity"))[1], "patchwork")
+                                 pr_plot_env_var(Trend = "None", trans = "identity"))[1], "patchwork")
 
   testthat::expect_equal(class(pr_get_NRSChemistry() %>%
                                  dplyr::filter(parameters == "SecchiDepth_m") %>%
-                                 pr_plot_env_var(Trend = "Smoother", Scale = "identity"))[1], "patchwork")
+                                 pr_plot_env_var(Trend = "Smoother", trans = "identity"))[1], "patchwork")
 
   testthat::expect_equal(class(pr_get_NRSChemistry() %>%
                                  dplyr::filter(parameters == "SecchiDepth_m") %>%
-                                 pr_plot_env_var(Trend = "Linear", Scale = "identity"))[1], "patchwork")
+                                 pr_plot_env_var(Trend = "Linear", trans = "identity"))[1], "patchwork")
 
   testthat::expect_equal(class(data.frame(Long = c(110, 130, 155, 150), Lat = c(-10, -35, -27, -45),
                                           freqfac = c("Absent", "Seen in 25%","50%", "75%"),

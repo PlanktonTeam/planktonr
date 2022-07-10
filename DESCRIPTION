@@ -30,6 +30,7 @@ Imports:
     purrr,
     readr (>= 2.0.0),
     rlang,
+    rnaturalearth,
     scales,
     sf,
     stats,

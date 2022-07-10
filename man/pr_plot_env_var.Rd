@@ -4,14 +4,14 @@
 \alias{pr_plot_env_var}
 \title{Combined timeseries and climatology plots for environmental variables}
 \usage{
-pr_plot_env_var(df, Trend = "None", Scale = "identity")
+pr_plot_env_var(df, Trend = "None", trans = "identity")
 }
 \arguments{
 \item{df}{A dataframe from pr_get_nuts or pr_get_pigments}
 
 \item{Trend}{Trend line to be used, options None, Smoother, Linear}
 
-\item{Scale}{scale on which to plot y axis}
+\item{trans}{scale on which to plot y axis}
 }
 \value{
 A plot with timeseries and climatology at depths

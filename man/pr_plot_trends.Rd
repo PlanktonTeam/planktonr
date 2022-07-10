@@ -8,8 +8,8 @@ pr_plot_trends(
   df,
   Trend = "Raw",
   Survey = "NRS",
-  Method = "lm",
-  Scale = "identity"
+  method = "lm",
+  trans = "identity"
 )
 }
 \arguments{
@@ -19,9 +19,9 @@ pr_plot_trends(
 
 \item{Survey}{"NRS" or "CPR" data}
 
-\item{Method}{Any Method accepted by \code{geom_smooth()}}
+\item{method}{Any method accepted by \code{geom_smooth()}}
 
-\item{Scale}{transformation of y axis on plot, whatever \code{scale_y_continuous()} trans accepts
+\item{trans}{transformation of y axis on plot, whatever \code{scale_y_continuous()} trans accepts
 #'}
 }
 \value{
