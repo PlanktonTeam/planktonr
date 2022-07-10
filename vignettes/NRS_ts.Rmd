@@ -72,13 +72,13 @@ pr_plot_tsclimate(df = datNRS_zoo, Survey = "NRS")
 We can plot the data on a log_10 scale:
 
 ```{r,include=TRUE}
-pr_plot_tsclimate(datNRS_zoo, Survey = "NRS", Scale = "log10")
+pr_plot_tsclimate(datNRS_zoo, Survey = "NRS", trans = "log10")
 ```
 
 We can also change the colour scale to any scales given by cmocean (https://cran.r-project.org/web/packages/cmocean/vignettes/cmocean.html)
 
 ```{r,include=TRUE}
-pr_plot_tsclimate(datNRS_zoo, Survey = "NRS", Scale = "log10")
+pr_plot_tsclimate(datNRS_zoo, Survey = "NRS", trans = "log10")
 ```
 
 ## Pipeable functions
@@ -90,7 +90,7 @@ pr_get_indices("NRS", "Z") %>%
   filter(StationName %in% c("Yongala", "Port Hacking", "Maria Island") & 
          parameters == "ZoopAbundance_m3") %>% 
   droplevels() %>% 
-  pr_plot_tsclimate(Survey = "NRS", Scale = "log10")
+  pr_plot_tsclimate(Survey = "NRS", trans = "log10")
 ```
 
 ## Load and plot size data
@@ -125,12 +125,12 @@ datNRS_zoo <- pr_get_indices("NRS", "Z") %>%
 
 
 ```{r,include=TRUE, warning=FALSE}
-pr_plot_trends(datNRS_zoo, Trend = "Raw", Survey = "NRS", Method = "lm", Scale = "log10")
+pr_plot_trends(datNRS_zoo, Trend = "Raw", Survey = "NRS", method = "lm", trans = "log10")
 ```
 
 Now lets check the seasonal cycle.
 ```{r,include=TRUE}
-pr_plot_trends(datNRS_zoo, Trend = "Month", Survey = "NRS", Method = "loess", Scale = "log10")
+pr_plot_trends(datNRS_zoo, Trend = "Month", Survey = "NRS", method = "loess", trans = "log10")
 ```
 
 ## Examine functional groups
