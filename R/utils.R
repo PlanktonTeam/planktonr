@@ -6,10 +6,25 @@
 #' @examples
 #' file_loc <- pr_get_site()
 #' @importFrom rlang .data
-pr_get_site <- function(){
+pr_get_site_bgc <- function(){
   # raw <-"http://geoserver-123.aodn.org.au/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=imos:LAYER_NAME&outputFormat=csv-with-metadata-header"
   raw = "https://geoserver-portal.aodn.org.au/geoserver/ows?typeName=LAYER_NAME&SERVICE=WFS&outputFormat=csv&REQUEST=GetFeature&VERSION=1.0.0&userId=Guest"
 }
+
+
+#' Get location of raw plankton data
+#'
+#' Internal function to load the location of the raw plankton data files.
+#' @return A string with location of raw plankton data
+#' @export
+#' @examples
+#' file_loc <- pr_get_site()
+#' @importFrom rlang .data
+pr_get_site <- function(){
+  raw <-"http://geoserver-123.aodn.org.au/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=imos:LAYER_NAME&outputFormat=csv-with-metadata-header"
+  # raw = "https://geoserver-portal.aodn.org.au/geoserver/ows?typeName=LAYER_NAME&SERVICE=WFS&outputFormat=csv&REQUEST=GetFeature&VERSION=1.0.0&userId=Guest"
+}
+
 
 #' Get location of s3 plankton data
 #'
@@ -71,13 +86,22 @@ pr_get_raw <- function(file){
     col_types = list()
   }
 
-
-  dat <- readr::read_csv(stringr::str_replace(
-    pr_get_site(), "LAYER_NAME", file),
-    na = c("", NaN, "NaN", NA, "NA"),
-    show_col_types = FALSE,
-    comment = "#",
-    col_types = col_types)
+  if (file ==  "bgc_pigments_data" | file == "bgc_tss_data" |
+      file == "bgc_picoplankton_data" | file == "bgc_chemistry_data"){
+    dat <- readr::read_csv(stringr::str_replace(
+      pr_get_site_bgc(), "LAYER_NAME", file),
+      na = c("", NaN, "NaN", NA, "NA"),
+      show_col_types = FALSE,
+      comment = "#",
+      col_types = col_types)
+  } else{
+    dat <- readr::read_csv(stringr::str_replace(
+      pr_get_site(), "LAYER_NAME", file),
+      na = c("", NaN, "NaN", NA, "NA"),
+      show_col_types = FALSE,
+      comment = "#",
+      col_types = col_types)
+  }
 
   return(dat)
 }
