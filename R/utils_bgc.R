@@ -11,12 +11,25 @@ pr_get_NRSChemistry <- function(){
   var_names <- c("SecchiDepth_m", "Silicate_umolL", "Phosphate_umolL", "Ammonium_umolL", "Nitrate_umolL", "Nitrite_umolL",
                  "Oxygen_umolL", "DIC_umolkg", "Alkalinity_umolkg", "Salinity") #TODO Check if it is Alk or Total Alk. Our code used to say Total Alk.
 
-  file <- "bgc_chemistry_data"
+  # file <- "bgc_chemistry_data"
 
-  dat <- pr_get_raw(file) %>%
-    dplyr::rename(Phosphate_umolL = .data$Phosphate_umoL,
-                  SampleTime_Local = .data$SampleDate_Local) %>%
-    dplyr::mutate(SampleTime_Local = lubridate::as_datetime(.data$SampleTime_Local)) %>%
+  ## TEMP FIX FOR THE MISSING CHEM FILE ON GEOSERVER
+  file <- "https://geoserver-portal.aodn.org.au/geoserver/ows?typeName=bgc_chemistry_data&SERVICE=WFS&outputFormat=csv&REQUEST=GetFeature&VERSION=1.0.0&userId=Guest"
+  col_types = list(Project = readr::col_character(),
+                   TripCode = readr::col_character(),
+                   SampleTime_Local = readr::col_datetime(),
+                   DIC_umolkg = readr::col_double(),
+                   Oxygen_umolL = readr::col_double())
+
+  dat <- readr::read_csv(file,
+                         na = c("", NaN, "NaN", NA, "NA"),
+                         show_col_types = FALSE,
+                         comment = "#",
+                         col_types = col_types) %>%
+  # dat <- pr_get_raw(file) %>%
+    # dplyr::rename(Phosphate_umolL = .data$Phosphate_umoL,
+                  # SampleTime_Local = .data$SampleDate_Local) %>%
+    # dplyr::mutate(SampleTime_Local = lubridate::as_datetime(.data$SampleTime_Local)) %>%
     pr_rename() %>%
     pr_apply_flags() %>%
     pr_add_StationCode() %>%
