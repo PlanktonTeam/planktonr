@@ -446,10 +446,6 @@ pr_get_Papers <- function(){
 
 pr_get_ProgressMap <- function(Survey = c("NRS", "CPR")){
 
-  if ("Both" %in% Survey){ #TODO Kept here for backwards compatability. Remove when "Both" is removed from BOO
-    Survey = c("NRS", "CPR") # Reset Survey
-  }
-
   if("NRS" %in% Survey) {
     PMapDataNRS <- planktonr::pr_get_NRSTrips(Type = c("P", "Z")) %>%
       dplyr::select(.data$StationCode, .data$Longitude, .data$Latitude) %>%
