@@ -7,11 +7,11 @@
 #' @export
 #'
 #' @examples
-#' NRSfgz <- planktonr::pr_get_fg("NRS", "Z")
-#' NRSfgp <- planktonr::pr_get_fg("NRS", "P")
-#' CPRfgz <- planktonr::pr_get_fg("CPR", "Z")
-#' CPRfgp <- planktonr::pr_get_fg("CPR", "P")
-pr_get_fg <- function(Survey = "NRS", Type = "Z"){
+#' NRSfgz <- planktonr::pr_get_FuncGroups("NRS", "Z")
+#' NRSfgp <- planktonr::pr_get_FuncGroups("NRS", "P")
+#' CPRfgz <- planktonr::pr_get_FuncGroups("CPR", "Z")
+#' CPRfgp <- planktonr::pr_get_FuncGroups("CPR", "P")
+pr_get_FuncGroups <- function(Survey = "NRS", Type = "Z"){
 
   if(Survey == "CPR"){
     df <- pr_get_CPRData(Type, Variable = "abundance", Subset = "htg")
@@ -77,17 +77,17 @@ pr_get_fg <- function(Survey = "NRS", Type = "Z"){
 #'
 #' @param Type Phytoplankton (P) or Zooplankton (Z), defaults to phyto
 #'
-#' @return dataframe for plotting with pr_plot_fmap
+#' @return dataframe for plotting with pr_plot_FreqMap
 #' @export
 #'
 #' @examples
-#' df <- pr_get_fMap_data("P")
-#' df <- pr_get_fMap_data("Z")
-pr_get_fMap_data <- function(Type = "Z"){
+#' df <- pr_get_FreqMap("P")
+#' df <- pr_get_FreqMap("Z")
+pr_get_FreqMap <- function(Type = "Z"){
 
   if(Type == "P"){
     PhytoCountNRS <- pr_get_NRSData(Type = "phytoplankton", Variable = "abundance", Subset = "species") %>%
-      tidyr::pivot_longer(cols = !dplyr::all_of(pr_get_nonTaxaColumns(Survey = "NRS", Type = "P")),
+      tidyr::pivot_longer(cols = !dplyr::all_of(pr_get_NonTaxaColumns(Survey = "NRS", Type = "P")),
                           names_to = "Taxon", values_to = "Counts") %>%
       dplyr::rename(Sample = .data$TripCode) %>%
       dplyr::mutate(Counts = as.integer(as.logical(.data$Counts)), # TODO Replace this with actual counts
@@ -96,7 +96,7 @@ pr_get_fMap_data <- function(Type = "Z"){
       dplyr::select(.data$Sample, .data$Survey, .data$Taxon, .data$Counts, .data$SampleVolume_m3) #TODO There is no volume data to remove
 
     PhytoCountCPR <- pr_get_CPRData(Type = "phytoplankton", Variable = "abundance", Subset = "species") %>%
-      tidyr::pivot_longer(cols = !dplyr::all_of(pr_get_nonTaxaColumns(Survey = "CPR", Type = "P")),
+      tidyr::pivot_longer(cols = !dplyr::all_of(pr_get_NonTaxaColumns(Survey = "CPR", Type = "P")),
                           names_to = "Taxon", values_to = "Counts") %>%
       dplyr::mutate(Counts = as.integer(as.logical(.data$Counts)),
                     Survey = "CPR") %>% # TODO Replace this with actual volume
@@ -109,7 +109,7 @@ pr_get_fMap_data <- function(Type = "Z"){
   } else if(Type == "Z"){
 
     ZooCountNRS <- pr_get_NRSData(Type = "zooplankton", Variable = "abundance", Subset = "species") %>%
-      tidyr::pivot_longer(cols = !tidyselect::all_of(pr_get_nonTaxaColumns(Survey = "NRS", Type = "Z")),
+      tidyr::pivot_longer(cols = !tidyselect::all_of(pr_get_NonTaxaColumns(Survey = "NRS", Type = "Z")),
                           names_to = "Taxon", values_to = "Counts") %>%
       dplyr::rename(Sample = .data$TripCode) %>%
       dplyr::mutate(Survey = "NRS",
@@ -117,7 +117,7 @@ pr_get_fMap_data <- function(Type = "Z"){
       dplyr::select(.data$Sample, .data$Survey, .data$Taxon, .data$Counts)
 
     ZooCountCPR <- pr_get_CPRData(Type = "zooplankton", Variable = "abundance", Subset = "species") %>%
-      tidyr::pivot_longer(cols = !tidyselect::all_of(pr_get_nonTaxaColumns(Survey = "CPR", Type = "Z")),
+      tidyr::pivot_longer(cols = !tidyselect::all_of(pr_get_NonTaxaColumns(Survey = "CPR", Type = "Z")),
                           names_to = "Taxon", values_to = "Counts") %>%
       dplyr::mutate(Counts = as.integer(as.logical(.data$Counts)),
                     Survey = "CPR") %>%
@@ -191,11 +191,11 @@ pr_get_fMap_data <- function(Type = "Z"){
 # Add day/night marker to dataframe
 # @param Type Phyto or zoo, defaults to phyto
 #
-# @return df to be used with pr_plot_daynight
+# @return df to be used with pr_plot_DayNight
 # @export
 #
 # @examples
-# df <- pr_get_indices(Survey = "NRS", Type = "Z")
+# df <- pr_get_Indices(Survey = "NRS", Type = "Z")
 # df <- pr_add_daynight(df)
 # pr_add_daynight <- function(df){
 #
@@ -221,12 +221,12 @@ pr_get_fMap_data <- function(Type = "Z"){
 #' Get data for plots of species abundance by day and night using CPR data
 #' @param Type "P" or "Z" (default)
 #'
-#' @return df to be used with pr_plot_daynight
+#' @return df to be used with pr_plot_DayNight
 #' @export
 #'
 #' @examples
-#' df <- pr_get_daynight(Type = "Z")
-pr_get_daynight <- function(Type = "Z"){
+#' df <- pr_get_DayNight(Type = "Z")
+pr_get_DayNight <- function(Type = "Z"){
 
   if(Type == "Z"){
     dat <- pr_get_CPRData(Type = "Z", Variable = "abundance", Subset = "copepods")
@@ -251,8 +251,8 @@ pr_get_daynight <- function(Type = "Z"){
 
   dat <- dat %>%
     dplyr::bind_cols(daynight_df["daynight"]) %>%
-    dplyr::select(tidyselect::all_of(pr_get_nonTaxaColumns(Survey = "CPR", Type = Type)), tidyselect::everything()) %>%
-    tidyr::pivot_longer(-tidyselect::any_of(c(pr_get_nonTaxaColumns(Survey = "CPR", Type = Type), "daynight")), values_to = "Species_m3", names_to = "Species") %>%
+    dplyr::select(tidyselect::all_of(pr_get_NonTaxaColumns(Survey = "CPR", Type = Type)), tidyselect::everything()) %>%
+    tidyr::pivot_longer(-tidyselect::any_of(c(pr_get_NonTaxaColumns(Survey = "CPR", Type = Type), "daynight")), values_to = "Species_m3", names_to = "Species") %>%
     dplyr::group_by(.data$Month_Local, .data$daynight, .data$Species) %>%
     dplyr::summarise(Species_m3 = mean(.data$Species_m3, na.rm = TRUE),
                      .groups = "drop")
@@ -265,13 +265,13 @@ pr_get_daynight <- function(Type = "Z"){
 #' Get data for STI plots of species abundance
 #' @param Type Phyto or zoo, defaults to phyto
 #'
-#' @return df to be sued with pr_plot_sti
+#' @return df to be sued with pr_plot_STI
 #' @export
 #'
 #' @examples
-#' df <- pr_get_sti("P")
-#' df <- pr_get_sti("Z")
-pr_get_sti <-  function(Type = "P"){
+#' df <- pr_get_STI("P")
+#' df <- pr_get_STI("Z")
+pr_get_STI <-  function(Type = "P"){
 
   if(Type == "Z"){
     cprdat <- pr_get_CPRData(Type, Variable = "abundance", Subset = "copepods")
@@ -299,7 +299,7 @@ pr_get_sti <-  function(Type = "P"){
     dplyr::rename(SampleTime_UTC = .data$SAMPLEDATE_UTC)
 
   cpr <- cprdat %>%
-    tidyr::pivot_longer(-tidyselect::all_of(pr_get_nonTaxaColumns(Survey = "CPR", Type = Type)), names_to = "Species", values_to = parameter) %>%
+    tidyr::pivot_longer(-tidyselect::all_of(pr_get_NonTaxaColumns(Survey = "CPR", Type = Type)), names_to = "Species", values_to = parameter) %>%
     dplyr::left_join(cprsat, by = c("Latitude", "Longitude", "SampleTime_UTC")) %>%
     dplyr::select(.data$Species, .data$SST, .data[[parameter]]) %>%
     dplyr::filter(!is.na(.data$SST) & .data[[parameter]] > 0) %>%
@@ -307,7 +307,7 @@ pr_get_sti <-  function(Type = "P"){
                   Species_m3 = .data[[parameter]] + min(.data[[parameter]][.data[[parameter]]>0], na.rm = TRUE))
 
   nrs <- nrsdat %>%
-    tidyr::pivot_longer(-tidyselect::all_of(pr_get_nonTaxaColumns(Survey = "NRS", Type = Type)), names_to = "Species", values_to = parameter) %>%
+    tidyr::pivot_longer(-tidyselect::all_of(pr_get_NonTaxaColumns(Survey = "NRS", Type = Type)), names_to = "Species", values_to = parameter) %>%
     dplyr::left_join(nrssat, by = c("Latitude", "Longitude", "SampleTime_Local")) %>%
     dplyr::select(.data$Species, .data$SST, .data[[parameter]]) %>%
     dplyr::filter(!is.na(.data$SST) & .data[[parameter]] > 0) %>%
@@ -355,8 +355,8 @@ out <- sppSummary %>%
 #' @export
 #'
 #' @examples
-#' pr_get_facts()
-pr_get_facts <- function(){
+#' pr_get_Facts()
+pr_get_Facts <- function(){
 
   facts <- list("Zooplankton are not only a major food source for commercial and invertebrate fisheries, but some groups are harvest directly for human consumption: 1.2 million tonnes of jellyfish are harvested each year in China, and about 400,000 tonnes of krill are caught annually in the Southern Ocean and off Japan, for human consumption and for fish meal (CCAMLR 2021).",
                 "Omega-3 fatty acids support human neurological function, cardiovascular health, and immune response (Calder 2015). As zooplankton have high levels of Omega-3 fatty acids, 1000 tonnes of the copepod _Calanus finmarchicus_ are harvested by Norway annually for use in human supplements.",
@@ -402,8 +402,8 @@ pr_get_facts <- function(){
 #' @export
 #'
 #' @examples
-#' pr_get_papers()
-pr_get_papers <- function(){
+#' pr_get_Papers()
+pr_get_Papers <- function(){
 
   papers <- list(
     "Campbell MD, Schoeman DS, Venables W, Abu-Alhaija R, Batten SD, Chiba S, et al. Testing Bergmann\'s rule in marine copepods. Ecography. 2021;n/a(n/a). doi: https://doi.org/10.1111/ecog.05545.",

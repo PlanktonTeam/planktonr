@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-warning" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.0000</span>
+        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.1.0.0000</span>
       </span>
     </div>
 
@@ -85,7 +85,7 @@
                         <h4 data-toc-skip class="author">Claire H.
 Davies and Jason D. Everett</h4>
             
-            <h4 data-toc-skip class="date">Sunday 10 July 2022</h4>
+            <h4 data-toc-skip class="date">Monday 11 July 2022</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/PlanktonTeam/planktonr/blob/HEAD/vignettes/CPR_ts.Rmd" class="external-link"><code>vignettes/CPR_ts.Rmd</code></a></small>
       <div class="hidden name"><code>CPR_ts.Rmd</code></div>
@@ -117,7 +117,7 @@ timeseries from the IMOS National Reference Station data.</p>
 <p>Lets look at phytoplankton abundance across the bioregions.<br>
 First we get the data then we filter it for the desired parameters.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">datCPR_p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_get_indices.html">pr_get_indices</a></span><span class="op">(</span><span class="st">"CPR"</span>, <span class="st">"P"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">datCPR_p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_get_Indices.html">pr_get_Indices</a></span><span class="op">(</span><span class="st">"CPR"</span>, <span class="st">"P"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">parameters</span> <span class="op">==</span> <span class="st">"PhytoAbundance_Cellsm3"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>This data is structured by bioregion. Lets look at where the
@@ -141,7 +141,7 @@ the east coast, with the highest abundances occuring in the
 temperate-east. Can we see more variation in the diatom to
 dinoflagellate rations across the regions?</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">datRat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_get_indices.html">pr_get_indices</a></span><span class="op">(</span><span class="st">"CPR"</span>, <span class="st">"P"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">datRat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_get_Indices.html">pr_get_Indices</a></span><span class="op">(</span><span class="st">"CPR"</span>, <span class="st">"P"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">parameters</span> <span class="op">==</span> <span class="st">"DiatomDinoflagellateRatio"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>And then plot the total timeseries</p>
@@ -158,15 +158,15 @@ and temperate East regions.</p>
 <p>Look to see if zooplankton abundance is changing in the tropical
 Coral Sea region.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">datNRSz</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_get_indices.html">pr_get_indices</a></span><span class="op">(</span><span class="st">"CPR"</span>, <span class="st">"Z"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">datNRSz</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_get_Indices.html">pr_get_Indices</a></span><span class="op">(</span><span class="st">"CPR"</span>, <span class="st">"Z"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">parameters</span> <span class="op">==</span> <span class="st">"ZoopAbundance_m3"</span> <span class="op">&amp;</span> <span class="va">BioRegion</span> <span class="op">==</span> <span class="st">"Coral Sea"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span>  <span class="fu"><a href="../reference/pr_plot_trends.html">pr_plot_trends</a></span><span class="op">(</span><span class="va">datNRSz</span>, Trend <span class="op">=</span> <span class="st">"Raw"</span>, Survey <span class="op">=</span> <span class="st">"CPR"</span>, method <span class="op">=</span> <span class="st">"lm"</span>, trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span>  <span class="fu"><a href="../reference/pr_plot_Trends.html">pr_plot_Trends</a></span><span class="op">(</span><span class="va">datNRSz</span>, Trend <span class="op">=</span> <span class="st">"Raw"</span>, Survey <span class="op">=</span> <span class="st">"CPR"</span>, method <span class="op">=</span> <span class="st">"lm"</span>, trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="CPR_ts_files/figure-html/unnamed-chunk-10-1.png" width="576"></p>
 <p>Now lets check the seasonal cycle.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span>    <span class="fu"><a href="../reference/pr_plot_trends.html">pr_plot_trends</a></span><span class="op">(</span><span class="va">datNRSz</span>, Trend <span class="op">=</span> <span class="st">"Month"</span>, Survey <span class="op">=</span> <span class="st">"CPR"</span>, method <span class="op">=</span> <span class="st">"loess"</span>, trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span>    <span class="fu"><a href="../reference/pr_plot_Trends.html">pr_plot_Trends</a></span><span class="op">(</span><span class="va">datNRSz</span>, Trend <span class="op">=</span> <span class="st">"Month"</span>, Survey <span class="op">=</span> <span class="st">"CPR"</span>, method <span class="op">=</span> <span class="st">"loess"</span>, trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="CPR_ts_files/figure-html/unnamed-chunk-11-1.png" width="576"></p>
 </div>
 </div>

@@ -7,15 +7,15 @@
 #' @export
 #'
 #' @examples
-#' df <- pr_get_pol("CPR")
-pr_get_pol <- function(Survey = "NRS"){
+#' df <- pr_get_PolicyData("CPR")
+pr_get_PolicyData <- function(Survey = "NRS"){
 
   if(Survey == "CPR") {
 
     var_names <- c("BiomassIndex_mgm3", "PhytoBiomassCarbon_pgm3",
                     "ShannonCopepodDiversity", "ShannonPhytoDiversity")
 
-    Polr <- pr_get_raw("cpr_derived_indices_data") %>%
+    Polr <- pr_get_Raw("cpr_derived_indices_data") %>%
       pr_rename() %>%
       pr_add_Bioregions()
 
@@ -44,7 +44,7 @@ pr_get_pol <- function(Survey = "NRS"){
                    "CTDTemperature_degC", "ShannonCopepodDiversity",
                    "ShannonPhytoDiversity", "CTDSalinity_PSU", "PigmentChla_mgm3")
 
-    Polr <- pr_get_raw("nrs_derived_indices_data") %>%
+    Polr <- pr_get_Raw("nrs_derived_indices_data") %>%
       pr_rename() %>%
       pr_add_StationCode() %>%
       dplyr::mutate(Month_Local = lubridate::month(.data$SampleTime_Local),
@@ -95,8 +95,8 @@ pr_get_pol <- function(Survey = "NRS"){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_polInfo("CPR")
-pr_get_polInfo <- function(Survey = "NRS"){
+#' df <- pr_get_PolicyInfo("CPR")
+pr_get_PolicyInfo <- function(Survey = "NRS"){
 
   if(Survey == "NRS"){
 

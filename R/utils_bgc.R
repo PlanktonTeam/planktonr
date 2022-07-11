@@ -14,9 +14,9 @@ pr_get_NRSChemistry <- function(){
   file <- "bgc_chemistry_data"
 
 
-  dat <- pr_get_raw(file) %>%
+  dat <- pr_get_Raw(file) %>%
     pr_rename() %>%
-    pr_apply_flags() %>%
+    pr_apply_Flags() %>%
     pr_add_StationCode() %>%
     pr_filter_NRSStations() %>%
     dplyr::mutate_all(~ replace(., is.na(.), NA)) %>%
@@ -44,9 +44,9 @@ pr_get_NRSPigments <- function(){
   file <- "bgc_pigments_data"
   var_names <- c("TotalChla", "TotalChl", "PPC", "PSC", "PSP", "TCaro", "TAcc", "TPig", "TDP")
 
-  dat <- pr_get_raw(file) %>%
+  dat <- pr_get_Raw(file) %>%
     pr_rename() %>%
-    pr_apply_flags("Pigments_flag") %>%
+    pr_apply_Flags("Pigments_flag") %>%
     dplyr::select(-.data$Pigments_flag) %>%
     dplyr::filter(.data$Project == "NRS", .data$SampleDepth_m != "WC") %>%
     pr_add_StationCode() %>%
@@ -62,7 +62,7 @@ pr_get_NRSPigments <- function(){
                   TDP = sum(.data$PSC, .data$Allo_mgm3, .data$Zea_mgm3, .data$DvCphlB_mgm3, .data$CphlB_mgm3,  na.rm = TRUE), # Total Diagnostic pigments
                   StationCode = stringr::str_sub(.data$TripCode, 1, 3),
                   SampleDepth_m = as.numeric(.data$SampleDepth_m)) %>%
-    pr_apply_time() %>%
+    pr_apply_Time() %>%
     dplyr::filter(.data$TotalChla != 0) %>%
     dplyr::select(.data$Project, .data$SampleTime_Local, .data$Month_Local, .data$SampleDepth_m, .data$StationName, .data$StationCode,
                   tidyselect::any_of(var_names)) %>%
@@ -87,12 +87,12 @@ pr_get_NRSPico <- function(){
 
   var_names <- c("Prochlorococcus_cellsmL", "Synecochoccus_cellsmL", "Picoeukaryotes_cellsmL")
 
-  dat <- pr_get_raw(file) %>%
+  dat <- pr_get_Raw(file) %>%
     pr_rename() %>%
     dplyr::filter(.data$SampleDepth_m != "WC") %>%
-    pr_apply_flags() %>%
+    pr_apply_Flags() %>%
     pr_add_StationCode() %>%
-    pr_apply_time() %>%
+    pr_apply_Time() %>%
     dplyr::mutate(SampleDepth_m = as.numeric(.data$SampleDepth_m)) %>%
     dplyr::select(.data$Project, .data$SampleTime_Local, .data$Month_Local, .data$Year_Local,
                   .data$SampleDepth_m, .data$StationName, .data$StationCode,
@@ -159,9 +159,9 @@ pr_get_NRSMicro <- function(){
 pr_get_NRSTSS <- function(){
   file <- "bgc_tss_data"
 
-  dat <- pr_get_raw(file) %>%
+  dat <- pr_get_Raw(file) %>%
     pr_rename() %>%
-    pr_apply_flags("TSSall_flag")
+    pr_apply_Flags("TSSall_flag")
 
   return(dat)
 }
@@ -184,14 +184,14 @@ pr_get_NRSCTD <- function(){
                 "Salinity_psu", "Temperature_degC", "DissolvedOxygen_umolkg", "ChlF_mgm3",
                 "Turbidity_NTU", "Conductivity_Sm", "WaterDensity_kgm3")
 
-  dat <- pr_get_raw(file) %>%
+  dat <- pr_get_Raw(file) %>%
     pr_rename() %>%
     pr_add_StationCode() %>%
     dplyr::rename(ChlF_mgm3 = .data$Chla_mgm3) %>%
-    #pr_apply_flags() %>%  #TODO flags are small f, make function work with both
+    #pr_apply_Flags() %>%  #TODO flags are small f, make function work with both
     dplyr::filter(!.data$file_id %in% c(2117, 2184, 2186, 2187)) %>% #TODO Check with Claire
     dplyr::select(tidyselect::all_of(ctd_vars)) %>%
-    pr_apply_time()
+    pr_apply_Time()
 
   return(dat)
 }
@@ -226,7 +226,7 @@ pr_get_LTnuts <-  function(){
     dplyr::select(.data$StationCode, .data$Project, .data$SampleTime_Local, .data$Month_Local, .data$Year_Local,
                   .data$SampleDepth_m, tidyselect::all_of(var_names), tidyselect::contains("_Flag"),
                   -tidyselect::contains("ROSETTE_POSITION")) %>%
-    pr_apply_flags() %>%
+    pr_apply_Flags() %>%
     dplyr::select(-dplyr::contains("Flag")) %>%
     pr_add_StationName() %>%
     tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = 'parameters') %>%

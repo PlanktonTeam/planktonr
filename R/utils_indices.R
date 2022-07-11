@@ -7,12 +7,12 @@
 #' @export
 #'
 #' @examples
-#' df <- pr_get_indices("NRS", "P")
-#' df <- pr_get_indices("NRS", "Z")
-#' df <- pr_get_indices("NRS", "W")
-#' df <- pr_get_indices("CPR", "P")
-#' df <- pr_get_indices("CPR", "Z")
-pr_get_indices <- function(Survey = "CPR", Type = "P"){
+#' df <- pr_get_Indices("NRS", "P")
+#' df <- pr_get_Indices("NRS", "Z")
+#' df <- pr_get_Indices("NRS", "W")
+#' df <- pr_get_Indices("CPR", "P")
+#' df <- pr_get_Indices("CPR", "Z")
+pr_get_Indices <- function(Survey = "CPR", Type = "P"){
 
   if(Type == "Z" & Survey == "NRS"){
     var_names <- c("Biomass_mgm3", "AshFreeBiomass_mgm3", "ZoopAbundance_m3", "CopeAbundance_m3", "AvgTotalLengthCopepod_mm",
@@ -39,10 +39,10 @@ pr_get_indices <- function(Survey = "CPR", Type = "P"){
 
   if(Survey == "CPR"){
 
-    dat <- pr_get_raw("cpr_derived_indices_data") %>%
+    dat <- pr_get_Raw("cpr_derived_indices_data") %>%
       pr_rename() %>%
       pr_add_Bioregions() %>%
-      pr_apply_time() %>% #TODO added for consistency but uses etc timezones - do we changes these to the more familiar names or leave? doesn't improve with method = accurate
+      pr_apply_Time() %>% #TODO added for consistency but uses etc timezones - do we changes these to the more familiar names or leave? doesn't improve with method = accurate
       dplyr::select(.data$SampleTime_Local, .data$Year_Local, .data$Month_Local, .data$BioRegion,
                     .data$tz, .data$Latitude, .data$Longitude, tidyselect::all_of(var_names)) %>%
       tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "parameters") %>%
@@ -52,10 +52,10 @@ pr_get_indices <- function(Survey = "CPR", Type = "P"){
 
   } else if(Survey == "NRS"){
 
-    dat <- pr_get_raw("nrs_derived_indices_data") %>%
+    dat <- pr_get_Raw("nrs_derived_indices_data") %>%
       pr_rename() %>%
       pr_add_StationCode() %>%
-      pr_apply_time() %>%
+      pr_apply_Time() %>%
       dplyr::select(.data$Year_Local, .data$Month_Local, .data$SampleTime_Local, .data$tz, .data$Latitude, .data$Longitude,
                     .data$StationName, .data$StationCode, tidyselect::all_of(var_names)) %>%
       tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "parameters") %>%
@@ -68,10 +68,10 @@ pr_get_indices <- function(Survey = "CPR", Type = "P"){
 
 #' To produce the climatology for plotting
 #'
-#' @param df output of pr_get_indices
+#' @param df output of pr_get_Indices
 #' @param x Year, Month, Day, time period of climatology
 #'
-#' @return dataframe to use in pr_plot_climate functions
+#' @return dataframe to use in pr_plot_Climatology functions
 #' @export
 #'
 #' @examples

@@ -1,24 +1,24 @@
 testthat::test_that("Correct function output", {
 
-  testthat::expect_type(planktonr::pr_get_fg("NRS", "P"), "list")
-  testthat::expect_type(planktonr::pr_get_fg("NRS", "Z"), "list")
-  testthat::expect_type(planktonr::pr_get_fg("CPR", "P"), "list")
-  testthat::expect_type(planktonr::pr_get_fg("CPR", "Z"), "list")
+  testthat::expect_type(planktonr::pr_get_FuncGroups("NRS", "P"), "list")
+  testthat::expect_type(planktonr::pr_get_FuncGroups("NRS", "Z"), "list")
+  testthat::expect_type(planktonr::pr_get_FuncGroups("CPR", "P"), "list")
+  testthat::expect_type(planktonr::pr_get_FuncGroups("CPR", "Z"), "list")
 
-  testthat::expect_type(pr_get_fMap_data("P"), "list")
-  testthat::expect_type(pr_get_fMap_data("Z"), "list")
+  testthat::expect_type(pr_get_FreqMap("P"), "list")
+  testthat::expect_type(pr_get_FreqMap("Z"), "list")
 
-  testthat::expect_type(pr_get_daynight("P"), "list")
-  testthat::expect_type(pr_get_daynight("Z"), "list")
+  testthat::expect_type(pr_get_DayNight("P"), "list")
+  testthat::expect_type(pr_get_DayNight("Z"), "list")
 
-  testthat::expect_type(pr_get_sti("P"), "list")
-  testthat::expect_type(pr_get_sti("Z"), "list")
+  testthat::expect_type(pr_get_STI("P"), "list")
+  testthat::expect_type(pr_get_STI("Z"), "list")
 
   testthat::expect_type(pr_get_SppCount("Z"), "list")
 
-  testthat::expect_type(pr_get_facts(), "character")
+  testthat::expect_type(pr_get_Facts(), "character")
 
-  testthat::expect_type(pr_get_papers(), "character")
+  testthat::expect_type(pr_get_Papers(), "character")
 
   testthat::expect_type(pr_get_ProgressMap(c("NRS", "CPR")), "list")
   testthat::expect_type(pr_get_ProgressMap("NRS"), "list")

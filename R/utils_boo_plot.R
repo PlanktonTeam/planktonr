@@ -73,10 +73,10 @@ pr_plot_CPRmap <-  function(df){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_indices("NRS", "Z") %>%
+#' df <- pr_get_Indices("NRS", "Z") %>%
 #'   dplyr::filter(parameters == "Biomass_mgm3")
-#' timeseries <- pr_plot_timeseries(df, "NRS")
-pr_plot_timeseries <- function(df, Survey = "NRS", trans = "identity"){
+#' timeseries <- pr_plot_TimeSeries(df, "NRS")
+pr_plot_TimeSeries <- function(df, Survey = "NRS", trans = "identity"){
 
   if(Survey == "CPR"){
     df <- df %>%
@@ -127,12 +127,12 @@ pr_plot_timeseries <- function(df, Survey = "NRS", trans = "identity"){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_indices("NRS", "Z") %>%
+#' df <- pr_get_Indices("NRS", "Z") %>%
 #'   dplyr::filter(parameters == 'Biomass_mgm3')
-#' pr_plot_trends(df, Trend = "Month", Survey = "NRS")
-#' pr_plot_trends(df, Trend = "Year", Survey = "NRS")
-#' pr_plot_trends(df, Trend = "Raw", Survey = "NRS")
-pr_plot_trends <- function(df, Trend = "Raw", Survey = "NRS", method = "lm",  trans = "identity"){
+#' pr_plot_Trends(df, Trend = "Month", Survey = "NRS")
+#' pr_plot_Trends(df, Trend = "Year", Survey = "NRS")
+#' pr_plot_Trends(df, Trend = "Raw", Survey = "NRS")
+pr_plot_Trends <- function(df, Trend = "Raw", Survey = "NRS", method = "lm",  trans = "identity"){
 
   if (Trend == "Month"){
     Trend = "Month_Local"
@@ -211,14 +211,14 @@ pr_plot_trends <- function(df, Trend = "Raw", Survey = "NRS", method = "lm",  tr
 #' @export
 #'
 #' @examples
-#' df <- pr_get_indices(Survey = "NRS", Type = "P") %>%
+#' df <- pr_get_Indices(Survey = "NRS", Type = "P") %>%
 #'         dplyr::filter(parameters == "PhytoBiomassCarbon_pgL")
-#' monthly <- pr_plot_climate(df, "NRS", "Month")
+#' monthly <- pr_plot_Climatology(df, "NRS", "Month")
 #'
-#' df <- pr_get_indices(Survey = "CPR", Type = "Z") %>%
+#' df <- pr_get_Indices(Survey = "CPR", Type = "Z") %>%
 #'         dplyr::filter(parameters == "ZoopAbundance_m3")
-#' annual <- pr_plot_climate(df, "CPR", "Year")
-pr_plot_climate <- function(df, Survey = "NRS", Trend = "Month", trans = "identity"){
+#' annual <- pr_plot_Climatology(df, "CPR", "Year")
+pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "identity"){
 
   if (Trend == "Month"){
     Trend = "Month_Local"
@@ -281,19 +281,19 @@ pr_plot_climate <- function(df, Survey = "NRS", Trend = "Month", trans = "identi
 #' @export
 #'
 #' @examples
-#' df <- pr_get_indices(Survey = "NRS", Type = "P") %>%
+#' df <- pr_get_Indices(Survey = "NRS", Type = "P") %>%
 #'   dplyr::filter(parameters == "PhytoAbundance_CellsL")
 #' pr_plot_tsclimate(df, "NRS")
 pr_plot_tsclimate <- function(df, Survey = "NRS", trans = "identity"){
 
-  p1 <- pr_plot_timeseries(df, Survey, trans) +
+  p1 <- pr_plot_TimeSeries(df, Survey, trans) +
     ggplot2::theme(legend.position = "none",
                    axis.title.y = ggplot2::element_blank())
 
-  p2 <- pr_plot_climate(df, Survey, "Month", trans) +
+  p2 <- pr_plot_Climatology(df, Survey, "Month", trans) +
     ggplot2::theme(legend.position = "none")
 
-  p3 <- pr_plot_climate(df, Survey, "Year", trans) +
+  p3 <- pr_plot_Climatology(df, Survey, "Year", trans) +
     ggplot2::theme(axis.title.y = ggplot2::element_blank(),
                    legend.title = ggplot2::element_blank())
 
@@ -304,7 +304,7 @@ pr_plot_tsclimate <- function(df, Survey = "NRS", trans = "identity"){
 
 #' Time series plot of functional groups
 #'
-#' @param df dataframe in format of output from pr_get_fg
+#' @param df dataframe in format of output from pr_get_FuncGroups
 #' @param Scale y axis scale Actual or Percent
 #' @param Trend Over what timescale to fit the Trend - "Raw", "Month" or "Year"
 #'
@@ -313,7 +313,7 @@ pr_plot_tsclimate <- function(df, Survey = "NRS", trans = "identity"){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_fg("NRS", "P")
+#' df <- pr_get_FuncGroups("NRS", "P")
 #' plot <- pr_plot_tsfg(df, "Actual")
 pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 
@@ -395,7 +395,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 
 #' Policy plot
 #'
-#' @param df dataframe containing timeseries data with parameters and Values, output of pr_get_pol and pr_get_coeffs
+#' @param df dataframe containing timeseries data with parameters and Values, output of pr_get_PolicyData and pr_get_Coeffs
 #' @param EOV Essential OCean Variable as a parameter
 #' @param Survey NRS, CPR or LTM 'Long term monitoring'
 #' @param trans scale for y axis
@@ -406,8 +406,8 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_pol("CPR") %>%
-#'   pr_get_coeffs()
+#' df <- pr_get_PolicyData("CPR") %>%
+#'   pr_get_Coeffs()
 #' pr_plot_EOV(df, EOV = "BiomassIndex_mgm3", Survey = "CPR",
 #'       trans = "identity", col = "blue", labels = "no")
 pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "identity", col = "blue", labels = "yes") {
@@ -488,9 +488,9 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
 #'
 #' @examples
 #' df <- pr_get_NRSChemistry() %>% dplyr::filter(parameters == "SecchiDepth_m")
-#' pr_plot_env_var(df)
+#' pr_plot_Enviro(df)
 #'
-pr_plot_env_var <- function(df, Trend = "None", trans = "identity") {
+pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
 
   n <- length(unique(df$StationName))
 
@@ -564,8 +564,8 @@ pr_plot_env_var <- function(df, Trend = "None", trans = "identity") {
 #'                  Season = c("December - February","March - May",
 #'                  "June - August","September - November"),
 #'                  Taxon = 'Acartia danae')
-#' plot <- pr_plot_fmap(df)
-pr_plot_fmap <- function(df){
+#' plot <- pr_plot_FreqMap(df)
+pr_plot_FreqMap <- function(df){
   cols <- c("lightblue1" ,"skyblue3", "dodgerblue2","blue1", "navyblue")
 
   Species <- unique(df$Taxon)
@@ -590,7 +590,7 @@ pr_plot_fmap <- function(df){
 
 #' Plot of relative day and night abundances
 #'
-#' @param df dataframe as output of pr_get_daynight() filtered for one species
+#' @param df dataframe as output of pr_get_DayNight() filtered for one species
 #'
 #' @return plot of relative day and night abundances
 #' @export
@@ -598,8 +598,8 @@ pr_plot_fmap <- function(df){
 #' @examples
 #' df <- data.frame(Month = rep(seq(1,12,1),2), daynight = c(rep('day', 12), rep('night', 12)),
 #' CopeAbundance_m3 = runif(24, 0.1, 10), Species = 'Acartia danae')
-#' plot <- pr_plot_daynight(df)
-pr_plot_daynight <-  function(df){
+#' plot <- pr_plot_DayNight(df)
+pr_plot_DayNight <-  function(df){
 
   titlemain <- unique(df$Species)
   if("CopeAbundance_m3" %in% names(df)){
@@ -624,7 +624,7 @@ pr_plot_daynight <-  function(df){
 
 #' Plot of STI kernel density for species
 #'
-#' @param df dataframe as output of pr_get_sti() filtered for one species
+#' @param df dataframe as output of pr_get_STI() filtered for one species
 #'
 #' @return plot of STI kernel density
 #' @export
@@ -634,8 +634,8 @@ pr_plot_daynight <-  function(df){
 #'                  Project = c(rep("CPR", 12), rep("NRS", 12)),
 #'                  Species_m3 = runif(24, 0.1, 10),
 #'                  Species = 'Acartia danae')
-#' plot <- pr_plot_sti(df)
-pr_plot_sti <-  function(df){
+#' plot <- pr_plot_STI(df)
+pr_plot_STI <-  function(df){
   means <- df %>%
     dplyr::group_by(.data$Project) %>%
     dplyr::summarise(mean = mean(.data$Species_m3, na.rm = TRUE))

@@ -433,6 +433,12 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_Chemistry.html</loc>
   </url>
   <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_FreqMap.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_FuncGroups.html</loc>
+  </url>
+  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_LFCountAll.html</loc>
   </url>
   <url>
@@ -547,6 +553,12 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_PlotCols.html</loc>
   </url>
   <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_PolicyData.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_PolicyInfo.html</loc>
+  </url>
+  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_ProgressMap.html</loc>
   </url>
   <url>
@@ -649,7 +661,16 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_CPRmap.html</loc>
   </url>
   <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_Climatology.html</loc>
+  </url>
+  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_EOV.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_Enviro.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_FreqMap.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_NRSmap.html</loc>

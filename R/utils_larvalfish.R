@@ -12,7 +12,7 @@
 #   LFSamp <- readr::read_csv(system.file("extdata", "BGC_LFish_Samples.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE,
 #                             col_types = readr::cols(FLAG_COMMENT = readr::col_character())) %>%
 #     pr_rename() %>%
-#     pr_apply_time() %>%
+#     pr_apply_Time() %>%
 #     dplyr::select(.data$i_Sample:.data$SampleDate_Local, .data$Year:.data$SampleDate_Local, .data$Latitude:.data$Comments)
 # }
 
@@ -27,7 +27,7 @@
 #' df <- pr_get_LFData()
 pr_get_LFData <- function(){
 
-  df <- planktonr::pr_get_raw("bgc_larval_fish_count_raw_data") %>%
+  df <- planktonr::pr_get_Raw("bgc_larval_fish_count_raw_data") %>%
     pr_rename()
 }
 

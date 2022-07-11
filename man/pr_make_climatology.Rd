@@ -7,12 +7,12 @@
 pr_make_climatology(df, x)
 }
 \arguments{
-\item{df}{output of pr_get_indices}
+\item{df}{output of pr_get_Indices}
 
 \item{x}{Year, Month, Day, time period of climatology}
 }
 \value{
-dataframe to use in pr_plot_climate functions
+dataframe to use in pr_plot_Climatology functions
 }
 \description{
 To produce the climatology for plotting

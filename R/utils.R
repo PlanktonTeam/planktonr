@@ -4,9 +4,9 @@
 #' @return A string with location of raw plankton data
 #' @export
 #' @examples
-#' file_loc <- pr_get_site()
+#' file_loc <- pr_get_Site()
 #' @importFrom rlang .data
-pr_get_site_bgc <- function(){
+pr_get_Site_bgc <- function(){
   # raw <-"http://geoserver-123.aodn.org.au/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=imos:LAYER_NAME&outputFormat=csv-with-metadata-header"
   raw = "https://geoserver-portal.aodn.org.au/geoserver/ows?typeName=LAYER_NAME&SERVICE=WFS&outputFormat=csv&REQUEST=GetFeature&VERSION=1.0.0&userId=Guest"
 }
@@ -18,9 +18,9 @@ pr_get_site_bgc <- function(){
 #' @return A string with location of raw plankton data
 #' @export
 #' @examples
-#' file_loc <- pr_get_site()
+#' file_loc <- pr_get_Site()
 #' @importFrom rlang .data
-pr_get_site <- function(){
+pr_get_Site <- function(){
   raw <-"http://geoserver-123.aodn.org.au/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=imos:LAYER_NAME&outputFormat=csv-with-metadata-header"
   # raw = "https://geoserver-portal.aodn.org.au/geoserver/ows?typeName=LAYER_NAME&SERVICE=WFS&outputFormat=csv&REQUEST=GetFeature&VERSION=1.0.0&userId=Guest"
 }
@@ -53,12 +53,12 @@ pr_get_s3site <- function(){
 #' @export
 #'
 #' @examples
-#' dat <- pr_get_raw("bgc_chemistry_data")
-#' dat <- pr_get_raw("bgc_pigments_data")
-#' dat <- pr_get_raw("bgc_picoplankton_data")
-#' dat <- pr_get_raw("bgc_tss_data")
+#' dat <- pr_get_Raw("bgc_chemistry_data")
+#' dat <- pr_get_Raw("bgc_pigments_data")
+#' dat <- pr_get_Raw("bgc_picoplankton_data")
+#' dat <- pr_get_Raw("bgc_tss_data")
 #'
-pr_get_raw <- function(file){
+pr_get_Raw <- function(file){
   # stringr::str_detect(file, "bgc_"
   if (file == "bgc_chemistry_data"){ # additional probs possible in chemistry. No WC.
     col_types = list(Project = readr::col_character(),
@@ -89,14 +89,14 @@ pr_get_raw <- function(file){
   if (file ==  "bgc_pigments_data" | file == "bgc_tss_data" |
       file == "bgc_picoplankton_data" | file == "bgc_chemistry_data"){
     dat <- readr::read_csv(stringr::str_replace(
-      pr_get_site_bgc(), "LAYER_NAME", file),
+      pr_get_Site_bgc(), "LAYER_NAME", file),
       na = c("", NaN, "NaN", NA, "NA"),
       show_col_types = FALSE,
       comment = "#",
       col_types = col_types)
   } else{
     dat <- readr::read_csv(stringr::str_replace(
-      pr_get_site(), "LAYER_NAME", file),
+      pr_get_Site(), "LAYER_NAME", file),
       na = c("", NaN, "NaN", NA, "NA"),
       show_col_types = FALSE,
       comment = "#",
@@ -299,10 +299,10 @@ pr_reorder <- function(df){
 #'
 #' @examples
 #' df <- data.frame(SST = c(27.4, 28.9, 45), SST_Flag = c(1, 1, 4))
-#' df <- pr_apply_flags(df)
+#' df <- pr_apply_Flags(df)
 #' @importFrom data.table ":="
 #' @importFrom rlang .data
-pr_apply_flags <- function(df, flag_col){
+pr_apply_Flags <- function(df, flag_col){
 
   # qc_scheme_short_name,flag_value,flag_meaning,flag_description
   # IMOS IODE,0,No QC performed,The level at which all data enter the working archive. They have not yet been quality controlled
@@ -352,9 +352,9 @@ pr_apply_flags <- function(df, flag_col){
 #' @importFrom rlang .data
 #'
 #' @examples
-#' df <- pr_get_indices("NRS", "P") %>%
-#'   pr_apply_time()
-pr_apply_time <- function(df){
+#' df <- pr_get_Indices("NRS", "P") %>%
+#'   pr_apply_Time()
+pr_apply_Time <- function(df){
 
   df <- df %>%
     dplyr::mutate(Year_Local = lubridate::year(.data$SampleTime_Local),
@@ -378,8 +378,8 @@ pr_apply_time <- function(df){
 #' @examples
 #' df <- data.frame(Species = c("IncorrectSpecies cf.", "CorrectSpecies1", NA,
 #'               "CorrectSpecies2", "Incorrect spp., Incorrect/Species"))
-#' df <- pr_filter_species(df)
-pr_filter_species <- function(df){
+#' df <- pr_filter_Species(df)
+pr_filter_Species <- function(df){
   pat <- c("spp.", "cf.", "/", "grp", "complex", "type")
   df <- df %>%
     dplyr::filter(stringr::str_detect(.data$Species, paste(pat, collapse = "|"), negate = TRUE))
@@ -480,9 +480,9 @@ pr_harmonic <- function (theta, k = 4) {
 #' @export
 #'
 #' @examples
-#' df <- planktonr::pr_get_pol("NRS") %>%
-#'   pr_get_coeffs()
-pr_get_coeffs <-  function(df){
+#' df <- planktonr::pr_get_PolicyData("NRS") %>%
+#'   pr_get_Coeffs()
+pr_get_Coeffs <-  function(df){
 
   if(unique(df$Survey == 'LTM')) {
     df <- df %>%
@@ -534,8 +534,8 @@ pr_get_coeffs <-  function(df){
 #' @export
 #'
 #' @examples
-#' str <- pr_get_nonTaxaColumns(Survey = "NRS", Type = "Z")
-pr_get_nonTaxaColumns <- function(Survey = "NRS", Type = "Z"){
+#' str <- pr_get_NonTaxaColumns(Survey = "NRS", Type = "Z")
+pr_get_NonTaxaColumns <- function(Survey = "NRS", Type = "Z"){
 
   if (Survey == "NRS" & Type == "Z"){
     vars <- c("Project", "StationName", "StationCode", "TripCode", "Latitude", "Longitude",
