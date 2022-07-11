@@ -23,6 +23,7 @@ testthat::test_that("Correct function output", {
   testthat::expect_type(pr_get_ProgressMap(c("NRS", "CPR")), "list")
   testthat::expect_type(pr_get_ProgressMap("NRS"), "list")
   testthat::expect_type(pr_get_ProgressMap("CPR"), "list")
+  testthat::expect_type(pr_get_ProgressMap("both"), "list")
 
 })
 

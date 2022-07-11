@@ -81,9 +81,19 @@ testthat::test_that("Correct function output", {
                                           Species = "Acartia danae") %>%
                                  pr_plot_DayNight())[1], "gg")
 
+  testthat::expect_equal(class(data.frame(Month = rep(seq(1,12,1),2),
+                                          daynight = c(rep("day", 12), rep("night", 12)),
+                                          PhytoAbund_m3 = runif(24, 0.1, 10),
+                                          Species = "Acartia danae") %>%
+                                 pr_plot_DayNight())[1], "gg")
+
   testthat::expect_equal(class(data.frame(sst = runif(24, 5, 25),
                                           Project = c(rep("cpr", 12), rep("nrs", 12)),
                                           Species_m3 = runif(24, 0.1, 10),
                                           Species = "Acartia danae") %>%
                                  pr_plot_STI())[1], "gg")
+
+  testthat::expect_equal(class(pr_get_ProgressMap(c("CPR", "NRS")) %>%
+                                 pr_plot_ProgressMap())[1], "gg")
+
 })
