@@ -7,7 +7,7 @@
 pr_plot_tsfg(df, Scale = "Actual", Trend = "Raw")
 }
 \arguments{
-\item{df}{dataframe in format of output from pr_get_fg}
+\item{df}{dataframe in format of output from pr_get_FuncGroups}
 
 \item{Scale}{y axis scale Actual or Percent}
 
@@ -20,6 +20,6 @@ plot of fg timseries
 Time series plot of functional groups
 }
 \examples{
-df <- pr_get_fg("NRS", "P")
+df <- pr_get_FuncGroups("NRS", "P")
 plot <- pr_plot_tsfg(df, "Actual")
 }

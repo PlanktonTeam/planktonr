@@ -46,7 +46,7 @@ Lets look at zooplankton abundance at Yongala and Maria Island, a tropical and a
 First we get the data then we filter it for the desired parameters.
 
 ```{r,include=TRUE}
-datNRS_zoo <- pr_get_indices("NRS", "Z")
+datNRS_zoo <- pr_get_Indices("NRS", "Z")
 ```
 
 ## Plot Sitemap
@@ -86,7 +86,7 @@ pr_plot_tsclimate(datNRS_zoo, Survey = "NRS", trans = "log10")
 The data analysis and plotting functions are pipeable so we can select additional sites on the fly.
 
 ```{r,include=TRUE}
-pr_get_indices("NRS", "Z") %>% 
+pr_get_Indices("NRS", "Z") %>% 
   filter(StationName %in% c("Yongala", "Port Hacking", "Maria Island") & 
          parameters == "ZoopAbundance_m3") %>% 
   droplevels() %>% 
@@ -99,7 +99,7 @@ The zooplankton abundance at Yongala is consistently greater than at Maria Islan
 There may be more zooplankton at Yongala, but is there a difference in copepod size between tropical Yongala and temperate Maria Island.
 
 ```{r,include=TRUE}
-datSize <- pr_get_indices("NRS", "Z") %>%
+datSize <- pr_get_Indices("NRS", "Z") %>%
   filter(StationName %in% c("Yongala", "Maria Island"),
          parameters == "AvgTotalLengthCopepod_mm") %>%
   droplevels()
@@ -117,7 +117,7 @@ So whilst Maria Island has less zooplankton abundance the copepods are larger, a
 ## Trends in Biomass Data
 Look to see if zooplankton biomass is changing at Maria Island.
 ```{r,include=TRUE}
-datNRS_zoo <- pr_get_indices("NRS", "Z") %>%
+datNRS_zoo <- pr_get_Indices("NRS", "Z") %>%
   filter(parameters == "Biomass_mgm3" & 
            StationName == "Maria Island") %>%
   droplevels()
@@ -125,12 +125,12 @@ datNRS_zoo <- pr_get_indices("NRS", "Z") %>%
 
 
 ```{r,include=TRUE, warning=FALSE}
-pr_plot_trends(datNRS_zoo, Trend = "Raw", Survey = "NRS", method = "lm", trans = "log10")
+pr_plot_Trends(datNRS_zoo, Trend = "Raw", Survey = "NRS", method = "lm", trans = "log10")
 ```
 
 Now lets check the seasonal cycle.
 ```{r,include=TRUE}
-pr_plot_trends(datNRS_zoo, Trend = "Month", Survey = "NRS", method = "loess", trans = "log10")
+pr_plot_Trends(datNRS_zoo, Trend = "Month", Survey = "NRS", method = "loess", trans = "log10")
 ```
 
 ## Examine functional groups
@@ -138,7 +138,7 @@ pr_plot_trends(datNRS_zoo, Trend = "Month", Survey = "NRS", method = "loess", tr
 We can also look at the change in functional groups through time. Firstly by annual averages
 
 ```{r,include=TRUE}
-NRSfgz <- pr_get_fg(Survey = "NRS", Type = "Z") %>% 
+NRSfgz <- pr_get_FuncGroups(Survey = "NRS", Type = "Z") %>% 
   filter(StationName %in% c("Yongala", "Maria Island")) %>% 
   droplevels()
 

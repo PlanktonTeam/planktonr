@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-warning" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.0000</span>
+        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.1.0.0000</span>
       </span>
     </div>
 
@@ -66,7 +66,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pr_plot_tsclimate</span><span class="op">(</span><span class="va">df</span>, Survey <span class="op">=</span> <span class="st">"NRS"</span>, pal <span class="op">=</span> <span class="st">"matter"</span>, Scale <span class="op">=</span> <span class="st">"identity"</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pr_plot_tsclimate</span><span class="op">(</span><span class="va">df</span>, Survey <span class="op">=</span> <span class="st">"NRS"</span>, trans <span class="op">=</span> <span class="st">"identity"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -79,11 +79,7 @@
 <dd><p>CPR or NRS data</p></dd>
 
 
-<dt>pal</dt>
-<dd><p>is the palette name from cmocean</p></dd>
-
-
-<dt>Scale</dt>
+<dt>trans</dt>
 <dd><p>scale of y axis on plot, whatever scale_y_continuous trans accepts</p></dd>
 
 </dl></div>
@@ -96,11 +92,11 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr_get_indices.html">pr_get_indices</a></span><span class="op">(</span>Survey <span class="op">=</span> <span class="st">"NRS"</span>, Type <span class="op">=</span> <span class="st">"P"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr_get_Indices.html">pr_get_Indices</a></span><span class="op">(</span>Survey <span class="op">=</span> <span class="st">"NRS"</span>, Type <span class="op">=</span> <span class="st">"P"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">parameters</span> <span class="op">==</span> <span class="st">"PhytoAbundance_CellsL"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">pr_plot_tsclimate</span><span class="op">(</span><span class="va">df</span>, <span class="st">"NRS"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 120 row(s) containing missing values (geom_path).</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 209 rows containing missing values (geom_point).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 123 row(s) containing missing values (geom_path).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 212 rows containing missing values (geom_point).</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 12 rows containing missing values (geom_col).</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 18 rows containing missing values (geom_col).</span>
 <span class="r-plt img"><img src="pr_plot_tsclimate-1.png" alt="" width="700" height="433"></span>

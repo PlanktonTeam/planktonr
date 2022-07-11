@@ -19,11 +19,11 @@ pr_get_CPRData <- function(Type = "P", Variable = "abundance", Subset = "raw"){
 
   if (Type == "zooplankton" & Subset == "species"){ # Specific case for zooplankton species
 
-    datc <- pr_get_raw("cpr_zooplankton_abundance_copepods_data") %>%
+    datc <- pr_get_Raw("cpr_zooplankton_abundance_copepods_data") %>%
       pr_rename() %>%
       dplyr::arrange(.data$TripCode, .data$SampleTime_Local)
 
-    datnc <- pr_get_raw("cpr_zooplankton_abundance_non_copepods_data") %>%
+    datnc <- pr_get_Raw("cpr_zooplankton_abundance_non_copepods_data") %>%
       pr_rename() %>%
       dplyr::arrange(.data$TripCode, .data$SampleTime_Local) %>%
       dplyr::select(-c(.data$TripCode:.data$SampleVolume_m3))
@@ -34,7 +34,7 @@ pr_get_CPRData <- function(Type = "P", Variable = "abundance", Subset = "raw"){
   } else {
     file = paste("cpr", Type, Variable, Subset, "data", sep = "_")
 
-    dat <- readr::read_csv(stringr::str_replace(pr_get_site(), "LAYER_NAME", file),
+    dat <- readr::read_csv(stringr::str_replace(pr_get_Site(), "LAYER_NAME", file),
                            na = "",
                            show_col_types = FALSE,
                            comment = "#") %>%
@@ -69,7 +69,7 @@ pr_get_CPRTrips <- function(){
 #' @importFrom rlang .data
 pr_get_CPRSamps <- function(){
 
-  df <- pr_get_raw("cpr_derived_indices_data") %>%
+  df <- pr_get_Raw("cpr_derived_indices_data") %>%
     pr_rename() %>%
     pr_add_Bioregions() %>%
     dplyr::select(tidyselect::starts_with(c("geometry", "FID", "TripCode", "Latitude", "Longitude", "BioRegion",

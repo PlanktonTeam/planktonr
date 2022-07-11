@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-warning" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.0000</span>
+        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.1.0.0000</span>
       </span>
     </div>
 
@@ -66,13 +66,13 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pr_get_SppCount</span><span class="op">(</span><span class="va">gp</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pr_get_SppCount</span><span class="op">(</span>Type <span class="op">=</span> <span class="st">"Z"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>gp</dt>
-<dd><p>The group of plankton requested. Either "Zooplankton" or "Phytoplankton"</p></dd>
+    <dl><dt>Type</dt>
+<dd><p>The group of plankton requested. Either "Z" or "P"</p></dd>
 
 </dl></div>
     <div id="value">
@@ -84,7 +84,8 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">pr_get_SppCount</span><span class="op">(</span><span class="st">"Zooplankton"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">pr_get_SppCount</span><span class="op">(</span><span class="st">"P"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">pr_get_SppCount</span><span class="op">(</span><span class="st">"Z"</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>

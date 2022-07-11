@@ -35,9 +35,9 @@ pr_get_NRSData <- function(Type = "phytoplankton", Variable = "abundance", Subse
 
   if (Type == "zooplankton" & Subset == "species"){ # Specific case for zooplankton species
 
-    datc <- pr_get_raw("bgc_zooplankton_abundance_copepods_data") %>%
+    datc <- pr_get_Raw("bgc_zooplankton_abundance_copepods_data") %>%
       pr_rename()
-    datnc <-pr_get_raw("bgc_zooplankton_abundance_non_copepods_data") %>%
+    datnc <-pr_get_Raw("bgc_zooplankton_abundance_non_copepods_data") %>%
       pr_rename() %>%
       dplyr::select(-c(.data$Project:.data$Longitude, .data$SampleTime_UTC:.data$AshFreeBiomass_mgm3))
 
@@ -47,7 +47,7 @@ pr_get_NRSData <- function(Type = "phytoplankton", Variable = "abundance", Subse
   } else {
 
     file = paste("bgc", Type, Variable, Subset, "data", sep = "_")
-    dat <-pr_get_raw(file) %>%
+    dat <-pr_get_Raw(file) %>%
       pr_rename()
   }
 
@@ -90,7 +90,7 @@ pr_get_NRSTrips <- function(Type = c("P", "Z", "F")){
     dplyr::filter(.data$ProjectName == "NRS" &
                     (stringr::str_detect(.data$SampleType, paste("P", collapse = "|")) |
                        is.na(.data$SampleType))) %>%
-    pr_apply_time() %>%
+    pr_apply_Time() %>%
     dplyr::select(-.data$ProjectName)
 
 

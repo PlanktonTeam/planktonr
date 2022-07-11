@@ -14,7 +14,7 @@ pr_plot_EOV(
 )
 }
 \arguments{
-\item{df}{dataframe containing timeseries data with parameters and Values, output of pr_get_pol and pr_get_coeffs}
+\item{df}{dataframe containing timeseries data with parameters and Values, output of pr_get_PolicyData and pr_get_Coeffs}
 
 \item{EOV}{Essential OCean Variable as a parameter}
 
@@ -33,8 +33,8 @@ plot of timeseries, anomalies and climatology
 Policy plot
 }
 \examples{
-df <- pr_get_pol("CPR") \%>\%
-  pr_get_coeffs()
+df <- pr_get_PolicyData("CPR") \%>\%
+  pr_get_Coeffs()
 pr_plot_EOV(df, EOV = "BiomassIndex_mgm3", Survey = "CPR",
       trans = "identity", col = "blue", labels = "no")
 }
