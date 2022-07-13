@@ -38,25 +38,29 @@ pr_plot_NRSmap <- function(df){
 #'
 #'
 #' @examples
-#' df <- data.frame(BioRegion = c("Temperate East", "South-west"))
+#' df <- data.frame(BioRegion = c("Temperate East", "South-west", "South-east", "North", "North-west"))
 #' cprmap <- pr_plot_CPRmap(df)
 pr_plot_CPRmap <-  function(df){
 
   bioregionSelection <- mbr %>%
-    dplyr::mutate(Colour = dplyr::if_else(.data$REGION %in% df$BioRegion, .data$Colour, "NA")) %>%
-    # dplyr::filter(.data$REGION != "North-west" & .data$REGION != "North") %>%
-    dplyr::mutate(REGION = factor(.data$REGION, levels = c("Coral Sea", "Temperate East", "South-west", "South-east", "North", "North-west")))
+    dplyr::mutate(Colour = dplyr::if_else(.data$REGION %in% df$BioRegion, .data$Colour, "NA"))
+
+  col <- bioregionSelection %>%
+    sf::st_drop_geometry() %>%
+    dplyr::distinct() %>%
+    dplyr::select(REGION, Colour) %>%
+    tibble::deframe()
 
   p1 <- ggplot2::ggplot() +
     ggplot2::geom_sf(data = bioregionSelection, colour = "black", ggplot2::aes(fill = .data$REGION)) +
-    ggplot2::scale_fill_manual(values = bioregionSelection$Colour, aesthetics = "fill") +
+    ggplot2::scale_fill_manual(values = col) +
     ggplot2::scale_x_continuous(expand = c(0, 0)) +
     ggplot2::scale_y_continuous(expand = c(0, 0)) +
     ggplot2::theme_void() +
     ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
     ggplot2::theme(legend.position = "none",
-                   plot.background = ggplot2::element_rect(fill = NA),
-                   panel.background = ggplot2::element_rect(fill = NA),
+                   plot.background = ggplot2::element_rect(fill = NA, colour = NA),
+                   panel.background = ggplot2::element_rect(fill = NA, colour = NA),
                    axis.line = ggplot2::element_blank())
 
   return(p1)
