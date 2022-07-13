@@ -43,18 +43,17 @@ pr_plot_NRSmap <- function(df){
 pr_plot_CPRmap <-  function(df){
 
   bioregionSelection <- mbr %>%
-    dplyr::filter(.data$REGION %in% df$BioRegion) %>%
-    dplyr::mutate(REGION = factor(.data$REGION, levels = c("Coral Sea", "Temperate East", "South-west", "South-east")))
-
-  n <- length(unique(bioregionSelection$REGION))
+    dplyr::mutate(Colour = dplyr::if_else(.data$REGION %in% df$BioRegion, .data$Colour, "NA")) %>%
+    # dplyr::filter(.data$REGION != "North-west" & .data$REGION != "North") %>%
+    dplyr::mutate(REGION = factor(.data$REGION, levels = c("Coral Sea", "Temperate East", "South-west", "South-east", "North", "North-west")))
 
   p1 <- ggplot2::ggplot() +
-    ggplot2::geom_sf(data = mbr, colour = "black", fill = "white") +
     ggplot2::geom_sf(data = bioregionSelection, colour = "black", ggplot2::aes(fill = .data$REGION)) +
-    ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
+    ggplot2::scale_fill_manual(values = bioregionSelection$Colour, aesthetics = "fill") +
     ggplot2::scale_x_continuous(expand = c(0, 0)) +
     ggplot2::scale_y_continuous(expand = c(0, 0)) +
     ggplot2::theme_void() +
+    ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
     ggplot2::theme(legend.position = "none",
                    plot.background = ggplot2::element_rect(fill = NA),
                    panel.background = ggplot2::element_rect(fill = NA),
