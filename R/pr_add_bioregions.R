@@ -45,27 +45,28 @@ pr_add_Bioregions <- function(df){
                                                  .data$Latitude <= sf::st_bbox(mbr[mbr$OBJECTID==1,])$ymax &
                                                  rlang::are_na(.data$BioRegion) == TRUE ~ "North",
                                                TRUE ~ .data$BioRegion)) %>%
-    dplyr::relocate(.data$BioRegion, .after = .data$Latitude)
+    dplyr::relocate(.data$BioRegion, .after = .data$Latitude) %>%
+    tibble::as_tibble()
 
-  # Then lets do IMCRA Provinvial Bioregions
-  df <- df %>%
-    sf::st_as_sf(sf_column_name = "geometry", crs = "+proj=longlat +datum=WGS84") %>%
-    sf::st_join(imcra_pb, join = sf::st_within) %>%
-    tibble::as_tibble() %>%
-    dplyr::select(.data$WATER_TYPE) %>%
-    dplyr::bind_cols(df) %>%
-    dplyr::rename(IMCRA_pb = .data$WATER_TYPE) %>%
-    dplyr::relocate(.data$IMCRA_pb, .after = .data$BioRegion)
+  # # Then lets do IMCRA Provinvial Bioregions
+  # df <- df %>%
+  #   sf::st_as_sf(sf_column_name = "geometry", crs = "+proj=longlat +datum=WGS84") %>%
+  #   sf::st_join(imcra_pb, join = sf::st_within) %>%
+  #   tibble::as_tibble() %>%
+  #   dplyr::select(.data$WATER_TYPE) %>%
+  #   dplyr::bind_cols(df) %>%
+  #   dplyr::rename(IMCRA_pb = .data$WATER_TYPE) %>%
+  #   dplyr::relocate(.data$IMCRA_pb, .after = .data$BioRegion)
 
-  # Then lets do IMCRA Mesoscale Bioregions
-  df <- df %>%
-    dplyr::select(.data$Longitude, .data$Latitude) %>%  # file with columns named .data$Longitude, .data$Latitude
-    sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = "+proj=longlat +datum=WGS84") %>%
-    sf::st_join(imcra_meso, join = sf::st_within) %>%
-    tibble::as_tibble() %>%
-    dplyr::select(.data$WATER_TYPE) %>%
-    dplyr::bind_cols(df) %>%
-    dplyr::rename(IMCRA_meso = .data$WATER_TYPE) %>%
-    dplyr::relocate(.data$IMCRA_meso, .after = .data$IMCRA_pb)
+  # # Then lets do IMCRA Mesoscale Bioregions
+  # df <- df %>%
+  #   dplyr::select(.data$Longitude, .data$Latitude) %>%  # file with columns named .data$Longitude, .data$Latitude
+  #   sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = "+proj=longlat +datum=WGS84") %>%
+  #   sf::st_join(imcra_meso, join = sf::st_within) %>%
+  #   tibble::as_tibble() %>%
+  #   dplyr::select(.data$WATER_TYPE) %>%
+  #   dplyr::bind_cols(df) %>%
+  #   dplyr::rename(IMCRA_meso = .data$WATER_TYPE) %>%
+  #   dplyr::relocate(.data$IMCRA_meso, .after = .data$IMCRA_pb)
 
 }
