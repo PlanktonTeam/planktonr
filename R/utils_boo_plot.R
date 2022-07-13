@@ -48,7 +48,7 @@ pr_plot_CPRmap <-  function(df){
   col <- bioregionSelection %>%
     sf::st_drop_geometry() %>%
     dplyr::distinct() %>%
-    dplyr::select(REGION, Colour) %>%
+    dplyr::select(.data$REGION, .data$Colour) %>%
     tibble::deframe()
 
   p1 <- ggplot2::ggplot() +
