@@ -61,22 +61,7 @@ pr_get_NRSPigments <- function(format = 'all'){
     dplyr::filter(.data$Project == "NRS", .data$SampleDepth_m != "WC") %>%
     pr_add_StationCode() %>%
     dplyr::rowwise() %>%
-<<<<<<< Updated upstream
-    dplyr::mutate(TotalChla = sum(.data$CphlideA_mgm3, .data$DvCphlA_mgm3, .data$CphlA_mgm3, na.rm = TRUE),
-                  TotalChl = sum(.data$TotalChla, .data$DvCphlB_mgm3, .data$CphlB_mgm3, .data$CphlC3_mgm3, .data$CphlC2_mgm3, .data$CphlC1_mgm3, na.rm = TRUE),
-                  PPC = sum(.data$Allo_mgm3, .data$Diadchr_mgm3, .data$Diadino_mgm3, .data$Diato_mgm3, .data$Zea_mgm3,  na.rm = TRUE), # CARO, #Photoprotective Carotenoids
-                  PSC = sum(.data$Butfuco_mgm3, .data$Hexfuco_mgm3, .data$Perid_mgm3,  na.rm = TRUE), # Photosynthetic Carotenoids
-                  PSP = sum(.data$PSC, .data$TotalChl, na.rm = TRUE), # Photosynthetic pigments
-                  TCaro = sum(.data$PSC, .data$PSP, na.rm = TRUE), # Total Carotenoids
-                  TAcc = sum(.data$TCaro, .data$DvCphlB_mgm3, .data$CphlB_mgm3, .data$CphlC3_mgm3, .data$CphlC2_mgm3, .data$CphlC1_mgm3,  na.rm = TRUE), # Total Accessory pigments
-                  TPig = sum(.data$TAcc, .data$TotalChla,  na.rm = TRUE), # Total pigments
-                  TDP = sum(.data$PSC, .data$Allo_mgm3, .data$Zea_mgm3, .data$DvCphlB_mgm3, .data$CphlB_mgm3,  na.rm = TRUE), # Total Diagnostic pigments
-                  StationCode = stringr::str_sub(.data$TripCode, 1, 3),
-                  SampleDepth_m = as.numeric(.data$SampleDepth_m)) %>%
-    pr_apply_Time() %>%
-    dplyr::filter(.data$TotalChla != 0) %>%
-=======
-    pr_apply_time()
+    pr_apply_Time()
 
   if(format == 'binned') {
     dat <- dat %>%
@@ -95,7 +80,6 @@ pr_get_NRSPigments <- function(format = 'all'){
  }
 
   dat <- dat %>%
->>>>>>> Stashed changes
     dplyr::select(.data$Project, .data$SampleTime_Local, .data$Month_Local, .data$SampleDepth_m, .data$StationName, .data$StationCode,
                   tidyselect::any_of(var_names)) %>%
     tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = 'Parameters') %>%
