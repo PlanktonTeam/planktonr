@@ -4,7 +4,10 @@
 \alias{pr_get_NRSPigments}
 \title{Get pigments data}
 \usage{
-pr_get_NRSPigments()
+pr_get_NRSPigments(format = "all")
+}
+\arguments{
+\item{format}{all or binned}
 }
 \value{
 A dataframe with NRS pigment data
@@ -14,4 +17,5 @@ Get pigments data
 }
 \examples{
 df <- pr_get_NRSPigments()
+df <- pr_get_NRSPigments('binned')
 }

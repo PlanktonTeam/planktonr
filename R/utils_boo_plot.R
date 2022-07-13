@@ -429,7 +429,8 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
     ggplot2::geom_smooth(ggplot2::aes(x = .data$SampleDate, y = .data$fv), method = "lm", formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
     ggplot2::labs(x = "Year", y = rlang::enexpr(titley)) +
     ggplot2::scale_y_continuous(trans = trans) +
-    ggplot2::theme(legend.position = "none")
+    ggplot2::theme(legend.position = "none",
+                   base)
 
   if(labels == "no"){
     p1 <- p1 + ggplot2::theme(axis.title.x = ggplot2::element_blank())
