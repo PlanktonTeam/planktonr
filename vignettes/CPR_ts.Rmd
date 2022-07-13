@@ -46,11 +46,11 @@ library(dplyr)
 
 ## Phytoplankton Abundance Data
 Lets look at phytoplankton abundance across the bioregions.  
-First we get the data then we filter it for the desired parameters.
+First we get the data then we filter it for the desired Parameters.
 
 ```{r,include=TRUE}
 datCPR_p <- pr_get_Indices("CPR", "P") %>%
-  filter(parameters == "PhytoAbundance_Cellsm3") %>%
+  filter(Parameters == "PhytoAbundance_Cellsm3") %>%
   droplevels()
 ```
 
@@ -80,7 +80,7 @@ Can we see more variation in the diatom to dinoflagellate rations across the reg
 
 ```{r,include=TRUE}
 datRat <- pr_get_Indices("CPR", "P") %>%
-  filter(parameters == "DiatomDinoflagellateRatio") %>%
+  filter(Parameters == "DiatomDinoflagellateRatio") %>%
   droplevels()
 ```
 
@@ -97,7 +97,7 @@ The South-west region has more dinoflagellates than the eastern regions with the
 Look to see if zooplankton abundance is changing in the tropical Coral Sea region.
 ```{r,include=TRUE}
 datNRSz <- pr_get_Indices("CPR", "Z") %>%
-  filter(parameters == "ZoopAbundance_m3" & BioRegion == "Coral Sea") %>%
+  filter(Parameters == "ZoopAbundance_m3" & BioRegion == "Coral Sea") %>%
   droplevels()
 ```
 

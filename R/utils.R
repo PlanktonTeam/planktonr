@@ -474,7 +474,7 @@ pr_harmonic <- function (theta, k = 4) {
 
 #' Get coefficients from linear model
 #'
-#' @param df dataframe containing Year, Month, parameters, values
+#' @param df dataframe containing Year, Month, Parameters, values
 #'
 #' @return coefficients from linear model
 #' @export
@@ -486,7 +486,7 @@ pr_get_Coeffs <-  function(df){
 
   if(unique(df$Survey == 'LTM')) {
     df <- df %>%
-      dplyr::group_by(.data$StationCode, .data$StationName, .data$SampleTime_Local, .data$anomaly, .data$Year_Local, .data$Month_Local, .data$parameters) %>%
+      dplyr::group_by(.data$StationCode, .data$StationName, .data$SampleTime_Local, .data$anomaly, .data$Year_Local, .data$Month_Local, .data$Parameters) %>%
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                        .groups = 'drop')
   }
@@ -497,13 +497,13 @@ pr_get_Coeffs <-  function(df){
     droplevels()
 
   params <- df %>%
-    dplyr::select(.data$parameters) %>%
+    dplyr::select(.data$Parameters) %>%
     unique()
-  params <- params$parameters
+  params <- params$Parameters
 
   coeffs <- function(params){
     lmdat <- df %>%
-      dplyr::filter(.data$parameters == params) %>%
+      dplyr::filter(.data$Parameters == params) %>%
       tidyr::drop_na()
 
     m <- stats::lm(Values ~ Year_Local + pr_harmonic(Month_Local, k = 1), data = lmdat)
@@ -514,10 +514,10 @@ pr_get_Coeffs <-  function(df){
     slope <- ifelse(ms$coefficients[2,1] < 0, 'decreasing', 'increasing')
     p <- ifelse(ms$coefficients[2,4] < 0.005, 'significantly', 'but not significantly')
 
-    df <- dplyr::tibble(slope = slope, p = p, parameters = params)
+    df <- dplyr::tibble(slope = slope, p = p, Parameters = params)
 
     df <- lmdat %>%
-      dplyr::inner_join(df, by = 'parameters')
+      dplyr::inner_join(df, by = 'Parameters')
   }
 
   outputs <- purrr::map_dfr(params, coeffs)

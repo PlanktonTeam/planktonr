@@ -23,18 +23,18 @@ pr_get_PolicyData <- function(Survey = "NRS"){
       dplyr::select(.data$SampleTime_Local, .data$Year_Local, .data$Month_Local, .data$BioRegion,
                     tidyselect::all_of(var_names)) %>%
       dplyr::filter(!.data$BioRegion %in% c("North", "North-west")) %>%
-      tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "parameters")
+      tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "Parameters")
 
     means <- Polr %>%
       dplyr::select(.data$BioRegion, tidyselect::all_of(var_names)) %>%
-      tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "parameters") %>%
-      dplyr::group_by(.data$BioRegion, .data$parameters) %>%
+      tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "Parameters") %>%
+      dplyr::group_by(.data$BioRegion, .data$Parameters) %>%
       dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
                        sd = stats::sd(.data$Values, na.rm = TRUE),
                        .groups = "drop")
 
     Pol <- Pol %>%
-      dplyr::left_join(means, by = c("BioRegion", "parameters")) %>%
+      dplyr::left_join(means, by = c("BioRegion", "Parameters")) %>%
       dplyr::mutate(anomaly = (.data$Values - means)/sd,
                     Survey = 'CPR')
 
@@ -53,18 +53,18 @@ pr_get_PolicyData <- function(Survey = "NRS"){
     Pol <- Polr %>%
       dplyr::select(.data$SampleTime_Local, .data$Year_Local, .data$Month_Local, .data$StationName,
                     .data$StationCode, tidyselect::all_of(var_names)) %>%
-      tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "parameters")
+      tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "Parameters")
 
     means <- Polr %>%
       dplyr::select(.data$StationName, tidyselect::all_of(var_names)) %>%
-      tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "parameters") %>%
-      dplyr::group_by(.data$StationName, .data$parameters) %>%
+      tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "Parameters") %>%
+      dplyr::group_by(.data$StationName, .data$Parameters) %>%
       dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
                        sd = stats::sd(.data$Values, na.rm = TRUE),
                        .groups = "drop")
 
     Pol <- Pol %>%
-      dplyr::left_join(means, by = c("StationName", "parameters")) %>%
+      dplyr::left_join(means, by = c("StationName", "Parameters")) %>%
       dplyr::mutate(anomaly = (.data$Values - means)/sd,
                     Survey = 'NRS')
 
@@ -73,14 +73,14 @@ pr_get_PolicyData <- function(Survey = "NRS"){
     LTnuts <- pr_get_LTnuts()
 
     means <- LTnuts %>%
-      dplyr::select(.data$StationName, .data$parameters, .data$Values) %>%
-      dplyr::group_by(.data$StationName, .data$parameters) %>%
+      dplyr::select(.data$StationName, .data$Parameters, .data$Values) %>%
+      dplyr::group_by(.data$StationName, .data$Parameters) %>%
       dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
                        sd = stats::sd(.data$Values, na.rm = TRUE),
                        .groups = "drop")
 
     Pol <- LTnuts %>%
-      dplyr::left_join(means, by = c("StationName", "parameters")) %>%
+      dplyr::left_join(means, by = c("StationName", "Parameters")) %>%
       dplyr::mutate(anomaly = (.data$Values - .data$means)/.data$sd,
                     Survey = 'LTM')
 

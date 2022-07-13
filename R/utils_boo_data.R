@@ -45,20 +45,20 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Z"){
   }
 
   df <- df %>%
-    tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "parameters")  %>%
+    tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters")  %>%
     dplyr::mutate(Values = .data$Values + min(.data$Values[.data$Values>0], na.rm = TRUE)) %>%
-    dplyr::filter(.data$parameters != "Flagellate") %>%
+    dplyr::filter(.data$Parameters != "Flagellate") %>%
     pr_reorder()
 
   if(Type == "P"){
     df <- df %>%
-      dplyr::mutate(parameters = ifelse(.data$parameters %in% c("Ciliate","Foraminifera", "Radiozoa", "Silicoflagellate"), "Other", .data$parameters),
-                    parameters = factor(.data$parameters, levels = c("Centric diatom", "Pennate diatom", "Dinoflagellate", "Cyanobacteria",
+      dplyr::mutate(Parameters = ifelse(.data$Parameters %in% c("Ciliate","Foraminifera", "Radiozoa", "Silicoflagellate"), "Other", .data$Parameters),
+                    Parameters = factor(.data$Parameters, levels = c("Centric diatom", "Pennate diatom", "Dinoflagellate", "Cyanobacteria",
                                                                      "Other")))
   } else if(Type == "Z"){
     df <- df %>%
-      dplyr::mutate(parameters = ifelse(.data$parameters %in% c("Copepod", "Appendicularian", "Mollusc", "Cladoceran", "Chaetognath", "Thaliacean"), .data$parameters, "Other"),
-                    parameters = factor(.data$parameters, levels = c("Copepod", "Appendicularian", "Mollusc", "Cladoceran", "Chaetognath", "Thaliacean",
+      dplyr::mutate(Parameters = ifelse(.data$Parameters %in% c("Copepod", "Appendicularian", "Mollusc", "Cladoceran", "Chaetognath", "Thaliacean"), .data$Parameters, "Other"),
+                    Parameters = factor(.data$Parameters, levels = c("Copepod", "Appendicularian", "Mollusc", "Cladoceran", "Chaetognath", "Thaliacean",
                                                                      "Other")))
   }
 

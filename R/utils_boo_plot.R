@@ -73,7 +73,7 @@ pr_plot_CPRmap <-  function(df){
 #'
 #' @examples
 #' df <- pr_get_Indices("NRS", "Z") %>%
-#'   dplyr::filter(parameters == "Biomass_mgm3")
+#'   dplyr::filter(Parameters == "Biomass_mgm3")
 #' timeseries <- pr_plot_TimeSeries(df, "NRS")
 pr_plot_TimeSeries <- function(df, Survey = "NRS", trans = "identity"){
 
@@ -85,7 +85,7 @@ pr_plot_TimeSeries <- function(df, Survey = "NRS", trans = "identity"){
   if(Survey == "NRS"){
 
     df <- df %>%
-      dplyr::group_by(.data$SampleTime_Local, .data$StationCode, .data$parameters) %>% # accounting for microbial data different depths
+      dplyr::group_by(.data$SampleTime_Local, .data$StationCode, .data$Parameters) %>% # accounting for microbial data different depths
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                        .groups = "drop")
   }
@@ -94,7 +94,7 @@ pr_plot_TimeSeries <- function(df, Survey = "NRS", trans = "identity"){
 
   n <- length(unique(df$StationCode))
   #plotCols <- pr_get_PlotCols(pal, n)
-  titley <- pr_relabel(unique(df$parameters), style = "ggplot")
+  titley <- pr_relabel(unique(df$Parameters), style = "ggplot")
 
   p1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$SampleTime_Local, y = .data$Values)) +
     ggplot2::geom_line(ggplot2::aes(group = .data$StationCode, color = .data$StationCode)) +
@@ -127,7 +127,7 @@ pr_plot_TimeSeries <- function(df, Survey = "NRS", trans = "identity"){
 #'
 #' @examples
 #' df <- pr_get_Indices("NRS", "Z") %>%
-#'   dplyr::filter(parameters == 'Biomass_mgm3')
+#'   dplyr::filter(Parameters == 'Biomass_mgm3')
 #' pr_plot_Trends(df, Trend = "Month", Survey = "NRS")
 #' pr_plot_Trends(df, Trend = "Year", Survey = "NRS")
 #' pr_plot_Trends(df, Trend = "Raw", Survey = "NRS")
@@ -146,7 +146,7 @@ pr_plot_Trends <- function(df, Trend = "Raw", Survey = "NRS", method = "lm",  tr
     site = rlang::sym("StationName")
   }
 
-  titley <- pr_relabel(unique(df$parameters))
+  titley <- pr_relabel(unique(df$Parameters))
 
   # Averaging based on `Trend` ----------------------------------------------
 
@@ -162,7 +162,7 @@ pr_plot_Trends <- function(df, Trend = "Raw", Survey = "NRS", method = "lm",  tr
   } else {
     Trend <- "SampleTime_Local" # Rename Trend to match the column with time
     df <- df %>%
-      dplyr::group_by(.data$SampleTime_Local, !!site, .data$parameters) %>% # accounting for microbial data different depths
+      dplyr::group_by(.data$SampleTime_Local, !!site, .data$Parameters) %>% # accounting for microbial data different depths
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                        .groups = "drop")%>%
       dplyr::rename(value = .data$Values)
@@ -211,11 +211,11 @@ pr_plot_Trends <- function(df, Trend = "Raw", Survey = "NRS", method = "lm",  tr
 #'
 #' @examples
 #' df <- pr_get_Indices(Survey = "NRS", Type = "P") %>%
-#'         dplyr::filter(parameters == "PhytoBiomassCarbon_pgL")
+#'         dplyr::filter(Parameters == "PhytoBiomassCarbon_pgL")
 #' monthly <- pr_plot_Climatology(df, "NRS", "Month")
 #'
 #' df <- pr_get_Indices(Survey = "CPR", Type = "Z") %>%
-#'         dplyr::filter(parameters == "ZoopAbundance_m3")
+#'         dplyr::filter(Parameters == "ZoopAbundance_m3")
 #' annual <- pr_plot_Climatology(df, "CPR", "Year")
 pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "identity"){
 
@@ -236,7 +236,7 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
 
   n <- length(unique(df$StationCode))
   #plotCols <- pr_get_PlotCols(pal, n)
-  title <- pr_relabel(unique(df$parameters), style = "ggplot")
+  title <- pr_relabel(unique(df$Parameters), style = "ggplot")
 
   df_climate <- df %>%
     dplyr::group_by(!!Trend, .data$StationCode) %>%
@@ -281,7 +281,7 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
 #'
 #' @examples
 #' df <- pr_get_Indices(Survey = "NRS", Type = "P") %>%
-#'   dplyr::filter(parameters == "PhytoAbundance_CellsL")
+#'   dplyr::filter(Parameters == "PhytoAbundance_CellsL")
 #' pr_plot_tsclimate(df, "NRS")
 pr_plot_tsclimate <- function(df, Survey = "NRS", trans = "identity"){
 
@@ -325,7 +325,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 
   titley <- pr_relabel("FunctionalGroup", style = "ggplot")
 
-  n <- length(unique(df$parameters))
+  n <- length(unique(df$Parameters))
 
   #plotCols <- pr_get_PlotCols(pal, n)
 
@@ -342,7 +342,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
   if (Trend %in% c("Year_Local", "Month_Local")){
 
     df <- df %>%
-      dplyr::group_by(!!rlang::sym(Trend), !!station, .data$parameters) %>%
+      dplyr::group_by(!!rlang::sym(Trend), !!station, .data$Parameters) %>%
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                        N = dplyr::n(),
                        sd = sd(.data$Values, na.rm = TRUE),
@@ -355,7 +355,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 
   if(Scale == "Percent") {
     df <- df %>%
-      dplyr::group_by(!!rlang::sym(Trend), !!station, .data$parameters) %>%
+      dplyr::group_by(!!rlang::sym(Trend), !!station, .data$Parameters) %>%
       dplyr::summarise(n = sum(.data$Values, na.rm = TRUE)) %>%
       dplyr::mutate(Values = .data$n / sum(.data$n, na.rm = TRUE)) %>%
       dplyr::ungroup()
@@ -364,7 +364,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
       dplyr::mutate(Values = log10(.data$Values))
   }
 
-  p1 <- ggplot2::ggplot(df, ggplot2::aes(x = !!rlang::sym(Trend), y = .data$Values, fill = .data$parameters)) +
+  p1 <- ggplot2::ggplot(df, ggplot2::aes(x = !!rlang::sym(Trend), y = .data$Values, fill = .data$Parameters)) +
     ggplot2::geom_area(alpha=0.6 , size=1, colour="white") +
     ggplot2::facet_wrap(rlang::enexpr(station), scales = "free", ncol = 1) +
     ggplot2::labs(y = titley) +
@@ -394,7 +394,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 
 #' Policy plot
 #'
-#' @param df dataframe containing timeseries data with parameters and Values, output of pr_get_PolicyData and pr_get_Coeffs
+#' @param df dataframe containing timeseries data with Parameters and Values, output of pr_get_PolicyData and pr_get_Coeffs
 #' @param EOV Essential OCean Variable as a parameter
 #' @param Survey NRS, CPR or LTM 'Long term monitoring'
 #' @param trans scale for y axis
@@ -416,11 +416,11 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
   if(Survey == "LTM"){
     lims <- c(lubridate::floor_date(min(df$SampleDate), "year"), lubridate::ceiling_date(Sys.Date(), "year"))
     df <- df %>%
-      dplyr::filter(.data$parameters == EOV)
+      dplyr::filter(.data$Parameters == EOV)
   } else {
     lims <- c(lubridate::floor_date(min(df$SampleDate), "year"), lubridate::ceiling_date(Sys.Date(), "year"))
     df <- df %>%
-      dplyr::filter(.data$parameters == EOV)
+      dplyr::filter(.data$Parameters == EOV)
   }
 
   p1 <- ggplot2::ggplot(df) +
@@ -486,7 +486,7 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
 #' @export
 #'
 #' @examples
-#' df <- pr_get_NRSChemistry() %>% dplyr::filter(parameters == "SecchiDepth_m")
+#' df <- pr_get_NRSChemistry() %>% dplyr::filter(Parameters == "SecchiDepth_m")
 #' pr_plot_Enviro(df)
 #'
 pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
@@ -495,7 +495,7 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
 
   #plotCols <- pr_get_PlotCols(pal, n)
 
-  titley <- pr_relabel(unique(df$parameters), style = 'ggplot')
+  titley <- pr_relabel(unique(df$Parameters), style = 'ggplot')
 
   np <- length(unique(df$SampleDepth_m))
 
@@ -523,7 +523,7 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
 
 
   mdat <- df %>%
-    dplyr::group_by(.data$StationName, .data$Month_Local, .data$SampleDepth_m, .data$parameters) %>%
+    dplyr::group_by(.data$StationName, .data$Month_Local, .data$SampleDepth_m, .data$Parameters) %>%
     dplyr::summarise(MonValues = mean(.data$Values, na.rm = TRUE),
                      N = length(.data$Values),
                      sd = stats::sd(.data$Values, na.rm = TRUE),

@@ -7,7 +7,7 @@
 pr_get_Coeffs(df)
 }
 \arguments{
-\item{df}{dataframe containing Year, Month, parameters, values}
+\item{df}{dataframe containing Year, Month, Parameters, values}
 }
 \value{
 coefficients from linear model

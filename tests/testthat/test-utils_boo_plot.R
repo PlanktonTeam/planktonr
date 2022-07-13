@@ -6,31 +6,31 @@ testthat::test_that("Correct function output", {
                                  pr_plot_CPRmap())[1], "gg")
 
   testthat::expect_equal(class(pr_get_Indices("NRS", "Z") %>%
-                                 dplyr::filter(parameters == "Biomass_mgm3") %>%
+                                 dplyr::filter(Parameters == "Biomass_mgm3") %>%
                                  pr_plot_TimeSeries("NRS"))[1], "gg")
 
   testthat::expect_equal(class(pr_get_Indices("CPR", "Z") %>%
-                                 dplyr::filter(parameters == "Biomass_mgm3") %>%
+                                 dplyr::filter(Parameters == "Biomass_mgm3") %>%
                                  pr_plot_TimeSeries("CPR"))[1], "gg")
 
   testthat::expect_equal(class(pr_get_Indices("NRS", "Z") %>%
-                                 dplyr::filter(parameters == "Biomass_mgm3") %>%
+                                 dplyr::filter(Parameters == "Biomass_mgm3") %>%
                                  pr_plot_Trends(Trend = "Year", Survey = "NRS"))[1], "gg")
 
   testthat::expect_equal(class(pr_get_Indices("CPR", "Z") %>%
-                                 dplyr::filter(parameters == "BiomassIndex_mgm3") %>%
+                                 dplyr::filter(Parameters == "BiomassIndex_mgm3") %>%
                                  pr_plot_Trends(Trend = "Month", Survey = "CPR"))[1], "gg")
 
   testthat::expect_equal(class(pr_get_Indices("CPR", "Z") %>%
-                                 dplyr::filter(parameters == "Biomass_mgm3") %>%
+                                 dplyr::filter(Parameters == "Biomass_mgm3") %>%
                                  pr_plot_Trends(Trend = "Raw", Survey = "CPR"))[1], "gg")
 
   testthat::expect_equal(class(pr_get_Indices(Survey = "CPR", Type = "Z") %>%
-                                 dplyr::filter(parameters == "ZoopAbundance_m3") %>%
+                                 dplyr::filter(Parameters == "ZoopAbundance_m3") %>%
                                  pr_plot_Climatology("CPR", "Year"))[1], "gg")
 
   testthat::expect_equal(class(pr_get_Indices(Survey = "NRS", Type = "P") %>%
-                                 dplyr::filter(parameters == "PhytoAbundance_CellsL") %>%
+                                 dplyr::filter(Parameters == "PhytoAbundance_CellsL") %>%
                                  pr_plot_tsclimate("NRS"))[1], "patchwork")
 
   testthat::expect_equal(class(pr_get_FuncGroups("NRS", "P") %>%
@@ -58,15 +58,15 @@ testthat::test_that("Correct function output", {
                                              labels = "no"))[1], "patchwork")
 
   testthat::expect_equal(class(pr_get_NRSChemistry() %>%
-                                 dplyr::filter(parameters == "SecchiDepth_m") %>%
+                                 dplyr::filter(Parameters == "SecchiDepth_m") %>%
                                  pr_plot_Enviro(Trend = "None", trans = "identity"))[1], "patchwork")
 
   testthat::expect_equal(class(pr_get_NRSChemistry() %>%
-                                 dplyr::filter(parameters == "SecchiDepth_m") %>%
+                                 dplyr::filter(Parameters == "SecchiDepth_m") %>%
                                  pr_plot_Enviro(Trend = "Smoother", trans = "identity"))[1], "patchwork")
 
   testthat::expect_equal(class(pr_get_NRSChemistry() %>%
-                                 dplyr::filter(parameters == "SecchiDepth_m") %>%
+                                 dplyr::filter(Parameters == "SecchiDepth_m") %>%
                                  pr_plot_Enviro(Trend = "Linear", trans = "identity"))[1], "patchwork")
 
   testthat::expect_equal(class(data.frame(Long = c(110, 130, 155, 150), Lat = c(-10, -35, -27, -45),
