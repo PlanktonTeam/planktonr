@@ -21,6 +21,6 @@ Plot basic timeseries
 }
 \examples{
 df <- pr_get_Indices("NRS", "Z") \%>\%
-  dplyr::filter(parameters == "Biomass_mgm3")
+  dplyr::filter(Parameters == "Biomass_mgm3")
 timeseries <- pr_plot_TimeSeries(df, "NRS")
 }

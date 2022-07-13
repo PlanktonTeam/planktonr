@@ -14,7 +14,7 @@ pr_plot_EOV(
 )
 }
 \arguments{
-\item{df}{dataframe containing timeseries data with parameters and Values, output of pr_get_PolicyData and pr_get_Coeffs}
+\item{df}{dataframe containing timeseries data with Parameters and Values, output of pr_get_PolicyData and pr_get_Coeffs}
 
 \item{EOV}{Essential OCean Variable as a parameter}
 

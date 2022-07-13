@@ -583,7 +583,7 @@ function TraceManager(graphDiv, highlight) {
   // most recently received selection for that group.
   this.groupSelections = {};
   
-  // selection parameters (e.g., transient versus persistent selection)
+  // selection Parameters (e.g., transient versus persistent selection)
   this.highlight = highlight;
 }
 

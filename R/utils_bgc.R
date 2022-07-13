@@ -23,7 +23,7 @@ pr_get_NRSChemistry <- function(){
     dplyr::mutate(Month_Local = lubridate::month(.data$SampleTime_Local)) %>%
     dplyr::select(.data$Project, .data$SampleTime_Local, .data$Month_Local, .data$SampleDepth_m,
                   .data$StationName, .data$StationCode, tidyselect::all_of(var_names)) %>%
-    tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = 'parameters') %>%
+    tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = 'Parameters') %>%
     pr_reorder()
 
   return(dat)
@@ -98,7 +98,7 @@ pr_get_NRSPigments <- function(format = 'all'){
 >>>>>>> Stashed changes
     dplyr::select(.data$Project, .data$SampleTime_Local, .data$Month_Local, .data$SampleDepth_m, .data$StationName, .data$StationCode,
                   tidyselect::any_of(var_names)) %>%
-    tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = 'parameters') %>%
+    tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = 'Parameters') %>%
     pr_reorder()
 
 }
@@ -128,7 +128,7 @@ pr_get_NRSPico <- function(){
     dplyr::select(.data$Project, .data$SampleTime_Local, .data$Month_Local, .data$Year_Local,
                   .data$SampleDepth_m, .data$StationName, .data$StationCode,
                   tidyselect::any_of(var_names)) %>%
-    tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "parameters") %>%
+    tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters") %>%
     dplyr::mutate(Values = .data$Values + min(.data$Values[.data$Values>0], na.rm = TRUE)) %>%
     pr_reorder()
 
@@ -170,7 +170,7 @@ pr_get_NRSMicro <- function(){
     dplyr::mutate(dplyr::across(tidyselect::all_of(var_names), as.numeric)) %>%
     dplyr::select(.data$StationName, .data$SampleDepth_m, .data$StationCode, .data$SampleTime_Local,
                   .data$Year_Local, .data$Month_Local, tidyselect::any_of(var_names)) %>%
-    tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "parameters") %>%
+    tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters") %>%
     pr_reorder()
 
   return(dat)
@@ -260,14 +260,14 @@ pr_get_LTnuts <-  function(){
     pr_apply_Flags() %>%
     dplyr::select(-dplyr::contains("Flag")) %>%
     pr_add_StationName() %>%
-    tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = 'parameters') %>%
+    tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = 'Parameters') %>%
     dplyr::filter(.data$Values != -999) %>%
     dplyr::relocate(c("Project", "StationName", "StationCode", tidyselect::everything())) %>%
     pr_reorder()
 
   Nuts <- pr_get_NRSChemistry() %>%
     dplyr::filter(.data$StationCode %in% c("MAI", "ROT", "PHB"),
-                  .data$parameters != 'SecchiDepth_m') %>%
+                  .data$Parameters != 'SecchiDepth_m') %>%
     dplyr::mutate(Year_Local = lubridate::year(.data$SampleTime_Local)) %>%
     dplyr::select(colnames(NutsLT)) # Ensure columns are in the same order
 
@@ -275,7 +275,7 @@ pr_get_LTnuts <-  function(){
     dplyr::select(.data$Project, .data$StationCode, .data$StationName, .data$Month_Local, .data$Year_Local,
                   .data$SampleTime_Local, .data$SampleDepth_m, .data$Temperature_degC) %>%
     dplyr::filter(.data$StationCode %in% c("MAI", "ROT", "PHB")) %>%
-    tidyr::pivot_longer(-c(.data$Project:.data$SampleDepth_m), values_to = "Values", names_to = "parameters") %>%
+    tidyr::pivot_longer(-c(.data$Project:.data$SampleDepth_m), values_to = "Values", names_to = "Parameters") %>%
     dplyr::select(colnames(NutsLT))
 
   dat <- dplyr::bind_rows(NutsLT, Nuts, CTD)
@@ -295,7 +295,7 @@ pr_get_LTnuts <-  function(){
 # # @importFrom rlang .data
 # pr_get_bgc <- function(){
 #
-#   # Each trip and depth combination for water quality parameters
+#   # Each trip and depth combination for water quality Parameters
 #   # the number of rows in this table should equal that in comb, if not look out for duplicates and replicates
 #   NRSTrips <- pr_get_NRSTrips() %>%
 #     dplyr::select(-.data$SampleType)

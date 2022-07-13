@@ -21,6 +21,6 @@ Combined timeseries and climatology plots
 }
 \examples{
 df <- pr_get_Indices(Survey = "NRS", Type = "P") \%>\%
-  dplyr::filter(parameters == "PhytoAbundance_CellsL")
+  dplyr::filter(Parameters == "PhytoAbundance_CellsL")
 pr_plot_tsclimate(df, "NRS")
 }
