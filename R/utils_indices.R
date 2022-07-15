@@ -76,18 +76,18 @@ pr_get_Indices <- function(Survey = "CPR", Type = "P"){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_indices("CPR", "Z") %>%
+#' df <- pr_get_Indices("CPR", "Z") %>%
 #'       pr_filter_data('BiomassIndex_mgm3', c('North', 'South-west'))
-#' df <- pr_get_indices("NRS", "P") %>%
+#' df <- pr_get_Indices("NRS", "P") %>%
 #'       pr_filter_data('PhytoBiomassCarbon_pgL', c('NSI', 'PHB'))
-pr_filter_data <- function(df, parameter = 'Biomass_mgm3', StationRegion = 'NSI'){
+pr_filter_data <- function(df, Parameter = 'Biomass_mgm3', StationRegion = 'NSI'){
     if("StationName" %in% colnames(df)) {
       df <- df %>%
-        dplyr::filter(parameters %in% parameter,
+        dplyr::filter(Parameters %in% Parameter,
                       StationCode %in% StationRegion)
     } else {
       df <- df %>%
-        dplyr::filter(parameters %in% parameter,
+        dplyr::filter(Parameters %in% Parameter,
                       BioRegion %in% StationRegion)
     }
   }
