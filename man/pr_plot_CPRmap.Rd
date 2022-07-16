@@ -16,6 +16,6 @@ a map of the selected bioregions
 Title Sidebar panel plot of selected CPR bioregions
 }
 \examples{
-df <- data.frame(BioRegion = c("Temperate East", "South-west"))
+df <- data.frame(BioRegion = c("Temperate East", "South-west", "South-east", "North", "North-west"))
 cprmap <- pr_plot_CPRmap(df)
 }
