@@ -24,7 +24,9 @@ pr_plot_NRSmap <- function(df){
     ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(-45, -9)) +
     ggplot2::theme_void() +
     ggplot2::theme(axis.title = ggplot2::element_blank(),
-                   axis.line = ggplot2::element_blank())
+                   axis.line = ggplot2::element_blank(),
+                   panel.background = ggplot2::element_rect(fill = "transparent", colour = NA),
+                   plot.background = ggplot2::element_rect(fill = "transparent", colour = NA))
 
   return(p1)
 }
@@ -59,8 +61,8 @@ pr_plot_CPRmap <-  function(df){
     ggplot2::theme_void() +
     ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
     ggplot2::theme(legend.position = "none",
-                   plot.background = ggplot2::element_rect(fill = NA, colour = NA),
-                   panel.background = ggplot2::element_rect(fill = NA, colour = NA),
+                   panel.background = ggplot2::element_rect(fill = "transparent", colour = NA),
+                   plot.background = ggplot2::element_rect(fill = "transparent", colour = NA),
                    axis.line = ggplot2::element_blank())
 
   return(p1)
