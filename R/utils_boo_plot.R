@@ -11,15 +11,20 @@
 #' pmap <- pr_plot_NRSmap(df)
 pr_plot_NRSmap <- function(df){
 
-  # meta2_sf <- subset(meta_sf, meta_sf$Code %in% df$StationCode)
-  meta2_sf <- meta_sf %>%
-    sf::st_as_sf() %>% # This seems to strip away some of the tibble stuff that makes the filter not work...
-    dplyr::filter(.data$Code %in% df$StationCode)
+  meta_sf <- meta_sf %>%
+    dplyr::mutate(Colour = dplyr::if_else(.data$Code %in% df$StationCode, "Red", "Blue")) %>%
+    sf::st_as_sf() # This seems to strip away some of the tibble stuff that makes the filter not work...
+    # dplyr::filter(.data$Code %in% df$StationCode)
+
+  col <- meta_sf %>%
+    sf::st_drop_geometry() %>%
+    dplyr::select(.data$Code, .data$Colour) %>%
+    tibble::deframe()
 
   p1 <- ggplot2::ggplot() +
     ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
-    ggplot2::geom_sf(data = meta_sf, colour = "blue", size = 5) +
-    ggplot2::geom_sf(data = meta2_sf, colour = "red", size = 5) +
+    ggplot2::geom_sf(data = meta_sf, ggplot2::aes(colour = .data$Code), size = 5, show.legend = FALSE) +
+    ggplot2::scale_colour_manual(values = col) +
     ggplot2::scale_x_continuous(expand = c(0, 0), limits = c(112, 155)) +
     ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(-45, -9)) +
     ggplot2::theme_void() +
