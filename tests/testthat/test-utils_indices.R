@@ -4,7 +4,7 @@ testthat::test_that("Correct function output", {
   testthat::expect_type(pr_get_Indices("NRS", "W"), "list")
   testthat::expect_type(pr_get_Indices("CPR", "P"), "list")
   testthat::expect_type(pr_get_Indices("CPR", "Z"), "list")
-
+  testthat::expect_type(pr_get_Indices("CPR", "W"), "list")
   testthat::expect_type(pr_get_Indices("CPR", "Z") %>%
                           pr_filter_data("BiomassIndex_mgm3", c("North", "South-west")), "list")
 
