@@ -4,12 +4,12 @@
 \alias{pr_filter_data}
 \title{Filter data for plotting functions}
 \usage{
-pr_filter_data(df, parameter = "Biomass_mgm3", StationRegion = "NSI")
+pr_filter_data(df, Parameter = "Biomass_mgm3", StationRegion = "NSI")
 }
 \arguments{
 \item{df}{dataframe from pr_get_indices}
 
-\item{parameter}{parameter(s) to be filtered on}
+\item{Parameter}{parameter(s) to be filtered on}
 
 \item{StationRegion}{StationCode(s) or BioRegion(s) to be filtered on}
 }
@@ -20,8 +20,8 @@ prefiltered data frame for pr_plot_trends, ts, climate
 Filter data for plotting functions
 }
 \examples{
-df <- pr_get_indices("CPR", "Z") \%>\%
+df <- pr_get_Indices("CPR", "Z") \%>\%
       pr_filter_data('BiomassIndex_mgm3', c('North', 'South-west'))
-df <- pr_get_indices("NRS", "P") \%>\%
+df <- pr_get_Indices("NRS", "P") \%>\%
       pr_filter_data('PhytoBiomassCarbon_pgL', c('NSI', 'PHB'))
 }

@@ -69,7 +69,7 @@ pr_get_Indices <- function(Survey = "CPR", Type = "P"){
 #' Filter data for plotting functions
 #'
 #' @param df dataframe from pr_get_indices
-#' @param parameter parameter(s) to be filtered on
+#' @param Parameter parameter(s) to be filtered on
 #' @param StationRegion StationCode(s) or BioRegion(s) to be filtered on
 #'
 #' @return prefiltered data frame for pr_plot_trends, ts, climate
@@ -77,18 +77,18 @@ pr_get_Indices <- function(Survey = "CPR", Type = "P"){
 #'
 #' @examples
 #' df <- pr_get_Indices("CPR", "Z") %>%
-#'       pr_filter_data('BiomassIndex_mgm3', c('North', 'South-west'))
+#'       pr_filter_data("BiomassIndex_mgm3", c("North", "South-west"))
 #' df <- pr_get_Indices("NRS", "P") %>%
-#'       pr_filter_data('PhytoBiomassCarbon_pgL', c('NSI', 'PHB'))
-pr_filter_data <- function(df, Parameter = 'Biomass_mgm3', StationRegion = 'NSI'){
+#'       pr_filter_data("PhytoBiomassCarbon_pgL", c("NSI", "PHB"))
+pr_filter_data <- function(df, Parameter = "Biomass_mgm3", StationRegion = "NSI"){
     if("StationName" %in% colnames(df)) {
       df <- df %>%
-        dplyr::filter(Parameters %in% Parameter,
-                      StationCode %in% StationRegion)
+        dplyr::filter(.data$Parameters %in% Parameter,
+                      .data$StationCode %in% StationRegion)
     } else {
       df <- df %>%
-        dplyr::filter(Parameters %in% Parameter,
-                      BioRegion %in% StationRegion)
+        dplyr::filter(.data$Parameters %in% Parameter,
+                      .data$BioRegion %in% StationRegion)
     }
   }
 

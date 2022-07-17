@@ -33,18 +33,18 @@ pr_get_NRSChemistry <- function(){
 
 
 #' Get pigments data
-#' @param format all or binned
+#' @param Format all or binned
 #'
 #' @return A dataframe with NRS pigment data
 #' @export
 #'
 #' @examples
 #' df <- pr_get_NRSPigments()
-#' df <- pr_get_NRSPigments('binned')
-pr_get_NRSPigments <- function(format = 'all'){
+#' df <- pr_get_NRSPigments(Format = "binned")
+pr_get_NRSPigments <- function(Format = "all"){
 
   file <- "bgc_pigments_data"
-  if(format == 'binned') {
+  if(Format == "binned") {
     var_names <- c("TotalChla", "TotalChl", "PPC", "PSC", "PSP", "TCaro", "TAcc", "TPig", "TDP")
   } else {
     var_names <- c("Allo_mgm3", "AlphaBetaCar_mgm3", "Anth_mgm3", "Asta_mgm3", "BetaBetaCar_mgm3", "BetaEpiCar_mgm3", "Butfuco_mgm3",
@@ -63,7 +63,7 @@ pr_get_NRSPigments <- function(format = 'all'){
     dplyr::rowwise() %>%
     pr_apply_Time()
 
-  if(format == 'binned') {
+  if(Format == "binned") {
     dat <- dat %>%
       dplyr::mutate(TotalChla = sum(.data$CphlideA_mgm3, .data$DvCphlA_mgm3, .data$CphlA_mgm3, na.rm = TRUE),
                     TotalChl = sum(.data$TotalChla, .data$DvCphlB_mgm3, .data$CphlB_mgm3, .data$CphlC3_mgm3, .data$CphlC2_mgm3, .data$CphlC1_mgm3, na.rm = TRUE),
@@ -75,7 +75,7 @@ pr_get_NRSPigments <- function(format = 'all'){
                     TPig = sum(.data$TAcc, .data$TotalChla,  na.rm = TRUE), # Total pigments
                     TDP = sum(.data$PSC, .data$Allo_mgm3, .data$Zea_mgm3, .data$DvCphlB_mgm3, .data$CphlB_mgm3,  na.rm = TRUE), # Total Diagnostic pigments
                     StationCode = stringr::str_sub(.data$TripCode, 1, 3),
-                    SampleDepth_m = as.numeric(.data$SampleDepth_m))
+                    SampleDepth_m = as.numeric(.data$SampleDepth_m)) %>%
       dplyr::filter(.data$TotalChla != 0)
  }
 
