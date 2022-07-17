@@ -1,6 +1,7 @@
 testthat::test_that("Correct function output", {
   testthat::expect_type(pr_get_Indices("NRS", "P"), "list")
   testthat::expect_type(pr_get_Indices("NRS", "Z"), "list")
+  testthat::expect_type(pr_get_Indices("NRS", "W"), "list")
   testthat::expect_type(pr_get_Indices("CPR", "P"), "list")
   testthat::expect_type(pr_get_Indices("CPR", "Z"), "list")
   testthat::expect_type(data.frame(Month = rep(1:12,10),
