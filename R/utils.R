@@ -39,8 +39,6 @@ pr_get_s3site <- function(){
   raw <-"https://s3-ap-southeast-2.amazonaws.com/imos-data/IMOS/BGC_DB/harvested_from_CSIRO/"
 }
 
-
-
 #' Download Raw Data from IMOS
 #'
 #' This function is not intended for use by most people. It downloads the raw data file from IMOS with NO QC or data manipulation done. User beware. It can be used to view the raw data that IMOS provides behind the scenes.

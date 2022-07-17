@@ -33,16 +33,26 @@ pr_get_NRSChemistry <- function(){
 
 
 #' Get pigments data
+#' @param format all or binned
 #'
 #' @return A dataframe with NRS pigment data
 #' @export
 #'
 #' @examples
 #' df <- pr_get_NRSPigments()
-pr_get_NRSPigments <- function(){
+#' df <- pr_get_NRSPigments('binned')
+pr_get_NRSPigments <- function(format = 'all'){
 
   file <- "bgc_pigments_data"
-  var_names <- c("TotalChla", "TotalChl", "PPC", "PSC", "PSP", "TCaro", "TAcc", "TPig", "TDP")
+  if(format == 'binned') {
+    var_names <- c("TotalChla", "TotalChl", "PPC", "PSC", "PSP", "TCaro", "TAcc", "TPig", "TDP")
+  } else {
+    var_names <- c("Allo_mgm3", "AlphaBetaCar_mgm3", "Anth_mgm3", "Asta_mgm3", "BetaBetaCar_mgm3", "BetaEpiCar_mgm3", "Butfuco_mgm3",
+                   "Cantha_mgm3", "CphlA_mgm3", "CphlB_mgm3", "CphlC1_mgm3", "CphlC2_mgm3", "CphlC3_mgm3", "CphlC1C2_mgm3",
+                   "CphlideA_mgm3", "Diadchr_mgm3", "Diadino_mgm3",  "Fuco_mgm3", "Gyro_mgm3", "Hexfuco_mgm3", "Ketohexfuco_mgm3", "Lut_mgm3",
+                   "Lyco_mgm3", "MgDvp_mgm3", "Neo_mgm3", "Perid_mgm3", "PhideA_mgm3", "PhytinA_mgm3", "PhytinB_mgm3", "Pras_mgm3",
+                   "PyrophideA_mgm3", "PyrophytinA_mgm3", "Viola_mgm3", "Zea_mgm3", "Pigments_flag" )
+  }
 
   dat <- pr_get_Raw(file) %>%
     pr_rename() %>%
@@ -51,25 +61,30 @@ pr_get_NRSPigments <- function(){
     dplyr::filter(.data$Project == "NRS", .data$SampleDepth_m != "WC") %>%
     pr_add_StationCode() %>%
     dplyr::rowwise() %>%
-    dplyr::mutate(TotalChla = sum(.data$CphlideA_mgm3, .data$DvCphlA_mgm3, .data$CphlA_mgm3, na.rm = TRUE),
-                  TotalChl = sum(.data$TotalChla, .data$DvCphlB_mgm3, .data$CphlB_mgm3, .data$CphlC3_mgm3, .data$CphlC2_mgm3, .data$CphlC1_mgm3, na.rm = TRUE),
-                  PPC = sum(.data$Allo_mgm3, .data$Diadchr_mgm3, .data$Diadino_mgm3, .data$Diato_mgm3, .data$Zea_mgm3,  na.rm = TRUE), # CARO, #Photoprotective Carotenoids
-                  PSC = sum(.data$Butfuco_mgm3, .data$Hexfuco_mgm3, .data$Perid_mgm3,  na.rm = TRUE), # Photosynthetic Carotenoids
-                  PSP = sum(.data$PSC, .data$TotalChl, na.rm = TRUE), # Photosynthetic pigments
-                  TCaro = sum(.data$PSC, .data$PSP, na.rm = TRUE), # Total Carotenoids
-                  TAcc = sum(.data$TCaro, .data$DvCphlB_mgm3, .data$CphlB_mgm3, .data$CphlC3_mgm3, .data$CphlC2_mgm3, .data$CphlC1_mgm3,  na.rm = TRUE), # Total Accessory pigments
-                  TPig = sum(.data$TAcc, .data$TotalChla,  na.rm = TRUE), # Total pigments
-                  TDP = sum(.data$PSC, .data$Allo_mgm3, .data$Zea_mgm3, .data$DvCphlB_mgm3, .data$CphlB_mgm3,  na.rm = TRUE), # Total Diagnostic pigments
-                  StationCode = stringr::str_sub(.data$TripCode, 1, 3),
-                  SampleDepth_m = as.numeric(.data$SampleDepth_m)) %>%
-    pr_apply_Time() %>%
-    dplyr::filter(.data$TotalChla != 0) %>%
+    pr_apply_Time()
+
+  if(format == 'binned') {
+    dat <- dat %>%
+      dplyr::mutate(TotalChla = sum(.data$CphlideA_mgm3, .data$DvCphlA_mgm3, .data$CphlA_mgm3, na.rm = TRUE),
+                    TotalChl = sum(.data$TotalChla, .data$DvCphlB_mgm3, .data$CphlB_mgm3, .data$CphlC3_mgm3, .data$CphlC2_mgm3, .data$CphlC1_mgm3, na.rm = TRUE),
+                    PPC = sum(.data$Allo_mgm3, .data$Diadchr_mgm3, .data$Diadino_mgm3, .data$Diato_mgm3, .data$Zea_mgm3,  na.rm = TRUE), # CARO, #Photoprotective Carotenoids
+                    PSC = sum(.data$Butfuco_mgm3, .data$Hexfuco_mgm3, .data$Perid_mgm3,  na.rm = TRUE), # Photosynthetic Carotenoids
+                    PSP = sum(.data$PSC, .data$TotalChl, na.rm = TRUE), # Photosynthetic pigments
+                    TCaro = sum(.data$PSC, .data$PSP, na.rm = TRUE), # Total Carotenoids
+                    TAcc = sum(.data$TCaro, .data$DvCphlB_mgm3, .data$CphlB_mgm3, .data$CphlC3_mgm3, .data$CphlC2_mgm3, .data$CphlC1_mgm3,  na.rm = TRUE), # Total Accessory pigments
+                    TPig = sum(.data$TAcc, .data$TotalChla,  na.rm = TRUE), # Total pigments
+                    TDP = sum(.data$PSC, .data$Allo_mgm3, .data$Zea_mgm3, .data$DvCphlB_mgm3, .data$CphlB_mgm3,  na.rm = TRUE), # Total Diagnostic pigments
+                    StationCode = stringr::str_sub(.data$TripCode, 1, 3),
+                    SampleDepth_m = as.numeric(.data$SampleDepth_m))
+      dplyr::filter(.data$TotalChla != 0)
+ }
+
+  dat <- dat %>%
     dplyr::select(.data$Project, .data$SampleTime_Local, .data$Month_Local, .data$SampleDepth_m, .data$StationName, .data$StationCode,
                   tidyselect::any_of(var_names)) %>%
     tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = 'Parameters') %>%
     pr_reorder()
 
-  return(dat)
 }
 
 
