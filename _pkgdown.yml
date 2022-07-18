@@ -1,5 +1,18 @@
 url: https://planktonteam.github.io/planktonr
 development:
   destination:
-  version_label: danger
-  version_tooltip: "The package is in the early stages of development. Not recommended for use at this stage."
+  version_label: info
+  version_tooltip: "The package is in the early stages of development. Use with caution."
+reference:
+- title: Load Data
+  desc:  Functions to access data from the AODN.
+- contents:
+  - starts_with("pr_get_")
+- title: Plotting
+  desc: Functions for plotting.
+- contents:
+  - starts_with("pr_plot_")
+- title: Utilities
+- contents:
+  - -starts_with("pr_get_")
+  - -starts_with("pr_plot_")

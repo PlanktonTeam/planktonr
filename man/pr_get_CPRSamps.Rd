@@ -4,10 +4,7 @@
 \alias{pr_get_CPRSamps}
 \title{Get CPR samples}
 \usage{
-pr_get_CPRSamps(Type = c("P", "Z", "B"))
-}
-\arguments{
-\item{Type}{A character string on which to filter data (P = Phytoplankton, Z = Zooplankton, B = Biomass)}
+pr_get_CPRSamps()
 }
 \value{
 A dataframe with CPR Samples
@@ -16,5 +13,5 @@ A dataframe with CPR Samples
 Get CPR samples
 }
 \examples{
-df <- pr_get_CPRSamps("Z")
+df <- pr_get_CPRSamps()
 }

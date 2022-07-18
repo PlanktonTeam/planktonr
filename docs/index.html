@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">planktonr</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="The package is in the early stages of development. Not recommended for use at this stage.">0.0.0.9001</span>
+        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.1.0.0000</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="articles/planktonr.html">Get started</a>
 </li>
@@ -50,24 +46,24 @@
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/CPR_ts.html">CPR timeseries</a>
+      <a href="articles/CPR_ts.html">Analysing CPR timeseries</a>
     </li>
     <li>
-      <a href="articles/NRS_ts.html">NRS timeseries</a>
+      <a href="articles/NRS_ts.html">Analysing NRS timeseries</a>
     </li>
   </ul>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/PlanktonTeam/planktonr/">
+  <a href="https://github.com/PlanktonTeam/planktonr/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -84,20 +80,20 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="planktonr-" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#planktonr-" class="anchor"></a>planktonr <a href="https://github.com/PlanktonTeam/planktonr"><img src="reference/figures/planktonr.png" align="right" height="139"></a>
+<div class="section level1">
+<div class="page-header"><h1 id="planktonr-">planktonr <a href="https://github.com/PlanktonTeam/planktonr" class="external-link"><img src="reference/figures/planktonr.png" align="right" height="150"></a>
+<a class="anchor" aria-label="anchor" href="#planktonr-"></a>
 </h1></div>
 <!-- badges: start -->
 
-<p>planktonr is an r package that facilitates the download, analysis and visualisation of phytoplankton and zooplankton data. Our initial focus will be on plankton data stored on the Australian Ocean Data Network (<a href="https://portal.aodn.org.au">AODN</a>) and collected by the Integrated Marine Observing System (<a href="www.imos.org.au">IMOS</a>), but we hope to expand to other plankton data sets in the future.</p>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p>We are currently not on CRAN (hopefully soon). Be aware that this package is in the very early stages of development. Functions and documentation are not complete so installing at the moment is at your own risk. If you are still interested, you can install the development version from <a href="https://github.com/">GitHub</a> with:</p>
+<p>planktonr is an r package that facilitates the download, analysis and visualisation of phytoplankton and zooplankton data. Our initial focus will be on plankton data stored on the Australian Ocean Data Network (<a href="https://portal.aodn.org.au" class="external-link">AODN</a>) and collected by the Integrated Marine Observing System (<a href="www.imos.org.au">IMOS</a>), but we hope to expand to other plankton data sets in the future.</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>We are currently not on CRAN (hopefully soon). Be aware that this package is in the very early stages of development. Functions and documentation are not complete so installing at the moment is at your own risk. If you are still interested, you can install the development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"PlanktonTeam/planktonr"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"PlanktonTeam/planktonr"</span><span class="op">)</span></span></code></pre></div>
 <p>Thanks to the team at the Integration and Application Network (ian.umces.edu/media-library) for the copepod symbol used in the planktonr logo.</p>
 </div>
 </div>
@@ -105,47 +101,58 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/PlanktonTeam/planktonr/">https://​github.com/​PlanktonTeam/​planktonr/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/PlanktonTeam/planktonr/issues">https://​github.com/​PlanktonTeam/​planktonr/​issues</a>
-</li>
+<li><a href="https://github.com/PlanktonTeam/planktonr/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/PlanktonTeam/planktonr/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
 <li><small>GPL (&gt;= 3)</small></li>
 </ul>
 </div>
-<div class="developers">
-<h2>Developers</h2>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li>Jason D. Everett <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-6681-8054" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Claire H. Davies <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-0424-1835" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html#citation">Citing planktonr</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
-<li><a href="https://github.com/PlanktonTeam/planktonr/actions"><img src="https://github.com/PlanktonTeam/planktonr/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://codecov.io/gh/PlanktonTeam/planktonr?branch=master"><img src="https://codecov.io/gh/PlanktonTeam/planktonr/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li>Jason D. Everett <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-6681-8054" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Claire H. Davies <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-0424-1835" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 </ul>
 </div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li><a href="https://github.com/PlanktonTeam/planktonr/actions" class="external-link"><img src="https://github.com/PlanktonTeam/planktonr/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://app.codecov.io/gh/PlanktonTeam/planktonr?branch=master" class="external-link"><img src="https://codecov.io/gh/PlanktonTeam/planktonr/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
+</ul>
 </div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Jason D. Everett, Claire H. Davies.</p>
+  <p></p>
+<p>Developed by Jason D. Everett, Claire H. Davies.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer>
@@ -153,6 +160,8 @@
 
   
 
+
+  
 
   </body>
 </html>

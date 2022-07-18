@@ -9,20 +9,20 @@ pr_plot_EOV(
   EOV = "Biomass_mgm3",
   Survey = "NRS",
   trans = "identity",
-  pal = "matter",
+  col = "blue",
   labels = "yes"
 )
 }
 \arguments{
-\item{df}{dataframe containing timeseries data with parameters and Values}
+\item{df}{dataframe containing timeseries data with Parameters and Values, output of pr_get_PolicyData and pr_get_Coeffs}
 
 \item{EOV}{Essential OCean Variable as a parameter}
 
-\item{Survey}{NRS, CPR or Long term monitoring}
+\item{Survey}{NRS, CPR or LTM 'Long term monitoring'}
 
 \item{trans}{scale for y axis}
 
-\item{pal}{colour pallet from cmocean}
+\item{col}{colour selection}
 
 \item{labels}{do you want to print labels on the x axes}
 }
@@ -33,9 +33,8 @@ plot of timeseries, anomalies and climatology
 Policy plot
 }
 \examples{
-df <- data.frame(SampleDate = c("2010-01-01","2010-02-25","2010-06-21","2010-04-11","2010-08-05"),
-StationName = 'Port Hacking', parameters = 'Biomass_mgm3', Values = runif(5, 1, 50),
-fv = runif(5, 1, 50), anomaly = runif(5, 1, 3), Month = runif(5, 1, 6)) \%>\%
-dplyr::mutate(SampleDate = as.POSIXct(SampleDate))
-plot <-  pr_plot_EOV(df, 'Biomass_mgm3', 'NRS', 'identity', 'matter', 'yes')
+df <- pr_get_PolicyData("CPR") \%>\%
+  pr_get_Coeffs()
+pr_plot_EOV(df, EOV = "BiomassIndex_mgm3", Survey = "CPR",
+      trans = "identity", col = "blue", labels = "no")
 }
