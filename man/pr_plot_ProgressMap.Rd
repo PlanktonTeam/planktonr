@@ -8,6 +8,8 @@ pr_plot_ProgressMap(df, interactive = FALSE)
 }
 \arguments{
 \item{df}{output from pr_get_ProgressMap}
+
+\item{interactive}{Should the plot be interactive with leaflet?}
 }
 \value{
 a plot of IMOS progress
