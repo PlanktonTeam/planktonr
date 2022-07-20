@@ -20,12 +20,13 @@ mbr <- sf::st_read(file.path("data-raw","marine_regions")) %>%  # Load marine re
 
 clr <- tibble::tribble(
   ~REGION, ~Colour,
-  "North", "#b3e2cd",
-  "Temperate East", "#fdcdac",
-  "North-west", "#cbd5e8",
-  "South-west", "#f4cae4",
-  "South-east", "#e6f5c9",
-  "Coral Sea",  "#fff2ae")
+  "North", "#e41a1c",
+  "Temperate East", "#377eb8",
+  "North-west", "#4daf4a",
+  "South-west", "#984ea3",
+  "South-east", "#ff7f00",
+  "Coral Sea",  "#ffff33")
+
 
 mbr <- dplyr::left_join(mbr, clr, by = "REGION")
 
