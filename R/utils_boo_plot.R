@@ -711,6 +711,7 @@ pr_plot_STI <-  function(df){
 #' IMOS progress plot
 #'
 #' @param df output from pr_get_ProgressMap
+#' @param interactive Should the plot be interactive with leaflet?
 #'
 #' @return a plot of IMOS progress
 #' @export
