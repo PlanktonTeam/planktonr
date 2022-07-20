@@ -14,7 +14,7 @@ pr_plot_NRSmap <- function(df){
   meta_sf <- meta_sf %>%
     dplyr::mutate(Colour = dplyr::if_else(.data$Code %in% df$StationCode, "Red", "Blue")) %>%
     sf::st_as_sf() # This seems to strip away some of the tibble stuff that makes the filter not work...
-    # dplyr::filter(.data$Code %in% df$StationCode)
+  # dplyr::filter(.data$Code %in% df$StationCode)
 
   col <- meta_sf %>%
     sf::st_drop_geometry() %>%
@@ -718,57 +718,160 @@ pr_plot_STI <-  function(df){
 #' @examples
 #' df <- pr_get_ProgressMap("CPR")
 #' plot <- pr_plot_ProgressMap(df)
-pr_plot_ProgressMap <- function(df){
+pr_plot_ProgressMap <- function(df, interactive = FALSE){
 
-  MapOz <- rnaturalearth::ne_countries(scale = "medium", country = "Australia",
-                                       returnclass = "sf")
+  if (interactive == TRUE){
 
-  PMapData2 <- df %>%
-    sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326)
 
-  PMapSum <- merge(df %>% dplyr::group_by(.data$Region, .data$Survey) %>%
-                     dplyr::summarise(Sums = dplyr::n(),
-                                      .groups = "drop") %>%
-                     dplyr::mutate(label = paste0(.data$Region, ' = ', .data$Sums)),
-                   df %>% dplyr::group_by(.data$Region, .data$Survey) %>%
-                     dplyr::summarise(Lats = mean(.data$Latitude),
-                                      Lons = mean(.data$Longitude),
-                                      .groups = "drop")) %>%
-    sf::st_as_sf(coords = c("Lons", "Lats"), crs = 4326)
+#
+#     library(tidyverse)
+#     library(planktonr)
+#     load("~/GitHub/planktonr/R/sysdata.rda")
+#     PMapDatan <- dplyr::bind_rows(planktonr::pr_get_Indices("NRS", "Z"), planktonr::pr_get_Indices("NRS", "P")) %>%
+#       filter(.data$Parameters == "ZoopAbundance_m3" | .data$Parameters == "PhytoAbundance_CellsL") %>%
+#       tidyr::pivot_wider(names_from = .data$Parameters, values_from = .data$Values) %>%
+#       dplyr::rename(Name = .data$StationName) %>%
+#       dplyr::select(-.data$StationCode) %>%
+#       dplyr::mutate(Survey = "NRS")
+#
+#     PMapDatac <- dplyr::bind_rows(planktonr::pr_get_Indices("CPR", "Z"), planktonr::pr_get_Indices("CPR", "P")) %>%
+#       filter(.data$Parameters == "ZoopAbundance_m3" | .data$Parameters == "PhytoAbundance_Cellsm3") %>%
+#       tidyr::pivot_wider(names_from = .data$Parameters, values_from = .data$Values) %>%
+#       dplyr::mutate(PhytoAbundance_Cellsm3 = .data$PhytoAbundance_Cellsm3/1e3,
+#                     Survey = "CPR") %>%
+#       dplyr::rename(PhytoAbundance_CellsL = .data$PhytoAbundance_Cellsm3,
+#                     Name = .data$BioRegion)
+#
+#     df <- dplyr::bind_rows(PMapDatan, PMapDatac) %>%
+#       dplyr::select(-c(.data$Year_Local, .data$Month_Local , .data$tz))
+#
 
-  nudgex = c(-2,5.5,2,8.5,9.5,0,0,4)
-  nudgey = c(-3,0,1,0,0,7,-2,10)
-  # GAB, GBR, NA, NEAC, SEAC, SO, Tas, WA
 
-  Survey <- df %>%
-    dplyr::select(.data$Survey) %>%
-    dplyr::distinct()
+    # if (!"NRS" %in% df$Survey){
+    #   df <- df %>%
+    #     dplyr::bind_cols(pr_get_ProgressMap("NRS"))
+    # } else if (!"CPR" %in% df$Survey){
+    #   df <- df %>%
+    #     dplyr::bind_cols(pr_get_ProgressMap("CPR"))
+    # }
 
-  gg <- ggplot2::ggplot() +
-    ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
-    ggplot2::coord_sf(xlim = c(105, 170), ylim = c(-54, -7), expand = FALSE) +
-    ggplot2::theme_void() +
-    ggplot2::theme(axis.title = ggplot2::element_blank(),
-                   axis.line = ggplot2::element_blank())
+    df_CPR <- df %>% dplyr::filter(.data$Survey == "CPR")
+    df_NRS <- df %>% dplyr::filter(.data$Survey == "NRS")
 
-  if ("NRS" %in% Survey$Survey) {
-    gg <-  gg +
-      ggplot2::geom_sf(data = PMapData2 %>% dplyr::filter(.data$Survey == "NRS"), size = 5) +
-      ggplot2::geom_sf_text(data = PMapSum %>% dplyr::filter(.data$Survey == "NRS"),
-                            size = 5, ggplot2::aes(label = .data$label),
-                            show.legend = FALSE, nudge_x = 3)
+    df_NRS2 <- df_NRS %>%
+      dplyr::distinct(.data$Name, .keep_all = TRUE) %>%
+      tidyr::drop_na() %>%
+      dplyr::select(-c(.data$ZoopAbundance_m3, .data$PhytoAbundance_CellsL, .data$Survey))
+
+    rm(df)
+
+    CPRpal <- leaflet::colorFactor(palette = "Paired", unique(df_CPR$Name))
+    NRSpal <- leaflet::colorFactor(palette = "Pastel1", unique(df_NRS$Name))
+    # MBRpal <- leaflet::colorFactor(palette = "Pastel2", mbr$Name)
+
+
+
+    labs_cpr <- lapply(seq(nrow(df_CPR)), function(i) {
+      paste("<strong>Sample Date:</strong>", df_CPR$SampleTime_Local[i], "<br/>","<b/>",
+            "<strong>Bioregion: </strong>", df_CPR$Name[i], "<br/>","<b/>",
+            "<strong>Phytoplankton Abundance (L\u207B\u00B9)</strong>: ", round(df_CPR$PhytoAbundance_CellsL[i],2), "<br/>","<b/>",
+            "<strong>Zooplankton Abundance (m\u207B\u00B3)</strong>: ", round(df_CPR$ZoopAbundance_m3[i],2), "<br/>","<b/>")})
+
+    labs_mbr <- lapply(seq(nrow(mbr)), function(i) {
+      paste("<strong>The ", mbr$REGION[i], " bioregion <br/>","<b/>",
+            "is characterised by....<br/>","<b/>")
+    })
+
+
+    tit <- htmltools::HTML(("<h3>Plankton sampling progress</h1>"))
+
+    map <- leaflet::leaflet() %>%
+      leaflet::addProviderTiles(provider = "Esri", layerId = "OceanBasemap") %>%
+      leaflet::addPolygons(data = mbr,  group = "Marine Bioregions",
+                           color = ~Colour, fill = ~Colour,
+                           opacity = 1, fillOpacity = 0.5,
+                           weight = 1,
+                           label = lapply(labs_mbr, htmltools::HTML)) %>%
+      leaflet::addCircles(data = df_CPR,
+                          lat = ~ Latitude, lng = ~ Longitude,
+                          fill = ~CPRpal(Name), color = ~CPRpal(Name),
+                          radius = 100, fillOpacity = 0.7, opacity = 1, weight = 1,
+                          group = "Continuous Plankton Recorder",
+                          label = lapply(labs_cpr, htmltools::HTML)) %>%
+      # leaflet::addCircles(data = df_NRS2, # A HACK BECAUSE I CAN'T GET THE LABEL FOR ADDMARKERS TO DISPLAY
+      #                     lat = ~ Latitude, lng = ~ Longitude,
+                          # popup = ~ Name,
+                          # popup = paste("National Reference Station: ",df_NRS2$Name),
+                          # label = htmltools::HTML(paste("<strong>National Reference Station:</strong> ",df_NRS2$Name))
+                          # ) %>%
+      leaflet::addMarkers(data = df_NRS,
+                          lat = ~ Latitude, lng = ~ Longitude, group = "National Reference Stations",
+                          # popup = ~ Name,
+                          # popup = paste("National Reference Station: ",unique(df_NRS$Name)),
+                          # label = htmltools::HTML(paste("<strong>National Reference Station:</strong> ",df_NRS$Name)),
+                          clusterOptions = leaflet::markerClusterOptions(showCoverageOnHover = FALSE,
+                                                                         # zoomToBoundsOnClick = FALSE,
+                                                                         spiderfyOnMaxZoom = FALSE)) %>%
+      leaflet::addControl(tit, position = "topright") %>%
+      leaflet::addLayersControl( # Layers control
+        overlayGroups = c("National Reference Stations", "Continuous Plankton Recorder", "Marine Bioregions"),
+        position = "topright",
+        options = leaflet::layersControlOptions(collapsed = FALSE, fill = NA))
+
+    return(map)
+
+  } else {
+
+    MapOz <- rnaturalearth::ne_countries(scale = "medium", country = "Australia",
+                                         returnclass = "sf")
+
+    PMapData2 <- df %>%
+      sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326)
+
+    PMapSum <- merge(df %>% dplyr::group_by(.data$Region, .data$Survey) %>%
+                       dplyr::summarise(Sums = dplyr::n(),
+                                        .groups = "drop") %>%
+                       dplyr::mutate(label = paste0(.data$Region, ' = ', .data$Sums)),
+                     df %>% dplyr::group_by(.data$Region, .data$Survey) %>%
+                       dplyr::summarise(Lats = mean(.data$Latitude),
+                                        Lons = mean(.data$Longitude),
+                                        .groups = "drop")) %>%
+      sf::st_as_sf(coords = c("Lons", "Lats"), crs = 4326)
+
+    nudgex = c(-2,5.5,2,8.5,9.5,0,0,4)
+    nudgey = c(-3,0,1,0,0,7,-2,10)
+    # GAB, GBR, NA, NEAC, SEAC, SO, Tas, WA
+
+    Survey <- df %>%
+      dplyr::select(.data$Survey) %>%
+      dplyr::distinct()
+
+    gg <- ggplot2::ggplot() +
+      ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
+      ggplot2::coord_sf(xlim = c(105, 170), ylim = c(-54, -7), expand = FALSE) +
+      ggplot2::theme_void() +
+      ggplot2::theme(axis.title = ggplot2::element_blank(),
+                     axis.line = ggplot2::element_blank())
+
+    if ("NRS" %in% Survey$Survey) {
+      gg <-  gg +
+        ggplot2::geom_sf(data = PMapData2 %>% dplyr::filter(.data$Survey == "NRS"), size = 5) +
+        ggplot2::geom_sf_text(data = PMapSum %>% dplyr::filter(.data$Survey == "NRS"),
+                              size = 5, ggplot2::aes(label = .data$label),
+                              show.legend = FALSE, nudge_x = 3)
+    }
+
+    if ("CPR" %in% Survey$Survey) {
+
+      gg <-  gg +
+        ggplot2::geom_sf(data = PMapData2 %>% dplyr::filter(.data$Survey == "CPR"),
+                         size = 1, ggplot2::aes(color =.data$Region), show.legend = FALSE) +
+        ggplot2::geom_sf_text(data = PMapSum %>% dplyr::filter(.data$Survey == "CPR"),
+                              size = 5, ggplot2::aes(label = .data$label, color = .data$Region),
+                              show.legend = FALSE, check_overlap = TRUE, nudge_x = nudgex, nudge_y = nudgey)
+    }
+
+    return(gg)
   }
-
-  if ("CPR" %in% Survey$Survey) {
-
-    gg <-  gg +
-      ggplot2::geom_sf(data = PMapData2 %>% dplyr::filter(.data$Survey == "CPR"),
-                       size = 1, ggplot2::aes(color =.data$Region), show.legend = FALSE) +
-      ggplot2::geom_sf_text(data = PMapSum %>% dplyr::filter(.data$Survey == "CPR"),
-                            size = 5, ggplot2::aes(label = .data$label, color = .data$Region),
-                            show.legend = FALSE, check_overlap = TRUE, nudge_x = nudgex, nudge_y = nudgey)
-  }
-
-  return(gg)
 
 }
