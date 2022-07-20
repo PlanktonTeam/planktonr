@@ -4,7 +4,7 @@
 \alias{pr_plot_ProgressMap}
 \title{IMOS progress plot}
 \usage{
-pr_plot_ProgressMap(df)
+pr_plot_ProgressMap(df, interactive = FALSE)
 }
 \arguments{
 \item{df}{output from pr_get_ProgressMap}
