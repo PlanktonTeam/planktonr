@@ -723,8 +723,6 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
 
   if (interactive == TRUE){
 
-
-#
 #     library(tidyverse)
 #     library(planktonr)
 #     load("~/GitHub/planktonr/R/sysdata.rda")
@@ -746,15 +744,6 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
 #     df <- dplyr::bind_rows(PMapDatan, PMapDatac) %>%
 #       dplyr::select(-c(.data$Year_Local, .data$Month_Local , .data$tz))
 #
-
-
-    # if (!"NRS" %in% df$Survey){
-    #   df <- df %>%
-    #     dplyr::bind_cols(pr_get_ProgressMap("NRS"))
-    # } else if (!"CPR" %in% df$Survey){
-    #   df <- df %>%
-    #     dplyr::bind_cols(pr_get_ProgressMap("CPR"))
-    # }
 
     df_CPR <- df %>% dplyr::filter(.data$Survey == "CPR")
     df_NRS <- df %>% dplyr::filter(.data$Survey == "NRS")
@@ -783,8 +772,31 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
             "is characterised by....<br/>","<b/>")
     })
 
+    title1 <- htmltools::div(
+      htmltools::tags$style(htmltools::HTML(".leaflet-control.map-title1 {
+                                                text-align: center;
+                                                background: rgba(255,255,255,0);
+                                                font-weight: bold;
+                                                font-size: 24px;
+                                                margin: 0;
+                                                margin-right: 6px}")),
+      "Plankton sampling progress")
 
-    tit <- htmltools::HTML(("<h3>Plankton sampling progress</h1>"))
+    title2 <- htmltools::div(
+      htmltools::tags$style(htmltools::HTML(".leaflet-control.map-title2 {
+                                                text-align: center;
+                                                background: rgba(255,255,255,0);
+                                                # font-weight: bold;
+                                                font-size: 16px;
+                                                margin: 0;
+                                                margin-right: 6px}")),
+      "Hover cursor over items of interest")
+
+
+    # iconSet <- leaflet::awesomeIconList(home = leaflet::makeAwesomeIcon(icon = "circle-o",
+    #                                                                    library = "fa",
+    #                                                                    iconColor = 'gold',
+    #                                                                    markerColor = 'red'))
 
     map <- leaflet::leaflet() %>%
       leaflet::addProviderTiles(provider = "Esri", layerId = "OceanBasemap") %>%
@@ -793,31 +805,36 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
                            opacity = 1, fillOpacity = 0.5,
                            weight = 1,
                            label = lapply(labs_mbr, htmltools::HTML)) %>%
-      leaflet::addCircles(data = df_CPR,
+      leaflet::addCircleMarkers(data = df_CPR,
+                                lat = ~ Latitude, lng = ~ Longitude,
+                                fill = ~CPRpal(Name), color = ~CPRpal(Name),
+                                radius = 5, fillOpacity = 0.7, opacity = 1, weight = 1,
+                                group = "Continuous Plankton Recorder",
+                                label = lapply(labs_cpr, htmltools::HTML)) %>%
+      leaflet::addAwesomeMarkers(data = df_NRS,
                           lat = ~ Latitude, lng = ~ Longitude,
-                          fill = ~CPRpal(Name), color = ~CPRpal(Name),
-                          radius = 100, fillOpacity = 0.7, opacity = 1, weight = 1,
-                          group = "Continuous Plankton Recorder",
-                          label = lapply(labs_cpr, htmltools::HTML)) %>%
-      # leaflet::addCircles(data = df_NRS2, # A HACK BECAUSE I CAN'T GET THE LABEL FOR ADDMARKERS TO DISPLAY
-      #                     lat = ~ Latitude, lng = ~ Longitude,
-                          # popup = ~ Name,
-                          # popup = paste("National Reference Station: ",df_NRS2$Name),
-                          # label = htmltools::HTML(paste("<strong>National Reference Station:</strong> ",df_NRS2$Name))
-                          # ) %>%
-      leaflet::addMarkers(data = df_NRS,
-                          lat = ~ Latitude, lng = ~ Longitude, group = "National Reference Stations",
-                          # popup = ~ Name,
-                          # popup = paste("National Reference Station: ",unique(df_NRS$Name)),
-                          # label = htmltools::HTML(paste("<strong>National Reference Station:</strong> ",df_NRS$Name)),
+                          icon = iconSet,
+                          group = "National Reference Stations",
                           clusterOptions = leaflet::markerClusterOptions(showCoverageOnHover = FALSE,
-                                                                         # zoomToBoundsOnClick = FALSE,
-                                                                         spiderfyOnMaxZoom = FALSE)) %>%
-      leaflet::addControl(tit, position = "topright") %>%
+                                                                         spiderfyOnMaxZoom = FALSE,
+                                                                         maxClusterRadius = 40)) %>%
+      leaflet::addControl(title1,
+                          position = "topright",
+                          className = "map-title1"
+      ) %>%
+      leaflet::addControl(title2,
+                          position = "topright",
+                          className = "map-title2"
+      ) %>%
       leaflet::addLayersControl( # Layers control
         overlayGroups = c("National Reference Stations", "Continuous Plankton Recorder", "Marine Bioregions"),
         position = "topright",
-        options = leaflet::layersControlOptions(collapsed = FALSE, fill = NA))
+        options = leaflet::layersControlOptions(collapsed = FALSE, fill = NA)) %>%
+      leaflet::addMiniMap() %>%  # add a minimap
+      leaflegend::addLegendFactor(pal = leaflet::colorFactor("#FFA500", "National Reference Stations"),
+                                  shape = "circle", values = "National Reference Stations")
+
+
 
     return(map)
 
