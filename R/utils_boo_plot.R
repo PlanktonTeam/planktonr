@@ -723,31 +723,27 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
 
   if (interactive == TRUE){
 
-
-
-    library(tidyverse)
-    library(planktonr)
-    load("~/GitHub/planktonr/R/sysdata.rda")
-    PMapDatan <- dplyr::bind_rows(planktonr::pr_get_Indices("NRS", "Z"), planktonr::pr_get_Indices("NRS", "P")) %>%
-      filter(.data$Parameters == "ZoopAbundance_m3" | .data$Parameters == "PhytoAbundance_CellsL") %>%
-      tidyr::pivot_wider(names_from = .data$Parameters, values_from = .data$Values) %>%
-      dplyr::rename(Name = .data$StationName) %>%
-      dplyr::select(-.data$StationCode) %>%
-      dplyr::mutate(Survey = "NRS")
-
-    PMapDatac <- dplyr::bind_rows(planktonr::pr_get_Indices("CPR", "Z"), planktonr::pr_get_Indices("CPR", "P")) %>%
-      filter(.data$Parameters == "ZoopAbundance_m3" | .data$Parameters == "PhytoAbundance_Cellsm3") %>%
-      tidyr::pivot_wider(names_from = .data$Parameters, values_from = .data$Values) %>%
-      dplyr::mutate(PhytoAbundance_Cellsm3 = .data$PhytoAbundance_Cellsm3/1e3,
-                    Survey = "CPR") %>%
-      dplyr::rename(PhytoAbundance_CellsL = .data$PhytoAbundance_Cellsm3,
-                    Name = .data$BioRegion)
-
-    df <- dplyr::bind_rows(PMapDatan, PMapDatac) %>%
-      dplyr::select(-c(.data$Year_Local, .data$Month_Local , .data$tz))
-
-
-
+#     library(tidyverse)
+#     library(planktonr)
+#     load("~/GitHub/planktonr/R/sysdata.rda")
+#     PMapDatan <- dplyr::bind_rows(planktonr::pr_get_Indices("NRS", "Z"), planktonr::pr_get_Indices("NRS", "P")) %>%
+#       filter(.data$Parameters == "ZoopAbundance_m3" | .data$Parameters == "PhytoAbundance_CellsL") %>%
+#       tidyr::pivot_wider(names_from = .data$Parameters, values_from = .data$Values) %>%
+#       dplyr::rename(Name = .data$StationName) %>%
+#       dplyr::select(-.data$StationCode) %>%
+#       dplyr::mutate(Survey = "NRS")
+#
+#     PMapDatac <- dplyr::bind_rows(planktonr::pr_get_Indices("CPR", "Z"), planktonr::pr_get_Indices("CPR", "P")) %>%
+#       filter(.data$Parameters == "ZoopAbundance_m3" | .data$Parameters == "PhytoAbundance_Cellsm3") %>%
+#       tidyr::pivot_wider(names_from = .data$Parameters, values_from = .data$Values) %>%
+#       dplyr::mutate(PhytoAbundance_Cellsm3 = .data$PhytoAbundance_Cellsm3/1e3,
+#                     Survey = "CPR") %>%
+#       dplyr::rename(PhytoAbundance_CellsL = .data$PhytoAbundance_Cellsm3,
+#                     Name = .data$BioRegion)
+#
+#     df <- dplyr::bind_rows(PMapDatan, PMapDatac) %>%
+#       dplyr::select(-c(.data$Year_Local, .data$Month_Local , .data$tz))
+#
 
     df_CPR <- df %>% dplyr::filter(.data$Survey == "CPR")
     df_NRS <- df %>% dplyr::filter(.data$Survey == "NRS")
@@ -797,11 +793,10 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
       "Hover cursor over items of interest")
 
 
-    iconSet <- leaflet::awesomeIconList(home = leaflet::makeAwesomeIcon(icon = "Flag",
-                                                                       library = "fa",
-                                                                       iconColor = 'gold',
-                                                                       markerColor = 'red'))
-
+    # iconSet <- leaflet::awesomeIconList(home = leaflet::makeAwesomeIcon(icon = "circle-o",
+    #                                                                    library = "fa",
+    #                                                                    iconColor = 'gold',
+    #                                                                    markerColor = 'red'))
 
     map <- leaflet::leaflet() %>%
       leaflet::addProviderTiles(provider = "Esri", layerId = "OceanBasemap") %>%
@@ -837,8 +832,7 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
         options = leaflet::layersControlOptions(collapsed = FALSE, fill = NA)) %>%
       leaflet::addMiniMap() %>%  # add a minimap
       leaflegend::addLegendFactor(pal = leaflet::colorFactor("#FFA500", "National Reference Stations"),
-                                  shape = "circle", values = "National Reference Stations") %>%
-    leaflegend::addLegendAwesomeIcon(iconSet = iconSet)
+                                  shape = "circle", values = "National Reference Stations")
 
 
 
