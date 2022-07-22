@@ -813,7 +813,7 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
                                 label = lapply(labs_cpr, htmltools::HTML)) %>%
       leaflet::addAwesomeMarkers(data = df_NRS,
                           lat = ~ Latitude, lng = ~ Longitude,
-                          icon = iconSet,
+                          # icon = iconSet,
                           group = "National Reference Stations",
                           clusterOptions = leaflet::markerClusterOptions(showCoverageOnHover = FALSE,
                                                                          spiderfyOnMaxZoom = FALSE,
