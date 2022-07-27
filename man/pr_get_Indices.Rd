@@ -4,12 +4,14 @@
 \alias{pr_get_Indices}
 \title{Access data for timeseries and climatology plots}
 \usage{
-pr_get_Indices(Survey = "CPR", Type = "P")
+pr_get_Indices(Survey = "CPR", Type = "P", ...)
 }
 \arguments{
 \item{Survey}{CPR or NRS, defaults to NRS}
 
 \item{Type}{Phyto, zoo or physical water props, defaults to phyto}
+
+\item{...}{to allow use of join when used within another function}
 }
 \value{
 dataframe to use in pr_plot functions
@@ -21,6 +23,6 @@ Access data for timeseries and climatology plots
 df <- pr_get_Indices("NRS", "P")
 df <- pr_get_Indices("NRS", "Z")
 df <- pr_get_Indices("NRS", "W")
-df <- pr_get_Indices("CPR", "P")
+df <- pr_get_Indices("CPR", "P", join = "st_nearest_feature")
 df <- pr_get_Indices("CPR", "Z")
 }

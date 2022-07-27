@@ -1,5 +1,5 @@
 #' Get functional group data
-#'
+#' @param ... to allow use of join when used within another function
 #' @param Survey CPR or NRS data
 #' @param Type Zooplankton or phytoplankton data
 #'
@@ -7,14 +7,15 @@
 #' @export
 #'
 #' @examples
-#' NRSfgz <- planktonr::pr_get_FuncGroups("NRS", "Z")
-#' NRSfgp <- planktonr::pr_get_FuncGroups("NRS", "P")
-#' CPRfgz <- planktonr::pr_get_FuncGroups("CPR", "Z")
-#' CPRfgp <- planktonr::pr_get_FuncGroups("CPR", "P")
-pr_get_FuncGroups <- function(Survey = "NRS", Type = "Z"){
+#' NRSfgz <- pr_get_FuncGroups("NRS", "Z")
+#' NRSfgp <- pr_get_FuncGroups("NRS", "P")
+#' CPRfgz <- pr_get_FuncGroups("CPR", "Z", join = "st_nearest_feature")
+#' CPRfgp <- pr_get_FuncGroups("CPR", "P")
+pr_get_FuncGroups <- function(Survey = "NRS", Type = "Z", ...){
 
   if(Survey == "CPR"){
-    df <- pr_get_CPRData(Type, Variable = "abundance", Subset = "htg")
+    df <- pr_get_CPRData(Type, Variable = "abundance", Subset = "htg") %>%
+      pr_add_Bioregions(...)
   } else if(Survey == "NRS"){
     df <- pr_get_NRSData(Type, Variable = "abundance", Subset = "htg") %>%
       dplyr::filter(.data$StationName != "Port Hacking 4")
@@ -34,7 +35,6 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Z"){
 
   if(Survey == "CPR"){
     df <- df %>%
-      pr_add_Bioregions() %>%
       dplyr::select(.data$BioRegion, .data$SampleTime_Local, .data$Month_Local, .data$Year_Local, tidyselect::any_of(var_names)) %>%
       dplyr::filter(!is.na(.data$BioRegion), !.data$BioRegion %in% c("North", "North-west")) %>%
       droplevels()

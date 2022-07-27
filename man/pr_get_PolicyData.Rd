@@ -4,7 +4,7 @@
 \alias{pr_get_PolicyData}
 \title{Get Policy data set}
 \usage{
-pr_get_PolicyData(Survey = "NRS")
+pr_get_PolicyData(Survey = "NRS", ...)
 }
 \arguments{
 \item{Survey}{"NRS" or "CPR" or "LTM"}
@@ -16,5 +16,5 @@ A dataframe with policy data
 Get Policy data set
 }
 \examples{
-df <- pr_get_PolicyData("CPR")
+df <- pr_get_PolicyData("CPR", join = 'st_nearest_feature')
 }

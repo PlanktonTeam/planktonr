@@ -2,6 +2,7 @@
 #'
 #' @param Survey CPR or NRS, defaults to NRS
 #' @param Type Phyto, zoo or physical water props, defaults to phyto
+#' @param ... to allow use of join when used within another function
 #'
 #' @return dataframe to use in pr_plot functions
 #' @export
@@ -10,9 +11,9 @@
 #' df <- pr_get_Indices("NRS", "P")
 #' df <- pr_get_Indices("NRS", "Z")
 #' df <- pr_get_Indices("NRS", "W")
-#' df <- pr_get_Indices("CPR", "P")
+#' df <- pr_get_Indices("CPR", "P", join = "st_nearest_feature")
 #' df <- pr_get_Indices("CPR", "Z")
-pr_get_Indices <- function(Survey = "CPR", Type = "P"){
+pr_get_Indices <- function(Survey = "CPR", Type = "P", ...){
 
   if(Type == "Z" & Survey == "NRS"){
     var_names <- c("Biomass_mgm3", "AshFreeBiomass_mgm3", "ZoopAbundance_m3", "CopeAbundance_m3", "AvgTotalLengthCopepod_mm",
@@ -41,12 +42,14 @@ pr_get_Indices <- function(Survey = "CPR", Type = "P"){
 
     dat <- pr_get_Raw("cpr_derived_indices_data") %>%
       pr_rename() %>%
-      pr_add_Bioregions() %>%
+      pr_add_Bioregions(...) %>%
       pr_apply_Time() %>% #TODO added for consistency but uses etc timezones - do we changes these to the more familiar names or leave? doesn't improve with method = accurate
-      dplyr::select(.data$SampleTime_Local, .data$Year_Local, .data$Month_Local, .data$BioRegion,
-                    .data$tz, .data$Latitude, .data$Longitude, tidyselect::all_of(var_names)) %>%
+      dplyr::select(tidyselect::starts_with(c("SampleTime_Local", "Year_Local", "Month_Local", "Latitude", "Longitude", "BioRegion",
+                                              "DistanceFromBioregion_m", "tz", tidyselect::all_of(var_names)))) %>%
       tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "Parameters") %>%
       pr_reorder()
+
+
 
     return(dat)
 

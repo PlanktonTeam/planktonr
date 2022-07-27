@@ -1,15 +1,18 @@
 #' Add bioregions data to existing df
 #'
 #' @param df A dataframe with columns `.data$Longitude` and `.data$Latitude`
+#' @param join use join arguments from sf::st_join for joining to CPR samples to bioregions.
+#' @param ... to allow use of join when used within another function
 #'
 #' @return A dataframe with Marine Bioregions added
 #' @export
 #'
 #' @examples
-#' df <- pr_get_NRSStation() %>%
-#'   pr_add_Bioregions()
+#' df <-   df <- pr_get_Raw("cpr_derived_indices_data") %>%
+#'   pr_rename() %>%
+#'    pr_add_Bioregions("st_nearest_feature")
 #' @importFrom rlang .data
-pr_add_Bioregions <- function(df){
+pr_add_Bioregions <- function(df, join = "st_within", ...){
 
   # First add Marine Bioregions
   df <- df %>%
@@ -47,6 +50,43 @@ pr_add_Bioregions <- function(df){
                                                TRUE ~ .data$BioRegion)) %>%
     dplyr::relocate(.data$BioRegion, .after = .data$Latitude) %>%
     tibble::as_tibble()
+
+  if(join == 'st_nearest_feature'){
+
+    df <- df %>%
+      dplyr::mutate(BioRegion = dplyr::case_when(.data$Latitude < -47.17 & is.na(.data$BioRegion) ~ 'Southern Ocean',
+                                          .data$Longitude > 145 & is.na(.data$BioRegion) ~ 'Other',
+                                          TRUE ~ .data$BioRegion))
+
+    dfn <- df %>%
+      dplyr::filter(is.na(.data$BioRegion)) %>%
+      dplyr::select(geometry) %>%
+      sf::st_as_sf(sf_column_name = "geometry") %>%  # file with columns named .data$Longitude, .data$Latitude
+      sf::st_join(mbr, join = sf::st_nearest_feature) %>%
+      dplyr::select(.data$REGION) %>%
+      dplyr::bind_cols(df %>% dplyr::filter(is.na(.data$BioRegion)) %>% dplyr::select(-c(.data$BioRegion, .data$geometry))) %>%
+      dplyr::rename(BioRegion = .data$REGION)
+
+    df <- df %>%
+      dplyr::filter(!is.na(.data$BioRegion)) %>%
+      dplyr::bind_rows(dfn)
+
+    x <- df %>%
+      dplyr::select(geometry) %>%
+      sf::st_as_sf(sf_column_name = "geometry") %>%  # file with columns named .data$Longitude, .data$Latitude
+      sf::st_join(mbr, join = sf::st_nearest_feature)
+
+    df <- data.frame(sf::st_distance(x, mbr)) %>%
+      apply(1, FUN = min) %>%
+      data.frame() %>%
+      dplyr::rename(DistanceFromBioregion_m = 1) %>%
+      dplyr::bind_cols(df) %>%
+      dplyr::mutate(DistanceFromBioregion_m = dplyr::case_when(!.data$BioRegion %in% c("Southern Ocean", "Other") ~ .data$DistanceFromBioregion_m)) %>%
+      dplyr::relocate(.data$DistanceFromBioregion_m, .after = .data$BioRegion)
+
+  }
+
+  return(df)
 
   # # Then lets do IMCRA Provinvial Bioregions
   # df <- df %>%
