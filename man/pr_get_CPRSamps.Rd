@@ -4,7 +4,10 @@
 \alias{pr_get_CPRSamps}
 \title{Get CPR samples}
 \usage{
-pr_get_CPRSamps()
+pr_get_CPRSamps(...)
+}
+\arguments{
+\item{...}{to allow use of join when used within another function}
 }
 \value{
 A dataframe with CPR Samples
@@ -13,5 +16,8 @@ A dataframe with CPR Samples
 Get CPR samples
 }
 \examples{
+df <- pr_get_CPRSamps(join = "st_nearest_feature")
 df <- pr_get_CPRSamps()
+
+#' @importFrom rlang .data
 }

@@ -4,12 +4,14 @@
 \alias{pr_get_FuncGroups}
 \title{Get functional group data}
 \usage{
-pr_get_FuncGroups(Survey = "NRS", Type = "Z")
+pr_get_FuncGroups(Survey = "NRS", Type = "Z", ...)
 }
 \arguments{
 \item{Survey}{CPR or NRS data}
 
 \item{Type}{Zooplankton or phytoplankton data}
+
+\item{...}{to allow use of join when used within another function}
 }
 \value{
 dataframe for plotting functional group time series info
@@ -18,8 +20,8 @@ dataframe for plotting functional group time series info
 Get functional group data
 }
 \examples{
-NRSfgz <- planktonr::pr_get_FuncGroups("NRS", "Z")
-NRSfgp <- planktonr::pr_get_FuncGroups("NRS", "P")
-CPRfgz <- planktonr::pr_get_FuncGroups("CPR", "Z")
-CPRfgp <- planktonr::pr_get_FuncGroups("CPR", "P")
+NRSfgz <- pr_get_FuncGroups("NRS", "Z")
+NRSfgp <- pr_get_FuncGroups("NRS", "P")
+CPRfgz <- pr_get_FuncGroups("CPR", "Z", join = "st_nearest_feature")
+CPRfgp <- pr_get_FuncGroups("CPR", "P")
 }

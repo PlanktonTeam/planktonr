@@ -4,10 +4,12 @@
 \alias{pr_get_PolicyInfo}
 \title{Get policy information}
 \usage{
-pr_get_PolicyInfo(Survey = "NRS")
+pr_get_PolicyInfo(Survey = "NRS", ...)
 }
 \arguments{
 \item{Survey}{"NRS" or "CPR"}
+
+\item{...}{to allow use of join when used within another function}
 }
 \value{
 A dataframe with policy information

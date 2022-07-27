@@ -7,8 +7,8 @@
 #' @export
 #'
 #' @examples
-#' df <- pr_get_PolicyData("CPR")
-pr_get_PolicyData <- function(Survey = "NRS"){
+#' df <- pr_get_PolicyData("CPR", join = 'st_nearest_feature')
+pr_get_PolicyData <- function(Survey = "NRS", ...){
 
   if(Survey == "CPR") {
 
@@ -17,11 +17,11 @@ pr_get_PolicyData <- function(Survey = "NRS"){
 
     Polr <- pr_get_Raw("cpr_derived_indices_data") %>%
       pr_rename() %>%
-      pr_add_Bioregions()
+      pr_add_Bioregions(...)
 
     Pol <- Polr %>%
-      dplyr::select(.data$SampleTime_Local, .data$Year_Local, .data$Month_Local, .data$BioRegion,
-                    tidyselect::all_of(var_names)) %>%
+      dplyr::select(tidyselect::starts_with(c("SampleTime_Local", "Year_Local", "Month_Local", "BioRegion", "DistanceFromBioregion_m",
+                    tidyselect::all_of(var_names)))) %>%
       dplyr::filter(!.data$BioRegion %in% c("North", "North-west")) %>%
       tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "Parameters")
 
@@ -88,7 +88,7 @@ pr_get_PolicyData <- function(Survey = "NRS"){
 }
 
 #' Get policy information
-#'
+#' @param ... to allow use of join when used within another function
 #' @param Survey "NRS" or "CPR"
 #'
 #' @return A dataframe with policy information
@@ -96,7 +96,7 @@ pr_get_PolicyData <- function(Survey = "NRS"){
 #'
 #' @examples
 #' df <- pr_get_PolicyInfo("CPR")
-pr_get_PolicyInfo <- function(Survey = "NRS"){
+pr_get_PolicyInfo <- function(Survey = "NRS", ...){
 
   if(Survey == "NRS"){
 
@@ -118,7 +118,7 @@ pr_get_PolicyInfo <- function(Survey = "NRS"){
   } else {
 
     CPRinfo <- pr_get_CPRTrips() %>%
-      pr_add_Bioregions() %>%
+      pr_add_Bioregions(...) %>%
       dplyr::group_by(.data$BioRegion) %>%
       dplyr::summarise(SampleStartDate = as.Date(min(.data$SampleTime_UTC)),
                        Miles = dplyr::n() * 4 * 5) %>%
