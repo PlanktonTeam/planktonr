@@ -80,7 +80,7 @@ pr_get_NRSPigments <- function(Format = "all"){
  }
 
   dat <- dat %>%
-    dplyr::select(.data$Project, .data$SampleTime_Local, .data$Month_Local, .data$SampleDepth_m, .data$StationName, .data$StationCode,
+    dplyr::select(.data$Project, .data$TripCode, .data$SampleTime_Local, .data$Month_Local, .data$SampleDepth_m, .data$StationName, .data$StationCode,
                   tidyselect::any_of(var_names)) %>%
     tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = 'Parameters') %>%
     pr_reorder()
