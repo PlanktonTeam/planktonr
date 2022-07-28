@@ -1,6 +1,6 @@
 
 #' Get Policy data set
-#'
+#' @param ... to allow use of join when used within another function
 #' @param Survey "NRS" or "CPR" or "LTM"
 #'
 #' @return A dataframe with policy data
