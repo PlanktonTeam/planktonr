@@ -53,6 +53,7 @@ pr_get_PolicyData <- function(Survey = "NRS", ...){
     Pol <- Polr %>%
       dplyr::select(.data$SampleTime_Local, .data$Year_Local, .data$Month_Local, .data$StationName,
                     .data$StationCode, tidyselect::all_of(var_names)) %>%
+      dplyr::filter(!.data$StationCode %in% c("PH4")) %>%
       tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "Parameters")
 
     means <- Polr %>%
