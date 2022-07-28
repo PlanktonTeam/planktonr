@@ -363,6 +363,43 @@ pr_apply_Time <- function(df){
 
 }
 
+#' Removing outliers from data
+#'
+#' @param df data frame with Parameters, Values and StationCode or BioRegion
+#' @param x no of sd from mean to remove
+#'
+#' @return df
+#' @export
+#'
+#' @examples
+#' df <- pr_get_Indices("NRS", "Z") %>% pr_remove_outliers(2)
+#' df <- pr_get_Indices("CPR", "Z") %>% pr_remove_outliers(2)
+pr_remove_outliers <- function(df, x){
+
+  if("StationCode" %in% colnames(df)){
+    outliers <- df %>%
+      dplyr::group_by(.data$Parameters, .data$StationCode)
+    location <- "StationCode"
+  } else {
+    outliers <- df %>%
+      dplyr::group_by(.data$Parameters, .data$BioRegion)
+    location <- "BioRegion"
+  }
+
+  outliers <- outliers %>%
+    dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
+                     sd2 = x*sd(.data$Values, na.rm = TRUE),
+                     meanplus = .data$means + .data$sd2,
+                     meanminus = .data$means - .data$sd2,
+                     .groups = 'drop') %>%
+    dplyr::select(-c(.data$means, .data$sd2))
+
+  added <- df %>%
+    dplyr::left_join(outliers, by = c("Parameters", location)) %>%
+    dplyr::filter(.data$Values < .data$meanplus & .data$Values > .data$meanminus) %>%
+    dplyr::select(-c(.data$meanplus, .data$meanminus))
+}
+
 
 #' Remove incorrect species names from dataframe
 #'
