@@ -323,8 +323,9 @@ pr_plot_tsclimate <- function(df, Survey = "NRS", trans = "identity"){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_FuncGroups("NRS", "P")
+#' df <- pr_get_FuncGroups("NRS", "P") %>% dplyr::filter(StationCode == 'PHB')
 #' plot <- pr_plot_tsfg(df, "Actual")
+#' plot
 pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 
   if (Trend == "Month"){
@@ -379,7 +380,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
     ggplot2::geom_area(alpha=0.6 , size=1, colour="white") +
     ggplot2::facet_wrap(rlang::enexpr(station), scales = "free", ncol = 1) +
     ggplot2::labs(y = titley) +
-    #ggplot2::scale_fill_manual(values = plotCols) +
+    ggplot2::scale_fill_viridis_d() +
     ggplot2::theme_bw() +
     ggplot2::theme(legend.position = "bottom",
                    legend.title = ggplot2::element_blank(),
