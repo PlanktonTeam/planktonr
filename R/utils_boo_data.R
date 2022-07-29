@@ -91,8 +91,9 @@ pr_get_FreqMap <- function(Type = "Z"){
                           names_to = "Taxon", values_to = "Counts") %>%
       dplyr::rename(Sample = .data$TripCode) %>%
       dplyr::mutate(Counts = as.integer(as.logical(.data$Counts)), # TODO Replace this with actual counts
-                    Survey = "NRS") %>%
-      dplyr::select(.data$Sample, .data$Survey, .data$Taxon, .data$Counts)
+                    Survey = "NRS",
+                    SampleVolume_m3 = 1) %>% # TODO Replace this with actual volume
+      dplyr::select(.data$Sample, .data$Survey, .data$Taxon, .data$Counts, .data$SampleVolume_m3) #TODO There is no volume data to remove
 
     PhytoCountCPR <- pr_get_CPRData(Type = "phytoplankton", Variable = "abundance", Subset = "species") %>%
       tidyr::pivot_longer(cols = !dplyr::all_of(pr_get_NonTaxaColumns(Survey = "CPR", Type = "P")),
@@ -100,7 +101,7 @@ pr_get_FreqMap <- function(Type = "Z"){
       dplyr::mutate(Counts = as.integer(as.logical(.data$Counts)),
                     Survey = "CPR") %>% # TODO Replace this with actual volume
       dplyr::rename(Sample = .data$TripCode) %>%
-      dplyr::select(.data$Sample, .data$Survey, .data$Taxon, .data$Counts) #TODO There is no volume data to remove
+      dplyr::select(.data$Sample, .data$Survey, .data$Taxon, .data$Counts, .data$SampleVolume_m3) #TODO There is no volume data to remove
 
     obs <- dplyr::bind_rows(PhytoCountCPR, PhytoCountNRS) %>%
       dplyr::arrange(.data$Taxon)
@@ -128,7 +129,8 @@ pr_get_FreqMap <- function(Type = "Z"){
   }
 
   NRSSamp <- pr_get_NRSTrips(Type) %>%
-    dplyr::rename(Sample = .data$TripCode) %>%
+    dplyr::rename(Sample = .data$TripCode) %>% #TODO Why do we rename TripCode to Sample
+    # Date = .data$SampleDate_Local #TODO Why do we rename Time to Date
     dplyr::mutate(DOY = lubridate::yday(.data$SampleTime_Local),
                   Start = as.Date(paste0(min(lubridate::year(.data$SampleTime_Local))-1, "-12-31")),
                   days = difftime(as.Date(.data$SampleTime_Local), .data$Start, units = "days") %>% as.numeric(),
@@ -136,7 +138,7 @@ pr_get_FreqMap <- function(Type = "Z"){
                   Survey = "NRS")  %>%
     dplyr::select(.data$Sample, .data$Survey, .data$SampleTime_Local, .data$DOY, .data$Latitude, .data$Longitude, .data$thetadoy)
 
-  CPRSamp <- pr_get_CPRTrips() %>%
+  CPRSamp <- pr_get_CPRSamps() %>%
     dplyr::mutate(DOY = lubridate::yday(.data$SampleTime_Local),
                   Start = as.Date(paste0(min(lubridate::year(.data$SampleTime_Local))-1, "-12-31")),
                   days = difftime(as.Date(.data$SampleTime_Local), .data$Start, units = "days") %>% as.numeric(),

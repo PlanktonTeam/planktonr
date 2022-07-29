@@ -596,43 +596,6 @@ pr_plot_FreqMap <- function(df){
                    legend.position = "bottom",
                    legend.key = ggplot2::element_blank())
 
-  Fmap <- leaflet::leaflet() %>%
-    leaflet::addProviderTiles(provider = "Esri", layerId = "OceanBasemap") %>%
-    leaflet::addPolygons(data = mbr,  group = "Marine Bioregions",
-                         color = ~Colour, fill = ~Colour,
-                         opacity = 1, fillOpacity = 0.5,
-                         weight = 1,
-                         label = lapply(labs_mbr, htmltools::HTML)) %>%
-    leaflet::addCircleMarkers(data = df,
-                              lat = ~ Latitude, lng = ~ Longitude,
-                              fill = ~CPRpal(Name), color = ~CPRpal(Name),
-                              radius = 5, fillOpacity = 0.7, opacity = 1, weight = 1,
-                              group = "Continuous Plankton Recorder",
-                              label = lapply(labs_cpr, htmltools::HTML)) %>%
-    leaflet::addAwesomeMarkers(data = df_NRS,
-                               lat = ~ Latitude, lng = ~ Longitude,
-                               # icon = iconSet,
-                               group = "National Reference Stations",
-                               clusterOptions = leaflet::markerClusterOptions(showCoverageOnHover = FALSE,
-                                                                              spiderfyOnMaxZoom = FALSE,
-                                                                              maxClusterRadius = 40)) %>%
-    leaflet::addControl(title1,
-                        position = "topright",
-                        className = "map-title1"
-    ) %>%
-    leaflet::addControl(title2,
-                        position = "topright",
-                        className = "map-title2"
-    ) %>%
-    leaflet::addLayersControl( # Layers control
-      overlayGroups = c("National Reference Stations", "Continuous Plankton Recorder", "Marine Bioregions"),
-      position = "topright",
-      options = leaflet::layersControlOptions(collapsed = FALSE, fill = NA)) %>%
-    leaflet::addMiniMap() %>%  # add a minimap
-    leaflegend::addLegendFactor(pal = leaflet::colorFactor("#FFA500", "National Reference Stations"),
-                                shape = "circle", values = "National Reference Stations")
-
-
 }
 
 
