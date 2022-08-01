@@ -36,7 +36,8 @@ pr_get_PolicyData <- function(Survey = "NRS", ...){
     Pol <- Pol %>%
       dplyr::left_join(means, by = c("BioRegion", "Parameters")) %>%
       dplyr::mutate(anomaly = (.data$Values - means)/sd,
-                    Survey = 'CPR')
+                    Survey = 'CPR') %>%
+      planktonr::pr_reorder()
 
   } else if (Survey == "NRS"){
 
@@ -53,6 +54,7 @@ pr_get_PolicyData <- function(Survey = "NRS", ...){
     Pol <- Polr %>%
       dplyr::select(.data$SampleTime_Local, .data$Year_Local, .data$Month_Local, .data$StationName,
                     .data$StationCode, tidyselect::all_of(var_names)) %>%
+      dplyr::filter(!.data$StationName %in% c("Port Hacking 4")) %>%
       tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "Parameters")
 
     means <- Polr %>%
@@ -66,7 +68,8 @@ pr_get_PolicyData <- function(Survey = "NRS", ...){
     Pol <- Pol %>%
       dplyr::left_join(means, by = c("StationName", "Parameters")) %>%
       dplyr::mutate(anomaly = (.data$Values - means)/sd,
-                    Survey = 'NRS')
+                    Survey = 'NRS') %>%
+      planktonr::pr_reorder()
 
   } else if (Survey == "LTM"){
 
@@ -82,7 +85,8 @@ pr_get_PolicyData <- function(Survey = "NRS", ...){
     Pol <- LTnuts %>%
       dplyr::left_join(means, by = c("StationName", "Parameters")) %>%
       dplyr::mutate(anomaly = (.data$Values - .data$means)/.data$sd,
-                    Survey = 'LTM')
+                    Survey = 'LTM') %>%
+      planktonr::pr_reorder()
 
   }
 }

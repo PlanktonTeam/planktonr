@@ -1,15 +1,15 @@
-#' Get location of raw plankton data
-#'
-#' Internal function to load the location of the raw plankton data files.
-#' @return A string with location of raw plankton data
-#' @export
-#' @examples
-#' file_loc <- pr_get_Site()
-#' @importFrom rlang .data
-pr_get_Site_bgc <- function(){
-  # raw <-"http://geoserver-123.aodn.org.au/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=imos:LAYER_NAME&outputFormat=csv-with-metadata-header"
-  raw = "https://geoserver-portal.aodn.org.au/geoserver/ows?typeName=LAYER_NAME&SERVICE=WFS&outputFormat=csv&REQUEST=GetFeature&VERSION=1.0.0&userId=Guest"
-}
+# Get location of raw plankton data
+#
+# Internal function to load the location of the raw plankton data files.
+# @return A string with location of raw plankton data
+# @export
+# @examples
+# file_loc <- pr_get_Site()
+# @importFrom rlang .data
+# pr_get_Site_bgc <- function(){
+#   # raw <-"http://geoserver-123.aodn.org.au/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=imos:LAYER_NAME&outputFormat=csv-with-metadata-header"
+#   raw = "https://geoserver-portal.aodn.org.au/geoserver/ows?typeName=LAYER_NAME&SERVICE=WFS&outputFormat=csv&REQUEST=GetFeature&VERSION=1.0.0&userId=Guest"
+# }
 
 
 #' Get location of raw plankton data
@@ -84,22 +84,22 @@ pr_get_Raw <- function(file){
     col_types = list()
   }
 
-  if (file ==  "bgc_pigments_data" | file == "bgc_tss_data" |
-      file == "bgc_picoplankton_data" | file == "bgc_chemistry_data"){
-    dat <- readr::read_csv(stringr::str_replace(
-      pr_get_Site_bgc(), "LAYER_NAME", file),
-      na = c("", NaN, "NaN", NA, "NA"),
-      show_col_types = FALSE,
-      comment = "#",
-      col_types = col_types)
-  } else{
+  # if (file ==  "bgc_pigments_data" | file == "bgc_tss_data" |
+  #     file == "bgc_picoplankton_data" | file == "bgc_chemistry_data"){
+  #   dat <- readr::read_csv(stringr::str_replace(
+  #     pr_get_Site_bgc(), "LAYER_NAME", file),
+  #     na = c("", NaN, "NaN", NA, "NA"),
+  #     show_col_types = FALSE,
+  #     comment = "#",
+  #     col_types = col_types)
+  # } else{
     dat <- readr::read_csv(stringr::str_replace(
       pr_get_Site(), "LAYER_NAME", file),
       na = c("", NaN, "NaN", NA, "NA"),
       show_col_types = FALSE,
       comment = "#",
       col_types = col_types)
-  }
+  # }
 
   return(dat)
 }
@@ -282,7 +282,7 @@ pr_reorder <- function(df){
     df <- df %>%
       dplyr::mutate(BioRegion = factor(.data$BioRegion,
                                        levels = c("North", "North-west", "Coral Sea",
-                                                  "Temperate East", "South-east", "South-west")))
+                                                  "Temperate East", "South-east", "South-west", "Southern Ocean")))
   }
   return(df)
 }
@@ -341,7 +341,7 @@ pr_apply_Flags <- function(df, flag_col){
 
 
 
-#' Remove flagged data in df
+#' Add Month & year columns to df
 #'
 #' @param df A dataframe containing time column
 #' @return A dataframe with extra date columns

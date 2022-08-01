@@ -8,6 +8,8 @@ pr_get_PolicyData(Survey = "NRS", ...)
 }
 \arguments{
 \item{Survey}{"NRS" or "CPR" or "LTM"}
+
+\item{...}{to allow use of join when used within another function}
 }
 \value{
 A dataframe with policy data

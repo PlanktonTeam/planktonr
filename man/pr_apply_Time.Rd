@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{pr_apply_Time}
 \alias{pr_apply_Time}
-\title{Remove flagged data in df}
+\title{Add Month & year columns to df}
 \usage{
 pr_apply_Time(df)
 }
@@ -13,7 +13,7 @@ pr_apply_Time(df)
 A dataframe with extra date columns
 }
 \description{
-Remove flagged data in df
+Add Month & year columns to df
 }
 \examples{
 df <- pr_get_Indices("NRS", "P") \%>\%

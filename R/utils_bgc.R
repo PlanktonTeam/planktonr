@@ -77,7 +77,7 @@ pr_get_NRSPigments <- function(Format = "all"){
                     StationCode = stringr::str_sub(.data$TripCode, 1, 3),
                     SampleDepth_m = as.numeric(.data$SampleDepth_m)) %>%
       dplyr::filter(.data$TotalChla != 0)
- }
+  }
 
   dat <- dat %>%
     dplyr::select(.data$Project, .data$TripCode, .data$SampleTime_Local, .data$Month_Local, .data$SampleDepth_m, .data$StationName, .data$StationCode,

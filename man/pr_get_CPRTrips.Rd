@@ -4,7 +4,7 @@
 \alias{pr_get_CPRTrips}
 \title{Get CPR trips}
 \usage{
-pr_get_CPRTrips()
+pr_get_CPRTrips(...)
 }
 \value{
 A dataframe with CPR Trips
@@ -14,4 +14,5 @@ Get CPR trips
 }
 \examples{
 df <- pr_get_CPRTrips()
+df <- pr_get_CPRTrips(join = "st_nearest_feature")
 }
