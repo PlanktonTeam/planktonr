@@ -341,7 +341,7 @@ pr_apply_Flags <- function(df, flag_col){
 
 
 
-#' Remove flagged data in df
+#' Add Month & year columns to df
 #'
 #' @param df A dataframe containing time column
 #' @return A dataframe with extra date columns

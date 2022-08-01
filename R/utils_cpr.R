@@ -51,30 +51,33 @@ pr_get_CPRData <- function(Type = "P", Variable = "abundance", Subset = "raw"){
 #'
 #' @examples
 #' df <- pr_get_CPRTrips()
+#' df <- pr_get_CPRTrips(join = "st_nearest_feature")
 #' @importFrom rlang .data
-pr_get_CPRTrips <- function(){
+pr_get_CPRTrips <- function(...){
   CPRTrips <- pr_get_s3("cpr_samp")  %>%
-    pr_rename()
-}
-
-
-#' Get CPR samples
-#' @param ... to allow use of join when used within another function
-#'
-#' @return A dataframe with CPR Samples
-#' @export
-#'
-#' @examples
-#' df <- pr_get_CPRSamps(join = "st_nearest_feature")
-#' df <- pr_get_CPRSamps()
-#'
-#' #' @importFrom rlang .data
-pr_get_CPRSamps <- function(...){
-
-  df <- pr_get_Raw("cpr_derived_indices_data") %>%
     pr_rename() %>%
     pr_add_Bioregions(...) %>%
-    dplyr::select(tidyselect::starts_with(c("geometry", "FID", "TripCode", "Latitude", "Longitude", "BioRegion", "DistanceFromBioregion_m",
-                                            "IMCRA", "SampleTime", "SampleDate", "Year", "Month", "Day", "Time", "Region")))
-
+    pr_apply_Time()
 }
+
+
+# #' Get CPR samples
+# #' @param ... to allow use of join when used within another function
+# #'
+# #' @return A dataframe with CPR Samples
+# #' @export
+# #'
+# #' @examples
+# #' df <- pr_get_CPRSamps(join = "st_nearest_feature")
+# #' df <- pr_get_CPRSamps()
+# #'
+# #' #' @importFrom rlang .data
+# pr_get_CPRSamps <- function(...){
+#
+#   df <- pr_get_Raw("cpr_derived_indices_data") %>%
+#     pr_rename() %>%
+#     pr_add_Bioregions(...) %>%
+#     dplyr::select(tidyselect::starts_with(c("geometry", "FID", "TripCode", "Latitude", "Longitude", "BioRegion", "DistanceFromBioregion_m",
+#                                             "IMCRA", "SampleTime", "SampleDate", "Year", "Month", "Day", "Time", "Region")))
+#
+# }

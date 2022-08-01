@@ -583,7 +583,7 @@ pr_plot_FreqMap <- function(df){
 
   p <- ggplot2::ggplot() +
     ggplot2::geom_sf(data = MapOz) +
-    ggplot2::geom_point(data=df, ggplot2::aes(x=.data$Long, y=.data$Lat, colour=.data$freqfac), size = 2) +
+    ggplot2::geom_point(data=df, ggplot2::aes(x=.data$Long, y=.data$Lat, colour=.data$freqfac, pch = .data$Survey), size = 2) +
     ggplot2::facet_wrap( ~ .data$Season, dir = "v") +
     ggplot2::labs(title = Species) +
     ggplot2::scale_colour_manual(name = "", values = cols, drop = FALSE) +
