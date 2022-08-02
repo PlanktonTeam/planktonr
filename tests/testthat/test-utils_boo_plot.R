@@ -73,7 +73,7 @@ testthat::test_that("Correct function output", {
                                           freqfac = c("Absent", "Seen in 25%","50%", "75%"),
                                           Season = c("December - February","March - May","June - August","September - November"),
                                           Taxon = "Acartia danae") %>%
-                                 pr_plot_FreqMap())[1], "gg")
+                                 pr_plot_FreqMap(species = 'Acartia danae', interactive = FALSE))[1], "gg")
 
   testthat::expect_equal(class(data.frame(Month = rep(seq(1,12,1),2),
                                           daynight = c(rep("day", 12), rep("night", 12)),

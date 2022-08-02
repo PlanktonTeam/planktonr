@@ -45,6 +45,7 @@ pr_get_CPRData <- function(Type = "P", Variable = "abundance", Subset = "raw"){
 
 
 #' Get CPR trips
+#' @param ... ability to choose join for bioregions
 #'
 #' @return A dataframe with CPR Trips
 #' @export

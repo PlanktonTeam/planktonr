@@ -565,8 +565,10 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
 #' Frequency plot of the selected species
 #'
 #' @param df dataframe of format similar to output of pr_get_fmap_data()
+#' @param species species to plot
+#' @param interactive ggplot if false, plotlist of leaflets if true
 #'
-#' @return a plot of frequency of occurence of chosen species
+#' @return a plot of frequency of occurrence of chosen species
 #' @export
 #'
 #' @examples
@@ -575,9 +577,15 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
 #'                  Season = c("December - February","March - May",
 #'                  "June - August","September - November"),
 #'                  Taxon = 'Acartia danae')
-#' plot <- pr_plot_FreqMap(df)
-pr_plot_FreqMap <- function(df){
-  cols <- c("lightblue1" ,"skyblue3", "dodgerblue2","blue1", "navyblue")
+#' plot <- pr_plot_FreqMap(df, species = 'Acartia danae', interactive = FALSE)
+pr_plot_FreqMap <- function(df, species, interactive = TRUE){
+
+  df <- df %>%
+    dplyr::mutate(Taxon = dplyr::if_else(.data$Taxon == 'Taxon', species, .data$Taxon)) %>%
+    dplyr::filter(.data$Taxon %in% species)
+
+  if(interactive == FALSE){
+    cols <- c("lightblue1" ,"skyblue3", "dodgerblue2","blue1", "navyblue")
 
   Species <- unique(df$Taxon)
 
@@ -595,7 +603,69 @@ pr_plot_FreqMap <- function(df){
                    panel.background = ggplot2::element_rect(fill = "snow1"),
                    legend.position = "bottom",
                    legend.key = ggplot2::element_blank())
+  return(p)
 
+  } else {
+
+    df <- df %>% dplyr::group_split(.data$Season)
+
+    plotlist <-  function(dflist){
+
+    CPRpal <- leaflet::colorFactor(c("lightblue1", "skyblue3", "dodgerblue2", "blue1", "navyblue"), domain = dflist$freqfac)
+    NRSpal <- leaflet::colorFactor(c("#CCFFCC", "#99FF99", "#669933", "#009900", "#006600"), domain = dflist$freqfac)
+
+    dfCPR <- dflist %>% dplyr::filter(.data$Survey == 'CPR')
+    dfNRS <- dflist %>% dplyr::filter(.data$Survey == 'NRS')
+
+    title1 <- htmltools::div(
+      htmltools::tags$style(htmltools::HTML(".leaflet-control.map-title1 {
+                                                text-align: center;
+                                                background: rgba(255,255,255,0);
+                                                font-weight: bold;
+                                                font-size: 16px;
+                                                margin: 0;
+                                                margin-right: 6px}")),
+      unique(dflist$Season))
+
+    title2 <- htmltools::div(
+      htmltools::tags$style(htmltools::HTML(".leaflet-control.map-title2 {
+                                                text-align: center;
+                                                background: rgba(255,255,255,0);
+                                                # font-weight: bold;
+                                                font-style: italic;
+                                                font-size: 16px;
+                                                margin: 0;
+                                                margin-right: 6px}")),
+      unique(dflist$Taxon))
+
+    fmap <- leaflet::leaflet() %>%
+      leaflet::addProviderTiles(provider = "Esri", layerId = "OceanBasemap") %>%
+      leaflet::addPolygons(data = mbr,  group = "Marine Bioregions",
+                           color = ~Colour, fill = ~Colour,
+                           opacity = 1, fillOpacity = 0.3,
+                           weight = 1) %>%
+      leaflet::addCircleMarkers(data = dfCPR, group = 'Continuous Plankton Recorder',
+                                lat = ~ Lat, lng = ~ Long,
+                                radius = ~ifelse(freqfac == "Absent", 2, 5),
+                                color = ~CPRpal(freqfac)) %>%
+      leaflet::addCircleMarkers(data = dfNRS , group = 'National Reference Stations',
+                                lat = ~ Lat, lng = ~ Long,
+                                color = ~NRSpal(freqfac),
+                                radius = ~ifelse(freqfac == "Absent", 1, 5)) %>%
+      leaflet::addControl(title1,
+                          position = "topright",
+                          className = "map-title1") %>%
+      leaflet::addControl(title2,
+                          position = "topright",
+                          className = "map-title2")  %>%
+      leaflet::addLayersControl( # Layers control
+        overlayGroups = c("National Reference Stations", "Continuous Plankton Recorder", "Marine Bioregions"),
+        position = "bottomleft",
+        options = leaflet::layersControlOptions(collapsed = FALSE, fill = NA))
+  }
+
+    plotlist <- purrr::map(df, plotlist)
+  }
 }
 
 

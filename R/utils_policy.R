@@ -122,7 +122,6 @@ pr_get_PolicyInfo <- function(Survey = "NRS", ...){
   } else {
 
     CPRinfo <- pr_get_CPRTrips() %>%
-      pr_add_Bioregions(...) %>%
       dplyr::group_by(.data$BioRegion) %>%
       dplyr::summarise(SampleStartDate = as.Date(min(.data$SampleTime_UTC)),
                        Miles = dplyr::n() * 4 * 5) %>%
