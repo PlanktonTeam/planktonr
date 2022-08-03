@@ -338,8 +338,6 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
     Trend = "Year_Local"
   }
 
-  titley <- pr_relabel("FunctionalGroup", style = "ggplot")
-
   n <- length(unique(df$Parameters))
 
   #plotCols <- pr_get_PlotCols(pal, n)
@@ -347,10 +345,12 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
   if("BioRegion" %in% colnames(df)){ # If CPR data
     SampleDate = rlang::sym("SampleTime_Local")
     station = rlang::sym("BioRegion")
+    titley <- pr_relabel("PhytoAbundance_Cellsm3", style = "ggplot")
 
   } else { # If NRS data
     SampleDate = rlang::sym("SampleTime_Local")
     station = rlang::sym("StationName")
+    titley <- pr_relabel("PhytoAbundance_CellsL", style = "ggplot")
   }
 
   titlex <- "Sample Time (Local)"
