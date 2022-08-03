@@ -582,7 +582,7 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
 #' plot <- pr_plot_FreqMap(df, species = 'Acartia danae', interactive = FALSE)
 pr_plot_FreqMap <- function(df, species, interactive = TRUE){
 
-  df <- dfz %>%
+  df <- df %>%
     dplyr::mutate(Taxon = dplyr::if_else(.data$Taxon == 'Taxon', species, .data$Taxon)) %>%
     dplyr::filter(.data$Taxon %in% species)  %>%
     dplyr::arrange(desc(.data$freqfac)) %>%
