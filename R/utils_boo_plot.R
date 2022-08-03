@@ -585,7 +585,7 @@ pr_plot_FreqMap <- function(df, species, interactive = TRUE){
   df <- df %>%
     dplyr::mutate(Taxon = dplyr::if_else(.data$Taxon == 'Taxon', species, .data$Taxon)) %>%
     dplyr::filter(.data$Taxon %in% species)  %>%
-    dplyr::arrange(desc(.data$freqfac)) %>%
+    dplyr::arrange(dplyr::desc(.data$freqfac)) %>%
     dplyr::group_by(.data$Season, .data$Survey, .data$Lat, .data$Long, .data$Taxon) %>%
     dplyr::slice(1) %>%
     dplyr::ungroup() %>%
@@ -654,7 +654,8 @@ pr_plot_FreqMap <- function(df, species, interactive = TRUE){
       leaflet::addCircleMarkers(data = dfCPR, group = 'Continuous Plankton Recorder',
                                 lat = ~ Lat, lng = ~ Long,
                                 radius = ~ifelse(freqfac == "Absent", 2, 5),
-                                color = ~CPRpal(freqfac)) %>%
+                                color = ~CPRpal(freqfac),
+                                fill = ~CPRpal(freqfac)) %>%
       leaflet::addCircleMarkers(data = dfNRS , group = 'National Reference Stations',
                                 lat = ~ Lat, lng = ~ Long,
                                 color = ~NRSpal(freqfac),
