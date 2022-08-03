@@ -149,9 +149,8 @@ pr_plot_Trends <- function(df, Trend = "Raw", Survey = "NRS", method = "lm",  tr
   }
   if (Trend == "Year"){
     Trend = "Year_Local"
-  } else {
-    Trend <- "SampleTime_Local" # Rename Trend to match the column with time
-      }
+  }
+
 
   if (Survey == "CPR"){
     site = rlang::sym("BioRegion")
@@ -173,6 +172,7 @@ pr_plot_Trends <- function(df, Trend = "Raw", Survey = "NRS", method = "lm",  tr
                        .groups = "drop")
 
   } else {
+    Trend <- "SampleTime_Local" # Rename Trend to match the column with time
     df <- df %>%
       dplyr::group_by(.data$SampleTime_Local, !!site, .data$Parameters) %>% # accounting for microbial data different depths
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
