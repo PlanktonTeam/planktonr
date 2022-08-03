@@ -21,9 +21,10 @@ Frequency plot of the selected species
 }
 \examples{
 df <- data.frame(Long = c(110, 130, 155, 150), Lat = c(-10, -35, -27, -45),
-                 freqfac = c("Absent", "Seen in 25\%",'50\%', '75\%'),
+                 freqfac = as.factor(c("Absent", "Seen in 25\%",'50\%', '75\%')),
                  Season = c("December - February","March - May",
                  "June - August","September - November"),
-                 Taxon = 'Acartia danae')
+                 Taxon = 'Acartia danae',
+                 Survey = 'CPR')
 plot <- pr_plot_FreqMap(df, species = 'Acartia danae', interactive = FALSE)
 }

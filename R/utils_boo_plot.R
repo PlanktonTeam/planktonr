@@ -149,7 +149,9 @@ pr_plot_Trends <- function(df, Trend = "Raw", Survey = "NRS", method = "lm",  tr
   }
   if (Trend == "Year"){
     Trend = "Year_Local"
-  }
+  } else {
+    Trend <- "SampleTime_Local" # Rename Trend to match the column with time
+      }
 
   if (Survey == "CPR"){
     site = rlang::sym("BioRegion")
@@ -171,7 +173,6 @@ pr_plot_Trends <- function(df, Trend = "Raw", Survey = "NRS", method = "lm",  tr
                        .groups = "drop")
 
   } else {
-    Trend <- "SampleTime_Local" # Rename Trend to match the column with time
     df <- df %>%
       dplyr::group_by(.data$SampleTime_Local, !!site, .data$Parameters) %>% # accounting for microbial data different depths
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
@@ -573,16 +574,20 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
 #'
 #' @examples
 #' df <- data.frame(Long = c(110, 130, 155, 150), Lat = c(-10, -35, -27, -45),
-#'                  freqfac = c("Absent", "Seen in 25%",'50%', '75%'),
+#'                  freqfac = as.factor(c("Absent", "Seen in 25%",'50%', '75%')),
 #'                  Season = c("December - February","March - May",
 #'                  "June - August","September - November"),
-#'                  Taxon = 'Acartia danae')
+#'                  Taxon = 'Acartia danae',
+#'                  Survey = 'CPR')
 #' plot <- pr_plot_FreqMap(df, species = 'Acartia danae', interactive = FALSE)
 pr_plot_FreqMap <- function(df, species, interactive = TRUE){
 
   df <- df %>%
     dplyr::mutate(Taxon = dplyr::if_else(.data$Taxon == 'Taxon', species, .data$Taxon)) %>%
-    dplyr::filter(.data$Taxon %in% species)
+    dplyr::filter(.data$Taxon %in% species)  %>%
+    dplyr::group_by(.data$Season, .data$Survey, .data$Lat, .data$Long, .data$Taxon) %>%
+    dplyr::summarise(freqfac = max(levels(.data$freqfac)),
+                     .groups = 'drop')
 
   if(interactive == FALSE){
     cols <- c("lightblue1" ,"skyblue3", "dodgerblue2","blue1", "navyblue")
@@ -711,7 +716,7 @@ pr_plot_DayNight <-  function(df){
 #' @export
 #'
 #' @examples
-#' df <- data.frame(sst = runif(24, 5, 25),
+#' df <- data.frame(SST = runif(24, 5, 25),
 #'                  Project = c(rep("CPR", 12), rep("NRS", 12)),
 #'                  Species_m3 = runif(24, 0.1, 10),
 #'                  Species = 'Acartia danae')

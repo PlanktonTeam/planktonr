@@ -120,7 +120,7 @@ pr_get_FreqMap <- function(Type = "Z"){
     PhytoCountCPR <- pr_get_CPRData(Type = "phytoplankton", Variable = "abundance", Subset = "species") %>%
       tidyr::pivot_longer(cols = !dplyr::all_of(pr_get_NonTaxaColumns(Survey = "CPR", Type = "P")),
                           names_to = "Taxon", values_to = "Counts") %>%
-      dplyr::filter(Counts > 0) %>%
+      dplyr::filter(.data$Counts > 0) %>%
       dplyr::mutate(Survey = 'CPR') %>%
       dplyr::left_join(CPRSamp %>% dplyr::select(-c(.data$Survey, .data$Month_Local)), by = c("Latitude", "Longitude", "SampleTime_Local")) #TODO get rid of this step if product contains sample
 
