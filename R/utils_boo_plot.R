@@ -715,6 +715,7 @@ pr_plot_DayNight <-  function(df){
 #'                  Project = c(rep("CPR", 12), rep("NRS", 12)),
 #'                  Species_m3 = runif(24, 0.1, 10),
 #'                  Species = 'Acartia danae')
+#'
 #' plot <- pr_plot_STI(df)
 pr_plot_STI <-  function(df){
   means <- df %>%
@@ -726,13 +727,13 @@ pr_plot_STI <-  function(df){
   sti <- df %>%
     dplyr::left_join(means, by = "Project") %>%
     dplyr::mutate(relab = .data$Species_m3/.data$mean) %>%
-    dplyr::group_by(.data$sst, .data$Species) %>%
+    dplyr::group_by(.data$SST, .data$Species) %>%
     dplyr::summarize(relab = sum(.data$relab),
                      freq = dplyr::n(),
                      a = sum(.data$relab)/dplyr::n(),
                      .groups = "drop")
 
-  n <- length(sti$sst)
+  n <- length(sti$SST)
   # have a stop if n < 10
 
   ## STI via kernel density
@@ -751,7 +752,7 @@ pr_plot_STI <-  function(df){
   sti$Species <- factor(sti$Species)
   sti$weight <- with(sti, abs(relab) / sum(relab))
   kernOut <- with(sti,
-                  density(sst, weight=weight,
+                  density(SST, weight=weight,
                           bw=kernBw,
                           from=kernMin,
                           to=kernMax,
