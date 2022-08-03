@@ -271,11 +271,13 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
 
   if("Month_Local" %in% colnames(df_climate)){
     p1 <- p1 +
+      ggplot2::xlab("Month") +
       ggplot2::scale_x_continuous(breaks = seq(1,12,length.out = 12), labels=c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"))
   }
 
   if("Year_Local" %in% colnames(df_climate)){
     p1 <- p1 +
+      ggplot2::xlab("Year") +
       ggplot2::scale_x_continuous(breaks = scales::breaks_width(1))
   }
 
