@@ -585,11 +585,11 @@ pr_plot_FreqMap <- function(df, species, interactive = TRUE){
   df <- dfz %>%
     dplyr::mutate(Taxon = dplyr::if_else(.data$Taxon == 'Taxon', species, .data$Taxon)) %>%
     dplyr::filter(.data$Taxon %in% species)  %>%
-    arrange(desc(.data$freqfac)) %>%
-    group_by(.data$Season, .data$Survey, .data$Lat, .data$Long, .data$Taxon) %>%
-    slice(1) %>%
-    ungroup()   %>%
-    arrange(.data$freqfac)
+    dplyr::arrange(desc(.data$freqfac)) %>%
+    dplyr::group_by(.data$Season, .data$Survey, .data$Lat, .data$Long, .data$Taxon) %>%
+    dplyr::slice(1) %>%
+    dplyr::ungroup() %>%
+    dplyr::arrange(.data$freqfac)
 
   if(interactive == FALSE){
     cols <- c("lightblue1" ,"skyblue3", "dodgerblue2","blue1", "navyblue")
