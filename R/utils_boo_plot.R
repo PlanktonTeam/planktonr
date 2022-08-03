@@ -582,12 +582,14 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
 #' plot <- pr_plot_FreqMap(df, species = 'Acartia danae', interactive = FALSE)
 pr_plot_FreqMap <- function(df, species, interactive = TRUE){
 
-  df <- df %>%
+  df <- dfz %>%
     dplyr::mutate(Taxon = dplyr::if_else(.data$Taxon == 'Taxon', species, .data$Taxon)) %>%
     dplyr::filter(.data$Taxon %in% species)  %>%
-    dplyr::group_by(.data$Season, .data$Survey, .data$Lat, .data$Long, .data$Taxon) %>%
-    dplyr::summarise(freqfac = max(levels(.data$freqfac)),
-                     .groups = 'drop')
+    arrange(desc(.data$freqfac)) %>%
+    group_by(.data$Season, .data$Survey, .data$Lat, .data$Long, .data$Taxon) %>%
+    slice(1) %>%
+    ungroup()   %>%
+    arrange(.data$freqfac)
 
   if(interactive == FALSE){
     cols <- c("lightblue1" ,"skyblue3", "dodgerblue2","blue1", "navyblue")
