@@ -706,7 +706,7 @@ pr_plot_DayNight <-  function(df){
     ggplot2::scale_x_continuous(breaks= seq(1,12,length.out = 12), labels=c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
     ggplot2::theme_bw(base_size = 12) +
     ggplot2::theme(strip.background = ggplot2::element_blank()) +
-    ggplot2::labs(y = ylabel) +
+    ggplot2::labs(y = ylabel, x = "Month") +
     ggplot2::ggtitle(titlemain) +
     ggplot2::theme(plot.title = ggplot2::element_text(face = "italic"))
 
