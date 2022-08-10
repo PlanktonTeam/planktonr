@@ -26,5 +26,5 @@ df <- data.frame(Long = c(110, 130, 155, 150), Lat = c(-10, -35, -27, -45),
                  "June - August","September - November"),
                  Taxon = 'Acartia danae',
                  Survey = 'CPR')
-plot <- pr_plot_FreqMap(df, species = 'Acartia danae', interactive = TRUE)
+plot <- pr_plot_FreqMap(df, species = 'Acartia danae', interactive = FALSE)
 }
