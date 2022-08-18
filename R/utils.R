@@ -69,7 +69,9 @@ pr_get_Raw <- function(file){
     col_types = list(Project = readr::col_character(),
                      TripCode = readr::col_character(),
                      SampleTime_Local = readr::col_datetime(),
-                     SampleDepth_m = readr::col_character())
+                     SampleDepth_m = readr::col_character(),
+                     Virus_cellsmL = readr::col_number(),
+                     Virus_flag = readr::col_number())
   } else if (file ==  "bgc_pigments_data"){ # Add specific filter for bgc files to deal with potential problems from 'WC' depth
     col_types = list(Project = readr::col_character(),
                      TripCode = readr::col_character(),
@@ -583,12 +585,12 @@ pr_get_NonTaxaColumns <- function(Survey = "NRS", Type = "Z"){
               "SampleDepth_m", "Method", "CTDSST_degC", "CTDChlaSurf_mgm3", "CTDSalinity_psu")
 
   } else if (Survey == "CPR" & Type == "Z"){
-    vars <- c("TripCode", "Region", "Latitude", "Longitude", "SampleTime_UTC", "SampleTime_Local",
+    vars <- c("TripCode", "Sample_ID", "Region", "Latitude", "Longitude", "SampleTime_UTC", "SampleTime_Local",
               "Year_Local", "Month_Local", "Day_Local", "Time_Local24hr", "SatSST_degC", "SatChlaSurf_mgm3",
               "PCI", "SampleVolume_m3", "BiomassIndex_mgm3")
 
   } else if (Survey == "CPR" & Type == "P"){
-    vars <- c("TripCode", "Region", "Latitude", "Longitude", "SampleTime_Local", "SampleTime_UTC",
+    vars <- c("TripCode", "Sample_ID", "Region", "Latitude", "Longitude", "SampleTime_Local", "SampleTime_UTC",
               "Year_Local", "Month_Local", "Day_Local", "Time_Local24hr", "SatSST_degC", "SatChlaSurf_mgm3",
               "PCI", "SampleVolume_m3")
   }

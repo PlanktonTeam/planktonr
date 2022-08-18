@@ -6,6 +6,9 @@
 \usage{
 pr_get_CPRTrips(...)
 }
+\arguments{
+\item{...}{ability to choose join for bioregions}
+}
 \value{
 A dataframe with CPR Trips
 }

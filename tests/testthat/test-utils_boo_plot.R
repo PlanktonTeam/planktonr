@@ -72,8 +72,9 @@ testthat::test_that("Correct function output", {
   testthat::expect_equal(class(data.frame(Long = c(110, 130, 155, 150), Lat = c(-10, -35, -27, -45),
                                           freqfac = c("Absent", "Seen in 25%","50%", "75%"),
                                           Season = c("December - February","March - May","June - August","September - November"),
-                                          Taxon = "Acartia danae") %>%
-                                 pr_plot_FreqMap())[1], "gg")
+                                          Taxon = "Acartia danae",
+                                          Survey = 'CPR') %>%
+                                 pr_plot_FreqMap(species = 'Acartia danae', interactive = FALSE))[1], "gg")
 
   testthat::expect_equal(class(data.frame(Month = rep(seq(1,12,1),2),
                                           daynight = c(rep("day", 12), rep("night", 12)),
@@ -87,7 +88,7 @@ testthat::test_that("Correct function output", {
                                           Species = "Acartia danae") %>%
                                  pr_plot_DayNight())[1], "gg")
 
-  testthat::expect_equal(class(data.frame(sst = runif(24, 5, 25),
+  testthat::expect_equal(class(data.frame(SST = runif(24, 5, 25),
                                           Project = c(rep("cpr", 12), rep("nrs", 12)),
                                           Species_m3 = runif(24, 0.1, 10),
                                           Species = "Acartia danae") %>%

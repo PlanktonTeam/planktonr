@@ -92,8 +92,8 @@ pr_get_FreqMap <- function(Type = "Z"){
 
   CPRSamp <- pr_get_CPRTrips() %>%
     dplyr::mutate(Survey = 'CPR',
-                  Latitude = round(Latitude, 4),
-                  Longitude = round(Longitude, 4)) %>%
+                  Latitude = round(.data$Latitude, 4),
+                  Longitude = round(.data$Longitude, 4)) %>%
     dplyr::select(.data$Sample, .data$Survey, .data$SampleTime_Local, .data$Month_Local, .data$Latitude, .data$Longitude)
 
   SampLocs <- dplyr::bind_rows(CPRSamp, NRSSamp) %>%
@@ -114,15 +114,15 @@ pr_get_FreqMap <- function(Type = "Z"){
       tidyr::pivot_longer(cols = !dplyr::all_of(pr_get_NonTaxaColumns(Survey = "NRS", Type = "P")),
                           names_to = "Taxon", values_to = "Counts") %>%
       dplyr::rename(Sample = .data$TripCode) %>%
-      dplyr::filter(Counts > 0) %>%
+      dplyr::filter(.data$Counts > 0) %>%
       dplyr::mutate(Survey = 'NRS')
 
     PhytoCountCPR <- pr_get_CPRData(Type = "phytoplankton", Variable = "abundance", Subset = "species") %>%
       tidyr::pivot_longer(cols = !dplyr::all_of(pr_get_NonTaxaColumns(Survey = "CPR", Type = "P")),
                           names_to = "Taxon", values_to = "Counts") %>%
-      dplyr::filter(Counts > 0) %>%
+      dplyr::filter(.data$Counts > 0) %>%
       dplyr::mutate(Survey = 'CPR') %>%
-      dplyr::left_join(CPRSamp %>% dplyr::select(-c(Survey, Month_Local)), by = c("Latitude", "Longitude", "SampleTime_Local")) #TODO get rid of this step if product contains sample
+      dplyr::left_join(CPRSamp %>% dplyr::select(-c(.data$Survey, .data$Month_Local)), by = c("Latitude", "Longitude", "SampleTime_Local")) #TODO get rid of this step if product contains sample
 
     obs <- dplyr::bind_rows(PhytoCountCPR, PhytoCountNRS) %>%
       dplyr::mutate(Counts = as.integer(as.logical(.data$Counts))) %>%
@@ -135,15 +135,15 @@ pr_get_FreqMap <- function(Type = "Z"){
       tidyr::pivot_longer(cols = !tidyselect::all_of(pr_get_NonTaxaColumns(Survey = "NRS", Type = "Z")),
                           names_to = "Taxon", values_to = "Counts") %>%
       dplyr::rename(Sample = .data$TripCode) %>%
-      dplyr::filter(Counts > 0) %>%
+      dplyr::filter(.data$Counts > 0) %>%
       dplyr::mutate(Survey = "NRS")
 
     ZooCountCPR <- pr_get_CPRData(Type = "zooplankton", Variable = "abundance", Subset = "species") %>%
       tidyr::pivot_longer(cols = !tidyselect::all_of(pr_get_NonTaxaColumns(Survey = "CPR", Type = "Z")),
                           names_to = "Taxon", values_to = "Counts") %>%
-      dplyr::filter(Counts > 0) %>%
+      dplyr::filter(.data$Counts > 0) %>%
       dplyr::mutate(Survey = "CPR")  %>%
-      dplyr::left_join(CPRSamp %>% dplyr::select(-c(Survey, Month_Local)), by = c("Latitude", "Longitude", "SampleTime_Local")) #TODO get rid of this step if product contains sample
+      dplyr::left_join(CPRSamp %>% dplyr::select(-c(.data$Survey, .data$Month_Local)), by = c("Latitude", "Longitude", "SampleTime_Local")) #TODO get rid of this step if product contains sample
 
     obs <- dplyr::bind_rows(ZooCountCPR, ZooCountNRS) %>%
       dplyr::mutate(Counts = as.integer(as.logical(.data$Counts))) %>%
@@ -179,7 +179,7 @@ pr_get_FreqMap <- function(Type = "Z"){
 
   freqMapData <- dplyr::bind_rows(mapdata, absences) %>%
     dplyr::mutate(freqfac = factor(.data$freqfac, levels = c("Absent", "Seen in 25%", "50%", "75%", "100 % of Samples"))) %>%
-    dplyr::arrange(freqfac)
+    dplyr::arrange(.data$freqfac)
 
   return(freqMapData)
 

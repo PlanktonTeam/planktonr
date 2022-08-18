@@ -4,22 +4,27 @@
 \alias{pr_plot_FreqMap}
 \title{Frequency plot of the selected species}
 \usage{
-pr_plot_FreqMap(df)
+pr_plot_FreqMap(df, species, interactive = TRUE)
 }
 \arguments{
 \item{df}{dataframe of format similar to output of pr_get_fmap_data()}
+
+\item{species}{species to plot}
+
+\item{interactive}{ggplot if false, plotlist of leaflets if true}
 }
 \value{
-a plot of frequency of occurence of chosen species
+a plot of frequency of occurrence of chosen species
 }
 \description{
 Frequency plot of the selected species
 }
 \examples{
 df <- data.frame(Long = c(110, 130, 155, 150), Lat = c(-10, -35, -27, -45),
-                 freqfac = c("Absent", "Seen in 25\%",'50\%', '75\%'),
+                 freqfac = as.factor(c("Absent", "Seen in 25\%",'50\%', '75\%')),
                  Season = c("December - February","March - May",
                  "June - August","September - November"),
-                 Taxon = 'Acartia danae')
-plot <- pr_plot_FreqMap(df)
+                 Taxon = 'Acartia danae',
+                 Survey = 'CPR')
+plot <- pr_plot_FreqMap(df, species = 'Acartia danae', interactive = FALSE)
 }

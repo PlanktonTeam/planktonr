@@ -151,6 +151,7 @@ pr_plot_Trends <- function(df, Trend = "Raw", Survey = "NRS", method = "lm",  tr
     Trend = "Year_Local"
   }
 
+
   if (Survey == "CPR"){
     site = rlang::sym("BioRegion")
   } else if (Survey == "NRS"){
@@ -270,11 +271,13 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
 
   if("Month_Local" %in% colnames(df_climate)){
     p1 <- p1 +
+      ggplot2::xlab("Month") +
       ggplot2::scale_x_continuous(breaks = seq(1,12,length.out = 12), labels=c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"))
   }
 
   if("Year_Local" %in% colnames(df_climate)){
     p1 <- p1 +
+      ggplot2::xlab("Year") +
       ggplot2::scale_x_continuous(breaks = scales::breaks_width(1))
   }
 
@@ -335,8 +338,6 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
     Trend = "Year_Local"
   }
 
-  titley <- pr_relabel("FunctionalGroup", style = "ggplot")
-
   n <- length(unique(df$Parameters))
 
   #plotCols <- pr_get_PlotCols(pal, n)
@@ -344,10 +345,12 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
   if("BioRegion" %in% colnames(df)){ # If CPR data
     SampleDate = rlang::sym("SampleTime_Local")
     station = rlang::sym("BioRegion")
+    titley <- pr_relabel("PhytoAbundance_Cellsm3", style = "ggplot")
 
   } else { # If NRS data
     SampleDate = rlang::sym("SampleTime_Local")
     station = rlang::sym("StationName")
+    titley <- pr_relabel("PhytoAbundance_CellsL", style = "ggplot")
   }
 
   titlex <- "Sample Time (Local)"
@@ -565,19 +568,33 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
 #' Frequency plot of the selected species
 #'
 #' @param df dataframe of format similar to output of pr_get_fmap_data()
+#' @param species species to plot
+#' @param interactive ggplot if false, plotlist of leaflets if true
 #'
-#' @return a plot of frequency of occurence of chosen species
+#' @return a plot of frequency of occurrence of chosen species
 #' @export
 #'
 #' @examples
 #' df <- data.frame(Long = c(110, 130, 155, 150), Lat = c(-10, -35, -27, -45),
-#'                  freqfac = c("Absent", "Seen in 25%",'50%', '75%'),
+#'                  freqfac = as.factor(c("Absent", "Seen in 25%",'50%', '75%')),
 #'                  Season = c("December - February","March - May",
 #'                  "June - August","September - November"),
-#'                  Taxon = 'Acartia danae')
-#' plot <- pr_plot_FreqMap(df)
-pr_plot_FreqMap <- function(df){
-  cols <- c("lightblue1" ,"skyblue3", "dodgerblue2","blue1", "navyblue")
+#'                  Taxon = 'Acartia danae',
+#'                  Survey = 'CPR')
+#' plot <- pr_plot_FreqMap(df, species = 'Acartia danae', interactive = FALSE)
+pr_plot_FreqMap <- function(df, species, interactive = TRUE){
+
+  df <- df %>%
+    dplyr::mutate(Taxon = dplyr::if_else(.data$Taxon == 'Taxon', species, .data$Taxon)) %>%
+    dplyr::filter(.data$Taxon %in% species)  %>%
+    dplyr::arrange(dplyr::desc(.data$freqfac)) %>%
+    dplyr::group_by(.data$Season, .data$Survey, .data$Lat, .data$Long, .data$Taxon) %>%
+    dplyr::slice(1) %>%
+    dplyr::ungroup() %>%
+    dplyr::arrange(.data$freqfac)
+
+  if(interactive == FALSE){
+    cols <- c("lightblue1" ,"skyblue3", "dodgerblue2","blue1", "navyblue")
 
   Species <- unique(df$Taxon)
 
@@ -595,7 +612,70 @@ pr_plot_FreqMap <- function(df){
                    panel.background = ggplot2::element_rect(fill = "snow1"),
                    legend.position = "bottom",
                    legend.key = ggplot2::element_blank())
+  return(p)
 
+  } else {
+
+    df <- df %>% dplyr::group_split(.data$Season)
+
+    plotlist <-  function(dflist){
+
+    CPRpal <- leaflet::colorFactor(c("lightblue1", "skyblue3", "dodgerblue2", "blue1", "navyblue"), domain = dflist$freqfac)
+    NRSpal <- leaflet::colorFactor(c("#CCFFCC", "#99FF99", "#669933", "#009900", "#006600"), domain = dflist$freqfac)
+
+    dfCPR <- dflist %>% dplyr::filter(.data$Survey == 'CPR')
+    dfNRS <- dflist %>% dplyr::filter(.data$Survey == 'NRS')
+
+    title1 <- htmltools::div(
+      htmltools::tags$style(htmltools::HTML(".leaflet-control.map-title1 {
+                                                text-align: center;
+                                                background: rgba(255,255,255,0);
+                                                font-weight: bold;
+                                                font-size: 16px;
+                                                margin: 0;
+                                                margin-right: 6px}")),
+      unique(dflist$Season))
+
+    title2 <- htmltools::div(
+      htmltools::tags$style(htmltools::HTML(".leaflet-control.map-title2 {
+                                                text-align: center;
+                                                background: rgba(255,255,255,0);
+                                                # font-weight: bold;
+                                                font-style: italic;
+                                                font-size: 16px;
+                                                margin: 0;
+                                                margin-right: 6px}")),
+      unique(dflist$Taxon))
+
+    fmap <- leaflet::leaflet() %>%
+      leaflet::addProviderTiles(provider = "Esri", layerId = "OceanBasemap") %>%
+      leaflet::addPolygons(data = mbr,  group = "Marine Bioregions",
+                           color = ~Colour, fill = ~Colour,
+                           opacity = 1, fillOpacity = 0.3,
+                           weight = 1) %>%
+      leaflet::addCircleMarkers(data = dfCPR, group = 'Continuous Plankton Recorder',
+                                lat = ~ Lat, lng = ~ Long,
+                                radius = ~ifelse(freqfac == "Absent", 2, 5),
+                                color = ~CPRpal(freqfac),
+                                fill = ~CPRpal(freqfac)) %>%
+      leaflet::addCircleMarkers(data = dfNRS , group = 'National Reference Stations',
+                                lat = ~ Lat, lng = ~ Long,
+                                color = ~NRSpal(freqfac),
+                                radius = ~ifelse(freqfac == "Absent", 1, 5)) %>%
+      leaflet::addControl(title1,
+                          position = "topright",
+                          className = "map-title1") %>%
+      leaflet::addControl(title2,
+                          position = "topright",
+                          className = "map-title2")  %>%
+      leaflet::addLayersControl( # Layers control
+        overlayGroups = c("National Reference Stations", "Continuous Plankton Recorder", "Marine Bioregions"),
+        position = "bottomleft",
+        options = leaflet::layersControlOptions(collapsed = FALSE, fill = NA))
+  }
+
+    plotlist <- purrr::map(df, plotlist)
+  }
 }
 
 
@@ -626,7 +706,7 @@ pr_plot_DayNight <-  function(df){
     ggplot2::scale_x_continuous(breaks= seq(1,12,length.out = 12), labels=c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
     ggplot2::theme_bw(base_size = 12) +
     ggplot2::theme(strip.background = ggplot2::element_blank()) +
-    ggplot2::labs(y = ylabel) +
+    ggplot2::labs(y = ylabel, x = "Month") +
     ggplot2::ggtitle(titlemain) +
     ggplot2::theme(plot.title = ggplot2::element_text(face = "italic"))
 
@@ -641,10 +721,11 @@ pr_plot_DayNight <-  function(df){
 #' @export
 #'
 #' @examples
-#' df <- data.frame(sst = runif(24, 5, 25),
+#' df <- data.frame(SST = runif(24, 5, 25),
 #'                  Project = c(rep("CPR", 12), rep("NRS", 12)),
 #'                  Species_m3 = runif(24, 0.1, 10),
 #'                  Species = 'Acartia danae')
+#'
 #' plot <- pr_plot_STI(df)
 pr_plot_STI <-  function(df){
   means <- df %>%
@@ -656,13 +737,13 @@ pr_plot_STI <-  function(df){
   sti <- df %>%
     dplyr::left_join(means, by = "Project") %>%
     dplyr::mutate(relab = .data$Species_m3/.data$mean) %>%
-    dplyr::group_by(.data$sst, .data$Species) %>%
+    dplyr::group_by(.data$SST, .data$Species) %>%
     dplyr::summarize(relab = sum(.data$relab),
                      freq = dplyr::n(),
                      a = sum(.data$relab)/dplyr::n(),
                      .groups = "drop")
 
-  n <- length(sti$sst)
+  n <- length(sti$SST)
   # have a stop if n < 10
 
   ## STI via kernel density
@@ -681,7 +762,7 @@ pr_plot_STI <-  function(df){
   sti$Species <- factor(sti$Species)
   sti$weight <- with(sti, abs(relab) / sum(relab))
   kernOut <- with(sti,
-                  density(sst, weight=weight,
+                  density(SST, weight=weight,
                           bw=kernBw,
                           from=kernMin,
                           to=kernMax,
