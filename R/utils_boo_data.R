@@ -257,8 +257,6 @@ pr_get_DayNight <- function(Type = "Z"){
 }
 
 
-
-
 #' Get data for STI plots of species abundance
 #' @param Type Phyto or zoo, defaults to phyto
 #'
@@ -266,9 +264,9 @@ pr_get_DayNight <- function(Type = "Z"){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_STI("P")
-#' df <- pr_get_STI("Z")
-pr_get_STI <-  function(Type = "P"){
+#' df <- pr_get_STIdata("P")
+#' df <- pr_get_STIdata("Z")
+pr_get_STIdata <-  function(Type = "P"){
 
   if(Type == "Z"){
     cprdat <- pr_get_CPRData(Type, Variable = "abundance", Subset = "copepods")
@@ -317,6 +315,69 @@ pr_get_STI <-  function(Type = "P"){
     dplyr::arrange(.data$Species)
 }
 
+#' Get STI kernel density for each species
+#'
+#' @param df dataframe as output of pr_get_STI()
+#'
+#' @return df of STI kernel density for each species
+#' @export
+#'
+#' @examples
+#' df <- pr_get_STIdata('Z') %>% pr_get_STI()
+#'
+pr_get_STI <-  function(df){
+  species <- unique(df$Species)
+
+  calc_sti <-  function(species){
+    means <- df %>%
+    dplyr::group_by(.data$Project) %>%
+    dplyr::summarise(mean = mean(.data$Species_m3, na.rm = TRUE))
+
+    #means are so different so log data as the abundance scale is so wide
+
+    sti <- df %>%
+      dplyr::filter(.data$Species == species) %>%
+      dplyr::left_join(means, by = "Project") %>%
+      dplyr::mutate(relab = .data$Species_m3/.data$mean) %>%
+      dplyr::group_by(.data$SST, .data$Species) %>%
+      dplyr::summarize(relab = sum(.data$relab),
+                       freq = dplyr::n(),
+                       a = sum(.data$relab)/dplyr::n(),
+                       .groups = "drop")
+
+    n <- length(sti$SST)
+    # have a stop if n < 10
+
+    ## STI via kernel density
+
+    kernStep <- 0.001
+    kernMin <- 0
+    kernMax <- 32
+    kernN <- round((kernMax - kernMin) / kernStep + 1)
+    kernTemps <- seq(kernMin, kernMax, length.out=kernN)
+    kernBw <- 2
+
+    kern_yp <- matrix(0, nrow = kernN, ncol = 1)
+    kypout <- matrix(0, nrow = kernN, ncol = 1)
+
+    taxon <- unique(sti$Species)
+    sti$Species <- factor(sti$Species)
+    sti$weight <- with(sti, abs(relab) / sum(relab))
+    kernOut <- with(sti,
+                    density(SST, weight=weight,
+                            bw=kernBw,
+                            from=kernMin,
+                            to=kernMax,
+                            n=kernN))
+
+    z <- data.frame(kernTemps, y = kernOut$y)
+    STI <- round(z[which.max(z[,2]),]$kernTemps,1)
+    }
+
+  STI <- purrr::map(species, calc_sti)
+  STI  <- data.frame(Species = species, STI = matrix(unlist(STI), nrow = length(STI), byrow = TRUE))
+
+  }
 
 #' Get the summary plankton observations
 #'

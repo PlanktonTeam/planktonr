@@ -715,7 +715,7 @@ pr_plot_DayNight <-  function(df){
 
 #' Plot of STI kernel density for species
 #'
-#' @param df dataframe as output of pr_get_STI() filtered for one species
+#' @param df dataframe as output of pr_get_STIdata() filtered for one species
 #'
 #' @return plot of STI kernel density
 #' @export
