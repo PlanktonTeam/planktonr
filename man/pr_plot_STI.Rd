@@ -7,7 +7,7 @@
 pr_plot_STI(df)
 }
 \arguments{
-\item{df}{dataframe as output of pr_get_STI() filtered for one species}
+\item{df}{dataframe as output of pr_get_STIdata() filtered for one species}
 }
 \value{
 plot of STI kernel density
