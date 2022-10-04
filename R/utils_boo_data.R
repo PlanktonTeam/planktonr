@@ -317,15 +317,17 @@ pr_get_STIdata <-  function(Type = "P"){
 
 #' Get STI kernel density for each species
 #'
-#' @param df dataframe as output of pr_get_STI()
+#' @param Type Zooplankton (Copepods) or phytoplankton species
 #'
 #' @return df of STI kernel density for each species
 #' @export
 #'
 #' @examples
-#' df <- pr_get_STIdata('Z') %>% pr_get_STI()
+#' df <- pr_get_STI('P')
 #'
-pr_get_STI <-  function(df){
+pr_get_STI <-  function(Type = "Z"){
+  df <- pr_get_STIdata(Type)
+
   species <- unique(df$Species)
 
   calc_sti <-  function(species){
@@ -378,6 +380,41 @@ pr_get_STI <-  function(df){
   STI  <- data.frame(Species = species, STI = matrix(unlist(STI), nrow = length(STI), byrow = TRUE))
 
   }
+
+#' Get CTI for sample
+#'
+#' @param Type Zooplankton (Copepods) or phytoplankton species
+#'
+#' @return df of CTI for each sample
+#' @export
+#'
+#' @examples
+#' df <- pr_get_CTI("P")
+#'
+pr_get_CTI <-  function(Type = 'Z'){
+
+  df <- pr_get_STI(Type)
+
+    if(Type == 'Z'){
+    dat <- pr_get_NRSData("zooplankton", "abundance", "species")
+    vars <- pr_get_NonTaxaColumns(Survey = "NRS", Type)
+  } else {
+    dat <- pr_get_NRSData("phytoplankton", "abundance", "species")
+    vars <- pr_get_NonTaxaColumns(Survey = "NRS", Type)
+  }
+
+  dat <- dat %>%
+    dplyr::mutate(StationCode = ifelse(.data$StationCode == 'PH4', 'PHB', .data$StationCode)) %>%
+    dplyr::select(-(tidyselect::any_of(vars)), .data$SampleTime_Local, .data$StationCode, .data$Project) %>%
+    tidyr::pivot_longer(-c(.data$SampleTime_Local, .data$StationCode, .data$Project), values_to = "Abundance", names_to = "Species") %>%
+    dplyr::inner_join(df, by = 'Species') %>%
+    dplyr::group_by(.data$SampleTime_Local, .data$StationCode, .data$Project) %>%
+    dplyr::summarise(CTI = sum(.data$Abundance * .data$STI, na.rm = TRUE)/sum(.data$Abundance, na.rm = TRUE),
+                     .groups = "drop") %>%
+    as.data.frame()
+
+  return(dat)
+}
 
 #' Get the summary plankton observations
 #'

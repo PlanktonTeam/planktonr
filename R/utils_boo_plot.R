@@ -790,6 +790,7 @@ pr_plot_STI <-  function(df){
 
 }
 
+
 #' IMOS progress plot
 #'
 #' @param df output from pr_get_ProgressMap
