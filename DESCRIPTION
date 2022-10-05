@@ -41,7 +41,10 @@ Suggests:
     knitr,
     rmarkdown,
     rnaturalearthdata,
-    testthat (>= 3.0.0)
+    RNetCDF,
+    testthat (>= 3.0.0),
+    thredds,
+    yaImpute
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3
