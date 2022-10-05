@@ -16,7 +16,7 @@ pr_get_DataLocs <- function(Survey = 'all'){
     df <- pr_get_NRSTrips(c('P', 'Z')) %>%
       dplyr::select(.data$Longitude, .data$Latitude, .data$SampleTime_UTC) %>%
       dplyr::distinct(.data$Longitude, .data$Latitude, Date = as.Date(.data$SampleTime_UTC, 'UTC'))
-  }
+  } else
   if(Survey == 'CPR'){
     df <- pr_get_CPRTrips() %>%
       dplyr::filter(grepl("P|Z", .data$SampleType)) %>%
