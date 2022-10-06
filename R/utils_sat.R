@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' df <- pr_get_DataLocs("NRS")
-#'
+
 pr_get_DataLocs <- function(Survey = 'all'){
 
   if(Survey == 'NRS'){
@@ -69,6 +69,8 @@ pr_get_DataLocs <- function(Survey = 'all'){
 #' res_spat = 10
 #' sstout <- pr_match_GHRSST(df,
 #' pr = c("sea_surface_temperature", "sea_surface_temperature_day_night"))
+#' #TODO add progress bars with purrr
+
 pr_match_GHRSST <- function(df, pr) {
 
   # Set resolution
@@ -163,9 +165,9 @@ pr_match_GHRSST <- function(df, pr) {
 #' @export
 #'
 #' @examples
-#' df <- head(pr_get_DataLocs("NRS"),5)
+#' df <- head(pr_get_DataLocs("NRS"),100)
 #' res_spat = 10
-#' altout <- pr_match_Altimetry(df, pr <- c("GSLA", "GSL"))
+#' altout <- pr_match_Altimetry(df, pr = "GSLA")
 pr_match_Altimetry <- function(df, pr) {
 
   if (!exists("res_spat")){
@@ -304,10 +306,10 @@ pr_match_MODIS <- function(df, pr) {
 
     tryCatch({ # Not all dates will exist
       nc <- RNetCDF::open.nc(imos_url)
-      lat <- RNetCDF::var.get.nc(nc, variable = "lat")
-      lon <- RNetCDF::var.get.nc(nc, variable = "lon")
-      lengthlat <- RNetCDF::dim.inq.nc(nc, "lat")
-      lengthlon <- RNetCDF::dim.inq.nc(nc, "lon")
+      lat <- RNetCDF::var.get.nc(nc, variable = "latitude")
+      lon <- RNetCDF::var.get.nc(nc, variable = "longitude")
+      lengthlat <- RNetCDF::dim.inq.nc(nc, "latitude")
+      lengthlon <- RNetCDF::dim.inq.nc(nc, "longitude")
       minlat <- min(lat)
       maxlat <- max(lat)
       minlon <- min(lon)
@@ -330,7 +332,7 @@ pr_match_MODIS <- function(df, pr) {
       RNetCDF::close.nc(nc)
     },
     error = function(cond) {
-      out <- NaN
+      out <- 0
       return(out)
     }
     )
