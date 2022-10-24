@@ -294,9 +294,9 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
 #' @export
 #'
 #' @examples
-#' df <- pr_get_Indices(Survey = "NRS", Type = "P") %>%
-#'   dplyr::filter(Parameters == "PhytoAbundance_CellsL")
-#' pr_plot_tsclimate(df, "NRS")
+#' df <- pr_get_Indices(Survey = "CPR", Type = "P") %>%
+#'   dplyr::filter(Parameters == "PhytoAbundance_Cellsm3")
+#' pr_plot_tsclimate(df, "CPR")
 pr_plot_tsclimate <- function(df, Survey = "NRS", trans = "identity"){
 
   p1 <- pr_plot_TimeSeries(df, Survey, trans) +
