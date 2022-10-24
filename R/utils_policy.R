@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-#' df <- pr_get_PolicyData("CPR", join = 'st_nearest_feature')
+#' df <- pr_get_PolicyData("CPR")
 pr_get_PolicyData <- function(Survey = "NRS", ...){
 
   if(Survey == "CPR") {
@@ -20,8 +20,8 @@ pr_get_PolicyData <- function(Survey = "NRS", ...){
       pr_add_Bioregions(...)
 
     Pol <- Polr %>%
-      dplyr::select(tidyselect::starts_with(c("SampleTime_Local", "Year_Local", "Month_Local", "BioRegion", "DistanceFromBioregion_m",
-                    tidyselect::all_of(var_names)))) %>%
+      dplyr::select(tidyselect::starts_with(c("SampleTime_Local", "Year_Local", "Month_Local", "BioRegion", "DistanceFromBioregion_m")),
+                    tidyselect::all_of(var_names)) %>%
       dplyr::filter(!.data$BioRegion %in% c("North", "North-west")) %>%
       tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "Parameters")
 
