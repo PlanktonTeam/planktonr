@@ -127,7 +127,7 @@ pr_match_GHRSST <- function(df, pr) {
 
       # Approximate nearest neighbour
       idx_lon <- yaImpute::ann(as.matrix(seq(minlon, maxlon, length.out = lengthlon$length)), as.matrix(df$Longitude), k = 1, verbose = FALSE)$knnIndexDist[,1]
-      idx_lat <- yaImpute::ann(as.matrix(seq(minlat, maxlat, length.out = lengthlat$length)), as.matrix(df$Latitude), k = 1, verbose = FALSE)$knnIndexDist[,1]
+      idx_lat <- yaImpute::ann(as.matrix(seq(maxlat, minlat, length.out = lengthlat$length)), as.matrix(df$Latitude), k = 1, verbose = FALSE)$knnIndexDist[,1]
       cnt <- c(1,1,1)
 
       if (res_spat > 1) { # If more than 1x1 pixel is requested we adjust the idx by res_spat/2 and count by res_spa
@@ -223,7 +223,7 @@ pr_match_Altimetry <- function(df, pr) {
 
       # Approximate nearest neighbour
       idx_lon <- (yaImpute::ann(as.matrix(seq(minlon, maxlon, length.out = lengthlon$length)), as.matrix(df$Longitude), k = 1, verbose = FALSE)$knnIndexDist[,1])[1]
-      idx_lat <- (yaImpute::ann(as.matrix(seq(minlat, maxlat, length.out = lengthlat$length)), as.matrix(df$Latitude), k = 1, verbose = FALSE)$knnIndexDist[,1])[1]
+      idx_lat <- (yaImpute::ann(as.matrix(seq(maxlat, minlat, length.out = lengthlat$length)), as.matrix(df$Latitude), k = 1, verbose = FALSE)$knnIndexDist[,1])[1]
       cnt <- c(1,1,1)
 
       if (res_spat > 1) { # If more than 1x1 pixel is requested we adjust the idx by res_spat/2 and count by res_spa
@@ -317,7 +317,7 @@ pr_match_MODIS <- function(df, pr) {
 
       # Approximate nearest neighbour
       idx_lon <- yaImpute::ann(as.matrix(seq(minlon, maxlon, length.out = lengthlon$length)), as.matrix(df$Longitude), k = 1, verbose = FALSE)$knnIndexDist[,1]
-      idx_lat <- yaImpute::ann(as.matrix(seq(minlat, maxlat, length.out = lengthlat$length)), as.matrix(df$Latitude), k = 1, verbose = FALSE)$knnIndexDist[,1]
+      idx_lat <- yaImpute::ann(as.matrix(seq(maxlat, minlat, length.out = lengthlat$length)), as.matrix(df$Latitude), k = 1, verbose = FALSE)$knnIndexDist[,1]
       cnt <- c(1,1,1)
 
       if (res_spat > 1) { # If more than 1x1 pixel is requested we adjust the idx by res_spat/2 and count by res_spa
