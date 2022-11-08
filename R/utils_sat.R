@@ -158,15 +158,15 @@ pr_match_GHRSST <- function(df, pr) {
 
 #' Match data for altimetry
 #'
-#' @param df dataframe containing latitude, longitude and Date
+#' @param df dataframe containing Latitude, Longitude and Date
 #' @param pr products from GSLA, GSL, UCUR, UCUR, VCUR, UCUR_MEAN, VCUR_MEAN, single or as a list
 #'
 #' @return df with product output attached
 #' @export
 #'
 #' @examples
-#' df <- head(pr_get_DataLocs("NRS"),100)
-#' res_spat = 10
+#' df <- head(pr_get_DataLocs("NRS"), 10)
+#' res_spat <- 10
 #' altout <- pr_match_Altimetry(df, pr = "GSLA")
 pr_match_Altimetry <- function(df, pr) {
 

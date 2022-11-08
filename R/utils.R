@@ -485,7 +485,7 @@ pr_add_Carbon <- function(df, meth){
 
 #' For use in models to create a circular predictor
 #'
-#' This function i for use in models to create a circular predictor
+#' This function is for use in models to create a circular predictor
 #' @param theta Paramter to model in radians
 #' @param k degrees of freedom
 #'

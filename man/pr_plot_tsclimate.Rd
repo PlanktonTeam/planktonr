@@ -20,7 +20,7 @@ a combined plot
 Combined timeseries and climatology plots
 }
 \examples{
-df <- pr_get_Indices(Survey = "NRS", Type = "P") \%>\%
-  dplyr::filter(Parameters == "PhytoAbundance_CellsL")
-pr_plot_tsclimate(df, "NRS")
+df <- pr_get_Indices(Survey = "CPR", Type = "P") \%>\%
+  dplyr::filter(Parameters == "PhytoAbundance_Cellsm3")
+pr_plot_tsclimate(df, "CPR")
 }
