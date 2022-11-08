@@ -7,7 +7,7 @@
 pr_match_Altimetry(df, pr)
 }
 \arguments{
-\item{df}{dataframe containing latitude, longitude and Date}
+\item{df}{dataframe containing Latitude, Longitude and Date}
 
 \item{pr}{products from GSLA, GSL, UCUR, UCUR, VCUR, UCUR_MEAN, VCUR_MEAN, single or as a list}
 }
@@ -18,7 +18,7 @@ df with product output attached
 Match data for altimetry
 }
 \examples{
-df <- head(pr_get_DataLocs("NRS"),5)
-res_spat = 10
-altout <- pr_match_Altimetry(df, pr <- c("GSLA", "GSL"))
+df <- head(pr_get_DataLocs("NRS"),10)
+res_spat <- 10
+altout <- pr_match_Altimetry(df, pr = "GSLA")
 }

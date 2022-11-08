@@ -19,5 +19,4 @@ Get data for satellite matching
 }
 \examples{
 df <- pr_get_DataLocs("NRS")
-
 }
