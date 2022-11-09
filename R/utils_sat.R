@@ -165,7 +165,7 @@ pr_match_GHRSST <- function(df, pr) {
 #' @export
 #'
 #' @examples
-#' df <- head(pr_get_DataLocs("NRS"), 10)
+#' df <- head(pr_get_DataLocs("NRS"), 5)
 #' res_spat <- 10
 #' altout <- pr_match_Altimetry(df, pr = "GSLA")
 pr_match_Altimetry <- function(df, pr) {
@@ -186,8 +186,13 @@ pr_match_Altimetry <- function(df, pr) {
     }
   }
 
+  if (max(df$Year > 2019)){
+    print("Only data before 2020 is available via this product and will be returned from this function")
+  }
+
   df <- df %>%
-    dplyr::select(.data$Latitude, .data$Longitude, .data$Year, .data$Month, .data$Day)
+    dplyr::select(.data$Latitude, .data$Longitude, .data$Year, .data$Month, .data$Day) %>%
+    dplyr::filter(.data$Year < 2020)
 
   df <- dplyr::bind_cols(purrr::map_dfr(seq_len(length(pr)), ~ df),
                          purrr::map_dfr(seq_len(nrow(df)), ~ data.frame(pr)) %>%
@@ -199,6 +204,7 @@ pr_match_Altimetry <- function(df, pr) {
     # Make sure month and day have a leading zero if less than 10
     mth <- stringr::str_pad(df$Month,2,"left",pad="0")
     dy <- stringr::str_pad(df$Day,2,"left",pad="0")
+
     thredd_url <- paste0("http://thredds.aodn.org.au/thredds/catalog/IMOS/OceanCurrent/GSLA/DM01/",df$Year,"/catalog.xml")
 
     f <- thredds::CatalogNode$new(thredd_url)
@@ -288,7 +294,12 @@ pr_match_MODIS <- function(df, pr) {
              Year = lubridate::year(.data$Date))
   }
 
-  df <- df %>%
+  if (min(df$Date) < as.Date("2002-07-01")){
+    print("Only data after 2002-07-01 is available via this product and will be returned from this function")
+  }
+
+  df <- df  %>%
+    dplyr::filter(Date > as.Date("2002-07-01")) %>%
     dplyr::select(.data$Latitude, .data$Longitude, .data$Year, .data$Month, .data$Day)
 
   df <- dplyr::bind_cols(purrr::map_dfr(seq_len(length(pr)), ~ df),

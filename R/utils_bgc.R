@@ -140,7 +140,9 @@ pr_get_NRSMicro <- function(){
                  "Eukaryote_Chlorophyll_Index")
 
   dat <- readr::read_csv(system.file("extdata", "datNRSm.csv", package = "planktonr", mustWork = TRUE), na = c("", NA, "NA"), show_col_types = FALSE) %>%
-    pr_rename() %>%
+  # dat <- readr::read_csv("https://raw.githubusercontent.com/AusMicrobiome/microbial_ocean_atlas/main/data/oceanViz_AM_data.csv")
+  # This should be the permanent address of this file where we will access it going forward.
+      pr_rename() %>%
     dplyr::rename(SampleTime_Local = .data$SampleDateLocal,
                   Month_Local = .data$Month,
                   Year_Local = .data$Year,
