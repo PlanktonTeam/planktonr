@@ -379,25 +379,24 @@ pr_apply_Time <- function(df){
 pr_remove_outliers <- function(df, x){
 
   if("StationCode" %in% colnames(df)){
-    outliers <- df %>%
-      dplyr::group_by(.data$Parameters, .data$StationCode)
-    location <- "StationCode"
+    location <- rlang::sym("StationCode")
+    joiner <- 'StationCode'
   } else {
-    outliers <- df %>%
-      dplyr::group_by(.data$Parameters, .data$BioRegion)
-    location <- "BioRegion"
+    location <- rlang::sym("BioRegion")
+    joiner <- 'BioRegion'
   }
 
-  outliers <- outliers %>%
+  outliers <- df %>%
+    dplyr::group_by(.data$Parameters, !!location) %>%
     dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
                      sd2 = x*sd(.data$Values, na.rm = TRUE),
                      meanplus = .data$means + .data$sd2,
                      meanminus = .data$means - .data$sd2,
                      .groups = 'drop') %>%
-    dplyr::select(-c(.data$means, .data$sd2))
+    dplyr::select(-c(means, sd2))
 
   added <- df %>%
-    dplyr::left_join(outliers, by = c("Parameters", location)) %>%
+    dplyr::left_join(outliers, by = c("Parameters", joiner)) %>%
     dplyr::filter(.data$Values < .data$meanplus & .data$Values > .data$meanminus) %>%
     dplyr::select(-c(.data$meanplus, .data$meanminus))
 }
