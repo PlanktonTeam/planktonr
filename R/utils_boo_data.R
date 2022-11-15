@@ -336,8 +336,8 @@ pr_get_STI <-  function(Type = "Z"){
 
   calc_sti <-  function(species){
     means <- df %>%
-    dplyr::group_by(.data$Project) %>%
-    dplyr::summarise(mean = mean(.data$Species_m3, na.rm = TRUE))
+      dplyr::group_by(.data$Project) %>%
+      dplyr::summarise(mean = mean(.data$Species_m3, na.rm = TRUE))
 
     #means are so different so log data as the abundance scale is so wide
 
@@ -378,12 +378,12 @@ pr_get_STI <-  function(Type = "Z"){
 
     z <- data.frame(kernTemps, y = kernOut$y)
     STI <- round(z[which.max(z[,2]),]$kernTemps,1)
-    }
+  }
 
   STI <- purrr::map(species, calc_sti)
   STI  <- data.frame(Species = species, STI = matrix(unlist(STI), nrow = length(STI), byrow = TRUE))
 
-  }
+}
 
 #' Get CTI for sample
 #'
@@ -399,7 +399,7 @@ pr_get_CTI <-  function(Type = 'Z'){
 
   df <- pr_get_STI(Type)
 
-    if(Type == 'Z'){
+  if(Type == 'Z'){
     dat <- pr_get_NRSData("zooplankton", "abundance", "species")
     vars <- pr_get_NonTaxaColumns(Survey = "NRS", Type)
   } else {
@@ -440,8 +440,8 @@ pr_get_SppCount <- function(Type = "Z"){
     gp <- "Zooplankton"
   }
 
-out <- sppSummary %>%
-  dplyr::filter(.data$Group == gp)
+  out <- sppSummary %>%
+    dplyr::filter(.data$Group == gp)
 
 }
 
@@ -535,40 +535,65 @@ pr_get_Papers <- function(){
 
 #' Data for IMOS progress map
 #'
-#' @param Survey one of NRS, CPR, Both
+#' @param Survey one of NRS, CPR or Both
+#' @param interactive A logical TRUE/FALSE if the data is to be used for an interactive plot.
 #'
 #' @return A dataframe for input into pr_plot_Progress()
 #' @export
 #'
 #' @examples
-#' df <- pr_get_ProgressMap(c("NRS", "CPR"))
+#' df <- pr_get_ProgressMapData(c("NRS", "CPR"))
+#' df <- pr_get_ProgressMapData(c("NRS", "CPR"), interactive = TRUE)
+pr_get_ProgressMapData <- function(Survey = c("NRS", "CPR"), interactive = FALSE){
 
-pr_get_ProgressMap <- function(Survey = c("NRS", "CPR")){
+  if (interactive == FALSE){
+    if("NRS" %in% Survey) {
+      PMapDataNRS <- planktonr::pr_get_NRSTrips(Type = c("P", "Z")) %>%
+        dplyr::select("StationCode", "Longitude", "Latitude") %>%
+        dplyr::rename(Region = .data$StationCode) %>%
+        dplyr::mutate(Survey = "NRS") %>%
+        dplyr::filter(.data$Region != "PH4")
 
-  if("NRS" %in% Survey) {
-    PMapDataNRS <- planktonr::pr_get_NRSTrips(Type = c("P", "Z")) %>%
-      dplyr::select("StationCode", "Longitude", "Latitude") %>%
-      dplyr::rename(Region = .data$StationCode) %>%
-      dplyr::mutate(Survey = "NRS") %>%
-      dplyr::filter(.data$Region != "PH4")
-    if (("CPR" %in% Survey) == FALSE){ # Return data if no CPR
-      return(PMapDataNRS)
+      if (("CPR" %in% Survey) == FALSE){ # Return data if no CPR
+        return(PMapDataNRS)
+      }
     }
-  }
 
-  if ("CPR" %in% Survey) {
-    # PMapDataCPR <- readr::read_csv("https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/deprecated/CPR_Samp.csv", show_col_types = FALSE)  %>%
-    PMapDataCPR <- pr_get_s3("cpr_samp") %>%
-      dplyr::select("REGION", "LONGITUDE", "LATITUDE") %>%
-      pr_rename() %>%
-      dplyr::mutate(Survey = "CPR")
-    if (("NRS" %in% Survey) == FALSE){ # Return data if no NRS
-      return(PMapDataCPR)
+    if ("CPR" %in% Survey) {
+      PMapDataCPR <- pr_get_s3("cpr_samp") %>%
+        dplyr::select("REGION", "LONGITUDE", "LATITUDE") %>%
+        pr_rename() %>%
+        dplyr::mutate(Survey = "CPR")
+      if (("NRS" %in% Survey) == FALSE){ # Return data if no NRS
+        return(PMapDataCPR)
+      }
     }
-  }
 
-  if(("NRS" %in% Survey & "CPR" %in% Survey) | "Both" %in% Survey) {
-    PMapData <- dplyr::bind_rows(PMapDataNRS, PMapDataCPR)
+    if(("NRS" %in% Survey & "CPR" %in% Survey) | "Both" %in% Survey) {
+      PMapData <- dplyr::bind_rows(PMapDataNRS, PMapDataCPR)
+      return(PMapData)
+    }
+  } else if (interactive == TRUE){
+
+    PMapDataNRS <- dplyr::bind_rows(planktonr::pr_get_Indices("NRS", "Z"), planktonr::pr_get_Indices("NRS", "P")) %>%
+      dplyr::filter(Parameters == "ZoopAbundance_m3" | Parameters == "PhytoAbundance_CellsL") %>%
+      tidyr::pivot_wider(names_from = .data$Parameters, values_from = .data$Values) %>%
+      dplyr::rename(Name = .data$StationName) %>%
+      dplyr::select(-"StationCode") %>%
+      dplyr::mutate(Survey = "NRS")
+
+    PMapDataCPR <- dplyr::bind_rows(planktonr::pr_get_Indices("CPR", "Z"), planktonr::pr_get_Indices("CPR", "P")) %>%
+      dplyr::filter(Parameters == "ZoopAbundance_m3" | Parameters == "PhytoAbundance_Cellsm3") %>%
+      tidyr::drop_na(.data$Values) %>%
+      tidyr::pivot_wider(names_from = .data$Parameters, values_from = .data$Values) %>%
+      dplyr::mutate(PhytoAbundance_Cellsm3 = .data$PhytoAbundance_Cellsm3/1e3,
+                    Survey = "CPR") %>%
+      dplyr::rename(PhytoAbundance_CellsL = .data$PhytoAbundance_Cellsm3,
+                    Name = .data$BioRegion)
+
+    PMapData <- dplyr::bind_rows(PMapDataNRS, PMapDataCPR) %>%
+      dplyr::select(-c("Year_Local", "Month_Local", "tz"))
+
     return(PMapData)
   }
 
