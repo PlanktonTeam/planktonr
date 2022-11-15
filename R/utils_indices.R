@@ -42,14 +42,12 @@ pr_get_Indices <- function(Survey = "CPR", Type = "P", ...){
 
     dat <- pr_get_Raw("cpr_derived_indices_data") %>%
       pr_rename() %>%
-      pr_add_Bioregions(...) %>%
+      pr_add_Bioregions() %>%
       pr_apply_Time() %>% #TODO added for consistency but uses etc timezones - do we changes these to the more familiar names or leave? doesn't improve with method = accurate
       dplyr::select(tidyselect::starts_with(c("SampleTime_Local", "Year_Local", "Month_Local", "BioRegion", "DistanceFromBioregion_m", "tz", "Latitude", "Longitude")),
                     tidyselect::all_of(var_names)) %>%
       tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters") %>%
       pr_reorder()
-
-
 
     return(dat)
 
