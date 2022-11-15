@@ -104,7 +104,7 @@ testthat::test_that("Correct function output", {
                                                            "June - August","September - November"),
                                                 Taxon = 'Acartia danae',
                                                 Survey = 'CPR') %>%
-                                 pr_plot_FreqMap(species = 'Acartia danae', interactive = FALSE)), "gg")
+                                 pr_plot_FreqMap(species = 'Acartia danae', interactive = FALSE))[1], "gg")
 
 
 
@@ -114,6 +114,6 @@ testthat::test_that("Correct function output", {
                                                            "June - August","September - November"),
                                                 Taxon = 'Acartia danae',
                                                 Survey = 'CPR') %>%
-                                 pr_plot_FreqMap(species = 'Acartia danae', interactive = TRUE)), "list")
+                                 pr_plot_FreqMap(species = 'Acartia danae', interactive = TRUE))[1], "list")
 
 })
