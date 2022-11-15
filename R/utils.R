@@ -533,7 +533,7 @@ pr_get_Coeffs <-  function(df){
     droplevels()
 
   params <- df %>%
-    dplyr::select(.data$Parameters) %>%
+    dplyr::select("Parameters") %>%
     unique()
   params <- params$Parameters
 

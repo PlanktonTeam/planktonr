@@ -57,8 +57,8 @@ pr_get_Indices <- function(Survey = "CPR", Type = "P", ...){
       pr_rename() %>%
       pr_add_StationCode() %>%
       pr_apply_Time() %>%
-      dplyr::select(.data$TripCode, .data$Year_Local, .data$Month_Local, .data$SampleTime_Local, .data$tz, .data$Latitude, .data$Longitude,
-                    .data$StationName, .data$StationCode, tidyselect::all_of(var_names)) %>%
+      dplyr::select("TripCode", "Year_Local", "Month_Local", "SampleTime_Local", "tz", "Latitude", "Longitude",
+                    "StationName", "StationCode", tidyselect::all_of(var_names)) %>%
       tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "Parameters") %>%
       pr_reorder()
 

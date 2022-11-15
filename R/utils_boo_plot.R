@@ -18,7 +18,7 @@ pr_plot_NRSmap <- function(df){
 
   col <- meta_sf %>%
     sf::st_drop_geometry() %>%
-    dplyr::select(.data$Code, .data$Colour) %>%
+    dplyr::select("Code", "Colour") %>%
     tibble::deframe()
 
   p1 <- ggplot2::ggplot() +
@@ -55,7 +55,7 @@ pr_plot_CPRmap <-  function(df){
   col <- bioregionSelection %>%
     sf::st_drop_geometry() %>%
     dplyr::distinct() %>%
-    dplyr::select(.data$REGION, .data$Colour) %>%
+    dplyr::select("REGION", "Colour") %>%
     tibble::deframe()
 
   p1 <- ggplot2::ggplot() +
@@ -944,7 +944,7 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
     # GAB, GBR, NA, NEAC, SEAC, SO, Tas, WA
 
     Survey <- df %>%
-      dplyr::select(.data$Survey) %>%
+      dplyr::select("Survey") %>%
       dplyr::distinct()
 
     gg <- ggplot2::ggplot() +

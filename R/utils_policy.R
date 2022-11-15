@@ -26,7 +26,7 @@ pr_get_PolicyData <- function(Survey = "NRS", ...){
       tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "Parameters")
 
     means <- Polr %>%
-      dplyr::select(.data$BioRegion, tidyselect::all_of(var_names)) %>%
+      dplyr::select("BioRegion", tidyselect::all_of(var_names)) %>%
       tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "Parameters") %>%
       dplyr::group_by(.data$BioRegion, .data$Parameters) %>%
       dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
@@ -52,13 +52,13 @@ pr_get_PolicyData <- function(Survey = "NRS", ...){
                     Year_Local = lubridate::year(.data$SampleTime_Local))
 
     Pol <- Polr %>%
-      dplyr::select(.data$SampleTime_Local, .data$Year_Local, .data$Month_Local, .data$StationName,
-                    .data$StationCode, tidyselect::all_of(var_names)) %>%
+      dplyr::select("SampleTime_Local", "Year_Local", "Month_Local", "StationName",
+                    "StationCode", tidyselect::all_of(var_names)) %>%
       dplyr::filter(!.data$StationName %in% c("Port Hacking 4")) %>%
       tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "Parameters")
 
     means <- Polr %>%
-      dplyr::select(.data$StationName, tidyselect::all_of(var_names)) %>%
+      dplyr::select("StationName", tidyselect::all_of(var_names)) %>%
       tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "Parameters") %>%
       dplyr::group_by(.data$StationName, .data$Parameters) %>%
       dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
@@ -76,7 +76,7 @@ pr_get_PolicyData <- function(Survey = "NRS", ...){
     LTnuts <- pr_get_LTnuts()
 
     means <- LTnuts %>%
-      dplyr::select(.data$StationName, .data$Parameters, .data$Values) %>%
+      dplyr::select("StationName", "Parameters", "Values") %>%
       dplyr::group_by(.data$StationName, .data$Parameters) %>%
       dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
                        sd = stats::sd(.data$Values, na.rm = TRUE),
