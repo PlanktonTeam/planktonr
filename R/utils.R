@@ -393,12 +393,12 @@ pr_remove_outliers <- function(df, x){
                      meanplus = .data$means + .data$sd2,
                      meanminus = .data$means - .data$sd2,
                      .groups = 'drop') %>%
-    dplyr::select(-c(means, sd2))
+    dplyr::select(-c("means", "sd2"))
 
   added <- df %>%
     dplyr::left_join(outliers, by = c("Parameters", joiner)) %>%
     dplyr::filter(.data$Values < .data$meanplus & .data$Values > .data$meanminus) %>%
-    dplyr::select(-c(.data$meanplus, .data$meanminus))
+    dplyr::select(-c("meanplus", "meanminus"))
 }
 
 

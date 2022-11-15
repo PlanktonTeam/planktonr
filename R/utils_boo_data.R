@@ -122,7 +122,9 @@ pr_get_FreqMap <- function(Type = "Z"){
                           names_to = "Taxon", values_to = "Counts") %>%
       dplyr::filter(.data$Counts > 0) %>%
       dplyr::mutate(Survey = 'CPR') %>%
-      dplyr::left_join(CPRSamp %>% dplyr::select(-c(.data$Survey, .data$Month_Local)), by = c("Latitude", "Longitude", "SampleTime_Local")) #TODO get rid of this step if product contains sample
+      dplyr::left_join(CPRSamp %>%
+                         dplyr::select(-c("Survey", "Month_Local")),
+                       by = c("Latitude", "Longitude", "SampleTime_Local")) #TODO get rid of this step if product contains sample
 
     obs <- dplyr::bind_rows(PhytoCountCPR, PhytoCountNRS) %>%
       dplyr::mutate(Counts = as.integer(as.logical(.data$Counts))) %>%
@@ -143,7 +145,9 @@ pr_get_FreqMap <- function(Type = "Z"){
                           names_to = "Taxon", values_to = "Counts") %>%
       dplyr::filter(.data$Counts > 0) %>%
       dplyr::mutate(Survey = "CPR")  %>%
-      dplyr::left_join(CPRSamp %>% dplyr::select(-c(.data$Survey, .data$Month_Local)), by = c("Latitude", "Longitude", "SampleTime_Local")) #TODO get rid of this step if product contains sample
+      dplyr::left_join(CPRSamp %>%
+                         dplyr::select(-c("Survey", "Month_Local")),
+                       by = c("Latitude", "Longitude", "SampleTime_Local")) #TODO get rid of this step if product contains sample
 
     obs <- dplyr::bind_rows(ZooCountCPR, ZooCountNRS) %>%
       dplyr::mutate(Counts = as.integer(as.logical(.data$Counts))) %>%

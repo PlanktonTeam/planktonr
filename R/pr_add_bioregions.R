@@ -63,7 +63,9 @@ pr_add_Bioregions <- function(df, join = "st_within", ...){
       sf::st_as_sf(sf_column_name = "geometry") %>%
       sf::st_join(mbr, join = sf::st_nearest_feature) %>%
       dplyr::select("REGION") %>%
-      dplyr::bind_cols(df %>% dplyr::filter(is.na(.data$BioRegion)) %>% dplyr::select(-c(.data$BioRegion, .data$geometry))) %>%
+      dplyr::bind_cols(df %>%
+                         dplyr::filter(is.na(.data$BioRegion)) %>%
+                         dplyr::select(-c("BioRegion", "geometry"))) %>%
       dplyr::rename(BioRegion = .data$REGION)
 
     df <- df %>%

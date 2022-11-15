@@ -117,7 +117,7 @@ pr_get_PolicyInfo <- function(Survey = "NRS", ...){
                                                 .data$StationCode %in% c("ROT", "ESP", "NIN") ~ "narrow shelf influenced by the Leeuwin Current with tropical oeanic communities"),
                     now = dplyr::case_when(.data$StationCode %in% c("DAR", "YON", "NSI", "PHB", "MAI", "KAI", "ROT") ~ "and is ongoing",
                                            .data$StationCode %in% c("ESP", "NIN") ~ "and concluded in March 2013")) %>%
-      dplyr::select(-c(.data$ProjectName, .data$StationCode, .data$IMCRA))
+      dplyr::select(-c("ProjectName", "StationCode", "IMCRA"))
 
   } else {
 

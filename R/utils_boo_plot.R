@@ -834,7 +834,7 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
     df_NRS2 <- df_NRS %>%
       dplyr::distinct(.data$Name, .keep_all = TRUE) %>%
       tidyr::drop_na() %>%
-      dplyr::select(-c(.data$ZoopAbundance_m3, .data$PhytoAbundance_CellsL, .data$Survey))
+      dplyr::select(-c("ZoopAbundance_m3", "PhytoAbundance_CellsL", "Survey"))
 
     rm(df)
 

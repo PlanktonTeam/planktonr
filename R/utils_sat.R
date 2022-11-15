@@ -299,7 +299,7 @@ pr_match_MODIS <- function(df, pr) {
   }
 
   df <- df  %>%
-    dplyr::filter(Date > as.Date("2002-07-01")) %>%
+    dplyr::filter(.data$Date > as.Date("2002-07-01")) %>%
     dplyr::select("Latitude", "Longitude", "Year", "Month", "Day")
 
   df <- dplyr::bind_cols(purrr::map_dfr(seq_len(length(pr)), ~ df),
