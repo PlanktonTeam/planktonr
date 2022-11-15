@@ -284,7 +284,7 @@ pr_reorder <- function(df){
     df <- df %>%
       dplyr::mutate(BioRegion = factor(.data$BioRegion,
                                        levels = c("North", "North-west", "Coral Sea",
-                                                  "Temperate East", "South-east", "South-west", "Southern Ocean")))
+                                                  "Temperate East", "South-east", "South-west", "Southern Ocean Region")))
   }
   return(df)
 }
@@ -393,12 +393,12 @@ pr_remove_outliers <- function(df, x){
                      meanplus = .data$means + .data$sd2,
                      meanminus = .data$means - .data$sd2,
                      .groups = 'drop') %>%
-    dplyr::select(-c(means, sd2))
+    dplyr::select(-c("means", "sd2"))
 
   added <- df %>%
     dplyr::left_join(outliers, by = c("Parameters", joiner)) %>%
     dplyr::filter(.data$Values < .data$meanplus & .data$Values > .data$meanminus) %>%
-    dplyr::select(-c(.data$meanplus, .data$meanminus))
+    dplyr::select(-c("meanplus", "meanminus"))
 }
 
 
@@ -533,7 +533,7 @@ pr_get_Coeffs <-  function(df){
     droplevels()
 
   params <- df %>%
-    dplyr::select(.data$Parameters) %>%
+    dplyr::select("Parameters") %>%
     unique()
   params <- params$Parameters
 

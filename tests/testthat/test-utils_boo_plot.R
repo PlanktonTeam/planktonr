@@ -97,4 +97,23 @@ testthat::test_that("Correct function output", {
   testthat::expect_equal(class(pr_get_ProgressMap(c("CPR", "NRS")) %>%
                                  pr_plot_ProgressMap())[1], "gg")
 
+
+  testthat::expect_equal(class(df <- data.frame(Long = c(110, 130, 155, 150), Lat = c(-10, -35, -27, -45),
+                                                freqfac = as.factor(c("Absent", "Seen in 25%",'50%', '75%')),
+                                                Season = c("December - February","March - May",
+                                                           "June - August","September - November"),
+                                                Taxon = 'Acartia danae',
+                                                Survey = 'CPR') %>%
+                                 pr_plot_FreqMap(species = 'Acartia danae', interactive = FALSE)), "gg")
+
+
+
+  testthat::expect_equal(class(df <- data.frame(Long = c(110, 130, 155, 150), Lat = c(-10, -35, -27, -45),
+                                                freqfac = as.factor(c("Absent", "Seen in 25%",'50%', '75%')),
+                                                Season = c("December - February","March - May",
+                                                           "June - August","September - November"),
+                                                Taxon = 'Acartia danae',
+                                                Survey = 'CPR') %>%
+                                 pr_plot_FreqMap(species = 'Acartia danae', interactive = TRUE)), "list")
+
 })

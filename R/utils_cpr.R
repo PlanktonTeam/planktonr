@@ -26,7 +26,7 @@ pr_get_CPRData <- function(Type = "P", Variable = "abundance", Subset = "raw"){
     datnc <- pr_get_Raw("cpr_zooplankton_abundance_non_copepods_data") %>%
       pr_rename() %>%
       dplyr::arrange(.data$TripCode, .data$SampleTime_Local) %>%
-      dplyr::select(-c(.data$TripCode:.data$SampleVolume_m3))
+      dplyr::select(-tidyselect::all_of(pr_get_NonTaxaColumns(Survey = "CPR", Type = "Z")))
 
     # Add together and COPEPODS and NON-COPEPODS
     dat <- dplyr::bind_cols(datc, datnc)

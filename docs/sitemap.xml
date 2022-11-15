@@ -352,6 +352,9 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_filter_NRSStations.html</loc>
   </url>
   <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_filter_data.html</loc>
+  </url>
+  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_filter_species.html</loc>
   </url>
   <url>
@@ -430,7 +433,13 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CTD.html</loc>
   </url>
   <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CTI.html</loc>
+  </url>
+  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_Chemistry.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_DataLocs.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_FreqMap.html</loc>
@@ -562,6 +571,9 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_ProgressMap.html</loc>
   </url>
   <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_STIdata.html</loc>
+  </url>
+  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_SppCount.html</loc>
   </url>
   <url>
@@ -658,6 +670,15 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_make_climatology.html</loc>
   </url>
   <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_match_Altimetry.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_match_GHRSST.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_match_MODIS.html</loc>
+  </url>
+  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_CPRmap.html</loc>
   </url>
   <url>
@@ -707,6 +728,9 @@
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_relabel.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_remove_outliers.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_rename.html</loc>

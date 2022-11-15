@@ -35,13 +35,13 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Z", ...){
 
   if(Survey == "CPR"){
     df <- df %>%
-      dplyr::select(.data$BioRegion, .data$SampleTime_Local, .data$Month_Local, .data$Year_Local, tidyselect::any_of(var_names)) %>%
+      dplyr::select("BioRegion", "SampleTime_Local", "Month_Local", "Year_Local", tidyselect::any_of(var_names)) %>%
       dplyr::filter(!is.na(.data$BioRegion), !.data$BioRegion %in% c("North", "North-west")) %>%
       droplevels()
   } else if(Survey == "NRS"){
     df <- df %>%
-      dplyr::select(.data$StationName, .data$StationCode, .data$SampleTime_Local,
-                    .data$Month_Local, .data$Year_Local, tidyselect::any_of(var_names))
+      dplyr::select("StationName", "StationCode", "SampleTime_Local",
+                    "Month_Local", "Year_Local", tidyselect::any_of(var_names))
   }
 
   df <- df %>%
@@ -88,13 +88,13 @@ pr_get_FreqMap <- function(Type = "Z"){
   NRSSamp <- pr_get_NRSTrips() %>%
     dplyr::rename(Sample = .data$TripCode) %>%
     dplyr::mutate(Survey = 'NRS') %>%
-    dplyr::select(.data$Sample, .data$Survey, .data$SampleTime_Local, .data$Month_Local, .data$Latitude, .data$Longitude)
+    dplyr::select("Sample", "Survey", "SampleTime_Local", "Month_Local", "Latitude", "Longitude")
 
   CPRSamp <- pr_get_CPRTrips() %>%
     dplyr::mutate(Survey = 'CPR',
                   Latitude = round(.data$Latitude, 4),
                   Longitude = round(.data$Longitude, 4)) %>%
-    dplyr::select(.data$Sample, .data$Survey, .data$SampleTime_Local, .data$Month_Local, .data$Latitude, .data$Longitude)
+    dplyr::select("Sample", "Survey", "SampleTime_Local", "Month_Local", "Latitude", "Longitude")
 
   SampLocs <- dplyr::bind_rows(CPRSamp, NRSSamp) %>%
     dplyr::mutate(DOY = lubridate::yday(.data$SampleTime_Local),
@@ -107,7 +107,7 @@ pr_get_FreqMap <- function(Type = "Z"){
                                             .data$Month_Local > 5 & .data$Month_Local < 9 ~ "June - August",
                                             .data$Month_Local > 8 & .data$Month_Local < 12 ~ "September - November",
                                             TRUE ~ "December - February")) %>%
-    dplyr::select(.data$Sample, .data$Survey, .data$Lat, .data$Long, .data$Season)
+    dplyr::select("Sample", "Survey", "Lat", "Long", "Season")
 
   if(Type == "P"){
     PhytoCountNRS <- pr_get_NRSData(Type = "phytoplankton", Variable = "abundance", Subset = "species") %>%
@@ -122,11 +122,13 @@ pr_get_FreqMap <- function(Type = "Z"){
                           names_to = "Taxon", values_to = "Counts") %>%
       dplyr::filter(.data$Counts > 0) %>%
       dplyr::mutate(Survey = 'CPR') %>%
-      dplyr::left_join(CPRSamp %>% dplyr::select(-c(.data$Survey, .data$Month_Local)), by = c("Latitude", "Longitude", "SampleTime_Local")) #TODO get rid of this step if product contains sample
+      dplyr::left_join(CPRSamp %>%
+                         dplyr::select(-c("Survey", "Month_Local")),
+                       by = c("Latitude", "Longitude", "SampleTime_Local")) #TODO get rid of this step if product contains sample
 
     obs <- dplyr::bind_rows(PhytoCountCPR, PhytoCountNRS) %>%
       dplyr::mutate(Counts = as.integer(as.logical(.data$Counts))) %>%
-      dplyr::select(.data$Sample, .data$Survey, .data$Taxon, .data$Counts) %>%
+      dplyr::select("Sample", "Survey", "Taxon", "Counts") %>%
       dplyr::arrange(.data$Taxon)
 
   } else if(Type == "Z"){
@@ -143,16 +145,18 @@ pr_get_FreqMap <- function(Type = "Z"){
                           names_to = "Taxon", values_to = "Counts") %>%
       dplyr::filter(.data$Counts > 0) %>%
       dplyr::mutate(Survey = "CPR")  %>%
-      dplyr::left_join(CPRSamp %>% dplyr::select(-c(.data$Survey, .data$Month_Local)), by = c("Latitude", "Longitude", "SampleTime_Local")) #TODO get rid of this step if product contains sample
+      dplyr::left_join(CPRSamp %>%
+                         dplyr::select(-c("Survey", "Month_Local")),
+                       by = c("Latitude", "Longitude", "SampleTime_Local")) #TODO get rid of this step if product contains sample
 
     obs <- dplyr::bind_rows(ZooCountCPR, ZooCountNRS) %>%
       dplyr::mutate(Counts = as.integer(as.logical(.data$Counts))) %>%
-      dplyr::select(.data$Sample, .data$Survey, .data$Taxon, .data$Counts) %>%
+      dplyr::select("Sample", "Survey", "Taxon", "Counts") %>%
       dplyr::arrange(.data$Taxon)
   }
 
   mapdata <- obs %>%
-    dplyr::select(.data$Sample, .data$Taxon, .data$Counts) %>%
+    dplyr::select("Sample", "Taxon", "Counts") %>%
     dplyr::left_join(SampLocs, by="Sample") %>%
     tidyr::drop_na() %>%
     dplyr::group_by(.data$Season, .data$Survey, .data$Taxon, .data$Lat, .data$Long) %>%
@@ -169,7 +173,7 @@ pr_get_FreqMap <- function(Type = "Z"){
                                                        TRUE ~ "75%")),
                   Season = factor(.data$Season, levels = c("December - February","March - May","June - August","September - November")),
                   Taxon = as.factor(.data$Taxon)) %>%
-    dplyr::select(.data$Season, .data$Survey, .data$Lat, .data$Long, .data$Taxon, .data$freqsamp, .data$freqfac)
+    dplyr::select("Season", "Survey", "Lat", "Long", "Taxon", "freqsamp", "freqfac")
 
   absences <-  SampLocs %>%
     dplyr::distinct(.data$Survey, .data$Lat, .data$Long, .data$Season) %>%
@@ -234,7 +238,7 @@ pr_get_DayNight <- function(Type = "Z"){
   }
 
   dates <- dat %>%
-    dplyr::select(.data$SampleTime_UTC, .data$Latitude, .data$Longitude) %>%
+    dplyr::select("SampleTime_UTC", "Latitude", "Longitude") %>%
     dplyr::rename(date = .data$SampleTime_UTC,
                   lat = .data$Latitude,
                   lon = .data$Longitude) %>%
@@ -296,7 +300,7 @@ pr_get_STIdata <-  function(Type = "P"){
   cpr <- cprdat %>%
     tidyr::pivot_longer(-tidyselect::all_of(pr_get_NonTaxaColumns(Survey = "CPR", Type = Type)), names_to = "Species", values_to = parameter) %>%
     dplyr::left_join(cprsat, by = c("Latitude", "Longitude", "SampleTime_UTC")) %>%
-    dplyr::select(.data$Species, .data$SST, .data[[parameter]]) %>%
+    dplyr::select("Species", "SST", tidyselect::all_of(parameter)) %>%
     dplyr::filter(!is.na(.data$SST) & .data[[parameter]] > 0) %>%
     dplyr::mutate(Project = "cpr",
                   Species_m3 = .data[[parameter]] + min(.data[[parameter]][.data[[parameter]]>0], na.rm = TRUE))
@@ -304,7 +308,7 @@ pr_get_STIdata <-  function(Type = "P"){
   nrs <- nrsdat %>%
     tidyr::pivot_longer(-tidyselect::all_of(pr_get_NonTaxaColumns(Survey = "NRS", Type = Type)), names_to = "Species", values_to = parameter) %>%
     dplyr::left_join(nrssat, by = c("Latitude", "Longitude", "SampleTime_Local")) %>%
-    dplyr::select(.data$Species, .data$SST, .data[[parameter]]) %>%
+    dplyr::select("Species", "SST", tidyselect::all_of(parameter)) %>%
     dplyr::filter(!is.na(.data$SST) & .data[[parameter]] > 0) %>%
     dplyr::mutate(Project = "nrs",
                   Species_m3 = .data[[parameter]] + min(.data[[parameter]][.data[[parameter]]>0], na.rm = TRUE))
@@ -543,7 +547,7 @@ pr_get_ProgressMap <- function(Survey = c("NRS", "CPR")){
 
   if("NRS" %in% Survey) {
     PMapDataNRS <- planktonr::pr_get_NRSTrips(Type = c("P", "Z")) %>%
-      dplyr::select(.data$StationCode, .data$Longitude, .data$Latitude) %>%
+      dplyr::select("StationCode", "Longitude", "Latitude") %>%
       dplyr::rename(Region = .data$StationCode) %>%
       dplyr::mutate(Survey = "NRS") %>%
       dplyr::filter(.data$Region != "PH4")
@@ -555,7 +559,7 @@ pr_get_ProgressMap <- function(Survey = c("NRS", "CPR")){
   if ("CPR" %in% Survey) {
     # PMapDataCPR <- readr::read_csv("https://raw.githubusercontent.com/PlanktonTeam/IMOS_Toolbox/master/Plankton/deprecated/CPR_Samp.csv", show_col_types = FALSE)  %>%
     PMapDataCPR <- pr_get_s3("cpr_samp") %>%
-      dplyr::select(.data$REGION, .data$LONGITUDE, .data$LATITUDE) %>%
+      dplyr::select("REGION", "LONGITUDE", "LATITUDE") %>%
       pr_rename() %>%
       dplyr::mutate(Survey = "CPR")
     if (("NRS" %in% Survey) == FALSE){ # Return data if no NRS
