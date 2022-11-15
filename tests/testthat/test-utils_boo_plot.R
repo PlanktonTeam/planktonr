@@ -94,11 +94,14 @@ testthat::test_that("Correct function output", {
                                           Species = "Acartia danae") %>%
                                  pr_plot_STI())[1], "gg")
 
-  testthat::expect_equal(class(pr_get_ProgressMap(c("CPR", "NRS")) %>%
+  testthat::expect_equal(class(pr_get_ProgressMapData(c("CPR", "NRS")) %>%
                                  pr_plot_ProgressMap())[1], "gg")
 
+  testthat::expect_equal(class(pr_get_ProgressMapData(c("CPR", "NRS"), interactive = TRUE) %>%
+                                 pr_plot_ProgressMap(interactive = TRUE))[1], "leaflet")
 
-  testthat::expect_equal(class(df <- data.frame(Long = c(110, 130, 155, 150), Lat = c(-10, -35, -27, -45),
+
+  testthat::expect_equal(class(data.frame(Long = c(110, 130, 155, 150), Lat = c(-10, -35, -27, -45),
                                                 freqfac = as.factor(c("Absent", "Seen in 25%",'50%', '75%')),
                                                 Season = c("December - February","March - May",
                                                            "June - August","September - November"),
@@ -106,9 +109,7 @@ testthat::test_that("Correct function output", {
                                                 Survey = 'CPR') %>%
                                  pr_plot_FreqMap(species = 'Acartia danae', interactive = FALSE))[1], "gg")
 
-
-
-  testthat::expect_equal(class(df <- data.frame(Long = c(110, 130, 155, 150), Lat = c(-10, -35, -27, -45),
+  testthat::expect_equal(class(data.frame(Long = c(110, 130, 155, 150), Lat = c(-10, -35, -27, -45),
                                                 freqfac = as.factor(c("Absent", "Seen in 25%",'50%', '75%')),
                                                 Season = c("December - February","March - May",
                                                            "June - August","September - November"),
