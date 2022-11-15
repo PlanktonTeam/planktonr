@@ -68,5 +68,10 @@ testthat::test_that("Correct function output", {
                            "Month_Local", "Day_Local", "Time_Local24hr", "SampleDepth_m",
                            "CTDSST_degC", "CTDChlaSurf_mgm3", "CTDSalinity_psu",
                            "Biomass_mgm3", "AshFreeBiomass_mgm3"))
+
+  testthat::expect_type(pr_get_Indices("NRS", "P") %>% pr_remove_outliers(2), "list")
+  testthat::expect_type(pr_get_Indices("CPR", "P") %>% pr_remove_outliers(2), "list")
+  testthat::expect_type(pr_get_Indices("NRS", "Z") %>% pr_remove_outliers(2), "list")
+  testthat::expect_type(pr_get_Indices("CPR", "Z") %>% pr_remove_outliers(2), "list")
 })
 
