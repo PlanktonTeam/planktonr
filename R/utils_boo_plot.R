@@ -947,3 +947,53 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
   }
 
 }
+
+
+
+
+
+#' Plot Gantt Chart showing plankton sampling status
+#'
+#' @param Survey "NRS" or "CPR"
+#'
+#' @return a ggplot
+#' @export
+#'
+#' @examples
+#' gg <- pr_plot_Gantt(Survey = "NRS")
+#' gg <- pr_plot_Gantt(Survey = "CPR")
+pr_plot_Gantt <- function(Survey = "NRS"){
+
+  if (Survey == "CPR"){
+    dat <- pr_get_CPRTrips() %>%
+      dplyr::mutate(YearMonth = Year_Local + Month_Local/12) %>%
+      dplyr::distinct(YearMonth, Region, TripCode) %>%
+      dplyr::group_by(YearMonth, Region, TripCode) %>%
+      dplyr::summarise(n = n()) %>%
+      dplyr::ungroup()
+
+    gg <- ggplot(data = dat, aes(x = YearMonth, y = Region, fill = n, colour = n, width = 1/12, height = 2/12)) +
+      geom_tile() +
+      ggplot2::theme_bw() +
+      ggplot2::labs(x = element_blank(), y = element_blank()) +
+      ggplot2::ggtitle("Continuous Plankton Counter Sampling")
+
+  } else if (Survey == "NRS"){
+
+    dat <- pr_get_NRSTrips(Type = c("P", "Z")) %>%
+      dplyr::mutate(YearMonth = Year_Local + Month_Local/12) %>%
+      dplyr::filter(StationName != "Port Hacking 4") %>%
+      dplyr::group_by(YearMonth, StationName) %>%
+      dplyr::summarise(n = n(), .groups = "drop")
+
+    gg <- ggplot(data = dat, aes(x = YearMonth, y = StationName, fill = n, colour = n, width = 1/12, height = 2/12)) +
+      geom_tile() +
+      ggplot2::theme_bw() +
+      ggplot2::labs(x = element_blank(), y = element_blank()) +
+      ggplot2::ggtitle("National Reference Station Sampling")
+
+  }
+
+}
+
+
