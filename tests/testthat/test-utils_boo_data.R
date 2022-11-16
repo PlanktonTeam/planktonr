@@ -21,9 +21,9 @@ testthat::test_that("Correct function output", {
 
   testthat::expect_type(pr_get_Papers(), "character")
 
-  testthat::expect_type(pr_get_ProgressMap(c("NRS", "CPR")), "list")
-  testthat::expect_type(pr_get_ProgressMap("NRS"), "list")
-  testthat::expect_type(pr_get_ProgressMap("CPR"), "list")
+  testthat::expect_type(pr_get_ProgressMapData(c("NRS", "CPR")), "list")
+  testthat::expect_type(pr_get_ProgressMapData("NRS"), "list")
+  testthat::expect_type(pr_get_ProgressMapData("CPR"), "list")
 
   testthat::expect_type(pr_get_CTI("P"), "list")
   testthat::expect_type(pr_get_CTI("Z"), "list")

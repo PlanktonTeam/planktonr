@@ -596,48 +596,48 @@ pr_plot_FreqMap <- function(df, species, interactive = TRUE){
   if(interactive == FALSE){
     cols <- c("lightblue1" ,"skyblue3", "dodgerblue2","blue1", "navyblue")
 
-  Species <- unique(df$Taxon)
+    Species <- unique(df$Taxon)
 
-  p <- ggplot2::ggplot() +
-    ggplot2::geom_sf(data = MapOz) +
-    ggplot2::geom_point(data=df, ggplot2::aes(x=.data$Long, y=.data$Lat, colour=.data$freqfac, pch = .data$Survey), size = 2) +
-    ggplot2::facet_wrap( ~ .data$Season, dir = "v") +
-    ggplot2::labs(title = Species) +
-    ggplot2::scale_colour_manual(name = "", values = cols, drop = FALSE) +
-    ggplot2::theme(strip.background = ggplot2::element_blank(),
-                   title = ggplot2::element_text(face = "italic"),
-                   legend.title = ggplot2::element_text(face = "plain", size = 12),
-                   axis.title.x = ggplot2::element_blank(),
-                   axis.title.y = ggplot2::element_blank(),
-                   panel.background = ggplot2::element_rect(fill = "snow1"),
-                   legend.position = "bottom",
-                   legend.key = ggplot2::element_blank())
-  return(p)
+    p <- ggplot2::ggplot() +
+      ggplot2::geom_sf(data = MapOz) +
+      ggplot2::geom_point(data=df, ggplot2::aes(x=.data$Long, y=.data$Lat, colour=.data$freqfac, pch = .data$Survey), size = 2) +
+      ggplot2::facet_wrap( ~ .data$Season, dir = "v") +
+      ggplot2::labs(title = Species) +
+      ggplot2::scale_colour_manual(name = "", values = cols, drop = FALSE) +
+      ggplot2::theme(strip.background = ggplot2::element_blank(),
+                     title = ggplot2::element_text(face = "italic"),
+                     legend.title = ggplot2::element_text(face = "plain", size = 12),
+                     axis.title.x = ggplot2::element_blank(),
+                     axis.title.y = ggplot2::element_blank(),
+                     panel.background = ggplot2::element_rect(fill = "snow1"),
+                     legend.position = "bottom",
+                     legend.key = ggplot2::element_blank())
+    return(p)
 
   } else {
 
     df <- df %>% dplyr::group_split(.data$Season)
 
-    plotlist <-  function(dflist){
+    plotlist <- function(dflist){
 
-    CPRpal <- leaflet::colorFactor(c("lightblue1", "skyblue3", "dodgerblue2", "blue1", "navyblue"), domain = dflist$freqfac)
-    NRSpal <- leaflet::colorFactor(c("#CCFFCC", "#99FF99", "#669933", "#009900", "#006600"), domain = dflist$freqfac)
+      CPRpal <- leaflet::colorFactor(c("lightblue1", "skyblue3", "dodgerblue2", "blue1", "navyblue"), domain = dflist$freqfac)
+      NRSpal <- leaflet::colorFactor(c("#CCFFCC", "#99FF99", "#669933", "#009900", "#006600"), domain = dflist$freqfac)
 
-    dfCPR <- dflist %>% dplyr::filter(.data$Survey == 'CPR')
-    dfNRS <- dflist %>% dplyr::filter(.data$Survey == 'NRS')
+      dfCPR <- dflist %>% dplyr::filter(.data$Survey == 'CPR')
+      dfNRS <- dflist %>% dplyr::filter(.data$Survey == 'NRS')
 
-    title1 <- htmltools::div(
-      htmltools::tags$style(htmltools::HTML(".leaflet-control.map-title1 {
+      title1 <- htmltools::div(
+        htmltools::tags$style(htmltools::HTML(".leaflet-control.map-title1 {
                                                 text-align: center;
                                                 background: rgba(255,255,255,0);
                                                 font-weight: bold;
                                                 font-size: 16px;
                                                 margin: 0;
                                                 margin-right: 6px}")),
-      unique(dflist$Season))
+        unique(dflist$Season))
 
-    title2 <- htmltools::div(
-      htmltools::tags$style(htmltools::HTML(".leaflet-control.map-title2 {
+      title2 <- htmltools::div(
+        htmltools::tags$style(htmltools::HTML(".leaflet-control.map-title2 {
                                                 text-align: center;
                                                 background: rgba(255,255,255,0);
                                                 # font-weight: bold;
@@ -645,36 +645,38 @@ pr_plot_FreqMap <- function(df, species, interactive = TRUE){
                                                 font-size: 16px;
                                                 margin: 0;
                                                 margin-right: 6px}")),
-      unique(dflist$Taxon))
+        unique(dflist$Taxon))
 
-    fmap <- leaflet::leaflet() %>%
-      leaflet::addProviderTiles(provider = "Esri", layerId = "OceanBasemap") %>%
-      leaflet::addPolygons(data = mbr,  group = "Marine Bioregions",
-                           color = ~Colour, fill = ~Colour,
-                           opacity = 1, fillOpacity = 0.3,
-                           weight = 1) %>%
-      leaflet::addCircleMarkers(data = dfCPR, group = 'Continuous Plankton Recorder',
-                                lat = ~ Lat, lng = ~ Long,
-                                radius = ~ifelse(freqfac == "Absent", 2, 5),
-                                color = ~CPRpal(freqfac),
-                                fill = ~CPRpal(freqfac)) %>%
-      leaflet::addCircleMarkers(data = dfNRS , group = 'National Reference Stations',
-                                lat = ~ Lat, lng = ~ Long,
-                                color = ~NRSpal(freqfac),
-                                radius = ~ifelse(freqfac == "Absent", 1, 5)) %>%
-      leaflet::addControl(title1,
-                          position = "topright",
-                          className = "map-title1") %>%
-      leaflet::addControl(title2,
-                          position = "topright",
-                          className = "map-title2")  %>%
-      leaflet::addLayersControl( # Layers control
-        overlayGroups = c("National Reference Stations", "Continuous Plankton Recorder", "Marine Bioregions"),
-        position = "bottomleft",
-        options = leaflet::layersControlOptions(collapsed = FALSE, fill = NA))
-  }
+      fmap <- leaflet::leaflet() %>%
+        leaflet::addProviderTiles(provider = "Esri", layerId = "OceanBasemap") %>%
+        leaflet::addPolygons(data = mbr,  group = "Marine Bioregions",
+                             color = ~Colour, fill = ~Colour,
+                             opacity = 1, fillOpacity = 0.3,
+                             weight = 1) %>%
+        leaflet::addCircleMarkers(data = dfCPR, group = 'Continuous Plankton Recorder',
+                                  lat = ~ Lat, lng = ~ Long,
+                                  radius = ~ifelse(freqfac == "Absent", 2, 5),
+                                  color = ~CPRpal(freqfac),
+                                  fill = ~CPRpal(freqfac)) %>%
+        leaflet::addCircleMarkers(data = dfNRS , group = 'National Reference Stations',
+                                  lat = ~ Lat, lng = ~ Long,
+                                  color = ~NRSpal(freqfac),
+                                  radius = ~ifelse(freqfac == "Absent", 1, 5)) %>%
+        leaflet::addControl(title1,
+                            position = "topright",
+                            className = "map-title1") %>%
+        leaflet::addControl(title2,
+                            position = "topright",
+                            className = "map-title2")  %>%
+        leaflet::addLayersControl( # Layers control
+          overlayGroups = c("National Reference Stations", "Continuous Plankton Recorder", "Marine Bioregions"),
+          position = "bottomleft",
+          options = leaflet::layersControlOptions(collapsed = FALSE, fill = NA))
+    }
 
     plotlist <- purrr::map(df, plotlist)
+
+    return(plotlist)
   }
 }
 
@@ -793,40 +795,18 @@ pr_plot_STI <-  function(df){
 
 #' IMOS progress plot
 #'
-#' @param df output from pr_get_ProgressMap
+#' @param df output from pr_get_ProgressMapData
 #' @param interactive Should the plot be interactive with leaflet?
 #'
 #' @return a plot of IMOS progress
 #' @export
 #'
 #' @examples
-#' df <- pr_get_ProgressMap("CPR")
+#' df <- pr_get_ProgressMapData("CPR")
 #' plot <- pr_plot_ProgressMap(df)
 pr_plot_ProgressMap <- function(df, interactive = FALSE){
 
   if (interactive == TRUE){
-
-#     library(tidyverse)
-#     library(planktonr)
-#     load("~/GitHub/planktonr/R/sysdata.rda")
-#     PMapDatan <- dplyr::bind_rows(planktonr::pr_get_Indices("NRS", "Z"), planktonr::pr_get_Indices("NRS", "P")) %>%
-#       filter(.data$Parameters == "ZoopAbundance_m3" | .data$Parameters == "PhytoAbundance_CellsL") %>%
-#       tidyr::pivot_wider(names_from = .data$Parameters, values_from = .data$Values) %>%
-#       dplyr::rename(Name = .data$StationName) %>%
-#       dplyr::select(-.data$StationCode) %>%
-#       dplyr::mutate(Survey = "NRS")
-#
-#     PMapDatac <- dplyr::bind_rows(planktonr::pr_get_Indices("CPR", "Z"), planktonr::pr_get_Indices("CPR", "P")) %>%
-#       filter(.data$Parameters == "ZoopAbundance_m3" | .data$Parameters == "PhytoAbundance_Cellsm3") %>%
-#       tidyr::pivot_wider(names_from = .data$Parameters, values_from = .data$Values) %>%
-#       dplyr::mutate(PhytoAbundance_Cellsm3 = .data$PhytoAbundance_Cellsm3/1e3,
-#                     Survey = "CPR") %>%
-#       dplyr::rename(PhytoAbundance_CellsL = .data$PhytoAbundance_Cellsm3,
-#                     Name = .data$BioRegion)
-#
-#     df <- dplyr::bind_rows(PMapDatan, PMapDatac) %>%
-#       dplyr::select(-c(.data$Year_Local, .data$Month_Local , .data$tz))
-#
 
     df_CPR <- df %>% dplyr::filter(.data$Survey == "CPR")
     df_NRS <- df %>% dplyr::filter(.data$Survey == "NRS")
@@ -840,9 +820,6 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
 
     CPRpal <- leaflet::colorFactor(palette = "Paired", unique(df_CPR$Name))
     NRSpal <- leaflet::colorFactor(palette = "Pastel1", unique(df_NRS$Name))
-    # MBRpal <- leaflet::colorFactor(palette = "Pastel2", mbr$Name)
-
-
 
     labs_cpr <- lapply(seq(nrow(df_CPR)), function(i) {
       paste("<strong>Sample Date:</strong>", df_CPR$SampleTime_Local[i], "<br/>","<b/>",
@@ -875,12 +852,6 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
                                                 margin-right: 6px}")),
       "Hover cursor over items of interest")
 
-
-    # iconSet <- leaflet::awesomeIconList(home = leaflet::makeAwesomeIcon(icon = "circle-o",
-    #                                                                    library = "fa",
-    #                                                                    iconColor = 'gold',
-    #                                                                    markerColor = 'red'))
-
     map <- leaflet::leaflet() %>%
       leaflet::addProviderTiles(provider = "Esri", layerId = "OceanBasemap") %>%
       leaflet::addPolygons(data = mbr,  group = "Marine Bioregions",
@@ -895,12 +866,12 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
                                 group = "Continuous Plankton Recorder",
                                 label = lapply(labs_cpr, htmltools::HTML)) %>%
       leaflet::addAwesomeMarkers(data = df_NRS,
-                          lat = ~ Latitude, lng = ~ Longitude,
-                          # icon = iconSet,
-                          group = "National Reference Stations",
-                          clusterOptions = leaflet::markerClusterOptions(showCoverageOnHover = FALSE,
-                                                                         spiderfyOnMaxZoom = FALSE,
-                                                                         maxClusterRadius = 40)) %>%
+                                 lat = ~ Latitude, lng = ~ Longitude,
+                                 # icon = iconSet,
+                                 group = "National Reference Stations",
+                                 clusterOptions = leaflet::markerClusterOptions(showCoverageOnHover = FALSE,
+                                                                                spiderfyOnMaxZoom = FALSE,
+                                                                                maxClusterRadius = 40)) %>%
       leaflet::addControl(title1,
                           position = "topright",
                           className = "map-title1"
