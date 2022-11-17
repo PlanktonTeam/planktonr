@@ -612,7 +612,7 @@ pr_get_NonTaxaColumns <- function(Survey = "NRS", Type = "Z"){
 #'
 #' @param Type Phytoplankton (P) or Zooplankton (Z)
 #'
-#' @return
+#' @return A dataframe of species information
 #' @export
 #'
 #' @examples

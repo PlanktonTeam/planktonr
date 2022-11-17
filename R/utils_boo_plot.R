@@ -950,8 +950,6 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
 
 
 
-
-
 #' Plot Gantt Chart showing plankton sampling status
 #'
 #' @param Survey "NRS" or "CPR"
@@ -966,34 +964,35 @@ pr_plot_Gantt <- function(Survey = "NRS"){
 
   if (Survey == "CPR"){
     dat <- pr_get_CPRTrips() %>%
-      dplyr::mutate(YearMonth = Year_Local + Month_Local/12) %>%
-      dplyr::distinct(YearMonth, Region, TripCode) %>%
-      dplyr::group_by(YearMonth, Region, TripCode) %>%
-      dplyr::summarise(n = n()) %>%
+      dplyr::mutate(YearMonth = .data$Year_Local + .data$Month_Local/12) %>%
+      dplyr::distinct(.data$YearMonth, .data$Region, .data$TripCode) %>%
+      dplyr::group_by(.data$YearMonth, .data$Region, .data$TripCode) %>%
+      dplyr::summarise(n = dplyr::n()) %>%
       dplyr::ungroup()
 
-    gg <- ggplot(data = dat, aes(x = YearMonth, y = Region, fill = n, colour = n, width = 1/12, height = 2/12)) +
-      geom_tile() +
+    gg <- ggplot2::ggplot(data = dat, ggplot2::aes(x = .data$YearMonth, y = .data$Region, fill = .data$n, colour = .data$n, width = 1/12, height = 2/12)) +
+      ggplot2::geom_tile() +
       ggplot2::theme_bw() +
-      ggplot2::labs(x = element_blank(), y = element_blank()) +
+      ggplot2::labs(x = ggplot2::element_blank(), y = ggplot2::element_blank()) +
       ggplot2::ggtitle("Continuous Plankton Counter Sampling")
 
   } else if (Survey == "NRS"){
 
     dat <- pr_get_NRSTrips(Type = c("P", "Z")) %>%
-      dplyr::mutate(YearMonth = Year_Local + Month_Local/12) %>%
-      dplyr::filter(StationName != "Port Hacking 4") %>%
-      dplyr::group_by(YearMonth, StationName) %>%
-      dplyr::summarise(n = n(), .groups = "drop")
+      dplyr::mutate(YearMonth = .data$Year_Local + .data$Month_Local/12) %>%
+      dplyr::filter(.data$StationName != "Port Hacking 4") %>%
+      dplyr::group_by(.data$YearMonth, .data$StationName) %>%
+      dplyr::summarise(n = dplyr::n(), .groups = "drop")
 
-    gg <- ggplot(data = dat, aes(x = YearMonth, y = StationName, fill = n, colour = n, width = 1/12, height = 2/12)) +
-      geom_tile() +
+    gg <- ggplot2::ggplot(data = dat, ggplot2::aes(x = .data$YearMonth, y = .data$StationName, fill = .data$n, colour = .data$n, width = 1/12, height = 2/12)) +
+      ggplot2::geom_tile() +
       ggplot2::theme_bw() +
-      ggplot2::labs(x = element_blank(), y = element_blank()) +
+      ggplot2::labs(x = ggplot2::element_blank(), y = ggplot2::element_blank()) +
       ggplot2::ggtitle("National Reference Station Sampling")
 
   }
 
 }
+
 
 
