@@ -109,7 +109,7 @@ pr_plot_LarvalFishDist <- function(df, SpeciesName, interactive = TRUE){
     dplyr::mutate(Presence = dplyr::if_else(.data$Count > 0, "Present", "Absent")) %>%
     dplyr::arrange(.data$Presence)
 
-  dat_sp <- dplyr::filter(dat, .data$Species == SpeciesName)
+  dat_sp <- dplyr::filter(dat, .data$Species2 == SpeciesName)
 
   if (interactive == TRUE){
 
