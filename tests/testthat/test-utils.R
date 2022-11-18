@@ -73,5 +73,9 @@ testthat::test_that("Correct function output", {
   testthat::expect_type(pr_get_Indices("CPR", "P") %>% pr_remove_outliers(2), "list")
   testthat::expect_type(pr_get_Indices("NRS", "Z") %>% pr_remove_outliers(2), "list")
   testthat::expect_type(pr_get_Indices("CPR", "Z") %>% pr_remove_outliers(2), "list")
+
+  testthat::expect_type(pr_get_SpeciesInfo(Type = "P"), "list")
+  testthat::expect_type(pr_get_SpeciesInfo(Type = "Z"), "list")
+
 })
 

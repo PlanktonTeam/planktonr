@@ -20,4 +20,8 @@ Options for \code{file} include: "bgc_trip"
 }
 \examples{
 dat <- pr_get_s3("bgc_trip")
+dat <- pr_get_s3("bgc_zoop_raw")
+dat <- pr_get_s3("bgc_phyto_raw")
+dat <- pr_get_s3("cpr_phyto_raw")
+dat <- pr_get_s3("cpr_zoop_raw")
 }

@@ -119,9 +119,18 @@ pr_get_Raw <- function(file){
 #'
 #' @examples
 #' dat <- pr_get_s3("bgc_trip")
+#' dat <- pr_get_s3("bgc_zoop_raw")
+#' dat <- pr_get_s3("bgc_phyto_raw")
+#' dat <- pr_get_s3("cpr_phyto_raw")
+#' dat <- pr_get_s3("cpr_zoop_raw")
 pr_get_s3 <- function(file){
 
   col_types = list()
+
+  # The file extension is not needed here.
+  if(stringr::str_detect(file, ".csv")){
+    file = stringr::str_remove(file, ".csv")
+  }
 
   dat <- readr::read_csv(paste0(pr_get_s3site(), file, ".csv"),
                          na = c("", NaN),
@@ -597,6 +606,29 @@ pr_get_NonTaxaColumns <- function(Survey = "NRS", Type = "Z"){
   return(vars)
 
 }
+
+
+#' Get species information table for Phytoplankton and Zooplankton
+#'
+#' @param Type Phytoplankton (P) or Zooplankton (Z)
+#'
+#' @return A dataframe of species information
+#' @export
+#'
+#' @examples
+#' dat <- pr_get_SpeciesInfo(Type = "P")
+#' dat <- pr_get_SpeciesInfo(Type = "Z")
+pr_get_SpeciesInfo <- function(Type = "Z"){
+
+  if (Type == "P"){file = "phytoinfo"}
+  if (Type == "Z"){file = "zoopinfo"}
+
+  dat <- pr_get_s3(file) %>%
+    pr_rename()
+
+}
+
+
 
 
 # Internal function to check Type
