@@ -95,12 +95,12 @@ pr_get_Raw <- function(file){
   #     comment = "#",
   #     col_types = col_types)
   # } else{
-    dat <- readr::read_csv(stringr::str_replace(
-      pr_get_Site(), "LAYER_NAME", file),
-      na = c("", NaN, "NaN", NA, "NA"),
-      show_col_types = FALSE,
-      comment = "#",
-      col_types = col_types)
+  dat <- readr::read_csv(stringr::str_replace(
+    pr_get_Site(), "LAYER_NAME", file),
+    na = c("", NaN, "NaN", NA, "NA"),
+    show_col_types = FALSE,
+    comment = "#",
+    col_types = col_types)
   # }
 
   return(dat)
@@ -119,9 +119,18 @@ pr_get_Raw <- function(file){
 #'
 #' @examples
 #' dat <- pr_get_s3("bgc_trip")
+#' dat <- pr_get_s3("bgc_zoop_raw")
+#' dat <- pr_get_s3("bgc_phyto_raw")
+#' dat <- pr_get_s3("cpr_phyto_raw")
+#' dat <- pr_get_s3("cpr_zoop_raw")
 pr_get_s3 <- function(file){
 
   col_types = list()
+
+  # The file extension is not needed here.
+  if(stringr::str_detect(file, ".csv")){
+    file = stringr::str_remove(file, ".csv")
+  }
 
   dat <- readr::read_csv(paste0(pr_get_s3site(), file, ".csv"),
                          na = c("", NaN),
@@ -284,7 +293,7 @@ pr_reorder <- function(df){
     df <- df %>%
       dplyr::mutate(BioRegion = factor(.data$BioRegion,
                                        levels = c("North", "North-west", "Coral Sea",
-                                                  "Temperate East", "South-east", "South-west", "Southern Ocean")))
+                                                  "Temperate East", "South-east", "South-west", "Southern Ocean Region")))
   }
   return(df)
 }
@@ -393,12 +402,12 @@ pr_remove_outliers <- function(df, x){
                      meanplus = .data$means + .data$sd2,
                      meanminus = .data$means - .data$sd2,
                      .groups = 'drop') %>%
-    dplyr::select(-c(means, sd2))
+    dplyr::select(-c("means", "sd2"))
 
   added <- df %>%
     dplyr::left_join(outliers, by = c("Parameters", joiner)) %>%
     dplyr::filter(.data$Values < .data$meanplus & .data$Values > .data$meanminus) %>%
-    dplyr::select(-c(.data$meanplus, .data$meanminus))
+    dplyr::select(-c("meanplus", "meanminus"))
 }
 
 
@@ -533,7 +542,7 @@ pr_get_Coeffs <-  function(df){
     droplevels()
 
   params <- df %>%
-    dplyr::select(.data$Parameters) %>%
+    dplyr::select("Parameters") %>%
     unique()
   params <- params$Parameters
 
@@ -599,6 +608,29 @@ pr_get_NonTaxaColumns <- function(Survey = "NRS", Type = "Z"){
 }
 
 
+#' Get species information table for Phytoplankton and Zooplankton
+#'
+#' @param Type Phytoplankton (P) or Zooplankton (Z)
+#'
+#' @return A dataframe of species information
+#' @export
+#'
+#' @examples
+#' dat <- pr_get_SpeciesInfo(Type = "P")
+#' dat <- pr_get_SpeciesInfo(Type = "Z")
+pr_get_SpeciesInfo <- function(Type = "Z"){
+
+  if (Type == "P"){file = "phytoinfo"}
+  if (Type == "Z"){file = "zoopinfo"}
+
+  dat <- pr_get_s3(file) %>%
+    pr_rename()
+
+}
+
+
+
+
 # Internal function to check Type
 #
 # @param Type Character string
@@ -620,3 +652,37 @@ pr_get_NonTaxaColumns <- function(Survey = "NRS", Type = "Z"){
 #   }
 #
 # }
+
+
+#' Helper function to reformat Titles
+#'
+#' @param tit String to reformat.
+#'
+#' @return A reformatted string
+#' @export
+#'
+#' @examples
+#' new_tit = pr_title("P")
+pr_title <- function(tit){
+
+  if (tit == "Z"){
+    tit = "Zooplankton"
+  }
+
+  if (tit == "P"){
+    tit = "Phytoplankton"
+  }
+
+  if (tit == "NRS"){
+    tit = "National Reference Station"
+  }
+
+  if (tit == "CPR"){
+    tit = "Continuous Plankton Recorder"
+  }
+  return(tit)
+
+}
+
+
+

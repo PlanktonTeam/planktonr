@@ -14,21 +14,21 @@ pr_get_DataLocs <- function(Survey = 'all'){
 
   if(Survey == 'NRS'){
     df <- pr_get_NRSTrips(c('P', 'Z')) %>%
-      dplyr::select(.data$Longitude, .data$Latitude, .data$SampleTime_UTC) %>%
+      dplyr::select("Longitude", "Latitude", "SampleTime_UTC") %>%
       dplyr::distinct(.data$Longitude, .data$Latitude, Date = as.Date(.data$SampleTime_UTC, 'UTC'))
   } else
   if(Survey == 'CPR'){
     df <- pr_get_CPRTrips() %>%
       dplyr::filter(grepl("P|Z", .data$SampleType)) %>%
-      dplyr::select(.data$Longitude, .data$Latitude, .data$SampleTime_UTC) %>%
+      dplyr::select("Longitude", "Latitude", "SampleTime_UTC") %>%
       dplyr::distinct(.data$Longitude, .data$Latitude, Date = as.Date(.data$SampleTime_UTC, 'UTC'))
   } else {
     df <- dplyr::bind_rows(
       pr_get_NRSTrips(c('P', 'Z')) %>%
-        dplyr::select(.data$Longitude, .data$Latitude, .data$SampleTime_UTC),
+        dplyr::select("Longitude", "Latitude", "SampleTime_UTC"),
       pr_get_CPRTrips() %>%
         dplyr::filter(grepl("P|Z", .data$SampleType)) %>%
-        dplyr::select(.data$Longitude, .data$Latitude, .data$SampleTime_UTC)) %>%
+        dplyr::select("Longitude", "Latitude", "SampleTime_UTC")) %>%
       dplyr::distinct(.data$Longitude, .data$Latitude, Date = as.Date(.data$SampleTime_UTC, 'UTC'))
   }
 
@@ -97,7 +97,7 @@ pr_match_GHRSST <- function(df, pr) {
   }
 
   df <- df %>%
-    dplyr::select(.data$Latitude, .data$Longitude, .data$Year, .data$Month, .data$Day)
+    dplyr::select("Latitude", "Longitude", "Year", "Month", "Day")
 
   df <- dplyr::bind_cols(purrr::map_dfr(seq_len(length(pr)), ~ df),
                          purrr::map_dfr(seq_len(nrow(df)), ~ data.frame(pr)) %>%
@@ -191,7 +191,7 @@ pr_match_Altimetry <- function(df, pr) {
   }
 
   df <- df %>%
-    dplyr::select(.data$Latitude, .data$Longitude, .data$Year, .data$Month, .data$Day) %>%
+    dplyr::select("Latitude", "Longitude", "Year", "Month", "Day") %>%
     dplyr::filter(.data$Year < 2020)
 
   df <- dplyr::bind_cols(purrr::map_dfr(seq_len(length(pr)), ~ df),
@@ -299,8 +299,8 @@ pr_match_MODIS <- function(df, pr) {
   }
 
   df <- df  %>%
-    dplyr::filter(Date > as.Date("2002-07-01")) %>%
-    dplyr::select(.data$Latitude, .data$Longitude, .data$Year, .data$Month, .data$Day)
+    dplyr::filter(.data$Date > as.Date("2002-07-01")) %>%
+    dplyr::select("Latitude", "Longitude", "Year", "Month", "Day")
 
   df <- dplyr::bind_cols(purrr::map_dfr(seq_len(length(pr)), ~ df),
                          purrr::map_dfr(seq_len(nrow(df)), ~ data.frame(pr)) %>%

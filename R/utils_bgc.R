@@ -21,8 +21,8 @@ pr_get_NRSChemistry <- function(){
     pr_filter_NRSStations() %>%
     dplyr::mutate_all(~ replace(., is.na(.), NA)) %>%
     dplyr::mutate(Month_Local = lubridate::month(.data$SampleTime_Local)) %>%
-    dplyr::select(.data$Project, .data$SampleTime_Local, .data$Month_Local, .data$SampleDepth_m,
-                  .data$StationName, .data$StationCode, tidyselect::all_of(var_names)) %>%
+    dplyr::select("Project", "SampleTime_Local", "Month_Local", "SampleDepth_m",
+                  "StationName", "StationCode", tidyselect::all_of(var_names)) %>%
     tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = 'Parameters') %>%
     pr_reorder()
 
@@ -80,7 +80,7 @@ pr_get_NRSPigments <- function(Format = "all"){
   }
 
   dat <- dat %>%
-    dplyr::select(.data$Project, .data$TripCode, .data$SampleTime_Local, .data$Month_Local, .data$SampleDepth_m, .data$StationName, .data$StationCode,
+    dplyr::select("Project", "TripCode", "SampleTime_Local", "Month_Local", "SampleDepth_m", "StationName", "StationCode",
                   tidyselect::any_of(var_names)) %>%
     tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = 'Parameters') %>%
     pr_reorder()
@@ -109,8 +109,8 @@ pr_get_NRSPico <- function(){
     pr_add_StationCode() %>%
     pr_apply_Time() %>%
     dplyr::mutate(SampleDepth_m = as.numeric(.data$SampleDepth_m)) %>%
-    dplyr::select(.data$Project, .data$SampleTime_Local, .data$Month_Local, .data$Year_Local,
-                  .data$SampleDepth_m, .data$StationName, .data$StationCode,
+    dplyr::select("Project", "SampleTime_Local", "Month_Local", "Year_Local",
+                  "SampleDepth_m", "StationName", "StationCode",
                   tidyselect::any_of(var_names)) %>%
     tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters") %>%
     dplyr::mutate(Values = .data$Values + min(.data$Values[.data$Values>0], na.rm = TRUE)) %>%
@@ -154,8 +154,8 @@ pr_get_NRSMicro <- function(){
                   Synecochoccus_CellsmL = .data$Synecochoccus_cells_ml,
                   Picoeukaryotes_CellsmL = .data$Picoeukaryotes_cells_ml) %>%
     dplyr::mutate(dplyr::across(tidyselect::all_of(var_names), as.numeric)) %>%
-    dplyr::select(.data$StationName, .data$SampleDepth_m, .data$StationCode, .data$SampleTime_Local,
-                  .data$Year_Local, .data$Month_Local, tidyselect::any_of(var_names)) %>%
+    dplyr::select("StationName", "SampleDepth_m", "StationCode", "SampleTime_Local",
+                  "Year_Local", "Month_Local", tidyselect::any_of(var_names)) %>%
     tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters") %>%
     pr_reorder()
 
@@ -240,8 +240,8 @@ pr_get_LTnuts <-  function(){
     pr_rename() %>%
     dplyr::rename(SampleTime_Local = .data$START_TIME,
                   SampleDepth_m = .data$PRESSURE) %>%
-    dplyr::select(.data$StationCode, .data$Project, .data$SampleTime_Local, .data$Month_Local, .data$Year_Local,
-                  .data$SampleDepth_m, tidyselect::all_of(var_names), tidyselect::contains("_Flag"),
+    dplyr::select("StationCode", "Project", "SampleTime_Local", "Month_Local", "Year_Local",
+                  "SampleDepth_m", tidyselect::all_of(var_names), tidyselect::contains("_Flag"),
                   -tidyselect::contains("ROSETTE_POSITION")) %>%
     pr_apply_Flags() %>%
     dplyr::select(-dplyr::contains("Flag")) %>%
@@ -258,8 +258,8 @@ pr_get_LTnuts <-  function(){
     dplyr::select(colnames(NutsLT)) # Ensure columns are in the same order
 
   CTD <- pr_get_NRSCTD() %>%
-    dplyr::select(.data$Project, .data$StationCode, .data$StationName, .data$Month_Local, .data$Year_Local,
-                  .data$SampleTime_Local, .data$SampleDepth_m, .data$Temperature_degC) %>%
+    dplyr::select("Project", "StationCode", "StationName", "Month_Local", "Year_Local",
+                  "SampleTime_Local", "SampleDepth_m", "Temperature_degC") %>%
     dplyr::filter(.data$StationCode %in% c("MAI", "ROT", "PHB")) %>%
     tidyr::pivot_longer(-c(.data$Project:.data$SampleDepth_m), values_to = "Values", names_to = "Parameters") %>%
     dplyr::select(colnames(NutsLT))

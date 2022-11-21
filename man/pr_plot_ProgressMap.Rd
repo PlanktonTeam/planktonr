@@ -7,7 +7,7 @@
 pr_plot_ProgressMap(df, interactive = FALSE)
 }
 \arguments{
-\item{df}{output from pr_get_ProgressMap}
+\item{df}{output from pr_get_ProgressMapData}
 
 \item{interactive}{Should the plot be interactive with leaflet?}
 }
@@ -18,6 +18,6 @@ a plot of IMOS progress
 IMOS progress plot
 }
 \examples{
-df <- pr_get_ProgressMap("CPR")
+df <- pr_get_ProgressMapData("CPR")
 plot <- pr_plot_ProgressMap(df)
 }

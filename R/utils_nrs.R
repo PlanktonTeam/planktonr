@@ -35,11 +35,14 @@ pr_get_NRSData <- function(Type = "phytoplankton", Variable = "abundance", Subse
 
   if (Type == "zooplankton" & Subset == "species"){ # Specific case for zooplankton species
 
+    str <- pr_get_NonTaxaColumns(Survey = "NRS", Type = "Z")
+
     datc <- pr_get_Raw("bgc_zooplankton_abundance_copepods_data") %>%
       pr_rename()
+
     datnc <-pr_get_Raw("bgc_zooplankton_abundance_non_copepods_data") %>%
       pr_rename() %>%
-      dplyr::select(-c(.data$Project:.data$Longitude, .data$SampleTime_UTC:.data$AshFreeBiomass_mgm3))
+      dplyr::select(-str[!str %in% "TripCode"])
 
     # Add together and COPEPODS and NON-COPEPODS
     dat <- dplyr::left_join(datc, datnc, by = "TripCode")
@@ -91,19 +94,19 @@ pr_get_NRSTrips <- function(Type = c("P", "Z", "F")){
                     (stringr::str_detect(.data$SampleType, paste("P", collapse = "|")) |
                        is.na(.data$SampleType))) %>%
     pr_apply_Time() %>%
-    dplyr::select(-.data$ProjectName)
+    dplyr::select(-"ProjectName")
 
 
   if("P" %in% Type & !"Z" %in% Type){ # Only Phytoplankton
     NRSTrip <- NRSTrip %>%
       dplyr::rename(SampleDepth_m = .data$PSampleDepth_m) %>%
-      dplyr::select(-.data$ZSampleDepth_m)
+      dplyr::select(-"ZSampleDepth_m")
   }
 
   if("Z" %in% Type & !"P" %in% Type){ # Only Zooplankton
     NRSTrip <- NRSTrip %>%
       dplyr::rename(SampleDepth_m = .data$ZSampleDepth_m) %>%
-      dplyr::select(-.data$PSampleDepth_m)
+      dplyr::select(-"PSampleDepth_m")
   }
 
   return(NRSTrip)
