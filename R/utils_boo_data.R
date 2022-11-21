@@ -598,3 +598,26 @@ pr_get_ProgressMapData <- function(Survey = c("NRS", "CPR"), interactive = FALSE
   }
 
 }
+
+
+
+#' Get taxa accumulation data for plotting
+#'
+#' @param Survey "NRS or "CPR"
+#' @param Type "Z" or "P"
+#'
+#' @return A data frame
+#' @export
+#'
+#' @examples
+#' df <- pr_get_TaxaAccum(Survey = "NRS", Type = "Z")
+pr_get_TaxaAccum <- function(Survey = "NRS", Type = "Z"){
+
+  if (Survey == "NRS"){
+    dat <- pr_get_NRSData(Type = Type, Variable = "abundance", Subset = "raw")
+  } else if (Survey == "CPR"){
+    dat <- pr_get_CPRData(Type = Type, Variable = "abundance", Subset = "raw")
+  }
+}
+
+

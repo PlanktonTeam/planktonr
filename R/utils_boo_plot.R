@@ -952,47 +952,103 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
 
 #' Plot Gantt Chart showing plankton sampling status
 #'
+#' @param dat Trip data for either NRS or CPR.
 #' @param Survey "NRS" or "CPR"
 #'
 #' @return a ggplot
 #' @export
 #'
 #' @examples
-#' gg <- pr_plot_Gantt(Survey = "NRS")
-#' gg <- pr_plot_Gantt(Survey = "CPR")
-pr_plot_Gantt <- function(Survey = "NRS"){
+#' dat <- pr_get_CPRTrips()
+#' gg <- pr_plot_Gantt(dat, Survey = "CPR")
+#' dat <- pr_get_NRSTrips()
+#' gg <- pr_plot_Gantt(dat, Survey = "NRS")
+pr_plot_Gantt <- function(dat, Survey = "NRS"){
 
   if (Survey == "CPR"){
-    dat <- pr_get_CPRTrips() %>%
+    dat2 <- dat %>%
+      dplyr::arrange(.data$Latitude) %>%
       dplyr::mutate(YearMonth = .data$Year_Local + .data$Month_Local/12) %>%
       dplyr::distinct(.data$YearMonth, .data$Region, .data$TripCode) %>%
       dplyr::group_by(.data$YearMonth, .data$Region, .data$TripCode) %>%
       dplyr::summarise(n = dplyr::n()) %>%
       dplyr::ungroup()
 
-    gg <- ggplot2::ggplot(data = dat, ggplot2::aes(x = .data$YearMonth, y = .data$Region, fill = .data$n, colour = .data$n, width = 1/12, height = 2/12)) +
+    gg <- ggplot2::ggplot(data = dat2, ggplot2::aes(x = .data$YearMonth, y = .data$Region, width = 1/12, height = 2/12), fill = "black", colour = "black") +
       ggplot2::geom_tile() +
       ggplot2::theme_bw() +
       ggplot2::labs(x = ggplot2::element_blank(), y = ggplot2::element_blank()) +
-      ggplot2::ggtitle("Continuous Plankton Counter Sampling")
+      ggplot2::ggtitle("Continuous Plankton Counter Sampling") +
+      ggplot2::coord_fixed(ratio = 0.5)
+
+    return (gg)
+
 
   } else if (Survey == "NRS"){
 
-    dat <- pr_get_NRSTrips(Type = c("P", "Z")) %>%
+    dat2 <- pr_get_NRSTrips(Type = c("P", "Z")) %>%
       dplyr::mutate(YearMonth = .data$Year_Local + .data$Month_Local/12) %>%
       dplyr::filter(.data$StationName != "Port Hacking 4") %>%
       dplyr::group_by(.data$YearMonth, .data$StationName) %>%
       dplyr::summarise(n = dplyr::n(), .groups = "drop")
 
-    gg <- ggplot2::ggplot(data = dat, ggplot2::aes(x = .data$YearMonth, y = .data$StationName, fill = .data$n, colour = .data$n, width = 1/12, height = 2/12)) +
+    gg <- ggplot2::ggplot(data = dat2, ggplot2::aes(x = .data$YearMonth, y = .data$StationName, width = 1/12, height = 2/12), fill = "black", colour = "black") +
       ggplot2::geom_tile() +
       ggplot2::theme_bw() +
       ggplot2::labs(x = ggplot2::element_blank(), y = ggplot2::element_blank()) +
-      ggplot2::ggtitle("National Reference Station Sampling")
+      ggplot2::ggtitle("National Reference Station Sampling") +
+      ggplot2::coord_fixed(ratio = 0.5)
+
+    return(gg)
 
   }
 
 }
+
+
+
+# 'Taxa Accumulation Curve
+#'
+#' Plot a taxa accumulation curve for everything that is identified by the IMOS plankton team
+#'
+#' @param dat A dataframe of plankton data
+#' @param Survey "CPR" or "NRS"
+#' @param Type "P" or "Z"
+#'
+#' @return a ggplot object.
+#' @export
+#'
+#' @examples
+#' dat <- pr_get_TaxaAccum(Survey = "NRS", Type = "Z")
+#' p <- pr_plot_TaxaAccum(dat, Survey = "NRS", Type = "Z")
+#' dat <- pr_get_TaxaAccum(Survey = "CPR", Type = "P")
+#' p <- pr_plot_TaxaAccum(dat, Survey = "CPR", Type = "P")
+pr_plot_TaxaAccum <- function(dat, Survey = "NRS", Type = "Z"){
+
+  dat <- dat %>%
+    tidyr::pivot_longer(-pr_get_NonTaxaColumns(Survey = Survey, Type = Type), names_to = "Taxa", values_to = "Abundance") %>%
+    dplyr::filter(.data$Abundance > 0) %>%
+    dplyr::arrange(.data$SampleTime_Local) %>%
+    dplyr::group_by(.data$Taxa) %>%
+    dplyr::summarise(First = dplyr::first(.data$SampleTime_Local), .groups = "drop") %>%
+    dplyr::arrange(.data$First) %>%
+    dplyr::mutate(RowN = dplyr::row_number())
+
+
+  gg <- ggplot2::ggplot(data = dat, ggplot2::aes(x = .data$First, y = .data$RowN)) +
+    ggplot2::geom_line() +
+    ggplot2::scale_x_datetime(name = "Year", breaks = "2 year", date_labels = "%Y", expand = c(0, 0)) +
+    ggplot2::ylab("Taxa Identified") +
+    ggplot2::theme_bw() +
+    ggplot2::scale_y_continuous(expand = c(0, 0)) +
+    ggplot2::ggtitle(paste(Survey, "-", planktonr::pr_title(Type)))
+
+  return(gg)
+
+}
+
+
+
 
 
 
