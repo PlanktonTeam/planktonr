@@ -83,68 +83,68 @@ pr_get_LFData <- function(){
 
 
 
-#' Plot of larval fish distribution
-#'
-#' @param df Dataframe of larval fish data from pr_get_LFData
-#' @param SpeciesName The species you wish to plot
-#' @param interactive Whether to return an interactive (leaflet; default) or ggplot.
-#'
-#' @return A plot element
-#' @export
-#'
-#' @examples
-#' pr_get_LFData() %>%
-#'    pr_plot_LarvalFishDist(SpeciesName = "Acanthuridae_37437900", interactive = TRUE)
-pr_plot_LarvalFishDist <- function(df, SpeciesName, interactive = TRUE){
-
-  dat <- df %>%
-    dplyr::group_by(.data$Species, .data$Latitude, .data$Longitude) %>%
-    dplyr::summarise(Species = dplyr::first(.data$Species),
-                     Species2 = dplyr::first(.data$Species2),
-                     Latitude = dplyr::first(.data$Latitude),
-                     Longitude = dplyr::first(.data$Longitude),
-                     Count = max(.data$Count),
-                     .groups = "drop") %>%
-    tidyr::complete(.data$Species, tidyr::nesting(Longitude, Latitude), fill = list(Count = 0)) %>%
-    dplyr::mutate(Presence = dplyr::if_else(.data$Count > 0, "Present", "Absent")) %>%
-    dplyr::arrange(.data$Presence)
-
-  dat_sp <- dplyr::filter(dat, .data$Species2 == SpeciesName)
-
-  if (interactive == TRUE){
-
-  pal <- leaflet::colorFactor(c("grey", "navy"), domain = c("Absent", "Present"))
-
-  title1 <- htmltools::div(
-    htmltools::tags$style(htmltools::HTML(".leaflet-control.map-title1 {
-                                                text-align: center;
-                                                background: rgba(255,255,255,0);
-                                                font-weight: bold;
-                                                font-size: 16px;
-                                                margin: 0;
-                                                margin-right: 6px}")),
-    unique(dat_sp$Species2))
-
-  map <- leaflet::leaflet() %>%
-    leaflet::addProviderTiles(provider = "Esri", layerId = "OceanBasemap") %>%
-    leaflet::addCircleMarkers(data = dat_sp,
-                              lat = ~ Latitude,
-                              lng = ~ Longitude,
-                              color = ~pal(Presence),
-                              opacity = 1,
-                              fillOpacity = 1,
-                              radius = ~ifelse(Presence == "Present", 5, 2),) %>%
-    leaflet::addControl(title1,
-                        position = "topright",
-                        className = "map-title1")
-
-  } else {
-    #TODO
-    # Non-interactive not available at the moment
-  }
-
-
-}
+# Plot of larval fish distribution
+#
+# @param df Dataframe of larval fish data from pr_get_LFData
+# @param SpeciesName The species you wish to plot
+# @param interactive Whether to return an interactive (leaflet; default) or ggplot.
+#
+# @return A plot element
+# @export
+#
+# @examples
+# pr_get_LFData() %>%
+#    pr_plot_LarvalFishDist(SpeciesName = "Acanthuridae_37437900", interactive = TRUE)
+# pr_plot_LarvalFishDist <- function(df, SpeciesName, interactive = TRUE){
+#
+#   dat <- df %>%
+#     dplyr::group_by(.data$Species, .data$Latitude, .data$Longitude) %>%
+#     dplyr::summarise(Species = dplyr::first(.data$Species),
+#                      Species2 = dplyr::first(.data$Species2),
+#                      Latitude = dplyr::first(.data$Latitude),
+#                      Longitude = dplyr::first(.data$Longitude),
+#                      Count = max(.data$Count),
+#                      .groups = "drop") %>%
+#     tidyr::complete(.data$Species, tidyr::nesting(Longitude, Latitude), fill = list(Count = 0)) %>%
+#     dplyr::mutate(Presence = dplyr::if_else(.data$Count > 0, "Present", "Absent")) %>%
+#     dplyr::arrange(.data$Presence)
+#
+#   dat_sp <- dplyr::filter(dat, .data$Species2 == SpeciesName)
+#
+#   if (interactive == TRUE){
+#
+#   pal <- leaflet::colorFactor(c("grey", "navy"), domain = c("Absent", "Present"))
+#
+#   title1 <- htmltools::div(
+#     htmltools::tags$style(htmltools::HTML(".leaflet-control.map-title1 {
+#                                                 text-align: center;
+#                                                 background: rgba(255,255,255,0);
+#                                                 font-weight: bold;
+#                                                 font-size: 16px;
+#                                                 margin: 0;
+#                                                 margin-right: 6px}")),
+#     unique(dat_sp$Species2))
+#
+#   map <- leaflet::leaflet() %>%
+#     leaflet::addProviderTiles(provider = "Esri", layerId = "OceanBasemap") %>%
+#     leaflet::addCircleMarkers(data = dat_sp,
+#                               lat = ~ Latitude,
+#                               lng = ~ Longitude,
+#                               color = ~pal(Presence),
+#                               opacity = 1,
+#                               fillOpacity = 1,
+#                               radius = ~ifelse(Presence == "Present", 5, 2),) %>%
+#     leaflet::addControl(title1,
+#                         position = "topright",
+#                         className = "map-title1")
+#
+#   } else {
+#     #TODO
+#     # Non-interactive not available at the moment
+#   }
+#
+#
+# }
 
 
 
