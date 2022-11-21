@@ -4,9 +4,11 @@
 \alias{pr_plot_Gantt}
 \title{Plot Gantt Chart showing plankton sampling status}
 \usage{
-pr_plot_Gantt(Survey = "NRS")
+pr_plot_Gantt(dat, Survey = "NRS")
 }
 \arguments{
+\item{dat}{Trip data for either NRS or CPR.}
+
 \item{Survey}{"NRS" or "CPR"}
 }
 \value{
@@ -16,6 +18,8 @@ a ggplot
 Plot Gantt Chart showing plankton sampling status
 }
 \examples{
-gg <- pr_plot_Gantt(Survey = "NRS")
-gg <- pr_plot_Gantt(Survey = "CPR")
+dat <- pr_get_CPRTrips()
+gg <- pr_plot_Gantt(dat, Survey = "CPR")
+dat <- pr_get_NRSTrips()
+gg <- pr_plot_Gantt(dat, Survey = "NRS")
 }

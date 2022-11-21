@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_boo_plot.R
 \name{pr_plot_EOV}
 \alias{pr_plot_EOV}
-\title{Policy plot}
+\title{Essential Ocean Variables plot}
 \usage{
 pr_plot_EOV(
   df,
@@ -30,7 +30,7 @@ pr_plot_EOV(
 plot of timeseries, anomalies and climatology
 }
 \description{
-Policy plot
+Essential Ocean Variables plot
 }
 \examples{
 df <- pr_get_PolicyData("CPR") \%>\%
