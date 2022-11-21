@@ -311,12 +311,12 @@ pr_apply_Flags <- function(df, flag_col){
   # IMOS IODE,3,Bad data that are potentially correctable,Suspect data in which unusual,, and probably erroneous features are observed
   # IMOS IODE,4,Bad data,Obviously erroneous values are observed
   # IMOS IODE,5,Value changed,Altered by a QC Centre,, with original values (before the change) preserved in the history record of the profile. eMII discourage the use of this flag. Where data values must be changed (e.g. smoothing of data sets) we strongly prefer that the original data be retained and an additional variable be added to accommodate the interpolated/corrected data values.
-  # IMOS IODE,6,Not used,Flag 6 is reserved for future use
+  # IMOS IODE,6,Under detection limit
   # IMOS IODE,7,Not used,Flag 7 is reserved for future use
   # IMOS IODE,8,Interpolated value,Indicates that data values are interpolated
   # IMOS IODE,9,Missing value,Indicates that the element is missing
 
-  bad_flags <- c(3, 4, 6, 9)
+  bad_flags <- c(3, 4, 9)
 
   if (missing(flag_col)){
 
