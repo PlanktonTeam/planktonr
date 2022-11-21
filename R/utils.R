@@ -95,12 +95,12 @@ pr_get_Raw <- function(file){
   #     comment = "#",
   #     col_types = col_types)
   # } else{
-    dat <- readr::read_csv(stringr::str_replace(
-      pr_get_Site(), "LAYER_NAME", file),
-      na = c("", NaN, "NaN", NA, "NA"),
-      show_col_types = FALSE,
-      comment = "#",
-      col_types = col_types)
+  dat <- readr::read_csv(stringr::str_replace(
+    pr_get_Site(), "LAYER_NAME", file),
+    na = c("", NaN, "NaN", NA, "NA"),
+    show_col_types = FALSE,
+    comment = "#",
+    col_types = col_types)
   # }
 
   return(dat)
@@ -652,3 +652,37 @@ pr_get_SpeciesInfo <- function(Type = "Z"){
 #   }
 #
 # }
+
+
+#' Helper function to reformat Titles
+#'
+#' @param tit String to reformat.
+#'
+#' @return A reformatted string
+#' @export
+#'
+#' @examples
+#' new_tit = pr_title("P")
+pr_title <- function(tit){
+
+  if (tit == "Z"){
+    tit = "Zooplankton"
+  }
+
+  if (tit == "P"){
+    tit = "Phytoplankton"
+  }
+
+  if (tit == "NRS"){
+    tit = "National Reference Station"
+  }
+
+  if (tit == "CPR"){
+    tit = "Continuous Plankton Recorder"
+  }
+  return(tit)
+
+}
+
+
+

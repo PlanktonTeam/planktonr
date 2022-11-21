@@ -117,4 +117,15 @@ testthat::test_that("Correct function output", {
                                                 Survey = 'CPR') %>%
                                  pr_plot_FreqMap(species = 'Acartia danae', interactive = TRUE))[1], "list")
 
+
+
+  testthat::expect_equal(class(pr_plot_Gantt(pr_get_CPRTrips(), Survey = "CPR"))[1], "gg")
+
+  testthat::expect_equal(class(pr_plot_Gantt(pr_get_NRSTrips(), Survey = "NRS"))[1], "gg")
+
+  testthat::expect_equal(class(pr_get_TaxaAccum(Survey = "NRS", Type = "Z") %>% pr_plot_TaxaAccum(Survey = "NRS", Type = "Z"))[1], "gg")
+  # testthat::expect_equal(class()[1], "gg")
+  # testthat::expect_equal(class()[1], "gg")
+  # testthat::expect_equal(class()[1], "gg")
+
 })
