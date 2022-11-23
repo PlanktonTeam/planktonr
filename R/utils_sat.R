@@ -165,7 +165,7 @@ pr_match_GHRSST <- function(df, pr) {
 #' @export
 #'
 #' @examples
-#' df <- head(pr_get_DataLocs("NRS"), 5)
+#' df <- tail(pr_get_DataLocs("NRS"), 5)
 #' res_spat <- 10
 #' altout <- pr_match_Altimetry(df, pr = "GSLA")
 pr_match_Altimetry <- function(df, pr) {
