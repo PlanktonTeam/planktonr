@@ -9,7 +9,7 @@
 #' @examples
 #' NRSfgz <- pr_get_FuncGroups("NRS", "Z")
 #' NRSfgp <- pr_get_FuncGroups("NRS", "P")
-#' CPRfgz <- pr_get_FuncGroups("CPR", "Z", join = "st_nearest_feature")
+#' CPRfgz <- pr_get_FuncGroups("CPR", "Z", near_dist_km = 250)
 #' CPRfgp <- pr_get_FuncGroups("CPR", "P")
 pr_get_FuncGroups <- function(Survey = "NRS", Type = "Z", ...){
 
@@ -86,7 +86,7 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Z", ...){
 pr_get_FreqMap <- function(Type = "Z"){
 
   NRSSamp <- pr_get_NRSTrips() %>%
-    dplyr::rename(Sample = .data$TripCode) %>%
+    dplyr::rename(Sample = "TripCode") %>%
     dplyr::mutate(Survey = 'NRS') %>%
     dplyr::select("Sample", "Survey", "SampleTime_Local", "Month_Local", "Latitude", "Longitude")
 
@@ -113,7 +113,7 @@ pr_get_FreqMap <- function(Type = "Z"){
     PhytoCountNRS <- pr_get_NRSData(Type = "phytoplankton", Variable = "abundance", Subset = "species") %>%
       tidyr::pivot_longer(cols = !dplyr::all_of(pr_get_NonTaxaColumns(Survey = "NRS", Type = "P")),
                           names_to = "Taxon", values_to = "Counts") %>%
-      dplyr::rename(Sample = .data$TripCode) %>%
+      dplyr::rename(Sample = "TripCode") %>%
       dplyr::filter(.data$Counts > 0) %>%
       dplyr::mutate(Survey = 'NRS')
 
@@ -136,7 +136,7 @@ pr_get_FreqMap <- function(Type = "Z"){
     ZooCountNRS <- pr_get_NRSData(Type = "zooplankton", Variable = "abundance", Subset = "species") %>%
       tidyr::pivot_longer(cols = !tidyselect::all_of(pr_get_NonTaxaColumns(Survey = "NRS", Type = "Z")),
                           names_to = "Taxon", values_to = "Counts") %>%
-      dplyr::rename(Sample = .data$TripCode) %>%
+      dplyr::rename(Sample = "TripCode") %>%
       dplyr::filter(.data$Counts > 0) %>%
       dplyr::mutate(Survey = "NRS")
 
@@ -239,9 +239,9 @@ pr_get_DayNight <- function(Type = "Z"){
 
   dates <- dat %>%
     dplyr::select("SampleTime_UTC", "Latitude", "Longitude") %>%
-    dplyr::rename(date = .data$SampleTime_UTC,
-                  lat = .data$Latitude,
-                  lon = .data$Longitude) %>%
+    dplyr::rename(date = "SampleTime_UTC",
+                  lat = "Latitude",
+                  lon = "Longitude") %>%
     dplyr::mutate(date = lubridate::as_date(.data$date))
 
   daynight_df <- suncalc::getSunlightTimes(data = dates, #TODO quicker to change to Local now that it exists.
@@ -290,12 +290,12 @@ pr_get_STIdata <-  function(Type = "P"){
                             show_col_types = FALSE,
                             na = c("NA", "")) %>%
     pr_rename() %>%
-    dplyr::rename(SampleTime_Local = .data$SAMPLEDATE_LOCAL)
+    dplyr::rename(SampleTime_Local = "SAMPLEDATE_LOCAL")
 
   cprsat <- readr::read_csv(system.file("extdata", "CPR_SatData.csv", package = "planktonr", mustWork = TRUE),
                             show_col_types = FALSE) %>%
     pr_rename() %>%
-    dplyr::rename(SampleTime_UTC = .data$SAMPLEDATE_UTC)
+    dplyr::rename(SampleTime_UTC = "SAMPLEDATE_UTC")
 
   cpr <- cprdat %>%
     tidyr::pivot_longer(-tidyselect::all_of(pr_get_NonTaxaColumns(Survey = "CPR", Type = Type)), names_to = "Species", values_to = parameter) %>%
@@ -420,30 +420,30 @@ pr_get_CTI <-  function(Type = 'Z'){
   return(dat)
 }
 
-#' Get the summary plankton observations
-#'
-#' Get the summary plankton observations from the NRS and CPR.
-#' @return a dataframe with a species summary
-#'
-#' @param Type The group of plankton requested. Either "Z" or "P"
-#'
-#' @export
-#'
-#' @examples
-#' df <- pr_get_SppCount("P")
-#' df <- pr_get_SppCount("Z")
-pr_get_SppCount <- function(Type = "Z"){
-
-  if (Type == "P"){
-    gp <- "Phytoplankton"
-  } else if (Type == "Z"){
-    gp <- "Zooplankton"
-  }
-
-  out <- sppSummary %>%
-    dplyr::filter(.data$Group == gp)
-
-}
+# Get the summary plankton observations
+#
+# Get the summary plankton observations from the NRS and CPR.
+# @return a dataframe with a species summary
+#
+# @param Type The group of plankton requested. Either "Z" or "P"
+#
+# @export
+#
+# @examples
+# df <- pr_get_SppCount("P")
+# df <- pr_get_SppCount("Z")
+# pr_get_SppCount <- function(Type = "Z"){
+#
+#   if (Type == "P"){
+#     gp <- "Phytoplankton"
+#   } else if (Type == "Z"){
+#     gp <- "Zooplankton"
+#   }
+#
+  # out <- sppSummary %>%
+  #   dplyr::filter(.data$Group == gp)
+#
+# }
 
 
 #' Random facts about plankton
@@ -550,7 +550,7 @@ pr_get_ProgressMapData <- function(Survey = c("NRS", "CPR"), interactive = FALSE
     if("NRS" %in% Survey) {
       PMapDataNRS <- planktonr::pr_get_NRSTrips(Type = c("P", "Z")) %>%
         dplyr::select("StationCode", "Longitude", "Latitude") %>%
-        dplyr::rename(Region = .data$StationCode) %>%
+        dplyr::rename(Region = "StationCode") %>%
         dplyr::mutate(Survey = "NRS") %>%
         dplyr::filter(.data$Region != "PH4")
 
@@ -578,7 +578,7 @@ pr_get_ProgressMapData <- function(Survey = c("NRS", "CPR"), interactive = FALSE
     PMapDataNRS <- dplyr::bind_rows(planktonr::pr_get_Indices("NRS", "Z"), planktonr::pr_get_Indices("NRS", "P")) %>%
       dplyr::filter(.data$Parameters == "ZoopAbundance_m3" | .data$Parameters == "PhytoAbundance_CellsL") %>%
       tidyr::pivot_wider(names_from = .data$Parameters, values_from = .data$Values) %>%
-      dplyr::rename(Name = .data$StationName) %>%
+      dplyr::rename(Name = "StationName") %>%
       dplyr::select(-"StationCode") %>%
       dplyr::mutate(Survey = "NRS")
 
@@ -588,8 +588,8 @@ pr_get_ProgressMapData <- function(Survey = c("NRS", "CPR"), interactive = FALSE
       tidyr::pivot_wider(names_from = .data$Parameters, values_from = .data$Values) %>%
       dplyr::mutate(PhytoAbundance_Cellsm3 = .data$PhytoAbundance_Cellsm3/1e3,
                     Survey = "CPR") %>%
-      dplyr::rename(PhytoAbundance_CellsL = .data$PhytoAbundance_Cellsm3,
-                    Name = .data$BioRegion)
+      dplyr::rename(PhytoAbundance_CellsL = "PhytoAbundance_Cellsm3",
+                    Name = "BioRegion")
 
     PMapData <- dplyr::bind_rows(PMapDataNRS, PMapDataCPR) %>%
       dplyr::select(-c("Year_Local", "Month_Local", "tz"))

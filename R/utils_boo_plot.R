@@ -90,7 +90,9 @@ pr_plot_TimeSeries <- function(df, Survey = "NRS", trans = "identity"){
 
   if(Survey == "CPR"){
     df <- df %>%
-      dplyr::rename(StationCode = .data$BioRegion)
+      dplyr::rename(StationCode = "BioRegion")
+    plotCols <- colCPR
+
   }
 
   if(Survey == "NRS"){
@@ -99,12 +101,12 @@ pr_plot_TimeSeries <- function(df, Survey = "NRS", trans = "identity"){
       dplyr::group_by(.data$SampleTime_Local, .data$StationCode, .data$Parameters) %>% # accounting for microbial data different depths
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                        .groups = "drop")
+    plotCols <- colNRS
   }
 
   titlex <- "Sample Date (Local)"
 
   n <- length(unique(df$StationCode))
-  #plotCols <- pr_get_PlotCols(pal, n)
   titley <- pr_relabel(unique(df$Parameters), style = "ggplot")
 
   p1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$SampleTime_Local, y = .data$Values)) +
@@ -114,7 +116,7 @@ pr_plot_TimeSeries <- function(df, Survey = "NRS", trans = "identity"){
     ggplot2::scale_y_continuous(trans = trans) +
     ggplot2::labs(y = titley,
                   x = titlex) +
-    #ggplot2::scale_colour_manual(values = plotCols) +
+    ggplot2::scale_colour_manual(values = plotCols) +
     ggplot2::theme_bw(base_size = 12) +
     ggplot2::theme(legend.position = "bottom")
 
@@ -151,7 +153,6 @@ pr_plot_Trends <- function(df, Trend = "Raw", Survey = "NRS", method = "lm",  tr
     Trend = "Year_Local"
   }
 
-
   if (Survey == "CPR"){
     site = rlang::sym("BioRegion")
   } else if (Survey == "NRS"){
@@ -177,7 +178,7 @@ pr_plot_Trends <- function(df, Trend = "Raw", Survey = "NRS", method = "lm",  tr
       dplyr::group_by(.data$SampleTime_Local, !!site, .data$Parameters) %>% # accounting for microbial data different depths
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                        .groups = "drop")%>%
-      dplyr::rename(value = .data$Values)
+      dplyr::rename(value = "Values")
   }
 
   # Do the plotting ---------------------------------------------------------
@@ -243,11 +244,13 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
 
   if(Survey == "CPR"){
     df <- df %>%
-      dplyr::rename(StationCode = .data$BioRegion)
+      dplyr::rename(StationCode = "BioRegion")
+    plotCols <- colCPR
+  } else if (Survey == "NRS"){
+    plotCols <- colNRS
   }
 
   n <- length(unique(df$StationCode))
-  #plotCols <- pr_get_PlotCols(pal, n)
   title <- pr_relabel(unique(df$Parameters), style = "ggplot")
 
   df_climate <- df %>%
@@ -265,7 +268,7 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
                            position = ggplot2::position_dodge(.9)) +
     ggplot2::labs(y = title) +
     ggplot2::scale_y_continuous(trans = trans) +
-    #ggplot2::scale_fill_manual(values = plotCols)  +
+    ggplot2::scale_fill_manual(values = plotCols)  +
     ggplot2::theme_bw(base_size = 12) +
     ggplot2::theme(legend.position = "bottom")
 
@@ -340,8 +343,6 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 
   n <- length(unique(df$Parameters))
 
-  #plotCols <- pr_get_PlotCols(pal, n)
-
   if("BioRegion" %in% colnames(df)){ # If CPR data
     SampleDate = rlang::sym("SampleTime_Local")
     station = rlang::sym("BioRegion")
@@ -380,11 +381,12 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
   }
 
   p1 <- ggplot2::ggplot(df, ggplot2::aes(x = !!rlang::sym(Trend), y = .data$Values, fill = .data$Parameters)) +
-    ggplot2::geom_area(alpha=0.6 , size=1, colour="white") +
+    ggplot2::geom_area(alpha = 0.9 , size = 0.2, colour = "white") +
     ggplot2::facet_wrap(rlang::enexpr(station), scales = "free", ncol = 1) +
     ggplot2::labs(y = titley) +
-    ggplot2::scale_fill_viridis_d() +
+    ggplot2::scale_fill_brewer(palette = "Set1") +
     ggplot2::theme_bw() +
+    ggplot2::scale_y_continuous(expand = c(0, 0)) +
     ggplot2::theme(legend.position = "bottom",
                    legend.title = ggplot2::element_blank(),
                    strip.background = ggplot2::element_blank(),
@@ -392,15 +394,16 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 
   if (rlang::as_string(Trend) %in% c("Month_Local")){
     p1 <- p1 +
-      ggplot2::scale_x_continuous(breaks = seq(1, 12, length.out = 12), labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
+      ggplot2::scale_x_continuous(breaks = seq(1, 12, length.out = 12), expand = c(0, 0),
+                                  labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
       ggplot2::xlab("Month")
   } else if (rlang::as_string(Trend) %in% c("Year_Local")){
     p1 <- p1 +
-      ggplot2::scale_x_continuous(breaks = 2) +
+      ggplot2::scale_x_continuous(breaks = 2, expand = c(0, 0)) +
       ggplot2::xlab("Year")
   } else if (rlang::as_string(Trend) %in% c("SampleTime_Local")){
     p1 <- p1 +
-      ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
+      ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", expand = c(0, 0)) +
       ggplot2::xlab("Sample Date")
   }
 
@@ -508,8 +511,6 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
 
   n <- length(unique(df$StationName))
 
-  #plotCols <- pr_get_PlotCols(pal, n)
-
   titley <- pr_relabel(unique(df$Parameters), style = 'ggplot')
 
   np <- length(unique(df$SampleDepth_m))
@@ -524,8 +525,8 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
                    legend.position = "bottom",
                    legend.title = ggplot2::element_blank()) +
     ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
-    ggplot2::scale_y_continuous(trans = trans)
-  #ggplot2::scale_colour_manual(values = plotCols)
+    ggplot2::scale_y_continuous(trans = trans) +
+    ggplot2::scale_colour_manual(values = colNRS)
 
   if(Trend == "Smoother"){
     p <- p + ggplot2::geom_smooth(method = "loess", formula = y ~ x)
@@ -533,8 +534,6 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
   if(Trend == "Linear"){
     p <- p + ggplot2::geom_smooth(method = "lm", formula = y ~ x)
   }
-
-  # p <- plotly::ggplotly(p, height = 150 * np)
 
 
   mdat <- df %>%
@@ -551,7 +550,7 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
     ggplot2::geom_smooth(method = "loess", formula = y ~ x) +
     ggplot2::scale_x_continuous(breaks = seq(1,12,length.out = 12),
                                 labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
-    #ggplot2::scale_colour_manual(values = plotCols) +
+    ggplot2::scale_colour_manual(values = colNRS) +
     ggplot2::labs(x = "Month") +
     ggplot2::theme_bw() +
     ggplot2::theme(strip.background = ggplot2::element_blank(),

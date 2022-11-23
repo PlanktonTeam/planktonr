@@ -22,6 +22,6 @@ Get functional group data
 \examples{
 NRSfgz <- pr_get_FuncGroups("NRS", "Z")
 NRSfgp <- pr_get_FuncGroups("NRS", "P")
-CPRfgz <- pr_get_FuncGroups("CPR", "Z", join = "st_nearest_feature")
+CPRfgz <- pr_get_FuncGroups("CPR", "Z", near_dist_km = 250)
 CPRfgp <- pr_get_FuncGroups("CPR", "P")
 }

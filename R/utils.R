@@ -537,7 +537,7 @@ pr_get_Coeffs <-  function(df){
   }
 
   df <-  df %>%
-    dplyr::rename(SampleDate = .data$SampleTime_Local) %>%
+    dplyr::rename(SampleDate = "SampleTime_Local") %>%
     dplyr::mutate(Month = .data$Month_Local * 2 * 3.142 / 12) %>%
     droplevels()
 

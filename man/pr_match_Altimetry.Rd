@@ -18,7 +18,7 @@ df with product output attached
 Match data for altimetry
 }
 \examples{
-df <- head(pr_get_DataLocs("NRS"), 5)
+df <- tail(pr_get_DataLocs("NRS"), 5)
 res_spat <- 10
 altout <- pr_match_Altimetry(df, pr = "GSLA")
 }
