@@ -1,91 +1,72 @@
 #' Add bioregions data to existing df
 #'
 #' @param df A dataframe with columns `.data$Longitude` and `.data$Latitude`
-#' @param join use join arguments from sf::st_join for joining to CPR samples to bioregions.
-#' @param ... to allow use of join when used within another function
-#'
+#' @param near_dist_km What buffer distance to use to find a BioRegion match
+#' #'
 #' @return A dataframe with Marine Bioregions added
 #' @export
 #'
 #' @examples
 #'  df <- pr_get_Raw("cpr_derived_indices_data") %>%
 #'   pr_rename() %>%
-#'    pr_add_Bioregions("st_nearest_feature")
+#'    pr_add_Bioregions()
+#'
+#'  df <- pr_get_Raw("cpr_derived_indices_data") %>%
+#'   pr_rename() %>%
+#'    pr_add_Bioregions(near_dist_km = 250)
+#'
 #' @importFrom rlang .data
-pr_add_Bioregions <- function(df, join = "st_within", ...){
+pr_add_Bioregions <- function(df, near_dist_km = 0){
+
+  # Ensure df is of the correct class
+  if (!("sf") %in% class(df)){
+    df <- df %>%
+      sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = "+proj=longlat +datum=WGS84", remove = FALSE)
+  }
 
   # First add Marine Bioregions
   df <- df %>%
-    dplyr::select("Longitude", "Latitude") %>%  # file with columns named .data$Longitude, .data$Latitude
-    sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = "+proj=longlat +datum=WGS84") %>%
     sf::st_join(mbr, join = sf::st_within) %>%
-    dplyr::select("REGION") %>%
-    dplyr::bind_cols(df) %>%
-    dplyr::rename(BioRegion = .data$REGION) %>%  # Below is temporary fix for state-based waters near bioregions
-    dplyr::mutate(BioRegion = dplyr::case_when(.data$Longitude >= sf::st_bbox(mbr[mbr$REGION == "Coral Sea",])$xmin &
-                                                 .data$Longitude <= sf::st_bbox(mbr[mbr$REGION == "Coral Sea",])$xmax &
-                                                 .data$Latitude >= sf::st_bbox(mbr[mbr$REGION == "Coral Sea",])$ymin &
-                                                 .data$Latitude <= sf::st_bbox(mbr[mbr$REGION == "Coral Sea",])$ymax &
-                                                 rlang::are_na(.data$BioRegion) == TRUE ~ "Coral Sea",
-                                               .data$Longitude >= sf::st_bbox(mbr[mbr$REGION == "Temperate East",])$xmin &
-                                                 .data$Longitude <= sf::st_bbox(mbr[mbr$REGION == "Temperate East",])$xmax &
-                                                 .data$Latitude >= sf::st_bbox(mbr[mbr$REGION == "Temperate East",])$ymin &
-                                                 .data$Latitude <= sf::st_bbox(mbr[mbr$REGION == "Temperate East",])$ymax &
-                                                 rlang::are_na(.data$BioRegion) == TRUE ~ "Temperate East",
-                                               .data$Longitude >= sf::st_bbox(mbr[mbr$REGION == "South-west",])$xmin &
-                                                 .data$Longitude <= sf::st_bbox(mbr[mbr$REGION == "South-west",])$xmax &
-                                                 .data$Latitude >= sf::st_bbox(mbr[mbr$REGION == "South-west",])$ymin &
-                                                 .data$Latitude <= sf::st_bbox(mbr[mbr$REGION == "South-west",])$ymax &
-                                                 rlang::are_na(.data$BioRegion) == TRUE ~ "South-west",
-                                               .data$Longitude >= sf::st_bbox(mbr[mbr$REGION == "South-east",])$xmin &
-                                                 .data$Longitude <= sf::st_bbox(mbr[mbr$REGION == "South-east",])$xmax &
-                                                 .data$Latitude >= sf::st_bbox(mbr[mbr$REGION == "South-east",])$ymin &
-                                                 .data$Latitude <= sf::st_bbox(mbr[mbr$REGION == "South-east",])$ymax &
-                                                 rlang::are_na(.data$BioRegion) == TRUE ~ "South-east",
-                                               .data$Longitude >= sf::st_bbox(mbr[mbr$REGION == "North",])$xmin &
-                                                 .data$Longitude <= sf::st_bbox(mbr[mbr$REGION == "North",])$xmax &
-                                                 .data$Latitude >= sf::st_bbox(mbr[mbr$REGION == "North",])$ymin &
-                                                 .data$Latitude <= sf::st_bbox(mbr[mbr$REGION == "North",])$ymax &
-                                                 rlang::are_na(.data$BioRegion) == TRUE ~ "North",
-                                               TRUE ~ .data$BioRegion)) %>%
-    dplyr::relocate(.data$BioRegion, .after = .data$Latitude) %>%
-    tibble::as_tibble()
+    dplyr::rename(BioRegion = "REGION") %>%
+    dplyr::mutate(cellID = dplyr::row_number())
 
-  if(join == 'st_nearest_feature'){
+  # Then do the ones that are missing
+  dfna <- df %>%
+    dplyr::filter(is.na(.data$BioRegion)) %>%
+    dplyr::select(-"BioRegion")
 
-    df <- df %>%
-      dplyr::mutate(BioRegion = dplyr::case_when(.data$Longitude > 145 & is.na(.data$BioRegion) ~ 'Other',
-        TRUE ~ .data$BioRegion))
+  dist <- dfna %>%
+    sf::st_distance(mbr)
 
-    dfn <- df %>%
-      dplyr::filter(is.na(.data$BioRegion)) %>%
-      dplyr::select("geometry") %>%
-      sf::st_as_sf(sf_column_name = "geometry") %>%
-      sf::st_join(mbr, join = sf::st_nearest_feature) %>%
-      dplyr::select("REGION") %>%
-      dplyr::bind_cols(df %>%
-                         dplyr::filter(is.na(.data$BioRegion)) %>%
-                         dplyr::select(-c("BioRegion", "geometry"))) %>%
-      dplyr::rename(BioRegion = .data$REGION)
+  colnames(dist) <- mbr$REGION
+  rownames(dist) <- dfna$cellID
 
-    df <- df %>%
-      dplyr::filter(!is.na(.data$BioRegion)) %>%
-      dplyr::bind_rows(dfn)
+  dist <- dist %>%
+    as.data.frame.table(responseName = "Dist") %>%
+    dplyr::rename(cellID = "Var1",
+                  BioRegion = "Var2") %>%
+    dplyr::mutate(cellID = as.numeric(as.character(.data$cellID))) %>%
+    dplyr::filter(.data$Dist <= units::set_units(near_dist_km, "km"))
 
-    x <- df %>%
-      dplyr::select("geometry") %>%
-      sf::st_as_sf(sf_column_name = "geometry") %>%
-      sf::st_join(mbr, join = sf::st_nearest_feature)
 
-    df <- data.frame(sf::st_distance(x, mbr)) %>%
-      apply(1, FUN = min) %>%
-      data.frame() %>%
-      dplyr::rename(DistanceFromBioregion_m = 1) %>%
-      dplyr::bind_cols(df) %>%
-      dplyr::mutate(DistanceFromBioregion_m = dplyr::case_when(!.data$BioRegion %in% c("Other") ~ .data$DistanceFromBioregion_m)) %>%
-      dplyr::relocate(.data$DistanceFromBioregion_m, .after = .data$BioRegion)
+  # Because of some quirks of boundary - we do the Coral Sea first. Then the rest
+  distcs <- dist %>%
+    dplyr::filter(.data$BioRegion == "Coral Sea")
 
-  }
+  df$BioRegion[distcs$cellID] <- "Coral Sea" # Add the Coral Sea ones to the original df
+
+  # Then continue on with the addition of the other groups
+  dist <- dist %>%
+    dplyr::group_by(.data$cellID) %>%
+    dplyr::slice(which.min(.data$Dist)) %>%
+    dplyr::ungroup() %>%
+    dplyr::select(-"Dist")
+
+  df <- dplyr::left_join(df, dist, by = "cellID") %>%
+    dplyr::mutate(BioRegion = dplyr::coalesce(.data$BioRegion.x, .data$BioRegion.y)) %>%
+    dplyr::select(-c("BioRegion.x", "BioRegion.y")) %>%
+    dplyr::relocate("BioRegion", .after = "TripCode") %>%
+    sf::st_drop_geometry(df) # DF in, DF out
 
   return(df)
 
