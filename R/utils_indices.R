@@ -11,7 +11,7 @@
 #' df <- pr_get_Indices("NRS", "P")
 #' df <- pr_get_Indices("NRS", "Z")
 #' df <- pr_get_Indices("NRS", "W")
-#' df <- pr_get_Indices("CPR", "P", join = "st_nearest_feature")
+#' df <- pr_get_Indices("CPR", "P", near_dist_km = 250)
 #' df <- pr_get_Indices("CPR", "Z")
 pr_get_Indices <- function(Survey = "CPR", Type = "P", ...){
 
@@ -42,7 +42,7 @@ pr_get_Indices <- function(Survey = "CPR", Type = "P", ...){
 
     dat <- pr_get_Raw("cpr_derived_indices_data") %>%
       pr_rename() %>%
-      pr_add_Bioregions() %>%
+      pr_add_Bioregions(...) %>%
       pr_apply_Time() %>% #TODO added for consistency but uses etc timezones - do we changes these to the more familiar names or leave? doesn't improve with method = accurate
       dplyr::select(tidyselect::starts_with(c("SampleTime_Local", "Year_Local", "Month_Local", "BioRegion", "DistanceFromBioregion_m", "tz", "Latitude", "Longitude")),
                     tidyselect::all_of(var_names)) %>%

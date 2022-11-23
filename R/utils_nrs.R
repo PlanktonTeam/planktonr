@@ -99,13 +99,13 @@ pr_get_NRSTrips <- function(Type = c("P", "Z", "F")){
 
   if("P" %in% Type & !"Z" %in% Type){ # Only Phytoplankton
     NRSTrip <- NRSTrip %>%
-      dplyr::rename(SampleDepth_m = .data$PSampleDepth_m) %>%
+      dplyr::rename(SampleDepth_m = "PSampleDepth_m") %>%
       dplyr::select(-"ZSampleDepth_m")
   }
 
   if("Z" %in% Type & !"P" %in% Type){ # Only Zooplankton
     NRSTrip <- NRSTrip %>%
-      dplyr::rename(SampleDepth_m = .data$ZSampleDepth_m) %>%
+      dplyr::rename(SampleDepth_m = "ZSampleDepth_m") %>%
       dplyr::select(-"PSampleDepth_m")
   }
 
