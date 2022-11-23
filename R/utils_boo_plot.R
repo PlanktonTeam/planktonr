@@ -817,8 +817,8 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
 
     rm(df)
 
-    CPRpal <- leaflet::colorFactor(palette = "Paired", unique(df_CPR$Name))
-    NRSpal <- leaflet::colorFactor(palette = "Pastel1", unique(df_NRS$Name))
+    # CPRpal <- leaflet::colorFactor(palette = "Paired", unique(df_CPR$Name))
+    # NRSpal <- leaflet::colorFactor(palette = "Pastel1", unique(df_NRS$Name))
 
     labs_cpr <- lapply(seq(nrow(df_CPR)), function(i) {
       paste("<strong>Sample Date:</strong>", df_CPR$SampleTime_Local[i], "<br/>","<b/>",
@@ -860,8 +860,9 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
                            label = lapply(labs_mbr, htmltools::HTML)) %>%
       leaflet::addCircleMarkers(data = df_CPR,
                                 lat = ~ Latitude, lng = ~ Longitude,
-                                fill = ~CPRpal(Name), color = ~CPRpal(Name),
-                                radius = 5, fillOpacity = 0.7, opacity = 1, weight = 1,
+                                fill = ~Colour,
+                                color = ~Colour,
+                                radius = 5, fillOpacity = 0.8, opacity = 1, weight = 1,
                                 group = "Continuous Plankton Recorder",
                                 label = lapply(labs_cpr, htmltools::HTML)) %>%
       leaflet::addAwesomeMarkers(data = df_NRS,
