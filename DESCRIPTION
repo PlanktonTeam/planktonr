@@ -1,13 +1,13 @@
 Package: planktonr
 Title: Analysis and visualisation of plankton data
-Version: 0.1.1.0000
+Version: 0.1.5.0000
 Authors@R: c(
     person("Jason D.", "Everett", , "jase.everett@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-6681-8054")),
     person("Claire H.", "Davies", role = "aut",
            comment = c(ORCID = "0000-0002-0424-1835"))
   )
-Description: What the package does (one paragraph).
+Description: planktonr is an r package that facilitates the download, analysis and visualisation of phytoplankton and zooplankton data. Our initial focus will be on plankton data stored on the Australian Ocean Data Network ([AODN](https://portal.aodn.org.au)) and collected by the Integrated Marine Observing System ([IMOS](www.imos.org.au)), but we hope to expand to other plankton data sets in the future.
 License: GPL (>= 3)
 URL: https://github.com/PlanktonTeam/planktonr
 BugReports: https://github.com/PlanktonTeam/planktonr/issues
@@ -41,11 +41,14 @@ Suggests:
     knitr,
     rmarkdown,
     rnaturalearthdata,
-    testthat (>= 3.0.0)
+    RNetCDF,
+    testthat (>= 3.0.0),
+    thredds,
+    yaImpute
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.2

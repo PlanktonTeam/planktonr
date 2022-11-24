@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.1.0.0000</span>
+        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.1.2.0000</span>
       </span>
     </div>
 
@@ -66,7 +66,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pr_get_Indices</span><span class="op">(</span>Survey <span class="op">=</span> <span class="st">"CPR"</span>, Type <span class="op">=</span> <span class="st">"P"</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pr_get_Indices</span><span class="op">(</span>Survey <span class="op">=</span> <span class="st">"CPR"</span>, Type <span class="op">=</span> <span class="st">"P"</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -77,6 +77,10 @@
 
 <dt>Type</dt>
 <dd><p>Phyto, zoo or physical water props, defaults to phyto</p></dd>
+
+
+<dt>...</dt>
+<dd><p>to allow use of join when used within another function</p></dd>
 
 </dl></div>
     <div id="value">
@@ -91,7 +95,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">pr_get_Indices</span><span class="op">(</span><span class="st">"NRS"</span>, <span class="st">"P"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">pr_get_Indices</span><span class="op">(</span><span class="st">"NRS"</span>, <span class="st">"Z"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">pr_get_Indices</span><span class="op">(</span><span class="st">"NRS"</span>, <span class="st">"W"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">pr_get_Indices</span><span class="op">(</span><span class="st">"CPR"</span>, <span class="st">"P"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">pr_get_Indices</span><span class="op">(</span><span class="st">"CPR"</span>, <span class="st">"P"</span>, join <span class="op">=</span> <span class="st">"st_nearest_feature"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">pr_get_Indices</span><span class="op">(</span><span class="st">"CPR"</span>, <span class="st">"Z"</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
@@ -107,7 +111,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

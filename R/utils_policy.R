@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-#' df <- pr_get_PolicyData("CPR", join = 'st_nearest_feature')
+#' df <- pr_get_PolicyData("CPR")
 pr_get_PolicyData <- function(Survey = "NRS", ...){
 
   if(Survey == "CPR") {
@@ -20,13 +20,13 @@ pr_get_PolicyData <- function(Survey = "NRS", ...){
       pr_add_Bioregions(...)
 
     Pol <- Polr %>%
-      dplyr::select(tidyselect::starts_with(c("SampleTime_Local", "Year_Local", "Month_Local", "BioRegion", "DistanceFromBioregion_m",
-                    tidyselect::all_of(var_names)))) %>%
+      dplyr::select(tidyselect::starts_with(c("SampleTime_Local", "Year_Local", "Month_Local", "BioRegion", "DistanceFromBioregion_m")),
+                    tidyselect::all_of(var_names)) %>%
       dplyr::filter(!.data$BioRegion %in% c("North", "North-west")) %>%
       tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "Parameters")
 
     means <- Polr %>%
-      dplyr::select(.data$BioRegion, tidyselect::all_of(var_names)) %>%
+      dplyr::select("BioRegion", tidyselect::all_of(var_names)) %>%
       tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "Parameters") %>%
       dplyr::group_by(.data$BioRegion, .data$Parameters) %>%
       dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
@@ -52,13 +52,13 @@ pr_get_PolicyData <- function(Survey = "NRS", ...){
                     Year_Local = lubridate::year(.data$SampleTime_Local))
 
     Pol <- Polr %>%
-      dplyr::select(.data$SampleTime_Local, .data$Year_Local, .data$Month_Local, .data$StationName,
-                    .data$StationCode, tidyselect::all_of(var_names)) %>%
+      dplyr::select("SampleTime_Local", "Year_Local", "Month_Local", "StationName",
+                    "StationCode", tidyselect::all_of(var_names)) %>%
       dplyr::filter(!.data$StationName %in% c("Port Hacking 4")) %>%
       tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "Parameters")
 
     means <- Polr %>%
-      dplyr::select(.data$StationName, tidyselect::all_of(var_names)) %>%
+      dplyr::select("StationName", tidyselect::all_of(var_names)) %>%
       tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "Parameters") %>%
       dplyr::group_by(.data$StationName, .data$Parameters) %>%
       dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
@@ -76,7 +76,7 @@ pr_get_PolicyData <- function(Survey = "NRS", ...){
     LTnuts <- pr_get_LTnuts()
 
     means <- LTnuts %>%
-      dplyr::select(.data$StationName, .data$Parameters, .data$Values) %>%
+      dplyr::select("StationName", "Parameters", "Values") %>%
       dplyr::group_by(.data$StationName, .data$Parameters) %>%
       dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
                        sd = stats::sd(.data$Values, na.rm = TRUE),
@@ -117,7 +117,7 @@ pr_get_PolicyInfo <- function(Survey = "NRS", ...){
                                                 .data$StationCode %in% c("ROT", "ESP", "NIN") ~ "narrow shelf influenced by the Leeuwin Current with tropical oeanic communities"),
                     now = dplyr::case_when(.data$StationCode %in% c("DAR", "YON", "NSI", "PHB", "MAI", "KAI", "ROT") ~ "and is ongoing",
                                            .data$StationCode %in% c("ESP", "NIN") ~ "and concluded in March 2013")) %>%
-      dplyr::select(-c(.data$ProjectName, .data$StationCode, .data$IMCRA))
+      dplyr::select(-c("ProjectName", "StationCode", "IMCRA"))
 
   } else {
 

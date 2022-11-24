@@ -18,7 +18,7 @@ pr_plot_NRSmap <- function(df){
 
   col <- meta_sf %>%
     sf::st_drop_geometry() %>%
-    dplyr::select(.data$Code, .data$Colour) %>%
+    dplyr::select("Code", "Colour") %>%
     tibble::deframe()
 
   p1 <- ggplot2::ggplot() +
@@ -55,7 +55,7 @@ pr_plot_CPRmap <-  function(df){
   col <- bioregionSelection %>%
     sf::st_drop_geometry() %>%
     dplyr::distinct() %>%
-    dplyr::select(.data$REGION, .data$Colour) %>%
+    dplyr::select("REGION", "Colour") %>%
     tibble::deframe()
 
   p1 <- ggplot2::ggplot() +
@@ -294,9 +294,9 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
 #' @export
 #'
 #' @examples
-#' df <- pr_get_Indices(Survey = "NRS", Type = "P") %>%
-#'   dplyr::filter(Parameters == "PhytoAbundance_CellsL")
-#' pr_plot_tsclimate(df, "NRS")
+#' df <- pr_get_Indices(Survey = "CPR", Type = "P") %>%
+#'   dplyr::filter(Parameters == "PhytoAbundance_Cellsm3")
+#' pr_plot_tsclimate(df, "CPR")
 pr_plot_tsclimate <- function(df, Survey = "NRS", trans = "identity"){
 
   p1 <- pr_plot_TimeSeries(df, Survey, trans) +
@@ -407,7 +407,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
   return(p1)
 }
 
-#' Policy plot
+#' Essential Ocean Variables plot
 #'
 #' @param df dataframe containing timeseries data with Parameters and Values, output of pr_get_PolicyData and pr_get_Coeffs
 #' @param EOV Essential OCean Variable as a parameter
@@ -596,48 +596,48 @@ pr_plot_FreqMap <- function(df, species, interactive = TRUE){
   if(interactive == FALSE){
     cols <- c("lightblue1" ,"skyblue3", "dodgerblue2","blue1", "navyblue")
 
-  Species <- unique(df$Taxon)
+    Species <- unique(df$Taxon)
 
-  p <- ggplot2::ggplot() +
-    ggplot2::geom_sf(data = MapOz) +
-    ggplot2::geom_point(data=df, ggplot2::aes(x=.data$Long, y=.data$Lat, colour=.data$freqfac, pch = .data$Survey), size = 2) +
-    ggplot2::facet_wrap( ~ .data$Season, dir = "v") +
-    ggplot2::labs(title = Species) +
-    ggplot2::scale_colour_manual(name = "", values = cols, drop = FALSE) +
-    ggplot2::theme(strip.background = ggplot2::element_blank(),
-                   title = ggplot2::element_text(face = "italic"),
-                   legend.title = ggplot2::element_text(face = "plain", size = 12),
-                   axis.title.x = ggplot2::element_blank(),
-                   axis.title.y = ggplot2::element_blank(),
-                   panel.background = ggplot2::element_rect(fill = "snow1"),
-                   legend.position = "bottom",
-                   legend.key = ggplot2::element_blank())
-  return(p)
+    p <- ggplot2::ggplot() +
+      ggplot2::geom_sf(data = MapOz) +
+      ggplot2::geom_point(data=df, ggplot2::aes(x=.data$Long, y=.data$Lat, colour=.data$freqfac, pch = .data$Survey), size = 2) +
+      ggplot2::facet_wrap( ~ .data$Season, dir = "v") +
+      ggplot2::labs(title = Species) +
+      ggplot2::scale_colour_manual(name = "", values = cols, drop = FALSE) +
+      ggplot2::theme(strip.background = ggplot2::element_blank(),
+                     title = ggplot2::element_text(face = "italic"),
+                     legend.title = ggplot2::element_text(face = "plain", size = 12),
+                     axis.title.x = ggplot2::element_blank(),
+                     axis.title.y = ggplot2::element_blank(),
+                     panel.background = ggplot2::element_rect(fill = "snow1"),
+                     legend.position = "bottom",
+                     legend.key = ggplot2::element_blank())
+    return(p)
 
   } else {
 
     df <- df %>% dplyr::group_split(.data$Season)
 
-    plotlist <-  function(dflist){
+    plotlist <- function(dflist){
 
-    CPRpal <- leaflet::colorFactor(c("lightblue1", "skyblue3", "dodgerblue2", "blue1", "navyblue"), domain = dflist$freqfac)
-    NRSpal <- leaflet::colorFactor(c("#CCFFCC", "#99FF99", "#669933", "#009900", "#006600"), domain = dflist$freqfac)
+      CPRpal <- leaflet::colorFactor(c("lightblue1", "skyblue3", "dodgerblue2", "blue1", "navyblue"), domain = dflist$freqfac)
+      NRSpal <- leaflet::colorFactor(c("#CCFFCC", "#99FF99", "#669933", "#009900", "#006600"), domain = dflist$freqfac)
 
-    dfCPR <- dflist %>% dplyr::filter(.data$Survey == 'CPR')
-    dfNRS <- dflist %>% dplyr::filter(.data$Survey == 'NRS')
+      dfCPR <- dflist %>% dplyr::filter(.data$Survey == 'CPR')
+      dfNRS <- dflist %>% dplyr::filter(.data$Survey == 'NRS')
 
-    title1 <- htmltools::div(
-      htmltools::tags$style(htmltools::HTML(".leaflet-control.map-title1 {
+      title1 <- htmltools::div(
+        htmltools::tags$style(htmltools::HTML(".leaflet-control.map-title1 {
                                                 text-align: center;
                                                 background: rgba(255,255,255,0);
                                                 font-weight: bold;
                                                 font-size: 16px;
                                                 margin: 0;
                                                 margin-right: 6px}")),
-      unique(dflist$Season))
+        unique(dflist$Season))
 
-    title2 <- htmltools::div(
-      htmltools::tags$style(htmltools::HTML(".leaflet-control.map-title2 {
+      title2 <- htmltools::div(
+        htmltools::tags$style(htmltools::HTML(".leaflet-control.map-title2 {
                                                 text-align: center;
                                                 background: rgba(255,255,255,0);
                                                 # font-weight: bold;
@@ -645,36 +645,38 @@ pr_plot_FreqMap <- function(df, species, interactive = TRUE){
                                                 font-size: 16px;
                                                 margin: 0;
                                                 margin-right: 6px}")),
-      unique(dflist$Taxon))
+        unique(dflist$Taxon))
 
-    fmap <- leaflet::leaflet() %>%
-      leaflet::addProviderTiles(provider = "Esri", layerId = "OceanBasemap") %>%
-      leaflet::addPolygons(data = mbr,  group = "Marine Bioregions",
-                           color = ~Colour, fill = ~Colour,
-                           opacity = 1, fillOpacity = 0.3,
-                           weight = 1) %>%
-      leaflet::addCircleMarkers(data = dfCPR, group = 'Continuous Plankton Recorder',
-                                lat = ~ Lat, lng = ~ Long,
-                                radius = ~ifelse(freqfac == "Absent", 2, 5),
-                                color = ~CPRpal(freqfac),
-                                fill = ~CPRpal(freqfac)) %>%
-      leaflet::addCircleMarkers(data = dfNRS , group = 'National Reference Stations',
-                                lat = ~ Lat, lng = ~ Long,
-                                color = ~NRSpal(freqfac),
-                                radius = ~ifelse(freqfac == "Absent", 1, 5)) %>%
-      leaflet::addControl(title1,
-                          position = "topright",
-                          className = "map-title1") %>%
-      leaflet::addControl(title2,
-                          position = "topright",
-                          className = "map-title2")  %>%
-      leaflet::addLayersControl( # Layers control
-        overlayGroups = c("National Reference Stations", "Continuous Plankton Recorder", "Marine Bioregions"),
-        position = "bottomleft",
-        options = leaflet::layersControlOptions(collapsed = FALSE, fill = NA))
-  }
+      fmap <- leaflet::leaflet() %>%
+        leaflet::addProviderTiles(provider = "Esri", layerId = "OceanBasemap") %>%
+        leaflet::addPolygons(data = mbr,  group = "Marine Bioregions",
+                             color = ~Colour, fill = ~Colour,
+                             opacity = 1, fillOpacity = 0.3,
+                             weight = 1) %>%
+        leaflet::addCircleMarkers(data = dfCPR, group = 'Continuous Plankton Recorder',
+                                  lat = ~ Lat, lng = ~ Long,
+                                  radius = ~ifelse(freqfac == "Absent", 2, 5),
+                                  color = ~CPRpal(freqfac),
+                                  fill = ~CPRpal(freqfac)) %>%
+        leaflet::addCircleMarkers(data = dfNRS , group = 'National Reference Stations',
+                                  lat = ~ Lat, lng = ~ Long,
+                                  color = ~NRSpal(freqfac),
+                                  radius = ~ifelse(freqfac == "Absent", 1, 5)) %>%
+        leaflet::addControl(title1,
+                            position = "topright",
+                            className = "map-title1") %>%
+        leaflet::addControl(title2,
+                            position = "topright",
+                            className = "map-title2")  %>%
+        leaflet::addLayersControl( # Layers control
+          overlayGroups = c("National Reference Stations", "Continuous Plankton Recorder", "Marine Bioregions"),
+          position = "bottomleft",
+          options = leaflet::layersControlOptions(collapsed = FALSE, fill = NA))
+    }
 
     plotlist <- purrr::map(df, plotlist)
+
+    return(plotlist)
   }
 }
 
@@ -715,7 +717,7 @@ pr_plot_DayNight <-  function(df){
 
 #' Plot of STI kernel density for species
 #'
-#' @param df dataframe as output of pr_get_STI() filtered for one species
+#' @param df dataframe as output of pr_get_STIdata() filtered for one species
 #'
 #' @return plot of STI kernel density
 #' @export
@@ -790,42 +792,21 @@ pr_plot_STI <-  function(df){
 
 }
 
+
 #' IMOS progress plot
 #'
-#' @param df output from pr_get_ProgressMap
+#' @param df output from pr_get_ProgressMapData
 #' @param interactive Should the plot be interactive with leaflet?
 #'
 #' @return a plot of IMOS progress
 #' @export
 #'
 #' @examples
-#' df <- pr_get_ProgressMap("CPR")
+#' df <- pr_get_ProgressMapData("CPR")
 #' plot <- pr_plot_ProgressMap(df)
 pr_plot_ProgressMap <- function(df, interactive = FALSE){
 
   if (interactive == TRUE){
-
-#     library(tidyverse)
-#     library(planktonr)
-#     load("~/GitHub/planktonr/R/sysdata.rda")
-#     PMapDatan <- dplyr::bind_rows(planktonr::pr_get_Indices("NRS", "Z"), planktonr::pr_get_Indices("NRS", "P")) %>%
-#       filter(.data$Parameters == "ZoopAbundance_m3" | .data$Parameters == "PhytoAbundance_CellsL") %>%
-#       tidyr::pivot_wider(names_from = .data$Parameters, values_from = .data$Values) %>%
-#       dplyr::rename(Name = .data$StationName) %>%
-#       dplyr::select(-.data$StationCode) %>%
-#       dplyr::mutate(Survey = "NRS")
-#
-#     PMapDatac <- dplyr::bind_rows(planktonr::pr_get_Indices("CPR", "Z"), planktonr::pr_get_Indices("CPR", "P")) %>%
-#       filter(.data$Parameters == "ZoopAbundance_m3" | .data$Parameters == "PhytoAbundance_Cellsm3") %>%
-#       tidyr::pivot_wider(names_from = .data$Parameters, values_from = .data$Values) %>%
-#       dplyr::mutate(PhytoAbundance_Cellsm3 = .data$PhytoAbundance_Cellsm3/1e3,
-#                     Survey = "CPR") %>%
-#       dplyr::rename(PhytoAbundance_CellsL = .data$PhytoAbundance_Cellsm3,
-#                     Name = .data$BioRegion)
-#
-#     df <- dplyr::bind_rows(PMapDatan, PMapDatac) %>%
-#       dplyr::select(-c(.data$Year_Local, .data$Month_Local , .data$tz))
-#
 
     df_CPR <- df %>% dplyr::filter(.data$Survey == "CPR")
     df_NRS <- df %>% dplyr::filter(.data$Survey == "NRS")
@@ -833,15 +814,12 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
     df_NRS2 <- df_NRS %>%
       dplyr::distinct(.data$Name, .keep_all = TRUE) %>%
       tidyr::drop_na() %>%
-      dplyr::select(-c(.data$ZoopAbundance_m3, .data$PhytoAbundance_CellsL, .data$Survey))
+      dplyr::select(-c("ZoopAbundance_m3", "PhytoAbundance_CellsL", "Survey"))
 
     rm(df)
 
     CPRpal <- leaflet::colorFactor(palette = "Paired", unique(df_CPR$Name))
     NRSpal <- leaflet::colorFactor(palette = "Pastel1", unique(df_NRS$Name))
-    # MBRpal <- leaflet::colorFactor(palette = "Pastel2", mbr$Name)
-
-
 
     labs_cpr <- lapply(seq(nrow(df_CPR)), function(i) {
       paste("<strong>Sample Date:</strong>", df_CPR$SampleTime_Local[i], "<br/>","<b/>",
@@ -874,12 +852,6 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
                                                 margin-right: 6px}")),
       "Hover cursor over items of interest")
 
-
-    # iconSet <- leaflet::awesomeIconList(home = leaflet::makeAwesomeIcon(icon = "circle-o",
-    #                                                                    library = "fa",
-    #                                                                    iconColor = 'gold',
-    #                                                                    markerColor = 'red'))
-
     map <- leaflet::leaflet() %>%
       leaflet::addProviderTiles(provider = "Esri", layerId = "OceanBasemap") %>%
       leaflet::addPolygons(data = mbr,  group = "Marine Bioregions",
@@ -894,12 +866,12 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
                                 group = "Continuous Plankton Recorder",
                                 label = lapply(labs_cpr, htmltools::HTML)) %>%
       leaflet::addAwesomeMarkers(data = df_NRS,
-                          lat = ~ Latitude, lng = ~ Longitude,
-                          # icon = iconSet,
-                          group = "National Reference Stations",
-                          clusterOptions = leaflet::markerClusterOptions(showCoverageOnHover = FALSE,
-                                                                         spiderfyOnMaxZoom = FALSE,
-                                                                         maxClusterRadius = 40)) %>%
+                                 lat = ~ Latitude, lng = ~ Longitude,
+                                 # icon = iconSet,
+                                 group = "National Reference Stations",
+                                 clusterOptions = leaflet::markerClusterOptions(showCoverageOnHover = FALSE,
+                                                                                spiderfyOnMaxZoom = FALSE,
+                                                                                maxClusterRadius = 40)) %>%
       leaflet::addControl(title1,
                           position = "topright",
                           className = "map-title1"
@@ -943,7 +915,7 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
     # GAB, GBR, NA, NEAC, SEAC, SO, Tas, WA
 
     Survey <- df %>%
-      dplyr::select(.data$Survey) %>%
+      dplyr::select("Survey") %>%
       dplyr::distinct()
 
     gg <- ggplot2::ggplot() +
@@ -975,3 +947,108 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
   }
 
 }
+
+
+
+#' Plot Gantt Chart showing plankton sampling status
+#'
+#' @param dat Trip data for either NRS or CPR.
+#' @param Survey "NRS" or "CPR"
+#'
+#' @return a ggplot
+#' @export
+#'
+#' @examples
+#' dat <- pr_get_CPRTrips()
+#' gg <- pr_plot_Gantt(dat, Survey = "CPR")
+#' dat <- pr_get_NRSTrips()
+#' gg <- pr_plot_Gantt(dat, Survey = "NRS")
+pr_plot_Gantt <- function(dat, Survey = "NRS"){
+
+  if (Survey == "CPR"){
+    dat2 <- dat %>%
+      dplyr::arrange(.data$Latitude) %>%
+      dplyr::mutate(YearMonth = .data$Year_Local + .data$Month_Local/12) %>%
+      dplyr::distinct(.data$YearMonth, .data$Region, .data$TripCode) %>%
+      dplyr::group_by(.data$YearMonth, .data$Region, .data$TripCode) %>%
+      dplyr::summarise(n = dplyr::n()) %>%
+      dplyr::ungroup()
+
+    gg <- ggplot2::ggplot(data = dat2, ggplot2::aes(x = .data$YearMonth, y = .data$Region, width = 1/12, height = 2/12), fill = "black", colour = "black") +
+      ggplot2::geom_tile() +
+      ggplot2::theme_bw() +
+      ggplot2::labs(x = ggplot2::element_blank(), y = ggplot2::element_blank()) +
+      ggplot2::ggtitle("Continuous Plankton Counter Sampling") +
+      ggplot2::coord_fixed(ratio = 0.5)
+
+    return (gg)
+
+
+  } else if (Survey == "NRS"){
+
+    dat2 <- pr_get_NRSTrips(Type = c("P", "Z")) %>%
+      dplyr::mutate(YearMonth = .data$Year_Local + .data$Month_Local/12) %>%
+      dplyr::filter(.data$StationName != "Port Hacking 4") %>%
+      dplyr::group_by(.data$YearMonth, .data$StationName) %>%
+      dplyr::summarise(n = dplyr::n(), .groups = "drop")
+
+    gg <- ggplot2::ggplot(data = dat2, ggplot2::aes(x = .data$YearMonth, y = .data$StationName, width = 1/12, height = 2/12), fill = "black", colour = "black") +
+      ggplot2::geom_tile() +
+      ggplot2::theme_bw() +
+      ggplot2::labs(x = ggplot2::element_blank(), y = ggplot2::element_blank()) +
+      ggplot2::ggtitle("National Reference Station Sampling") +
+      ggplot2::coord_fixed(ratio = 0.5)
+
+    return(gg)
+
+  }
+
+}
+
+
+
+# 'Taxa Accumulation Curve
+#'
+#' Plot a taxa accumulation curve for everything that is identified by the IMOS plankton team
+#'
+#' @param dat A dataframe of plankton data
+#' @param Survey "CPR" or "NRS"
+#' @param Type "P" or "Z"
+#'
+#' @return a ggplot object.
+#' @export
+#'
+#' @examples
+#' dat <- pr_get_TaxaAccum(Survey = "NRS", Type = "Z")
+#' p <- pr_plot_TaxaAccum(dat, Survey = "NRS", Type = "Z")
+#' dat <- pr_get_TaxaAccum(Survey = "CPR", Type = "P")
+#' p <- pr_plot_TaxaAccum(dat, Survey = "CPR", Type = "P")
+pr_plot_TaxaAccum <- function(dat, Survey = "NRS", Type = "Z"){
+
+  dat <- dat %>%
+    tidyr::pivot_longer(-pr_get_NonTaxaColumns(Survey = Survey, Type = Type), names_to = "Taxa", values_to = "Abundance") %>%
+    dplyr::filter(.data$Abundance > 0) %>%
+    dplyr::arrange(.data$SampleTime_Local) %>%
+    dplyr::group_by(.data$Taxa) %>%
+    dplyr::summarise(First = dplyr::first(.data$SampleTime_Local), .groups = "drop") %>%
+    dplyr::arrange(.data$First) %>%
+    dplyr::mutate(RowN = dplyr::row_number())
+
+
+  gg <- ggplot2::ggplot(data = dat, ggplot2::aes(x = .data$First, y = .data$RowN)) +
+    ggplot2::geom_line() +
+    ggplot2::scale_x_datetime(name = "Year", breaks = "2 year", date_labels = "%Y", expand = c(0, 0)) +
+    ggplot2::ylab("Taxa Identified") +
+    ggplot2::theme_bw() +
+    ggplot2::scale_y_continuous(expand = c(0, 0)) +
+    ggplot2::ggtitle(paste(Survey, "-", planktonr::pr_title(Type)))
+
+  return(gg)
+
+}
+
+
+
+
+
+

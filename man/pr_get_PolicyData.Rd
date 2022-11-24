@@ -18,5 +18,5 @@ A dataframe with policy data
 Get Policy data set
 }
 \examples{
-df <- pr_get_PolicyData("CPR", join = 'st_nearest_feature')
+df <- pr_get_PolicyData("CPR")
 }

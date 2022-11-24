@@ -2,20 +2,20 @@
 % Please edit documentation in R/utils_boo_data.R
 \name{pr_get_STI}
 \alias{pr_get_STI}
-\title{Get data for STI plots of species abundance}
+\title{Get STI kernel density for each species}
 \usage{
-pr_get_STI(Type = "P")
+pr_get_STI(Type = "Z")
 }
 \arguments{
-\item{Type}{Phyto or zoo, defaults to phyto}
+\item{Type}{Zooplankton (Copepods) or phytoplankton species}
 }
 \value{
-df to be sued with pr_plot_STI
+df of STI kernel density for each species
 }
 \description{
-Get data for STI plots of species abundance
+Get STI kernel density for each species
 }
 \examples{
-df <- pr_get_STI("P")
-df <- pr_get_STI("Z")
+df <- pr_get_STI('P')
+
 }

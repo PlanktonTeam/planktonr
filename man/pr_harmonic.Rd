@@ -15,7 +15,7 @@ pr_harmonic(theta, k = 4)
 A harmonic function
 }
 \description{
-This function i for use in models to create a circular predictor
+This function is for use in models to create a circular predictor
 }
 \examples{
 theta = 2
