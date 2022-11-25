@@ -30,8 +30,6 @@ pr_get_NRSChemistry <- function(){
 
 }
 
-
-
 #' Get pigments data
 #' @param Format all or binned
 #'
@@ -119,6 +117,27 @@ pr_get_NRSPico <- function(){
   return(dat)
 }
 
+#' Data for environmental contour plots
+#'
+#' @param Data Use Chemistry, Pico or Micro, the depth stratified samples
+#'
+#' @return A dataframe to be used with pr_plot_NRSEnvContour
+#' @export
+#'
+#' @examples
+#' df <- pr_get_NRSEnvContour('Pico')
+pr_get_NRSEnvContour <- function(Data = 'Chemistry') {
+  file <- parse(text = paste('planktonr::pr_get_NRS', Data, '()', sep = ''))
+
+  dat <- eval(file) %>%
+    dplyr::mutate(name = as.factor(.data$Parameters)) %>%
+    tidyr::drop_na() %>%
+    dplyr::mutate(SampleTime_Local = lubridate::floor_date(.data$SampleTime_Local, unit = 'month')) %>%
+    dplyr::filter(!.data$StationCode %in% c('ESP', 'NIN')) %>%
+    planktonr::pr_remove_outliers(2) %>%
+    droplevels() %>%
+    planktonr::pr_reorder()
+}
 
 
 #' Load microbial data
