@@ -19,14 +19,14 @@
 pr_add_Bioregions <- function(df, near_dist_km = 0){
 
   # Ensure df is of the correct class
-  if (!("sf") %in% class(df)){
+  if (!("sf") %in% class(df[])){
     df <- df %>%
       sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = "+proj=longlat +datum=WGS84", remove = FALSE)
   }
 
   # First add Marine Bioregions
   df <- df %>%
-    sf::st_join(mbr, join = sf::st_within) %>%
+    sf::st_join(mbr %>% dplyr::select(-"Colour"), join = sf::st_within) %>%
     dplyr::rename(BioRegion = "REGION") %>%
     dplyr::mutate(cellID = dplyr::row_number())
 
@@ -64,9 +64,14 @@ pr_add_Bioregions <- function(df, near_dist_km = 0){
 
   df <- dplyr::left_join(df, dist, by = "cellID") %>%
     dplyr::mutate(BioRegion = dplyr::coalesce(.data$BioRegion.x, .data$BioRegion.y)) %>%
+    dplyr::mutate(BioRegion = forcats::fct_explicit_na(.data$BioRegion, na_level = "None")) %>%
     dplyr::select(-c("BioRegion.x", "BioRegion.y")) %>%
     dplyr::relocate("BioRegion", .after = "TripCode") %>%
-    sf::st_drop_geometry(df) # DF in, DF out
+    sf::st_drop_geometry(df) %>% # DF in, DF out
+    dplyr::left_join(mbr %>%
+                       sf::st_drop_geometry() %>%
+                       dplyr::distinct(.data$REGION, .data$Colour),
+                     by = c("BioRegion" = "REGION"))
 
   return(df)
 

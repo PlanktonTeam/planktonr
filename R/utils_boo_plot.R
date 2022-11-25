@@ -807,28 +807,43 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
 
   if (interactive == TRUE){
 
-    df_CPR <- df %>% dplyr::filter(.data$Survey == "CPR")
+    df_CPR <- df %>%
+      dplyr::filter(.data$Survey == "CPR" & (!is.na(.data$ZoopAbundance_m3) | !is.na(.data$PhytoAbundance_CellsL)))
+
+    df_PCI <- df %>%
+      dplyr::filter(.data$Survey == "CPR" & is.na(.data$ZoopAbundance_m3) & is.na(.data$PhytoAbundance_CellsL))
+
+
     df_NRS <- df %>% dplyr::filter(.data$Survey == "NRS")
-
-    df_NRS2 <- df_NRS %>%
-      dplyr::distinct(.data$Name, .keep_all = TRUE) %>%
-      tidyr::drop_na() %>%
-      dplyr::select(-c("ZoopAbundance_m3", "PhytoAbundance_CellsL", "Survey"))
-
     rm(df)
 
-    # CPRpal <- leaflet::colorFactor(palette = "Paired", unique(df_CPR$Name))
-    # NRSpal <- leaflet::colorFactor(palette = "Pastel1", unique(df_NRS$Name))
-
     labs_cpr <- lapply(seq(nrow(df_CPR)), function(i) {
-      paste("<strong>Sample Date:</strong>", df_CPR$SampleTime_Local[i], "<br/>","<b/>",
-            "<strong>Bioregion: </strong>", df_CPR$Name[i], "<br/>","<b/>",
-            "<strong>Phytoplankton Abundance (L\u207B\u00B9)</strong>: ", round(df_CPR$PhytoAbundance_CellsL[i],2), "<br/>","<b/>",
-            "<strong>Zooplankton Abundance (m\u207B\u00B3)</strong>: ", round(df_CPR$ZoopAbundance_m3[i],2), "<br/>","<b/>")})
+      paste("<strong>Sample Date:</strong>", df_CPR$SampleTime_Local[i], "<br>",
+            "<strong>Bioregion:</strong>", df_CPR$Name[i], "<br>",
+            "<strong>Latitude:</strong>", df_CPR$Latitude[i], "<br>",
+            "<strong>Longitude:</strong>", df_CPR$Longitude[i], "<br>",
+            "<strong>Phytoplankton Abundance (L\u207B\u00B9)</strong>: ", round(df_CPR$PhytoAbundance_CellsL[i],2), "<br>",
+            "<strong>Zooplankton Abundance (m\u207B\u00B3)</strong>: ", round(df_CPR$ZoopAbundance_m3[i],2), "<br>",
+            "<strong>Phytoplankton Colour Index:</strong>", df_CPR$PCI[i], "<br>")})
+
+    labs_cpr2 <- lapply(seq(nrow(df_CPR)), function(i) {
+      paste("<strong>Sample Date:</strong>", df_CPR$SampleTime_Local[i], "<br>",
+            "<strong>Bioregion:</strong>", df_CPR$Name[i], "<br>",
+            "<strong>Latitude:</strong>", df_CPR$Latitude[i], "<br>",
+            "<strong>Longitude:</strong>", df_CPR$Longitude[i], "<br>",
+            "<strong>Phytoplankton Colour Index:</strong>", df_CPR$PCI[i], "<br>")})
 
     labs_mbr <- lapply(seq(nrow(mbr)), function(i) {
-      paste("<strong>The ", mbr$REGION[i], " bioregion <br/>","<b/>",
-            "is characterised by....<br/>","<b/>")
+      if (mbr$REGION[i] != "Southern Ocean Region"){
+        br = " Bioregion"
+      } else {
+        br = ""
+      }
+      sapply(strwrap(
+        paste("<strong>The ", mbr$REGION[i], br,"</strong>",
+              "is characterised by",(CPRinfo %>% dplyr::filter(mbr$REGION[i] == .data$BioRegion))$Features, "<br>"),
+        width = 60, simplify = FALSE),
+        paste, collapse = "<br>")
     })
 
     title1 <- htmltools::div(
@@ -854,20 +869,30 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
     map <- leaflet::leaflet() %>%
       leaflet::addProviderTiles(provider = "Esri", layerId = "OceanBasemap") %>%
       leaflet::addPolygons(data = mbr,  group = "Marine Bioregions",
-                           color = ~Colour, fill = ~Colour,
+                           color = ~Colour,
+                           fill = ~Colour,
                            opacity = 1, fillOpacity = 0.5,
                            weight = 1,
                            label = lapply(labs_mbr, htmltools::HTML)) %>%
       leaflet::addCircleMarkers(data = df_CPR,
-                                lat = ~ Latitude, lng = ~ Longitude,
+                                lat = ~ Latitude,
+                                lng = ~ Longitude,
                                 fill = ~Colour,
                                 color = ~Colour,
-                                radius = 5, fillOpacity = 0.8, opacity = 1, weight = 1,
-                                group = "Continuous Plankton Recorder",
+                                radius = 3, fillOpacity = 0.8, opacity = 1, weight = 1,
+                                group = "Continuous Plankton Recorder (Phyto/Zoo Counts)",
                                 label = lapply(labs_cpr, htmltools::HTML)) %>%
+      leaflet::addCircleMarkers(data = df_PCI,
+                                lat = ~ Latitude,
+                                lng = ~ Longitude,
+                                fill = ~Colour,
+                                color = ~Colour,
+                                radius = 1, fillOpacity = 0.8, opacity = 1, weight = 1,
+                                group = "Continuous Plankton Recorder (PCI Only)",
+                                label = lapply(labs_cpr2, htmltools::HTML)) %>%
       leaflet::addAwesomeMarkers(data = df_NRS,
-                                 lat = ~ Latitude, lng = ~ Longitude,
-                                 # icon = iconSet,
+                                 lat = ~ Latitude,
+                                 lng = ~ Longitude,
                                  group = "National Reference Stations",
                                  clusterOptions = leaflet::markerClusterOptions(showCoverageOnHover = FALSE,
                                                                                 spiderfyOnMaxZoom = FALSE,
@@ -881,12 +906,16 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
                           className = "map-title2"
       ) %>%
       leaflet::addLayersControl( # Layers control
-        overlayGroups = c("National Reference Stations", "Continuous Plankton Recorder", "Marine Bioregions"),
+        overlayGroups = c("National Reference Stations",
+                          "Continuous Plankton Recorder (Phyto/Zoo Counts)",
+                          "Continuous Plankton Recorder (PCI Only)",
+                          "Marine Bioregions"),
         position = "topright",
         options = leaflet::layersControlOptions(collapsed = FALSE, fill = NA)) %>%
       leaflet::addMiniMap() %>%  # add a minimap
       leaflegend::addLegendFactor(pal = leaflet::colorFactor("#FFA500", "National Reference Stations"),
-                                  shape = "circle", values = "National Reference Stations")
+                                  shape = "circle", values = "National Reference Stations") %>%
+      leaflet::hideGroup("Continuous Plankton Recorder (PCI Only)")
 
 
 

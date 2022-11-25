@@ -22,7 +22,7 @@ pr_get_Indices <- function(Survey = "CPR", Type = "P", ...){
     var_names <- c("BiomassIndex_mgm3", "ZoopAbundance_m3", "CopeAbundance_m3", "AvgTotalLengthCopepod_mm",
                    "OmnivoreCarnivoreCopepodRatio", "NoCopepodSpecies_Sample", "ShannonCopepodDiversity", "CopepodEvenness")
   } else if(Type == "P" & Survey == "CPR"){
-    var_names <- c( "PhytoBiomassCarbon_pgm3", "PhytoAbundance_Cellsm3", "DiatomDinoflagellateRatio",
+    var_names <- c( "PCI", "PhytoBiomassCarbon_pgm3", "PhytoAbundance_Cellsm3", "DiatomDinoflagellateRatio",
                     "AvgCellVol_um3", "NoPhytoSpecies_Sample", "ShannonPhytoDiversity", "PhytoEvenness",
                     "NoDiatomSpecies_Sample", "ShannonDiatomDiversity", "DiatomEvenness", "NoDinoSpecies_Sample",
                     "ShannonDinoDiversity", "DinoflagellateEvenness")
@@ -42,9 +42,12 @@ pr_get_Indices <- function(Survey = "CPR", Type = "P", ...){
 
     dat <- pr_get_Raw("cpr_derived_indices_data") %>%
       pr_rename() %>%
+      # dplyr::mutate(BioRegion = as.factor("None")) %>%
       pr_add_Bioregions(...) %>%
       pr_apply_Time() %>% #TODO added for consistency but uses etc timezones - do we changes these to the more familiar names or leave? doesn't improve with method = accurate
-      dplyr::select(tidyselect::starts_with(c("SampleTime_Local", "Year_Local", "Month_Local", "BioRegion", "DistanceFromBioregion_m", "tz", "Latitude", "Longitude")),
+      dplyr::select(tidyselect::starts_with(c("SampleTime_Local", "Year_Local", "Month_Local",
+                                              "BioRegion", "DistanceFromBioregion_m", "tz",
+                                              "Latitude", "Longitude", "Sample_ID")),
                     tidyselect::all_of(var_names)) %>%
       tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters") %>%
       pr_reorder()

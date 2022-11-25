@@ -6,8 +6,6 @@ library(rnaturalearth)
 library(sf)
 library(rmapshaper)
 
-devtools::load_all() # Not sure if this is appropriate but I load the package to use the functions to load data
-
 mbr <- sf::st_read(file.path("data-raw","marine_regions")) %>%  # Load marine regions as sf
   sf::st_transform(crs = "+proj=longlat +datum=WGS84") %>%
   dplyr::select(-c(SHAPE_AREA, SHAPE_LEN)) %>%
@@ -39,15 +37,18 @@ mbr <- tibble(x = c(85, 85:155, 155, 85), y = c(-61, rep(-45, 71), -61, -61)) %>
   dplyr::mutate(REGION = "Southern Ocean Region") %>%
   dplyr::bind_rows(mbr, .)
 
-clr <- tibble::tribble( # Set1 on colorbrewer2.org
+mbr[(dim(mbr)[1])+1,"REGION"] <- "None" # Add an empty geometry for the points that are not in a bioregion.
+
+clr <- tibble::tribble( # Set1 on colorbrewer2.org - Yellow has been updated.
   ~REGION, ~Colour,
   "North", "#e41a1c",
   "Temperate East", "#377eb8",
   "North-west", "#4daf4a",
   "South-west", "#984ea3",
   "South-east", "#ff7f00",
-  "Coral Sea",  "#ffff33",
-  "Southern Ocean Region", "#a65628")
+  "Coral Sea",  "#fce205",
+  "Southern Ocean Region", "#a65628",
+  "None", "#808080")
 
 
 mbr <- dplyr::left_join(mbr, clr, by = "REGION") %>%
@@ -57,7 +58,7 @@ mbr <- dplyr::left_join(mbr, clr, by = "REGION") %>%
 MapOz <- rnaturalearth::ne_countries(scale = "small", country = "Australia",
                                      returnclass = "sf")
 
-meta_sf <- pr_get_NRSTrips("Z") %>%
+meta_sf <- planktonr::pr_get_NRSTrips("Z") %>%
   dplyr::select("StationName", "StationCode", "Longitude", "Latitude") %>%
   dplyr::distinct() %>%
   dplyr::rename(Code = "StationCode",
@@ -74,7 +75,9 @@ colCPR <- mbr %>%
   sf::st_drop_geometry() %>%
   tibble::deframe()
 
-usethis::use_data(mbr, MapOz, meta_sf, colNRS, colCPR, overwrite = TRUE, internal = TRUE, compress = "bzip2")
+CPRinfo <- planktonr::pr_get_PolicyInfo("CPR")
+
+usethis::use_data(mbr, MapOz, meta_sf, colNRS, colCPR, CPRinfo, overwrite = TRUE, internal = TRUE, compress = "bzip2")
 
 # tools::checkRdaFiles("R") # Check what compression to use above
 # OK - bzip2

@@ -440,8 +440,8 @@ pr_get_CTI <-  function(Type = 'Z'){
 #     gp <- "Zooplankton"
 #   }
 #
-  # out <- sppSummary %>%
-  #   dplyr::filter(.data$Group == gp)
+# out <- sppSummary %>%
+#   dplyr::filter(.data$Group == gp)
 #
 # }
 
@@ -575,16 +575,19 @@ pr_get_ProgressMapData <- function(Survey = c("NRS", "CPR"), interactive = FALSE
     }
   } else if (interactive == TRUE){
 
-    PMapDataNRS <- dplyr::bind_rows(planktonr::pr_get_Indices(Survey = "NRS", Type = "Z", ...), planktonr::pr_get_Indices("NRS", "P", ...)) %>%
+    PMapDataNRS <- dplyr::bind_rows(planktonr::pr_get_Indices(Survey = "NRS", Type = "Z", ...),
+                                    planktonr::pr_get_Indices(Survey = "NRS", Type = "P", ...)) %>%
       dplyr::filter(.data$Parameters == "ZoopAbundance_m3" | .data$Parameters == "PhytoAbundance_CellsL") %>%
       tidyr::pivot_wider(names_from = .data$Parameters, values_from = .data$Values) %>%
       dplyr::rename(Name = "StationName") %>%
       dplyr::select(-"StationCode") %>%
       dplyr::mutate(Survey = "NRS")
 
-    PMapDataCPR <- dplyr::bind_rows(planktonr::pr_get_Indices("CPR", "Z", ...), planktonr::pr_get_Indices("CPR", "P", ...)) %>%
-      dplyr::filter(.data$Parameters == "ZoopAbundance_m3" | .data$Parameters == "PhytoAbundance_Cellsm3") %>%
-      tidyr::drop_na("Values") %>%
+    PMapDataCPR <- dplyr::bind_rows(planktonr::pr_get_Indices(Survey = "CPR", Type = "Z", ...),
+                                    planktonr::pr_get_Indices(Survey = "CPR", Type = "P", ...)) %>%
+      dplyr::filter(.data$Parameters == "ZoopAbundance_m3" |
+                      .data$Parameters == "PhytoAbundance_Cellsm3" |
+                      .data$Parameters == "PCI") %>%
       tidyr::pivot_wider(names_from = "Parameters", values_from = "Values") %>%
       dplyr::mutate(PhytoAbundance_Cellsm3 = .data$PhytoAbundance_Cellsm3/1e3,
                     Survey = "CPR") %>%
@@ -596,7 +599,9 @@ pr_get_ProgressMapData <- function(Survey = c("NRS", "CPR"), interactive = FALSE
 
     # Map colours for easy plotting
     PMapData <- PMapData %>%
-      dplyr::left_join(mbr %>% sf::st_drop_geometry(), by = c("Name" = "REGION"))
+      dplyr::left_join(mbr %>%
+                         sf::st_drop_geometry(),
+                       by = c("Name" = "REGION"))
 
     return(PMapData)
   }

@@ -293,7 +293,8 @@ pr_reorder <- function(df){
     df <- df %>%
       dplyr::mutate(BioRegion = factor(.data$BioRegion,
                                        levels = c("North", "North-west", "Coral Sea",
-                                                  "Temperate East", "South-east", "South-west", "Southern Ocean Region")))
+                                                  "Temperate East", "South-east", "South-west",
+                                                  "Southern Ocean Region", "None")))
   }
   return(df)
 }

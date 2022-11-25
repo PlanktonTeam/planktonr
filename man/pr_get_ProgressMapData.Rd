@@ -4,7 +4,7 @@
 \alias{pr_get_ProgressMapData}
 \title{Data for IMOS progress map}
 \usage{
-pr_get_ProgressMapData(Survey = c("NRS", "CPR"), interactive = FALSE)
+pr_get_ProgressMapData(Survey = c("NRS", "CPR"), interactive = FALSE, ...)
 }
 \arguments{
 \item{Survey}{one of NRS, CPR or Both}
