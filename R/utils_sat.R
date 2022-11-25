@@ -191,8 +191,7 @@ pr_match_Altimetry <- function(df, pr) {
   }
 
   df <- df %>%
-    dplyr::select("Latitude", "Longitude", "Year", "Month", "Day") %>%
-    dplyr::filter(.data$Year < 2020)
+    dplyr::select("Latitude", "Longitude", "Year", "Month", "Day")
 
   df <- dplyr::bind_cols(purrr::map_dfr(seq_len(length(pr)), ~ df),
                          purrr::map_dfr(seq_len(nrow(df)), ~ data.frame(pr)) %>%
@@ -205,18 +204,23 @@ pr_match_Altimetry <- function(df, pr) {
     mth <- stringr::str_pad(df$Month,2,"left",pad="0")
     dy <- stringr::str_pad(df$Day,2,"left",pad="0")
 
-    thredd_url <- paste0("http://thredds.aodn.org.au/thredds/catalog/IMOS/OceanCurrent/GSLA/DM01/",df$Year,"/catalog.xml")
+    tryCatch({
+      thredd_url <- paste0("http://thredds.aodn.org.au/thredds/catalog/IMOS/OceanCurrent/GSLA/DM01/",df$Year,"/catalog.xml")
+      f <- thredds::CatalogNode$new(thredd_url)
+      files <- data.frame(files = f$get_dataset_names())
+      pattern <- paste0(df$Year,mth,dy,"T000000Z")
+      fileName <- files %>% dplyr::filter(grepl(pattern, files))
+      filename <- fileName$files
+      url_base <- paste0("http://thredds.aodn.org.au/thredds/dodsC/IMOS/OceanCurrent/GSLA/DM01/") # Base URL
+      imos_url <- paste0(url_base,df$Year,"/",filename)
+      },
+      error = function(cond) {
+        x <- NaN
+        return(x)
+        }
+    )
 
-    f <- thredds::CatalogNode$new(thredd_url)
-
-    files <- data.frame(files = f$get_dataset_names())
-    pattern <- paste0(df$Year,mth,dy,"T000000Z")
-    file <- files %>% dplyr::filter(grepl(pattern, files))
-    filename <- file$files
-    url_base <- paste0("http://thredds.aodn.org.au/thredds/dodsC/IMOS/OceanCurrent/GSLA/DM01/") # Base URL
-    imos_url <- paste0(url_base,df$Year,"/",filename)
-
-    tryCatch({ # Not all dates will exist
+    if(exists("fileName") && nrow(fileName) > 0) {# Not all dates will exist
       nc <- RNetCDF::open.nc(imos_url)
       lat <- RNetCDF::var.get.nc(nc, variable = "LATITUDE")
       lon <- RNetCDF::var.get.nc(nc, variable = "LONGITUDE")
@@ -241,16 +245,12 @@ pr_match_Altimetry <- function(df, pr) {
       out <- RNetCDF::var.get.nc(nc, df$pr, start=c(idx_lon, idx_lat, 1), count = cnt, unpack = TRUE)
 
       out <- mean(out, na.rm = TRUE)
-      return(out)
       RNetCDF::close.nc(nc)
-    },
-    error = function(cond) {
+    } else {
       out <- NaN
-      return(out)
     }
-    )
-
   }
+
   altout <- purrr::map(df, pr_get_SatData)
   df <- dplyr::bind_rows(df) %>%
     dplyr::bind_cols(value = unlist(altout)) %>%
@@ -299,7 +299,6 @@ pr_match_MODIS <- function(df, pr) {
   }
 
   df <- df  %>%
-    dplyr::filter(.data$Date > as.Date("2002-07-01")) %>%
     dplyr::select("Latitude", "Longitude", "Year", "Month", "Day")
 
   df <- dplyr::bind_cols(purrr::map_dfr(seq_len(length(pr)), ~ df),
@@ -312,11 +311,19 @@ pr_match_MODIS <- function(df, pr) {
     mth <- stringr::str_pad(df$Month,2,"left",pad="0")
     dy <- stringr::str_pad(df$Day,2,"left",pad="0")
 
-    url_base <- paste0("http://thredds.aodn.org.au/thredds/dodsC/IMOS/SRS/OC/gridded/aqua/P1D/") # Base URL
-    imos_url <- paste0(url_base, df$Year,"/",mth,"/A.P1D.",df$Year,mth,dy,"T053000Z.aust.",df$pr,".nc")
-
     tryCatch({ # Not all dates will exist
+      url_base <- paste0("http://thredds.aodn.org.au/thredds/dodsC/IMOS/SRS/OC/gridded/aqua/P1D/") # Base URL
+      imos_url <- paste0(url_base, df$Year,"/",mth,"/A.P1D.",df$Year,mth,dy,"T053000Z.aust.",df$pr,".nc")
       nc <- RNetCDF::open.nc(imos_url)
+      },
+      error = function(cond) {
+        ncx <- NaN
+        return(ncx)
+        }
+    )
+
+    if(exists("nc")) {# Not all dates will exist
+
       lat <- RNetCDF::var.get.nc(nc, variable = "latitude")
       lon <- RNetCDF::var.get.nc(nc, variable = "longitude")
       lengthlat <- RNetCDF::dim.inq.nc(nc, "latitude")
@@ -341,13 +348,9 @@ pr_match_MODIS <- function(df, pr) {
       out <- mean(out, na.rm = TRUE)
       return(out)
       RNetCDF::close.nc(nc)
-    },
-    error = function(cond) {
-      out <- 0
-      return(out)
+    } else {
+      out <- NaN
     }
-    )
-
   }
   modisout <- purrr::map(df, pr_get_SatData)
   df <- dplyr::bind_rows(df) %>%
