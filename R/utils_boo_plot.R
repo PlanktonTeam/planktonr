@@ -564,6 +564,141 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
 
 }
 
+
+#' Contour plots for depth stratified environmental data
+#'
+#' @param df dataframe from pr_get_NRSEnvContour
+#' @param Interpolation If TRUE data is interpolated at 5m intervals (DAR = 10m)
+#'
+#' @return a contour plot
+#' @export
+#'
+#' @examples
+#' df <- pr_get_NRSEnvContour("Pico") %>% dplyr::filter(Parameters == "Prochlorococcus_cellsmL",
+#' StationCode %in% c('YON', 'PHB', 'NSI'))
+#' plot <- pr_plot_NRSEnvContour(df, Interpolation = TRUE)
+pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE) {
+  stations <- unique(as.character(df$StationName))
+  param <- planktonr::pr_relabel(unique(df$Parameters), style = 'ggplot')
+
+  if (Interpolation == FALSE) {
+    df <- df %>%
+      dplyr::mutate(Values = ifelse(.data$Values < 0, 0, .data$Values),
+                    SampleDepth_m = ifelse(.data$StationName %in% c('Darwin'), round(.data$SampleDepth_m/10, 0)*10,
+                                           round(.data$SampleDepth_m/5, 0)*5))
+    minDate <- lubridate::floor_date(min(df$SampleTime_Local, na.rm = TRUE), unit = 'month')
+    df <- df %>% dplyr::mutate(MonthSince = lubridate::interval(minDate, .data$SampleTime_Local) %/% months(1),
+                               Year = lubridate::year(.data$SampleTime_Local),
+                               Label = ifelse(.data$Month_Local == 6, .data$Year, NA))
+    myBreaks <- (df %>% dplyr::filter(!is.na(.data$Label)) %>% dplyr::distinct(.data$MonthSince) %>%
+                   dplyr::arrange(dplyr::desc(-.data$MonthSince), .by_group = FALSE))$MonthSince
+    Label <- (df %>% dplyr::group_by(.data$Label) %>% dplyr::summarise(n = dplyr::n()) %>% tidyr::drop_na() %>%
+                dplyr::distinct(.data$Label))$Label
+
+  } else {
+    plotfunc <- function(stations) {
+      df <- df %>% dplyr::filter(.data$StationName == stations) %>%
+        dplyr::mutate(Values = ifelse(.data$Values < 0, 0, .data$Values),
+                      SampleDepth_m = ifelse(.data$StationName %in% c('Darwin'), round(.data$SampleDepth_m/10, 0)*10,
+                                             round(.data$SampleDepth_m/5, 0)*5))
+
+      maxDepth <- max(df$SampleDepth_m, na.rm = TRUE)
+      Depths <- unique(df$SampleDepth_m)
+      minDate <-
+        lubridate::floor_date(min(df$SampleTime_Local, na.rm = TRUE), unit = 'month')
+      maxDate <-
+        lubridate::floor_date(max(df$SampleTime_Local, na.rm = TRUE), unit = 'month')
+      seqDate <-
+        seq.Date(as.Date(minDate), as.Date(maxDate), by = 'month')
+
+      seqDepth <- Depths
+
+      depthPurr <- function(seqDepth) {
+        interped <-
+          expand.grid(SampleTime_Local = seqDate,
+                      SampleDepth_m = Depths) %>%
+          data.frame() %>%
+          dplyr::left_join(df,
+                    by = c("SampleDepth_m", "SampleTime_Local"))  %>%
+          dplyr::filter(.data$SampleDepth_m == seqDepth) %>%
+          dplyr::arrange(.data$SampleTime_Local) %>%
+          dplyr::mutate(
+            Values = zoo::na.approx(.data$Values, maxgap = 5, na.rm = FALSE),
+            StationName = ifelse(
+              is.na(.data$StationName),
+              stations,
+              as.character(.data$StationName)
+            )
+          )
+      }
+
+      PlotData <- purrr::map_dfr(seqDepth, depthPurr) # Interpolating across time for each depth for the station
+    }
+
+    PlotData <- purrr::map_dfr(stations, plotfunc) # Running the interpolation for each station
+
+    minDateAll <- lubridate::floor_date(min(PlotData$SampleTime_Local, na.rm = TRUE), unit = 'month')
+
+    df <- PlotData %>% dplyr::mutate(MonthSince = lubridate::interval(minDateAll, .data$SampleTime_Local) %/% months(1),
+                                           Year = lubridate::year(.data$SampleTime_Local),
+                                           Label = ifelse(.data$Month_Local == 6, .data$Year, NA)) %>%
+      droplevels() %>%
+      planktonr::pr_reorder()
+
+    Label <- (df %>% dplyr::group_by(.data$Label) %>% dplyr::summarise(n = dplyr::n()) %>% tidyr::drop_na() %>%
+                dplyr::distinct(.data$Label))$Label
+    myBreaks <- (df %>% dplyr::filter(!is.na(.data$Label)) %>% dplyr::distinct(.data$MonthSince) %>%
+                   dplyr::arrange(dplyr::desc(-.data$MonthSince), .by_group = FALSE))$MonthSince
+  }
+
+  # Function for plots
+  outPlot <- function(df, x, just = "left"){
+      out <- ggplot2::ggplot(data = df, ggplot2::aes(x, y = .data$SampleDepth_m, z = .data$Values)) +
+        ggplot2::geom_contour_filled(bins = 8) +
+        ggplot2::geom_point(colour = 'dark grey', cex = 0.75) +
+        ggplot2::facet_grid(.data$StationName ~ ., scales = 'free') +
+        ggplot2::theme_bw() +
+        ggplot2::theme(strip.background = ggplot2::element_blank(),
+                       legend.position = "bottom",
+                       legend.title = ggplot2::element_text(size = 8),
+                       legend.text = ggplot2::element_text(size = 6),
+                       legend.justification = just) +
+        ggplot2::guides(fill = ggplot2::guide_legend(title = param, title.position = 'top')) +
+        ggplot2::scale_y_continuous(expand = c(0, 0))
+    out
+  }
+
+  # Plotting year time series
+  out <- outPlot(df, df$MonthSince, "left") +
+    ggplot2::labs(x = "Year", y = 'Depth (m)') +
+    ggplot2::theme(strip.text = ggplot2::element_blank()) +
+    ggplot2::scale_x_continuous(breaks = myBreaks, labels = Label, expand = c(0, 0))
+
+  # Prepare monthly climatology data
+  dfMon <- df %>%
+    dplyr::mutate(Values = ifelse(.data$Values < 0, 0, .data$Values),
+                  SampleDepth_m = ifelse(.data$StationName == 'Darwin', round(.data$SampleDepth_m/10, 0)*10,
+                                         round(.data$SampleDepth_m/5, 0)*5)) %>%
+    dplyr::group_by(.data$Month_Local, .data$StationName, .data$SampleDepth_m) %>%
+    dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
+                     .groups = 'drop')
+
+  # Plotting monthly climatology
+  outMon <- outPlot(dfMon, dfMon$Month_Local, "right") +
+    ggplot2::labs(x = "Month") +
+    ggplot2::theme(axis.title.y = ggplot2::element_blank()) +
+    ggplot2::scale_x_continuous(breaks = seq(1, 12, length.out = 12), labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"), expand = c(0, 0))
+  outMon
+
+  np <- length(stations)
+  plots <- out + outMon + patchwork::plot_layout(widths = c(3,1), heights = np * 200)
+
+  return(plots)
+
+}
+
+
+
 #' Frequency plot of the selected species
 #'
 #' @param df dataframe of format similar to output of pr_get_fmap_data()

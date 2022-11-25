@@ -45,7 +45,8 @@ Suggests:
     RNetCDF,
     testthat (>= 3.0.0),
     thredds,
-    yaImpute
+    yaImpute,
+    zoo
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3
