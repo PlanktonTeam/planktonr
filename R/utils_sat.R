@@ -67,8 +67,7 @@ pr_get_DataLocs <- function(Survey = 'all'){
 #' @examples
 #' df <- head(pr_get_DataLocs("NRS"),5)
 #' res_spat = 10
-#' sstout <- pr_match_GHRSST(df,
-#' pr = c("sea_surface_temperature", "sea_surface_temperature_day_night"))
+#' sstout <- pr_match_GHRSST(df, pr = c("sea_surface_temperature", "sea_surface_temperature_day_night"))
 #' #TODO add progress bars with purrr
 
 pr_match_GHRSST <- function(df, pr) {
@@ -215,7 +214,7 @@ pr_match_Altimetry <- function(df, pr) {
       imos_url <- paste0(url_base,df$Year,"/",filename)
       },
       error = function(cond) {
-        x <- NaN
+        x <- NA
         return(x)
         }
     )
@@ -247,11 +246,13 @@ pr_match_Altimetry <- function(df, pr) {
       out <- mean(out, na.rm = TRUE)
       RNetCDF::close.nc(nc)
     } else {
-      out <- NaN
+      out <- NA
     }
+    return(out)
   }
 
   altout <- purrr::map(df, pr_get_SatData)
+
   df <- dplyr::bind_rows(df) %>%
     dplyr::bind_cols(value = unlist(altout)) %>%
     tidyr::pivot_wider(names_from = "pr", values_from = "value")
