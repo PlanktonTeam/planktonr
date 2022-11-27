@@ -83,6 +83,7 @@ pr_relabel <- function(s, style = "ggplot"){
     "OmnivoreCarnivoreCopepodRatio", rlang::expr(paste("Omnivore:Carnivore Copepod Ratio")), "Omnivore:Carnivore Copepod Ratio", "Omnivore:Carnivore Copepod Ratio",
     "OrganicFraction_mgL", rlang::expr(paste("Organic Fraction (mg L"^-1,")")), "Organic Fraction (mg L<sup>-1</sup>)", "Organic Fraction",
     "Oxygen_umolL", rlang::expr(paste("Oxygen (","\U00B5","mol L"^-1,")")), "Oxygen (&#181; mol L<sup>-1</sup>)", "Oxygen",
+    "PCI", rlang::expr(paste("Phytoplankton Colour Index (PCI)")), "Phytoplankton Colour Index (PCI)", "Phytoplankton Colour Index",
     "Phosphate_umolL", rlang::expr(paste("Phosphate (","\U00B5","mol L"^-1,")")), "Phosphate (&#181; mol L<sup>-1</sup>)", "Phosphate",
     "PhytoAbundance_CellsL", rlang::expr(paste("Phytoplankton Abundance (cells L"^-1,")")), "Phytoplankton Abundance (cells L<sup>-1</sup>)", "Phytoplankton Abundance",
     "PhytoAbundance_Cellsm3", rlang::expr(paste("Phytoplankton Abundance (cells m"^-3,")")), "Phytoplankton Abundance (cells m<sup>-3</sup>)", "Phytoplankton Abundance",
@@ -120,7 +121,7 @@ pr_relabel <- function(s, style = "ggplot"){
     "Silicate_umolL", rlang::expr(paste("Silicate (","\U00B5","mol L"^-1,")")), "Silicate (&#181; mol L<sup>-1</sup>)", "Silicate",
     "StationCode", rlang::expr(paste("Station Code")), "Station Code", "Station Code",
     "StationName", rlang::expr(paste("Station Name")), "Station Name", "Station Name",
-    "Synecochoccus_cellsmL", rlang::expr(paste("Synecochoccus (cells ml"^-1,")")), "Synecochoccus (cells ml<sup>-1</sup>)", "Synecochoccus Abundance",
+    "Synechococcus_cellsmL", rlang::expr(paste("Synecochoccus (cells ml"^-1,")")), "Synecochoccus (cells ml<sup>-1</sup>)", "Synecochoccus Abundance",
     "TAcc", rlang::expr(paste("Total Accessory Pigments (mg m"^-3,")")), "Total Accessory Pigments (mg m<sup>-3</sup>)", "Total Accessory Pigments",
     "TaxonCount", rlang::expr(paste("Taxon Count")), "Taxon Count", "Taxon Count",
     "TaxonGroup", rlang::expr(paste("Taxon Group")), "Taxon Group", "Taxon Group",
@@ -149,6 +150,7 @@ pr_relabel <- function(s, style = "ggplot"){
     print(unlist(relabel_df$Variable[i]))
     print(unique(s))
   }
+
 
   if(style == "ggplot" & length(i) > 0) {
     return(relabel_df$gg[[i]]) # Returned as a list due to expr
