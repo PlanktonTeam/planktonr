@@ -1006,7 +1006,8 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
       leaflet::addPolygons(data = mbr,  group = "Marine Bioregions",
                            color = ~Colour,
                            fill = ~Colour,
-                           opacity = 1, fillOpacity = 0.5,
+                           opacity = 0.4,
+                           fillOpacity = 0.4,
                            weight = 1,
                            label = lapply(labs_mbr, htmltools::HTML)) %>%
       leaflet::addCircleMarkers(data = df_CPR,
@@ -1050,6 +1051,11 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
       leaflet::addMiniMap() %>%  # add a minimap
       leaflegend::addLegendFactor(pal = leaflet::colorFactor("#FFA500", "National Reference Stations"),
                                   shape = "circle", values = "National Reference Stations") %>%
+      leaflet::addLegend("topleft",
+                         colors = mbr$Colour,
+                         labels = mbr$REGION,
+                         title = "Bioregions",
+                         opacity = 1) %>%
       leaflet::hideGroup("Continuous Plankton Recorder (PCI Only)")
 
 
