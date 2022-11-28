@@ -35,8 +35,6 @@ pr_rename <- function(df){
     "Oxygen_Flag", "OXYGEN_QC_FLAG",
     "Phosphate_umolL", "PHOSPHATE_VALUE",
     "Phosphate_Flag", "PHOSPHATE_QC_FLAG",
-    "Picoeukaryotes_cellsmL", "Picoeukaryotes_cells_ml",
-    "Prochlorococcus_cellsmL", "Prochlorococcus_cells_ml",
     "Reference (Size)", "SIZEREFERENCE",
     "SampleTime_UTC", "SAMPLEDATEUTC",  # put these back as they come from S3 pr_get_CPRtrips()
     "SampleTime_Local", "SAMPLEDATELOCAL",
@@ -45,8 +43,6 @@ pr_rename <- function(df){
     "Silicate_umolL", "SILICATE_VALUE",
     "Silicate_Flag", "SILICATE_QC_FLAG",
     "Species", "SPECIES",
-    "Synechococcus_cellsmL", "Synecochoccus_cells_ml", # TODO check if this is spelt correctly in the file and remove line when no longer needed
-    "Synechococcus_cellsmL", "Synechococcus_cells_ml",
     "Temperature_degC", "TEMPERATURE_VALUE",
     "Temperature_Flag", "TEMPERATURE_QC_FLAG",
     "Ammonium_umolL", "AMMONIA_VALUE",
