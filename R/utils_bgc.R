@@ -149,7 +149,7 @@ pr_get_NRSEnvContour <- function(Data = 'Chemistry') {
 #' @importFrom rlang .data
 pr_get_NRSMicro <- function(){
 
-  var_names <- c("Prochlorococcus_cellsmL", "Synecochoccus_cellsmL", "Picoeukaryotes_cellsmL", "Bacterial_Richness",
+  var_names <- c("Prochlorococcus_cellsmL", "Synechococcus_cellsmL", "Picoeukaryotes_cellsmL", "Bacterial_Richness",
                  "Archaeal_Richness", "Eukaryote_Richness", "Bacterial_Niche_Cluster", "Eukaryote_Niche_Cluster", "Archaea_Niche_Cluster",
                  "Bacterial_Chlorophyll_Index", "Bacterial_Nitrogen_Index", "Bacterial_Oxygen_Index", "Bacterial_Phosphate_Index", "Bacterial_Salinity_Index",
                  "Bacterial_Silicate_Index", "Bacterial_Temperature_Index", "Archaeal_Temperature_Index", "Archaeal_Salinity_Index", "Archaeal_Nitrogen_Index",
@@ -160,7 +160,7 @@ pr_get_NRSMicro <- function(){
   #dat <- readr::read_csv(system.file("extdata", "datNRSm.csv", package = "planktonr", mustWork = TRUE), na = c("", NA, "NA"), show_col_types = FALSE) %>%
   dat <- readr::read_csv("https://raw.githubusercontent.com/AusMicrobiome/microbial_ocean_atlas/main/data/oceanViz_AM_data.csv") %>%
   # This should be the permanent address of this file where we will access it going forward.
-      pr_rename() %>%
+    pr_rename() %>%
     dplyr::rename(SampleTime_Local = "SampleDateLocal",
                   Month_Local = "Month",
                   Year_Local = "Year",
