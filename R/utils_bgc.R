@@ -98,7 +98,7 @@ pr_get_NRSPico <- function(){
 
   file <- "bgc_picoplankton_data"
 
-  var_names <- c("Prochlorococcus_cellsmL", "Synecochoccus_cellsmL", "Picoeukaryotes_cellsmL")
+  var_names <- c("Prochlorococcus_cellsmL", "Synechococcus_cellsmL", "Picoeukaryotes_cellsmL")
   dat <- pr_get_Raw(file) %>%
     pr_rename() %>%
     dplyr::filter(.data$SampleDepth_m != "WC") %>%
