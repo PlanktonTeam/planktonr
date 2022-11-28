@@ -537,6 +537,7 @@ pr_get_Papers <- function(){
 #'
 #' @param Survey one of NRS, CPR or Both
 #' @param interactive A logical TRUE/FALSE if the data is to be used for an interactive plot.
+#' @param ... Open for other arguments
 #'
 #' @return A dataframe for input into pr_plot_Progress()
 #' @export

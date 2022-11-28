@@ -10,6 +10,8 @@ pr_get_ProgressMapData(Survey = c("NRS", "CPR"), interactive = FALSE, ...)
 \item{Survey}{one of NRS, CPR or Both}
 
 \item{interactive}{A logical TRUE/FALSE if the data is to be used for an interactive plot.}
+
+\item{...}{Open for other arguments}
 }
 \value{
 A dataframe for input into pr_plot_Progress()
