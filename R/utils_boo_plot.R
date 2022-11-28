@@ -660,8 +660,8 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE) {
         ggplot2::theme_bw() +
         ggplot2::theme(strip.background = ggplot2::element_blank(),
                        legend.position = "bottom",
-                       legend.title = ggplot2::element_text(size = 8),
-                       legend.text = ggplot2::element_text(size = 6),
+                       legend.title = ggplot2::element_text(size = 10),
+                       legend.text = ggplot2::element_text(size = 8),
                        legend.justification = just) +
         ggplot2::guides(fill = ggplot2::guide_legend(title = param, title.position = 'top')) +
         ggplot2::scale_y_continuous(expand = c(0, 0))
