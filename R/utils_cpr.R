@@ -52,7 +52,7 @@ pr_get_CPRData <- function(Type = "P", Variable = "abundance", Subset = "raw"){
 #'
 #' @examples
 #' df <- pr_get_CPRTrips()
-#' df <- pr_get_CPRTrips(join = "st_nearest_feature")
+#' df <- pr_get_CPRTrips(near_dist_km = 250)
 #' @importFrom rlang .data
 pr_get_CPRTrips <- function(...){
   CPRTrips <- pr_get_s3("cpr_samp")  %>%
@@ -69,7 +69,7 @@ pr_get_CPRTrips <- function(...){
 # #' @export
 # #'
 # #' @examples
-# #' df <- pr_get_CPRSamps(join = "st_nearest_feature")
+# #' df <- pr_get_CPRSamps(near_dist_km = 250)
 # #' df <- pr_get_CPRSamps()
 # #'
 # #' #' @importFrom rlang .data

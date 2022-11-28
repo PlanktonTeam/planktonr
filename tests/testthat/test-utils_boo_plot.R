@@ -102,19 +102,19 @@ testthat::test_that("Correct function output", {
 
 
   testthat::expect_equal(class(data.frame(Long = c(110, 130, 155, 150), Lat = c(-10, -35, -27, -45),
-                                                freqfac = as.factor(c("Absent", "Seen in 25%",'50%', '75%')),
-                                                Season = c("December - February","March - May",
-                                                           "June - August","September - November"),
-                                                Taxon = 'Acartia danae',
-                                                Survey = 'CPR') %>%
+                                          freqfac = as.factor(c("Absent", "Seen in 25%",'50%', '75%')),
+                                          Season = c("December - February","March - May",
+                                                     "June - August","September - November"),
+                                          Taxon = 'Acartia danae',
+                                          Survey = 'CPR') %>%
                                  pr_plot_FreqMap(species = 'Acartia danae', interactive = FALSE))[1], "gg")
 
   testthat::expect_equal(class(data.frame(Long = c(110, 130, 155, 150), Lat = c(-10, -35, -27, -45),
-                                                freqfac = as.factor(c("Absent", "Seen in 25%",'50%', '75%')),
-                                                Season = c("December - February","March - May",
-                                                           "June - August","September - November"),
-                                                Taxon = 'Acartia danae',
-                                                Survey = 'CPR') %>%
+                                          freqfac = as.factor(c("Absent", "Seen in 25%",'50%', '75%')),
+                                          Season = c("December - February","March - May",
+                                                     "June - August","September - November"),
+                                          Taxon = 'Acartia danae',
+                                          Survey = 'CPR') %>%
                                  pr_plot_FreqMap(species = 'Acartia danae', interactive = TRUE))[1], "list")
 
 
@@ -127,5 +127,15 @@ testthat::test_that("Correct function output", {
   # testthat::expect_equal(class()[1], "gg")
   # testthat::expect_equal(class()[1], "gg")
   # testthat::expect_equal(class()[1], "gg")
+
+  testthat::expect_equal(class(pr_get_NRSEnvContour("Pico") %>%
+                                 dplyr::filter(Parameters == "Prochlorococcus_cellsmL",
+                                               StationCode %in% c('YON', 'PHB', 'NSI')) %>%
+                                 pr_plot_NRSEnvContour(Interpolation = TRUE))[1], "patchwork")
+
+  testthat::expect_equal(class(pr_get_NRSEnvContour("Pico") %>%
+                                 dplyr::filter(Parameters == "Prochlorococcus_cellsmL",
+                                               StationCode %in% c('YON', 'PHB', 'NSI')) %>%
+                                 pr_plot_NRSEnvContour(Interpolation = FALSE))[1], "patchwork")
 
 })

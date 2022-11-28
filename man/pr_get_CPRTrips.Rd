@@ -17,5 +17,5 @@ Get CPR trips
 }
 \examples{
 df <- pr_get_CPRTrips()
-df <- pr_get_CPRTrips(join = "st_nearest_feature")
+df <- pr_get_CPRTrips(near_dist_km = 250)
 }

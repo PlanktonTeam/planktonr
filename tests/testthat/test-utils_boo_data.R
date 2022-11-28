@@ -14,8 +14,8 @@ testthat::test_that("Correct function output", {
   testthat::expect_type(pr_get_STI("P"), "list")
   testthat::expect_type(pr_get_STI("Z"), "list")
 
-  testthat::expect_type(pr_get_SppCount("P"), "list")
-  testthat::expect_type(pr_get_SppCount("Z"), "list")
+  # testthat::expect_type(pr_get_SppCount("P"), "list")
+  # testthat::expect_type(pr_get_SppCount("Z"), "list")
 
   testthat::expect_type(pr_get_Facts(), "character")
 

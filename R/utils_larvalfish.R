@@ -13,7 +13,7 @@
 #                             col_types = readr::cols(FLAG_COMMENT = readr::col_character())) %>%
 #     pr_rename() %>%
 #     pr_apply_Time() %>%
-#     dplyr::select(.data$i_Sample:.data$SampleDate_Local, .data$Year:.data$SampleDate_Local, .data$Latitude:.data$Comments)
+#     dplyr::select("i_Sample":"SampleDate_Local", "Year":"SampleDate_Local", "Latitude":"Comments")
 # }
 
 

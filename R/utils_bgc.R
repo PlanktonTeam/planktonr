@@ -55,7 +55,7 @@ pr_get_NRSPigments <- function(Format = "all"){
   dat <- pr_get_Raw(file) %>%
     pr_rename() %>%
     pr_apply_Flags("Pigments_flag") %>%
-    dplyr::select(-.data$Pigments_flag) %>%
+    dplyr::select(-"Pigments_flag") %>%
     dplyr::filter(.data$Project == "NRS", .data$SampleDepth_m != "WC") %>%
     pr_add_StationCode() %>%
     dplyr::rowwise() %>%
@@ -98,8 +98,7 @@ pr_get_NRSPico <- function(){
 
   file <- "bgc_picoplankton_data"
 
-  var_names <- c("Prochlorococcus_cellsmL", "Synechococcus_cellsmL", "Picoeukaryotes_cellsmL")
-
+  var_names <- c("Prochlorococcus_cellsmL", "Synecochoccus_cellsmL", "Picoeukaryotes_cellsmL")
   dat <- pr_get_Raw(file) %>%
     pr_rename() %>%
     dplyr::filter(.data$SampleDepth_m != "WC") %>%
@@ -161,11 +160,11 @@ pr_get_NRSMicro <- function(){
   #dat <- readr::read_csv(system.file("extdata", "datNRSm.csv", package = "planktonr", mustWork = TRUE), na = c("", NA, "NA"), show_col_types = FALSE) %>%
   dat <- readr::read_csv("https://raw.githubusercontent.com/AusMicrobiome/microbial_ocean_atlas/main/data/oceanViz_AM_data.csv") %>%
   # This should be the permanent address of this file where we will access it going forward.
-    pr_rename() %>%
-    dplyr::rename(SampleTime_Local = .data$SampleDateLocal,
-                  Month_Local = .data$Month,
-                  Year_Local = .data$Year,
-                  SampleTime_UTC = .data$SampleDateUTC) %>%
+      pr_rename() %>%
+    dplyr::rename(SampleTime_Local = "SampleDateLocal",
+                  Month_Local = "Month",
+                  Year_Local = "Year",
+                  SampleTime_UTC = "SampleDateUTC") %>%
     dplyr::mutate(StationName = dplyr::if_else(.data$StationName == "North Stradbroke", "North Stradbroke Island", .data$StationName)) %>%
     pr_add_StationCode() %>%
     dplyr::mutate(SampleDepth_m = as.numeric(stringr::str_sub(.data$TripCode_depth, -3, -1))) %>%
@@ -187,7 +186,6 @@ pr_get_NRSMicro <- function(){
 #'
 #' @examples
 #' df <- pr_get_NRSTSS()
-#' @importFrom rlang .data
 pr_get_NRSTSS <- function(){
   file <- "bgc_tss_data"
 
@@ -219,7 +217,7 @@ pr_get_NRSCTD <- function(){
   dat <- pr_get_Raw(file) %>%
     pr_rename() %>%
     pr_add_StationCode() %>%
-    dplyr::rename(ChlF_mgm3 = .data$Chla_mgm3) %>%
+    dplyr::rename(ChlF_mgm3 = "Chla_mgm3") %>%
     #pr_apply_Flags() %>%  #TODO flags are small f, make function work with both
     dplyr::filter(!.data$file_id %in% c(2117, 2184, 2186, 2187)) %>% #TODO Check with Claire
     dplyr::select(tidyselect::all_of(ctd_vars)) %>%
@@ -253,8 +251,8 @@ pr_get_LTnuts <-  function(){
                   Month_Local = lubridate::month(.data$START_TIME),
                   Year_Local = lubridate::year(.data$START_TIME)) %>%
     pr_rename() %>%
-    dplyr::rename(SampleTime_Local = .data$START_TIME,
-                  SampleDepth_m = .data$PRESSURE) %>%
+    dplyr::rename(SampleTime_Local = "START_TIME",
+                  SampleDepth_m = "PRESSURE") %>%
     dplyr::select("StationCode", "Project", "SampleTime_Local", "Month_Local", "Year_Local",
                   "SampleDepth_m", tidyselect::all_of(var_names), tidyselect::contains("_Flag"),
                   -tidyselect::contains("ROSETTE_POSITION")) %>%
@@ -276,90 +274,10 @@ pr_get_LTnuts <-  function(){
     dplyr::select("Project", "StationCode", "StationName", "Month_Local", "Year_Local",
                   "SampleTime_Local", "SampleDepth_m", "Temperature_degC") %>%
     dplyr::filter(.data$StationCode %in% c("MAI", "ROT", "PHB")) %>%
-    tidyr::pivot_longer(-c(.data$Project:.data$SampleDepth_m), values_to = "Values", names_to = "Parameters") %>%
+    tidyr::pivot_longer(-c("Project":"SampleDepth_m"), values_to = "Values", names_to = "Parameters") %>%
     dplyr::select(colnames(NutsLT))
 
   dat <- dplyr::bind_rows(NutsLT, Nuts, CTD)
 
   return(dat)
 }
-
-
-# # Create Biogeochemical data
-# #
-# # @return A dataframe with BGC data
-# # @export
-# #
-# # @examples
-# # df <- pr_get_bgc()
-# #
-# # @importFrom rlang .data
-# pr_get_bgc <- function(){
-#
-#   # Each trip and depth combination for water quality Parameters
-#   # the number of rows in this table should equal that in comb, if not look out for duplicates and replicates
-#   NRSTrips <- pr_get_NRSTrips() %>%
-#     dplyr::select(-.data$SampleType)
-#
-#   # Hydrochemistry data
-#   Chemistry <- pr_get_chemistry()
-#
-#   # Zooplankton biomass
-#   ZBiomass <-  pr_get_NRSTrips() %>%
-#     dplyr::select(.data$TripCode, .data$Biomass_mgm3, .data$Secchi_m) %>%
-#     dplyr::mutate(SampleDepth_m = "WC")
-#
-#   # Pigments data
-#   Pigments <- pr_get_NRSPigments()
-#
-#
-#   # Flow cytometry picoplankton data
-#   Pico <- pr_get_NRSPico() %>%
-#     dplyr::mutate(SampleDepth_m = as.character(.data$SampleDepth_m)) %>%
-#     dplyr::group_by(.data$TripCode, .data$SampleDepth_m) %>%
-#     dplyr::summarise(Prochlorococcus_Cellsml = mean(.data$Prochlorococcus_Cellsml, na.rm = TRUE), # mean of replicates
-#                      Synecochoccus_Cellsml = mean(.data$Synecochoccus_Cellsml, na.rm = TRUE),
-#                      Picoeukaryotes_Cellsml = mean(.data$Picoeukaryotes_Cellsml, na.rm = TRUE),
-#                      .groups = "drop")
-#
-#   # Total suspended solid data
-#   TSS <- pr_get_NRSTSS() %>%
-#     dplyr::mutate(SampleDepth_m = as.character(.data$SampleDepth_m),
-#                   TripCode = substring(.data$TripCode,4)) %>%
-#     dplyr::rename(OrganicFraction_mgL = .data$TSSorganic_mgL,
-#                   InorganicFraction_mgL = .data$TSSinorganic_mgL) %>%
-#     dplyr::group_by(.data$TripCode, .data$SampleDepth_m) %>%
-#     dplyr::summarise(TSS_mgL = mean(.data$TSS_mgL, na.rm = TRUE), # mean of replicates
-#                      InorganicFraction_mgL = mean(.data$InorganicFraction_mgL, na.rm = TRUE),
-#                      OrganicFraction_mgL = mean(.data$OrganicFraction_mgL, na.rm = TRUE),
-#                      .groups = "drop") %>%
-#     tidyr::drop_na(.data$SampleDepth_m)
-#
-#
-#   # CTD Cast Data
-#   var_names <- c("Density_kgm3", "Temperature_degC", "Conductivity_Sm", "Salinity_psu", "Turbidity_NTU", "CTDChlF_mgm3")
-#   CTD <- pr_get_NRSCTD() %>%
-#     dplyr::mutate(SampleDepth_m = as.character(round(.data$SampleDepth_m, 0))) %>%
-#     dplyr::select(-c(.data$Pressure_dbar)) %>%
-#     dplyr::group_by(.data$TripCode, .data$SampleDepth_m) %>%
-#     dplyr::summarise(dplyr::across(dplyr::matches(var_names), ~ mean(.x, na.rm = TRUE)), .groups = "drop")
-#
-#   # combine for all samples taken
-#   Samples <- dplyr::bind_rows(Chemistry %>% dplyr::select(.data$TripCode, .data$SampleDepth_m),
-#                               Pico %>% dplyr::select(.data$TripCode, .data$SampleDepth_m),
-#                               Pigments %>% dplyr::select(.data$TripCode, .data$SampleDepth_m),
-#                               TSS %>% dplyr::select(.data$TripCode, .data$SampleDepth_m),
-#                               ZBiomass %>% dplyr::select(.data$TripCode, .data$SampleDepth_m)) %>%
-#     unique()
-#
-#   # Combined BGC data for each station at the sample depth
-#   BGC <- Samples %>%
-#     dplyr::left_join(NRSTrips,  by = c("TripCode")) %>%
-#     dplyr::mutate(IMOSsampleCode = paste0('NRS',.data$TripCode, '_', dplyr::if_else(.data$SampleDepth_m == "WC", "WC", stringr::str_pad(.data$SampleDepth_m, 3, side = "left", "0")))) %>%
-#     dplyr::left_join(Chemistry, by = c("TripCode", "SampleDepth_m")) %>%
-#     dplyr::left_join(Pico, by = c("TripCode", "SampleDepth_m")) %>%
-#     dplyr::left_join(Pigments, by = c("TripCode", "SampleDepth_m")) %>%
-#     dplyr::left_join(TSS, by = c("TripCode", "SampleDepth_m")) %>%
-#     dplyr::left_join(CTD, by = c("TripCode", "SampleDepth_m"))
-#
-# }

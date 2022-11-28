@@ -21,7 +21,7 @@ pr_relabel <- function(s, style = "ggplot"){
     "Archaeal_Nitrogen_Index", rlang::expr(paste("Archaeal Nitrogen Index")), "Archaeal Nitrogen Index", "Archaeal Nitrogen Index",
     "Archaeal_Oxygen_Index", rlang::expr(paste("Archaeal Oxygen Index")), "Archaeal Oxygen Index", "Archaeal Oxygen Index",
     "Archaeal_Phosphate_Index", rlang::expr(paste("Archaeal Phosphate Index")), "Archaeal Phosphate Index", "Archaeal Phosphate Index",
-    "Archaeal_Richness", rlang::expr(paste("Archaeal Richness")), "Archaeal_Richness", "Archaeal_Richness",
+    "Archaeal_Richness", rlang::expr(paste("Archaeal Richness")), "Archaeal_Richness", "Archaeal Richness",
     "Archaeal_Salinity_Index", rlang::expr(paste("Archaeal Salinity Index")), "Archaeal Salinity Index", "Archaeal Salinity Index",
     "Archaeal_Silicate_Index", rlang::expr(paste("Archaeal Silicate Index")), "Archaeal Silicate Index", "Archaeal Silicate Index",
     "Archaeal_Temperature_Index", rlang::expr(paste("Archaeal Temperature Index")), "Archaeal Temperature Index", "Archaeal Temperature Index",
@@ -83,6 +83,7 @@ pr_relabel <- function(s, style = "ggplot"){
     "OmnivoreCarnivoreCopepodRatio", rlang::expr(paste("Omnivore:Carnivore Copepod Ratio")), "Omnivore:Carnivore Copepod Ratio", "Omnivore:Carnivore Copepod Ratio",
     "OrganicFraction_mgL", rlang::expr(paste("Organic Fraction (mg L"^-1,")")), "Organic Fraction (mg L<sup>-1</sup>)", "Organic Fraction",
     "Oxygen_umolL", rlang::expr(paste("Oxygen (","\U00B5","mol L"^-1,")")), "Oxygen (&#181; mol L<sup>-1</sup>)", "Oxygen",
+    "PCI", rlang::expr(paste("Phytoplankton Colour Index (PCI)")), "Phytoplankton Colour Index (PCI)", "Phytoplankton Colour Index",
     "Phosphate_umolL", rlang::expr(paste("Phosphate (","\U00B5","mol L"^-1,")")), "Phosphate (&#181; mol L<sup>-1</sup>)", "Phosphate",
     "PhytoAbundance_CellsL", rlang::expr(paste("Phytoplankton Abundance (cells L"^-1,")")), "Phytoplankton Abundance (cells L<sup>-1</sup>)", "Phytoplankton Abundance",
     "PhytoAbundance_Cellsm3", rlang::expr(paste("Phytoplankton Abundance (cells m"^-3,")")), "Phytoplankton Abundance (cells m<sup>-3</sup>)", "Phytoplankton Abundance",
@@ -149,6 +150,7 @@ pr_relabel <- function(s, style = "ggplot"){
     print(unlist(relabel_df$Variable[i]))
     print(unique(s))
   }
+
 
   if(style == "ggplot" & length(i) > 0) {
     return(relabel_df$gg[[i]]) # Returned as a list due to expr
