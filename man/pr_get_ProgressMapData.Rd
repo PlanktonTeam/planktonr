@@ -11,7 +11,7 @@ pr_get_ProgressMapData(Survey = c("NRS", "CPR"), interactive = FALSE, ...)
 
 \item{interactive}{A logical TRUE/FALSE if the data is to be used for an interactive plot.}
 
-\item{...}{Open for other arguments}
+\item{...}{variables to be passed to pr_add_Bioregions. At the moment it only supports \code{near_dist_km} which is the distance (km) around each bioregion to pad the allocation of points.}
 }
 \value{
 A dataframe for input into pr_plot_Progress()

@@ -537,7 +537,7 @@ pr_get_Papers <- function(){
 #'
 #' @param Survey one of NRS, CPR or Both
 #' @param interactive A logical TRUE/FALSE if the data is to be used for an interactive plot.
-#' @param ... Open for other arguments
+#' @param ... variables to be passed to pr_add_Bioregions. At the moment it only supports `near_dist_km` which is the distance (km) around each bioregion to pad the allocation of points.
 #'
 #' @return A dataframe for input into pr_plot_Progress()
 #' @export
