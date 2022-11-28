@@ -23,6 +23,6 @@ Access data for timeseries and climatology plots
 df <- pr_get_Indices("NRS", "P")
 df <- pr_get_Indices("NRS", "Z")
 df <- pr_get_Indices("NRS", "W")
-df <- pr_get_Indices("CPR", "P", join = "st_nearest_feature")
+df <- pr_get_Indices("CPR", "P", near_dist_km = 250)
 df <- pr_get_Indices("CPR", "Z")
 }

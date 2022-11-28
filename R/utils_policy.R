@@ -43,7 +43,9 @@ pr_get_PolicyData <- function(Survey = "NRS", ...){
 
     var_names <- c("Biomass_mgm3", "PhytoBiomassCarbon_pgL",
                    "CTDTemperature_degC", "ShannonCopepodDiversity",
-                   "ShannonPhytoDiversity", "CTDSalinity_PSU", "PigmentChla_mgm3")
+                   "ShannonPhytoDiversity", "CTDSalinity_PSU", "PigmentChla_mgm3",
+                   "Ammonium_umolL", "Nitrate_umolL", "Nitrite_umolL",
+                   "Phosphate_umolL", "Oxygen_umolL")
 
     Polr <- pr_get_Raw("nrs_derived_indices_data") %>%
       pr_rename() %>%
@@ -121,6 +123,8 @@ pr_get_PolicyInfo <- function(Survey = "NRS", ...){
 
   } else {
 
+    # Southern ocean info from https://soe.dcceew.gov.au/antarctica/environment/physical-environment
+    # All others from https://www.dcceew.gov.au/environment/marine/marine-bioregional-plans
     CPRinfo <- pr_get_CPRTrips() %>%
       dplyr::group_by(.data$BioRegion) %>%
       dplyr::summarise(SampleStartDate = as.Date(min(.data$SampleTime_UTC)),
@@ -128,6 +132,10 @@ pr_get_PolicyInfo <- function(Survey = "NRS", ...){
       dplyr::mutate(Features = dplyr::case_when(.data$BioRegion %in% c("South-east") ~ "narrow shelf intensifying currents, eddies and upwellings with low nutrient and primary productivity",
                                                 .data$BioRegion %in% c("South-west") ~ "temperate and subtropical habitats influenced by the nutrient deplete Leeuwin Current.",
                                                 .data$BioRegion %in% c("Temperate East") ~ "temperate and subtropical habitats influenced by the East Australian Current and its eddies.",
-                                                .data$BioRegion %in% c("Coral Sea") ~ "Western Pacific Warm Pool water mass with low surface nutrient levels"))
-  }
+                                                .data$BioRegion %in% c("Coral Sea") ~ "Western Pacific Warm Pool water mass with low surface nutrient levels",
+                                                .data$BioRegion %in% c("North-west") ~ "shallow-water tropical marine ecosystems with high species richness, partly driven by the interaction between seafloor features and the currents of the region",
+                                                .data$BioRegion %in% c("North") ~ "its high diversity of tropical species but relatively low endemism and provides important bird, marine turtle and dugong breeding, feeding and nursery sites.",
+                                                .data$BioRegion %in% c("Southern Ocean Region") ~ "strong biological seasonality and interactions between the atmosphere, ice and ocean that set up patterns of weather and climate that extend across the Southern Hemisphere"))
+
+    }
 }

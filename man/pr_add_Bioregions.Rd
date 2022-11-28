@@ -4,14 +4,13 @@
 \alias{pr_add_Bioregions}
 \title{Add bioregions data to existing df}
 \usage{
-pr_add_Bioregions(df, join = "st_within", ...)
+pr_add_Bioregions(df, near_dist_km = 0)
 }
 \arguments{
 \item{df}{A dataframe with columns \code{.data$Longitude} and \code{.data$Latitude}}
 
-\item{join}{use join arguments from sf::st_join for joining to CPR samples to bioregions.}
-
-\item{...}{to allow use of join when used within another function}
+\item{near_dist_km}{What buffer distance to use to find a BioRegion match
+#'}
 }
 \value{
 A dataframe with Marine Bioregions added
@@ -22,5 +21,10 @@ Add bioregions data to existing df
 \examples{
  df <- pr_get_Raw("cpr_derived_indices_data") \%>\%
   pr_rename() \%>\%
-   pr_add_Bioregions("st_nearest_feature")
+   pr_add_Bioregions()
+
+ df <- pr_get_Raw("cpr_derived_indices_data") \%>\%
+  pr_rename() \%>\%
+   pr_add_Bioregions(near_dist_km = 250)
+
 }
