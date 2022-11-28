@@ -121,7 +121,7 @@ pr_relabel <- function(s, style = "ggplot"){
     "Silicate_umolL", rlang::expr(paste("Silicate (","\U00B5","mol L"^-1,")")), "Silicate (&#181; mol L<sup>-1</sup>)", "Silicate",
     "StationCode", rlang::expr(paste("Station Code")), "Station Code", "Station Code",
     "StationName", rlang::expr(paste("Station Name")), "Station Name", "Station Name",
-    "Synecochoccus_cellsmL", rlang::expr(paste("Synecochoccus (cells ml"^-1,")")), "Synecochoccus (cells ml<sup>-1</sup>)", "Synecochoccus Abundance",
+    "Synechococcus_cellsmL", rlang::expr(paste("Synechococcus (cells ml"^-1,")")), "Synechococcus (cells ml<sup>-1</sup>)", "Synechococcus Abundance",
     "TAcc", rlang::expr(paste("Total Accessory Pigments (mg m"^-3,")")), "Total Accessory Pigments (mg m<sup>-3</sup>)", "Total Accessory Pigments",
     "TaxonCount", rlang::expr(paste("Taxon Count")), "Taxon Count", "Taxon Count",
     "TaxonGroup", rlang::expr(paste("Taxon Group")), "Taxon Group", "Taxon Group",
