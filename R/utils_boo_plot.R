@@ -381,7 +381,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
   }
 
   p1 <- ggplot2::ggplot(df, ggplot2::aes(x = !!rlang::sym(Trend), y = .data$Values, fill = .data$Parameters)) +
-    ggplot2::geom_area(alpha = 0.9 , size = 0.2, colour = "white") +
+    ggplot2::geom_area(alpha = 0.9 , linewidth = 0.2, colour = "white") +
     ggplot2::facet_wrap(rlang::enexpr(station), scales = "free", ncol = 1) +
     ggplot2::labs(y = titley) +
     ggplot2::scale_fill_brewer(palette = "Set1") +

@@ -3,6 +3,8 @@ testthat::test_that("Correct function output", {
   testthat::expect_type(pr_get_s3site(), "character")
   testthat::expect_type(pr_get_Raw("bgc_tss_data"), "list")
   testthat::expect_type(pr_get_s3("bgc_trip"), "list")
+  testthat::expect_type(pr_get_s3("bgc_trip.csv"), "list")
+
   testthat::expect_type(pr_get_PlanktonInfo(Type = "P"), "list")
   testthat::expect_type(pr_get_PlanktonInfo(Type = "Z"), "list")
 

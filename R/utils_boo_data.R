@@ -63,7 +63,7 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Z", ...){
   }
 
   df <- df %>%
-    dplyr::group_by(dplyr::across(-.data$Values)) %>%
+    dplyr::group_by(dplyr::across(-"Values")) %>%
     dplyr::summarise(Values = sum(.data$Values, na.rm = TRUE),
                      .groups = "drop") %>%
     dplyr::mutate(Values = ifelse(.data$Values < 1, 1, .data$Values))
@@ -201,7 +201,7 @@ pr_get_FreqMap <- function(Type = "Z"){
 # pr_add_daynight <- function(df){
 #
 #   dates <- df %>%
-#     dplyr::select(.data$SampleTime_Local, .data$Latitude, .data$Longitude) %>%
+#     dplyr::select("SampleTime_Local", "Latitude", "Longitude") %>%
 #     dplyr::rename(date = .data$SampleTime_Local,
 #                   lat = .data$Latitude,
 #                   lon = .data$Longitude) %>%
@@ -409,8 +409,8 @@ pr_get_CTI <-  function(Type = 'Z'){
 
   dat <- dat %>%
     dplyr::mutate(StationCode = ifelse(.data$StationCode == 'PH4', 'PHB', .data$StationCode)) %>%
-    dplyr::select(-(tidyselect::any_of(vars)), .data$SampleTime_Local, .data$StationCode, .data$Project) %>%
-    tidyr::pivot_longer(-c(.data$SampleTime_Local, .data$StationCode, .data$Project), values_to = "Abundance", names_to = "Species") %>%
+    dplyr::select(-(tidyselect::any_of(vars)), "SampleTime_Local", "StationCode", "Project") %>%
+    tidyr::pivot_longer(-c("SampleTime_Local", "StationCode", "Project"), values_to = "Abundance", names_to = "Species") %>%
     dplyr::inner_join(df, by = 'Species') %>%
     dplyr::group_by(.data$SampleTime_Local, .data$StationCode, .data$Project) %>%
     dplyr::summarise(CTI = sum(.data$Abundance * .data$STI, na.rm = TRUE)/sum(.data$Abundance, na.rm = TRUE),
@@ -578,7 +578,7 @@ pr_get_ProgressMapData <- function(Survey = c("NRS", "CPR"), interactive = FALSE
     PMapDataNRS <- dplyr::bind_rows(planktonr::pr_get_Indices(Survey = "NRS", Type = "Z", ...),
                                     planktonr::pr_get_Indices(Survey = "NRS", Type = "P", ...)) %>%
       dplyr::filter(.data$Parameters == "ZoopAbundance_m3" | .data$Parameters == "PhytoAbundance_CellsL") %>%
-      tidyr::pivot_wider(names_from = .data$Parameters, values_from = .data$Values) %>%
+      tidyr::pivot_wider(names_from = "Parameters", values_from = "Values") %>%
       dplyr::rename(Name = "StationName") %>%
       dplyr::select(-"StationCode") %>%
       dplyr::mutate(Survey = "NRS")

@@ -58,6 +58,7 @@ sst_count, sst_dtime, sst_mean, sst_standard_deviation, wind_speed, wind_speed_d
 \examples{
 df <- head(pr_get_DataLocs("NRS"),5)
 res_spat = 10
-sstout <- pr_match_GHRSST(df, pr = c("sea_surface_temperature", "sea_surface_temperature_day_night"))
+pr = c("sea_surface_temperature", "sea_surface_temperature_day_night")
+sstout <- pr_match_GHRSST(df, pr)
 #TODO add progress bars with purrr
 }

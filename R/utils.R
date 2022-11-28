@@ -64,8 +64,12 @@ pr_get_Raw <- function(file){
                      SampleTime_Local = readr::col_datetime(),
                      DIC_umolkg = readr::col_double(),
                      Oxygen_umolL = readr::col_double())
-  } else if (file == "bgc_tss_data" |
-             file == "bgc_picoplankton_data"){ # Add specific filter for bgc files to deal with potential problems from 'WC' depth
+  } else if (file == "bgc_tss_data"){ # Add specific filter for bgc files to deal with potential problems from 'WC' depth
+    col_types = list(Project = readr::col_character(),
+                     TripCode = readr::col_character(),
+                     SampleTime_Local = readr::col_datetime(),
+                     SampleDepth_m = readr::col_character())
+  } else if (file == "bgc_picoplankton_data"){ # Add specific filter for bgc files to deal with potential problems from 'WC' depth
     col_types = list(Project = readr::col_character(),
                      TripCode = readr::col_character(),
                      SampleTime_Local = readr::col_datetime(),
@@ -219,7 +223,7 @@ pr_add_StationName <- function(df){
       StationCode == "ESP" ~ "Esperance",
       StationCode == "ROT" ~ "Rottnest Island",
       StationCode == "NIN" ~ "Ningaloo")) %>%
-    dplyr::relocate(.data$StationCode, .after = .data$StationName)
+    dplyr::relocate("StationCode", .after = "StationName")
 }
 
 
@@ -249,11 +253,11 @@ pr_add_StationCode <- function(df){
         StationName == "Esperance" ~ "ESP",
         StationName == "Rottnest Island" ~ "ROT",
         StationName == "Ningaloo" ~ "NIN")) %>%
-      dplyr::relocate(.data$StationCode, .after = .data$StationName)
+      dplyr::relocate("StationCode", .after = "StationName")
   } else if("TripCode" %in% colnames(df)){
     df <- df %>%
       dplyr::mutate(StationCode = stringr::str_sub(.data$TripCode, start = 1, end = 3)) %>%
-      dplyr::relocate(.data$StationCode, .after = .data$TripCode)
+      dplyr::relocate("StationCode", .after = "TripCode")
   }
   return(df)
 }
@@ -371,7 +375,7 @@ pr_apply_Time <- function(df){
                   Month_Local = lubridate::month(.data$SampleTime_Local),
                   # Day_Local = lubridate::day(.data$SampleTime_Local),
                   tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE)) %>%
-    dplyr::relocate(tidyselect::all_of(c("Year_Local", "Month_Local", "tz")), .after = .data$SampleTime_Local)
+    dplyr::relocate(tidyselect::all_of(c("Year_Local", "Month_Local", "tz")), .after = "SampleTime_Local")
 
 }
 

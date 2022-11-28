@@ -55,7 +55,7 @@ pr_get_NRSPigments <- function(Format = "all"){
   dat <- pr_get_Raw(file) %>%
     pr_rename() %>%
     pr_apply_Flags("Pigments_flag") %>%
-    dplyr::select(-.data$Pigments_flag) %>%
+    dplyr::select(-"Pigments_flag") %>%
     dplyr::filter(.data$Project == "NRS", .data$SampleDepth_m != "WC") %>%
     pr_add_StationCode() %>%
     dplyr::rowwise() %>%
@@ -98,8 +98,7 @@ pr_get_NRSPico <- function(){
 
   file <- "bgc_picoplankton_data"
 
-  var_names <- c("Prochlorococcus_cellsmL", "Synechococcus_cellsmL", "Picoeukaryotes_cellsmL")
-
+  var_names <- c("Prochlorococcus_cellsmL", "Synecochoccus_cellsmL", "Picoeukaryotes_cellsmL")
   dat <- pr_get_Raw(file) %>%
     pr_rename() %>%
     dplyr::filter(.data$SampleDepth_m != "WC") %>%
@@ -187,7 +186,6 @@ pr_get_NRSMicro <- function(){
 #'
 #' @examples
 #' df <- pr_get_NRSTSS()
-#' @importFrom rlang .data
 pr_get_NRSTSS <- function(){
   file <- "bgc_tss_data"
 
@@ -276,7 +274,7 @@ pr_get_LTnuts <-  function(){
     dplyr::select("Project", "StationCode", "StationName", "Month_Local", "Year_Local",
                   "SampleTime_Local", "SampleDepth_m", "Temperature_degC") %>%
     dplyr::filter(.data$StationCode %in% c("MAI", "ROT", "PHB")) %>%
-    tidyr::pivot_longer(-c(.data$Project:.data$SampleDepth_m), values_to = "Values", names_to = "Parameters") %>%
+    tidyr::pivot_longer(-c("Project":"SampleDepth_m"), values_to = "Values", names_to = "Parameters") %>%
     dplyr::select(colnames(NutsLT))
 
   dat <- dplyr::bind_rows(NutsLT, Nuts, CTD)
