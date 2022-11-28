@@ -11,7 +11,7 @@ pr_get_Indices(Survey = "CPR", Type = "P", ...)
 
 \item{Type}{Phyto, zoo or physical water props, defaults to phyto}
 
-\item{...}{to allow use of join when used within another function}
+\item{...}{variables to be passed to pr_add_Bioregions. At the moment it only supports \code{near_dist_km} which is the distance (km) around each bioregion to pad the allocation of points.}
 }
 \value{
 dataframe to use in pr_plot functions

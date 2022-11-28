@@ -2,7 +2,7 @@
 #'
 #' @param Survey CPR or NRS, defaults to NRS
 #' @param Type Phyto, zoo or physical water props, defaults to phyto
-#' @param ... to allow use of join when used within another function
+#' @param ... variables to be passed to pr_add_Bioregions. At the moment it only supports `near_dist_km` which is the distance (km) around each bioregion to pad the allocation of points.
 #'
 #' @return dataframe to use in pr_plot functions
 #' @export
