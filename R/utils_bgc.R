@@ -138,9 +138,9 @@ pr_get_NRSEnvContour <- function(Data = 'Chemistry') {
     tidyr::drop_na() %>%
     dplyr::mutate(SampleTime_Local = lubridate::floor_date(.data$SampleTime_Local, unit = 'month')) %>%
     dplyr::filter(!.data$StationCode %in% c('ESP', 'NIN')) %>%
-    planktonr::pr_remove_outliers(2) %>%
+    pr_remove_outliers(2) %>%
     droplevels() %>%
-    planktonr::pr_reorder()
+    pr_reorder()
 }
 
 
