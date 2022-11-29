@@ -402,13 +402,13 @@ pr_remove_outliers <- function(df, x){
 
   outliers <- df %>%
     dplyr::group_by(.data$Parameters, !!location) %>%
-    dplyr::summarise(Values = ifelse(.data$Values < 0, 0, Values),
+    dplyr::summarise(Values = ifelse(.data$Values < 0, 0, .data$Values),
                      means = mean(.data$Values, na.rm = TRUE),
                      sd2 = x*sd(.data$Values, na.rm = TRUE),
                      meanplus = .data$means + .data$sd2,
                      meanminus = .data$means - .data$sd2,
                      .groups = 'drop') %>%
-    dplyr::select(-c("means", "sd2"))
+    dplyr::select(-c("means", "sd2", "Values"))
 
   added <- df %>%
     dplyr::left_join(outliers, by = c("Parameters", joiner)) %>%
