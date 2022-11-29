@@ -576,7 +576,7 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
 #' @examples
 #' df <- pr_get_NRSEnvContour("Chemistry") %>% dplyr::filter(Parameters == "NOx_umolL",
 #' StationCode %in% c('YON', 'PHB', 'MAI'))
-#' plot <- pr_plot_NRSEnvContour(df, Interpolation = FALSE)
+#' plot <- pr_plot_NRSEnvContour(df, Interpolation = TRUE)
 pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE) {
   stations <- unique(as.character(df$StationName))
   param <- planktonr::pr_relabel(unique(df$Parameters), style = 'ggplot')
@@ -584,8 +584,9 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE) {
   if (Interpolation == FALSE) {
     df <- df %>%
       dplyr::mutate(Values = ifelse(.data$Values < 0, 0, .data$Values),
-                    SampleDepth_m = ifelse(.data$StationName %in% c('Darwin'), round(.data$SampleDepth_m/10, 0)*10,
-                                           round(.data$SampleDepth_m/5, 0)*5))
+                    SampleDepth_m = dplyr::case_when(.data$StationName %in% c('Darwin') ~ round(.data$SampleDepth_m/10, 0)*10,
+                                                     .data$StationCode == 'MAI' & .data$SampleDepth_m > 79 ~ 85,
+                                                     TRUE ~ round(.data$SampleDepth_m/5, 0)*5))
     minDate <- lubridate::floor_date(min(df$SampleTime_Local, na.rm = TRUE), unit = 'month')
     df <- df %>% dplyr::mutate(MonthSince = lubridate::interval(minDate, .data$SampleTime_Local) %/% months(1),
                                Year = lubridate::year(.data$SampleTime_Local),
@@ -599,8 +600,9 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE) {
     plotfunc <- function(stations) {
       df <- df %>% dplyr::filter(.data$StationName == stations) %>%
         dplyr::mutate(Values = ifelse(.data$Values < 0, 0, .data$Values),
-                      SampleDepth_m = ifelse(.data$StationName %in% c('Darwin'), round(.data$SampleDepth_m/10, 0)*10,
-                                             round(.data$SampleDepth_m/5, 0)*5))
+                      SampleDepth_m = dplyr::case_when(.data$StationName %in% c('Darwin') ~ round(.data$SampleDepth_m/10, 0)*10,
+                                                       .data$StationCode == 'MAI' & .data$SampleDepth_m > 79 ~ 85,
+                                                       TRUE ~ round(.data$SampleDepth_m/5, 0)*5))
 
       maxDepth <- max(df$SampleDepth_m, na.rm = TRUE)
       Depths <- unique(df$SampleDepth_m)
