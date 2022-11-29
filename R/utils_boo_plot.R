@@ -574,9 +574,9 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
 #' @export
 #'
 #' @examples
-#' df <- pr_get_NRSEnvContour("Pico") %>% dplyr::filter(Parameters == "Prochlorococcus_cellsmL",
-#' StationCode %in% c('YON', 'PHB', 'NSI'))
-#' plot <- pr_plot_NRSEnvContour(df, Interpolation = TRUE)
+#' df <- pr_get_NRSEnvContour("Chemistry") %>% dplyr::filter(Parameters == "NOx_umolL",
+#' StationCode %in% c('YON', 'PHB', 'MAI'))
+#' plot <- pr_plot_NRSEnvContour(df, Interpolation = FALSE)
 pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE) {
   stations <- unique(as.character(df$StationName))
   param <- planktonr::pr_relabel(unique(df$Parameters), style = 'ggplot')

@@ -129,7 +129,7 @@ pr_get_NRSPico <- function(){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_NRSEnvContour('Chemistry')
+#' df <- pr_get_NRSEnvContour('Pico')
 pr_get_NRSEnvContour <- function(Data = 'Chemistry') {
   file <- parse(text = paste('planktonr::pr_get_NRS', Data, '()', sep = ''))
 
@@ -137,7 +137,8 @@ pr_get_NRSEnvContour <- function(Data = 'Chemistry') {
     dplyr::mutate(name = as.factor(.data$Parameters)) %>%
     tidyr::drop_na() %>%
     dplyr::mutate(SampleTime_Local = lubridate::floor_date(.data$SampleTime_Local, unit = 'month')) %>%
-    dplyr::filter(!.data$StationCode %in% c('ESP', 'NIN')) %>%
+    dplyr::filter(!.data$StationCode %in% c('ESP', 'NIN'),
+                  .data$Parameters != 'SecchiDepth_m') %>%
     pr_remove_outliers(2) %>%
     droplevels() %>%
     pr_reorder()
