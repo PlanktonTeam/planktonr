@@ -9,7 +9,8 @@
 pr_get_NRSChemistry <- function(){
 
   var_names <- c("SecchiDepth_m", "Silicate_umolL", "Phosphate_umolL", "Ammonium_umolL", "Nitrate_umolL", "Nitrite_umolL",
-                 "Oxygen_umolL", "DIC_umolkg", "Alkalinity_umolkg", "Salinity") #TODO Check if it is Alk or Total Alk. Our code used to say Total Alk.
+                 "Oxygen_umolL", "DIC_umolkg", "Alkalinity_umolkg", "Salinity",
+                 "NOx_umolL", 'DIN_umolL', 'Redfield') #TODO Check if it is Alk or Total Alk. Our code used to say Total Alk.
 
   file <- "bgc_chemistry_data"
 
@@ -20,7 +21,11 @@ pr_get_NRSChemistry <- function(){
     pr_add_StationCode() %>%
     pr_filter_NRSStations() %>%
     dplyr::mutate_all(~ replace(., is.na(.), NA)) %>%
-    dplyr::mutate(Month_Local = lubridate::month(.data$SampleTime_Local)) %>%
+    dplyr::rowwise() %>%
+    dplyr::mutate(Month_Local = lubridate::month(.data$SampleTime_Local),
+                  NOx_umolL = sum(.data$Nitrate_umolL, .data$Nitrite_umolL, na.rm = TRUE),
+                  DIN_umolL = sum(.data$NOx_umolL, .data$Ammonium_umolL, na.rm = TRUE),
+                  Redfield = mean(.data$NOx_umolL, na.rm = TRUE)/mean(.data$Phosphate_umolL, na.rm = TRUE)) %>%
     dplyr::select("Project", "SampleTime_Local", "Month_Local", "SampleDepth_m",
                   "StationName", "StationCode", tidyselect::all_of(var_names)) %>%
     tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = 'Parameters') %>%
