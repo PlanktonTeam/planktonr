@@ -14,7 +14,6 @@ pr_get_NRSChemistry <- function(){
 
   file <- "bgc_chemistry_data"
 
-
   dat <- pr_get_Raw(file) %>%
     pr_rename() %>%
     pr_apply_Flags() %>%
@@ -25,7 +24,8 @@ pr_get_NRSChemistry <- function(){
     dplyr::mutate(Month_Local = lubridate::month(.data$SampleTime_Local),
                   NOx_umolL = sum(.data$Nitrate_umolL, .data$Nitrite_umolL, na.rm = TRUE),
                   DIN_umolL = sum(.data$NOx_umolL, .data$Ammonium_umolL, na.rm = TRUE),
-                  Redfield = mean(.data$NOx_umolL, na.rm = TRUE)/mean(.data$Phosphate_umolL, na.rm = TRUE)) %>%
+                  Redfield = mean(.data$NOx_umolL, na.rm = TRUE)/mean(.data$Phosphate_umolL, na.rm = TRUE),
+                  Redfield = ifelse(is.infinite(.data$Redfield), NA, .data$Redfield)) %>%
     dplyr::select("Project", "SampleTime_Local", "Month_Local", "SampleDepth_m",
                   "StationName", "StationCode", tidyselect::all_of(var_names)) %>%
     tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = 'Parameters') %>%
