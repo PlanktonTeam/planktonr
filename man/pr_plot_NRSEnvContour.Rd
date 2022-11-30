@@ -4,12 +4,14 @@
 \alias{pr_plot_NRSEnvContour}
 \title{Contour plots for depth stratified environmental data}
 \usage{
-pr_plot_NRSEnvContour(df, Interpolation = TRUE)
+pr_plot_NRSEnvContour(df, Interpolation = TRUE, Fill_NA = FALSE)
 }
 \arguments{
 \item{df}{dataframe from pr_get_NRSEnvContour}
 
 \item{Interpolation}{If TRUE data is interpolated at 5m intervals (DAR = 10m)}
+
+\item{Fill_NA}{to fill in NA's or not via zoo::na_approx, only used when interpolation is TRUE}
 }
 \value{
 a contour plot
@@ -18,7 +20,7 @@ a contour plot
 Contour plots for depth stratified environmental data
 }
 \examples{
-df <- pr_get_NRSEnvContour("Pico") \%>\% dplyr::filter(Parameters == "Prochlorococcus_cellsmL",
-StationCode \%in\% c('YON', 'PHB', 'NSI'))
-plot <- pr_plot_NRSEnvContour(df, Interpolation = TRUE)
+df <- pr_get_NRSEnvContour("Chemistry") \%>\% dplyr::filter(Parameters == "NOx_umolL",
+StationCode \%in\% c('MAI', 'NSI', 'PHB'))
+plot <- pr_plot_NRSEnvContour(df, Interpolation = TRUE, Fill_NA = TRUE)
 }

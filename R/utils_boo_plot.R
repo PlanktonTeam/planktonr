@@ -569,28 +569,31 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
 #'
 #' @param df dataframe from pr_get_NRSEnvContour
 #' @param Interpolation If TRUE data is interpolated at 5m intervals (DAR = 10m)
+#' @param Fill_NA to fill in NA's or not via zoo::na_approx, only used when interpolation is TRUE
 #'
 #' @return a contour plot
 #' @export
 #'
 #' @examples
 #' df <- pr_get_NRSEnvContour("Chemistry") %>% dplyr::filter(Parameters == "NOx_umolL",
-#' StationCode %in% c('YON', 'PHB', 'MAI'))
-#' plot <- pr_plot_NRSEnvContour(df, Interpolation = TRUE)
-pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE) {
+#' StationCode %in% c('MAI', 'NSI', 'PHB'))
+#' plot <- pr_plot_NRSEnvContour(df, Interpolation = TRUE, Fill_NA = TRUE)
+pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE) {
   stations <- unique(as.character(df$StationName))
   param <- planktonr::pr_relabel(unique(df$Parameters), style = 'ggplot')
 
-  if (Interpolation == FALSE) {
+    minDate <- lubridate::floor_date(min(df$SampleTime_Local, na.rm = TRUE), unit = 'month')
+
     df <- df %>%
       dplyr::mutate(Values = ifelse(.data$Values < 0, 0, .data$Values),
-                    SampleDepth_m = dplyr::case_when(.data$StationName %in% c('Darwin') ~ round(.data$SampleDepth_m/10, 0)*10,
-                                                     .data$StationCode == 'MAI' & .data$SampleDepth_m > 79 ~ 85,
-                                                     TRUE ~ round(.data$SampleDepth_m/5, 0)*5))
-    minDate <- lubridate::floor_date(min(df$SampleTime_Local, na.rm = TRUE), unit = 'month')
-    df <- df %>% dplyr::mutate(MonthSince = lubridate::interval(minDate, .data$SampleTime_Local) %/% months(1),
-                               Year = lubridate::year(.data$SampleTime_Local),
-                               Label = ifelse(.data$Month_Local == 6, .data$Year, NA))
+                  SampleDepth_m = dplyr::case_when(.data$StationName %in% c('Darwin') ~ round(.data$SampleDepth_m/10, 0)*10,
+                                                   TRUE ~ round(.data$SampleDepth_m/5, 0)*5)) %>%
+      dplyr::mutate(MonthSince = lubridate::interval(minDate, .data$SampleTime_Local) %/% months(1)) %>%
+      dplyr::mutate(Year = lubridate::year(.data$SampleTime_Local),
+                    Label = ifelse(.data$Month_Local == 6, .data$Year, NA))
+
+  if (Interpolation == FALSE) {
+
     myBreaks <- (df %>% dplyr::filter(!is.na(.data$Label)) %>% dplyr::distinct(.data$MonthSince) %>%
                    dplyr::arrange(dplyr::desc(-.data$MonthSince), .by_group = FALSE))$MonthSince
     Label <- (df %>% dplyr::group_by(.data$Label) %>% dplyr::summarise(n = dplyr::n()) %>% tidyr::drop_na() %>%
@@ -599,65 +602,56 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE) {
   } else {
     plotfunc <- function(stations) {
       df <- df %>% dplyr::filter(.data$StationName == stations) %>%
-        dplyr::mutate(Values = ifelse(.data$Values < 0, 0, .data$Values),
-                      SampleDepth_m = dplyr::case_when(.data$StationName %in% c('Darwin') ~ round(.data$SampleDepth_m/10, 0)*10,
-                                                       .data$StationCode == 'MAI' & .data$SampleDepth_m > 79 ~ 85,
-                                                       TRUE ~ round(.data$SampleDepth_m/5, 0)*5))
+        dplyr::select("MonthSince", "SampleDepth_m", "Values")
 
-      maxDepth <- max(df$SampleDepth_m, na.rm = TRUE)
-      Depths <- unique(df$SampleDepth_m)
-      minDate <-
-        lubridate::floor_date(min(df$SampleTime_Local, na.rm = TRUE), unit = 'month')
-      maxDate <-
-        lubridate::floor_date(max(df$SampleTime_Local, na.rm = TRUE), unit = 'month')
-      seqDate <-
-        seq.Date(as.Date(minDate), as.Date(maxDate), by = 'month')
+      mat <- df %>%
+        tidyr::pivot_wider(names_from = "MonthSince", values_from = "Values", values_fn = "mean") %>%
+        dplyr::select(-.data$SampleDepth_m) %>%
+        as.matrix.data.frame()
 
-      seqDepth <- Depths
+      if(Fill_NA == TRUE){
+        mat <- t(zoo::na.approx(t(mat)))
+        mat <- zoo::na.approx(mat)
+        }
 
-      depthPurr <- function(seqDepth) {
-        interped <-
-          expand.grid(SampleTime_Local = seqDate,
-                      SampleDepth_m = Depths) %>%
-          data.frame() %>%
-          dplyr::left_join(df,
-                    by = c("SampleDepth_m", "SampleTime_Local"))  %>%
-          dplyr::filter(.data$SampleDepth_m == seqDepth) %>%
-          dplyr::arrange(.data$SampleTime_Local) %>%
-          dplyr::mutate(
-            Values = zoo::na.approx(.data$Values, maxgap = 5, na.rm = FALSE),
-            StationName = ifelse(
-              is.na(.data$StationName),
-              stations,
-              as.character(.data$StationName)
-            )
-          )
+      maxDepth <- max(df$SampleDepth_m, na.rm = TRUE) + 5
+      Depths <- seq(0, maxDepth, 5)
+      maxMonths <- max(df$MonthSince) + 1
+      Months <- seq(0, maxMonths, 1)
+
+      interped <- expand.grid(SampleDepth_m = Depths,
+                              MonthSince = Months)
+
+      interp_vals <- pracma::interp2(y = seq(0, max(df$SampleDepth_m, na.rm = TRUE), length.out = nrow(mat)),
+                                     x = seq(0, max(df$MonthSince), length.out = ncol(mat)),
+                                     Z = mat,
+                                     yp = interped$SampleDepth_m,
+                                     xp = interped$MonthSince,
+                                     method = "linear")
+
+      dfInterp <- dplyr::bind_cols(interped, Values = interp_vals) %>% data.frame() %>%
+        dplyr::mutate(StationName = stations,
+                      Values = ifelse(.data$Values < 0, 0, .data$Values))
+
       }
 
-      PlotData <- purrr::map_dfr(seqDepth, depthPurr) # Interpolating across time for each depth for the station
-    }
+      PlotData <- purrr::map_dfr(stations, plotfunc) # Interpolating across time and depth for the station
 
-    PlotData <- purrr::map_dfr(stations, plotfunc) # Running the interpolation for each station
-
-    minDateAll <- lubridate::floor_date(min(PlotData$SampleTime_Local, na.rm = TRUE), unit = 'month')
-
-    df <- PlotData %>% dplyr::mutate(MonthSince = lubridate::interval(minDateAll, .data$SampleTime_Local) %/% months(1),
-                                           Year = lubridate::year(.data$SampleTime_Local),
-                                           Label = ifelse(.data$Month_Local == 6, .data$Year, NA)) %>%
-      droplevels() %>%
-      planktonr::pr_reorder()
+      df <- PlotData %>% dplyr::left_join(df %>% dplyr::select('MonthSince', 'SampleDepth_m', 'StationName', 'Label', 'Month_Local'),
+                                           by = c("MonthSince", "SampleDepth_m", "StationName")) %>%
+        dplyr::distinct() %>%
+        pr_reorder()
 
     Label <- (df %>% dplyr::group_by(.data$Label) %>% dplyr::summarise(n = dplyr::n()) %>% tidyr::drop_na() %>%
                 dplyr::distinct(.data$Label))$Label
     myBreaks <- (df %>% dplyr::filter(!is.na(.data$Label)) %>% dplyr::distinct(.data$MonthSince) %>%
                    dplyr::arrange(dplyr::desc(-.data$MonthSince), .by_group = FALSE))$MonthSince
-  }
+    }
 
   # Function for plots
   outPlot <- function(df, x, just = "left"){
       out <- ggplot2::ggplot(data = df, ggplot2::aes(x, y = .data$SampleDepth_m, z = .data$Values)) +
         ggplot2::geom_contour_filled(bins = 8) +
-        ggplot2::geom_point(colour = 'dark grey', cex = 0.75) +
         ggplot2::facet_grid(.data$StationName ~ ., scales = 'free') +
         ggplot2::theme_bw() +
         ggplot2::theme(strip.background = ggplot2::element_blank(),
@@ -666,7 +660,7 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE) {
                        legend.text = ggplot2::element_text(size = 8),
                        legend.justification = just) +
         ggplot2::guides(fill = ggplot2::guide_legend(title = param, title.position = 'top')) +
-        ggplot2::scale_y_continuous(expand = c(0, 0))
+        ggplot2::scale_y_reverse(expand = c(0, 0))
     out
   }
 
@@ -676,11 +670,21 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE) {
     ggplot2::theme(strip.text = ggplot2::element_blank()) +
     ggplot2::scale_x_continuous(breaks = myBreaks, labels = Label, expand = c(0, 0))
 
+  if(Interpolation == FALSE){
+    out <- out +
+      ggplot2::geom_point(colour = 'dark grey', cex = 0.75)
+  }
+
   # Prepare monthly climatology data
+
+  if(Fill_NA == TRUE){
+    selecs <- df %>% dplyr::select("MonthSince", "Month_Local") %>% dplyr::distinct() %>% tidyr::drop_na()
+    df <- df %>%
+      dplyr::select(-"Month_Local") %>%
+      dplyr::left_join(selecs, by = c("MonthSince"))
+  }
+
   dfMon <- df %>%
-    dplyr::mutate(Values = ifelse(.data$Values < 0, 0, .data$Values),
-                  SampleDepth_m = ifelse(.data$StationName == 'Darwin', round(.data$SampleDepth_m/10, 0)*10,
-                                         round(.data$SampleDepth_m/5, 0)*5)) %>%
     dplyr::group_by(.data$Month_Local, .data$StationName, .data$SampleDepth_m) %>%
     dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                      .groups = 'drop')
