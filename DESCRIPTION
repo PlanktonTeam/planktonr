@@ -40,6 +40,7 @@ Imports:
 Suggests: 
     covr,
     knitr,
+    pracma,
     rmarkdown,
     rnaturalearthdata,
     RNetCDF,

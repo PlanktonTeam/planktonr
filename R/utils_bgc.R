@@ -129,7 +129,7 @@ pr_get_NRSPico <- function(){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_NRSEnvContour('Pico')
+#' df <- pr_get_NRSEnvContour('Chemistry')
 pr_get_NRSEnvContour <- function(Data = 'Chemistry') {
   file <- parse(text = paste('planktonr::pr_get_NRS', Data, '()', sep = ''))
 
