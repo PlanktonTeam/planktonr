@@ -4,7 +4,7 @@
 \alias{pr_plot_NRSEnvContour}
 \title{Contour plots for depth stratified environmental data}
 \usage{
-pr_plot_NRSEnvContour(df, Interpolation = TRUE, Fill_NA = FALSE)
+pr_plot_NRSEnvContour(df, Interpolation = TRUE, Fill_NA = FALSE, maxGap = 3)
 }
 \arguments{
 \item{df}{dataframe from pr_get_NRSEnvContour}
@@ -12,6 +12,8 @@ pr_plot_NRSEnvContour(df, Interpolation = TRUE, Fill_NA = FALSE)
 \item{Interpolation}{If TRUE data is interpolated at 5m intervals (DAR = 10m)}
 
 \item{Fill_NA}{to fill in NA's or not via zoo::na_approx, only used when interpolation is TRUE}
+
+\item{maxGap}{maximum gap across which to interpolate across NAs}
 }
 \value{
 a contour plot
@@ -20,7 +22,7 @@ a contour plot
 Contour plots for depth stratified environmental data
 }
 \examples{
-df <- pr_get_NRSEnvContour("Chemistry") \%>\% dplyr::filter(Parameters == "NOx_umolL",
-StationCode \%in\% c('MAI', 'NSI', 'PHB'))
-plot <- pr_plot_NRSEnvContour(df, Interpolation = TRUE, Fill_NA = TRUE)
+df <- pr_get_NRSEnvContour("Chemistry") \%>\% dplyr::filter(Parameters == "Nitrate_umolL",
+StationCode \%in\% c('YON', 'MAI', 'PHB', 'NSI'))
+plot <- pr_plot_NRSEnvContour(df, Interpolation = TRUE, Fill_NA = FALSE, maxGap = 3)
 }

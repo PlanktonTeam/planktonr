@@ -570,15 +570,16 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
 #' @param df dataframe from pr_get_NRSEnvContour
 #' @param Interpolation If TRUE data is interpolated at 5m intervals (DAR = 10m)
 #' @param Fill_NA to fill in NA's or not via zoo::na_approx, only used when interpolation is TRUE
+#' @param maxGap maximum gap across which to interpolate across NAs
 #'
 #' @return a contour plot
 #' @export
 #'
 #' @examples
-#' df <- pr_get_NRSEnvContour("Chemistry") %>% dplyr::filter(Parameters == "NOx_umolL",
-#' StationCode %in% c('MAI', 'NSI', 'PHB'))
-#' plot <- pr_plot_NRSEnvContour(df, Interpolation = TRUE, Fill_NA = TRUE)
-pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE) {
+#' df <- pr_get_NRSEnvContour("Chemistry") %>% dplyr::filter(Parameters == "Nitrate_umolL",
+#' StationCode %in% c('YON', 'MAI', 'PHB', 'NSI'))
+#' plot <- pr_plot_NRSEnvContour(df, Interpolation = TRUE, Fill_NA = FALSE, maxGap = 3)
+pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, maxGap = 3) {
   stations <- unique(as.character(df$StationName))
   param <- planktonr::pr_relabel(unique(df$Parameters), style = 'ggplot')
 
@@ -604,23 +605,30 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE) {
       df <- df %>% dplyr::filter(.data$StationName == stations) %>%
         dplyr::select("MonthSince", "SampleDepth_m", "Values")
 
+      min <- min(df$MonthSince)
+      Depths = unique(df$SampleDepth_m)
+      Months <- seq(min(df$MonthSince), max(df$MonthSince), 1)
+
+      emptyGrid <- expand.grid(SampleDepth_m = Depths,
+                              MonthSince = Months)
+
+      df <- emptyGrid %>% dplyr::left_join(df, by = c("MonthSince", "SampleDepth_m")) %>% data.frame() %>%
+        dplyr::arrange(.data$MonthSince, .data$SampleDepth_m)
+
       mat <- df %>%
         tidyr::pivot_wider(names_from = "MonthSince", values_from = "Values", values_fn = "mean") %>%
-        dplyr::select(-.data$SampleDepth_m) %>%
+        dplyr::select(-"SampleDepth_m") %>%
         as.matrix.data.frame()
 
       if(Fill_NA == TRUE){
-        mat <- t(zoo::na.approx(t(mat)))
-        mat <- zoo::na.approx(mat)
+        mat <- t(zoo::na.approx(t(mat), maxgap = maxGap))
+        mat <- zoo::na.approx(mat, maxgap = maxGap)
         }
 
-      maxDepth <- max(df$SampleDepth_m, na.rm = TRUE) + 5
-      Depths <- seq(0, maxDepth, 5)
-      maxMonths <- max(df$MonthSince) + 1
-      Months <- seq(0, maxMonths, 1)
+      Months2 <- seq(0, length(Months)-1, 1)
 
       interped <- expand.grid(SampleDepth_m = Depths,
-                              MonthSince = Months)
+                              MonthSince = Months2)
 
       interp_vals <- pracma::interp2(y = seq(0, max(df$SampleDepth_m, na.rm = TRUE), length.out = nrow(mat)),
                                      x = seq(0, max(df$MonthSince), length.out = ncol(mat)),
@@ -631,7 +639,8 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE) {
 
       dfInterp <- dplyr::bind_cols(interped, Values = interp_vals) %>% data.frame() %>%
         dplyr::mutate(StationName = stations,
-                      Values = ifelse(.data$Values < 0, 0, .data$Values))
+                      Values = ifelse(.data$Values < 0, 0, .data$Values),
+                      MonthSince = .data$MonthSince + min)
 
       }
 
