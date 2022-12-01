@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 [![Codecov test coverage](https://codecov.io/gh/PlanktonTeam/planktonr/branch/master/graph/badge.svg)](https://app.codecov.io/gh/PlanktonTeam/planktonr?branch=master)
 <!-- badges: end -->
 
-planktonr is an r package that facilitates the download, analysis and visualisation of phytoplankton and zooplankton data. Our initial focus will be on plankton data stored on the Australian Ocean Data Network ([AODN](https://portal.aodn.org.au)) and collected by the Integrated Marine Observing System ([IMOS](www.imos.org.au)), but we hope to expand to other plankton data sets in the future. 
+`planktonr` is an r package that facilitates the download, analysis and visualisation of phytoplankton and zooplankton data. Our initial focus will be on plankton data stored on the Australian Ocean Data Network ([AODN](https://portal.aodn.org.au)) and collected by the Integrated Marine Observing System ([IMOS](www.imos.org.au)), but we hope to expand to other plankton data sets in the future. 
 
 ## Installation
 

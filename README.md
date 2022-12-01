@@ -12,7 +12,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 coverage](https://codecov.io/gh/PlanktonTeam/planktonr/branch/master/graph/badge.svg)](https://app.codecov.io/gh/PlanktonTeam/planktonr?branch=master)
 <!-- badges: end -->
 
-planktonr is an r package that facilitates the download, analysis and
+`planktonr` is an r package that facilitates the download, analysis and
 visualisation of phytoplankton and zooplankton data. Our initial focus
 will be on plankton data stored on the Australian Ocean Data Network
 ([AODN](https://portal.aodn.org.au)) and collected by the Integrated
