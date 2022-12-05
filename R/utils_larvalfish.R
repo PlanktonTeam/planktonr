@@ -37,7 +37,7 @@ pr_get_LFData <- function(){
                   Species2 = stringr::str_replace(.data$Species2, "_", ": "),
                   Species2 = stringr::str_replace(.data$Species2, stringr::coll("."), " "),
                   Species2 = paste0(.data$Species2, ")")) %>%
-    mutate(Abundance_1000m3 = (.data$Count/.data$Volume_m3)*1e3)
+    dplyr::mutate(Abundance_1000m3 = (.data$Count/.data$Volume_m3)*1e3)
 
 }
 
