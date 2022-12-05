@@ -137,8 +137,7 @@ pr_get_NRSEnvContour <- function(Data = 'Chemistry') {
     dplyr::mutate(name = as.factor(.data$Parameters)) %>%
     tidyr::drop_na() %>%
     dplyr::mutate(SampleTime_Local = lubridate::floor_date(.data$SampleTime_Local, unit = 'month')) %>%
-    dplyr::filter(!.data$StationCode %in% c('ESP', 'NIN'),
-                  .data$Parameters != 'SecchiDepth_m') %>%
+    dplyr::filter(.data$Parameters != 'SecchiDepth_m') %>%
     pr_remove_outliers(2) %>%
     droplevels() %>%
     pr_reorder()
