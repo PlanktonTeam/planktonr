@@ -1223,16 +1223,6 @@ pr_plot_Gantt <- function(dat, Survey = "NRS"){
 #' p <- pr_plot_TaxaAccum(dat, Survey = "CPR", Type = "P")
 pr_plot_TaxaAccum <- function(dat, Survey = "NRS", Type = "Z"){
 
-  dat <- dat %>%
-    tidyr::pivot_longer(-pr_get_NonTaxaColumns(Survey = Survey, Type = Type), names_to = "Taxa", values_to = "Abundance") %>%
-    dplyr::filter(.data$Abundance > 0) %>%
-    dplyr::arrange(.data$SampleTime_Local) %>%
-    dplyr::group_by(.data$Taxa) %>%
-    dplyr::summarise(First = dplyr::first(.data$SampleTime_Local), .groups = "drop") %>%
-    dplyr::arrange(.data$First) %>%
-    dplyr::mutate(RowN = dplyr::row_number())
-
-
   gg <- ggplot2::ggplot(data = dat, ggplot2::aes(x = .data$First, y = .data$RowN)) +
     ggplot2::geom_line() +
     ggplot2::scale_x_datetime(name = "Year", breaks = "2 year", date_labels = "%Y", expand = c(0, 0)) +
