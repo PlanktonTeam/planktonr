@@ -1184,7 +1184,7 @@ pr_plot_Gantt <- function(dat, Survey = "NRS"){
 
   } else if (Survey == "NRS"){
 
-    dat2 <- pr_get_NRSTrips(Type = c("P", "Z")) %>%
+    dat2 <- dat %>%
       dplyr::mutate(YearMonth = .data$Year_Local + .data$Month_Local/12) %>%
       dplyr::filter(.data$StationName != "Port Hacking 4") %>%
       dplyr::group_by(.data$YearMonth, .data$StationName) %>%
