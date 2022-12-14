@@ -1080,8 +1080,14 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE, labels = TRUE){
       leaflegend::addLegendFactor(pal = leaflet::colorFactor("#FFA500", "National Reference Stations"),
                                   shape = "circle", values = "National Reference Stations") %>%
       leaflet::addLegend("topleft",
-                         colors = mbr %>% dplyr::distinct(REGION, .keep_all = TRUE) %>% dplyr::pull(.data$Colour),
-                         labels = mbr %>% dplyr::distinct(REGION) %>% dplyr::pull(.data$REGION),
+                         colors = mbr %>%
+                           sf::st_drop_geometry() %>%
+                           dplyr::distinct(.data$REGION, .keep_all = TRUE) %>%
+                           dplyr::pull(.data$Colour),
+                         labels = mbr %>%
+                           sf::st_drop_geometry() %>%
+                           dplyr::distinct(.data$REGION) %>%
+                           dplyr::pull(.data$REGION),
                          title = "Bioregions",
                          opacity = 1) %>%
       leaflet::hideGroup("Continuous Plankton Recorder (PCI Only)")
