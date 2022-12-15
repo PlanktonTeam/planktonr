@@ -911,6 +911,8 @@ pr_plot_DayNight <-  function(df){
     ggplot2::ggtitle(titlemain) +
     ggplot2::theme(plot.title = ggplot2::element_text(face = "italic"))
 
+  return(plots)
+
 }
 
 
