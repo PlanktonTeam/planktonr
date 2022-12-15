@@ -444,9 +444,11 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
   p1 <- ggplot2::ggplot(df) +
     ggplot2::geom_point(ggplot2::aes(x = .data$SampleDate, y = .data$Values), colour = col) +
     ggplot2::geom_smooth(ggplot2::aes(x = .data$SampleDate, y = .data$fv), method = "lm", formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
-    ggplot2::labs(x = "Year", y = rlang::enexpr(titley)) +
+    ggplot2::labs(x = "Year", subtitle = rlang::enexpr(titley)) +
     ggplot2::scale_y_continuous(trans = trans) +
-    ggplot2::theme(legend.position = "none")
+    ggplot2::theme(legend.position = "none",
+                   axis.title.y = ggplot2::element_blank(),
+                   plot.subtitle = ggplot2::element_text(size = 10))
 
   if(labels == "no"){
     p1 <- p1 + ggplot2::theme(axis.title.x = ggplot2::element_blank())
@@ -712,8 +714,6 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, max
 
 }
 
-
-
 #' Frequency plot of the selected species
 #'
 #' @param df dataframe of format similar to output of pr_get_fmap_data()
@@ -724,32 +724,32 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, max
 #' @export
 #'
 #' @examples
-#' df <- data.frame(Long = c(110, 130, 155, 150), Lat = c(-10, -35, -27, -45),
+#' df <- data.frame(Longitude = c(110, 130, 155, 150), Latitude = c(-10, -35, -27, -45),
 #'                  freqfac = as.factor(c("Absent", "Seen in 25%",'50%', '75%')),
 #'                  Season = c("December - February","March - May",
 #'                  "June - August","September - November"),
 #'                  Taxon = 'Acartia danae',
 #'                  Survey = 'CPR')
-#' plot <- pr_plot_FreqMap(df, species = 'Acartia danae', interactive = FALSE)
+#' plot <- pr_plot_FreqMap(df, species = 'Acartia danae', interactive = TRUE)
 pr_plot_FreqMap <- function(df, species, interactive = TRUE){
 
-  df <- df %>%
-    dplyr::mutate(Taxon = dplyr::if_else(.data$Taxon == 'Taxon', species, .data$Taxon)) %>%
-    dplyr::filter(.data$Taxon %in% species)  %>%
-    dplyr::arrange(dplyr::desc(.data$freqfac)) %>%
-    dplyr::group_by(.data$Season, .data$Survey, .data$Lat, .data$Long, .data$Taxon) %>%
-    dplyr::slice(1) %>%
-    dplyr::ungroup() %>%
+  dfa <- df %>% dplyr::select('Season', 'Latitude', 'Longitude', 'Survey') %>%
+    dplyr::distinct()
+
+  dff <- df %>%
+    dplyr::filter(.data$Taxon %in% species) %>%
+    dplyr::mutate(freqfac = factor(.data$freqfac, levels = c("Seen in 25%",'50%', '75%', '100% of Samples'))) %>%
     dplyr::arrange(.data$freqfac)
 
   if(interactive == FALSE){
-    cols <- c("lightblue1", "skyblue3", "dodgerblue2", "blue1", "navyblue")
+    cols <- c("lightblue1", "skyblue3", "blue1", "navyblue")
 
     Species <- unique(df$Taxon)
 
     p <- ggplot2::ggplot() +
       ggplot2::geom_sf(data = MapOz) +
-      ggplot2::geom_point(data=df, ggplot2::aes(x=.data$Long, y=.data$Lat, colour=.data$freqfac, pch = .data$Survey), size = 2) +
+      ggplot2::geom_point(data=dfa, ggplot2::aes(x=.data$Longitude, y=.data$Latitude, pch = .data$Survey), colour='light grey', size = 1) +
+      ggplot2::geom_point(data=dff, ggplot2::aes(x=.data$Longitude, y=.data$Latitude, colour=.data$freqfac, pch = .data$Survey), size = 2) +
       ggplot2::facet_wrap( ~ .data$Season, dir = "v") +
       ggplot2::labs(title = Species) +
       ggplot2::scale_colour_manual(name = "", values = cols, drop = FALSE) +
@@ -761,15 +761,16 @@ pr_plot_FreqMap <- function(df, species, interactive = TRUE){
                      panel.background = ggplot2::element_rect(fill = "snow1"),
                      legend.position = "bottom",
                      legend.key = ggplot2::element_blank())
+
     return(p)
 
   } else {
 
-    df <- df %>% dplyr::group_split(.data$Season)
+    df <- dff %>% dplyr::group_split(.data$Season)
 
     plotlist <- function(dflist){
 
-      CPRpal <- leaflet::colorFactor(c("lightblue1", "skyblue3", "dodgerblue2", "blue1", "navyblue"), domain = dflist$freqfac)
+      CPRpal <- leaflet::colorFactor(c("lightblue1", "skyblue3", "blue1", "navyblue"), domain = dflist$freqfac)
       NRSpal <- leaflet::colorFactor(c("#CCFFCC", "#99FF99", "#669933", "#009900", "#006600"), domain = dflist$freqfac)
 
       dfCPR <- dflist %>% dplyr::filter(.data$Survey == 'CPR')
@@ -802,15 +803,20 @@ pr_plot_FreqMap <- function(df, species, interactive = TRUE){
                              color = ~Colour, fill = ~Colour,
                              opacity = 1, fillOpacity = 0.3,
                              weight = 1) %>%
+        leaflet::addCircleMarkers(data = dfa, group = 'All Samples',
+                                  lat = ~ Latitude, lng = ~ Longitude,
+                                  radius = 1,
+                                  color = 'light grey',
+                                  fill = 'light grey') %>%
         leaflet::addCircleMarkers(data = dfCPR, group = 'Continuous Plankton Recorder',
-                                  lat = ~ Lat, lng = ~ Long,
-                                  radius = ~ifelse(freqfac == "Absent", 2, 5),
+                                  lat = ~ Latitude, lng = ~ Longitude,
+                                  radius = 5,
                                   color = ~CPRpal(freqfac),
                                   fill = ~CPRpal(freqfac)) %>%
         leaflet::addCircleMarkers(data = dfNRS , group = 'National Reference Stations',
-                                  lat = ~ Lat, lng = ~ Long,
+                                  lat = ~ Latitude, lng = ~ Longitude,
                                   color = ~NRSpal(freqfac),
-                                  radius = ~ifelse(freqfac == "Absent", 1, 5)) %>%
+                                  radius = 5) %>%
         leaflet::addControl(title1,
                             position = "topright",
                             className = "map-title1") %>%
@@ -827,6 +833,52 @@ pr_plot_FreqMap <- function(df, species, interactive = TRUE){
 
     return(plotlist)
   }
+}
+
+#' Pie plots of functional groups for data
+#'
+#' @param df data frame binned to functional group e.g. planktonr::pr_get_FuncGroups("NRS", "Z")
+#'
+#' @return pie plot of functional groups
+#' @export
+#'
+#' @examples
+#' df <- pr_get_FuncGroups("CPR", "P")
+#' plot <- pr_plot_PieFG(df)
+#'
+pr_plot_PieFG <- function(df){
+
+  if('BioRegion' %in% colnames(df)){
+    Survey = 'CPR'
+  } else if ('StationCode' %in% colnames(df)){
+    Survey = 'NRS'
+  } else {
+    Survey = ''
+  }
+
+  if(nrow(df %>% dplyr::filter(grepl('iatom', df$Parameters))) > 0){
+    plotTitle = 'Phytoplankton'
+  } else if (nrow(df %>% dplyr::filter(grepl('opepod', df$Parameters))) > 0){
+    plotTitle = 'Zooplankton'
+  } else {
+    plotTitle = ''
+  }
+
+  p <- ggplot2::ggplot(data = df %>%
+                         dplyr::group_by(.data$Parameters) %>%
+                         dplyr::summarise(mean = mean(.data$Values, na.rm = TRUE)),
+                       ggplot2::aes(x = "", y = mean, fill = .data$Parameters)) +
+    ggplot2::geom_bar(stat = "identity", width = 1, color = "white") +
+    ggplot2::coord_polar("y", start = 0) +
+    ggplot2::theme_void() +  # remove background, grid, numeric labels
+    ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5),
+                   legend.position = 'bottom') +
+    ggplot2::scale_fill_brewer(palette = "Set1") +
+    ggplot2::guides(fill = ggplot2::guide_legend(title = plotTitle, nrow = 2, title.position = "top",
+                                                 title.hjust = 0.5, title.theme = ggplot2::element_text(face = "bold"))) +
+    ggplot2::ggtitle(Survey)
+
+  return(p)
 }
 
 
@@ -860,6 +912,8 @@ pr_plot_DayNight <-  function(df){
     ggplot2::labs(y = ylabel, x = "Month") +
     ggplot2::ggtitle(titlemain) +
     ggplot2::theme(plot.title = ggplot2::element_text(face = "italic"))
+
+  return(plots)
 
 }
 
