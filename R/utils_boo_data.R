@@ -83,111 +83,57 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Z", ...){
 #' @examples
 #' dfp <- pr_get_FreqMap("P")
 #' dfz <- pr_get_FreqMap("Z")
+
 pr_get_FreqMap <- function(Type = "Z"){
 
-  NRSSamp <- pr_get_NRSTrips() %>%
-    dplyr::rename(Sample = "TripCode") %>%
-    dplyr::mutate(Survey = 'NRS') %>%
-    dplyr::select("Sample", "Survey", "SampleTime_Local", "Month_Local", "Latitude", "Longitude")
+    NRS <- pr_get_NRSData(Type = Type, Variable = "abundance", Subset = "species") %>%
+      tidyr::pivot_longer(cols = !dplyr::all_of(pr_get_NonTaxaColumns(Survey = "NRS", Type = Type)),
+                          names_to = "Taxon", values_to = "Counts")
 
-  CPRSamp <- pr_get_CPRTrips() %>%
-    dplyr::mutate(Survey = 'CPR',
-                  Latitude = round(.data$Latitude, 4),
-                  Longitude = round(.data$Longitude, 4)) %>%
-    dplyr::select("Sample", "Survey", "SampleTime_Local", "Month_Local", "Latitude", "Longitude")
-
-  SampLocs <- dplyr::bind_rows(CPRSamp, NRSSamp) %>%
-    dplyr::mutate(DOY = lubridate::yday(.data$SampleTime_Local),
-                  Start = as.Date(paste0(min(lubridate::year(.data$SampleTime_Local))-1, "-12-31")),
-                  days = difftime(as.Date(.data$SampleTime_Local), .data$Start, units = "days") %>% as.numeric(),
-                  thetadoy = (.data$days %% 365.25)/365.25 * 2 * base::pi, ## leap years...
-                  Lat = round(.data$Latitude/0.5, 0)*0.5,
-                  Long = round(.data$Longitude/0.5, 0)*0.5,
-                  Season = dplyr::case_when(.data$Month_Local > 2 & .data$Month_Local < 6 ~ "March - May",
-                                            .data$Month_Local > 5 & .data$Month_Local < 9 ~ "June - August",
-                                            .data$Month_Local > 8 & .data$Month_Local < 12 ~ "September - November",
-                                            TRUE ~ "December - February")) %>%
-    dplyr::select("Sample", "Survey", "Lat", "Long", "Season")
-
-  if(Type == "P"){
-    PhytoCountNRS <- pr_get_NRSData(Type = "phytoplankton", Variable = "abundance", Subset = "species") %>%
-      tidyr::pivot_longer(cols = !dplyr::all_of(pr_get_NonTaxaColumns(Survey = "NRS", Type = "P")),
-                          names_to = "Taxon", values_to = "Counts") %>%
+    CountNRS <- NRS %>%
       dplyr::rename(Sample = "TripCode") %>%
-      dplyr::filter(.data$Counts > 0) %>%
-      dplyr::mutate(Survey = 'NRS')
+      dplyr::mutate(Survey = 'NRS') %>%
+      dplyr::select("Sample", "Survey", "Taxon", "Counts", "SampleTime_Local", "Month_Local", "Latitude", "Longitude")
 
-    PhytoCountCPR <- pr_get_CPRData(Type = "phytoplankton", Variable = "abundance", Subset = "species") %>%
-      tidyr::pivot_longer(cols = !dplyr::all_of(pr_get_NonTaxaColumns(Survey = "CPR", Type = "P")),
-                          names_to = "Taxon", values_to = "Counts") %>%
-      dplyr::filter(.data$Counts > 0) %>%
+    CPR <- pr_get_CPRData(Type = Type, Variable = "abundance", Subset = "species") %>%
+      tidyr::pivot_longer(cols = !dplyr::all_of(pr_get_NonTaxaColumns(Survey = "CPR", Type = Type)),
+                          names_to = "Taxon", values_to = "Counts")
+
+    CountCPR <- CPR %>%
+      dplyr::rename(Sample = "Sample_ID") %>%
       dplyr::mutate(Survey = 'CPR') %>%
-      dplyr::left_join(CPRSamp %>%
-                         dplyr::select(-c("Survey", "Month_Local")),
-                       by = c("Latitude", "Longitude", "SampleTime_Local")) #TODO get rid of this step if product contains sample
+      dplyr::select("Sample", "Survey", "Taxon", "Counts", "SampleTime_Local", "Month_Local", "Latitude", "Longitude")
 
-    obs <- dplyr::bind_rows(PhytoCountCPR, PhytoCountNRS) %>%
-      dplyr::mutate(Counts = as.integer(as.logical(.data$Counts))) %>%
-      dplyr::select("Sample", "Survey", "Taxon", "Counts") %>%
-      dplyr::arrange(.data$Taxon)
+    dat <- dplyr::bind_rows(CountCPR, CountNRS)  %>%
+      dplyr::mutate(Latitude = round(.data$Latitude/0.5, 0)*0.5,
+                    Longitude = round(.data$Longitude/0.5, 0)*0.5,
+                    Season = dplyr::case_when(.data$Month_Local > 2 & .data$Month_Local < 6 ~ "March - May",
+                                              .data$Month_Local > 5 & .data$Month_Local < 9 ~ "June - August",
+                                              .data$Month_Local > 8 & .data$Month_Local < 12 ~ "September - November",
+                                              TRUE ~ "December - February"))
 
-  } else if(Type == "Z"){
+    totals <- dat %>% dplyr::select(-c('Taxon', 'Counts')) %>% # All samples including where nothing is counted
+      dplyr::distinct() %>%
+      dplyr::group_by(.data$Season, .data$Survey, .data$Latitude, .data$Longitude) %>%
+      dplyr::summarise(samples = dplyr::n(), .groups = "drop")
 
-    ZooCountNRS <- pr_get_NRSData(Type = "zooplankton", Variable = "abundance", Subset = "species") %>%
-      tidyr::pivot_longer(cols = !tidyselect::all_of(pr_get_NonTaxaColumns(Survey = "NRS", Type = "Z")),
-                          names_to = "Taxon", values_to = "Counts") %>%
-      dplyr::rename(Sample = "TripCode") %>%
+    obs <- dat %>%  # Samples where something is counted
       dplyr::filter(.data$Counts > 0) %>%
-      dplyr::mutate(Survey = "NRS")
+      dplyr::group_by(.data$Season, .data$Survey, .data$Taxon, .data$Latitude, .data$Longitude) %>%
+      dplyr::summarise(freq = dplyr::n(), .groups = "drop") %>%
+      dplyr::left_join(totals, by = c('Season', 'Survey', 'Latitude', 'Longitude')) %>%
+      dplyr::mutate(freqsamp = .data$freq/.data$samples,
+                    freqfac = as.factor(dplyr::case_when(.data$freqsamp < 0.375 ~ "Seen in 25%",
+                                                         .data$freqsamp > 0.875 ~ "100% of Samples",
+                                                         .data$freqsamp > 0.375 & .data$freqsamp < 0.625 ~ "50%",
+                                                         TRUE ~ "75%")))
 
-    ZooCountCPR <- pr_get_CPRData(Type = "zooplankton", Variable = "abundance", Subset = "species") %>%
-      tidyr::pivot_longer(cols = !tidyselect::all_of(pr_get_NonTaxaColumns(Survey = "CPR", Type = "Z")),
-                          names_to = "Taxon", values_to = "Counts") %>%
-      dplyr::filter(.data$Counts > 0) %>%
-      dplyr::mutate(Survey = "CPR")  %>%
-      dplyr::left_join(CPRSamp %>%
-                         dplyr::select(-c("Survey", "Month_Local")),
-                       by = c("Latitude", "Longitude", "SampleTime_Local")) #TODO get rid of this step if product contains sample
+    # Adding empty samples back in for absences
+    mapData <-  totals %>% dplyr::left_join(obs, by = c('Season', 'Survey', 'Latitude', 'Longitude', 'samples'))
 
-    obs <- dplyr::bind_rows(ZooCountCPR, ZooCountNRS) %>%
-      dplyr::mutate(Counts = as.integer(as.logical(.data$Counts))) %>%
-      dplyr::select("Sample", "Survey", "Taxon", "Counts") %>%
-      dplyr::arrange(.data$Taxon)
-  }
+    }
 
-  mapdata <- obs %>%
-    dplyr::select("Sample", "Taxon", "Counts") %>%
-    dplyr::left_join(SampLocs, by="Sample") %>%
-    tidyr::drop_na() %>%
-    dplyr::group_by(.data$Season, .data$Survey, .data$Taxon, .data$Lat, .data$Long) %>%
-    dplyr::summarise(freq = dplyr::n(), .groups = "drop") %>%
-    dplyr::left_join(SampLocs %>%
-                       dplyr::group_by(.data$Lat, .data$Long, .data$Season) %>%
-                       dplyr::summarise(samples = dplyr::n(), .groups = "drop"),
-                     by = c("Lat", "Long", "Season")) %>%
-    dplyr::ungroup() %>%
-    dplyr::mutate(freqsamp = .data$freq/.data$samples,
-                  freqfac = as.factor(dplyr::case_when(.data$freqsamp < 0.375 ~ "Seen in 25%",
-                                                       .data$freqsamp > 0.875 ~ "100 % of Samples",
-                                                       .data$freqsamp > 0.375 & .data$freqsamp < 0.625 ~ "50%",
-                                                       TRUE ~ "75%")),
-                  Season = factor(.data$Season, levels = c("December - February","March - May","June - August","September - November")),
-                  Taxon = as.factor(.data$Taxon)) %>%
-    dplyr::select("Season", "Survey", "Lat", "Long", "Taxon", "freqsamp", "freqfac")
 
-  absences <-  SampLocs %>%
-    dplyr::distinct(.data$Survey, .data$Lat, .data$Long, .data$Season) %>%
-    dplyr::mutate(Taxon = "Taxon",
-                  freqsamp = 0,
-                  freqfac = as.factor("Absent"))
-
-  freqMapData <- dplyr::bind_rows(mapdata, absences) %>%
-    dplyr::mutate(freqfac = factor(.data$freqfac, levels = c("Absent", "Seen in 25%", "50%", "75%", "100 % of Samples"))) %>%
-    dplyr::arrange(.data$freqfac)
-
-  return(freqMapData)
-
-}
 
 # Add day/night marker to dataframe
 # @param Type Phyto or zoo, defaults to phyto

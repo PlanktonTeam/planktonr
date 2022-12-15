@@ -30,9 +30,9 @@ mbr <- tibble(x = c(85, 85:155, 155, 85), y = c(-61, rep(-45, 71), -61, -61)) %>
   dplyr::rename(geometry = x) %>%
   sf::st_union(so) %>%
   sf::st_make_valid() %>%
-  st_difference(mbr[6,]) %>%
+  sf::st_difference(mbr[6,]) %>%
   dplyr::select(-REGION) %>%
-  st_difference(mbr[8,]) %>%
+  sf::st_difference(mbr[8,]) %>%
   dplyr::select(-name) %>%
   dplyr::mutate(REGION = "Southern Ocean Region") %>%
   dplyr::bind_rows(mbr, .)

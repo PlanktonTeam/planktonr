@@ -69,13 +69,6 @@ testthat::test_that("Correct function output", {
                                  dplyr::filter(Parameters == "SecchiDepth_m") %>%
                                  pr_plot_Enviro(Trend = "Linear", trans = "identity"))[1], "patchwork")
 
-  testthat::expect_equal(class(data.frame(Long = c(110, 130, 155, 150), Lat = c(-10, -35, -27, -45),
-                                          freqfac = c("Absent", "Seen in 25%","50%", "75%"),
-                                          Season = c("December - February","March - May","June - August","September - November"),
-                                          Taxon = "Acartia danae",
-                                          Survey = 'CPR') %>%
-                                 pr_plot_FreqMap(species = 'Acartia danae', interactive = FALSE))[1], "gg")
-
   testthat::expect_equal(class(data.frame(Month = rep(seq(1,12,1),2),
                                           daynight = c(rep("day", 12), rep("night", 12)),
                                           CopeAbundance_m3 = runif(24, 0.1, 10),
@@ -101,7 +94,7 @@ testthat::test_that("Correct function output", {
                                  pr_plot_ProgressMap(interactive = TRUE))[1], "leaflet")
 
 
-  testthat::expect_equal(class(data.frame(Long = c(110, 130, 155, 150), Lat = c(-10, -35, -27, -45),
+  testthat::expect_equal(class(data.frame(Longitude = c(110, 130, 155, 150), Latitude = c(-10, -35, -27, -45),
                                           freqfac = as.factor(c("Absent", "Seen in 25%",'50%', '75%')),
                                           Season = c("December - February","March - May",
                                                      "June - August","September - November"),
@@ -109,7 +102,7 @@ testthat::test_that("Correct function output", {
                                           Survey = 'CPR') %>%
                                  pr_plot_FreqMap(species = 'Acartia danae', interactive = FALSE))[1], "gg")
 
-  testthat::expect_equal(class(data.frame(Long = c(110, 130, 155, 150), Lat = c(-10, -35, -27, -45),
+  testthat::expect_equal(class(data.frame(Longitude = c(110, 130, 155, 150), Latitude = c(-10, -35, -27, -45),
                                           freqfac = as.factor(c("Absent", "Seen in 25%",'50%', '75%')),
                                           Season = c("December - February","March - May",
                                                      "June - August","September - November"),
