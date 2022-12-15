@@ -101,7 +101,7 @@ pr_plot_TimeSeries <- function(df, Survey = "NRS", trans = "identity"){
       dplyr::group_by(.data$SampleTime_Local, .data$StationCode, .data$Parameters) %>% # accounting for microbial data different depths
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                        .groups = "drop")
-    plotCols <- colNRS
+    plotCols <- colNRSCode
   }
 
   titlex <- "Sample Date (Local)"
@@ -247,7 +247,7 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
       dplyr::rename(StationCode = "BioRegion")
     plotCols <- colCPR
   } else if (Survey == "NRS"){
-    plotCols <- colNRS
+    plotCols <- colNRSCode
   }
 
   n <- length(unique(df$StationCode))
@@ -526,7 +526,7 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
                    legend.title = ggplot2::element_blank()) +
     ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
     ggplot2::scale_y_continuous(trans = trans) +
-    ggplot2::scale_colour_manual(values = colNRS)
+    ggplot2::scale_colour_manual(values = colNRSName)
 
   if(Trend == "Smoother"){
     p <- p + ggplot2::geom_smooth(method = "loess", formula = y ~ x)
@@ -550,7 +550,7 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
     ggplot2::geom_smooth(method = "loess", formula = y ~ x) +
     ggplot2::scale_x_continuous(breaks = seq(1,12,length.out = 12),
                                 labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
-    ggplot2::scale_colour_manual(values = colNRS) +
+    ggplot2::scale_colour_manual(values = colNRSName) +
     ggplot2::labs(x = "Month") +
     ggplot2::theme_bw() +
     ggplot2::theme(strip.background = ggplot2::element_blank(),
@@ -743,7 +743,7 @@ pr_plot_FreqMap <- function(df, species, interactive = TRUE){
     dplyr::arrange(.data$freqfac)
 
   if(interactive == FALSE){
-    cols <- c("lightblue1" ,"skyblue3", "dodgerblue2","blue1", "navyblue")
+    cols <- c("lightblue1", "skyblue3", "dodgerblue2", "blue1", "navyblue")
 
     Species <- unique(df$Taxon)
 
