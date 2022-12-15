@@ -2,9 +2,9 @@
 
 ## Shrink data-file and save as internal data file
 library(tidyverse)
-library(rnaturalearth)
-library(sf)
-library(rmapshaper)
+# library(rnaturalearth)
+# library(sf)
+# library(rmapshaper)
 
 mbr <- sf::st_read(file.path("data-raw","marine_regions")) %>%  # Load marine regions as sf
   sf::st_transform(crs = "+proj=longlat +datum=WGS84") %>%
@@ -30,9 +30,9 @@ mbr <- tibble(x = c(85, 85:155, 155, 85), y = c(-61, rep(-45, 71), -61, -61)) %>
   dplyr::rename(geometry = x) %>%
   sf::st_union(so) %>%
   sf::st_make_valid() %>%
-  st_difference(mbr[6,]) %>%
+  sf::st_difference(mbr[6,]) %>%
   dplyr::select(-REGION) %>%
-  st_difference(mbr[8,]) %>%
+  sf::st_difference(mbr[8,]) %>%
   dplyr::select(-name) %>%
   dplyr::mutate(REGION = "Southern Ocean Region") %>%
   dplyr::bind_rows(mbr, .)
@@ -54,7 +54,6 @@ clr <- tibble::tribble( # Set1 on colorbrewer2.org - Yellow has been updated.
 mbr <- dplyr::left_join(mbr, clr, by = "REGION") %>%
   dplyr::arrange("REGION")
 
-
 MapOz <- rnaturalearth::ne_countries(scale = "small", country = "Australia",
                                      returnclass = "sf")
 
@@ -67,9 +66,15 @@ meta_sf <- planktonr::pr_get_NRSTrips("Z") %>%
   sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326)
 
 
-colNRS <- data.frame(Code = meta_sf$Code,
+colNRSCode <- data.frame(Code = meta_sf$Code,
                      Colr = RColorBrewer::brewer.pal(9, "Set1")) %>%
   tibble::deframe()
+
+colNRSName <- data.frame(Code = meta_sf$Station,
+                     Colr = RColorBrewer::brewer.pal(9, "Set1")) %>%
+  tibble::deframe()
+
+
 
 colCPR <- mbr %>%
   sf::st_drop_geometry() %>%
@@ -77,7 +82,7 @@ colCPR <- mbr %>%
 
 CPRinfo <- planktonr::pr_get_PolicyInfo("CPR")
 
-usethis::use_data(mbr, MapOz, meta_sf, colNRS, colCPR, CPRinfo, overwrite = TRUE, internal = TRUE, compress = "bzip2")
+usethis::use_data(mbr, MapOz, meta_sf, colNRSCode, colNRSName, colCPR, CPRinfo, overwrite = TRUE, internal = TRUE, compress = "bzip2")
 
 # tools::checkRdaFiles("R") # Check what compression to use above
 # OK - bzip2
