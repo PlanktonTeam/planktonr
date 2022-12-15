@@ -129,7 +129,8 @@ pr_get_FreqMap <- function(Type = "Z"){
                                                          TRUE ~ "75%")))
 
     # Adding empty samples back in for absences
-    mapData <-  totals %>% dplyr::left_join(obs, by = c('Season', 'Survey', 'Latitude', 'Longitude', 'samples'))
+    mapData <-  totals %>% dplyr::left_join(obs, by = c('Season', 'Survey', 'Latitude', 'Longitude', 'samples')) %>%
+      dplyr::arrange(.data$Taxon)
 
     }
 
