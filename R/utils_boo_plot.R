@@ -447,7 +447,8 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
     ggplot2::labs(x = "Year", subtitle = rlang::enexpr(titley)) +
     ggplot2::scale_y_continuous(trans = trans) +
     ggplot2::theme(legend.position = "none",
-                   axis.title.y = ggplot2::element_blank() )
+                   axis.title.y = ggplot2::element_blank(),
+                   plot.subtitle = ggplot2::element_text(size = 10))
 
   if(labels == "no"){
     p1 <- p1 + ggplot2::theme(axis.title.x = ggplot2::element_blank())
