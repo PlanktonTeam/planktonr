@@ -448,7 +448,7 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
     ggplot2::scale_y_continuous(trans = trans) +
     ggplot2::theme(legend.position = "none",
                    axis.title.y = ggplot2::element_blank(),
-                   plot.subtitle = ggplot2::element_text(size = 10))
+                   plot.subtitle = ggplot2::element_text(size = 12))
 
   if(labels == "no"){
     p1 <- p1 + ggplot2::theme(axis.title.x = ggplot2::element_blank())
@@ -1012,15 +1012,25 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE, labels = TRUE){
 
   if (interactive == TRUE){
 
-    df_CPR <- df %>%
-      dplyr::filter(.data$Survey == "CPR" & (!is.na(.data$ZoopAbundance_m3) | !is.na(.data$PhytoAbundance_CellsL)))
+    if (is.data.frame(df) == TRUE){ # planktonr will likely return a df
+      df_CPR <- df %>%
+        dplyr::filter(.data$Survey == "CPR" & (!is.na(.data$ZoopAbundance_m3) | !is.na(.data$PhytoAbundance_CellsL)))
 
-    df_PCI <- df %>%
-      dplyr::filter(.data$Survey == "CPR" & is.na(.data$ZoopAbundance_m3) & is.na(.data$PhytoAbundance_CellsL))
+      df_PCI <- df %>%
+        dplyr::filter(.data$Survey == "CPR" & is.na(.data$ZoopAbundance_m3) & is.na(.data$PhytoAbundance_CellsL))
 
+      df_NRS <- df %>% dplyr::filter(.data$Survey == "NRS")
+    } else if (is.list(df) == TRUE){ # boo will return a list to shrink size
 
-    df_NRS <- df %>% dplyr::filter(.data$Survey == "NRS")
-    rm(df)
+      df_CPR <- df$CPR %>%
+        dplyr::filter((!is.na(.data$ZoopAbundance_m3) | !is.na(.data$PhytoAbundance_CellsL)))
+
+      df_PCI <- df$CPR %>%
+        dplyr::filter(is.na(.data$ZoopAbundance_m3) & is.na(.data$PhytoAbundance_CellsL))
+
+      df_NRS <- df$NRS
+
+    }
 
     if(labels == TRUE){
       labs_cpr <- lapply(seq(nrow(df_CPR)), function(i) {
@@ -1060,6 +1070,26 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE, labels = TRUE){
       labs_cpr <- NULL
       labs_pci <- NULL
     }
+
+
+    if (is.list(df) == TRUE){
+      labs_nrs <- lapply(seq(nrow(df_NRS)), function(i) {
+
+        if (lubridate::year(df_NRS$End_Date[i]) < 2020){
+          EndDate <- paste0(df_NRS$End_Date[i], " (discontinued)")
+        } else {
+          EndDate <- paste0(df_NRS$End_Date[i], " (ongoing)")
+        }
+
+        paste("<strong>National Reference Station:</strong>", df_NRS$Name[i], "<br>",
+              "<strong>First Sampling:</strong>", df_NRS$Start_Date[i], "<br>",
+              "<strong>Last Sampling:</strong>", EndDate, "<br>",
+              "<strong>Latitude:</strong>", df_NRS$Latitude[i], "<br>",
+              "<strong>Longitude:</strong>", df_NRS$Longitude[i], "<br>",
+              "<strong>Number of Sampling Trips:</strong>", df_NRS$Samples[i], "<br>")})
+      labs_nrs <- lapply(labs_nrs, htmltools::HTML)
+    }
+
 
     title1 <- htmltools::div(
       htmltools::tags$style(htmltools::HTML(".leaflet-control.map-title1 {
@@ -1108,13 +1138,14 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE, labels = TRUE){
                                 group = "Continuous Plankton Recorder (PCI Only)",
                                 label = labs_pci,
       ) %>%
-      leaflet::addAwesomeMarkers(data = df_NRS,
-                                 lat = ~ Latitude,
-                                 lng = ~ Longitude,
-                                 group = "National Reference Stations",
-                                 clusterOptions = leaflet::markerClusterOptions(showCoverageOnHover = FALSE,
-                                                                                spiderfyOnMaxZoom = FALSE,
-                                                                                maxClusterRadius = 40)) %>%
+      leaflet::addCircleMarkers(data = df_NRS,
+                                lat = ~ Latitude,
+                                lng = ~ Longitude,
+                                color = "#FFA500",
+                                radius = 10, fillOpacity = 0.8, opacity = 1, weight = 1,
+                                group = "National Reference Stations",
+                                label = labs_nrs,
+      ) %>%
       leaflet::addControl(title1,
                           position = "topright",
                           className = "map-title1"
