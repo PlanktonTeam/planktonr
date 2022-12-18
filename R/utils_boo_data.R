@@ -575,6 +575,15 @@ pr_get_TaxaAccum <- function(Survey = "NRS", Type = "Z"){
   } else if (Survey == "CPR"){
     dat <- pr_get_CPRData(Type = Type, Variable = "abundance", Subset = "raw")
   }
+
+  dat <- dat %>%
+    tidyr::pivot_longer(-pr_get_NonTaxaColumns(Survey = Survey, Type = Type), names_to = "Taxa", values_to = "Abundance") %>%
+    dplyr::filter(.data$Abundance > 0) %>%
+    dplyr::arrange(.data$SampleTime_Local) %>%
+    dplyr::group_by(.data$Taxa) %>%
+    dplyr::summarise(First = dplyr::first(.data$SampleTime_Local), .groups = "drop") %>%
+    dplyr::arrange(.data$First) %>%
+    dplyr::mutate(RowN = dplyr::row_number())
 }
 
 

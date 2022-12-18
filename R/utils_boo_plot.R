@@ -101,7 +101,7 @@ pr_plot_TimeSeries <- function(df, Survey = "NRS", trans = "identity"){
       dplyr::group_by(.data$SampleTime_Local, .data$StationCode, .data$Parameters) %>% # accounting for microbial data different depths
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                        .groups = "drop")
-    plotCols <- colNRS
+    plotCols <- colNRSCode
   }
 
   titlex <- "Sample Date (Local)"
@@ -247,7 +247,7 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
       dplyr::rename(StationCode = "BioRegion")
     plotCols <- colCPR
   } else if (Survey == "NRS"){
-    plotCols <- colNRS
+    plotCols <- colNRSCode
   }
 
   n <- length(unique(df$StationCode))
@@ -448,7 +448,7 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
     ggplot2::scale_y_continuous(trans = trans) +
     ggplot2::theme(legend.position = "none",
                    axis.title.y = ggplot2::element_blank(),
-                   plot.subtitle = ggplot2::element_text(size = 10))
+                   plot.subtitle = ggplot2::element_text(size = 12))
 
   if(labels == "no"){
     p1 <- p1 + ggplot2::theme(axis.title.x = ggplot2::element_blank())
@@ -528,7 +528,7 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
                    legend.title = ggplot2::element_blank()) +
     ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
     ggplot2::scale_y_continuous(trans = trans) +
-    ggplot2::scale_colour_manual(values = colNRS)
+    ggplot2::scale_colour_manual(values = colNRSName)
 
   if(Trend == "Smoother"){
     p <- p + ggplot2::geom_smooth(method = "loess", formula = y ~ x)
@@ -552,7 +552,7 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
     ggplot2::geom_smooth(method = "loess", formula = y ~ x) +
     ggplot2::scale_x_continuous(breaks = seq(1,12,length.out = 12),
                                 labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
-    ggplot2::scale_colour_manual(values = colNRS) +
+    ggplot2::scale_colour_manual(values = colNRSName) +
     ggplot2::labs(x = "Month") +
     ggplot2::theme_bw() +
     ggplot2::theme(strip.background = ggplot2::element_blank(),
@@ -585,15 +585,15 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, max
   stations <- unique(as.character(df$StationName))
   param <- planktonr::pr_relabel(unique(df$Parameters), style = 'ggplot')
 
-    minDate <- lubridate::floor_date(min(df$SampleTime_Local, na.rm = TRUE), unit = 'month')
+  minDate <- lubridate::floor_date(min(df$SampleTime_Local, na.rm = TRUE), unit = 'month')
 
-    df <- df %>%
-      dplyr::mutate(Values = ifelse(.data$Values < 0, 0, .data$Values),
+  df <- df %>%
+    dplyr::mutate(Values = ifelse(.data$Values < 0, 0, .data$Values),
                   SampleDepth_m = dplyr::case_when(.data$StationName %in% c('Darwin') ~ round(.data$SampleDepth_m/10, 0)*10,
                                                    TRUE ~ round(.data$SampleDepth_m/5, 0)*5)) %>%
-      dplyr::mutate(MonthSince = lubridate::interval(minDate, .data$SampleTime_Local) %/% months(1)) %>%
-      dplyr::mutate(Year = lubridate::year(.data$SampleTime_Local),
-                    Label = ifelse(.data$Month_Local == 6, .data$Year, NA))
+    dplyr::mutate(MonthSince = lubridate::interval(minDate, .data$SampleTime_Local) %/% months(1)) %>%
+    dplyr::mutate(Year = lubridate::year(.data$SampleTime_Local),
+                  Label = ifelse(.data$Month_Local == 6, .data$Year, NA))
 
   if (Interpolation == FALSE) {
 
@@ -612,7 +612,7 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, max
       Months <- seq(min(df$MonthSince), max(df$MonthSince), 1)
 
       emptyGrid <- expand.grid(SampleDepth_m = Depths,
-                              MonthSince = Months)
+                               MonthSince = Months)
 
       df <- emptyGrid %>% dplyr::left_join(df, by = c("MonthSince", "SampleDepth_m")) %>% data.frame() %>%
         dplyr::arrange(.data$MonthSince, .data$SampleDepth_m)
@@ -625,7 +625,7 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, max
       if(Fill_NA == TRUE){
         mat <- t(zoo::na.approx(t(mat), maxgap = maxGap))
         mat <- zoo::na.approx(mat, maxgap = maxGap)
-        }
+      }
 
       Months2 <- seq(0, length(Months)-1, 1)
 
@@ -644,34 +644,34 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, max
                       Values = ifelse(.data$Values < 0, 0, .data$Values),
                       MonthSince = .data$MonthSince + min)
 
-      }
+    }
 
-      PlotData <- purrr::map_dfr(stations, plotfunc) # Interpolating across time and depth for the station
+    PlotData <- purrr::map_dfr(stations, plotfunc) # Interpolating across time and depth for the station
 
-      df <- PlotData %>% dplyr::left_join(df %>% dplyr::select('MonthSince', 'SampleDepth_m', 'StationName', 'Label', 'Month_Local'),
-                                           by = c("MonthSince", "SampleDepth_m", "StationName")) %>%
-        dplyr::distinct() %>%
-        pr_reorder()
+    df <- PlotData %>% dplyr::left_join(df %>% dplyr::select('MonthSince', 'SampleDepth_m', 'StationName', 'Label', 'Month_Local'),
+                                        by = c("MonthSince", "SampleDepth_m", "StationName")) %>%
+      dplyr::distinct() %>%
+      pr_reorder()
 
     Label <- (df %>% dplyr::group_by(.data$Label) %>% dplyr::summarise(n = dplyr::n()) %>% tidyr::drop_na() %>%
                 dplyr::distinct(.data$Label))$Label
     myBreaks <- (df %>% dplyr::filter(!is.na(.data$Label)) %>% dplyr::distinct(.data$MonthSince) %>%
                    dplyr::arrange(dplyr::desc(-.data$MonthSince), .by_group = FALSE))$MonthSince
-    }
+  }
 
   # Function for plots
   outPlot <- function(df, x, just = "left"){
-      out <- ggplot2::ggplot(data = df, ggplot2::aes(x, y = .data$SampleDepth_m, z = .data$Values)) +
-        ggplot2::geom_contour_filled(bins = 8) +
-        ggplot2::facet_grid(.data$StationName ~ ., scales = 'free') +
-        ggplot2::theme_bw() +
-        ggplot2::theme(strip.background = ggplot2::element_blank(),
-                       legend.position = "bottom",
-                       legend.title = ggplot2::element_text(size = 10),
-                       legend.text = ggplot2::element_text(size = 8),
-                       legend.justification = just) +
-        ggplot2::guides(fill = ggplot2::guide_legend(title = param, title.position = 'top')) +
-        ggplot2::scale_y_reverse(expand = c(0, 0))
+    out <- ggplot2::ggplot(data = df, ggplot2::aes(x, y = .data$SampleDepth_m, z = .data$Values)) +
+      ggplot2::geom_contour_filled(bins = 8) +
+      ggplot2::facet_grid(.data$StationName ~ ., scales = 'free') +
+      ggplot2::theme_bw() +
+      ggplot2::theme(strip.background = ggplot2::element_blank(),
+                     legend.position = "bottom",
+                     legend.title = ggplot2::element_text(size = 10),
+                     legend.text = ggplot2::element_text(size = 8),
+                     legend.justification = just) +
+      ggplot2::guides(fill = ggplot2::guide_legend(title = param, title.position = 'top')) +
+      ggplot2::scale_y_reverse(expand = c(0, 0))
     out
   }
 
@@ -742,7 +742,7 @@ pr_plot_FreqMap <- function(df, species, interactive = TRUE){
     dplyr::arrange(.data$freqfac)
 
   if(interactive == FALSE){
-    cols <- c("lightblue1" ,"skyblue3", "blue1", "navyblue")
+    cols <- c("lightblue1", "skyblue3", "blue1", "navyblue")
 
     Species <- unique(df$Taxon)
 
@@ -1000,6 +1000,7 @@ pr_plot_STI <-  function(df){
 #'
 #' @param df output from pr_get_ProgressMapData
 #' @param interactive Should the plot be interactive with leaflet?
+#' @param labels TRUE/FALSE Should labels be added to leaflet plot? Adding labels adds more information but slows down the rendering.
 #'
 #' @return a plot of IMOS progress
 #' @export
@@ -1007,48 +1008,88 @@ pr_plot_STI <-  function(df){
 #' @examples
 #' df <- pr_get_ProgressMapData("CPR")
 #' plot <- pr_plot_ProgressMap(df)
-pr_plot_ProgressMap <- function(df, interactive = FALSE){
+pr_plot_ProgressMap <- function(df, interactive = FALSE, labels = TRUE){
 
   if (interactive == TRUE){
 
-    df_CPR <- df %>%
-      dplyr::filter(.data$Survey == "CPR" & (!is.na(.data$ZoopAbundance_m3) | !is.na(.data$PhytoAbundance_CellsL)))
+    if (is.data.frame(df) == TRUE){ # planktonr will likely return a df
+      df_CPR <- df %>%
+        dplyr::filter(.data$Survey == "CPR" & (!is.na(.data$ZoopAbundance_m3) | !is.na(.data$PhytoAbundance_CellsL)))
 
-    df_PCI <- df %>%
-      dplyr::filter(.data$Survey == "CPR" & is.na(.data$ZoopAbundance_m3) & is.na(.data$PhytoAbundance_CellsL))
+      df_PCI <- df %>%
+        dplyr::filter(.data$Survey == "CPR" & is.na(.data$ZoopAbundance_m3) & is.na(.data$PhytoAbundance_CellsL))
+
+      df_NRS <- df %>% dplyr::filter(.data$Survey == "NRS")
+    } else if (is.list(df) == TRUE){ # boo will return a list to shrink size
+
+      df_CPR <- df$CPR %>%
+        dplyr::filter((!is.na(.data$ZoopAbundance_m3) | !is.na(.data$PhytoAbundance_CellsL)))
+
+      df_PCI <- df$CPR %>%
+        dplyr::filter(is.na(.data$ZoopAbundance_m3) & is.na(.data$PhytoAbundance_CellsL))
+
+      df_NRS <- df$NRS
+
+    }
+
+    if(labels == TRUE){
+      labs_cpr <- lapply(seq(nrow(df_CPR)), function(i) {
+        paste("<strong>Sample Date:</strong>", df_CPR$SampleTime_Local[i], "<br>",
+              "<strong>Bioregion:</strong>", df_CPR$Name[i], "<br>",
+              "<strong>Latitude:</strong>", df_CPR$Latitude[i], "<br>",
+              "<strong>Longitude:</strong>", df_CPR$Longitude[i], "<br>",
+              "<strong>Phytoplankton Abundance (L\u207B\u00B9)</strong>: ", round(df_CPR$PhytoAbundance_CellsL[i],2), "<br>",
+              "<strong>Zooplankton Abundance (m\u207B\u00B3)</strong>: ", round(df_CPR$ZoopAbundance_m3[i],2), "<br>",
+              "<strong>Phytoplankton Colour Index:</strong>", df_CPR$PCI[i], "<br>")})
+
+      labs_pci <- lapply(seq(nrow(df_CPR)), function(i) {
+        paste("<strong>Sample Date:</strong>", df_CPR$SampleTime_Local[i], "<br>",
+              "<strong>Bioregion:</strong>", df_CPR$Name[i], "<br>",
+              "<strong>Latitude:</strong>", df_CPR$Latitude[i], "<br>",
+              "<strong>Longitude:</strong>", df_CPR$Longitude[i], "<br>",
+              "<strong>Phytoplankton Colour Index:</strong>", df_CPR$PCI[i], "<br>")})
+
+      labs_mbr <- lapply(seq(nrow(mbr)), function(i) {
+        if (mbr$REGION[i] != "Southern Ocean Region"){
+          br = " Bioregion"
+        } else {
+          br = ""
+        }
+        sapply(strwrap(
+          paste("<strong>The ", mbr$REGION[i], br,"</strong>",
+                "is characterised by",(CPRinfo %>% dplyr::filter(mbr$REGION[i] == .data$BioRegion))$Features, "<br>"),
+          width = 60, simplify = FALSE),
+          paste, collapse = "<br>")
+      })
+
+      labs_mbr <- lapply(labs_mbr, htmltools::HTML)
+      labs_cpr <- lapply(labs_cpr, htmltools::HTML)
+      labs_pci <- lapply(labs_pci, htmltools::HTML)
+    } else {
+      labs_mbr <- NULL
+      labs_cpr <- NULL
+      labs_pci <- NULL
+    }
 
 
-    df_NRS <- df %>% dplyr::filter(.data$Survey == "NRS")
-    rm(df)
+    if (is.list(df) == TRUE){
+      labs_nrs <- lapply(seq(nrow(df_NRS)), function(i) {
 
-    labs_cpr <- lapply(seq(nrow(df_CPR)), function(i) {
-      paste("<strong>Sample Date:</strong>", df_CPR$SampleTime_Local[i], "<br>",
-            "<strong>Bioregion:</strong>", df_CPR$Name[i], "<br>",
-            "<strong>Latitude:</strong>", df_CPR$Latitude[i], "<br>",
-            "<strong>Longitude:</strong>", df_CPR$Longitude[i], "<br>",
-            "<strong>Phytoplankton Abundance (L\u207B\u00B9)</strong>: ", round(df_CPR$PhytoAbundance_CellsL[i],2), "<br>",
-            "<strong>Zooplankton Abundance (m\u207B\u00B3)</strong>: ", round(df_CPR$ZoopAbundance_m3[i],2), "<br>",
-            "<strong>Phytoplankton Colour Index:</strong>", df_CPR$PCI[i], "<br>")})
+        if (lubridate::year(df_NRS$End_Date[i]) < 2020){
+          EndDate <- paste0(df_NRS$End_Date[i], " (discontinued)")
+        } else {
+          EndDate <- paste0(df_NRS$End_Date[i], " (ongoing)")
+        }
 
-    labs_cpr2 <- lapply(seq(nrow(df_CPR)), function(i) {
-      paste("<strong>Sample Date:</strong>", df_CPR$SampleTime_Local[i], "<br>",
-            "<strong>Bioregion:</strong>", df_CPR$Name[i], "<br>",
-            "<strong>Latitude:</strong>", df_CPR$Latitude[i], "<br>",
-            "<strong>Longitude:</strong>", df_CPR$Longitude[i], "<br>",
-            "<strong>Phytoplankton Colour Index:</strong>", df_CPR$PCI[i], "<br>")})
+        paste("<strong>National Reference Station:</strong>", df_NRS$Name[i], "<br>",
+              "<strong>First Sampling:</strong>", df_NRS$Start_Date[i], "<br>",
+              "<strong>Last Sampling:</strong>", EndDate, "<br>",
+              "<strong>Latitude:</strong>", df_NRS$Latitude[i], "<br>",
+              "<strong>Longitude:</strong>", df_NRS$Longitude[i], "<br>",
+              "<strong>Number of Sampling Trips:</strong>", df_NRS$Samples[i], "<br>")})
+      labs_nrs <- lapply(labs_nrs, htmltools::HTML)
+    }
 
-    labs_mbr <- lapply(seq(nrow(mbr)), function(i) {
-      if (mbr$REGION[i] != "Southern Ocean Region"){
-        br = " Bioregion"
-      } else {
-        br = ""
-      }
-      sapply(strwrap(
-        paste("<strong>The ", mbr$REGION[i], br,"</strong>",
-              "is characterised by",(CPRinfo %>% dplyr::filter(mbr$REGION[i] == .data$BioRegion))$Features, "<br>"),
-        width = 60, simplify = FALSE),
-        paste, collapse = "<br>")
-    })
 
     title1 <- htmltools::div(
       htmltools::tags$style(htmltools::HTML(".leaflet-control.map-title1 {
@@ -1064,7 +1105,6 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
       htmltools::tags$style(htmltools::HTML(".leaflet-control.map-title2 {
                                                 text-align: center;
                                                 background: rgba(255,255,255,0);
-                                                # font-weight: bold;
                                                 font-size: 16px;
                                                 margin: 0;
                                                 margin-right: 6px}")),
@@ -1078,7 +1118,8 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
                            opacity = 0.4,
                            fillOpacity = 0.4,
                            weight = 1,
-                           label = lapply(labs_mbr, htmltools::HTML)) %>%
+                           label = labs_mbr
+      ) %>%
       leaflet::addCircleMarkers(data = df_CPR,
                                 lat = ~ Latitude,
                                 lng = ~ Longitude,
@@ -1086,7 +1127,8 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
                                 color = ~Colour,
                                 radius = 3, fillOpacity = 0.8, opacity = 1, weight = 1,
                                 group = "Continuous Plankton Recorder (Phyto/Zoo Counts)",
-                                label = lapply(labs_cpr, htmltools::HTML)) %>%
+                                label = labs_cpr,
+      ) %>%
       leaflet::addCircleMarkers(data = df_PCI,
                                 lat = ~ Latitude,
                                 lng = ~ Longitude,
@@ -1094,14 +1136,16 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
                                 color = ~Colour,
                                 radius = 1, fillOpacity = 0.8, opacity = 1, weight = 1,
                                 group = "Continuous Plankton Recorder (PCI Only)",
-                                label = lapply(labs_cpr2, htmltools::HTML)) %>%
-      leaflet::addAwesomeMarkers(data = df_NRS,
-                                 lat = ~ Latitude,
-                                 lng = ~ Longitude,
-                                 group = "National Reference Stations",
-                                 clusterOptions = leaflet::markerClusterOptions(showCoverageOnHover = FALSE,
-                                                                                spiderfyOnMaxZoom = FALSE,
-                                                                                maxClusterRadius = 40)) %>%
+                                label = labs_pci,
+      ) %>%
+      leaflet::addCircleMarkers(data = df_NRS,
+                                lat = ~ Latitude,
+                                lng = ~ Longitude,
+                                color = "#FFA500",
+                                radius = 10, fillOpacity = 0.8, opacity = 1, weight = 1,
+                                group = "National Reference Stations",
+                                label = labs_nrs,
+      ) %>%
       leaflet::addControl(title1,
                           position = "topright",
                           className = "map-title1"
@@ -1121,8 +1165,14 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE){
       leaflegend::addLegendFactor(pal = leaflet::colorFactor("#FFA500", "National Reference Stations"),
                                   shape = "circle", values = "National Reference Stations") %>%
       leaflet::addLegend("topleft",
-                         colors = mbr$Colour,
-                         labels = mbr$REGION,
+                         colors = mbr %>%
+                           sf::st_drop_geometry() %>%
+                           dplyr::distinct(.data$REGION, .keep_all = TRUE) %>%
+                           dplyr::pull(.data$Colour),
+                         labels = mbr %>%
+                           sf::st_drop_geometry() %>%
+                           dplyr::distinct(.data$REGION) %>%
+                           dplyr::pull(.data$REGION),
                          title = "Bioregions",
                          opacity = 1) %>%
       leaflet::hideGroup("Continuous Plankton Recorder (PCI Only)")
@@ -1225,7 +1275,7 @@ pr_plot_Gantt <- function(dat, Survey = "NRS"){
 
   } else if (Survey == "NRS"){
 
-    dat2 <- pr_get_NRSTrips(Type = c("P", "Z")) %>%
+    dat2 <- dat %>%
       dplyr::mutate(YearMonth = .data$Year_Local + .data$Month_Local/12) %>%
       dplyr::filter(.data$StationName != "Port Hacking 4") %>%
       dplyr::group_by(.data$YearMonth, .data$StationName) %>%
@@ -1263,16 +1313,6 @@ pr_plot_Gantt <- function(dat, Survey = "NRS"){
 #' dat <- pr_get_TaxaAccum(Survey = "CPR", Type = "P")
 #' p <- pr_plot_TaxaAccum(dat, Survey = "CPR", Type = "P")
 pr_plot_TaxaAccum <- function(dat, Survey = "NRS", Type = "Z"){
-
-  dat <- dat %>%
-    tidyr::pivot_longer(-pr_get_NonTaxaColumns(Survey = Survey, Type = Type), names_to = "Taxa", values_to = "Abundance") %>%
-    dplyr::filter(.data$Abundance > 0) %>%
-    dplyr::arrange(.data$SampleTime_Local) %>%
-    dplyr::group_by(.data$Taxa) %>%
-    dplyr::summarise(First = dplyr::first(.data$SampleTime_Local), .groups = "drop") %>%
-    dplyr::arrange(.data$First) %>%
-    dplyr::mutate(RowN = dplyr::row_number())
-
 
   gg <- ggplot2::ggplot(data = dat, ggplot2::aes(x = .data$First, y = .data$RowN)) +
     ggplot2::geom_line() +

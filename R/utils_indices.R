@@ -57,6 +57,7 @@ pr_get_Indices <- function(Survey = "CPR", Type = "P", ...){
 
     dat <- pr_get_Raw("nrs_derived_indices_data") %>%
       pr_rename() %>%
+      dplyr::filter(.data$StationName != "Port Hacking 4") %>%
       pr_add_StationCode() %>%
       pr_apply_Time() %>%
       dplyr::select("TripCode", "Year_Local", "Month_Local", "SampleTime_Local", "tz", "Latitude", "Longitude",

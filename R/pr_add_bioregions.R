@@ -66,7 +66,7 @@ pr_add_Bioregions <- function(df, near_dist_km = 0){
     dplyr::mutate(BioRegion.z = "None",
       BioRegion = dplyr::coalesce(.data$BioRegion.x, .data$BioRegion.y, .data$BioRegion.z)) %>%
     # dplyr::mutate(BioRegion = forcats::fct_explicit_na(.data$BioRegion, na_level = "None")) %>%
-    dplyr::select(-c("BioRegion.x", "BioRegion.y")) %>%
+    dplyr::select(-c("BioRegion.x", "BioRegion.y", "BioRegion.z")) %>%
     dplyr::relocate("BioRegion", .after = "TripCode") %>%
     sf::st_drop_geometry(df) %>% # DF in, DF out
     dplyr::left_join(mbr %>%

@@ -4,12 +4,14 @@
 \alias{pr_plot_ProgressMap}
 \title{IMOS progress plot}
 \usage{
-pr_plot_ProgressMap(df, interactive = FALSE)
+pr_plot_ProgressMap(df, interactive = FALSE, labels = TRUE)
 }
 \arguments{
 \item{df}{output from pr_get_ProgressMapData}
 
 \item{interactive}{Should the plot be interactive with leaflet?}
+
+\item{labels}{TRUE/FALSE Should labels be added to leaflet plot? Adding labels adds more information but slows down the rendering.}
 }
 \value{
 a plot of IMOS progress
