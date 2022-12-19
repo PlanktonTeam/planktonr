@@ -81,28 +81,27 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Z", ...){
 #' @export
 #'
 #' @examples
-#' dfp <- pr_get_FreqMap("P")
-#' dfz <- pr_get_FreqMap("Z")
+#' df <- pr_get_FreqMap("Z")
 
 pr_get_FreqMap <- function(Type = "Z"){
 
     NRS <- pr_get_NRSData(Type = Type, Variable = "abundance", Subset = "species") %>%
       tidyr::pivot_longer(cols = !dplyr::all_of(pr_get_NonTaxaColumns(Survey = "NRS", Type = Type)),
-                          names_to = "Taxon", values_to = "Counts")
+                          names_to = "Species", values_to = "Counts")
 
     CountNRS <- NRS %>%
       dplyr::rename(Sample = "TripCode") %>%
       dplyr::mutate(Survey = 'NRS') %>%
-      dplyr::select("Sample", "Survey", "Taxon", "Counts", "SampleTime_Local", "Month_Local", "Latitude", "Longitude")
+      dplyr::select("Sample", "Survey", "Species", "Counts", "SampleTime_Local", "Month_Local", "Latitude", "Longitude")
 
     CPR <- pr_get_CPRData(Type = Type, Variable = "abundance", Subset = "species") %>%
       tidyr::pivot_longer(cols = !dplyr::all_of(pr_get_NonTaxaColumns(Survey = "CPR", Type = Type)),
-                          names_to = "Taxon", values_to = "Counts")
+                          names_to = "Species", values_to = "Counts")
 
     CountCPR <- CPR %>%
       dplyr::rename(Sample = "Sample_ID") %>%
       dplyr::mutate(Survey = 'CPR') %>%
-      dplyr::select("Sample", "Survey", "Taxon", "Counts", "SampleTime_Local", "Month_Local", "Latitude", "Longitude")
+      dplyr::select("Sample", "Survey", "Species", "Counts", "SampleTime_Local", "Month_Local", "Latitude", "Longitude")
 
     dat <- dplyr::bind_rows(CountCPR, CountNRS)  %>%
       dplyr::mutate(Latitude = round(.data$Latitude/0.5, 0)*0.5,
@@ -112,14 +111,14 @@ pr_get_FreqMap <- function(Type = "Z"){
                                               .data$Month_Local > 8 & .data$Month_Local < 12 ~ "September - November",
                                               TRUE ~ "December - February"))
 
-    totals <- dat %>% dplyr::select(-c('Taxon', 'Counts')) %>% # All samples including where nothing is counted
+    totals <- dat %>% dplyr::select(-c('Species', 'Counts')) %>% # All samples including where nothing is counted
       dplyr::distinct() %>%
       dplyr::group_by(.data$Season, .data$Survey, .data$Latitude, .data$Longitude) %>%
       dplyr::summarise(samples = dplyr::n(), .groups = "drop")
 
     obs <- dat %>%  # Samples where something is counted
       dplyr::filter(.data$Counts > 0) %>%
-      dplyr::group_by(.data$Season, .data$Survey, .data$Taxon, .data$Latitude, .data$Longitude) %>%
+      dplyr::group_by(.data$Season, .data$Survey, .data$Species, .data$Latitude, .data$Longitude) %>%
       dplyr::summarise(freq = dplyr::n(), .groups = "drop") %>%
       dplyr::left_join(totals, by = c('Season', 'Survey', 'Latitude', 'Longitude')) %>%
       dplyr::mutate(freqsamp = .data$freq/.data$samples,
@@ -130,7 +129,7 @@ pr_get_FreqMap <- function(Type = "Z"){
 
     # Adding empty samples back in for absences
     mapData <-  totals %>% dplyr::left_join(obs, by = c('Season', 'Survey', 'Latitude', 'Longitude', 'samples')) %>%
-      dplyr::arrange(.data$Taxon)
+      dplyr::arrange(.data$Species)
 
     }
 
