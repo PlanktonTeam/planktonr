@@ -129,6 +129,7 @@ pr_get_FreqMap <- function(Type = "Z"){
 
     # Adding empty samples back in for absences
     mapData <-  totals %>% dplyr::left_join(obs, by = c('Season', 'Survey', 'Latitude', 'Longitude', 'samples')) %>%
+      dplyr::mutate(freqfac = factor(.data$freqfac, levels = c("Seen in 25%",'50%', '75%', '100% of Samples'))) %>%
       dplyr::arrange(.data$Species)
 
     }
