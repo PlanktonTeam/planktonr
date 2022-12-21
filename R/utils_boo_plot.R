@@ -432,11 +432,11 @@ pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "ident
   titley <- pr_relabel(EOV, style = "ggplot")
 
   if(Survey == "LTM"){
-    lims <- c(lubridate::floor_date(min(df$SampleDate), "year"), lubridate::ceiling_date(Sys.Date(), "year"))
+    lims <- c(lubridate::floor_date(min(df$SampleDate), "year"), lubridate::ceiling_date(max(df$SampleDate), "year"))
     df <- df %>%
       dplyr::filter(.data$Parameters == EOV)
   } else {
-    lims <- c(lubridate::floor_date(min(df$SampleDate), "year"), lubridate::ceiling_date(Sys.Date(), "year"))
+    lims <- c(lubridate::floor_date(min(df$SampleDate), "year"), lubridate::ceiling_date(max(df$SampleDate), "year"))
     df <- df %>%
       dplyr::filter(.data$Parameters == EOV)
   }
