@@ -557,6 +557,27 @@ pr_get_ProgressMapData <- function(Survey = c("NRS", "CPR"), interactive = FALSE
 }
 
 
+#' Data for PCI plot from CPR data
+#'
+#' @return dataframe of PCI data
+#' @export
+#'
+#' @examples
+#' head(pr_get_PCIData(),5)
+pr_get_PCIData <- function(){
+  dat <- planktonr::pr_get_Indices("CPR", "W", near_dist_km = 250) %>%
+    dplyr::filter(.data$Parameters == 'PCI') %>%
+    dplyr::mutate(Longitude = round(.data$Longitude, 0),
+                Latitude = round(.data$Latitude, 0),
+                Season = dplyr::case_when(.data$Month_Local > 2 & .data$Month_Local < 6 ~ "March - May",
+                                          .data$Month_Local > 5 & .data$Month_Local < 9 ~ "June - August",
+                                          .data$Month_Local > 8 & .data$Month_Local < 12 ~ "September - November",
+                                          TRUE ~ "December - February")) %>%
+    dplyr::group_by(.data$Longitude, .data$Latitude, .data$Season, .data$BioRegion) %>%
+    dplyr::summarise(PCI = mean(.data$Values, na.rm = TRUE),
+                   .groups = 'drop')
+
+}
 
 #' Get taxa accumulation data for plotting
 #'

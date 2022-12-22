@@ -73,6 +73,34 @@ pr_plot_CPRmap <-  function(df){
   return(p1)
 }
 
+
+
+#' PCI plot for CPR data
+#'
+#' @param df dataframe with location and seasonal PCI data
+#'
+#' @return plot of PCI around Australia
+#' @export
+#'
+#' @examples
+#' pr_get_PCIData() %>% pr_plot_PCI()
+pr_plot_PCI <- function(df){
+  cprmap <-  ggplot2::ggplot() +
+    ggplot2::geom_raster(data = df, ggplot2::aes(x = .data$Longitude, y = .data$Latitude, fill = .data$PCI), interpolate = TRUE) +
+    ggplot2::scale_fill_gradient(low = "light green", high = "darkgreen",
+                                 breaks = c(0,1,2,3),
+                                 labels = c("No Colour", "Very Pale Green", "Pale Green", "Green")) +
+    ggplot2::facet_wrap(~ .data$Season) +
+    ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
+    ggplot2::theme_bw() +
+    ggplot2::guides(fill = ggplot2::guide_colourbar(barwidth = 20)) +
+    ggplot2::theme(axis.title = ggplot2::element_blank(),
+                   strip.background = ggplot2::element_blank(),
+                   legend.position = 'bottom')
+
+  return(cprmap)
+}
+
 #' Plot basic timeseries
 #'
 #' @param df dataframe with SampleDate_Local, station code and parameter name and values
@@ -770,7 +798,7 @@ pr_plot_FreqMap <- function(df, species, interactive = TRUE){
 
     plotlist <- function(dflist){
 
-      CPRpal <- leaflet::colorFactor(c("lightblue1", "skyblue3", "blue1", "navyblue"), domain = dflist$freqfac)
+      CPRpal <- leaflet::colorFactor(c("lightblue1", "skyblue3", "dodgerblue", "blue1", "navyblue"), domain = dflist$freqfac)
       NRSpal <- leaflet::colorFactor(c("#CCFFCC", "#99FF99", "#669933", "#009900", "#006600"), domain = dflist$freqfac)
 
       dfCPR <- dflist %>% dplyr::filter(.data$Survey == 'CPR')
@@ -816,6 +844,7 @@ pr_plot_FreqMap <- function(df, species, interactive = TRUE){
         leaflet::addCircleMarkers(data = dfNRS , group = 'National Reference Stations',
                                   lat = ~ Latitude, lng = ~ Longitude,
                                   color = ~NRSpal(freqfac),
+                                  fill = ~NRSpal(freqfac),
                                   radius = 5) %>%
         leaflet::addControl(title1,
                             position = "topright",
@@ -1006,7 +1035,7 @@ pr_plot_STI <-  function(df){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_ProgressMapData("CPR")
+#' df <- pr_get_ProgressMapData("NRS")
 #' plot <- pr_plot_ProgressMap(df)
 pr_plot_ProgressMap <- function(df, interactive = FALSE, labels = TRUE){
 
