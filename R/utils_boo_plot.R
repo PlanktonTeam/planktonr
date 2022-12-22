@@ -85,15 +85,27 @@ pr_plot_CPRmap <-  function(df){
 #' @examples
 #' pr_get_PCIData() %>% pr_plot_PCI()
 pr_plot_PCI <- function(df){
+  bioregionSelection <- mbr %>%
+    dplyr::mutate(Colour = dplyr::if_else(.data$REGION %in% df$BioRegion, .data$Colour, "Black"))
+
+  col <- bioregionSelection %>%
+    sf::st_drop_geometry() %>%
+    dplyr::distinct() %>%
+    dplyr::select("REGION", "Colour") %>%
+    tibble::deframe()
+
   cprmap <-  ggplot2::ggplot() +
+    ggplot2::geom_sf(data = bioregionSelection, ggplot2::aes(colour = .data$REGION), fill = 'white') +
+    ggplot2::scale_colour_manual(values = col) +
+    ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
     ggplot2::geom_raster(data = df, ggplot2::aes(x = .data$Longitude, y = .data$Latitude, fill = .data$PCI), interpolate = TRUE) +
     ggplot2::scale_fill_gradient(low = "light green", high = "darkgreen",
                                  breaks = c(0,1,2,3),
                                  labels = c("No Colour", "Very Pale Green", "Pale Green", "Green")) +
     ggplot2::facet_wrap(~ .data$Season) +
-    ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
     ggplot2::theme_bw() +
-    ggplot2::guides(fill = ggplot2::guide_colourbar(barwidth = 20)) +
+    ggplot2::guides(fill = ggplot2::guide_colourbar(barwidth = 20),
+                    colour = "none") +
     ggplot2::theme(axis.title = ggplot2::element_blank(),
                    strip.background = ggplot2::element_blank(),
                    legend.position = 'bottom')
