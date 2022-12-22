@@ -16,6 +16,5 @@ dataframe for plotting with pr_plot_FreqMap
 Get data for frequency map plots
 }
 \examples{
-dfp <- pr_get_FreqMap("P")
-dfz <- pr_get_FreqMap("Z")
+df <- pr_get_FreqMap("Z")
 }

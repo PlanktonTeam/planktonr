@@ -81,28 +81,27 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Z", ...){
 #' @export
 #'
 #' @examples
-#' dfp <- pr_get_FreqMap("P")
-#' dfz <- pr_get_FreqMap("Z")
+#' df <- pr_get_FreqMap("Z")
 
 pr_get_FreqMap <- function(Type = "Z"){
 
     NRS <- pr_get_NRSData(Type = Type, Variable = "abundance", Subset = "species") %>%
       tidyr::pivot_longer(cols = !dplyr::all_of(pr_get_NonTaxaColumns(Survey = "NRS", Type = Type)),
-                          names_to = "Taxon", values_to = "Counts")
+                          names_to = "Species", values_to = "Counts")
 
     CountNRS <- NRS %>%
       dplyr::rename(Sample = "TripCode") %>%
       dplyr::mutate(Survey = 'NRS') %>%
-      dplyr::select("Sample", "Survey", "Taxon", "Counts", "SampleTime_Local", "Month_Local", "Latitude", "Longitude")
+      dplyr::select("Sample", "Survey", "Species", "Counts", "SampleTime_Local", "Month_Local", "Latitude", "Longitude")
 
     CPR <- pr_get_CPRData(Type = Type, Variable = "abundance", Subset = "species") %>%
       tidyr::pivot_longer(cols = !dplyr::all_of(pr_get_NonTaxaColumns(Survey = "CPR", Type = Type)),
-                          names_to = "Taxon", values_to = "Counts")
+                          names_to = "Species", values_to = "Counts")
 
     CountCPR <- CPR %>%
       dplyr::rename(Sample = "Sample_ID") %>%
       dplyr::mutate(Survey = 'CPR') %>%
-      dplyr::select("Sample", "Survey", "Taxon", "Counts", "SampleTime_Local", "Month_Local", "Latitude", "Longitude")
+      dplyr::select("Sample", "Survey", "Species", "Counts", "SampleTime_Local", "Month_Local", "Latitude", "Longitude")
 
     dat <- dplyr::bind_rows(CountCPR, CountNRS)  %>%
       dplyr::mutate(Latitude = round(.data$Latitude/0.5, 0)*0.5,
@@ -112,14 +111,14 @@ pr_get_FreqMap <- function(Type = "Z"){
                                               .data$Month_Local > 8 & .data$Month_Local < 12 ~ "September - November",
                                               TRUE ~ "December - February"))
 
-    totals <- dat %>% dplyr::select(-c('Taxon', 'Counts')) %>% # All samples including where nothing is counted
+    totals <- dat %>% dplyr::select(-c('Species', 'Counts')) %>% # All samples including where nothing is counted
       dplyr::distinct() %>%
       dplyr::group_by(.data$Season, .data$Survey, .data$Latitude, .data$Longitude) %>%
       dplyr::summarise(samples = dplyr::n(), .groups = "drop")
 
     obs <- dat %>%  # Samples where something is counted
       dplyr::filter(.data$Counts > 0) %>%
-      dplyr::group_by(.data$Season, .data$Survey, .data$Taxon, .data$Latitude, .data$Longitude) %>%
+      dplyr::group_by(.data$Season, .data$Survey, .data$Species, .data$Latitude, .data$Longitude) %>%
       dplyr::summarise(freq = dplyr::n(), .groups = "drop") %>%
       dplyr::left_join(totals, by = c('Season', 'Survey', 'Latitude', 'Longitude')) %>%
       dplyr::mutate(freqsamp = .data$freq/.data$samples,
@@ -130,7 +129,8 @@ pr_get_FreqMap <- function(Type = "Z"){
 
     # Adding empty samples back in for absences
     mapData <-  totals %>% dplyr::left_join(obs, by = c('Season', 'Survey', 'Latitude', 'Longitude', 'samples')) %>%
-      dplyr::arrange(.data$Taxon)
+      dplyr::mutate(freqfac = factor(.data$freqfac, levels = c("Seen in 25%",'50%', '75%', '100% of Samples'))) %>%
+      dplyr::arrange(.data$Species)
 
     }
 
@@ -557,6 +557,27 @@ pr_get_ProgressMapData <- function(Survey = c("NRS", "CPR"), interactive = FALSE
 }
 
 
+#' Data for PCI plot from CPR data
+#'
+#' @return dataframe of PCI data
+#' @export
+#'
+#' @examples
+#' head(pr_get_PCIData(),5)
+pr_get_PCIData <- function(){
+  dat <- planktonr::pr_get_Indices("CPR", "W", near_dist_km = 250) %>%
+    dplyr::filter(.data$Parameters == 'PCI') %>%
+    dplyr::mutate(Longitude = round(.data$Longitude, 0),
+                Latitude = round(.data$Latitude, 0),
+                Season = dplyr::case_when(.data$Month_Local > 2 & .data$Month_Local < 6 ~ "March - May",
+                                          .data$Month_Local > 5 & .data$Month_Local < 9 ~ "June - August",
+                                          .data$Month_Local > 8 & .data$Month_Local < 12 ~ "September - November",
+                                          TRUE ~ "December - February")) %>%
+    dplyr::group_by(.data$Longitude, .data$Latitude, .data$Season, .data$BioRegion) %>%
+    dplyr::summarise(PCI = mean(.data$Values, na.rm = TRUE),
+                   .groups = 'drop')
+
+}
 
 #' Get taxa accumulation data for plotting
 #'

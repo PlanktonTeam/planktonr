@@ -44,7 +44,7 @@ pr_get_PolicyData <- function(Survey = "NRS", ...){
     var_names <- c("Biomass_mgm3", "PhytoBiomassCarbon_pgL",
                    "CTDTemperature_degC", "ShannonCopepodDiversity",
                    "ShannonPhytoDiversity", "CTDSalinity_PSU", "PigmentChla_mgm3",
-                   "Ammonium_umolL", "Nitrate_umolL", "Nitrite_umolL",
+                   "Ammonium_umolL", "Nitrate_umolL", "Nitrite_umolL", "Silicate_umolL",
                    "Phosphate_umolL", "Oxygen_umolL")
 
     Polr <- pr_get_Raw("nrs_derived_indices_data") %>%

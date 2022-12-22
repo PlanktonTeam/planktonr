@@ -20,6 +20,6 @@ a plot of IMOS progress
 IMOS progress plot
 }
 \examples{
-df <- pr_get_ProgressMapData("CPR")
+df <- pr_get_ProgressMapData("NRS")
 plot <- pr_plot_ProgressMap(df)
 }
