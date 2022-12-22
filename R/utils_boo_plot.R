@@ -85,27 +85,15 @@ pr_plot_CPRmap <-  function(df){
 #' @examples
 #' pr_get_PCIData() %>% pr_plot_PCI()
 pr_plot_PCI <- function(df){
-  bioregionSelection <- mbr %>%
-    dplyr::mutate(Colour = dplyr::if_else(.data$REGION %in% df$BioRegion, .data$Colour, "Black"))
-
-  col <- bioregionSelection %>%
-    sf::st_drop_geometry() %>%
-    dplyr::distinct() %>%
-    dplyr::select("REGION", "Colour") %>%
-    tibble::deframe()
-
   cprmap <-  ggplot2::ggplot() +
-    ggplot2::geom_sf(data = bioregionSelection, ggplot2::aes(colour = .data$REGION), fill = 'white') +
-    ggplot2::scale_colour_manual(values = col) +
-    ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
     ggplot2::geom_raster(data = df, ggplot2::aes(x = .data$Longitude, y = .data$Latitude, fill = .data$PCI), interpolate = TRUE) +
     ggplot2::scale_fill_gradient(low = "light green", high = "darkgreen",
                                  breaks = c(0,1,2,3),
                                  labels = c("No Colour", "Very Pale Green", "Pale Green", "Green")) +
     ggplot2::facet_wrap(~ .data$Season) +
+    ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
     ggplot2::theme_bw() +
-    ggplot2::guides(fill = ggplot2::guide_colourbar(barwidth = 20),
-                    colour = "none") +
+    ggplot2::guides(fill = ggplot2::guide_colourbar(barwidth = 20)) +
     ggplot2::theme(axis.title = ggplot2::element_blank(),
                    strip.background = ggplot2::element_blank(),
                    legend.position = 'bottom')
@@ -156,7 +144,7 @@ pr_plot_TimeSeries <- function(df, Survey = "NRS", trans = "identity"){
     ggplot2::scale_y_continuous(trans = trans) +
     ggplot2::labs(y = titley,
                   x = titlex) +
-    ggplot2::scale_colour_manual(values = plotCols) +
+    ggplot2::scale_colour_manual(values = plotCols, limits = force) +
     ggplot2::theme_bw(base_size = 12) +
     ggplot2::theme(legend.position = "bottom")
 
@@ -265,6 +253,7 @@ pr_plot_Trends <- function(df, Trend = "Raw", Survey = "NRS", method = "lm",  tr
 #' @examples
 #' df <- pr_get_Indices(Survey = "NRS", Type = "P") %>%
 #'         dplyr::filter(Parameters == "PhytoBiomassCarbon_pgL")
+#'
 #' monthly <- pr_plot_Climatology(df, "NRS", "Month")
 #'
 #' df <- pr_get_Indices(Survey = "CPR", Type = "Z") %>%
@@ -308,7 +297,7 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
                            position = ggplot2::position_dodge(.9)) +
     ggplot2::labs(y = title) +
     ggplot2::scale_y_continuous(trans = trans) +
-    ggplot2::scale_fill_manual(values = plotCols)  +
+    ggplot2::scale_fill_manual(values = plotCols, limits = force)  +
     ggplot2::theme_bw(base_size = 12) +
     ggplot2::theme(legend.position = "bottom")
 
@@ -568,7 +557,7 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
                    legend.title = ggplot2::element_blank()) +
     ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
     ggplot2::scale_y_continuous(trans = trans) +
-    ggplot2::scale_colour_manual(values = colNRSName)
+    ggplot2::scale_colour_manual(values = colNRSName, limits = force)
 
   if(Trend == "Smoother"){
     p <- p + ggplot2::geom_smooth(method = "loess", formula = y ~ x)
@@ -592,7 +581,7 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
     ggplot2::geom_smooth(method = "loess", formula = y ~ x) +
     ggplot2::scale_x_continuous(breaks = seq(1,12,length.out = 12),
                                 labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
-    ggplot2::scale_colour_manual(values = colNRSName) +
+    ggplot2::scale_colour_manual(values = colNRSName, limits = force) +
     ggplot2::labs(x = "Month") +
     ggplot2::theme_bw() +
     ggplot2::theme(strip.background = ggplot2::element_blank(),
