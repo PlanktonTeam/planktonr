@@ -1298,7 +1298,7 @@ pr_plot_Gantt <- function(dat, Survey = "NRS"){
       ggplot2::geom_tile() +
       ggplot2::theme_bw() +
       ggplot2::labs(x = ggplot2::element_blank(), y = ggplot2::element_blank()) +
-      ggplot2::ggtitle("Continuous Plankton Counter Sampling") +
+      ggplot2::ggtitle("Continuous Plankton Recorder Sampling") +
       ggplot2::coord_fixed(ratio = 0.5)
 
     return (gg)
