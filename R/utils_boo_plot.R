@@ -1049,7 +1049,7 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE, labels = TRUE){
         dplyr::filter(.data$Survey == "CPR" & is.na(.data$ZoopAbundance_m3) & is.na(.data$PhytoAbundance_CellsL))
 
       df_NRS <- df %>% dplyr::filter(.data$Survey == "NRS")
-    } else if (is.list(df) == TRUE){ # boo will return a list to shrink size
+    } else if (is.data.frame(df) == FALSE){ # boo will return a list to shrink size
 
       df_CPR <- df$CPR %>%
         dplyr::filter((!is.na(.data$ZoopAbundance_m3) | !is.na(.data$PhytoAbundance_CellsL)))
@@ -1100,8 +1100,7 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE, labels = TRUE){
       labs_pci <- NULL
     }
 
-
-    if (is.list(df) == TRUE){
+    if (is.data.frame(df) == FALSE){
       labs_nrs <- lapply(seq(nrow(df_NRS)), function(i) {
 
         if (lubridate::year(df_NRS$End_Date[i]) < 2020){
@@ -1117,6 +1116,8 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE, labels = TRUE){
               "<strong>Longitude:</strong>", df_NRS$Longitude[i], "<br>",
               "<strong>Number of Sampling Trips:</strong>", df_NRS$Samples[i], "<br>")})
       labs_nrs <- lapply(labs_nrs, htmltools::HTML)
+    } else if (is.data.frame(df) == TRUE){
+      labs_nrs <- NULL
     }
 
 
