@@ -50,7 +50,7 @@ pr_get_DataLocs <- function(Survey = 'all'){
 #' Match locations to GHRSST
 #' Optional Inputs:
 #' res_spat - Spatial resolution. How many pixels (n x n) to download in each direction
-#' res_temp - What temporal averaging: 1 day (1d), 1 month(1m), 1 year (1y),...
+#' res_temp - What temporal averaging: 1 day (1d), 6 day (6d), 1 month(1m), ,...
 #' Monthly climatology (1mNy), Annual climatology (12mNy)
 
 #' Possible products to download are:
@@ -67,6 +67,7 @@ pr_get_DataLocs <- function(Survey = 'all'){
 #' @examples
 #' df <- head(pr_get_DataLocs("NRS"),5)
 #' res_spat = 10
+#' res_temp = "6d"
 #' pr = c("sea_surface_temperature", "sea_surface_temperature_day_night")
 #' sstout <- pr_match_GHRSST(df, pr)
 #' #TODO add progress bars with purrr
@@ -110,8 +111,14 @@ pr_match_GHRSST <- function(df, pr) {
     mth <- stringr::str_pad(df$Month,2,"left",pad="0")
     dy <- stringr::str_pad(df$Day,2,"left",pad="0")
 
+    if(res_temp == '6d'){
+      string = "212000"
+    } else {
+      string = "092000"
+    }
+
     url_base <- paste0("http://thredds.aodn.org.au/thredds/dodsC/IMOS/SRS/SST/ghrsst/L3S-",res_temp,"/dn/") # Base URL
-    imos_url <- paste0(url_base, df$Year,"/",df$Year,mth,dy,"092000-ABOM-L3S_GHRSST-SSTfnd-AVHRR_D-1d_dn.nc")
+    imos_url <- paste0(url_base, df$Year,"/",df$Year,mth,dy,string,"-ABOM-L3S_GHRSST-SSTfnd-AVHRR_D-", res_temp, "_dn.nc")
 
     tryCatch({ # Not all dates will exist
 
