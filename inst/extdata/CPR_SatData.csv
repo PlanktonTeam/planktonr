@@ -1,4 +1,4 @@
-Sample_id,Latitude,Longitude,SampleTime_UTC,WaterDepth_m,SST,chl_gsm,chl_oc3
+Sample_ID,Latitude,Longitude,SampleTime_UTC,WaterDepth_m,SST,chl_oc3,chl_gsm
 45-2,-36.73745,150.5543,4/06/2010 21:15,-3462.25125,19.6796462,,
 45-13,-37.6228,150.25185,4/06/2010 23:54,-1609.62904,18.8,0.334411502,
 Apr-18,-35.64307,150.92193,27/07/2009 11:40,-2457.589375,20.4199934,,
