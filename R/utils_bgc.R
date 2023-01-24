@@ -154,32 +154,31 @@ pr_get_NRSEnvContour <- function(Data = 'Chemistry') {
 #' @importFrom rlang .data
 pr_get_NRSMicro <- function(){
 
-  var_names <- c("Bacterial_Richness", 'Prochlorococcus_cellsmL', 'Synechococcus_cellsmL', 'Picoeukaryotes_cellsmL',
-                 "Archaeal_Richness", "Eukaryote_Richness", "Bacterial_Niche_Cluster", "Eukaryote_Niche_Cluster", "Archaea_Niche_Cluster",
-                 "Bacterial_Chlorophyll_Index", "Bacterial_Nitrogen_Index", "Bacterial_Oxygen_Index", "Bacterial_Phosphate_Index", "Bacterial_Salinity_Index",
-                 "Bacterial_Silicate_Index", "Bacterial_Temperature_Index", "Archaeal_Temperature_Index", "Archaeal_Salinity_Index", "Archaeal_Nitrogen_Index",
-                 "Archaeal_Phosphate_Index", "Archaeal_Silicate_Index", "Archaeal_Oxygen_Index", "Archaeal_Chlorophyll_Index", "Eukaryote_Temperature_Index",
-                 "Eukaryote_Salinity_Index", "Eukaryote_Nitrogen_Index", "Eukaryote_Phosphate_Index", "Eukaryote_Silicate_Index", "Eukaryote_Oxygen_Diversity",
-                 "Eukaryote_Chlorophyll_Index")
+  var_names <- c('Prochlorococcus_cellsmL', 'Synechococcus_cellsmL', 'Picoeukaryotes_cellsmL',
+                 "Bacterial_Nitrogen_Index_KD", "Bacterial_Oxygen_Index_KD", "Bacterial_Phosphate_Index_KD", "Bacterial_Salinity_Index_KD",
+                 "Bacterial_Silicate_Index_KD", "Bacterial_Temperature_Index_KD", "Archaeal_Temperature_Index_KD", "Archaeal_Salinity_Index_KD", "Archaeal_Nitrogen_Index_KD",
+                 "Archaeal_Phosphate_Index_KD", "Archaeal_Silicate_Index_KD", "Archaeal_Oxygen_Index_KD", "Eukaryote_Temperature_Index_KD",
+                 "Eukaryote_Salinity_Index_KD", "Eukaryote_Nitrogen_Index_KD", "Eukaryote_Phosphate_Index_KD", "Eukaryote_Silicate_Index_KD", "Eukaryote_Oxygen_Diversity")
 
-  #dat <- readr::read_csv(system.file("extdata", "datNRSm.csv", package = "planktonr", mustWork = TRUE), na = c("", NA, "NA"), show_col_types = FALSE) %>%
+  NRS <- pr_get_NRSTrips() %>%
+    dplyr::select(TripCode, SampleTime_Local, Year_Local, Month_Local, StationName, StationCode)
+
+
   dat <- readr::read_csv("https://raw.githubusercontent.com/AusMicrobiome/microbial_ocean_atlas/main/data/oceanViz_AM_data.csv") %>%
-  # This should be the permanent address of this file where we will access it going forward.
     pr_rename() %>%
-    dplyr::rename(SampleTime_Local = "SampleDateLocal",
-                  Month_Local = "Month",
-                  Year_Local = "Year",
-                  SampleTime_UTC = "SampleDateUTC") %>%
-    dplyr::mutate(StationName = dplyr::if_else(.data$StationName == "North Stradbroke", "North Stradbroke Island", .data$StationName)) %>%
-    pr_add_StationCode() %>%
+    dplyr::select(TripCode, TripCode_depth, tidyselect::any_of(var_names)) %>%
     dplyr::mutate(SampleDepth_m = as.numeric(stringr::str_sub(.data$TripCode_depth, -3, -1))) %>%
-    dplyr::mutate(dplyr::across(tidyselect::all_of(var_names), as.numeric)) %>%
-    dplyr::select("StationName", "SampleDepth_m", "StationCode", "SampleTime_Local",
-                  "Year_Local", "Month_Local", tidyselect::any_of(var_names)) %>%
+    dplyr::mutate(dplyr::across(tidyselect::all_of(var_names), as.numeric))
+
+  colnames(dat) <- gsub('_KD', '', colnames(dat))
+
+  dat <- dat %>%
+    dplyr::left_join(NRS, by = "TripCode") %>%
     tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters") %>%
     pr_reorder()
 
   return(dat)
+
 }
 
 

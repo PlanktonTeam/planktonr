@@ -207,6 +207,32 @@ pr_get_DayNight <- function(Type = "Z"){
 
 }
 
+#' Get data for satellite data
+#' @param Type Phyto or zoo, defaults to phyto
+#'
+#' @return Survey either NRS or CPR
+#' @export
+#'
+#' @examples
+#' df <- pr_get_SatData("NRS")
+## These will be replace with proper satellite data from extractions in time
+
+pr_get_SatData <- function(Survey = 'NRS'){
+
+  if(Survey == "NRS"){
+      NRS_SatData <- readr::read_csv(system.file("extdata", "NRS_SatData.csv", package = "planktonr", mustWork = TRUE),
+                            show_col_types = FALSE,
+                            na = c("NA", "")) %>%
+        pr_rename() %>%
+        dplyr::rename(SampleTime_Local = "SAMPLEDATE_LOCAL")
+  } else {
+      CPR_SatData <- readr::read_csv(system.file("extdata", "CPR_SatData.csv", package = "planktonr", mustWork = TRUE),
+                              show_col_types = FALSE) %>%
+        pr_rename() %>%
+        dplyr::rename(SampleTime_UTC = "SAMPLEDATE_UTC")
+  }
+}
+
 
 #' Get data for STI plots of species abundance
 #' @param Type Phyto or zoo, defaults to phyto
@@ -232,17 +258,8 @@ pr_get_STIdata <-  function(Type = "P"){
     parameter <- "PhytoAbundance_m3"
   }
 
-  ## These will be replace with proper satellite data from extractions in time
-  nrssat <- readr::read_csv(system.file("extdata", "NRS_SatData.csv", package = "planktonr", mustWork = TRUE),
-                            show_col_types = FALSE,
-                            na = c("NA", "")) %>%
-    pr_rename() %>%
-    dplyr::rename(SampleTime_Local = "SAMPLEDATE_LOCAL")
-
-  cprsat <- readr::read_csv(system.file("extdata", "CPR_SatData.csv", package = "planktonr", mustWork = TRUE),
-                            show_col_types = FALSE) %>%
-    pr_rename() %>%
-    dplyr::rename(SampleTime_UTC = "SAMPLEDATE_UTC")
+  cprsat <- pr_get_SatData("CPR")
+  nrssat <- pr_get_SatData("NRS")
 
   cpr <- cprdat %>%
     tidyr::pivot_longer(-tidyselect::all_of(pr_get_NonTaxaColumns(Survey = "CPR", Type = Type)), names_to = "Species", values_to = parameter) %>%

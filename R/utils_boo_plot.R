@@ -452,9 +452,9 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_PolicyData("CPR") %>%
+#' df <- pr_get_PolicyData("CPR") %>% pr_remove_outliers(2) %>%
 #'   pr_get_Coeffs()
-#' pr_plot_EOV(df, EOV = "BiomassIndex_mgm3", Survey = "CPR",
+#' pr_plot_EOV(df, EOV = "CHLA_MGM3", Survey = "CPR",
 #'       trans = "identity", col = "blue", labels = "no")
 pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "identity", col = "blue", labels = "yes") {
 
@@ -1298,7 +1298,7 @@ pr_plot_Gantt <- function(dat, Survey = "NRS"){
       ggplot2::geom_tile() +
       ggplot2::theme_bw() +
       ggplot2::labs(x = ggplot2::element_blank(), y = ggplot2::element_blank()) +
-      ggplot2::ggtitle("Continuous Plankton Counter Sampling") +
+      ggplot2::ggtitle("Continuous Plankton Recorder Sampling") +
       ggplot2::coord_fixed(ratio = 0.5)
 
     return (gg)

@@ -553,10 +553,28 @@ pr_get_Coeffs <-  function(df){
     unique()
   params <- params$Parameters
 
-  coeffs <- function(params){
+  if(BioRegion %in% colnames(df)){
+    stations <- df %>%
+      dplyr::select("BioRegion") %>%
+      unique()
+    stations <- stations$Bioregion
+  } else {
+    stations <- df %>%
+      dplyr::select("StationName") %>%
+      unique()
+    stations <- stations$StationName
+  }
+
+  coeffs <- function(params, stations){
     lmdat <- df %>%
       dplyr::filter(.data$Parameters == params) %>%
       tidyr::drop_na()
+
+    if(BioRegion %in% colnames(df)){
+      lmdat <- lmdat %>% dplyr::filter(.data$BioRegion == stations)
+    } else {
+      lmdat <- lmdat %>% dplyr::filter(.data$StationName == stations)
+    }
 
     m <- stats::lm(Values ~ Year_Local + pr_harmonic(Month_Local, k = 1), data = lmdat)
 
@@ -572,7 +590,7 @@ pr_get_Coeffs <-  function(df){
       dplyr::inner_join(df, by = 'Parameters')
   }
 
-  outputs <- purrr::map_dfr(params, coeffs)
+  outputs <- purrr::map2(params, stations, coeffs) %>% purrr::list_rbind
 
 }
 

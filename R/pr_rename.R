@@ -45,7 +45,7 @@ pr_rename <- function(df){
     "Silicate_umolL", "SILICATE_VALUE",
     "Silicate_Flag", "SILICATE_QC_FLAG",
     "Species", "SPECIES",
-    "Synechococcus_cellsmL", "Synecochoccus_cells_ml",
+    "Synechococcus_cellsmL", "Synechococcus_cells_ml",
     "Temperature_degC", "TEMPERATURE_VALUE",
     "Temperature_Flag", "TEMPERATURE_QC_FLAG",
     "Ammonium_umolL", "AMMONIA_VALUE",
