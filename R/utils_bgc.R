@@ -170,11 +170,9 @@ pr_get_NRSMicro <- function(){
     dplyr::mutate(SampleDepth_m = as.numeric(stringr::str_sub(.data$TripCode_depth, -3, -1))) %>%
     dplyr::mutate(dplyr::across(tidyselect::all_of(var_names), as.numeric))
 
-  colnames(dat) <- gsub('_KD', '', colnames(dat))
-
   dat <- dat %>%
-    dplyr::left_join(NRS, by = "TripCode") %>%
     tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters") %>%
+    dplyr::left_join(NRS, by = "TripCode") %>%
     pr_reorder()
 
   return(dat)
