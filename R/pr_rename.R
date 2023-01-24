@@ -59,7 +59,7 @@ pr_rename <- function(df){
     "Sub Genera", "SUBGENERA",
     "Taxon Name", "TAXON_NAME",
     "TripCode", "TRIP_CODE",
-    "WoRMS Code", "SPCODE",
+    "WoRMS AphiaID", "SPCODE",
     "ZSampleDepth_m", "ZOOPSAMPLEDEPTH_M"),
     ncol = 2, byrow = TRUE, dimnames = list(NULL, c("New","Old"))))
 

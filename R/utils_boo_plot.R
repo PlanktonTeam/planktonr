@@ -937,7 +937,7 @@ pr_plot_DayNight <-  function(df){
     ggplot2::geom_smooth(formula = "y ~ x", method = "loess") +
     ggplot2::facet_grid(~ .data$daynight, scales = "free_y") +
     ggplot2::scale_x_continuous(breaks= seq(1,12,length.out = 12), labels=c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
-    ggplot2::theme_bw(base_size = 12) +
+    ggplot2::theme_bw() +
     ggplot2::theme(strip.background = ggplot2::element_blank()) +
     ggplot2::labs(y = ylabel, x = "Month") +
     ggplot2::ggtitle(titlemain) +
