@@ -24,6 +24,7 @@ Plot single climatology
 \examples{
 df <- pr_get_Indices(Survey = "NRS", Type = "P") \%>\%
         dplyr::filter(Parameters == "PhytoBiomassCarbon_pgL")
+
 monthly <- pr_plot_Climatology(df, "NRS", "Month")
 
 df <- pr_get_Indices(Survey = "CPR", Type = "Z") \%>\%

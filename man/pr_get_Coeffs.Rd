@@ -17,5 +17,7 @@ Get coefficients from linear model
 }
 \examples{
 df <- planktonr::pr_get_PolicyData("NRS") \%>\%
+dplyr::filter(StationCode \%in\% c('PHB', 'NSI'),
+Parameters \%in\% c("Biomass_mgm3", "PhytoBiomassCarbon_pgL")) \%>\%
   pr_get_Coeffs()
 }

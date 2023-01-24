@@ -161,12 +161,12 @@ pr_get_NRSMicro <- function(){
                  "Eukaryote_Salinity_Index_KD", "Eukaryote_Nitrogen_Index_KD", "Eukaryote_Phosphate_Index_KD", "Eukaryote_Silicate_Index_KD", "Eukaryote_Oxygen_Diversity")
 
   NRS <- pr_get_NRSTrips() %>%
-    dplyr::select(TripCode, SampleTime_Local, Year_Local, Month_Local, StationName, StationCode)
+    dplyr::select("TripCode", "SampleTime_Local", "Year_Local", "Month_Local", "StationName", "StationCode")
 
 
   dat <- readr::read_csv("https://raw.githubusercontent.com/AusMicrobiome/microbial_ocean_atlas/main/data/oceanViz_AM_data.csv") %>%
     pr_rename() %>%
-    dplyr::select(TripCode, TripCode_depth, tidyselect::any_of(var_names)) %>%
+    dplyr::select("TripCode", "TripCode_depth", tidyselect::any_of(var_names)) %>%
     dplyr::mutate(SampleDepth_m = as.numeric(stringr::str_sub(.data$TripCode_depth, -3, -1))) %>%
     dplyr::mutate(dplyr::across(tidyselect::all_of(var_names), as.numeric))
 

@@ -208,9 +208,9 @@ pr_get_DayNight <- function(Type = "Z"){
 }
 
 #' Get data for satellite data
-#' @param Type Phyto or zoo, defaults to phyto
+#' @param Survey either NRS or CPR
 #'
-#' @return Survey either NRS or CPR
+#' @return df with either NRS or CPR satellite data
 #' @export
 #'
 #' @examples
@@ -223,13 +223,11 @@ pr_get_SatData <- function(Survey = 'NRS'){
       NRS_SatData <- readr::read_csv(system.file("extdata", "NRS_SatData.csv", package = "planktonr", mustWork = TRUE),
                             show_col_types = FALSE,
                             na = c("NA", "")) %>%
-        pr_rename() %>%
-        dplyr::rename(SampleTime_Local = "SAMPLEDATE_LOCAL")
+        pr_rename()
   } else {
       CPR_SatData <- readr::read_csv(system.file("extdata", "CPR_SatData.csv", package = "planktonr", mustWork = TRUE),
                               show_col_types = FALSE) %>%
-        pr_rename() %>%
-        dplyr::rename(SampleTime_UTC = "SAMPLEDATE_UTC")
+        pr_rename()
   }
 }
 

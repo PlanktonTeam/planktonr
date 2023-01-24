@@ -33,8 +33,8 @@ plot of timeseries, anomalies and climatology
 Essential Ocean Variables plot
 }
 \examples{
-df <- pr_get_PolicyData("CPR") \%>\%
+df <- pr_get_PolicyData("CPR") \%>\% pr_remove_outliers(2) \%>\%
   pr_get_Coeffs()
-pr_plot_EOV(df, EOV = "BiomassIndex_mgm3", Survey = "CPR",
+pr_plot_EOV(df, EOV = "chl_oc3", Survey = "CPR",
       trans = "identity", col = "blue", labels = "no")
 }

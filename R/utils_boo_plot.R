@@ -454,7 +454,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 #' @examples
 #' df <- pr_get_PolicyData("CPR") %>% pr_remove_outliers(2) %>%
 #'   pr_get_Coeffs()
-#' pr_plot_EOV(df, EOV = "CHLA_MGM3", Survey = "CPR",
+#' pr_plot_EOV(df, EOV = "chl_oc3", Survey = "CPR",
 #'       trans = "identity", col = "blue", labels = "no")
 pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "identity", col = "blue", labels = "yes") {
 

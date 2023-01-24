@@ -13,13 +13,13 @@ pr_get_PolicyData <- function(Survey = "NRS", ...){
   if(Survey == "CPR") {
 
     var_names <- c("BiomassIndex_mgm3", "PhytoBiomassCarbon_pgm3",
-                    "ShannonCopepodDiversity", "ShannonPhytoDiversity", "SST", "CHLA_MGM3")
+                    "ShannonCopepodDiversity", "ShannonPhytoDiversity", "SST", "chl_oc3")
 
     Polr <- pr_get_Raw("cpr_derived_indices_data") %>%
       pr_rename() %>%
       pr_add_Bioregions(...)
 
-    polSat <- pr_get_SatData("CPR") %>% dplyr::select(Sample_ID = Sample, SST, CHLA_MGM3)
+    polSat <- pr_get_SatData("CPR") %>% dplyr::select("Sample_ID", "SST", "chl_oc3")
 
     Polr <-  Polr %>% dplyr::left_join(polSat, by = "Sample_ID")
 
