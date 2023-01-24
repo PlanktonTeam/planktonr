@@ -405,7 +405,7 @@ pr_remove_outliers <- function(df, x){
   outliers <- df %>%
     dplyr::group_by(.data$Parameters, !!location) %>%
     dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
-                     sd2 = x*sd(.data$Values, na.rm = TRUE),
+                     sd2 = 2*sd(.data$Values, na.rm = TRUE),
                      meanplus = .data$means + .data$sd2,
                      meanminus = .data$means - .data$sd2,
                      .groups = 'drop') %>%
@@ -533,6 +533,8 @@ pr_harmonic <- function (theta, k = 4) {
 #'
 #' @examples
 #' df <- planktonr::pr_get_PolicyData("NRS") %>%
+#' dplyr::filter(StationCode %in% c('PHB', 'NSI'),
+#' Parameters %in% c("Biomass_mgm3", "PhytoBiomassCarbon_pgL")) %>%
 #'   pr_get_Coeffs()
 pr_get_Coeffs <-  function(df){
 
@@ -553,10 +555,31 @@ pr_get_Coeffs <-  function(df){
     unique()
   params <- params$Parameters
 
-  coeffs <- function(params){
+  if("BioRegion" %in% colnames(df)){
+    stations <- df %>%
+      dplyr::select("BioRegion") %>%
+      unique()
+    stations <- stations$BioRegion
+  } else {
+    stations <- df %>%
+      dplyr::select("StationName") %>%
+      unique()
+    stations <- stations$StationName
+  }
+
+  params <- rep(params, each = length(stations))
+  stations <- rep(stations, length.out = length(params))
+
+  coeffs <- function(params, stations){
     lmdat <- df %>%
       dplyr::filter(.data$Parameters == params) %>%
       tidyr::drop_na()
+
+    if("BioRegion" %in% colnames(df)){
+      lmdat <- lmdat %>% dplyr::filter(.data$BioRegion == stations)
+    } else {
+      lmdat <- lmdat %>% dplyr::filter(.data$StationName == stations)
+    }
 
     m <- stats::lm(Values ~ Year_Local + pr_harmonic(Month_Local, k = 1), data = lmdat)
 
@@ -566,13 +589,13 @@ pr_get_Coeffs <-  function(df){
     slope <- ifelse(ms$coefficients[2,1] < 0, 'decreasing', 'increasing')
     p <- ifelse(ms$coefficients[2,4] < 0.005, 'significantly', 'but not significantly')
 
-    df <- dplyr::tibble(slope = slope, p = p, Parameters = params)
+    dfs <- dplyr::tibble(slope = slope, p = p, Parameters = params, StationName = stations)
 
-    df <- lmdat %>%
-      dplyr::inner_join(df, by = 'Parameters')
+    dfs <- lmdat %>%
+      dplyr::inner_join(dfs, by = 'Parameters')
   }
 
-  outputs <- purrr::map_dfr(params, coeffs)
+  outputs <- purrr::map2(params, stations, coeffs) %>% purrr::list_rbind()
 
 }
 

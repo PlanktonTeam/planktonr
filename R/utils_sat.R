@@ -65,7 +65,7 @@ pr_get_DataLocs <- function(Survey = 'all'){
 #' @export
 #'
 #' @examples
-#' df <- head(pr_get_DataLocs("NRS"),5)
+#' df <- head(pr_get_DataLocs("CPR"),5)
 #' res_spat = 10
 #' res_temp = "6d"
 #' pr = c("sea_surface_temperature", "sea_surface_temperature_day_night")

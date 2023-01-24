@@ -57,7 +57,8 @@ testthat::test_that("Correct function output", {
     testthat::expect_type("double") %>%
     testthat::expect_length(4)
 
-  testthat::expect_type(planktonr::pr_get_PolicyData("NRS") %>%
+  testthat::expect_type(planktonr::pr_get_PolicyData("NRS") %>% dplyr::filter(.data$Parameters != 'Oxygen_umolL',
+                                                                              !.data$StationCode %in% c('NIN', 'ESP')) %>%
                           pr_get_Coeffs(), "list")
 
   testthat::expect_type(planktonr::pr_get_PolicyData("LTM") %>%

@@ -16,7 +16,7 @@ pr_check_DataLocs <- function(df){
 Match locations to GHRSST
 Optional Inputs:
 res_spat - Spatial resolution. How many pixels (n x n) to download in each direction
-res_temp - What temporal averaging: 1 day (1d), 1 month(1m), 1 year (1y),...
+res_temp - What temporal averaging: 1 day (1d), 6 day (6d), 1 month(1m), ,...
 Monthly climatology (1mNy), Annual climatology (12mNy)
 Possible products to download are:
 dt_analysis, l2p_flags, quality_level, satellite_zenith_angle, sea_ice_fraction, sea_ice_fraction_dtime_from_sst,
@@ -48,7 +48,7 @@ pr_check_DataLocs <- function(df){
 Match locations to GHRSST
 Optional Inputs:
 res_spat - Spatial resolution. How many pixels (n x n) to download in each direction
-res_temp - What temporal averaging: 1 day (1d), 1 month(1m), 1 year (1y),...
+res_temp - What temporal averaging: 1 day (1d), 6 day (6d), 1 month(1m), ,...
 Monthly climatology (1mNy), Annual climatology (12mNy)
 Possible products to download are:
 dt_analysis, l2p_flags, quality_level, satellite_zenith_angle, sea_ice_fraction, sea_ice_fraction_dtime_from_sst,
@@ -56,8 +56,9 @@ sea_surface_temperature, sea_surface_temperature_day_night, sses_bias, sses_coun
 sst_count, sst_dtime, sst_mean, sst_standard_deviation, wind_speed, wind_speed_dtime_from_sst
 }
 \examples{
-df <- head(pr_get_DataLocs("NRS"),5)
+df <- head(pr_get_DataLocs("CPR"),5)
 res_spat = 10
+res_temp = "6d"
 pr = c("sea_surface_temperature", "sea_surface_temperature_day_night")
 sstout <- pr_match_GHRSST(df, pr)
 #TODO add progress bars with purrr
