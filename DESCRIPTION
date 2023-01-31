@@ -24,7 +24,7 @@ Imports:
     lutz,
     magrittr,
     patchwork,
-    purrr,
+    purrr (>= 1.0.1) ,
     readr (>= 2.0.0),
     rlang,
     rnaturalearth,
