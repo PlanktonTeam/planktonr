@@ -647,7 +647,7 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, max
         dplyr::arrange(.data$MonthSince, .data$SampleDepth_m)
 
       mat <- df %>%
-        tidyr::pivot_wider(names_from = "MonthSince", values_from = "Values", values_fn = "mean") %>%
+        tidyr::pivot_wider(names_from = "MonthSince", values_from = "Values", values_fn = mean) %>%
         dplyr::select(-"SampleDepth_m") %>%
         as.matrix.data.frame()
 
