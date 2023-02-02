@@ -1,0 +1,21 @@
+---
+title: "1. Essential Ocean Variables"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{1. Essential Ocean Variables}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(planktonr)
+```
+
+### Vignette Coming Soon

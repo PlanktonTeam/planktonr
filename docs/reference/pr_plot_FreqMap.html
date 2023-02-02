@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.1.2.0000</span>
+        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.3.5.0000</span>
       </span>
     </div>
 
@@ -35,10 +35,25 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/CPR_ts.html">Analysing CPR timeseries</a>
+      <a href="../articles/1_EssentialOceanVariables.html">1. Essential Ocean Variables</a>
     </li>
     <li>
-      <a href="../articles/NRS_ts.html">Analysing NRS timeseries</a>
+      <a href="../articles/2_Microbes.html">2. Microbes</a>
+    </li>
+    <li>
+      <a href="../articles/3_Phytoplankton.html">3. Phytoplankton</a>
+    </li>
+    <li>
+      <a href="../articles/4_Zooplankton.html">4. Zooplankton</a>
+    </li>
+    <li>
+      <a href="../articles/5_LarvalFish.html">5. LarvalFish</a>
+    </li>
+    <li>
+      <a href="../articles/6_Biogeochemistry.html">6. Biogeochemistry</a>
+    </li>
+    <li>
+      <a href="../articles/7_Moorings.html">7. Moorings</a>
     </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
@@ -92,13 +107,13 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Long <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">110</span>, <span class="fl">130</span>, <span class="fl">155</span>, <span class="fl">150</span><span class="op">)</span>, Lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">10</span>, <span class="op">-</span><span class="fl">35</span>, <span class="op">-</span><span class="fl">27</span>, <span class="op">-</span><span class="fl">45</span><span class="op">)</span>,</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Longitude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">110</span>, <span class="fl">130</span>, <span class="fl">155</span>, <span class="fl">150</span><span class="op">)</span>, Latitude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">10</span>, <span class="op">-</span><span class="fl">35</span>, <span class="op">-</span><span class="fl">27</span>, <span class="op">-</span><span class="fl">45</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                 freqfac <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Absent"</span>, <span class="st">"Seen in 25%"</span>,<span class="st">'50%'</span>, <span class="st">'75%'</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                 Season <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"December - February"</span>,<span class="st">"March - May"</span>,</span></span>
 <span class="r-in"><span>                 <span class="st">"June - August"</span>,<span class="st">"September - November"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                 Taxon <span class="op">=</span> <span class="st">'Acartia danae'</span>,</span></span>
 <span class="r-in"><span>                 Survey <span class="op">=</span> <span class="st">'CPR'</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu">pr_plot_FreqMap</span><span class="op">(</span><span class="va">df</span>, species <span class="op">=</span> <span class="st">'Acartia danae'</span>, interactive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu">pr_plot_FreqMap</span><span class="op">(</span><span class="va">df</span>, species <span class="op">=</span> <span class="st">'Acartia danae'</span>, interactive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -113,7 +128,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

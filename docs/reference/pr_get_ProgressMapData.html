@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.1.2.0000</span>
+        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.3.5.0000</span>
       </span>
     </div>
 
@@ -35,10 +35,25 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/CPR_ts.html">Analysing CPR timeseries</a>
+      <a href="../articles/1_EssentialOceanVariables.html">1. Essential Ocean Variables</a>
     </li>
     <li>
-      <a href="../articles/NRS_ts.html">Analysing NRS timeseries</a>
+      <a href="../articles/2_Microbes.html">2. Microbes</a>
+    </li>
+    <li>
+      <a href="../articles/3_Phytoplankton.html">3. Phytoplankton</a>
+    </li>
+    <li>
+      <a href="../articles/4_Zooplankton.html">4. Zooplankton</a>
+    </li>
+    <li>
+      <a href="../articles/5_LarvalFish.html">5. LarvalFish</a>
+    </li>
+    <li>
+      <a href="../articles/6_Biogeochemistry.html">6. Biogeochemistry</a>
+    </li>
+    <li>
+      <a href="../articles/7_Moorings.html">7. Moorings</a>
     </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
@@ -66,7 +81,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pr_get_ProgressMapData</span><span class="op">(</span>Survey <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NRS"</span>, <span class="st">"CPR"</span><span class="op">)</span>, interactive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pr_get_ProgressMapData</span><span class="op">(</span>Survey <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NRS"</span>, <span class="st">"CPR"</span><span class="op">)</span>, interactive <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -77,6 +92,10 @@
 
 <dt>interactive</dt>
 <dd><p>A logical TRUE/FALSE if the data is to be used for an interactive plot.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>variables to be passed to pr_add_Bioregions. At the moment it only supports <code>near_dist_km</code> which is the distance (km) around each bioregion to pad the allocation of points.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -104,7 +123,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

@@ -1,0 +1,21 @@
+---
+title: "2. Microbes"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{2. Microbes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(planktonr)
+```
+
+### Vignette Coming Soon

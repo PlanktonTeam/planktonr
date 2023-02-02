@@ -13,6 +13,7 @@ reference:
 - contents:
   - starts_with("pr_plot_")
 - title: Utilities
+  desc: Helper functions.
 - contents:
   - -starts_with("pr_get_")
   - -starts_with("pr_plot_")

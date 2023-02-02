@@ -1,11 +1,16 @@
-pandoc: '2.18'
-pkgdown: 2.0.6
+pandoc: 2.19.2
+pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
-  CPR_ts: CPR_ts.html
-  NRS_ts: NRS_ts.html
+  1_EssentialOceanVariables: 1_EssentialOceanVariables.html
+  2_Microbes: 2_Microbes.html
+  3_Phytoplankton: 3_Phytoplankton.html
+  4_Zooplankton: 4_Zooplankton.html
+  5_LarvalFish: 5_LarvalFish.html
+  6_Biogeochemistry: 6_Biogeochemistry.html
+  7_Moorings: 7_Moorings.html
   planktonr: planktonr.html
-last_built: 2022-11-15T22:52Z
+last_built: 2023-02-02T05:48Z
 urls:
   reference: https://planktonteam.github.io/planktonr/reference
   article: https://planktonteam.github.io/planktonr/articles
