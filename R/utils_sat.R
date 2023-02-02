@@ -66,24 +66,22 @@ pr_get_DataLocs <- function(Survey = 'all'){
 #'
 #' @examples
 #' df <- head(pr_get_DataLocs("CPR"),5)
-#' res_spat = 10
-#' res_temp = "6d"
 #' pr = c("sea_surface_temperature", "sea_surface_temperature_day_night")
-#' sstout <- pr_match_GHRSST(df, pr)
+#' sstout <- pr_match_GHRSST(df, pr, res_spat = 10, res_temp = "6d")
 #' #TODO add progress bars with purrr
 
-pr_match_GHRSST <- function(df, pr) {
+pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d") {
 
   # Set resolution
-  if (!exists("res_temp")){
-    print("Defaulting to daily satellite data. Provide res_temp if you want to change")
-    res_temp <-  "1d"
-  }
-
-  if (!exists("res_spat")){
-    print("Defaulting to 1 pixel x 1 pixel. Provide res_spat if you want to increase")
-    res_spat <-  1
-  }
+  # if (!exists("res_temp")){
+  #   print("Defaulting to daily satellite data. Provide res_temp if you want to change")
+  #   res_temp <-  "1d"
+  # }
+  #
+  # if (!exists("res_spat")){
+  #   print("Defaulting to 1 pixel x 1 pixel. Provide res_spat if you want to increase")
+  #   res_spat <-  1
+  # }
 
   if (("Date" %in% colnames(df))==FALSE) {
     stop("No Date column found in data. Please include a Date column in POSIXct format")
@@ -173,14 +171,13 @@ pr_match_GHRSST <- function(df, pr) {
 #'
 #' @examples
 #' df <- tail(pr_get_DataLocs("NRS"), 5)
-#' res_spat <- 10
-#' altout <- pr_match_Altimetry(df, pr = "GSLA")
-pr_match_Altimetry <- function(df, pr) {
+#' altout <- pr_match_Altimetry(df, pr = "GSLA", res_spat = 10)
+pr_match_Altimetry <- function(df, pr, res_spat = 1) {
 
-  if (!exists("res_spat")){
-    print("Defaulting to 1 pixel x 1 pixel. Provide res_spat if you want to increase")
-    res_spat <-  1
-  }
+  # if (!exists("res_spat")){
+  #   print("Defaulting to 1 pixel x 1 pixel. Provide res_spat if you want to increase")
+  #   res_spat <-  1
+  # }
 
   if (sum(c("Day","Month","Year") %in% colnames(df)) != 3) { # Check that Day, Month, Year exists
     if (sum(stringr::str_detect(colnames(df),"Date")) == 1) { # Otherwise check that Date exists
@@ -276,20 +273,19 @@ pr_match_Altimetry <- function(df, pr) {
 #'
 #' @examples
 #' df <- head(pr_get_DataLocs("NRS"),5)
-#' res_spat = 10
-#' MODISout <- pr_match_MODIS(df, pr <- c("chl_gsm", "chl_oc3"))
-pr_match_MODIS <- function(df, pr) {
+#' MODISout <- pr_match_MODIS(df, pr <- c("chl_gsm", "chl_oc3"), res_spat = 10)
+pr_match_MODIS <- function(df, pr, res_spat = 1, res_temp = "1d") {
 
-  # Set resolution
-  if (!exists("res_temp")){
-    print("Defaulting to daily satellite data")
-    res_temp <-  "1d"
-  }
-
-  if (!exists("res_spat")){
-    print("Defaulting to 1 pixel x 1 pixel. Provide res_spat if you want to increase")
-    res_spat <-  1
-  }
+  # # Set resolution
+  # if (!exists("res_temp")){
+  #   print("Defaulting to daily satellite data")
+  #   res_temp <-  "1d"
+  # }
+  #
+  # if (!exists("res_spat")){
+  #   print("Defaulting to 1 pixel x 1 pixel. Provide res_spat if you want to increase")
+  #   res_spat <-  1
+  # }
 
   if (("Date" %in% colnames(df))==FALSE) {
     stop("No Date column found in data. Please include a Date column in POSIXct format")
