@@ -4,12 +4,16 @@
 \alias{pr_match_MODIS}
 \title{Match data for MODIS}
 \usage{
-pr_match_MODIS(df, pr)
+pr_match_MODIS(df, pr, res_spat = 1, res_temp = "1d")
 }
 \arguments{
 \item{df}{dataframe containing latitude, longitude and Date}
 
 \item{pr}{products from K_490, chl_carder, chl_gsm, chl_oc3, chl_oci, dt, ipar, l2_flags, owtd, par, sst, sst_quality single or as a list}
+
+\item{res_spat}{Number of spatial pixels to average over}
+
+\item{res_temp}{Temporal resolution of satellite data to use}
 }
 \value{
 df with product output attached
@@ -19,6 +23,5 @@ Match data for MODIS
 }
 \examples{
 df <- head(pr_get_DataLocs("NRS"),5)
-res_spat = 10
-MODISout <- pr_match_MODIS(df, pr <- c("chl_gsm", "chl_oc3"))
+MODISout <- pr_match_MODIS(df, pr <- c("chl_gsm", "chl_oc3"), res_spat = 10)
 }

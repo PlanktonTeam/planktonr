@@ -91,12 +91,11 @@ testthat::test_that("Correct function output", {
   testthat::expect_equal(class(pr_get_ProgressMapData(c("CPR", "NRS")) %>%
                                  pr_plot_ProgressMap())[1], "gg")
 
-  testthat::expect_equal(class(pr_get_ProgressMapData(c("CPR", "NRS")) %>%
+  testthat::expect_equal(class(pr_get_ProgressMapData(c("CPR", "NRS"), interactive = TRUE) %>%
                                  pr_plot_ProgressMap(interactive = TRUE, labels = FALSE))[1], "leaflet")
 
   testthat::expect_equal(class(pr_get_ProgressMapData(c("CPR", "NRS"), interactive = TRUE) %>%
                                  pr_plot_ProgressMap(interactive = TRUE))[1], "leaflet")
-
 
   testthat::expect_equal(class(data.frame(Longitude = c(110, 130, 155, 150), Latitude = c(-10, -35, -27, -45),
                                           freqfac = as.factor(c("Absent", "Seen in 25%",'50%', '75%')),
@@ -121,23 +120,19 @@ testthat::test_that("Correct function output", {
   testthat::expect_equal(class(pr_plot_Gantt(pr_get_NRSTrips(), Survey = "NRS"))[1], "gg")
 
   testthat::expect_equal(class(pr_get_TaxaAccum(Survey = "NRS", Type = "Z") %>% pr_plot_TaxaAccum(Survey = "NRS", Type = "Z"))[1], "gg")
-  # testthat::expect_equal(class()[1], "gg")
-  # testthat::expect_equal(class()[1], "gg")
-  # testthat::expect_equal(class()[1], "gg")
 
   testthat::expect_equal(class(pr_get_NRSEnvContour("Pico") %>%
                                  dplyr::filter(Parameters == "Prochlorococcus_cellsmL",
                                                StationCode %in% c('YON', 'PHB', 'NSI')) %>%
-                                 pr_plot_NRSEnvContour(Interpolation = TRUE, Fill_NA == TRUE))[1], "patchwork")
+                                 pr_plot_NRSEnvContour(Interpolation = TRUE, Fill_NA = TRUE))[1], "patchwork")
 
   testthat::expect_equal(class(pr_get_NRSEnvContour("Pico") %>%
                                  dplyr::filter(Parameters == "Prochlorococcus_cellsmL",
                                                StationCode %in% c('YON', 'PHB', 'NSI')) %>%
                                  pr_plot_NRSEnvContour(Interpolation = FALSE))[1], "patchwork")
 
-  testthat::expect_equal(class(pr_get_PCIData(pr_get_FuncGroups("CPR", "P") %>% pr_plot_PieFG()))[1], "gg")
-  testthat::expect_equal(class(pr_get_PCIData(pr_get_FuncGroups("NRS", "Z") %>% pr_plot_PieFG()))[1], "gg")
+  testthat::expect_equal(class(pr_get_FuncGroups("CPR", "P") %>% pr_plot_PieFG())[1], "gg")
+  testthat::expect_equal(class(pr_get_FuncGroups("NRS", "Z") %>% pr_plot_PieFG())[1], "gg")
 
-  testthat::expect_equal(class()[1], "gg")
 
 })

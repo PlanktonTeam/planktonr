@@ -23,12 +23,16 @@ dt_analysis, l2p_flags, quality_level, satellite_zenith_angle, sea_ice_fraction,
 sea_surface_temperature, sea_surface_temperature_day_night, sses_bias, sses_count,sses_standard_deviation,
 sst_count, sst_dtime, sst_mean, sst_standard_deviation, wind_speed, wind_speed_dtime_from_sst}
 \usage{
-pr_match_GHRSST(df, pr)
+pr_match_GHRSST(df, pr, res_spat = 1, res_temp = "1d")
 }
 \arguments{
 \item{df}{dataframe containing latitude, longitude and Date}
 
 \item{pr}{products from list above, single or as a list}
+
+\item{res_spat}{Number of spatial pixels to average over}
+
+\item{res_temp}{Temporal resolution of satellite data to use}
 }
 \value{
 df with product output attached
@@ -57,9 +61,7 @@ sst_count, sst_dtime, sst_mean, sst_standard_deviation, wind_speed, wind_speed_d
 }
 \examples{
 df <- head(pr_get_DataLocs("CPR"),5)
-res_spat = 10
-res_temp = "6d"
 pr = c("sea_surface_temperature", "sea_surface_temperature_day_night")
-sstout <- pr_match_GHRSST(df, pr)
+sstout <- pr_match_GHRSST(df, pr, res_spat = 10, res_temp = "6d")
 #TODO add progress bars with purrr
 }

@@ -60,6 +60,8 @@ pr_get_DataLocs <- function(Survey = 'all'){
 #'
 #' @param df dataframe containing latitude, longitude and Date
 #' @param pr products from list above, single or as a list
+#' @param res_spat Number of spatial pixels to average over
+#' @param res_temp Temporal resolution of satellite data to use
 #'
 #' @return df with product output attached
 #' @export
@@ -165,6 +167,7 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d") {
 #'
 #' @param df dataframe containing Latitude, Longitude and Date
 #' @param pr products from GSLA, GSL, UCUR, UCUR, VCUR, UCUR_MEAN, VCUR_MEAN, single or as a list
+#' @param res_spat Number of spatial pixels to average over
 #'
 #' @return df with product output attached
 #' @export
@@ -267,6 +270,8 @@ pr_match_Altimetry <- function(df, pr, res_spat = 1) {
 #'
 #' @param df dataframe containing latitude, longitude and Date
 #' @param pr products from K_490, chl_carder, chl_gsm, chl_oc3, chl_oci, dt, ipar, l2_flags, owtd, par, sst, sst_quality single or as a list
+#' @param res_spat Number of spatial pixels to average over
+#' @param res_temp Temporal resolution of satellite data to use
 #'
 #' @return df with product output attached
 #' @export

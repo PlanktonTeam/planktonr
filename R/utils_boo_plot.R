@@ -566,7 +566,6 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
     p <- p + ggplot2::geom_smooth(method = "lm", formula = y ~ x)
   }
 
-
   mdat <- df %>%
     dplyr::group_by(.data$StationName, .data$Month_Local, .data$SampleDepth_m, .data$Parameters) %>%
     dplyr::summarise(MonValues = mean(.data$Values, na.rm = TRUE),
