@@ -42,18 +42,18 @@ testthat::test_that("Correct function output", {
   testthat::expect_equal(class(pr_get_FuncGroups("CPR", "P") %>%
                                  pr_plot_tsfg(Scale = "Actual", Trend = "Year"))[1], "gg")
 
-  testthat::expect_equal(class(planktonr::pr_get_PolicyData("NRS") %>% dplyr::filter(.data$Parameters != 'Oxygen_umolL',
+  testthat::expect_equal(class(planktonr::pr_get_EOVs("NRS") %>% dplyr::filter(.data$Parameters != 'Oxygen_umolL',
                                                                                      !.data$StationCode %in% c('NIN', 'ESP')) %>%
                                  pr_get_Coeffs() %>%
                                  pr_plot_EOV(EOV = "Biomass_mgm3", Survey = "NRS", trans = "identity",
                                              labels = "yes"))[1], "patchwork")
 
-  testthat::expect_equal(class(planktonr::pr_get_PolicyData("CPR") %>%
+  testthat::expect_equal(class(planktonr::pr_get_EOVs("CPR") %>%
                                  pr_get_Coeffs() %>%
                                  pr_plot_EOV(EOV = "Biomass_mgm3", Survey = "CPR", trans = "identity",
                                              labels = "no"))[1], "patchwork")
 
-  testthat::expect_equal(class(planktonr::pr_get_PolicyData("LTM") %>%
+  testthat::expect_equal(class(planktonr::pr_get_EOVs("LTM") %>%
                                  pr_get_Coeffs() %>%
                                  pr_plot_EOV(EOV = "Biomass_mgm3", Survey = "LTM", trans = "identity",
                                              labels = "no"))[1], "patchwork")
