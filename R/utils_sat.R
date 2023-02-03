@@ -1,5 +1,5 @@
 #' Functions for matching location data to satellite products
-
+#'
 #' Get data for satellite matching
 #'
 #' @param Survey NRS, CPR or all
@@ -34,25 +34,14 @@ pr_get_DataLocs <- function(Survey = 'all'){
 
 }
 
-#' #' Title
-#' #'
-#' #' @param df
-#' #'
-#' #' @return
-#' #' @export
-#' #'
-#' #' @examples
-#' pr_check_DataLocs <- function(df){
-#'   #TODO remove locations that already have data associated with them
-#' }
 
 
 #' Match locations to GHRSST
+#'
 #' Optional Inputs:
 #' res_spat - Spatial resolution. How many pixels (n x n) to download in each direction
 #' res_temp - What temporal averaging: 1 day (1d), 6 day (6d), 1 month(1m), ,...
 #' Monthly climatology (1mNy), Annual climatology (12mNy)
-
 #' Possible products to download are:
 #' dt_analysis, l2p_flags, quality_level, satellite_zenith_angle, sea_ice_fraction, sea_ice_fraction_dtime_from_sst,
 #' sea_surface_temperature, sea_surface_temperature_day_night, sses_bias, sses_count,sses_standard_deviation,
@@ -71,7 +60,7 @@ pr_get_DataLocs <- function(Survey = 'all'){
 #' pr = c("sea_surface_temperature", "sea_surface_temperature_day_night")
 #' sstout <- pr_match_GHRSST(df, pr, res_spat = 10, res_temp = "6d")
 #' #TODO add progress bars with purrr
-
+#'
 pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d") {
 
   # Set resolution
