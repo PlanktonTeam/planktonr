@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.3.5.0000</span>
+        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.4.0.0000</span>
       </span>
     </div>
 
@@ -107,12 +107,122 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PlanktonTeam/planktonr" class="external-link">planktonr</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PlanktonTeam/planktonr" class="external-link">planktonr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span></code></pre></div>
+<p>Biomass and diversity are the <a href="%22https://www.goosocean.org/index.php?option=com_content&amp;view=article&amp;layout=edit&amp;id=283&amp;Itemid=441%22" class="external-link">Essential
+Ocean Variables (EOVs)</a> for plankton. These are the important
+variables that scientists have identified to monitor our oceans. They
+are chosen based on impact of the measurement and the feasiblity to take
+consistent measurements. They are commonly measured by observing systems
+and frequently used in policy making and input into reporting such as
+State of Environment.</p>
+<div class="section level2">
+<h2 id="national-reference-stations">National Reference Stations<a class="anchor" aria-label="anchor" href="#national-reference-stations"></a>
+</h2>
+<p>First we get the NRS EOV data and subset it for Maria Island and add
+the trend coefficients using:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">EOV</span> <span class="op">&lt;-</span> <span class="fu">planktonr</span><span class="fu">::</span><span class="fu">pr_get_EOVs</span><span class="op">(</span><span class="st">"NRS"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">EOV_MAI</span> <span class="op">&lt;-</span> <span class="va">EOV</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">StationCode</span> <span class="op">==</span> <span class="st">"MAI"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/pr_remove_outliers.html">pr_remove_outliers</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/pr_get_Coeffs.html">pr_get_Coeffs</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>To see what EOVs are available for plotting at Maria Island, do:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">EOV_MAI</span><span class="op">$</span><span class="va">Parameters</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  [1] "Biomass_mgm3"            "PhytoBiomassCarbon_pgL" </span></span>
+<span><span class="co">#&gt;  [3] "ShannonCopepodDiversity" "ShannonPhytoDiversity"  </span></span>
+<span><span class="co">#&gt;  [5] "PigmentChla_mgm3"        "Ammonium_umolL"         </span></span>
+<span><span class="co">#&gt;  [7] "Nitrate_umolL"           "Silicate_umolL"         </span></span>
+<span><span class="co">#&gt;  [9] "Phosphate_umolL"         "CTDTemperature_degC"    </span></span>
+<span><span class="co">#&gt; [11] "CTDSalinity_PSU"         "Oxygen_umolL"           </span></span>
+<span><span class="co">#&gt; [13] "Nitrite_umolL"</span></span></code></pre></div>
+<p>Once we have chosen the EOV we are interested in, we can plot it as
+below. Note the use of the <code>&amp;</code> to apply the theme. This
+is because the resulting figure is a patchwork of ggplots.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="op">(</span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">pr_plot_EOVs</span><span class="op">(</span><span class="va">EOV_MAI</span>, EOV <span class="op">=</span> <span class="st">"Biomass_mgm3"</span><span class="op">)</span> <span class="op">&amp;</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="1_EssentialOceanVariables_files/figure-html/unnamed-chunk-4-1.png" width="672"></p>
+<p>We can also add other EOVs to the patchwork.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p1</span> <span class="op">/</span> <span class="fu">pr_plot_EOVs</span><span class="op">(</span><span class="va">EOV_MAI</span>, EOV <span class="op">=</span> <span class="st">"Nitrate_umolL"</span>, col <span class="op">=</span> <span class="st">"darkgreen"</span><span class="op">)</span> <span class="op">&amp;</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">&amp;</span></span>
+<span>  <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html" class="external-link">plot_annotation</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Maria Island"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="1_EssentialOceanVariables_files/figure-html/unnamed-chunk-5-1.png" width="672"></p>
+</div>
+<div class="section level2">
+<h2 id="continuous-plankton-recorder">Continuous Plankton Recorder<a class="anchor" aria-label="anchor" href="#continuous-plankton-recorder"></a>
+</h2>
+<p>We can also do the same for bioregions using data from the Continuous
+Plankton Recorder. In this instance, the data is structured as
+bioregions.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">EOV</span> <span class="op">&lt;-</span> <span class="fu">planktonr</span><span class="fu">::</span><span class="fu">pr_get_EOVs</span><span class="op">(</span><span class="st">"CPR"</span><span class="op">)</span></span></code></pre></div>
+<p>To see the bioregions and EOVs available we can look at the data</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">EOV</span><span class="op">$</span><span class="va">BioRegion</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] South-east            None                  South-west           </span></span>
+<span><span class="co">#&gt; [4] Southern Ocean Region Temperate East        Coral Sea            </span></span>
+<span><span class="co">#&gt; 8 Levels: North North-west Coral Sea Temperate East South-east ... None</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">EOV</span><span class="op">$</span><span class="va">Parameters</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "BiomassIndex_mgm3"       "PhytoBiomassCarbon_pgm3"</span></span>
+<span><span class="co">#&gt; [3] "ShannonCopepodDiversity" "ShannonPhytoDiversity"  </span></span>
+<span><span class="co">#&gt; [5] "SST"                     "chl_oc3"</span></span></code></pre></div>
+<p>Filter the data for the required bioregion.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">EOV_SE</span> <span class="op">&lt;-</span> <span class="va">EOV</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BioRegion</span> <span class="op">==</span> <span class="st">"South-east"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/pr_remove_outliers.html">pr_remove_outliers</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/pr_get_Coeffs.html">pr_get_Coeffs</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>Now plot the data</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">pr_plot_EOVs</span><span class="op">(</span><span class="va">EOV_SE</span>, EOV <span class="op">=</span> <span class="st">"ShannonPhytoDiversity"</span>, col <span class="op">=</span> <span class="st">"darkorange"</span><span class="op">)</span> <span class="op">/</span> </span>
+<span>  <span class="fu">pr_plot_EOVs</span><span class="op">(</span><span class="va">EOV_SE</span>, EOV <span class="op">=</span> <span class="st">"ShannonCopepodDiversity"</span>, col <span class="op">=</span> <span class="st">"darkred"</span><span class="op">)</span> <span class="op">&amp;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">&amp;</span></span>
+<span>  <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html" class="external-link">plot_annotation</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"South-east Bioregion"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="1_EssentialOceanVariables_files/figure-html/unnamed-chunk-9-1.png" width="672"></p>
+</div>
+<div class="section level2">
+<h2 id="long-term-monitoring">Long term monitoring<a class="anchor" aria-label="anchor" href="#long-term-monitoring"></a>
+</h2>
+<p>Sampling at Maria Island, Port Hacking and Rottnest Island begun
+prior to IMOS. Here we plot the data for the long-term monitoring
+stations only.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">EOV</span> <span class="op">&lt;-</span> <span class="fu">planktonr</span><span class="fu">::</span><span class="fu">pr_get_EOVs</span><span class="op">(</span><span class="st">"LTM"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">EOV_PHB</span> <span class="op">&lt;-</span> <span class="va">EOV</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">StationCode</span> <span class="op">==</span> <span class="st">"PHB"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/pr_remove_outliers.html">pr_remove_outliers</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/pr_get_Coeffs.html">pr_get_Coeffs</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>To see what EOVs are available for plotting at Port Hacking LTM,
+do:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">EOV_PHB</span><span class="op">$</span><span class="va">Parameters</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  [1] "Nitrate_umolL"     "Oxygen_umolL"      "Temperature_degC" </span></span>
+<span><span class="co">#&gt;  [4] "Salinity"          "Phosphate_umolL"   "Silicate_umolL"   </span></span>
+<span><span class="co">#&gt;  [7] "Redfield"          "DIN_umolL"         "NOx_umolL"        </span></span>
+<span><span class="co">#&gt; [10] "Ammonium_umolL"    "Alkalinity_umolkg" "DIC_umolkg"       </span></span>
+<span><span class="co">#&gt; [13] "Nitrite_umolL"</span></span></code></pre></div>
+<p>Do the plotting</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">pr_plot_EOVs</span><span class="op">(</span><span class="va">EOV_PHB</span>, EOV <span class="op">=</span> <span class="st">"Temperature_degC"</span>, col <span class="op">=</span> <span class="st">"purple"</span><span class="op">)</span> <span class="op">/</span> </span>
+<span>  <span class="fu">pr_plot_EOVs</span><span class="op">(</span><span class="va">EOV_PHB</span>, EOV <span class="op">=</span> <span class="st">"Salinity"</span>, col <span class="op">=</span> <span class="st">"pink"</span><span class="op">)</span> <span class="op">&amp;</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">&amp;</span></span>
+<span>  <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html" class="external-link">plot_annotation</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Port Hacking"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="1_EssentialOceanVariables_files/figure-html/unnamed-chunk-12-1.png" width="672"></p>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 

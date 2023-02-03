@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.3.5.0000</span>
+        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.4.0.0000</span>
       </span>
     </div>
 
@@ -128,9 +128,10 @@
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr_get_PolicyData.html">pr_get_PolicyData</a></span><span class="op">(</span><span class="st">"CPR"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="pr_remove_outliers.html">pr_remove_outliers</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="pr_get_Coeffs.html">pr_get_Coeffs</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in pr_get_PolicyData("CPR"):</span> could not find function "pr_get_PolicyData"</span>
 <span class="r-in"><span><span class="fu">pr_plot_EOV</span><span class="op">(</span><span class="va">df</span>, EOV <span class="op">=</span> <span class="st">"chl_oc3"</span>, Survey <span class="op">=</span> <span class="st">"CPR"</span>,</span></span>
 <span class="r-in"><span>      trans <span class="op">=</span> <span class="st">"identity"</span>, col <span class="op">=</span> <span class="st">"blue"</span>, labels <span class="op">=</span> <span class="st">"no"</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="pr_plot_EOV-1.png" alt="" width="700" height="433"></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in pr_plot_EOV(df, EOV = "chl_oc3", Survey = "CPR", trans = "identity",     col = "blue", labels = "no"):</span> could not find function "pr_plot_EOV"</span>
 </code></pre></div>
     </div>
   </div>
