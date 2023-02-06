@@ -2,8 +2,7 @@
 % Please edit documentation in R/utils_sat.R
 \name{pr_get_DataLocs}
 \alias{pr_get_DataLocs}
-\title{Functions for matching location data to satellite products
-Get data for satellite matching}
+\title{Functions for matching location data to satellite products}
 \usage{
 pr_get_DataLocs(Survey = "all")
 }
@@ -14,7 +13,6 @@ pr_get_DataLocs(Survey = "all")
 df with latitude, longitude and Date
 }
 \description{
-Functions for matching location data to satellite products
 Get data for satellite matching
 }
 \examples{
