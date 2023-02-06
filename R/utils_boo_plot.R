@@ -610,6 +610,7 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
 #' StationCode %in% c('YON', 'MAI', 'PHB', 'NSI'))
 #' plot <- pr_plot_NRSEnvContour(df, Interpolation = TRUE, Fill_NA = FALSE, maxGap = 3)
 pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, maxGap = 3) {
+
   stations <- unique(as.character(df$StationName))
   param <- planktonr::pr_relabel(unique(df$Parameters), style = 'ggplot')
 
@@ -676,8 +677,9 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, max
 
     PlotData <- purrr::map_dfr(stations, plotfunc) # Interpolating across time and depth for the station
 
-    df <- PlotData %>% dplyr::left_join(df %>% dplyr::select('MonthSince', 'SampleDepth_m', 'StationName', 'Label', 'Month_Local'),
-                                        by = c("MonthSince", "SampleDepth_m", "StationName")) %>%
+    df <- PlotData %>%
+      dplyr::left_join(df %>% dplyr::select('MonthSince', 'SampleDepth_m', 'StationName', 'Label', 'Month_Local'),
+                       by = c("MonthSince", "SampleDepth_m", "StationName")) %>%
       dplyr::distinct() %>%
       pr_reorder()
 
@@ -1370,9 +1372,11 @@ pr_plot_TaxaAccum <- function(dat, Survey = "NRS", Type = "Z"){
 #' @export
 #'
 #' @examples
-#' df <- planktonr::pr_get_NRSMicro()
-#' gg <- pr_plot_scatter(df, )
 pr_plot_scatter <- function(df, x, y){
+
+  # TODO Examples to fix
+  # df <- planktonr::pr_get_NRSMicro() %>% tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>% tidyr::pivot_wider(names_from = "Parameters", values_from = "Values")
+  # gg <- pr_plot_scatter(df, "Prochlorococcus_cellsmL", "Synechococcus_cellsmL")
 
   titlex <- planktonr::pr_relabel(x, style = "ggplot")
   titley <- planktonr::pr_relabel(y, style = "ggplot")
