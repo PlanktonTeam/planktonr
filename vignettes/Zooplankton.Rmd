@@ -1,0 +1,125 @@
+---
+title: "4. Zooplankton"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    number_sections: false
+vignette: >
+  %\VignetteIndexEntry{4. Zooplankton}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE,
+  warning = FALSE,
+  fig.width = 7
+)
+```
+
+```{r setup}
+library(planktonr)
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+```
+
+# National Reference Stations
+
+## Trend Analysis
+
+```{r}
+
+NRSz <- planktonr::pr_get_Indices("NRS", "Z") %>% 
+  filter(Parameters == "ZoopAbundance_m3") %>% 
+  filter(StationCode %in% c("YON", "NSI", "PHB", "MAI"))
+
+p1 <- planktonr::pr_plot_Trends(NRSz, Trend = "Raw", Survey = "NRS", method = "lm", trans = "log10")
+p2 <- planktonr::pr_plot_Trends(NRSz, Trend = "Month", Survey = "NRS", method = "loess")
+
+p1 + p2 + 
+  ggplot2::theme(axis.title.y = ggplot2::element_blank()) + # Remove y-title from 2nd column
+  plot_layout(widths = c(3, 1), guides = "collect")
+
+```
+
+## Climatologies
+
+```{r}
+(p1 <- planktonr::pr_plot_TimeSeries(NRSz, Survey = "NRS", trans = "log10"))
+```
+```{r}
+(p2 <- planktonr::pr_plot_Climatology(NRSz, Survey = "NRS", Trend = "Month", trans = "log10"))
+```
+```{r}
+(p3 <- planktonr::pr_plot_Climatology(NRSz, Survey = "NRS", Trend = "Year", trans = "log10"))
+```
+
+## Functional Groups
+
+```{r}
+FGz <- pr_get_FuncGroups(Survey = "NRS", Type = "Z") %>% 
+  dplyr::filter(StationCode %in% c("ROT", "MAI"))
+
+p1 <- planktonr::pr_plot_tsfg(FGz, Scale = "Actual")
+p2 <- planktonr::pr_plot_tsfg(FGz, Scale = "Actual", Trend = "Month") +
+  ggplot2::theme(axis.title.y = element_blank())
+      
+p1 + p2 + 
+  patchwork::plot_layout(widths = c(3,1), guides = "collect") & 
+  theme(legend.position = "bottom")
+
+```
+
+
+# Continuous Plankton Recorder
+
+## Trend Analysis
+
+```{r}
+CPRz <- planktonr::pr_get_Indices("CPR", "Z") %>% 
+  filter(Parameters == "CopeAbundance_m3") %>% 
+  filter(BioRegion %in% c("South-east", "Temperate East"))
+
+p1 <- planktonr::pr_plot_Trends(CPRz, Trend = "Raw", Survey = "CPR", method = "lm", trans = "log10")
+p2 <- planktonr::pr_plot_Trends(CPRz, Trend = "Month", Survey = "CPR", method = "loess")
+
+p1 + p2 + 
+  ggplot2::theme(axis.title.y = ggplot2::element_blank()) + # Remove y-title from 2nd column
+  patchwork::plot_layout(widths = c(3, 1), guides = "collect")
+
+```
+
+
+## Climatologies
+```{r}
+p1 <- planktonr::pr_plot_TimeSeries(CPRz, Survey = "CPR", trans = "log10") + theme(axis.title.y = element_blank())
+
+p2 <- planktonr::pr_plot_Climatology(CPRz, Survey = "CPR", Trend = "Month", trans = "log10")
+
+p3 <- planktonr::pr_plot_Climatology(CPRz, Survey = "CPR", Trend = "Year", trans = "log10") + theme(axis.title.y = element_blank())
+
+wrap_plots(p1, p2, p3, ncol = 1, guides = "collect") & theme(legend.position = "bottom")
+
+```
+
+
+
+## Functional Groups
+
+```{r}
+FG <- pr_get_FuncGroups(Survey = "CPR", Type = "Z") %>% 
+  filter(BioRegion %in% c("South-east", "Temperate East"))
+
+p1 <- planktonr::pr_plot_tsfg(FG, Scale = "Actual")
+p2 <- planktonr::pr_plot_tsfg(FG, Scale = "Actual", Trend = "Month") +
+  ggplot2::theme(axis.title.y = element_blank())
+      
+p1 + p2 + 
+  patchwork::plot_layout(widths = c(3,1), guides = "collect") & 
+  theme(legend.position = "bottom")
+
+```

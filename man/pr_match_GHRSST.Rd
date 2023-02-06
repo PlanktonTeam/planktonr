@@ -2,50 +2,23 @@
 % Please edit documentation in R/utils_sat.R
 \name{pr_match_GHRSST}
 \alias{pr_match_GHRSST}
-\title{#' Title
-#'
-#' @param df
-#'
-#' @return
-#' @export
-#'
-#' @examples
-pr_check_DataLocs <- function(df){
-#TODO remove locations that already have data associated with them
-}
-Match locations to GHRSST
-Optional Inputs:
-res_spat - Spatial resolution. How many pixels (n x n) to download in each direction
-res_temp - What temporal averaging: 1 day (1d), 6 day (6d), 1 month(1m), ,...
-Monthly climatology (1mNy), Annual climatology (12mNy)
-Possible products to download are:
-dt_analysis, l2p_flags, quality_level, satellite_zenith_angle, sea_ice_fraction, sea_ice_fraction_dtime_from_sst,
-sea_surface_temperature, sea_surface_temperature_day_night, sses_bias, sses_count,sses_standard_deviation,
-sst_count, sst_dtime, sst_mean, sst_standard_deviation, wind_speed, wind_speed_dtime_from_sst}
+\title{Match locations to GHRSST}
 \usage{
-pr_match_GHRSST(df, pr)
+pr_match_GHRSST(df, pr, res_spat = 1, res_temp = "1d")
 }
 \arguments{
 \item{df}{dataframe containing latitude, longitude and Date}
 
 \item{pr}{products from list above, single or as a list}
+
+\item{res_spat}{Number of spatial pixels to average over}
+
+\item{res_temp}{Temporal resolution of satellite data to use}
 }
 \value{
 df with product output attached
 }
 \description{
-#' Title
-#'
-#' @param df
-#'
-#' @return
-#' @export
-#'
-#' @examples
-pr_check_DataLocs <- function(df){
-#TODO remove locations that already have data associated with them
-}
-Match locations to GHRSST
 Optional Inputs:
 res_spat - Spatial resolution. How many pixels (n x n) to download in each direction
 res_temp - What temporal averaging: 1 day (1d), 6 day (6d), 1 month(1m), ,...
@@ -57,9 +30,8 @@ sst_count, sst_dtime, sst_mean, sst_standard_deviation, wind_speed, wind_speed_d
 }
 \examples{
 df <- head(pr_get_DataLocs("CPR"),5)
-res_spat = 10
-res_temp = "6d"
 pr = c("sea_surface_temperature", "sea_surface_temperature_day_night")
-sstout <- pr_match_GHRSST(df, pr)
+sstout <- pr_match_GHRSST(df, pr, res_spat = 10, res_temp = "6d")
 #TODO add progress bars with purrr
+
 }

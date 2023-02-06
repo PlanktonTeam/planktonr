@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.1.2.0000</span>
+        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.4.0.0000</span>
       </span>
     </div>
 
@@ -53,10 +53,22 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/CPR_ts.html">Analysing CPR timeseries</a>
+      <a href="../articles/EssentialOceanVariables.html">1. Essential Ocean Variables</a>
     </li>
     <li>
-      <a href="../articles/NRS_ts.html">Analysing NRS timeseries</a>
+      <a href="../articles/Microbes.html">2. Microbes</a>
+    </li>
+    <li>
+      <a href="../articles/Phytoplankton.html">3. Phytoplankton</a>
+    </li>
+    <li>
+      <a href="../articles/Zooplankton.html">4. Zooplankton</a>
+    </li>
+    <li>
+      <a href="../articles/LarvalFish.html">5. LarvalFish</a>
+    </li>
+    <li>
+      <a href="../articles/Biogeochemistry.html">6. Biogeochemistry</a>
     </li>
   </ul>
 </li>
@@ -101,12 +113,75 @@
 <span><span class="co">#&gt;     filter, lag</span></span>
 <span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span></code></pre></div>
+<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span></code></pre></div>
+<div class="section level2">
+<h2 id="what-functional-groups-do-we-commonly-see">What functional groups do we commonly see?<a class="anchor" aria-label="anchor" href="#what-functional-groups-do-we-commonly-see"></a>
+</h2>
+<div class="section level3">
+<h3 id="phytoplankton">Phytoplankton<a class="anchor" aria-label="anchor" href="#phytoplankton"></a>
+</h3>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_plot_PieFG.html">pr_plot_PieFG</a></span><span class="op">(</span><span class="fu"><a href="../reference/pr_get_FuncGroups.html">pr_get_FuncGroups</a></span><span class="op">(</span>Survey <span class="op">=</span> <span class="st">"NRS"</span>, Type <span class="op">=</span> <span class="st">"P"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_plot_PieFG.html">pr_plot_PieFG</a></span><span class="op">(</span><span class="fu"><a href="../reference/pr_get_FuncGroups.html">pr_get_FuncGroups</a></span><span class="op">(</span>Survey <span class="op">=</span> <span class="st">"CPR"</span>, Type <span class="op">=</span> <span class="st">"P"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="op">(</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, guides <span class="op">=</span> <span class="st">"collect"</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">&amp;</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">16</span><span class="op">)</span>, legend.position <span class="op">=</span> <span class="st">"bottom"</span>, </span>
+<span>          plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="planktonr_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
+</div>
+<div class="section level3">
+<h3 id="zooplankton">Zooplankton<a class="anchor" aria-label="anchor" href="#zooplankton"></a>
+</h3>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_plot_PieFG.html">pr_plot_PieFG</a></span><span class="op">(</span><span class="fu"><a href="../reference/pr_get_FuncGroups.html">pr_get_FuncGroups</a></span><span class="op">(</span>Survey <span class="op">=</span> <span class="st">"NRS"</span>, Type <span class="op">=</span> <span class="st">"Z"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_plot_PieFG.html">pr_plot_PieFG</a></span><span class="op">(</span><span class="fu"><a href="../reference/pr_get_FuncGroups.html">pr_get_FuncGroups</a></span><span class="op">(</span>Survey <span class="op">=</span> <span class="st">"CPR"</span>, Type <span class="op">=</span> <span class="st">"Z"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="op">(</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">p3</span>, <span class="va">p4</span>, guides <span class="op">=</span> <span class="st">"collect"</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">&amp;</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">16</span><span class="op">)</span>, legend.position <span class="op">=</span> <span class="st">"bottom"</span>, </span>
+<span>          plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="planktonr_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="how-many-taxa-are-we-identifying">How many taxa are we identifying?<a class="anchor" aria-label="anchor" href="#how-many-taxa-are-we-identifying"></a>
+</h2>
+<div class="section level3">
+<h3 id="phytoplankton-1">Phytoplankton<a class="anchor" aria-label="anchor" href="#phytoplankton-1"></a>
+</h3>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">PSpNRSAccum</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_get_TaxaAccum.html">pr_get_TaxaAccum</a></span><span class="op">(</span>Survey <span class="op">=</span> <span class="st">"NRS"</span>, Type <span class="op">=</span> <span class="st">"P"</span><span class="op">)</span></span>
+<span><span class="va">PSpCPRAccum</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_get_TaxaAccum.html">pr_get_TaxaAccum</a></span><span class="op">(</span>Survey <span class="op">=</span> <span class="st">"CPR"</span>, Type <span class="op">=</span> <span class="st">"P"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_plot_TaxaAccum.html">pr_plot_TaxaAccum</a></span><span class="op">(</span><span class="va">PSpNRSAccum</span>, Survey <span class="op">=</span> <span class="st">"NRS"</span>, Type <span class="op">=</span> <span class="st">"P"</span><span class="op">)</span> </span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_plot_TaxaAccum.html">pr_plot_TaxaAccum</a></span><span class="op">(</span><span class="va">PSpCPRAccum</span>, Survey <span class="op">=</span> <span class="st">"CPR"</span>, Type <span class="op">=</span> <span class="st">"P"</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">&amp;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">16</span>, face <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span>,</span>
+<span>        aspect.ratio <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="planktonr_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ZSpNRSAccum</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_get_TaxaAccum.html">pr_get_TaxaAccum</a></span><span class="op">(</span>Survey <span class="op">=</span> <span class="st">"NRS"</span>, Type <span class="op">=</span> <span class="st">"Z"</span><span class="op">)</span></span>
+<span><span class="va">ZSpCPRAccum</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_get_TaxaAccum.html">pr_get_TaxaAccum</a></span><span class="op">(</span>Survey <span class="op">=</span> <span class="st">"CPR"</span>, Type <span class="op">=</span> <span class="st">"Z"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_plot_TaxaAccum.html">pr_plot_TaxaAccum</a></span><span class="op">(</span><span class="va">ZSpNRSAccum</span>, Survey <span class="op">=</span> <span class="st">"NRS"</span>, Type <span class="op">=</span> <span class="st">"Z"</span><span class="op">)</span></span>
+<span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_plot_TaxaAccum.html">pr_plot_TaxaAccum</a></span><span class="op">(</span><span class="va">ZSpCPRAccum</span>, Survey <span class="op">=</span> <span class="st">"CPR"</span>, Type <span class="op">=</span> <span class="st">"Z"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">p3</span>, <span class="va">p4</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">&amp;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">16</span>, face <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span>,</span>
+<span>        aspect.ratio <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> </span></code></pre></div>
+<p><img src="planktonr_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+</div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 
@@ -119,7 +194,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>

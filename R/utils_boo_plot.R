@@ -441,8 +441,8 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 
 #' Essential Ocean Variables plot
 #'
-#' @param df dataframe containing timeseries data with Parameters and Values, output of pr_get_PolicyData and pr_get_Coeffs
-#' @param EOV Essential OCean Variable as a parameter
+#' @param df dataframe containing timeseries data with Parameters and Values, output of pr_get_EOVs and pr_get_Coeffs
+#' @param EOV Essential Ocean Variable as a parameter
 #' @param Survey NRS, CPR or LTM 'Long term monitoring'
 #' @param trans scale for y axis
 #' @param col colour selection
@@ -452,11 +452,11 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_PolicyData("CPR") %>% pr_remove_outliers(2) %>%
+#' df <- pr_get_EOVs("CPR") %>% pr_remove_outliers(2) %>%
 #'   pr_get_Coeffs()
-#' pr_plot_EOV(df, EOV = "chl_oc3", Survey = "CPR",
+#' pr_plot_EOVs(df, EOV = "chl_oc3", Survey = "CPR",
 #'       trans = "identity", col = "blue", labels = "no")
-pr_plot_EOV <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "identity", col = "blue", labels = "yes") {
+pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "identity", col = "blue", labels = "yes") {
 
   titley <- pr_relabel(EOV, style = "ggplot")
 
@@ -566,7 +566,6 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
     p <- p + ggplot2::geom_smooth(method = "lm", formula = y ~ x)
   }
 
-
   mdat <- df %>%
     dplyr::group_by(.data$StationName, .data$Month_Local, .data$SampleDepth_m, .data$Parameters) %>%
     dplyr::summarise(MonValues = mean(.data$Values, na.rm = TRUE),
@@ -611,6 +610,7 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
 #' StationCode %in% c('YON', 'MAI', 'PHB', 'NSI'))
 #' plot <- pr_plot_NRSEnvContour(df, Interpolation = TRUE, Fill_NA = FALSE, maxGap = 3)
 pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, maxGap = 3) {
+
   stations <- unique(as.character(df$StationName))
   param <- planktonr::pr_relabel(unique(df$Parameters), style = 'ggplot')
 
@@ -647,7 +647,7 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, max
         dplyr::arrange(.data$MonthSince, .data$SampleDepth_m)
 
       mat <- df %>%
-        tidyr::pivot_wider(names_from = "MonthSince", values_from = "Values", values_fn = "mean") %>%
+        tidyr::pivot_wider(names_from = "MonthSince", values_from = "Values", values_fn = mean) %>%
         dplyr::select(-"SampleDepth_m") %>%
         as.matrix.data.frame()
 
@@ -677,8 +677,9 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, max
 
     PlotData <- purrr::map_dfr(stations, plotfunc) # Interpolating across time and depth for the station
 
-    df <- PlotData %>% dplyr::left_join(df %>% dplyr::select('MonthSince', 'SampleDepth_m', 'StationName', 'Label', 'Month_Local'),
-                                        by = c("MonthSince", "SampleDepth_m", "StationName")) %>%
+    df <- PlotData %>%
+      dplyr::left_join(df %>% dplyr::select('MonthSince', 'SampleDepth_m', 'StationName', 'Label', 'Month_Local'),
+                       by = c("MonthSince", "SampleDepth_m", "StationName")) %>%
       dplyr::distinct() %>%
       pr_reorder()
 
@@ -1327,7 +1328,7 @@ pr_plot_Gantt <- function(dat, Survey = "NRS"){
 
 
 
-# 'Taxa Accumulation Curve
+#' Taxa Accumulation Curve
 #'
 #' Plot a taxa accumulation curve for everything that is identified by the IMOS plankton team
 #'
@@ -1359,6 +1360,35 @@ pr_plot_TaxaAccum <- function(dat, Survey = "NRS", Type = "Z"){
 
 
 
+#' Simple function to scatter 2 data columns using common NRS colouring
+#'
+#' Note that this function assumes wide data with the data to plot as columns.
+#'
+#' @param df Dataframe
+#' @param x Column name for the x axis
+#' @param y Column name for the y axis
+#'
+#' @return ggplot object
+#' @export
+#'
+#' @examples
+pr_plot_scatter <- function(df, x, y){
+
+  # TODO Examples to fix
+  # df <- planktonr::pr_get_NRSMicro() %>% tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>% tidyr::pivot_wider(names_from = "Parameters", values_from = "Values")
+  # gg <- pr_plot_scatter(df, "Prochlorococcus_cellsmL", "Synechococcus_cellsmL")
+
+  titlex <- planktonr::pr_relabel(x, style = "ggplot")
+  titley <- planktonr::pr_relabel(y, style = "ggplot")
+
+  gg <-  ggplot2::ggplot(data = df) +
+    ggplot2::geom_point(ggplot2::aes(!!rlang::sym(x), !!rlang::sym(y), colour = .data$StationName)) +
+    ggplot2::xlab(titlex) +
+    ggplot2::ylab(titley) +
+    ggplot2::scale_colour_manual(values = colNRSName)
+
+  return(gg)
+}
 
 
 

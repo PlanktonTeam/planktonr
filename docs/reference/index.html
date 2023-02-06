@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.1.2.0000</span>
+        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.4.0.0000</span>
       </span>
     </div>
 
@@ -35,10 +35,22 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/CPR_ts.html">Analysing CPR timeseries</a>
+      <a href="../articles/EssentialOceanVariables.html">1. Essential Ocean Variables</a>
     </li>
     <li>
-      <a href="../articles/NRS_ts.html">Analysing NRS timeseries</a>
+      <a href="../articles/Microbes.html">2. Microbes</a>
+    </li>
+    <li>
+      <a href="../articles/Phytoplankton.html">3. Phytoplankton</a>
+    </li>
+    <li>
+      <a href="../articles/Zooplankton.html">4. Zooplankton</a>
+    </li>
+    <li>
+      <a href="../articles/LarvalFish.html">5. LarvalFish</a>
+    </li>
+    <li>
+      <a href="../articles/Biogeochemistry.html">6. Biogeochemistry</a>
     </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
@@ -82,12 +94,15 @@
       </tr><tr><td>
           <p><code><a href="pr_get_DataLocs.html">pr_get_DataLocs()</a></code> </p>
         </td>
-        <td><p>Functions for matching location data to satellite products
-Get data for satellite matching</p></td>
+        <td><p>Functions for matching location data to satellite products</p></td>
       </tr><tr><td>
           <p><code><a href="pr_get_DayNight.html">pr_get_DayNight()</a></code> </p>
         </td>
         <td><p>Get data for plots of species abundance by day and night using CPR data</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_EOVs.html">pr_get_EOVs()</a></code> </p>
+        </td>
+        <td><p>Get Essential Ocean Variables</p></td>
       </tr><tr><td>
           <p><code><a href="pr_get_Facts.html">pr_get_Facts()</a></code> </p>
         </td>
@@ -125,6 +140,10 @@ Get data for satellite matching</p></td>
         </td>
         <td><p>Import NRS Data</p></td>
       </tr><tr><td>
+          <p><code><a href="pr_get_NRSEnvContour.html">pr_get_NRSEnvContour()</a></code> </p>
+        </td>
+        <td><p>Data for environmental contour plots</p></td>
+      </tr><tr><td>
           <p><code><a href="pr_get_NRSMicro.html">pr_get_NRSMicro()</a></code> </p>
         </td>
         <td><p>Load microbial data</p></td>
@@ -153,6 +172,10 @@ Get data for satellite matching</p></td>
         </td>
         <td><p>Return columns that are not taxonomic</p></td>
       </tr><tr><td>
+          <p><code><a href="pr_get_PCIData.html">pr_get_PCIData()</a></code> </p>
+        </td>
+        <td><p>Data for PCI plot from CPR data</p></td>
+      </tr><tr><td>
           <p><code><a href="pr_get_Papers.html">pr_get_Papers()</a></code> </p>
         </td>
         <td><p>Random scientific papers using IMOS data</p></td>
@@ -160,10 +183,6 @@ Get data for satellite matching</p></td>
           <p><code><a href="pr_get_PlanktonInfo.html">pr_get_PlanktonInfo()</a></code> </p>
         </td>
         <td><p>Load plankton information table with sizes etc.</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_PolicyData.html">pr_get_PolicyData()</a></code> </p>
-        </td>
-        <td><p>Get Policy data set</p></td>
       </tr><tr><td>
           <p><code><a href="pr_get_PolicyInfo.html">pr_get_PolicyInfo()</a></code> </p>
         </td>
@@ -185,13 +204,21 @@ Get data for satellite matching</p></td>
         </td>
         <td><p>Get data for STI plots of species abundance</p></td>
       </tr><tr><td>
+          <p><code><a href="pr_get_SatData.html">pr_get_SatData()</a></code> </p>
+        </td>
+        <td><p>Get data for satellite data</p></td>
+      </tr><tr><td>
           <p><code><a href="pr_get_Site.html">pr_get_Site()</a></code> </p>
         </td>
         <td><p>Get location of raw plankton data</p></td>
       </tr><tr><td>
-          <p><code><a href="pr_get_SppCount.html">pr_get_SppCount()</a></code> </p>
+          <p><code><a href="pr_get_SpeciesInfo.html">pr_get_SpeciesInfo()</a></code> </p>
         </td>
-        <td><p>Get the summary plankton observations</p></td>
+        <td><p>Get species information table for Phytoplankton and Zooplankton</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_TaxaAccum.html">pr_get_TaxaAccum()</a></code> </p>
+        </td>
+        <td><p>Get taxa accumulation data for plotting</p></td>
       </tr><tr><td>
           <p><code><a href="pr_get_s3.html">pr_get_s3()</a></code> </p>
         </td>
@@ -217,9 +244,9 @@ Get data for satellite matching</p></td>
         </td>
         <td><p>Plot of relative day and night abundances</p></td>
       </tr><tr><td>
-          <p><code><a href="pr_plot_EOV.html">pr_plot_EOV()</a></code> </p>
+          <p><code><a href="pr_plot_EOVs.html">pr_plot_EOVs()</a></code> </p>
         </td>
-        <td><p>Policy plot</p></td>
+        <td><p>Essential Ocean Variables plot</p></td>
       </tr><tr><td>
           <p><code><a href="pr_plot_Enviro.html">pr_plot_Enviro()</a></code> </p>
         </td>
@@ -229,9 +256,25 @@ Get data for satellite matching</p></td>
         </td>
         <td><p>Frequency plot of the selected species</p></td>
       </tr><tr><td>
+          <p><code><a href="pr_plot_Gantt.html">pr_plot_Gantt()</a></code> </p>
+        </td>
+        <td><p>Plot Gantt Chart showing plankton sampling status</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_plot_NRSEnvContour.html">pr_plot_NRSEnvContour()</a></code> </p>
+        </td>
+        <td><p>Contour plots for depth stratified environmental data</p></td>
+      </tr><tr><td>
           <p><code><a href="pr_plot_NRSmap.html">pr_plot_NRSmap()</a></code> </p>
         </td>
         <td><p>Sidebar panel plot of selected NRS stations</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_plot_PCI.html">pr_plot_PCI()</a></code> </p>
+        </td>
+        <td><p>PCI plot for CPR data</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_plot_PieFG.html">pr_plot_PieFG()</a></code> </p>
+        </td>
+        <td><p>Pie plots of functional groups for data</p></td>
       </tr><tr><td>
           <p><code><a href="pr_plot_ProgressMap.html">pr_plot_ProgressMap()</a></code> </p>
         </td>
@@ -241,6 +284,10 @@ Get data for satellite matching</p></td>
         </td>
         <td><p>Plot of STI kernel density for species</p></td>
       </tr><tr><td>
+          <p><code><a href="pr_plot_TaxaAccum.html">pr_plot_TaxaAccum()</a></code> </p>
+        </td>
+        <td><p>Taxa Accumulation Curve</p></td>
+      </tr><tr><td>
           <p><code><a href="pr_plot_TimeSeries.html">pr_plot_TimeSeries()</a></code> </p>
         </td>
         <td><p>Plot basic timeseries</p></td>
@@ -248,6 +295,10 @@ Get data for satellite matching</p></td>
           <p><code><a href="pr_plot_Trends.html">pr_plot_Trends()</a></code> </p>
         </td>
         <td><p>Plot temporal Trends in plankton data</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_plot_scatter.html">pr_plot_scatter()</a></code> </p>
+        </td>
+        <td><p>Simple function to scatter 2 data columns using common NRS colouring</p></td>
       </tr><tr><td>
           <p><code><a href="pr_plot_tsclimate.html">pr_plot_tsclimate()</a></code> </p>
         </td>
@@ -258,7 +309,7 @@ Get data for satellite matching</p></td>
         <td><p>Time series plot of functional groups</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="utilities">Utilities <a href="#utilities" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p>
+          <p class="section-desc"></p><p>Helper functions.</p>
         </th>
       </tr></tbody><tbody><tr><td>
           <p><code><a href="pr_add_Bioregions.html">pr_add_Bioregions()</a></code> </p>
@@ -311,26 +362,7 @@ Get data for satellite matching</p></td>
       </tr><tr><td>
           <p><code><a href="pr_match_GHRSST.html">pr_match_GHRSST()</a></code> </p>
         </td>
-        <td><p>#' Title
-#'
-#' @param df
-#'
-#' @return
-#' @export
-#'
-#' @examples
-pr_check_DataLocs &lt;- function(df)
-#TODO remove locations that already have data associated with them
-
-Match locations to GHRSST
-Optional Inputs:
-res_spat - Spatial resolution. How many pixels (n x n) to download in each direction
-res_temp - What temporal averaging: 1 day (1d), 1 month(1m), 1 year (1y),...
-Monthly climatology (1mNy), Annual climatology (12mNy)
-Possible products to download are:
-dt_analysis, l2p_flags, quality_level, satellite_zenith_angle, sea_ice_fraction, sea_ice_fraction_dtime_from_sst,
-sea_surface_temperature, sea_surface_temperature_day_night, sses_bias, sses_count,sses_standard_deviation,
-sst_count, sst_dtime, sst_mean, sst_standard_deviation, wind_speed, wind_speed_dtime_from_sst</p></td>
+        <td><p>Match locations to GHRSST</p></td>
       </tr><tr><td>
           <p><code><a href="pr_match_MODIS.html">pr_match_MODIS()</a></code> </p>
         </td>
@@ -351,6 +383,10 @@ sst_count, sst_dtime, sst_mean, sst_standard_deviation, wind_speed, wind_speed_d
           <p><code><a href="pr_reorder.html">pr_reorder()</a></code> </p>
         </td>
         <td><p>Order the Station or region in the df by latitude for consistent plotting</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_title.html">pr_title()</a></code> </p>
+        </td>
+        <td><p>Helper function to reformat Titles</p></td>
       </tr></tbody></table></div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -364,7 +400,7 @@ sst_count, sst_dtime, sst_mean, sst_standard_deviation, wind_speed, wind_speed_d
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

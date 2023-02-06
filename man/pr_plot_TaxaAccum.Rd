@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_boo_plot.R
 \name{pr_plot_TaxaAccum}
 \alias{pr_plot_TaxaAccum}
-\title{Plot a taxa accumulation curve for everything that is identified by the IMOS plankton team}
+\title{Taxa Accumulation Curve}
 \usage{
 pr_plot_TaxaAccum(dat, Survey = "NRS", Type = "Z")
 }

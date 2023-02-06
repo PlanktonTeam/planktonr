@@ -7,13 +7,22 @@
     <loc>https://planktonteam.github.io/planktonr/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/articles/CPR_ts.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/articles/Biogeochemistry.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/articles/NRS_ts.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/articles/EssentialOceanVariables.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/articles/getting-started.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/articles/LarvalFish.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/articles/Microbes.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/articles/Phytoplankton.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/articles/Zooplankton.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/articles/index.html</loc>
@@ -313,6 +322,9 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pipe.html</loc>
   </url>
   <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_add_Bioregions.html</loc>
+  </url>
+  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_add_Carbon.html</loc>
   </url>
   <url>
@@ -328,13 +340,10 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_add_StationName.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/pr_add_bioregions.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_apply_Flags.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/pr_apply_flags.html</loc>
-  </url>
-  <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/pr_apply_time.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_apply_Time.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_export_SppCount.html</loc>
@@ -352,10 +361,10 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_filter_NRSStations.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/pr_filter_data.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_filter_Species.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/pr_filter_species.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_filter_data.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRData.html</loc>
@@ -442,10 +451,19 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_DataLocs.html</loc>
   </url>
   <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_DayNight.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_EOVs.html</loc>
+  </url>
+  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_FreqMap.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_FuncGroups.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_Indices.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_LFCountAll.html</loc>
@@ -470,6 +488,9 @@
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSData.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSEnvContour.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSMicro.html</loc>
@@ -556,6 +577,12 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NRSZooSpeciesNonCopepod.html</loc>
   </url>
   <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_NonTaxaColumns.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_PCIData.html</loc>
+  </url>
+  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_PlanktonInfo.html</loc>
   </url>
   <url>
@@ -574,7 +601,22 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_ProgressMapData.html</loc>
   </url>
   <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_Raw.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_STI.html</loc>
+  </url>
+  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_STIdata.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_SatData.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_Site.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_SpeciesInfo.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_SppCount.html</loc>
@@ -584,6 +626,9 @@
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_StationName.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_TaxaAccum.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_ZooInfo.html</loc>
@@ -598,9 +643,6 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_csv.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_daynight.html</loc>
-  </url>
-  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_fMap_data.html</loc>
   </url>
   <url>
@@ -610,16 +652,10 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_fg.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_indices.html</loc>
-  </url>
-  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_indices_cpr.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_indices_nrs.html</loc>
-  </url>
-  <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_nonTaxaColumns.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_nuts.html</loc>
@@ -643,25 +679,16 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_polInfo.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_raw.html</loc>
-  </url>
-  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_s3.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_s3site.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_site.html</loc>
-  </url>
-  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_site2.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_site_bgc.html</loc>
-  </url>
-  <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_sti.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_tsdata.html</loc>
@@ -688,7 +715,13 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_Climatology.html</loc>
   </url>
   <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_DayNight.html</loc>
+  </url>
+  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_EOV.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_EOVs.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_Enviro.html</loc>
@@ -697,16 +730,37 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_FreqMap.html</loc>
   </url>
   <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_Gantt.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_NRSEnvContour.html</loc>
+  </url>
+  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_NRSmap.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_PCI.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_PieFG.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_ProgressMap.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_climate.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_STI.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_daynight.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_TaxaAccum.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_TimeSeries.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_Trends.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_climate.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_env_var.html</loc>
@@ -715,13 +769,7 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_fmap.html</loc>
   </url>
   <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_sti.html</loc>
-  </url>
-  <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_timeseries.html</loc>
-  </url>
-  <url>
-    <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_trends.html</loc>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_scatter.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_tsclimate.html</loc>
@@ -740,6 +788,9 @@
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_reorder.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_title.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/untibble.html</loc>

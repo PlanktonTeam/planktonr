@@ -1,14 +1,14 @@
 
-#' Get Policy data set
-#' @param ... to allow use of join when used within another function
+#' Get Essential Ocean Variables
 #' @param Survey "NRS" or "CPR" or "LTM"
+#' @param ... to allow use of join when used within another function
 #'
 #' @return A dataframe with policy data
 #' @export
 #'
 #' @examples
-#' df <- pr_get_PolicyData("CPR")
-pr_get_PolicyData <- function(Survey = "NRS", ...){
+#' df <- pr_get_EOVs("CPR")
+pr_get_EOVs <- function(Survey = "NRS", ...){
 
   if(Survey == "CPR") {
 

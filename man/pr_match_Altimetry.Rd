@@ -4,12 +4,14 @@
 \alias{pr_match_Altimetry}
 \title{Match data for altimetry}
 \usage{
-pr_match_Altimetry(df, pr)
+pr_match_Altimetry(df, pr, res_spat = 1)
 }
 \arguments{
 \item{df}{dataframe containing Latitude, Longitude and Date}
 
 \item{pr}{products from GSLA, GSL, UCUR, UCUR, VCUR, UCUR_MEAN, VCUR_MEAN, single or as a list}
+
+\item{res_spat}{Number of spatial pixels to average over}
 }
 \value{
 df with product output attached
@@ -19,6 +21,5 @@ Match data for altimetry
 }
 \examples{
 df <- tail(pr_get_DataLocs("NRS"), 5)
-res_spat <- 10
-altout <- pr_match_Altimetry(df, pr = "GSLA")
+altout <- pr_match_Altimetry(df, pr = "GSLA", res_spat = 10)
 }

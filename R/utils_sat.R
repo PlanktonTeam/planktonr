@@ -1,5 +1,5 @@
 #' Functions for matching location data to satellite products
-
+#'
 #' Get data for satellite matching
 #'
 #' @param Survey NRS, CPR or all
@@ -34,25 +34,14 @@ pr_get_DataLocs <- function(Survey = 'all'){
 
 }
 
-#' #' Title
-#' #'
-#' #' @param df
-#' #'
-#' #' @return
-#' #' @export
-#' #'
-#' #' @examples
-#' pr_check_DataLocs <- function(df){
-#'   #TODO remove locations that already have data associated with them
-#' }
 
 
 #' Match locations to GHRSST
+#'
 #' Optional Inputs:
 #' res_spat - Spatial resolution. How many pixels (n x n) to download in each direction
 #' res_temp - What temporal averaging: 1 day (1d), 6 day (6d), 1 month(1m), ,...
 #' Monthly climatology (1mNy), Annual climatology (12mNy)
-
 #' Possible products to download are:
 #' dt_analysis, l2p_flags, quality_level, satellite_zenith_angle, sea_ice_fraction, sea_ice_fraction_dtime_from_sst,
 #' sea_surface_temperature, sea_surface_temperature_day_night, sses_bias, sses_count,sses_standard_deviation,
@@ -60,30 +49,30 @@ pr_get_DataLocs <- function(Survey = 'all'){
 #'
 #' @param df dataframe containing latitude, longitude and Date
 #' @param pr products from list above, single or as a list
+#' @param res_spat Number of spatial pixels to average over
+#' @param res_temp Temporal resolution of satellite data to use
 #'
 #' @return df with product output attached
 #' @export
 #'
 #' @examples
 #' df <- head(pr_get_DataLocs("CPR"),5)
-#' res_spat = 10
-#' res_temp = "6d"
 #' pr = c("sea_surface_temperature", "sea_surface_temperature_day_night")
-#' sstout <- pr_match_GHRSST(df, pr)
+#' sstout <- pr_match_GHRSST(df, pr, res_spat = 10, res_temp = "6d")
 #' #TODO add progress bars with purrr
-
-pr_match_GHRSST <- function(df, pr) {
+#'
+pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d") {
 
   # Set resolution
-  if (!exists("res_temp")){
-    print("Defaulting to daily satellite data. Provide res_temp if you want to change")
-    res_temp <-  "1d"
-  }
-
-  if (!exists("res_spat")){
-    print("Defaulting to 1 pixel x 1 pixel. Provide res_spat if you want to increase")
-    res_spat <-  1
-  }
+  # if (!exists("res_temp")){
+  #   print("Defaulting to daily satellite data. Provide res_temp if you want to change")
+  #   res_temp <-  "1d"
+  # }
+  #
+  # if (!exists("res_spat")){
+  #   print("Defaulting to 1 pixel x 1 pixel. Provide res_spat if you want to increase")
+  #   res_spat <-  1
+  # }
 
   if (("Date" %in% colnames(df))==FALSE) {
     stop("No Date column found in data. Please include a Date column in POSIXct format")
@@ -167,20 +156,20 @@ pr_match_GHRSST <- function(df, pr) {
 #'
 #' @param df dataframe containing Latitude, Longitude and Date
 #' @param pr products from GSLA, GSL, UCUR, UCUR, VCUR, UCUR_MEAN, VCUR_MEAN, single or as a list
+#' @param res_spat Number of spatial pixels to average over
 #'
 #' @return df with product output attached
 #' @export
 #'
 #' @examples
 #' df <- tail(pr_get_DataLocs("NRS"), 5)
-#' res_spat <- 10
-#' altout <- pr_match_Altimetry(df, pr = "GSLA")
-pr_match_Altimetry <- function(df, pr) {
+#' altout <- pr_match_Altimetry(df, pr = "GSLA", res_spat = 10)
+pr_match_Altimetry <- function(df, pr, res_spat = 1) {
 
-  if (!exists("res_spat")){
-    print("Defaulting to 1 pixel x 1 pixel. Provide res_spat if you want to increase")
-    res_spat <-  1
-  }
+  # if (!exists("res_spat")){
+  #   print("Defaulting to 1 pixel x 1 pixel. Provide res_spat if you want to increase")
+  #   res_spat <-  1
+  # }
 
   if (sum(c("Day","Month","Year") %in% colnames(df)) != 3) { # Check that Day, Month, Year exists
     if (sum(stringr::str_detect(colnames(df),"Date")) == 1) { # Otherwise check that Date exists
@@ -270,26 +259,27 @@ pr_match_Altimetry <- function(df, pr) {
 #'
 #' @param df dataframe containing latitude, longitude and Date
 #' @param pr products from K_490, chl_carder, chl_gsm, chl_oc3, chl_oci, dt, ipar, l2_flags, owtd, par, sst, sst_quality single or as a list
+#' @param res_spat Number of spatial pixels to average over
+#' @param res_temp Temporal resolution of satellite data to use
 #'
 #' @return df with product output attached
 #' @export
 #'
 #' @examples
 #' df <- head(pr_get_DataLocs("NRS"),5)
-#' res_spat = 10
-#' MODISout <- pr_match_MODIS(df, pr <- c("chl_gsm", "chl_oc3"))
-pr_match_MODIS <- function(df, pr) {
+#' MODISout <- pr_match_MODIS(df, pr <- c("chl_gsm", "chl_oc3"), res_spat = 10)
+pr_match_MODIS <- function(df, pr, res_spat = 1, res_temp = "1d") {
 
-  # Set resolution
-  if (!exists("res_temp")){
-    print("Defaulting to daily satellite data")
-    res_temp <-  "1d"
-  }
-
-  if (!exists("res_spat")){
-    print("Defaulting to 1 pixel x 1 pixel. Provide res_spat if you want to increase")
-    res_spat <-  1
-  }
+  # # Set resolution
+  # if (!exists("res_temp")){
+  #   print("Defaulting to daily satellite data")
+  #   res_temp <-  "1d"
+  # }
+  #
+  # if (!exists("res_spat")){
+  #   print("Defaulting to 1 pixel x 1 pixel. Provide res_spat if you want to increase")
+  #   res_spat <-  1
+  # }
 
   if (("Date" %in% colnames(df))==FALSE) {
     stop("No Date column found in data. Please include a Date column in POSIXct format")
