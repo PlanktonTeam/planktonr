@@ -591,10 +591,15 @@ pr_get_Coeffs <-  function(df){
     slope <- ifelse(ms$coefficients[2,1] < 0, "decreasing", "increasing")
     p <- ifelse(ms$coefficients[2,4] < 0.005, "significantly", "but not significantly")
 
-    dfs <- dplyr::tibble(slope = slope, p = p, Parameters = params, StationName = stations)
-
-    dfs2 <- lmdat %>%
-      dplyr::inner_join(dfs, by = c("Parameters", "StationName"))
+    if("StationName" %in% colnames(lmdat)) {
+      dfs <- dplyr::tibble(slope = slope, p = p, Parameters = params, StationName = stations)
+      dfs2 <- lmdat %>%
+        dplyr::inner_join(dfs, by = c("Parameters", "StationName"))
+    } else {
+      dfs <- dplyr::tibble(slope = slope, p = p, Parameters = params, BioRegion = stations)
+      dfs2 <- lmdat %>%
+        dplyr::inner_join(dfs, by = c("Parameters", "BioRegion"))
+    }
   }
 
   outputs <- purrr::map2(params, stations, coeffs) %>% purrr::list_rbind()
