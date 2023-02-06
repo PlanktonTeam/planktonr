@@ -1,6 +1,9 @@
 ---
 title: "planktonr"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    number_sections: false
 vignette: >
   %\VignetteIndexEntry{planktonr}
   %\VignetteEngine{knitr::rmarkdown}
@@ -17,5 +20,67 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(planktonr)
 library(dplyr)
+library(ggplot2)
+library(patchwork)
 ```
+
+
+# What functional groups do we commonly see?
+
+## Phytoplankton
+```{r}
+p1 <- pr_plot_PieFG(pr_get_FuncGroups(Survey = "NRS", Type = "P"))
+p2 <- pr_plot_PieFG(pr_get_FuncGroups(Survey = "CPR", Type = "P"))
+
+(wrap_plots(p1, p2, guides = "collect", ncol = 2) &
+    theme(text = element_text(size = 16), legend.position = "bottom", 
+          plot.title = element_text(face = "bold")))
+
+```
+
+
+## Zooplankton
+```{r}
+p3 <- pr_plot_PieFG(pr_get_FuncGroups(Survey = "NRS", Type = "Z"))
+p4 <- pr_plot_PieFG(pr_get_FuncGroups(Survey = "CPR", Type = "Z"))
+
+(wrap_plots(p3, p4, guides = "collect", ncol = 2) &
+    theme(text = element_text(size = 16), legend.position = "bottom", 
+          plot.title = element_text(face = "bold")))
+
+```
+
+
+
+
+# How many taxa are we identifying?
+
+## Phytoplankton
+```{r}
+PSpNRSAccum <- pr_get_TaxaAccum(Survey = "NRS", Type = "P")
+PSpCPRAccum <- pr_get_TaxaAccum(Survey = "CPR", Type = "P")
+
+p1 <- pr_plot_TaxaAccum(PSpNRSAccum, Survey = "NRS", Type = "P") 
+p2 <- pr_plot_TaxaAccum(PSpCPRAccum, Survey = "CPR", Type = "P")
+
+
+wrap_plots(p1, p2, ncol = 2) &
+  theme(text = element_text(size = 16, face = "bold"),
+        aspect.ratio = 1)
+```
+
+
+```{r}
+ZSpNRSAccum <- pr_get_TaxaAccum(Survey = "NRS", Type = "Z")
+ZSpCPRAccum <- pr_get_TaxaAccum(Survey = "CPR", Type = "Z")
+
+p3 <- pr_plot_TaxaAccum(ZSpNRSAccum, Survey = "NRS", Type = "Z")
+p4 <- pr_plot_TaxaAccum(ZSpCPRAccum, Survey = "CPR", Type = "Z")
+
+wrap_plots(p3, p4, ncol = 2) &
+  theme(text = element_text(size = 16, face = "bold"),
+        aspect.ratio = 1) 
+
+```
+
 

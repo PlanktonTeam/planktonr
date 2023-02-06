@@ -1,6 +1,9 @@
 ---
 title: "2. Microbes"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    number_sections: false
 vignette: >
   %\VignetteIndexEntry{2. Microbes}
   %\VignetteEngine{knitr::rmarkdown}
@@ -18,4 +21,4 @@ knitr::opts_chunk$set(
 library(planktonr)
 ```
 
-### Vignette Coming Soon
+# Vignette Coming Soon

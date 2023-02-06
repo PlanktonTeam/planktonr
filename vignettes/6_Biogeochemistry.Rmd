@@ -1,8 +1,11 @@
 ---
 title: "6. Biogeochemistry"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    number_sections: false
 vignette: >
-  %\VignetteIndexEntry{Biogeochemistry}
+  %\VignetteIndexEntry{6. Biogeochemistry}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,6 +19,67 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(planktonr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(patchwork)
 ```
 
-### Vignette Coming Soon
+### Nutrients at National Reference Stations
+
+```{r}
+
+Nuts <- pr_get_NRSEnvContour('Chemistry') %>% 
+  filter(StationCode %in% c("NSI", "PHB", "MAI")) %>% 
+  filter(Parameters %in% "Nitrate_umolL") %>%
+  mutate(name = as.factor(.data$Parameters)) %>% #TODO Check
+  drop_na() 
+
+pr_plot_NRSEnvContour(Nuts, Interpolation = TRUE, Fill_NA = TRUE, maxGap = 3)
+
+```
+
+
+### CTD data from National Reference Stations
+
+```{r}
+CTD <- pr_get_Indices("NRS", "W") %>% 
+  filter(Parameters == "CTDTemperature_degC") %>% 
+  filter(StationCode %in% c("NSI", "MAI"))
+
+p1 <- pr_plot_Trends(CTD, Trend = "Raw", Survey = "NRS", method = "lm", trans = 'identity')
+p2 <- pr_plot_Trends(CTD, Trend = "Month", Survey = "NRS", method = "loess", trans = 'identity') +
+  ggplot2::theme(axis.title.y = ggplot2::element_blank())
+p1 + p2 + plot_layout(widths = c(3, 1), guides = 'collect')
+
+```
+
+
+# Pigments at National Reference Stations
+
+```{r}
+
+Pigs <- pr_get_NRSPigments(Format = "binned") %>% 
+  pr_remove_outliers(2) %>% 
+  filter(Parameters == "TotalChla") %>% 
+  filter(StationCode %in% c("NSI", "MAI"))
+
+(p <- pr_plot_Enviro(Pigs, Trend = "Smoother", trans = "log10") & theme(legend.position = "bottom"))
+
+```
+
+
+# Picophytoplankton at National Reference Stations
+
+```{r}
+
+Pico <- pr_get_NRSEnvContour('Pico') %>% 
+  dplyr::filter(Parameters %in% c("Prochlorococcus_cellsmL")) %>% 
+  filter(StationCode %in% c("PHB", "MAI"))
+
+pr_plot_NRSEnvContour(Pico, Interpolation = TRUE, Fill_NA = TRUE, maxGap = 3)
+
+
+```
+
+

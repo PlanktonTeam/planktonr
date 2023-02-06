@@ -1,8 +1,11 @@
 ---
 title: "5. LarvalFish"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    number_sections: false
 vignette: >
-  %\VignetteIndexEntry{LarvalFish}
+  %\VignetteIndexEntry{5. LarvalFish}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

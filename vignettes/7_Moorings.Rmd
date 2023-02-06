@@ -1,8 +1,11 @@
 ---
 title: "7. Moorings"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    number_sections: false
 vignette: >
-  %\VignetteIndexEntry{Moorings}
+  %\VignetteIndexEntry{7. Moorings}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
