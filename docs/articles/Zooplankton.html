@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.3.5.0000</span>
+        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.4.0.0000</span>
       </span>
     </div>
 
@@ -53,25 +53,22 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/Biogeochemistry.html">6. Biogeochemistry</a>
-    </li>
-    <li>
       <a href="../articles/EssentialOceanVariables.html">1. Essential Ocean Variables</a>
     </li>
     <li>
-      <a href="../articles/LarvalFish.html">5. LarvalFish</a>
-    </li>
-    <li>
       <a href="../articles/Microbes.html">2. Microbes</a>
-    </li>
-    <li>
-      <a href="../articles/Moorings.html">7. Moorings</a>
     </li>
     <li>
       <a href="../articles/Phytoplankton.html">3. Phytoplankton</a>
     </li>
     <li>
       <a href="../articles/Zooplankton.html">4. Zooplankton</a>
+    </li>
+    <li>
+      <a href="../articles/LarvalFish.html">5. LarvalFish</a>
+    </li>
+    <li>
+      <a href="../articles/Biogeochemistry.html">6. Biogeochemistry</a>
     </li>
   </ul>
 </li>
@@ -107,16 +104,116 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PlanktonTeam/planktonr" class="external-link">planktonr</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PlanktonTeam/planktonr" class="external-link">planktonr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span></code></pre></div>
+<div class="section level2">
+<h2 id="national-reference-stations">National Reference Stations<a class="anchor" aria-label="anchor" href="#national-reference-stations"></a>
+</h2>
 <div class="section level3">
-<h3 id="vignette-coming-soon">Vignette Coming Soon<a class="anchor" aria-label="anchor" href="#vignette-coming-soon"></a>
+<h3 id="trend-analysis">Trend Analysis<a class="anchor" aria-label="anchor" href="#trend-analysis"></a>
 </h3>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">NRSz</span> <span class="op">&lt;-</span> <span class="fu">planktonr</span><span class="fu">::</span><span class="fu"><a href="../reference/pr_get_Indices.html">pr_get_Indices</a></span><span class="op">(</span><span class="st">"NRS"</span>, <span class="st">"Z"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Parameters</span> <span class="op">==</span> <span class="st">"ZoopAbundance_m3"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">StationCode</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"YON"</span>, <span class="st">"NSI"</span>, <span class="st">"PHB"</span>, <span class="st">"MAI"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">planktonr</span><span class="fu">::</span><span class="fu"><a href="../reference/pr_plot_Trends.html">pr_plot_Trends</a></span><span class="op">(</span><span class="va">NRSz</span>, Trend <span class="op">=</span> <span class="st">"Raw"</span>, Survey <span class="op">=</span> <span class="st">"NRS"</span>, method <span class="op">=</span> <span class="st">"lm"</span>, trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">planktonr</span><span class="fu">::</span><span class="fu"><a href="../reference/pr_plot_Trends.html">pr_plot_Trends</a></span><span class="op">(</span><span class="va">NRSz</span>, Trend <span class="op">=</span> <span class="st">"Month"</span>, Survey <span class="op">=</span> <span class="st">"NRS"</span>, method <span class="op">=</span> <span class="st">"loess"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> </span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.title.y <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="co"># Remove y-title from 2nd column</span></span>
+<span>  <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_layout.html" class="external-link">plot_layout</a></span><span class="op">(</span>widths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span>, guides <span class="op">=</span> <span class="st">"collect"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Zooplankton_files/figure-html/unnamed-chunk-2-1.png" width="672"></p>
+</div>
+<div class="section level3">
+<h3 id="climatologies">Climatologies<a class="anchor" aria-label="anchor" href="#climatologies"></a>
+</h3>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="op">(</span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">planktonr</span><span class="fu">::</span><span class="fu"><a href="../reference/pr_plot_TimeSeries.html">pr_plot_TimeSeries</a></span><span class="op">(</span><span class="va">NRSz</span>, Survey <span class="op">=</span> <span class="st">"NRS"</span>, trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Zooplankton_files/figure-html/unnamed-chunk-3-1.png" width="672"></p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="op">(</span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">planktonr</span><span class="fu">::</span><span class="fu"><a href="../reference/pr_plot_Climatology.html">pr_plot_Climatology</a></span><span class="op">(</span><span class="va">NRSz</span>, Survey <span class="op">=</span> <span class="st">"NRS"</span>, Trend <span class="op">=</span> <span class="st">"Month"</span>, trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Zooplankton_files/figure-html/unnamed-chunk-4-1.png" width="672"></p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="op">(</span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu">planktonr</span><span class="fu">::</span><span class="fu"><a href="../reference/pr_plot_Climatology.html">pr_plot_Climatology</a></span><span class="op">(</span><span class="va">NRSz</span>, Survey <span class="op">=</span> <span class="st">"NRS"</span>, Trend <span class="op">=</span> <span class="st">"Year"</span>, trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Zooplankton_files/figure-html/unnamed-chunk-5-1.png" width="672"></p>
+</div>
+<div class="section level3">
+<h3 id="functional-groups">Functional Groups<a class="anchor" aria-label="anchor" href="#functional-groups"></a>
+</h3>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">FGz</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_get_FuncGroups.html">pr_get_FuncGroups</a></span><span class="op">(</span>Survey <span class="op">=</span> <span class="st">"NRS"</span>, Type <span class="op">=</span> <span class="st">"Z"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">StationCode</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ROT"</span>, <span class="st">"MAI"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">planktonr</span><span class="fu">::</span><span class="fu"><a href="../reference/pr_plot_tsfg.html">pr_plot_tsfg</a></span><span class="op">(</span><span class="va">FGz</span>, Scale <span class="op">=</span> <span class="st">"Actual"</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">planktonr</span><span class="fu">::</span><span class="fu"><a href="../reference/pr_plot_tsfg.html">pr_plot_tsfg</a></span><span class="op">(</span><span class="va">FGz</span>, Scale <span class="op">=</span> <span class="st">"Actual"</span>, Trend <span class="op">=</span> <span class="st">"Month"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.title.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>      </span>
+<span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> </span>
+<span>  <span class="fu">patchwork</span><span class="fu">::</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_layout.html" class="external-link">plot_layout</a></span><span class="op">(</span>widths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">1</span><span class="op">)</span>, guides <span class="op">=</span> <span class="st">"collect"</span><span class="op">)</span> <span class="op">&amp;</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Zooplankton_files/figure-html/unnamed-chunk-6-1.png" width="672"></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="continuous-plankton-recorder">Continuous Plankton Recorder<a class="anchor" aria-label="anchor" href="#continuous-plankton-recorder"></a>
+</h2>
+<div class="section level3">
+<h3 id="trend-analysis-1">Trend Analysis<a class="anchor" aria-label="anchor" href="#trend-analysis-1"></a>
+</h3>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">CPRz</span> <span class="op">&lt;-</span> <span class="fu">planktonr</span><span class="fu">::</span><span class="fu"><a href="../reference/pr_get_Indices.html">pr_get_Indices</a></span><span class="op">(</span><span class="st">"CPR"</span>, <span class="st">"Z"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Parameters</span> <span class="op">==</span> <span class="st">"CopeAbundance_m3"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BioRegion</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"South-east"</span>, <span class="st">"Temperate East"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">planktonr</span><span class="fu">::</span><span class="fu"><a href="../reference/pr_plot_Trends.html">pr_plot_Trends</a></span><span class="op">(</span><span class="va">CPRz</span>, Trend <span class="op">=</span> <span class="st">"Raw"</span>, Survey <span class="op">=</span> <span class="st">"CPR"</span>, method <span class="op">=</span> <span class="st">"lm"</span>, trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">planktonr</span><span class="fu">::</span><span class="fu"><a href="../reference/pr_plot_Trends.html">pr_plot_Trends</a></span><span class="op">(</span><span class="va">CPRz</span>, Trend <span class="op">=</span> <span class="st">"Month"</span>, Survey <span class="op">=</span> <span class="st">"CPR"</span>, method <span class="op">=</span> <span class="st">"loess"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> </span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.title.y <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="co"># Remove y-title from 2nd column</span></span>
+<span>  <span class="fu">patchwork</span><span class="fu">::</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_layout.html" class="external-link">plot_layout</a></span><span class="op">(</span>widths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span>, guides <span class="op">=</span> <span class="st">"collect"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Zooplankton_files/figure-html/unnamed-chunk-7-1.png" width="672"></p>
+</div>
+<div class="section level3">
+<h3 id="climatologies-1">Climatologies<a class="anchor" aria-label="anchor" href="#climatologies-1"></a>
+</h3>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">planktonr</span><span class="fu">::</span><span class="fu"><a href="../reference/pr_plot_TimeSeries.html">pr_plot_TimeSeries</a></span><span class="op">(</span><span class="va">CPRz</span>, Survey <span class="op">=</span> <span class="st">"CPR"</span>, trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.title.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">planktonr</span><span class="fu">::</span><span class="fu"><a href="../reference/pr_plot_Climatology.html">pr_plot_Climatology</a></span><span class="op">(</span><span class="va">CPRz</span>, Survey <span class="op">=</span> <span class="st">"CPR"</span>, Trend <span class="op">=</span> <span class="st">"Month"</span>, trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu">planktonr</span><span class="fu">::</span><span class="fu"><a href="../reference/pr_plot_Climatology.html">pr_plot_Climatology</a></span><span class="op">(</span><span class="va">CPRz</span>, Survey <span class="op">=</span> <span class="st">"CPR"</span>, Trend <span class="op">=</span> <span class="st">"Year"</span>, trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.title.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, <span class="va">p3</span>, ncol <span class="op">=</span> <span class="fl">1</span>, guides <span class="op">=</span> <span class="st">"collect"</span><span class="op">)</span> <span class="op">&amp;</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Zooplankton_files/figure-html/unnamed-chunk-8-1.png" width="672"></p>
+</div>
+<div class="section level3">
+<h3 id="functional-groups-1">Functional Groups<a class="anchor" aria-label="anchor" href="#functional-groups-1"></a>
+</h3>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">FG</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_get_FuncGroups.html">pr_get_FuncGroups</a></span><span class="op">(</span>Survey <span class="op">=</span> <span class="st">"CPR"</span>, Type <span class="op">=</span> <span class="st">"Z"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BioRegion</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"South-east"</span>, <span class="st">"Temperate East"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">planktonr</span><span class="fu">::</span><span class="fu"><a href="../reference/pr_plot_tsfg.html">pr_plot_tsfg</a></span><span class="op">(</span><span class="va">FG</span>, Scale <span class="op">=</span> <span class="st">"Actual"</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">planktonr</span><span class="fu">::</span><span class="fu"><a href="../reference/pr_plot_tsfg.html">pr_plot_tsfg</a></span><span class="op">(</span><span class="va">FG</span>, Scale <span class="op">=</span> <span class="st">"Actual"</span>, Trend <span class="op">=</span> <span class="st">"Month"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.title.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>      </span>
+<span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> </span>
+<span>  <span class="fu">patchwork</span><span class="fu">::</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_layout.html" class="external-link">plot_layout</a></span><span class="op">(</span>widths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">1</span><span class="op">)</span>, guides <span class="op">=</span> <span class="st">"collect"</span><span class="op">)</span> <span class="op">&amp;</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Zooplankton_files/figure-html/unnamed-chunk-9-1.png" width="672"></p>
+</div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 

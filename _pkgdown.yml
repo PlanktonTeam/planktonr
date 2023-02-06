@@ -1,4 +1,14 @@
 url: https://planktonteam.github.io/planktonr
+articles:
+- title: Articles
+  navbar: ~
+  contents:
+  - EssentialOceanVariables
+  - Microbes
+  - Phytoplankton
+  - Zooplankton
+  - LarvalFish
+  - Biogeochemistry
 development:
   destination:
   version_label: info

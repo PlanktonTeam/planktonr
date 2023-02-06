@@ -35,25 +35,22 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/1_EssentialOceanVariables.html">1. Essential Ocean Variables</a>
+      <a href="../articles/EssentialOceanVariables.html">1. Essential Ocean Variables</a>
     </li>
     <li>
-      <a href="../articles/2_Microbes.html">2. Microbes</a>
+      <a href="../articles/Microbes.html">2. Microbes</a>
     </li>
     <li>
-      <a href="../articles/3_Phytoplankton.html">3. Phytoplankton</a>
+      <a href="../articles/Phytoplankton.html">3. Phytoplankton</a>
     </li>
     <li>
-      <a href="../articles/4_Zooplankton.html">4. Zooplankton</a>
+      <a href="../articles/Zooplankton.html">4. Zooplankton</a>
     </li>
     <li>
-      <a href="../articles/5_LarvalFish.html">5. LarvalFish</a>
+      <a href="../articles/LarvalFish.html">5. LarvalFish</a>
     </li>
     <li>
-      <a href="../articles/6_Biogeochemistry.html">6. Biogeochemistry</a>
-    </li>
-    <li>
-      <a href="../articles/7_Moorings.html">7. Moorings</a>
+      <a href="../articles/Biogeochemistry.html">6. Biogeochemistry</a>
     </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
@@ -97,12 +94,15 @@
       </tr><tr><td>
           <p><code><a href="pr_get_DataLocs.html">pr_get_DataLocs()</a></code> </p>
         </td>
-        <td><p>Functions for matching location data to satellite products
-Get data for satellite matching</p></td>
+        <td><p>Functions for matching location data to satellite products</p></td>
       </tr><tr><td>
           <p><code><a href="pr_get_DayNight.html">pr_get_DayNight()</a></code> </p>
         </td>
         <td><p>Get data for plots of species abundance by day and night using CPR data</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_EOVs.html">pr_get_EOVs()</a></code> </p>
+        </td>
+        <td><p>Get Essential Ocean Variables</p></td>
       </tr><tr><td>
           <p><code><a href="pr_get_Facts.html">pr_get_Facts()</a></code> </p>
         </td>
@@ -184,10 +184,6 @@ Get data for satellite matching</p></td>
         </td>
         <td><p>Load plankton information table with sizes etc.</p></td>
       </tr><tr><td>
-          <p><code><a href="pr_get_PolicyData.html">pr_get_PolicyData()</a></code> </p>
-        </td>
-        <td><p>Get Policy data set</p></td>
-      </tr><tr><td>
           <p><code><a href="pr_get_PolicyInfo.html">pr_get_PolicyInfo()</a></code> </p>
         </td>
         <td><p>Get policy information</p></td>
@@ -248,7 +244,7 @@ Get data for satellite matching</p></td>
         </td>
         <td><p>Plot of relative day and night abundances</p></td>
       </tr><tr><td>
-          <p><code><a href="pr_plot_EOV.html">pr_plot_EOV()</a></code> </p>
+          <p><code><a href="pr_plot_EOVs.html">pr_plot_EOVs()</a></code> </p>
         </td>
         <td><p>Essential Ocean Variables plot</p></td>
       </tr><tr><td>
@@ -290,7 +286,7 @@ Get data for satellite matching</p></td>
       </tr><tr><td>
           <p><code><a href="pr_plot_TaxaAccum.html">pr_plot_TaxaAccum()</a></code> </p>
         </td>
-        <td><p>Plot a taxa accumulation curve for everything that is identified by the IMOS plankton team</p></td>
+        <td><p>Taxa Accumulation Curve</p></td>
       </tr><tr><td>
           <p><code><a href="pr_plot_TimeSeries.html">pr_plot_TimeSeries()</a></code> </p>
         </td>
@@ -299,6 +295,10 @@ Get data for satellite matching</p></td>
           <p><code><a href="pr_plot_Trends.html">pr_plot_Trends()</a></code> </p>
         </td>
         <td><p>Plot temporal Trends in plankton data</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_plot_scatter.html">pr_plot_scatter()</a></code> </p>
+        </td>
+        <td><p>Simple function to scatter 2 data columns using common NRS colouring</p></td>
       </tr><tr><td>
           <p><code><a href="pr_plot_tsclimate.html">pr_plot_tsclimate()</a></code> </p>
         </td>
@@ -362,26 +362,7 @@ Get data for satellite matching</p></td>
       </tr><tr><td>
           <p><code><a href="pr_match_GHRSST.html">pr_match_GHRSST()</a></code> </p>
         </td>
-        <td><p>#' Title
-#'
-#' @param df
-#'
-#' @return
-#' @export
-#'
-#' @examples
-pr_check_DataLocs &lt;- function(df)
-#TODO remove locations that already have data associated with them
-
-Match locations to GHRSST
-Optional Inputs:
-res_spat - Spatial resolution. How many pixels (n x n) to download in each direction
-res_temp - What temporal averaging: 1 day (1d), 6 day (6d), 1 month(1m), ,...
-Monthly climatology (1mNy), Annual climatology (12mNy)
-Possible products to download are:
-dt_analysis, l2p_flags, quality_level, satellite_zenith_angle, sea_ice_fraction, sea_ice_fraction_dtime_from_sst,
-sea_surface_temperature, sea_surface_temperature_day_night, sses_bias, sses_count,sses_standard_deviation,
-sst_count, sst_dtime, sst_mean, sst_standard_deviation, wind_speed, wind_speed_dtime_from_sst</p></td>
+        <td><p>Match locations to GHRSST</p></td>
       </tr><tr><td>
           <p><code><a href="pr_match_MODIS.html">pr_match_MODIS()</a></code> </p>
         </td>

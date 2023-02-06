@@ -35,25 +35,22 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/1_EssentialOceanVariables.html">1. Essential Ocean Variables</a>
+      <a href="../articles/EssentialOceanVariables.html">1. Essential Ocean Variables</a>
     </li>
     <li>
-      <a href="../articles/2_Microbes.html">2. Microbes</a>
+      <a href="../articles/Microbes.html">2. Microbes</a>
     </li>
     <li>
-      <a href="../articles/3_Phytoplankton.html">3. Phytoplankton</a>
+      <a href="../articles/Phytoplankton.html">3. Phytoplankton</a>
     </li>
     <li>
-      <a href="../articles/4_Zooplankton.html">4. Zooplankton</a>
+      <a href="../articles/Zooplankton.html">4. Zooplankton</a>
     </li>
     <li>
-      <a href="../articles/5_LarvalFish.html">5. LarvalFish</a>
+      <a href="../articles/LarvalFish.html">5. LarvalFish</a>
     </li>
     <li>
-      <a href="../articles/6_Biogeochemistry.html">6. Biogeochemistry</a>
-    </li>
-    <li>
-      <a href="../articles/7_Moorings.html">7. Moorings</a>
+      <a href="../articles/Biogeochemistry.html">6. Biogeochemistry</a>
     </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
@@ -99,11 +96,10 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">planktonr</span><span class="fu">::</span><span class="fu"><a href="pr_get_PolicyData.html">pr_get_PolicyData</a></span><span class="op">(</span><span class="st">"NRS"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">planktonr</span><span class="fu">::</span><span class="fu"><a href="pr_get_EOVs.html">pr_get_EOVs</a></span><span class="op">(</span><span class="st">"NRS"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">StationCode</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'PHB'</span>, <span class="st">'NSI'</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span><span class="va">Parameters</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Biomass_mgm3"</span>, <span class="st">"PhytoBiomassCarbon_pgL"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">pr_get_Coeffs</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> 'pr_get_PolicyData' is not an exported object from 'namespace:planktonr'</span>
 </code></pre></div>
     </div>
   </div>
