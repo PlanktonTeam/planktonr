@@ -87,12 +87,8 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d") {
   }
 
   df <- df %>%
-    dplyr::select("Latitude", "Longitude", "Year", "Month", "Day")
-
-  df <- dplyr::bind_cols(purrr::map_dfr(seq_len(length(pr)), ~ df),
-                         purrr::map_dfr(seq_len(nrow(df)), ~ data.frame(pr)) %>%
-                           dplyr::arrange(pr)) %>%
-    dplyr::group_split(.data$Latitude, .data$Longitude, .data$Year, .data$Month, .data$Day, .data$pr)
+    dplyr::select("Latitude", "Longitude", "Year", "Month", "Day") %>%
+    dplyr::group_split(.data$Latitude, .data$Longitude, .data$Year, .data$Month, .data$Day)
 
   pr_get_SSTData <- function(df){
 
@@ -131,23 +127,31 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d") {
         idx_lat <- idx_lat - floor(res_spat/2)
         cnt <- c(res_spat, res_spat, 1)
       }
-      out <- RNetCDF::var.get.nc(nc, df$pr, start=c(idx_lon, idx_lat, 1), count = cnt, unpack = TRUE)
 
-      out <- mean(out, na.rm = TRUE) - 273.15
+      prfunc <- function(pr){
+        out <- mean(RNetCDF::var.get.nc(nc, pr, start=c(idx_lon, idx_lat, 1), count = cnt, unpack = TRUE)) - 273.15
+      }
+
+      out <- purrr::map(pr, prfunc)
+      names(out) <- pr
       return(out)
       RNetCDF::close.nc(nc)
     },
     error = function(cond) {
-      out <- NaN
+
+      erfunc <- function(pr){(as.numeric(NA))}
+      out <- purrr::map(pr, erfunc)
+      names(out) <- pr
       return(out)
     }
     )
 
   }
-  sstout <- purrr::map(df, pr_get_SSTData)
+
+  sstout <- purrr::map(df, pr_get_SSTData) %>%
+    data.table::rbindlist()
   df <- dplyr::bind_rows(df) %>%
-    dplyr::bind_cols(value = unlist(sstout)) %>%
-    tidyr::pivot_wider(names_from = "pr", values_from = "value")
+    dplyr::bind_cols(sstout)
 
 }
 
@@ -187,12 +191,8 @@ pr_match_Altimetry <- function(df, pr, res_spat = 1) {
   }
 
   df <- df %>%
-    dplyr::select("Latitude", "Longitude", "Year", "Month", "Day")
-
-  df <- dplyr::bind_cols(purrr::map_dfr(seq_len(length(pr)), ~ df),
-                         purrr::map_dfr(seq_len(nrow(df)), ~ data.frame(pr)) %>%
-                           dplyr::arrange(pr)) %>%
-    dplyr::group_split(.data$Latitude, .data$Longitude, .data$Year, .data$Month, .data$Day, .data$pr)
+    dplyr::select("Latitude", "Longitude", "Year", "Month", "Day") %>%
+    dplyr::group_split(.data$Latitude, .data$Longitude, .data$Year, .data$Month, .data$Day)
 
 
   pr_get_SatData <- function(df){
@@ -238,21 +238,27 @@ pr_match_Altimetry <- function(df, pr, res_spat = 1) {
         cnt <- c(res_spat, res_spat, 1)
       }
 
-      out <- RNetCDF::var.get.nc(nc, df$pr, start=c(idx_lon, idx_lat, 1), count = cnt, unpack = TRUE)
+      prfunc <- function(pr){
+        out <- mean(RNetCDF::var.get.nc(nc, pr, start=c(idx_lon, idx_lat, 1), count = cnt, unpack = TRUE))
+      }
 
-      out <- mean(out, na.rm = TRUE)
+      out <- purrr::map(pr, prfunc)
+      names(out) <- pr
       RNetCDF::close.nc(nc)
+      return(out)
+
     } else {
-      out <- NA
-    }
-    return(out)
+        erfunc <- function(pr){(as.numeric(NA))}
+        out <- purrr::map(pr, erfunc)
+        names(out) <- pr
+        return(out)
+        }
   }
 
-  altout <- purrr::map(df, pr_get_SatData)
-
+  altout <- purrr::map(df, pr_get_SatData) %>%
+    data.table::rbindlist()
   df <- dplyr::bind_rows(df) %>%
-    dplyr::bind_cols(value = unlist(altout)) %>%
-    tidyr::pivot_wider(names_from = "pr", values_from = "value")
+    dplyr::bind_cols(altout)
 }
 
 #' Match data for MODIS
@@ -280,6 +286,9 @@ pr_match_MODIS <- function(df, pr, res_spat = 1, res_temp = "1d") {
   #   print("Defaulting to 1 pixel x 1 pixel. Provide res_spat if you want to increase")
   #   res_spat <-  1
   # }
+
+  res_spat <- res_spat
+  res_temp <- res_temp
 
   if (("Date" %in% colnames(df))==FALSE) {
     stop("No Date column found in data. Please include a Date column in POSIXct format")
