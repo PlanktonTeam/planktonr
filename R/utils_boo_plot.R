@@ -546,12 +546,12 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
   np <- length(unique(df$SampleDepth_m))
 
   df <- df %>%
-    dplyr::mutate(SampleDepth_ms = stringr::str_c(SampleDepth_m," m"))
+    dplyr::mutate(SampleDepth_ms = stringr::str_c(.data$SampleDepth_m," m"))
 
   p <- ggplot2::ggplot(df, ggplot2::aes(.data$SampleTime_Local, .data$Values, colour = .data$StationName)) +
     ggplot2::geom_line() +
     ggplot2::labs(x = "Year", y = titley) +
-    ggplot2::facet_wrap(SampleDepth_ms ~., scales = "free_y", ncol = 1, strip.position = "right") +
+    ggplot2::facet_wrap(.data$SampleDepth_ms ~., scales = "free_y", ncol = 1, strip.position = "right") +
     theme_pr() +
     ggplot2::theme(strip.text = ggplot2::element_blank(),
                    legend.title = ggplot2::element_blank()) +

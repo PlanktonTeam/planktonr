@@ -4,10 +4,10 @@
 #'
 #' @importFrom ggplot2 '%+replace%'
 #'
-#' @return
-#' @export
+#' @return planktonr theme
 #'
 #' @examples
+#' \dontrun{ggplot() + geom_blank() + theme_pr()}
 theme_pr <- function(){
   font <- "Georgia"   #assign font family up front
   ggplot2::theme_bw(base_size = 16) %+replace%    #replace elements we want to change

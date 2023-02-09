@@ -11,7 +11,6 @@
 #   raw = "https://geoserver-portal.aodn.org.au/geoserver/ows?typeName=LAYER_NAME&SERVICE=WFS&outputFormat=csv&REQUEST=GetFeature&VERSION=1.0.0&userId=Guest"
 # }
 
-
 #' Get location of raw plankton data
 #'
 #' Internal function to load the location of the raw plankton data files.
