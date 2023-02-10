@@ -135,4 +135,7 @@ testthat::test_that("Correct function output", {
   testthat::expect_equal(class(pr_get_FuncGroups("NRS", "Z") %>% pr_plot_PieFG())[1], "gg")
 
 
+  testthat::expect_equal(class(pr_get_PCIData() %>% pr_plot_PCI())[1], "gg")
+
+
 })

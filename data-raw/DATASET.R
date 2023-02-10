@@ -67,11 +67,11 @@ meta_sf <- planktonr::pr_get_NRSTrips("Z") %>%
 
 
 colNRSCode <- data.frame(Code = meta_sf$Code,
-                     Colr = RColorBrewer::brewer.pal(9, "Set1")) %>%
+                         Colr = RColorBrewer::brewer.pal(9, "Set1")) %>%
   tibble::deframe()
 
 colNRSName <- data.frame(Code = meta_sf$Station,
-                     Colr = RColorBrewer::brewer.pal(9, "Set1")) %>%
+                         Colr = RColorBrewer::brewer.pal(9, "Set1")) %>%
   tibble::deframe()
 
 
@@ -82,7 +82,8 @@ colCPR <- mbr %>%
 
 CPRinfo <- planktonr::pr_get_PolicyInfo("CPR")
 
-usethis::use_data(mbr, MapOz, meta_sf, colNRSCode, colNRSName, colCPR, CPRinfo, overwrite = TRUE, internal = TRUE, compress = "bzip2")
+usethis::use_data(mbr, MapOz, meta_sf, colNRSCode, colNRSName, colCPR, CPRinfo,
+                  overwrite = TRUE, internal = TRUE, compress = "bzip2")
 
 # tools::checkRdaFiles("R") # Check what compression to use above
 # OK - bzip2

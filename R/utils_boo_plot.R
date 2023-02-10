@@ -92,11 +92,9 @@ pr_plot_PCI <- function(df){
                                  labels = c("No Colour", "Very Pale Green", "Pale Green", "Green")) +
     ggplot2::facet_wrap(~ .data$Season) +
     ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
-    ggplot2::theme_bw() +
+    theme_pr() +
     ggplot2::guides(fill = ggplot2::guide_colourbar(barwidth = 20)) +
-    ggplot2::theme(axis.title = ggplot2::element_blank(),
-                   strip.background = ggplot2::element_blank(),
-                   legend.position = 'bottom')
+    ggplot2::theme(axis.title = ggplot2::element_blank())
 
   return(cprmap)
 }
@@ -124,7 +122,6 @@ pr_plot_TimeSeries <- function(df, Survey = "NRS", trans = "identity"){
   }
 
   if(Survey == "NRS"){
-
     df <- df %>%
       dplyr::group_by(.data$SampleTime_Local, .data$StationCode, .data$Parameters) %>% # accounting for microbial data different depths
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
@@ -145,8 +142,7 @@ pr_plot_TimeSeries <- function(df, Survey = "NRS", trans = "identity"){
     ggplot2::labs(y = titley,
                   x = titlex) +
     ggplot2::scale_colour_manual(values = plotCols, limits = force) +
-    ggplot2::theme_bw(base_size = 12) +
-    ggplot2::theme(legend.position = "bottom")
+    theme_pr()
 
   return(p1)
 }
@@ -217,10 +213,8 @@ pr_plot_Trends <- function(df, Trend = "Raw", Survey = "NRS", method = "lm",  tr
     ggplot2::facet_wrap(rlang::enexpr(site), scales = "free_y", ncol = 1) +
     ggplot2::ylab(rlang::enexpr(titley)) +
     ggplot2::scale_y_continuous(trans = trans) +
-    ggplot2::theme_bw() +
-    ggplot2::theme(legend.position = "bottom",
-                   strip.background = ggplot2::element_blank(),
-                   strip.text = ggplot2::element_text(hjust = 0))
+    theme_pr() +
+    ggplot2::theme(strip.text = ggplot2::element_text(hjust = 0))
 
   if (rlang::as_string(Trend) %in% c("Month_Local")){
     p1 <- p1 +
@@ -298,8 +292,7 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
     ggplot2::labs(y = title) +
     ggplot2::scale_y_continuous(trans = trans) +
     ggplot2::scale_fill_manual(values = plotCols, limits = force)  +
-    ggplot2::theme_bw(base_size = 12) +
-    ggplot2::theme(legend.position = "bottom")
+    theme_pr()
 
   if("Month_Local" %in% colnames(df_climate)){
     p1 <- p1 +
@@ -342,7 +335,7 @@ pr_plot_tsclimate <- function(df, Survey = "NRS", trans = "identity"){
     ggplot2::theme(axis.title.y = ggplot2::element_blank(),
                    legend.title = ggplot2::element_blank())
 
-  plots <- patchwork::wrap_plots(p1, p2,  p3, nrow = 3)
+  plots <- patchwork::wrap_plots(p1, p2,  p3, nrow = 3) & theme_pr()
 
   return(plots)
 }
@@ -414,11 +407,9 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
     ggplot2::facet_wrap(rlang::enexpr(station), scales = "free", ncol = 1) +
     ggplot2::labs(y = titley) +
     ggplot2::scale_fill_brewer(palette = "Set1") +
-    ggplot2::theme_bw() +
+    theme_pr() +
     ggplot2::scale_y_continuous(expand = c(0, 0)) +
-    ggplot2::theme(legend.position = "bottom",
-                   legend.title = ggplot2::element_blank(),
-                   strip.background = ggplot2::element_blank(),
+    ggplot2::theme(legend.title = ggplot2::element_blank(),
                    strip.text = ggplot2::element_text(hjust = 0))
 
   if (rlang::as_string(Trend) %in% c("Month_Local")){
@@ -475,12 +466,15 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "iden
     ggplot2::geom_smooth(ggplot2::aes(x = .data$SampleDate, y = .data$fv), method = "lm", formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
     ggplot2::labs(x = "Year", subtitle = rlang::enexpr(titley)) +
     ggplot2::scale_y_continuous(trans = trans) +
+    theme_pr() +
     ggplot2::theme(legend.position = "none",
                    axis.title.y = ggplot2::element_blank(),
-                   plot.subtitle = ggplot2::element_text(size = 12))
+                   #plot.subtitle = ggplot2::element_text(size = 12)
+    )
 
   if(labels == "no"){
-    p1 <- p1 + ggplot2::theme(axis.title.x = ggplot2::element_blank())
+    p1 <- p1 +
+      ggplot2::theme(axis.title.x = ggplot2::element_blank())
   }
 
   if(Survey == "LTM"){
@@ -492,15 +486,18 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "iden
   p2 <- ggplot2::ggplot(df, ggplot2::aes(.data$SampleDate, .data$anomaly)) +
     ggplot2::geom_col(fill = col, colour = col, alpha = 0.5) +
     ggplot2::xlab("Year") +
-    ggplot2::labs(y = "Anomaly")
+    ggplot2::labs(y = "Anomaly") +
+    theme_pr()
 
   if(labels == "no"){
     p2 <- p2 + ggplot2::theme(axis.title.x = ggplot2::element_blank())
   }
   if(Survey == "LTM"){
-    p2 <-  p2 + ggplot2::scale_x_datetime(date_breaks = "10 years", date_labels = "%Y", limits = lims)
+    p2 <- p2 +
+      ggplot2::scale_x_datetime(date_breaks = "10 years", date_labels = "%Y", limits = lims)
   } else {
-    p2 <-  p2 + ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", limits = lims)
+    p2 <- p2 +
+      ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", limits = lims)
   }
 
   p3 <- ggplot2::ggplot(df) +
@@ -509,11 +506,13 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "iden
     ggplot2::scale_y_continuous(trans = trans) +
     ggplot2::scale_x_continuous(breaks = seq(0.5, 6.3, length.out = 12), labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
     ggplot2::xlab("Month") +
+    theme_pr() +
     ggplot2::theme(legend.position = "none",
                    axis.title.y = ggplot2::element_blank())
 
   if(labels == "no"){
-    p3 <- p3 + ggplot2::theme(axis.title.x = ggplot2::element_blank())
+    p3 <- p3 +
+      ggplot2::theme(axis.title.x = ggplot2::element_blank())
   }
 
   plots <- patchwork::wrap_plots(p1, p2, p3, widths = c(3,3,2))
@@ -542,18 +541,19 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
 
   n <- length(unique(df$StationName))
 
-  titley <- pr_relabel(unique(df$Parameters), style = 'ggplot')
+  titley <- pr_relabel(unique(df$Parameters), style = "ggplot")
 
   np <- length(unique(df$SampleDepth_m))
+
+  df <- df %>%
+    dplyr::mutate(SampleDepth_ms = stringr::str_c(.data$SampleDepth_m," m"))
 
   p <- ggplot2::ggplot(df, ggplot2::aes(.data$SampleTime_Local, .data$Values, colour = .data$StationName)) +
     ggplot2::geom_line() +
     ggplot2::labs(x = "Year", y = titley) +
-    ggplot2::facet_grid(SampleDepth_m ~., scales = "free") +
-    ggplot2::theme_bw() +
-    ggplot2::theme(strip.background = ggplot2::element_blank(),
-                   strip.text = ggplot2::element_blank(),
-                   legend.position = "bottom",
+    ggplot2::facet_wrap(.data$SampleDepth_ms ~., scales = "free_y", ncol = 1, strip.position = "right") +
+    theme_pr() +
+    ggplot2::theme(strip.text = ggplot2::element_blank(),
                    legend.title = ggplot2::element_blank()) +
     ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
     ggplot2::scale_y_continuous(trans = trans) +
@@ -567,7 +567,7 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
   }
 
   mdat <- df %>%
-    dplyr::group_by(.data$StationName, .data$Month_Local, .data$SampleDepth_m, .data$Parameters) %>%
+    dplyr::group_by(.data$StationName, .data$Month_Local, .data$SampleDepth_ms, .data$Parameters) %>%
     dplyr::summarise(MonValues = mean(.data$Values, na.rm = TRUE),
                      N = length(.data$Values),
                      sd = stats::sd(.data$Values, na.rm = TRUE),
@@ -576,19 +576,19 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
 
   m <- ggplot2::ggplot(mdat, ggplot2::aes(.data$Month_Local, .data$MonValues, colour = .data$StationName)) +
     ggplot2::geom_point() +
-    ggplot2::facet_grid(.data$SampleDepth_m ~., scales = "free") +
+    ggplot2::facet_wrap(.data$SampleDepth_ms ~., scales = "free_y", ncol = 1, strip.position = "right") +
     ggplot2::geom_smooth(method = "loess", formula = y ~ x) +
     ggplot2::scale_x_continuous(breaks = seq(1,12,length.out = 12),
                                 labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
     ggplot2::scale_colour_manual(values = colNRSName, limits = force) +
     ggplot2::labs(x = "Month") +
-    ggplot2::theme_bw() +
-    ggplot2::theme(strip.background = ggplot2::element_blank(),
-                   legend.position = 'none',
+    theme_pr() +
+    ggplot2::theme(legend.position = 'none',
                    axis.title.y = ggplot2::element_blank(),
-                   strip.text.y = ggplot2::element_text(face = "bold", size = 12, angle = 0))
+                   strip.text.y = ggplot2::element_text(face = "bold", angle = 0)) # size = 12
 
-  plots <- p + m + patchwork::plot_layout(widths = c(3,1), guides = 'collect', heights = np * 200)
+  plots <- p +
+    m + patchwork::plot_layout(widths = c(3,1), heights = np * 200)
 
   return(plots)
 
@@ -643,7 +643,9 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, max
       emptyGrid <- expand.grid(SampleDepth_m = Depths,
                                MonthSince = Months)
 
-      df <- emptyGrid %>% dplyr::left_join(df, by = c("MonthSince", "SampleDepth_m")) %>% data.frame() %>%
+      df <- emptyGrid %>%
+        dplyr::left_join(df, by = c("MonthSince", "SampleDepth_m")) %>%
+        data.frame() %>%
         dplyr::arrange(.data$MonthSince, .data$SampleDepth_m)
 
       mat <- df %>%
@@ -685,6 +687,7 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, max
 
     Label <- (df %>% dplyr::group_by(.data$Label) %>% dplyr::summarise(n = dplyr::n()) %>% tidyr::drop_na() %>%
                 dplyr::distinct(.data$Label))$Label
+
     myBreaks <- (df %>% dplyr::filter(!is.na(.data$Label)) %>% dplyr::distinct(.data$MonthSince) %>%
                    dplyr::arrange(dplyr::desc(-.data$MonthSince), .by_group = FALSE))$MonthSince
   }
@@ -693,22 +696,17 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, max
   outPlot <- function(df, x, just = "left"){
     out <- ggplot2::ggplot(data = df, ggplot2::aes(x, y = .data$SampleDepth_m, z = .data$Values)) +
       ggplot2::geom_contour_filled(bins = 8) +
-      ggplot2::facet_grid(.data$StationName ~ ., scales = 'free') +
-      ggplot2::theme_bw() +
-      ggplot2::theme(strip.background = ggplot2::element_blank(),
-                     legend.position = "bottom",
-                     legend.title = ggplot2::element_text(size = 10),
-                     legend.text = ggplot2::element_text(size = 8),
-                     legend.justification = just) +
+      ggplot2::facet_wrap(.data$StationName ~ ., scales = "free_y", ncol = 1, strip.position = "top") +
+      theme_pr() +
+      ggplot2::theme(legend.justification = just) +
       ggplot2::guides(fill = ggplot2::guide_legend(title = param, title.position = 'top')) +
       ggplot2::scale_y_reverse(expand = c(0, 0))
-    out
+    return(out)
   }
 
   # Plotting year time series
   out <- outPlot(df, df$MonthSince, "left") +
     ggplot2::labs(x = "Year", y = 'Depth (m)') +
-    ggplot2::theme(strip.text = ggplot2::element_blank()) +
     ggplot2::scale_x_continuous(breaks = myBreaks, labels = Label, expand = c(0, 0))
 
   if(Interpolation == FALSE){
@@ -719,7 +717,11 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, max
   # Prepare monthly climatology data
 
   if(Fill_NA == TRUE){
-    selecs <- df %>% dplyr::select("MonthSince", "Month_Local") %>% dplyr::distinct() %>% tidyr::drop_na()
+    selecs <- df %>%
+      dplyr::select("MonthSince", "Month_Local") %>%
+      dplyr::distinct() %>%
+      tidyr::drop_na()
+
     df <- df %>%
       dplyr::select(-"Month_Local") %>%
       dplyr::left_join(selecs, by = c("MonthSince"))
@@ -730,15 +732,19 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, max
     dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                      .groups = 'drop')
 
+
   # Plotting monthly climatology
   outMon <- outPlot(dfMon, dfMon$Month_Local, "right") +
     ggplot2::labs(x = "Month") +
-    ggplot2::theme(axis.title.y = ggplot2::element_blank()) +
-    ggplot2::scale_x_continuous(breaks = seq(1, 12, length.out = 12), labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"), expand = c(0, 0))
-  outMon
+    ggplot2::theme(axis.title.y = ggplot2::element_blank(),
+                   #strip.text = ggplot2::element_blank(),
+                   ) +
+    ggplot2::scale_x_continuous(breaks = seq(1, 12, length.out = 12),
+                                labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"),
+                                expand = c(0, 0))
 
-  np <- length(stations)
-  plots <- out + outMon + patchwork::plot_layout(widths = c(3,1), heights = np * 200)
+  plots <- patchwork::wrap_plots(out, outMon, ncol = 2) +
+    patchwork::plot_layout(widths = c(3,1), heights = length(stations) * 200)
 
   return(plots)
 
@@ -783,13 +789,12 @@ pr_plot_FreqMap <- function(df, species, interactive = TRUE){
       ggplot2::facet_wrap( ~ .data$Season, dir = "v") +
       ggplot2::labs(title = Species) +
       ggplot2::scale_colour_manual(name = "", values = cols, drop = FALSE) +
-      ggplot2::theme(strip.background = ggplot2::element_blank(),
-                     title = ggplot2::element_text(face = "italic"),
-                     legend.title = ggplot2::element_text(face = "plain", size = 12),
+      theme_pr() +
+      ggplot2::theme(title = ggplot2::element_text(face = "italic"),
+                     # legend.title = ggplot2::element_text(face = "plain", size = 12),
                      axis.title.x = ggplot2::element_blank(),
                      axis.title.y = ggplot2::element_blank(),
                      panel.background = ggplot2::element_rect(fill = "snow1"),
-                     legend.position = "bottom",
                      legend.key = ggplot2::element_blank())
 
     return(p)
@@ -937,9 +942,9 @@ pr_plot_DayNight <-  function(df){
     ggplot2::geom_point() +
     ggplot2::geom_smooth(formula = "y ~ x", method = "loess") +
     ggplot2::facet_grid(~ .data$daynight, scales = "free_y") +
-    ggplot2::scale_x_continuous(breaks= seq(1,12,length.out = 12), labels=c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
-    ggplot2::theme_bw() +
-    ggplot2::theme(strip.background = ggplot2::element_blank()) +
+    ggplot2::scale_x_continuous(breaks = seq(1, 12, length.out = 12),
+                                labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
+    theme_pr() +
     ggplot2::labs(y = ylabel, x = "Month") +
     ggplot2::ggtitle(titlemain) +
     ggplot2::theme(plot.title = ggplot2::element_text(face = "italic"))
@@ -998,11 +1003,12 @@ pr_plot_STI <-  function(df){
   sti$Species <- factor(sti$Species)
   sti$weight <- with(sti, abs(relab) / sum(relab))
   kernOut <- with(sti,
-                  density(SST, weight=weight,
-                          bw=kernBw,
-                          from=kernMin,
-                          to=kernMax,
-                          n=kernN))
+                  density(SST,
+                          weight = weight,
+                          bw = kernBw,
+                          from = kernMin,
+                          to = kernMax,
+                          n = kernN))
 
   z <- data.frame(kernTemps, y = kernOut$y)
   STI <- round(z[which.max(z[,2]),]$kernTemps,1)
@@ -1017,8 +1023,8 @@ pr_plot_STI <-  function(df){
   stiplot <- ggplot2::ggplot(z, ggplot2::aes(kernTemps, .data$y)) +
     ggplot2::geom_point() +
     ggplot2::geom_vline(xintercept = STI, colour = "blue", lty = 4) +
-    ggplot2::theme_bw() +
-    ggplot2::labs(x=xlabel, y="Relative kernel density") +
+    theme_pr() +
+    ggplot2::labs(x = xlabel, y = "Relative kernel density") +
     ggplot2::ggtitle(taxon, subtitle = subtit) +
     ggplot2::theme(plot.title = ggplot2::element_text(face = "italic"))
 
@@ -1221,11 +1227,13 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE, labels = TRUE){
     PMapData2 <- df %>%
       sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326)
 
-    PMapSum <- merge(df %>% dplyr::group_by(.data$Region, .data$Survey) %>%
+    PMapSum <- merge(df %>%
+                       dplyr::group_by(.data$Region, .data$Survey) %>%
                        dplyr::summarise(Sums = dplyr::n(),
                                         .groups = "drop") %>%
                        dplyr::mutate(label = paste0(.data$Region, ' = ', .data$Sums)),
-                     df %>% dplyr::group_by(.data$Region, .data$Survey) %>%
+                     df %>%
+                       dplyr::group_by(.data$Region, .data$Survey) %>%
                        dplyr::summarise(Lats = mean(.data$Latitude),
                                         Lons = mean(.data$Longitude),
                                         .groups = "drop")) %>%
@@ -1297,7 +1305,7 @@ pr_plot_Gantt <- function(dat, Survey = "NRS"){
 
     gg <- ggplot2::ggplot(data = dat2, ggplot2::aes(x = .data$YearMonth, y = .data$Region, width = 1/12, height = 2/12), fill = "black", colour = "black") +
       ggplot2::geom_tile() +
-      ggplot2::theme_bw() +
+      theme_pr() +
       ggplot2::labs(x = ggplot2::element_blank(), y = ggplot2::element_blank()) +
       ggplot2::ggtitle("Continuous Plankton Recorder Sampling") +
       ggplot2::coord_fixed(ratio = 0.5)
@@ -1315,7 +1323,7 @@ pr_plot_Gantt <- function(dat, Survey = "NRS"){
 
     gg <- ggplot2::ggplot(data = dat2, ggplot2::aes(x = .data$YearMonth, y = .data$StationName, width = 1/12, height = 2/12), fill = "black", colour = "black") +
       ggplot2::geom_tile() +
-      ggplot2::theme_bw() +
+      theme_pr() +
       ggplot2::labs(x = ggplot2::element_blank(), y = ggplot2::element_blank()) +
       ggplot2::ggtitle("National Reference Station Sampling") +
       ggplot2::coord_fixed(ratio = 0.5)
@@ -1350,7 +1358,7 @@ pr_plot_TaxaAccum <- function(dat, Survey = "NRS", Type = "Z"){
     ggplot2::geom_line() +
     ggplot2::scale_x_datetime(name = "Year", breaks = "2 year", date_labels = "%Y", expand = c(0, 0)) +
     ggplot2::ylab("Taxa Identified") +
-    ggplot2::theme_bw() +
+    theme_pr() +
     ggplot2::scale_y_continuous(expand = c(0, 0)) +
     ggplot2::ggtitle(paste(Survey, "-", planktonr::pr_title(Type)))
 
