@@ -4,6 +4,7 @@
 #'
 #' @importFrom ggplot2 '%+replace%'
 #'
+#' @export
 #' @return planktonr theme
 #'
 #' @examples

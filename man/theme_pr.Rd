@@ -6,6 +6,12 @@
 \usage{
 theme_pr()
 }
+\value{
+planktonr theme
+}
 \description{
 Define theme_pr() function
+}
+\examples{
+\dontrun{ggplot() + geom_blank() + theme_pr()}
 }
