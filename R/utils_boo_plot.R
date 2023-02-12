@@ -284,6 +284,11 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
                      se = sd / sqrt(.data$N),
                      .groups = "drop")
 
+  if("Year_Local" %in% colnames(df_climate)){
+  df_climate <- df_climate %>%
+    dplyr::mutate(!!Trend := lubridate::as_date(paste(!!Trend, 7, 1, sep = "-"))) #TODO Temp fix to convert to date and fix ticks below
+  }
+
   p1 <- ggplot2::ggplot(df_climate, ggplot2::aes(x = !!Trend, y = .data$mean, fill = .data$StationCode)) +
     ggplot2::geom_col(position = ggplot2::position_dodge()) +
     ggplot2::geom_errorbar(ggplot2::aes(ymin = .data$mean-.data$se, ymax = .data$mean+.data$se),
@@ -297,13 +302,14 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
   if("Month_Local" %in% colnames(df_climate)){
     p1 <- p1 +
       ggplot2::xlab("Month") +
-      ggplot2::scale_x_continuous(breaks = seq(1,12,length.out = 12), labels=c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"))
+      ggplot2::scale_x_continuous(breaks = seq(1,12, length.out = 12), labels=c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"))
   }
 
   if("Year_Local" %in% colnames(df_climate)){
     p1 <- p1 +
       ggplot2::xlab("Year") +
-      ggplot2::scale_x_continuous(breaks = scales::breaks_width(1))
+      ggplot2::scale_x_date(date_breaks = "2 years", date_labels = "%Y")
+      # ggplot2::scale_x_continuous(breaks = scales::breaks_width(1))
   }
 
   return(p1)
