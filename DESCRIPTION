@@ -1,6 +1,6 @@
 Package: planktonr
 Title: Analysis and visualisation of plankton data
-Version: 0.5.0.0000
+Version: 0.5.1.0000
 Authors@R: c(
     person("Jason D.", "Everett", , "jase.everett@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-6681-8054")),
@@ -8,7 +8,7 @@ Authors@R: c(
            comment = c(ORCID = "0000-0002-0424-1835"))
   )
 Description: planktonr is an r package that facilitates the download, analysis and visualisation of phytoplankton and zooplankton data. Our initial focus will be on plankton data stored on the Australian Ocean Data Network ([AODN](https://portal.aodn.org.au)) and collected by the Integrated Marine Observing System ([IMOS](www.imos.org.au)), but we hope to expand to other plankton data sets in the future.
-License: GPL (>= 3)
+License: MIT + file LICENSE
 URL: https://github.com/PlanktonTeam/planktonr
 BugReports: https://github.com/PlanktonTeam/planktonr/issues
 Depends: 
@@ -28,7 +28,6 @@ Imports:
     readr (>= 2.0.0),
     rlang,
     rnaturalearth,
-    scales,
     sf,
     stats,
     stringr,
