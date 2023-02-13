@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.4.0.0000</span>
+        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.5.1.0000</span>
       </span>
     </div>
 
@@ -104,10 +104,54 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PlanktonTeam/planktonr" class="external-link">planktonr</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PlanktonTeam/planktonr" class="external-link">planktonr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
-<h3 id="vignette-coming-soon">Vignette Coming Soon<a class="anchor" aria-label="anchor" href="#vignette-coming-soon"></a>
+<h3 id="download-larval-fish-data">Download Larval Fish Data<a class="anchor" aria-label="anchor" href="#download-larval-fish-data"></a>
 </h3>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_get_LFData.html">pr_get_LFData</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>Examine the first 20 species</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">Species2</span><span class="op">)</span>, <span class="fl">20</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  [1] "Acanthuridae: Acanthuridae (37437900)"               </span></span>
+<span><span class="co">#&gt;  [2] "Acropomatidae: Acropomatidae (37311956)"             </span></span>
+<span><span class="co">#&gt;  [3] "Acropomatidae: Synagrops spp (37311949)"             </span></span>
+<span><span class="co">#&gt;  [4] "Acropomatidae: Verilus anomalus (37311053)"          </span></span>
+<span><span class="co">#&gt;  [5] "Ambassidae: Ambassidae (37310900)"                   </span></span>
+<span><span class="co">#&gt;  [6] "Ambassidae: Ambassis jacksoniensis (37310012)"       </span></span>
+<span><span class="co">#&gt;  [7] "Ambassidae: Ambassis marianus (37310018)"            </span></span>
+<span><span class="co">#&gt;  [8] "Ammodytidae: Ammodytidae (37425000)"                 </span></span>
+<span><span class="co">#&gt;  [9] "Ammodytidae: Ammodytoides spp (37425901)"            </span></span>
+<span><span class="co">#&gt; [10] "Anguilliformes (37990025)"                           </span></span>
+<span><span class="co">#&gt; [11] "Antennariidae: Antennariidae (37210915)"             </span></span>
+<span><span class="co">#&gt; [12] "Aploactinidae: Aploactinidae (37290000)"             </span></span>
+<span><span class="co">#&gt; [13] "Aploactinidae: Matsubarichthys inusitatus (37290013)"</span></span>
+<span><span class="co">#&gt; [14] "Aplodactylidae: Aplodactylus lophodon (37376002)"    </span></span>
+<span><span class="co">#&gt; [15] "Aplodactylidae: Aplodactylus spp (37376901)"         </span></span>
+<span><span class="co">#&gt; [16] "Apogonidae: Apogonidae (37327926)"                   </span></span>
+<span><span class="co">#&gt; [17] "Argentinidae: Argentinidae (37097905)"               </span></span>
+<span><span class="co">#&gt; [18] "Arripidae: Arripidae (37344000)"                     </span></span>
+<span><span class="co">#&gt; [19] "Arripidae: Arripis trutta (37344002)"                </span></span>
+<span><span class="co">#&gt; [20] "Astronesthidae: Astronesthidae (37108000)"</span></span></code></pre></div>
+<p>Filter the data for <em>Ambassidae</em> observations</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">df_Amb</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Species2</span> <span class="op">==</span> <span class="st">"Ambassidae: Ambassidae (37310900)"</span><span class="op">)</span></span></code></pre></div>
+<p>Plot the observations</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Convert the data to an sf object and set observations to present or Absent</span></span>
+<span><span class="va">df_sf</span> <span class="op">&lt;-</span> <span class="va">df_Amb</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span>coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Longitude"</span>, <span class="st">"Latitude"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Observations <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span><span class="va">Abundance_1000m3</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">Abundance_1000m3</span><span class="op">)</span>, <span class="st">"Absent"</span>, <span class="st">"Present"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu">rnaturalearth</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/rnaturalearth/reference/ne_countries.html" class="external-link">ne_countries</a></span><span class="op">(</span>country <span class="op">=</span> <span class="st">"Australia"</span>, returnclass <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">df_sf</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="va">Observations</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Ambassidae (37310900)"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="LarvalFish_files/figure-html/unnamed-chunk-5-1.png" width="672"></p>
 </div>
   </div>
 

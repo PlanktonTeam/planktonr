@@ -284,6 +284,11 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
                      se = sd / sqrt(.data$N),
                      .groups = "drop")
 
+  if("Year_Local" %in% colnames(df_climate)){
+    df_climate <- df_climate %>%
+      dplyr::mutate(!!Trend := lubridate::as_date(paste(!!Trend, 7, 1, sep = "-"))) #TODO Temp fix to convert to date and fix ticks below
+  }
+
   p1 <- ggplot2::ggplot(df_climate, ggplot2::aes(x = !!Trend, y = .data$mean, fill = .data$StationCode)) +
     ggplot2::geom_col(position = ggplot2::position_dodge()) +
     ggplot2::geom_errorbar(ggplot2::aes(ymin = .data$mean-.data$se, ymax = .data$mean+.data$se),
@@ -297,13 +302,14 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
   if("Month_Local" %in% colnames(df_climate)){
     p1 <- p1 +
       ggplot2::xlab("Month") +
-      ggplot2::scale_x_continuous(breaks = seq(1,12,length.out = 12), labels=c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"))
+      ggplot2::scale_x_continuous(breaks = seq(1,12, length.out = 12), labels=c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"))
   }
 
   if("Year_Local" %in% colnames(df_climate)){
     p1 <- p1 +
       ggplot2::xlab("Year") +
-      ggplot2::scale_x_continuous(breaks = scales::breaks_width(1))
+      ggplot2::scale_x_date(date_breaks = "2 years", date_labels = "%Y")
+    # ggplot2::scale_x_continuous(breaks = scales::breaks_width(1))
   }
 
   return(p1)
@@ -738,7 +744,7 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, max
     ggplot2::labs(x = "Month") +
     ggplot2::theme(axis.title.y = ggplot2::element_blank(),
                    #strip.text = ggplot2::element_blank(),
-                   ) +
+    ) +
     ggplot2::scale_x_continuous(breaks = seq(1, 12, length.out = 12),
                                 labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"),
                                 expand = c(0, 0))
@@ -1250,26 +1256,31 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE, labels = TRUE){
     gg <- ggplot2::ggplot() +
       ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
       ggplot2::coord_sf(xlim = c(105, 170), ylim = c(-54, -7), expand = FALSE) +
-      ggplot2::theme_void() +
+      ggplot2::theme_bw(base_size = 14) +
       ggplot2::theme(axis.title = ggplot2::element_blank(),
                      axis.line = ggplot2::element_blank())
 
-    if ("NRS" %in% Survey$Survey) {
-      gg <-  gg +
-        ggplot2::geom_sf(data = PMapData2 %>% dplyr::filter(.data$Survey == "NRS"), size = 5) +
-        ggplot2::geom_sf_text(data = PMapSum %>% dplyr::filter(.data$Survey == "NRS"),
-                              size = 5, ggplot2::aes(label = .data$label),
-                              show.legend = FALSE, nudge_x = 3)
-    }
 
     if ("CPR" %in% Survey$Survey) {
-
-      gg <-  gg +
+      gg <- gg +
         ggplot2::geom_sf(data = PMapData2 %>% dplyr::filter(.data$Survey == "CPR"),
-                         size = 1, ggplot2::aes(color =.data$Region), show.legend = FALSE) +
-        ggplot2::geom_sf_text(data = PMapSum %>% dplyr::filter(.data$Survey == "CPR"),
-                              size = 5, ggplot2::aes(label = .data$label, color = .data$Region),
-                              show.legend = FALSE, check_overlap = TRUE, nudge_x = nudgex, nudge_y = nudgey)
+                         size = 1, ggplot2::aes(color =.data$Region), show.legend = TRUE) +
+        ggplot2::theme(legend.position = c(.01, .99),
+                       legend.justification = c("left", "top"),
+                       legend.box.just = "left",
+                       legend.background = ggplot2::element_rect(fill = "transparent", colour = "NA"), #transparent legend bg
+                       legend.box.background = ggplot2::element_rect(fill = "transparent", colour = "NA")) #transparent legend panel) #+
+      # ggplot2::geom_sf_text(data = PMapSum %>% dplyr::filter(.data$Survey == "CPR"),
+      #                       size = 5, ggplot2::aes(label = .data$label, color = .data$Region),
+      #                       show.legend = FALSE, check_overlap = TRUE, nudge_x = nudgex, nudge_y = nudgey)
+    }
+
+    if ("NRS" %in% Survey$Survey) {
+      gg <- gg +
+        ggplot2::geom_sf(data = PMapData2 %>% dplyr::filter(.data$Survey == "NRS"), size = 3) +
+        ggplot2::geom_sf_text(data = PMapSum %>% dplyr::filter(.data$Survey == "NRS"),
+                              size = 4, ggplot2::aes(label = .data$label),
+                              show.legend = FALSE, nudge_y = -1)
     }
 
     return(gg)
@@ -1368,35 +1379,35 @@ pr_plot_TaxaAccum <- function(dat, Survey = "NRS", Type = "Z"){
 
 
 
-#' Simple function to scatter 2 data columns using common NRS colouring
-#'
-#' Note that this function assumes wide data with the data to plot as columns.
-#'
-#' @param df Dataframe
-#' @param x Column name for the x axis
-#' @param y Column name for the y axis
-#'
-#' @return ggplot object
-#' @export
-#'
-#' @examples
-pr_plot_scatter <- function(df, x, y){
-
-  # TODO Examples to fix
-  # df <- planktonr::pr_get_NRSMicro() %>% tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>% tidyr::pivot_wider(names_from = "Parameters", values_from = "Values")
-  # gg <- pr_plot_scatter(df, "Prochlorococcus_cellsmL", "Synechococcus_cellsmL")
-
-  titlex <- planktonr::pr_relabel(x, style = "ggplot")
-  titley <- planktonr::pr_relabel(y, style = "ggplot")
-
-  gg <-  ggplot2::ggplot(data = df) +
-    ggplot2::geom_point(ggplot2::aes(!!rlang::sym(x), !!rlang::sym(y), colour = .data$StationName)) +
-    ggplot2::xlab(titlex) +
-    ggplot2::ylab(titley) +
-    ggplot2::scale_colour_manual(values = colNRSName)
-
-  return(gg)
-}
+# Simple function to scatter 2 data columns using common NRS colouring
+#
+# Note that this function assumes wide data with the data to plot as columns.
+#
+# @param df Dataframe
+# @param x Column name for the x axis
+# @param y Column name for the y axis
+#
+# @return ggplot object
+# @export
+#
+# @examples
+# pr_plot_scatter <- function(df, x, y){
+#
+#   # TODO Examples to fix
+#   # df <- planktonr::pr_get_NRSMicro() %>% tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>% tidyr::pivot_wider(names_from = "Parameters", values_from = "Values")
+#   # gg <- pr_plot_scatter(df, "Prochlorococcus_cellsmL", "Synechococcus_cellsmL")
+#
+#   titlex <- planktonr::pr_relabel(x, style = "ggplot")
+#   titley <- planktonr::pr_relabel(y, style = "ggplot")
+#
+#   gg <-  ggplot2::ggplot(data = df) +
+#     ggplot2::geom_point(ggplot2::aes(!!rlang::sym(x), !!rlang::sym(y), colour = .data$StationName)) +
+#     ggplot2::xlab(titlex) +
+#     ggplot2::ylab(titley) +
+#     ggplot2::scale_colour_manual(values = colNRSName)
+#
+#   return(gg)
+# }
 
 
 

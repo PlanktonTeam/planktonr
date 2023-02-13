@@ -10,15 +10,57 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  message = FALSE,
+  warning = FALSE,
+  fig.width = 7
 )
 ```
 
 ```{r setup}
 library(planktonr)
+library(ggplot2)
+library(dplyr)
 ```
 
-### Vignette Coming Soon
+### Download Larval Fish Data
+
+```{r}
+df <- pr_get_LFData()
+```
+
+Examine the first 20 species
+```{r}
+head(unique(df$Species2), 20)
+```
+
+Filter the data for _Ambassidae_ observations
+
+```{r}
+df_Amb <- df %>% 
+  filter(Species2 == "Ambassidae: Ambassidae (37310900)")
+```
+
+
+Plot the observations
+
+```{r}
+# Convert the data to an sf object and set observations to present or Absent
+df_sf <- df_Amb %>% 
+  sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326) %>% 
+  mutate(Observations = if_else(Abundance_1000m3 == 0 | is.na(Abundance_1000m3), "Absent", "Present"))
+
+ggplot() + 
+  geom_sf(data = rnaturalearth::ne_countries(country = "Australia", returnclass = "sf")) +
+  geom_sf(data = df_sf, aes(colour = Observations)) + 
+  theme_bw() +
+  ggtitle("Ambassidae (37310900)")
+```
+
+
+
+
