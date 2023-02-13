@@ -10,16 +10,21 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  message = FALSE,
+  warning = FALSE,
+  fig.width = 7
 )
 ```
 
 ```{r setup}
 library(planktonr)
-library(tidyverse)
+library(ggplot2)
+library(dplyr)
 ```
 
 ### Download Larval Fish Data

@@ -10,10 +10,14 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  message = FALSE,
+  warning = FALSE,
+  fig.width = 8
 )
 ```
 
@@ -22,6 +26,30 @@ library(planktonr)
 library(dplyr)
 library(ggplot2)
 library(patchwork)
+```
+
+# Examine the frequency of sampling
+
+```{r}
+datCPR <- pr_get_CPRTrips()
+datNRS <- pr_get_NRSTrips()
+
+ggCPR <- planktonr::pr_plot_Gantt(datCPR, Survey = "CPR")
+ggNRS <- planktonr::pr_plot_Gantt(datNRS, Survey = "NRS")
+
+wrap_plots(ggCPR, ggNRS, ncol = 1) &
+  theme(text = ggplot2::element_text(size = 12, face = "bold"))
+```
+
+
+
+# Plot the spatial distribution of NRS and CPR samples
+
+```{r}
+df <- pr_get_ProgressMapData(c("NRS", "CPR"))
+
+pr_plot_ProgressMap(df)
+
 ```
 
 
