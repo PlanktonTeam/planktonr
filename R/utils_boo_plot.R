@@ -374,13 +374,29 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
   if("BioRegion" %in% colnames(df)){ # If CPR data
     SampleDate = rlang::sym("SampleTime_Local")
     station = rlang::sym("BioRegion")
-    titley <- pr_relabel("PhytoAbundance_Cellsm3", style = "ggplot")
+
+    if ("Copepod" %in% df$Parameters) {
+      titley <- pr_relabel("ZoopAbund_m3", style = "ggplot")
+    } else {
+      titley <- pr_relabel("PhytoAbundance_Cellsm3", style = "ggplot")
+    }
 
   } else { # If NRS data
     SampleDate = rlang::sym("SampleTime_Local")
     station = rlang::sym("StationName")
-    titley <- pr_relabel("PhytoAbundance_CellsL", style = "ggplot")
+
+    if ("Copepod" %in% df$Parameters) {
+      titley <- pr_relabel("ZoopAbund_m3", style = "ggplot")
+    } else {
+      titley <- pr_relabel("PhytoAbundance_CellsL", style = "ggplot")
+    }
   }
+
+  # Overwrite titley if its a proportion
+  if (Scale == "Percent"){
+    titley <- "Proportion"
+  }
+
 
   titlex <- "Sample Time (Local)"
   if (Trend %in% c("Year_Local", "Month_Local")){
@@ -407,6 +423,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
     df <- df %>%
       dplyr::mutate(Values = log10(.data$Values))
   }
+
 
   p1 <- ggplot2::ggplot(df, ggplot2::aes(x = !!rlang::sym(Trend), y = .data$Values, fill = .data$Parameters)) +
     ggplot2::geom_area(alpha = 0.9 , linewidth = 0.2, colour = "white") +
