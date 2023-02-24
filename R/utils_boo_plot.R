@@ -258,11 +258,11 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
 
   if (Trend == "Month"){
     Trend = "Month_Local"
-    dodge <- 30
+    dodge <- 0.8
   }
   if (Trend == "Year"){
     Trend = "Year_Local"
-    dodge <- 365
+    dodge <- 300
   }
 
   # Trend <- dplyr::enquo(arg = Trend)
@@ -290,13 +290,13 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
 
   if("Year_Local" %in% colnames(df_climate)){
     df_climate <- df_climate %>%
-      dplyr::mutate(!!Trend := lubridate::as_date(paste(!!Trend, 7, 1, sep = "-"))) #TODO Temp fix to convert to date and fix ticks below
+      dplyr::mutate(!!Trend := lubridate::as_date(paste(!!Trend, 1, 1, sep = "-"))) #TODO Temp fix to convert to date and fix ticks below
   }
 
-  p1 <- ggplot2::ggplot(df_climate, ggplot2::aes(x = !!Trend, y = .data$mean, fill = .data$StationName)) +
+  p1 <- ggplot2::ggplot(df_climate, ggplot2::aes(x = !!Trend, y = .data$mean, fill = .data$StationName, group = .data$StationName)) +
     ggplot2::geom_col(width = dodge, position = ggplot2::position_dodge(width = dodge)) +
     ggplot2::geom_errorbar(ggplot2::aes(ymin = .data$mean-.data$se, ymax = .data$mean+.data$se),
-                           # width = .2,                    # Width of the error bars
+                           width = dodge/3,                    # Width of the error bars
                            position = ggplot2::position_dodge(width = dodge)) +
     ggplot2::labs(y = title) +
     ggplot2::scale_y_continuous(trans = trans, expand = c(0, 0)) +
