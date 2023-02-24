@@ -285,7 +285,8 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
                      N = length(.data$Values),
                      sd = stats::sd(.data$Values, na.rm = TRUE),
                      se = sd / sqrt(.data$N),
-                     .groups = "drop")
+                     .groups = "drop") %>%
+    tidyr::complete(!!Trend, .data$StationName)
 
   if("Year_Local" %in% colnames(df_climate)){
     df_climate <- df_climate %>%
