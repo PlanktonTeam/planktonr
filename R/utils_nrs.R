@@ -94,20 +94,21 @@ pr_get_NRSTrips <- function(Type = c("P", "Z", "F")){
                     (stringr::str_detect(.data$SampleType, paste("P", collapse = "|")) |
                        is.na(.data$SampleType))) %>%
     pr_apply_Time() %>%
-    dplyr::select(-"ProjectName")
+    dplyr::select(-"ProjectName") %>%
+    dplyr::select(-tidyselect::any_of(c("PSampleDepth_m", "ZSampleDepth_m")))
 
 
-  if("P" %in% Type & !"Z" %in% Type){ # Only Phytoplankton
-    NRSTrip <- NRSTrip %>%
-      dplyr::rename(SampleDepth_m = "PSampleDepth_m") %>%
-      dplyr::select(-"ZSampleDepth_m")
-  }
-
-  if("Z" %in% Type & !"P" %in% Type){ # Only Zooplankton
-    NRSTrip <- NRSTrip %>%
-      dplyr::rename(SampleDepth_m = "ZSampleDepth_m") %>%
-      dplyr::select(-"PSampleDepth_m")
-  }
+  # if("P" %in% Type & !"Z" %in% Type){ # Only Phytoplankton
+  #   NRSTrip <- NRSTrip %>%
+  #     dplyr::rename(SampleDepth_m = "PSampleDepth_m") %>%
+  #     dplyr::select(-"ZSampleDepth_m")
+  # }
+  #
+  # if("Z" %in% Type & !"P" %in% Type){ # Only Zooplankton
+  #   NRSTrip <- NRSTrip %>%
+  #     dplyr::rename(SampleDepth_m = "ZSampleDepth_m") %>%
+  #     dplyr::select(-"PSampleDepth_m")
+  # }
 
   return(NRSTrip)
 

@@ -116,29 +116,29 @@ pr_plot_TimeSeries <- function(df, Survey = "NRS", trans = "identity"){
 
   if(Survey == "CPR"){
     df <- df %>%
-      dplyr::rename(StationCode = "BioRegion")
+      dplyr::rename(StationName = "BioRegion")
     plotCols <- colCPR
 
   }
 
   if(Survey == "NRS"){
     df <- df %>%
-      dplyr::group_by(.data$SampleTime_Local, .data$StationCode, .data$Parameters) %>% # accounting for microbial data different depths
+      dplyr::group_by(.data$SampleTime_Local, .data$StationName, .data$Parameters) %>% # accounting for microbial data different depths
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                        .groups = "drop")
-    plotCols <- colNRSCode
+    plotCols <- colNRSName
   }
 
   titlex <- "Sample Date (Local)"
 
-  n <- length(unique(df$StationCode))
+  n <- length(unique(df$StationName))
   titley <- pr_relabel(unique(df$Parameters), style = "ggplot")
 
   p1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$SampleTime_Local, y = .data$Values)) +
-    ggplot2::geom_line(ggplot2::aes(group = .data$StationCode, color = .data$StationCode)) +
-    ggplot2::geom_point(ggplot2::aes(group = .data$StationCode, color = .data$StationCode)) +
-    ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
-    ggplot2::scale_y_continuous(trans = trans) +
+    ggplot2::geom_line(ggplot2::aes(group = .data$StationName, color = .data$StationName)) +
+    ggplot2::geom_point(ggplot2::aes(group = .data$StationName, color = .data$StationName)) +
+    ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", expand = c(0, 0)) +
+    ggplot2::scale_y_continuous(trans = trans, expand = c(0, 0)) +
     ggplot2::labs(y = titley,
                   x = titlex) +
     ggplot2::scale_colour_manual(values = plotCols, limits = force) +
@@ -212,21 +212,22 @@ pr_plot_Trends <- function(df, Trend = "Raw", Survey = "NRS", method = "lm",  tr
     ggplot2::geom_point() +
     ggplot2::facet_wrap(rlang::enexpr(site), scales = "free_y", ncol = 1) +
     ggplot2::ylab(rlang::enexpr(titley)) +
-    ggplot2::scale_y_continuous(trans = trans) +
+    ggplot2::scale_y_continuous(trans = trans, expand = c(0, 0)) +
     theme_pr() +
     ggplot2::theme(strip.text = ggplot2::element_text(hjust = 0))
 
   if (rlang::as_string(Trend) %in% c("Month_Local")){
     p1 <- p1 +
-      ggplot2::scale_x_continuous(breaks = seq(1, 12, length.out = 12), labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
+      ggplot2::scale_x_continuous(breaks = seq(1, 12, length.out = 12), expand = c(0, 0),
+                                  labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
       ggplot2::xlab("Month")
   } else if (rlang::as_string(Trend) %in% "Year_Local"){
     p1 <- p1 +
-      ggplot2::scale_x_continuous(breaks = 2) +
+      ggplot2::scale_x_continuous(breaks = 2, expand = c(0, 0)) +
       ggplot2::xlab("Year")
   } else if (!rlang::as_string(Trend) %in% c("Month_Local", "Year_Local")){
     p1 <- p1 +
-      ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
+      ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", expand = c(0, 0)) +
       ggplot2::xlab("Year")
   }
 
@@ -257,9 +258,11 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
 
   if (Trend == "Month"){
     Trend = "Month_Local"
+    dodge <- 0.8
   }
   if (Trend == "Year"){
     Trend = "Year_Local"
+    dodge <- 300
   }
 
   # Trend <- dplyr::enquo(arg = Trend)
@@ -267,48 +270,50 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
 
   if(Survey == "CPR"){
     df <- df %>%
-      dplyr::rename(StationCode = "BioRegion")
+      dplyr::rename(StationName = "BioRegion")
     plotCols <- colCPR
   } else if (Survey == "NRS"){
-    plotCols <- colNRSCode
+    plotCols <- colNRSName
   }
 
-  n <- length(unique(df$StationCode))
+  n <- length(unique(df$StationName))
   title <- pr_relabel(unique(df$Parameters), style = "ggplot")
 
   df_climate <- df %>%
-    dplyr::group_by(!!Trend, .data$StationCode) %>%
+    dplyr::group_by(!!Trend, .data$StationName) %>%
     dplyr::summarise(mean = mean(.data$Values, na.rm = TRUE),
                      N = length(.data$Values),
                      sd = stats::sd(.data$Values, na.rm = TRUE),
                      se = sd / sqrt(.data$N),
-                     .groups = "drop")
+                     .groups = "drop") %>%
+    tidyr::complete(!!Trend, .data$StationName)
 
   if("Year_Local" %in% colnames(df_climate)){
     df_climate <- df_climate %>%
-      dplyr::mutate(!!Trend := lubridate::as_date(paste(!!Trend, 7, 1, sep = "-"))) #TODO Temp fix to convert to date and fix ticks below
+      dplyr::mutate(!!Trend := lubridate::as_date(paste(!!Trend, 1, 1, sep = "-"))) #TODO Temp fix to convert to date and fix ticks below
   }
 
-  p1 <- ggplot2::ggplot(df_climate, ggplot2::aes(x = !!Trend, y = .data$mean, fill = .data$StationCode)) +
-    ggplot2::geom_col(position = ggplot2::position_dodge()) +
+  p1 <- ggplot2::ggplot(df_climate, ggplot2::aes(x = !!Trend, y = .data$mean, fill = .data$StationName, group = .data$StationName)) +
+    ggplot2::geom_col(width = dodge, position = ggplot2::position_dodge(width = dodge)) +
     ggplot2::geom_errorbar(ggplot2::aes(ymin = .data$mean-.data$se, ymax = .data$mean+.data$se),
-                           width = .2,                    # Width of the error bars
-                           position = ggplot2::position_dodge(.9)) +
+                           width = dodge/3,                    # Width of the error bars
+                           position = ggplot2::position_dodge(width = dodge)) +
     ggplot2::labs(y = title) +
-    ggplot2::scale_y_continuous(trans = trans) +
-    ggplot2::scale_fill_manual(values = plotCols, limits = force)  +
+    ggplot2::scale_y_continuous(trans = trans, expand = c(0, 0)) +
+    ggplot2::scale_fill_manual(values = plotCols, limits = force, guide = ggplot2::guide_legend(byrow = TRUE)) +
     theme_pr()
 
   if("Month_Local" %in% colnames(df_climate)){
     p1 <- p1 +
       ggplot2::xlab("Month") +
-      ggplot2::scale_x_continuous(breaks = seq(1,12, length.out = 12), labels=c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"))
+      ggplot2::scale_x_continuous(breaks = seq(1,12, length.out = 12), expand = c(0, 0),
+                                  labels=c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"))
   }
 
   if("Year_Local" %in% colnames(df_climate)){
     p1 <- p1 +
       ggplot2::xlab("Year") +
-      ggplot2::scale_x_date(date_breaks = "2 years", date_labels = "%Y")
+      ggplot2::scale_x_date(date_breaks = "2 years", date_labels = "%Y", expand = c(0, 0))
     # ggplot2::scale_x_continuous(breaks = scales::breaks_width(1))
   }
 
@@ -488,7 +493,7 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "iden
     ggplot2::geom_point(ggplot2::aes(x = .data$SampleDate, y = .data$Values), colour = col) +
     ggplot2::geom_smooth(ggplot2::aes(x = .data$SampleDate, y = .data$fv), method = "lm", formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
     ggplot2::labs(x = "Year", subtitle = rlang::enexpr(titley)) +
-    ggplot2::scale_y_continuous(trans = trans) +
+    ggplot2::scale_y_continuous(trans = trans, expand = c(0, 0)) +
     theme_pr() +
     ggplot2::theme(legend.position = "none",
                    axis.title.y = ggplot2::element_blank(),
@@ -501,9 +506,9 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "iden
   }
 
   if(Survey == "LTM"){
-    p1 <-  p1 + ggplot2::scale_x_datetime(date_breaks = "10 years", date_labels = "%Y", limits = lims)
+    p1 <-  p1 + ggplot2::scale_x_datetime(date_breaks = "10 years", date_labels = "%Y", limits = lims, expand = c(0, 0))
   } else {
-    p1 <-  p1 + ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", limits = lims)
+    p1 <-  p1 + ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", limits = lims, expand = c(0, 0))
   }
 
   p2 <- ggplot2::ggplot(df, ggplot2::aes(.data$SampleDate, .data$anomaly)) +
@@ -517,17 +522,18 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "iden
   }
   if(Survey == "LTM"){
     p2 <- p2 +
-      ggplot2::scale_x_datetime(date_breaks = "10 years", date_labels = "%Y", limits = lims)
+      ggplot2::scale_x_datetime(date_breaks = "10 years", date_labels = "%Y", limits = lims, expand = c(0, 0))
   } else {
     p2 <- p2 +
-      ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", limits = lims)
+      ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", limits = lims, expand = c(0, 0))
   }
 
   p3 <- ggplot2::ggplot(df) +
     ggplot2::geom_point(ggplot2::aes(x = .data$Month, y = .data$Values), colour = col) +
     ggplot2::geom_smooth(ggplot2::aes(x = .data$Month, y = .data$fv), method = "loess", formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
-    ggplot2::scale_y_continuous(trans = trans) +
-    ggplot2::scale_x_continuous(breaks = seq(0.5, 6.3, length.out = 12), labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
+    ggplot2::scale_y_continuous(trans = trans, expand = c(0, 0)) +
+    ggplot2::scale_x_continuous(breaks = seq(0.5, 6.3, length.out = 12), expand = c(0, 0),
+                                labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
     ggplot2::xlab("Month") +
     theme_pr() +
     ggplot2::theme(legend.position = "none",
@@ -578,8 +584,8 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
     theme_pr() +
     ggplot2::theme(strip.text = ggplot2::element_blank(),
                    legend.title = ggplot2::element_blank()) +
-    ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y") +
-    ggplot2::scale_y_continuous(trans = trans) +
+    ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", expand = c(0, 0)) +
+    ggplot2::scale_y_continuous(trans = trans, expand = c(0, 0)) +
     ggplot2::scale_colour_manual(values = colNRSName, limits = force)
 
   if(Trend == "Smoother"){
@@ -601,7 +607,7 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
     ggplot2::geom_point() +
     ggplot2::facet_wrap(.data$SampleDepth_ms ~., scales = "free_y", ncol = 1, strip.position = "right") +
     ggplot2::geom_smooth(method = "loess", formula = y ~ x) +
-    ggplot2::scale_x_continuous(breaks = seq(1,12,length.out = 12),
+    ggplot2::scale_x_continuous(breaks = seq(1,12,length.out = 12), expand = c(0, 0),
                                 labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
     ggplot2::scale_colour_manual(values = colNRSName, limits = force) +
     ggplot2::labs(x = "Month") +
@@ -965,7 +971,7 @@ pr_plot_DayNight <-  function(df){
     ggplot2::geom_point() +
     ggplot2::geom_smooth(formula = "y ~ x", method = "loess") +
     ggplot2::facet_grid(~ .data$daynight, scales = "free_y") +
-    ggplot2::scale_x_continuous(breaks = seq(1, 12, length.out = 12),
+    ggplot2::scale_x_continuous(breaks = seq(1, 12, length.out = 12), expand = c(0, 0),
                                 labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
     theme_pr() +
     ggplot2::labs(y = ylabel, x = "Month") +

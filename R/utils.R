@@ -286,7 +286,8 @@ pr_reorder <- function(df){
                                                     "Rottnest Island", "Esperance", "Port Hacking", "Kangaroo Island",
                                                     "Maria Island")))
   }
-  if("StationCode" %in% colnames(df) & !"StationName" %in% colnames(df)){
+
+  if("StationCode" %in% colnames(df)){
     df <- df %>%
       dplyr::mutate(StationCode = factor(.data$StationCode,
                                          levels = c("DAR", "YON", "NIN", "NSI", "ROT",

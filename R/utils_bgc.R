@@ -10,7 +10,7 @@ pr_get_NRSChemistry <- function(){
 
   var_names <- c("SecchiDepth_m", "Silicate_umolL", "Phosphate_umolL", "Ammonium_umolL", "Nitrate_umolL", "Nitrite_umolL",
                  "Oxygen_umolL", "DIC_umolkg", "Alkalinity_umolkg", "Salinity",
-                 "NOx_umolL", 'DIN_umolL', 'Redfield') #TODO Check if it is Alk or Total Alk. Our code used to say Total Alk.
+                 "NOx_umolL", "DIN_umolL", "Redfield") # TODO Check if it is Alk or Total Alk. Our code used to say Total Alk.
 
   file <- "bgc_chemistry_data"
 
@@ -154,7 +154,7 @@ pr_get_NRSEnvContour <- function(Data = 'Chemistry') {
 #' @importFrom rlang .data
 pr_get_NRSMicro <- function(){
 
-  var_names <- c('Prochlorococcus_cellsmL', 'Synechococcus_cellsmL', 'Picoeukaryotes_cellsmL',
+  var_names <- c("Prochlorococcus_cellsmL", "Synechococcus_cellsmL", "Picoeukaryotes_cellsmL",
                  "Bacterial_Nitrogen_Index_KD", "Bacterial_Oxygen_Index_KD", "Bacterial_Phosphate_Index_KD", "Bacterial_Salinity_Index_KD",
                  "Bacterial_Silicate_Index_KD", "Bacterial_Temperature_Index_KD", "Archaeal_Temperature_Index_KD", "Archaeal_Salinity_Index_KD", "Archaeal_Nitrogen_Index_KD",
                  "Archaeal_Phosphate_Index_KD", "Archaeal_Silicate_Index_KD", "Archaeal_Oxygen_Index_KD", "Eukaryote_Temperature_Index_KD",

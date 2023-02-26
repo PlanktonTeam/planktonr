@@ -63,18 +63,23 @@ meta_sf <- planktonr::pr_get_NRSTrips("Z") %>%
   dplyr::rename(Code = "StationCode",
                 Station = "StationName") %>%
   dplyr::filter(Station != 'Port Hacking 4') %>%
+  dplyr::arrange(desc(Latitude)) %>%
   sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326)
 
 
+# https://coolors.co/palette/d00000-ffba08-cbff8c-8fe388-1b998b-3185fc-5d2e8c-46237a-ff7b9c-ff9b85
+# Darwin                 Yongala                Ningaloo      North Stradbroke Island         Rottnest Island               Esperance            Port Hacking         Kangaroo Island            Maria Island
+ # "#ff8500"               "#b66ee8"             "#ff9b85"           "#d00000".                 "#46237a"               "#1b998b"                  "#8fe388"                 "#ff7b9c"            "#3185fc"
+
+coolor <- c("#ff8500", "#b66ee8", "#ff9b85", "#d00000", "#46237a", "#1b998b", "#8fe388", "#ff7b9c", "#3185fc") # "#cbff8c" "#ffba08"
+
 colNRSCode <- data.frame(Code = meta_sf$Code,
-                         Colr = RColorBrewer::brewer.pal(9, "Set1")) %>%
+                         Colr = coolor) %>%
   tibble::deframe()
 
 colNRSName <- data.frame(Code = meta_sf$Station,
-                         Colr = RColorBrewer::brewer.pal(9, "Set1")) %>%
+                         Colr = coolor) %>%
   tibble::deframe()
-
-
 
 colCPR <- mbr %>%
   sf::st_drop_geometry() %>%
