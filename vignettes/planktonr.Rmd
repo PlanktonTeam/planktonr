@@ -30,6 +30,9 @@ library(patchwork)
 
 # Examine the frequency of sampling
 
+The sampling at the National Reference Stations is predominantly monthly. Darwin sample on a quarterly basis and do multiple trips acorss the tidal samples and Kangaroo Island are restricted to sampling 5-6 times a year by conditions. 
+The Continuous Plankton Recorder samples quarterly through our main areas of interest, the Great Barrier Reef and the East Australian Current and on a more ad-hoc basis in other regions. 
+
 ```{r}
 datCPR <- pr_get_CPRTrips()
 datNRS <- pr_get_NRSTrips()
@@ -41,9 +44,9 @@ wrap_plots(ggCPR, ggNRS, ncol = 1) &
   theme(text = ggplot2::element_text(size = 12, face = "bold"))
 ```
 
-
-
 # Plot the spatial distribution of NRS and CPR samples
+
+The National Reference Stations are situated throughout the coastal region of Australia with most Marine Bioregions having one station. The West Australian stations in Ningaloo and Esperance were discontinued after an initial sampling period due to logistical constraints. The CPR tracks are also more sparse in Western Australia as shipping options are few.
 
 ```{r}
 df <- pr_get_ProgressMapData(c("NRS", "CPR"))
@@ -52,8 +55,9 @@ pr_plot_ProgressMap(df)
 
 ```
 
-
 # What functional groups do we commonly see?
+
+We can learn a lot about the community structure of the plankton by using functional groups and these pie charts also show that sampling methods also impact on what we find in the samples. Centric diatoms dominate in the NRS samples whilst pennate diatoms become more important in the CPR samples. Note here that the CPR sampling occurs during the night time as well as the daylight hours and is sampling waters around 10 meters. The net samples are integrated depth samples and are collected in niskin bottles. 
 
 ## Phytoplankton
 ```{r}
@@ -66,8 +70,10 @@ p2 <- pr_plot_PieFG(pr_get_FuncGroups(Survey = "CPR", Type = "P"))
 
 ```
 
-
 ## Zooplankton
+
+Looking at zooplankton functional groups the copepods dominate the CPR and the net samples. Chaetognaths and cladocerans are also sampled well with the CPR whilst molluscs are caught more in the net samples. 
+
 ```{r}
 p3 <- pr_plot_PieFG(pr_get_FuncGroups(Survey = "NRS", Type = "Z"))
 p4 <- pr_plot_PieFG(pr_get_FuncGroups(Survey = "CPR", Type = "Z"))
@@ -78,10 +84,9 @@ p4 <- pr_plot_PieFG(pr_get_FuncGroups(Survey = "CPR", Type = "Z"))
 
 ```
 
-
-
-
 # How many taxa are we identifying?
+
+Over the course of the surveys, since 2009, we have improved our taxonomic resolution through training and exposure. We are now identifying over 1000 zooplankton taxa from the CPR which includes noting the lifestage and sex of many. As zooplankton are bigger and differences between species is generally more definitive than for phytoplankton, the diversity of zooplankton taxa is greater. 
 
 ## Phytoplankton
 ```{r}
