@@ -29,6 +29,16 @@ library(patchwork)
 
 # National Reference Stations
 
+Have a look at the file and see what is available for plotting, by downloading the file you can inspect the parameters and the Stations available.
+
+```{r}
+
+NRSz <- planktonr::pr_get_Indices("NRS", "Z") 
+unique(NRSz$Parameters)
+unique(NRSz$StationName)
+
+```
+
 ## Trend Analysis
 
 Long term plankton monitoring can provide insights into how zooplankton abundance and biomass are changing with time. This has implications for the fish communities they support and the lower trophic levels on which they depend for energy. Abundance and biomass trends don't necessarily show the same temporal trends, here we show zooplankton abundance by time, but biomass can also be chosen as the parameter. Seasonal cycles can also be important for understanding planktonic communities, for examples in these plots it is clear that there is a much stronger seasonal cycle at Maria Island in a temperate location than at Yongala, a more tropical station.   
@@ -82,6 +92,16 @@ p1 + p2 +
 
 
 # Continuous Plankton Recorder
+
+Have a look at the file and see what is available for plotting, by downloading the file you can inspect the parameters and the bioregions available.
+
+```{r}
+
+CPRz <- planktonr::pr_get_Indices("CPR", "Z") 
+unique(CPRz$Parameters)
+unique(CPRz$BioRegion)
+
+```
 
 ## Trend Analysis
 

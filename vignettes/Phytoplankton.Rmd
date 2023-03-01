@@ -29,6 +29,16 @@ library(patchwork)
 
 # National Reference Stations
 
+Have a look at the file and see what is available for plotting, by downloading the file you can inspect the parameters and the Stations available.
+
+```{r}
+
+NRSz <- planktonr::pr_get_Indices("NRS", "P") 
+unique(NRSz$Parameters)
+unique(NRSz$StationName)
+
+```
+
 ## Trend Analysis
 
 Here we plot the abundance of phytoplankton as a time series and a monthly climatology for the National Reference Stations around Australia. This can give us some information on the long term trends. At this time, early 2023, phytoplankton abundance seem to be generally decreasing along the east coast and this may have implications for zooplankton and higher trophic levels as phytoplankton is thought of as the base of the food web.  
@@ -79,7 +89,18 @@ p1 + p2 +
   theme(legend.position = "bottom")
 
 ```
+
 # Continuous Plankton Recorder
+
+Have a look at the file and see what is available for plotting, by downloading the file you can inspect the parameters and the bioregions available.
+
+```{r}
+
+CPRz <- planktonr::pr_get_Indices("CPR", "P") 
+unique(CPRz$Parameters)
+unique(CPRz$BioRegion)
+
+```
 
 ## Trend Analysis
 
