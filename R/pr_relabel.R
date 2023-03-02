@@ -118,7 +118,7 @@ pr_relabel <- function(s, style = "ggplot"){
     "WaterDensity_kgm3", rlang::expr(paste("Water Density (kg m"^-3,")")), "Water Density (kg m<sup>-3</sup>)", "Water Density",
     "WaterDepth_m", rlang::expr(paste("Water Depth (m)")), "Water Depth (m)", "Water Depth",
     "ZoopAbund_m3", rlang::expr(paste("Zooplankton Abundance (m"^-3,")")), "Zooplankton Abundance (m<sup>-3</sup>)", "Zooplankton Abundance",
-    "ZoopAbundance_m3", rlang::expr(paste("Zooplankton Abundance (m"^-3,")")), "Zooplankton Abundance (m<sup>-3</sup>)", "Zooplankton Abundance"),
+    "ZoopAbundance_m3", rlang::expr(paste("Zooplankton Abundance (m"^-3,")")), "Zooplankton Abundance (m<sup>-3</sup>)", "Zooplankton Abundance",
     ## Microbial
     "Bacterial_Salinity_Index_KD", rlang::expr(paste("Bacterial Salinity Index")), "Bacterial Salinity Index", "Bacterial Salinity Index",
     "Bacterial_Salinity_Index_mean", rlang::expr(paste("Bacterial Salinity Index Mean")), "Bacterial Salinity Index Mean", "Bacterial Salinity Index Mean",
@@ -242,7 +242,7 @@ pr_relabel <- function(s, style = "ggplot"){
     "Eukaryote_shannon_index", rlang::expr(paste("Eukaryote Shannon Index")), "Eukaryote Shannon Index", "Eukaryote Shannon Index",
     "Eukaryote_simpsons_index", rlang::expr(paste("Eukaryote Simpson's Index")), "Eukaryote Simpson's Index", "Eukaryote Simpson's Index",
     "Eukaryote_invsimpson_index", rlang::expr(paste("Eukaryote Inverse Simpson's Index")), "Eukaryote Inverse Simpson's Index", "Eukaryote Inverse Simpson's Index",
-    "Eukaryote_total_observations", rlang::expr(paste("Eukaryote Total ASVs")), "Eukaryote Total ASVs", "Eukaryote Total ASVs",
+    "Eukaryote_total_observations", rlang::expr(paste("Eukaryote Total ASVs")), "Eukaryote Total ASVs", "Eukaryote Total ASVs"),
     ncol = 4, byrow = TRUE, dimnames = list(NULL, c("Variable","gg", "pl", "simple"))))
 
   i <- which(relabel_df$Variable %in% s)
