@@ -120,6 +120,10 @@ pr_relabel <- function(s, style = "ggplot"){
     "ZoopAbund_m3", rlang::expr(paste("Zooplankton Abundance (m"^-3,")")), "Zooplankton Abundance (m<sup>-3</sup>)", "Zooplankton Abundance",
     "ZoopAbundance_m3", rlang::expr(paste("Zooplankton Abundance (m"^-3,")")), "Zooplankton Abundance (m<sup>-3</sup>)", "Zooplankton Abundance",
     ## Microbial
+    "NifH_genes_per_mil_reads", rlang::expr(paste("Nitrogen Fixing Genes (million reads"^-1,")")), "Nitrogen Fixing Genes (million reads<sup>-1</sup>)", "Nitrogen Fixing Genes",
+    "RuBisCo_genes_per_mil_reads", rlang::expr(paste("Carbon Fixing Genes (million reads"^-1,")")), "Carbon Fixing Genes (million reads<sup>-1</sup>)", "Carbon Fixing Genes",
+    "fish_parasites", rlang::expr(paste("Total Fish Parasite ASVs")), "Total Fish Parasite ASVs", "Fish Parasite ASVs",
+    "nitrogen_fixation_organisms", rlang::expr(paste("Total Nitrogen Fixing ASVs")), "Total Nitrogen Fixing ASVs", "Nitrogen Fixing ASVs",
     "Bacterial_Salinity_Index_KD", rlang::expr(paste("Bacterial Salinity Index")), "Bacterial Salinity Index", "Bacterial Salinity Index",
     "Bacterial_Salinity_Index_mean", rlang::expr(paste("Bacterial Salinity Index Mean")), "Bacterial Salinity Index Mean", "Bacterial Salinity Index Mean",
     "Bacterial_Salinity_Range", rlang::expr(paste("Bacterial Salinity Range")), "Bacterial Salinity Range", "Bacterial Salinity Range",
