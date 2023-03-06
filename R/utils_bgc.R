@@ -150,9 +150,9 @@ pr_get_NRSEnvContour <- function(Data = 'Chemistry') {
 #' @export
 #'
 #' @examples
-#' df <- pr_get_NRSMicro()
+#' df <- pr_get_NRSMicro("NRS")
 #' @importFrom rlang .data
-pr_get_NRSMicro <- function(){
+pr_get_NRSMicro <- function(Survey = "NRS"){
 
   var_names <- c("Prochlorococcus_cellsmL", "Synechococcus_cellsmL", "Picoeukaryotes_cellsmL",
                  "NifH_genes_per_mil_reads", "RuBisCo_genes_per_mil_reads", "fish_parasites",
@@ -202,20 +202,37 @@ pr_get_NRSMicro <- function(){
                  "Eukaryote_shannon_index", "Eukaryote_simpsons_index", "Eukaryote_invsimpson_index",
                  "Eukaryote_total_observations")
 
-  NRS <- pr_get_NRSTrips() %>%
-    dplyr::select("TripCode", "SampleTime_Local", "Year_Local", "Month_Local", "StationName", "StationCode")
+  if(Survey == "Coastal"){
 
+    CoastalStations <- c("Balls Head", "Salmon Haul", "Bare Island", "Cobblers Beach", "Towra Point", "Lilli Pilli",
+                         "Derwent Estuary B1", "Derwent Estuary B3", "Derwent Estuary E", "Derwent Estuary G2",
+                         "Derwent Estuary KB", "Derwent Estuary RBN", "Derwent Estuary U2", "Low Head",
+                         "Tully River Mouth mooring", "Russell-Mulgrave River mooring", "Green Island", "Port Douglas",
+                         "Cape Tribulation", "Double Island", "Yorkey's Knob", "Fairlead Buoy", "Hobsons; Port Phillip Bay",
+                         "Long Reef; Port Phillip Bay", "Geoffrey Bay", "Channel", "Pioneer Bay", "Centaur Reef",
+                         "Wreck Rock")
 
-  dat <- readr::read_csv("https://raw.githubusercontent.com/AusMicrobiome/microbial_ocean_atlas/main/data/oceanViz_AM_data.csv") %>%
-    pr_rename() %>%
-    dplyr::select("TripCode", "TripCode_depth", tidyselect::any_of(var_names)) %>%
-    dplyr::mutate(SampleDepth_m = as.numeric(stringr::str_sub(.data$TripCode_depth, -3, -1))) %>%
-    dplyr::mutate(dplyr::across(tidyselect::all_of(var_names), as.numeric))
+    dat <- readr::read_csv("https://raw.githubusercontent.com/AusMicrobiome/microbial_ocean_atlas/main/data/oceanViz_AM_data.csv") %>%
+      pr_rename() %>%
+      dplyr::filter(is.na(TripCode), StationName %in% CoastalStations) %>%
+      dplyr::select("StationName", "SampleDateUTC", "Latitude", "Longitude", tidyselect::any_of(var_names)) %>%
+      dplyr::mutate(dplyr::across(tidyselect::all_of(var_names), as.numeric)) %>%
+      tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters")
+    } else {
+    NRS <- pr_get_NRSTrips() %>%
+      dplyr::select("TripCode", "SampleTime_Local", "Year_Local", "Month_Local", "StationName", "StationCode")
 
-  dat <- dat %>%
-    tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters") %>%
-    dplyr::left_join(NRS, by = "TripCode") %>%
-    pr_reorder()
+    dat <- readr::read_csv("https://raw.githubusercontent.com/AusMicrobiome/microbial_ocean_atlas/main/data/oceanViz_AM_data.csv") %>%
+      pr_rename() %>%
+      dplyr::select("TripCode", "TripCode_depth", tidyselect::any_of(var_names)) %>%
+      dplyr::mutate(SampleDepth_m = as.numeric(stringr::str_sub(.data$TripCode_depth, -3, -1))) %>%
+      dplyr::mutate(dplyr::across(tidyselect::all_of(var_names), as.numeric))
+
+    dat <- dat %>%
+      tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters") %>%
+      dplyr::left_join(NRS, by = "TripCode") %>%
+      pr_reorder()
+  }
 
   return(dat)
 
