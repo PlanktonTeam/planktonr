@@ -225,6 +225,7 @@ pr_get_NRSMicro <- function(Survey = "NRS"){
     dat <- dat %>%
       dplyr::bind_cols(SampleTime_Local = times) %>%
       dplyr::select(-SampleDateUTC, -tz) %>%
+      dplyr::inner_join(CSCodes, by = "StationName") %>%
       tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters")
 
     } else {

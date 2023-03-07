@@ -110,7 +110,7 @@ colCPR <- mbr %>%
 
 CPRinfo <- planktonr::pr_get_PolicyInfo("CPR")
 
-usethis::use_data(mbr, MapOz, meta_sf, csDAT, colNRSCode, colNRSName, colCPR, CPRinfo,
+usethis::use_data(mbr, MapOz, meta_sf, csDAT, colNRSCode, colNRSName, colCPR, CPRinfo, CSCodes,
                   overwrite = TRUE, internal = TRUE, compress = "bzip2")
 
 # tools::checkRdaFiles("R") # Check what compression to use above
