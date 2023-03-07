@@ -77,7 +77,7 @@ meta_sf <- planktonr::pr_get_NRSTrips("Z") %>%
   dplyr::arrange(desc(Latitude)) %>%
   sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326)
 
-csDAT <- pr_get_NRSMicro("Coastal") %>%
+csDAT <- planktonr::pr_get_NRSMicro("Coastal") %>%
   dplyr::inner_join(CSCodes, by = "StationName") %>%
   dplyr::select("StationName", "StationCode", "Longitude", "Latitude") %>%
   dplyr::rename(Code = "StationCode",
