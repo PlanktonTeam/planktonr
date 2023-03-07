@@ -280,6 +280,7 @@ pr_add_StationCode <- function(df){
 #' df <- pr_reorder(df)
 pr_reorder <- function(df){
   if("StationName" %in% colnames(df)){
+
     df <- df %>%
       dplyr::mutate(StationName = factor(.data$StationName,
                                          levels = c("Darwin", "Yongala", "Ningaloo", "North Stradbroke Island",

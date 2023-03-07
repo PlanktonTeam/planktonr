@@ -225,9 +225,10 @@ pr_get_NRSMicro <- function(Survey = "NRS"){
     dat <- dat %>%
       dplyr::bind_cols(SampleTime_Local = times) %>%
       planktonr::pr_apply_Time() %>%
-      dplyr::select(-SampleDateUTC, -tz) %>%
       dplyr::inner_join(CSCodes, by = "StationName") %>%
-      tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters")
+      tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters") %>%
+      dplyr::arrange(State, Latitude) %>%
+      dplyr::select(-c(SampleDateUTC, tz))
 
     } else {
 

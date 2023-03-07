@@ -57,6 +57,7 @@ mbr <- dplyr::left_join(mbr, clr, by = "REGION") %>%
 MapOz <- rnaturalearth::ne_countries(scale = "small", country = "Australia",
                                      returnclass = "sf")
 
+# Details for coastal stations
 CSCodes <- tibble::tibble(StationName = c("Balls Head", "Salmon Haul", "Bare Island", "Cobblers Beach", "Towra Point", "Lilli Pilli",
                                           "Derwent Estuary B1", "Derwent Estuary B3", "Derwent Estuary E", "Derwent Estuary G2",
                                           "Derwent Estuary KB", "Derwent Estuary RBN", "Derwent Estuary U2", "Low Head",
@@ -66,8 +67,12 @@ CSCodes <- tibble::tibble(StationName = c("Balls Head", "Salmon Haul", "Bare Isl
                                           "Wreck Rock", "Inshore reef_Channel", "Inshore reef_Geoffrey Bay"),
                           StationCode = c("BAH", "SAH", "BAI", "COB", "TOP", "LIP", "DEB", "DES", "DEE", "DEG", "DEK", "DER", "DEU", "LOH",
                                      "TRM", "RMR", "GNI", "PTD", "CTL", "DBI", "YKK", "FLB", "HOB", "LOR", "GEB", "CHA", "PIB", "CER",
-                                     "WRR", "IRC", "IGB"))
+                                     "WRR", "IRC", "IGB"),
+                          State = factor(c("NSW", "NSW", "NSW", "NSW", "NSW", "NSW", "TAS", "TAS","TAS","TAS","TAS","TAS","TAS", "TAS", "GBR",
+                                    "GBR","GBR","GBR","GBR","GBR","GBR","GBR", "VIC", "VIC","GBR","GBR","GBR","NSW", "NSW","GBR","GBR" ),
+                                    levels = c("GBR", "NSW", "VIC", "TAS")))
 
+# NRS input into pl_plot_NRSmap()
 meta_sf <- planktonr::pr_get_NRSTrips("Z") %>%
   dplyr::select("StationName", "StationCode", "Longitude", "Latitude") %>%
   dplyr::distinct() %>%
@@ -77,17 +82,18 @@ meta_sf <- planktonr::pr_get_NRSTrips("Z") %>%
   dplyr::arrange(desc(Latitude)) %>%
   sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326)
 
+# Microbial Coastal station input into pl_plot_NRSmap()
 csDAT <- planktonr::pr_get_NRSMicro("Coastal") %>%
   dplyr::inner_join(CSCodes, by = "StationName") %>%
   dplyr::select("StationName", "StationCode", "Longitude", "Latitude") %>%
   dplyr::rename(Code = "StationCode",
                 Station = "StationName") %>%
-  dplyr::group_by(Code, Station) %>%
+  dplyr::group_by(Code, Station, State) %>%
   dplyr::summarise(Latitude = mean(Latitude, na.rm = TRUE),
                    Longitude = mean(Longitude, na.rm = TRUE),
                    .groups = "drop") %>%
   dplyr::distinct() %>%
-  dplyr::arrange(desc(Latitude)) %>%
+  dplyr::arrange(desc(State, Latitude)) %>%
   sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326)
 
 # https://coolors.co/palette/d00000-ffba08-cbff8c-8fe388-1b998b-3185fc-5d2e8c-46237a-ff7b9c-ff9b85
