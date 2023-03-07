@@ -4,7 +4,10 @@
 \alias{pr_get_NRSMicro}
 \title{Load microbial data}
 \usage{
-pr_get_NRSMicro()
+pr_get_NRSMicro(Survey = "NRS")
+}
+\arguments{
+\item{Survey}{NRS or Coastal stations}
 }
 \value{
 A dataframe with NRS microbial data
@@ -13,5 +16,5 @@ A dataframe with NRS microbial data
 Load microbial data
 }
 \examples{
-df <- pr_get_NRSMicro()
+df <- pr_get_NRSMicro("NRS")
 }

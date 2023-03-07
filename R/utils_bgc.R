@@ -145,6 +145,7 @@ pr_get_NRSEnvContour <- function(Data = 'Chemistry') {
 
 
 #' Load microbial data
+#' @param Survey NRS or Coastal stations
 #'
 #' @return A dataframe with NRS microbial data
 #' @export
@@ -210,7 +211,7 @@ pr_get_NRSMicro <- function(Survey = "NRS"){
                          "Tully River Mouth mooring", "Russell-Mulgrave River mooring", "Green Island", "Port Douglas",
                          "Cape Tribulation", "Double Island", "Yorkey's Knob", "Fairlead Buoy", "Hobsons; Port Phillip Bay",
                          "Long Reef; Port Phillip Bay", "Geoffrey Bay", "Channel", "Pioneer Bay", "Centaur Reef",
-                         "Wreck Rock")
+                         "Wreck Rock", "Inshore reef_Channel", "Inshore reef_Geoffrey Bay")
 
     dat <- readr::read_csv("https://raw.githubusercontent.com/AusMicrobiome/microbial_ocean_atlas/main/data/oceanViz_AM_data.csv") %>%
       pr_rename() %>%
