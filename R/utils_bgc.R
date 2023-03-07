@@ -223,7 +223,7 @@ pr_get_NRSMicro <- function(Survey = "NRS"){
     times <- purrr::map2_vec(dat$SampleDateUTC, dat$tz, function(x,y) lubridate::with_tz(x, tzone = y))
 
     dat <- dat %>%
-      dplyr::bind_cols(SampleDate_Local = times) %>%
+      dplyr::bind_cols(SampleTime_Local = times) %>%
       dplyr::select(-SampleDateUTC, -tz) %>%
       tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters")
 
