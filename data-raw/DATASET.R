@@ -69,8 +69,9 @@ CSCodes <- tibble::tibble(StationName = c("Balls Head", "Salmon Haul", "Bare Isl
                                      "TRM", "RMR", "GNI", "PTD", "CTL", "DBI", "YKK", "FLB", "HOB", "LOR", "GEB", "CHA", "PIB", "CER",
                                      "WRR", "IRC", "IGB"),
                           State = factor(c("NSW", "NSW", "NSW", "NSW", "NSW", "NSW", "TAS", "TAS","TAS","TAS","TAS","TAS","TAS", "TAS", "GBR",
-                                    "GBR","GBR","GBR","GBR","GBR","GBR","GBR", "VIC", "VIC","GBR","GBR","GBR","NSW", "NSW","GBR","GBR" ),
-                                    levels = c("GBR", "NSW", "VIC", "TAS")))
+                                    "GBR","GBR","GBR","GBR","GBR","GBR","GBR", "VIC", "VIC","GBR","GBR","GBR","WA", "WA","GBR","GBR" ),
+                                    levels = c("GBR", "NSW", "WA", "VIC", "TAS"))) %>%
+  dplyr::arrange(State)
 
 # NRS input into pl_plot_NRSmap()
 meta_sf <- planktonr::pr_get_NRSTrips("Z") %>%
@@ -116,7 +117,29 @@ colCPR <- mbr %>%
 
 CPRinfo <- planktonr::pr_get_PolicyInfo("CPR")
 
-usethis::use_data(mbr, MapOz, meta_sf, csDAT, colNRSCode, colNRSName, colCPR, CPRinfo, CSCodes,
+## Coastal station colours
+stateCol <- c(rep("#8FE388", 5), rep("#8FE388", 4), rep("#8FE388", 4), rep("#FFBA08",6), rep("#3185FC",2), rep("#5D2E8C",2), rep("#FF7B9C",4), rep("#FF9B85", 4))
+statePCH <- c("solid", "dashed", "dotted", "dotdash", "longdash", "solid", "dashed", "dotted", "dotdash",  "solid", "dashed", "dotted", "dotdash",
+              "solid", "dashed", "dotted", "dotdash", "longdash", "twodash", "solid", "dashed", "solid", "dashed", "solid", "dashed", "dotted",
+              "dotdash", "solid", "dashed", "dotted", "dotdash")
+
+colCSCode <- data.frame(Code = CSCodes$StationCode,
+                         Colr = stateCol) %>%
+  tibble::deframe()
+
+colCSName <- data.frame(Code = CSCodes$StationName,
+                        Colr = stateCol) %>%
+  tibble::deframe()
+
+pchCSCode <- data.frame(Code = CSCodes$StationCode,
+                        pchr = statePCH) %>%
+  tibble::deframe()
+
+pchCSName <- data.frame(Code = CSCodes$StationName,
+                        pchr = statePCH) %>%
+  tibble::deframe()
+
+usethis::use_data(mbr, MapOz, meta_sf, csDAT, colNRSCode, colNRSName, colCPR, CPRinfo, CSCodes, colCSCode, pchCSCode, colCSName, pchCSName,
                   overwrite = TRUE, internal = TRUE, compress = "bzip2")
 
 # tools::checkRdaFiles("R") # Check what compression to use above

@@ -117,13 +117,15 @@ pr_plot_PCI <- function(df){
 #' @examples
 #' df <- pr_get_Indices("NRS", "Z") %>%
 #'   dplyr::filter(Parameters == "Biomass_mgm3")
-#' timeseries <- pr_plot_TimeSeries(df, "NRS")
+#' timeseries <- pr_plot_TimeSeries(df %>% dplyr::filter(Parameters == 'Bacterial_Temperature_Index_KD',grepl('Derwent', StationName)), Survey = "Coastal")
+
 pr_plot_TimeSeries <- function(df, Survey = "NRS", trans = "identity"){
 
   if(Survey == "CPR"){
     df <- df %>%
       dplyr::rename(StationName = "BioRegion")
     plotCols <- colCPR
+    ltype <- "solid"
 
   }
 
@@ -133,7 +135,18 @@ pr_plot_TimeSeries <- function(df, Survey = "NRS", trans = "identity"){
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                        .groups = "drop")
     plotCols <- colNRSName
+    ltype <- "solid"
   }
+
+  if(Survey == "Coastal"){
+    df <- df %>%
+      dplyr::group_by(.data$SampleTime_Local, .data$StationName, .data$Parameters) %>% # accounting for microbial data different depths
+      dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
+                       .groups = "drop")
+    plotCols <- colCSName
+    ltype <- pchCSName
+  }
+
 
   titlex <- "Sample Date (Local)"
 
@@ -141,13 +154,14 @@ pr_plot_TimeSeries <- function(df, Survey = "NRS", trans = "identity"){
   titley <- pr_relabel(unique(df$Parameters), style = "ggplot")
 
   p1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$SampleTime_Local, y = .data$Values)) +
-    ggplot2::geom_line(ggplot2::aes(group = .data$StationName, color = .data$StationName)) +
+    ggplot2::geom_line(ggplot2::aes(group = .data$StationName, color = .data$StationName, linetype = .data$StationName)) +
     ggplot2::geom_point(ggplot2::aes(group = .data$StationName, color = .data$StationName)) +
     ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", expand = c(0, 0)) +
     ggplot2::scale_y_continuous(trans = trans, expand = c(0, 0)) +
     ggplot2::labs(y = titley,
                   x = titlex) +
     ggplot2::scale_colour_manual(values = plotCols, limits = force) +
+    ggplot2::scale_shape_manual(values = ltype)
     theme_pr()
 
   return(p1)

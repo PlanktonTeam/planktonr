@@ -151,7 +151,7 @@ pr_get_NRSEnvContour <- function(Data = 'Chemistry') {
 #' @export
 #'
 #' @examples
-#' df <- pr_get_NRSMicro("NRS")
+#' df <- pr_get_NRSMicro("Coastal")
 #' @importFrom rlang .data
 pr_get_NRSMicro <- function(Survey = "NRS"){
 
