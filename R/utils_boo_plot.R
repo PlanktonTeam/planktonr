@@ -294,6 +294,8 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
     plotCols <- colCPR
   } else if (Survey == "NRS"){
     plotCols <- colNRSName
+  } else if (Survey == "Coastal"){
+    plotCols <- colCSName
   }
 
   n <- length(unique(df$StationName))

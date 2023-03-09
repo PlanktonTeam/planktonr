@@ -122,6 +122,7 @@ stateCol <- c(rep("#8FE388", 5), rep("#8FE388", 4), rep("#8FE388", 4), rep("#FFB
 statePCH <- c("solid", "dashed", "dotted", "dotdash", "longdash", "solid", "dashed", "dotted", "dotdash",  "solid", "dashed", "dotted", "dotdash",
               "solid", "dashed", "dotted", "dotdash", "longdash", "twodash", "solid", "dashed", "solid", "dashed", "solid", "dashed", "dotted",
               "dotdash", "solid", "dashed", "dotted", "dotdash")
+#stateFill <- c()
 
 colCSCode <- data.frame(Code = CSCodes$StationCode,
                          Colr = stateCol) %>%
@@ -138,6 +139,10 @@ pchCSCode <- data.frame(Code = CSCodes$StationCode,
 pchCSName <- data.frame(Code = CSCodes$StationName,
                         pchr = statePCH) %>%
   tibble::deframe()
+
+# fillCSName <- data.frame(Code = CSCodes$StationName,
+#                          fillr = stateFill) %>%
+#   tibble::deframe()
 
 usethis::use_data(mbr, MapOz, meta_sf, csDAT, colNRSCode, colNRSName, colCPR, CPRinfo, CSCodes, colCSCode, pchCSCode, colCSName, pchCSName,
                   overwrite = TRUE, internal = TRUE, compress = "bzip2")
