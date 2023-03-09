@@ -161,7 +161,7 @@ pr_plot_TimeSeries <- function(df, Survey = "NRS", trans = "identity"){
     ggplot2::labs(y = titley,
                   x = titlex) +
     ggplot2::scale_colour_manual(values = plotCols, limits = force) +
-    ggplot2::scale_shape_manual(values = ltype)
+    ggplot2::scale_shape_manual(values = ltype) +
     theme_pr()
 
   return(p1)
@@ -199,7 +199,7 @@ pr_plot_Trends <- function(df, Trend = "Raw", Survey = "NRS", method = "lm",  tr
 
   if (Survey == "CPR"){
     site = rlang::sym("BioRegion")
-  } else if (Survey == "NRS"){
+  } else if (Survey != "CPR"){
     site = rlang::sym("StationName")
   }
 
@@ -245,9 +245,13 @@ pr_plot_Trends <- function(df, Trend = "Raw", Survey = "NRS", method = "lm",  tr
     p1 <- p1 +
       ggplot2::scale_x_continuous(breaks = 2, expand = c(0, 0)) +
       ggplot2::xlab("Year")
-  } else if (!rlang::as_string(Trend) %in% c("Month_Local", "Year_Local")){
+  } else if (!rlang::as_string(Trend) %in% c("Month_Local", "Year_Local") & Survey != 'Coastal'){
     p1 <- p1 +
       ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", expand = c(0, 0)) +
+      ggplot2::xlab("Year")
+  } else if (!rlang::as_string(Trend) %in% c("Month_Local", "Year_Local") & Survey == 'Coastal'){
+    p1 <- p1 +
+      ggplot2::scale_x_datetime(date_breaks = "1 years", date_labels = "%Y", expand = c(0, 0)) +
       ggplot2::xlab("Year")
   }
 
