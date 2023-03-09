@@ -118,7 +118,7 @@ colCPR <- mbr %>%
 CPRinfo <- planktonr::pr_get_PolicyInfo("CPR")
 
 ## Coastal station colours
-stateCol <- c(rep("#8FE388", 5), rep("#8FE388", 4), rep("#8FE388", 4), rep("#FFBA08",6), rep("#3185FC",2), rep("#5D2E8C",2), rep("#FF7B9C",4), rep("#FF9B85", 4))
+stateCol <- c(rep("#8FE388", 5), rep("#1B998B", 4), rep("#CBFF8C", 4), rep("#FFBA08",6), rep("#3185FC",2), rep("#5D2E8C",2), rep("#FF7B9C",4), rep("#FF9B85", 4))
 statePCH <- c("solid", "dashed", "dotted", "dotdash", "longdash", "solid", "dashed", "dotted", "dotdash",  "solid", "dashed", "dotted", "dotdash",
               "solid", "dashed", "dotted", "dotdash", "longdash", "twodash", "solid", "dashed", "solid", "dashed", "solid", "dashed", "dotted",
               "dotdash", "solid", "dashed", "dotted", "dotdash")
