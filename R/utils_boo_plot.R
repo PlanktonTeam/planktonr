@@ -156,13 +156,20 @@ pr_plot_TimeSeries <- function(df, Survey = "NRS", trans = "identity"){
   p1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$SampleTime_Local, y = .data$Values)) +
     ggplot2::geom_line(ggplot2::aes(group = .data$StationName, color = .data$StationName, linetype = .data$StationName)) +
     ggplot2::geom_point(ggplot2::aes(group = .data$StationName, color = .data$StationName)) +
-    ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", expand = c(0, 0)) +
     ggplot2::scale_y_continuous(trans = trans, expand = c(0, 0)) +
     ggplot2::labs(y = titley,
                   x = titlex) +
     ggplot2::scale_colour_manual(values = plotCols, limits = force) +
     ggplot2::scale_shape_manual(values = ltype) +
     theme_pr()
+
+  if(Survey != "Coastal") {
+    p1 +
+    ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", expand = c(0, 0))
+  } else {
+    p1 +
+      ggplot2::scale_x_datetime(date_breaks = "1 year", date_labels = "%Y", expand = c(0, 0))
+  }
 
   return(p1)
 }
@@ -251,7 +258,7 @@ pr_plot_Trends <- function(df, Trend = "Raw", Survey = "NRS", method = "lm",  tr
       ggplot2::xlab("Year")
   } else if (!rlang::as_string(Trend) %in% c("Month_Local", "Year_Local") & Survey == 'Coastal'){
     p1 <- p1 +
-      ggplot2::scale_x_datetime(date_breaks = "1 years", date_labels = "%Y", expand = c(0, 0)) +
+      ggplot2::scale_x_datetime(date_breaks = "1 year", date_labels = "%Y", expand = c(0, 0)) +
       ggplot2::xlab("Year")
   }
 
@@ -475,9 +482,13 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
     p1 <- p1 +
       ggplot2::scale_x_continuous(breaks = 2, expand = c(0, 0)) +
       ggplot2::xlab("Year")
-  } else if (rlang::as_string(Trend) %in% c("SampleTime_Local")){
+  } else if (rlang::as_string(Trend) %in% c("SampleTime_Local") & Survey != 'Coastal'){
     p1 <- p1 +
       ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", expand = c(0, 0)) +
+      ggplot2::xlab("Sample Date")
+  } else if (rlang::as_string(Trend) %in% c("SampleTime_Local") & Survey == 'Coastal'){
+    p1 <- p1 +
+      ggplot2::scale_x_datetime(date_breaks = "1 year", date_labels = "%Y", expand = c(0, 0)) +
       ggplot2::xlab("Sample Date")
   }
 
