@@ -2,6 +2,7 @@
 #' Sidebar panel plot of selected NRS stations
 #'
 #' @param df dataframe containing station codes to plot
+#' @param Survey NRS or Coastal
 #'
 #' @return a map of the selected stations
 #' @export
@@ -9,14 +10,12 @@
 #' @examples
 #' df <- data.frame(StationCode = c("MAI", "PHB"))
 #' pmap <- pr_plot_NRSmap(df)
-pr_plot_NRSmap <- function(df){
+pr_plot_NRSmap <- function(df, Survey = 'NRS'){
 
-  dfsc <- csDAT %>% dplyr::filter(.data$Code %in% df$StationCode)
-
-  if(nrow(dfsc) > 0){
-    meta_sf <- csDAT
-  } else {
+  if(Survey == 'NRS'){
     meta_sf <- meta_sf
+  } else {
+    meta_sf <- csDAT
   }
 
   meta_sf <- meta_sf %>%

@@ -4,10 +4,12 @@
 \alias{pr_plot_NRSmap}
 \title{Sidebar panel plot of selected NRS stations}
 \usage{
-pr_plot_NRSmap(df)
+pr_plot_NRSmap(df, Survey = "NRS")
 }
 \arguments{
 \item{df}{dataframe containing station codes to plot}
+
+\item{Survey}{NRS or Coastal}
 }
 \value{
 a map of the selected stations
@@ -16,6 +18,6 @@ a map of the selected stations
 Sidebar panel plot of selected NRS stations
 }
 \examples{
-df <- data.frame(StationCode = c("NSI", "PHB"))
+df <- data.frame(StationCode = c("MAI", "PHB"))
 pmap <- pr_plot_NRSmap(df)
 }
