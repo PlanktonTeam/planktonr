@@ -7,22 +7,22 @@
 #' @export
 #'
 #' @examples
-#' df <- data.frame(StationCode = c("CTL", "PTD"))
+#' df <- data.frame(StationCode = c("MAI", "PHB"))
 #' pmap <- pr_plot_NRSmap(df)
 pr_plot_NRSmap <- function(df){
+
+  dfsc <- csDAT %>% dplyr::filter(.data$Code %in% df$StationCode)
+
+  if(nrow(dfsc) > 0){
+    meta_sf <- csDAT
+  } else {
+    meta_sf <- meta_sf
+  }
 
   meta_sf <- meta_sf %>%
     dplyr::mutate(Colour = dplyr::if_else(.data$Code %in% df$StationCode, "Red", "Blue")) %>%
     sf::st_as_sf() # This seems to strip away some of the tibble stuff that makes the filter not work...
   # dplyr::filter(.data$Code %in% df$StationCode)
-
-  testNRS <- meta_sf %>% filter(.data$Colour == "Red")
-
-  if(nrow(testNRS) == 0){
-    meta_sf <- csDAT %>%
-      dplyr::mutate(Colour = dplyr::if_else(.data$Code %in% df$StationCode, "Red", "Blue")) %>%
-      sf::st_as_sf()
-  }
 
   col <- meta_sf %>%
     sf::st_drop_geometry() %>%
