@@ -11,11 +11,11 @@
 #' pmap <- pr_plot_NRSmap(df)
 pr_plot_NRSmap <- function(df){
 
-  dfsc <- csDAT %>% dplyr::filter(.data$Code %in% df$StationCode)
-
-  if(nrow(dfsc) > 0){
-    meta_sf <- csDAT
-  }
+  # dfsc <- csDAT %>% dplyr::filter(.data$Code %in% df$StationCode)
+  #
+  # if(nrow(dfsc) > 0){
+  #   meta_sf <- csDAT
+  # }
 
   meta_sf <- meta_sf %>%
     dplyr::mutate(Colour = dplyr::if_else(.data$Code %in% df$StationCode, "Red", "Blue")) %>%
@@ -278,7 +278,7 @@ pr_plot_Trends <- function(df, Trend = "Raw", Survey = "NRS", method = "lm",  tr
 #'
 #' @examples
 #' df <- pr_get_Indices(Survey = "NRS", Type = "P") %>%
-#'         dplyr::filter(Parameters == "PhytoBiomassCarbon_pgL")
+#'         dplyr::filter(Parameters == "PhytoBiomassCarbon_pgL", StationCode %in% c("NSI", "PHB", "MAI"))
 #'
 #' monthly <- pr_plot_Climatology(df, "NRS", "Month")
 #'
@@ -326,7 +326,8 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
       dplyr::mutate(!!Trend := lubridate::as_date(paste(!!Trend, 1, 1, sep = "-"))) #TODO Temp fix to convert to date and fix ticks below
   }
 
-  p1 <- ggplot2::ggplot(df_climate, ggplot2::aes(x = !!Trend, y = .data$mean, fill = .data$StationName, group = .data$StationName)) +
+  p1 <- ggplot2::ggplot(df_climate, ggplot2::aes(x = !!Trend, y = .data$mean, fill = .data$StationName,
+                                                 group = .data$StationName)) +
     ggplot2::geom_col(width = dodge, position = ggplot2::position_dodge(width = dodge)) +
     ggplot2::geom_errorbar(ggplot2::aes(ymin = .data$mean-.data$se, ymax = .data$mean+.data$se),
                            width = dodge/3,                    # Width of the error bars
@@ -343,11 +344,15 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
                                   labels=c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"))
   }
 
-  if("Year_Local" %in% colnames(df_climate)){
+  if("Year_Local" %in% colnames(df_climate) & Survey != 'Coastal'){
     p1 <- p1 +
       ggplot2::xlab("Year") +
       ggplot2::scale_x_date(date_breaks = "2 years", date_labels = "%Y", expand = c(0, 0))
-    # ggplot2::scale_x_continuous(breaks = scales::breaks_width(1))
+  }
+  if("Year_Local" %in% colnames(df_climate) & Survey == 'Coastal'){
+    p1 <- p1 +
+      ggplot2::xlab("Year") +
+      ggplot2::scale_x_date(date_breaks = "1 year", date_labels = "%Y", expand = c(0, 0))
   }
 
   return(p1)
