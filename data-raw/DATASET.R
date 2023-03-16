@@ -85,8 +85,7 @@ meta_sf <- planktonr::pr_get_NRSTrips("Z") %>%
 
 # Microbial Coastal station input into pl_plot_NRSmap()
 csDAT <- planktonr::pr_get_NRSMicro("Coastal") %>%
-  dplyr::inner_join(CSCodes, by = "StationName") %>%
-  dplyr::select("StationName", "StationCode", "Longitude", "Latitude") %>%
+  dplyr::select("StationName", "StationCode", "Longitude", "Latitude", "State") %>%
   dplyr::rename(Code = "StationCode",
                 Station = "StationName") %>%
   dplyr::group_by(Code, Station, State) %>%
@@ -94,7 +93,7 @@ csDAT <- planktonr::pr_get_NRSMicro("Coastal") %>%
                    Longitude = mean(Longitude, na.rm = TRUE),
                    .groups = "drop") %>%
   dplyr::distinct() %>%
-  dplyr::arrange(desc(State, Latitude)) %>%
+  dplyr::arrange(desc(State), desc(Latitude)) %>%
   sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326)
 
 # https://coolors.co/palette/d00000-ffba08-cbff8c-8fe388-1b998b-3185fc-5d2e8c-46237a-ff7b9c-ff9b85
