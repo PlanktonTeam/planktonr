@@ -110,6 +110,10 @@ colNRSName <- data.frame(Code = meta_sf$Station,
                          Colr = coolor) %>%
   tibble::deframe()
 
+pchNRSName <- data.frame(Code = meta_sf$Station,
+                         pchr = rep(16,9)) %>%
+  tibble::deframe()
+
 colCPR <- mbr %>%
   sf::st_drop_geometry() %>%
   tibble::deframe()
@@ -151,7 +155,7 @@ ltyCSName <- data.frame(Code = CSCodes$StationName,
 #                          fillr = stateFill) %>%
 #   tibble::deframe()
 
-usethis::use_data(mbr, MapOz, meta_sf, csDAT, colNRSCode, colNRSName, colCPR, CPRinfo,
+usethis::use_data(mbr, MapOz, meta_sf, csDAT, colNRSCode, colNRSName, pchNRSName, colCPR, CPRinfo,
                   CSCodes, colCSCode, pchCSCode, ltyCSCode, colCSName, pchCSName, ltyCSName,
                   overwrite = TRUE, internal = TRUE, compress = "bzip2")
 

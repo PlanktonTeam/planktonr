@@ -1454,15 +1454,15 @@ pr_plot_TaxaAccum <- function(dat, Survey = "NRS", Type = "Z"){
 #' @export
 
 #' @examples
-#' df <- planktonr::pr_get_NRSMicro(Survey = 'Coastal') %>% tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
-#' dplyr::filter(.data$StationCode %in% c("BAI", "DEE")) %>%
+#' df <- planktonr::pr_get_NRSMicro() %>% tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
+#' dplyr::filter(.data$StationCode %in% c("NSI", "PHB")) %>%
 #' tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = 'mean')
 #' gg <- pr_plot_scatter(df, "Bacterial_Temperature_Index_KD", "nitrogen_fixation_organisms")
 
 pr_plot_scatter <- function(df, x, y){
 
   cols <- c(colNRSName, colCSName)
-  pchs <- c(rep(16,9), pchCSName)
+  pchs <- c(pchNRSName, pchCSName)
 
   titlex <- planktonr::pr_relabel(x, style = "ggplot")
   titley <- planktonr::pr_relabel(y, style = "ggplot")
@@ -1476,7 +1476,8 @@ pr_plot_scatter <- function(df, x, y){
     planktonr::theme_pr()
 
   if("SampleDepth_m" %in% colnames(df)){
-    gg <- gg + ggplot2::facet_grid(.data$SampleDepth_m ~ .)
+    gg <- gg + ggplot2::facet_grid(.data$SampleDepth_m ~ ., scales = "free_y") +
+      ggplot2::theme(strip.text.y = ggplot2::element_text(face = "bold", angle = 0)) # size = 12
   }
 
   return(gg)
