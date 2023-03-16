@@ -154,11 +154,11 @@ pchCSName <- data.frame(Code = CSCodes$StationName,
   tibble::deframe()
 
 ltyCSCode <- data.frame(Code = CSCodes$StationCode,
-                        pchr = statePCH) %>%
+                        pchr = stateLTY) %>%
   tibble::deframe()
 
 ltyCSName <- data.frame(Code = CSCodes$StationName,
-                        pchr = statePCH) %>%
+                        pchr = stateLTY) %>%
   tibble::deframe()
 
 colNRSCode <- c(colNRSCode, colCSCode)
