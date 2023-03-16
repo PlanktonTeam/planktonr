@@ -1429,7 +1429,6 @@ pr_plot_TaxaAccum <- function(dat, Survey = "NRS", Type = "Z"){
 
 }
 
-
 #' Simple function to scatter 2 data columns using common NRS colouring
 #'
 #' Note that this function assumes wide data with the data to plot as columns.
@@ -1471,5 +1470,41 @@ pr_plot_scatter <- function(df, x, y){
   return(gg)
 }
 
+#' Simple boxplot function using common NRS colouring
+#'
+#' Note that this function assumes wide data with the data to plot as columns.
+#'
+#' @param df Dataframe
+#' @param x Column name for the x axis
+#' @param y Column name for the y axis
+#'
+#' @return ggplot object
+#' @export
+
+#' @examples
+#' df <- planktonr::pr_get_NRSMicro('Coastal') %>% tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
+#' dplyr::filter(.data$StationCode %in% c("DEE", "DEB")) %>%
+#' tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = 'mean')
+#' gg <- pr_plot_box(df, "Bacterial_Temperature_Index_KD")
+
+pr_plot_box <- function(df, y){
+
+  cols <- colNRSName
+  ltys <- ltyNRSName
+
+  titley <- planktonr::pr_relabel(y, style = "ggplot")
+
+  gg <- ggplot2::ggplot(data = df,
+                        ggplot2::aes(.data$StationName, !!rlang::sym(y), color = .data$StationName, linetype = .data$StationName)) +
+    ggplot2::geom_point() +
+    ggplot2::geom_boxplot() +
+    ggplot2::ylab(titley) +
+    ggplot2::scale_colour_manual(values = colNRSName) +
+    ggplot2::scale_linetype_manual(values = ltyNRSName)  +
+    ggplot2::scale_shape_manual(values = pchNRSName) +
+    planktonr::theme_pr()
+
+  return(gg)
+}
 
 
