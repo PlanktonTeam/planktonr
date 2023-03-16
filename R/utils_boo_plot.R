@@ -304,10 +304,8 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
     df <- df %>%
       dplyr::rename(StationName = "BioRegion")
     plotCols <- colCPR
-  } else if (Survey == "NRS"){
-    plotCols <- colNRSName
-  } else if (Survey == "Coastal"){
-    plotCols <- colCSName
+  } else if (Survey != "CPR"){
+    plotCols <- c(colNRSName, colCSName)
   }
 
   n <- length(unique(df$StationName))
@@ -1444,36 +1442,43 @@ pr_plot_TaxaAccum <- function(dat, Survey = "NRS", Type = "Z"){
 }
 
 
+#' Simple function to scatter 2 data columns using common NRS colouring
+#'
+#' Note that this function assumes wide data with the data to plot as columns.
+#'
+#' @param df Dataframe
+#' @param x Column name for the x axis
+#' @param y Column name for the y axis
+#'
+#' @return ggplot object
+#' @export
 
-# Simple function to scatter 2 data columns using common NRS colouring
-#
-# Note that this function assumes wide data with the data to plot as columns.
-#
-# @param df Dataframe
-# @param x Column name for the x axis
-# @param y Column name for the y axis
-#
-# @return ggplot object
-# @export
-#
-# @examples
-# pr_plot_scatter <- function(df, x, y){
-#
-#   # TODO Examples to fix
-#   # df <- planktonr::pr_get_NRSMicro() %>% tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>% tidyr::pivot_wider(names_from = "Parameters", values_from = "Values")
-#   # gg <- pr_plot_scatter(df, "Prochlorococcus_cellsmL", "Synechococcus_cellsmL")
-#
-#   titlex <- planktonr::pr_relabel(x, style = "ggplot")
-#   titley <- planktonr::pr_relabel(y, style = "ggplot")
-#
-#   gg <-  ggplot2::ggplot(data = df) +
-#     ggplot2::geom_point(ggplot2::aes(!!rlang::sym(x), !!rlang::sym(y), colour = .data$StationName)) +
-#     ggplot2::xlab(titlex) +
-#     ggplot2::ylab(titley) +
-#     ggplot2::scale_colour_manual(values = colNRSName)
-#
-#   return(gg)
-# }
+#' @examples
+#' df <- planktonr::pr_get_NRSMicro(Survey = 'Coastal') %>% tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
+#' dplyr::filter(.data$StationCode %in% c("BAI", "DEE")) %>%
+#' tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = 'mean')
+#' gg <- pr_plot_scatter(df, "Bacterial_Temperature_Index_KD", "nitrogen_fixation_organisms")
+
+pr_plot_scatter <- function(df, x, y){
+
+  cols <- c(colNRSName, colCSName)
+
+  titlex <- planktonr::pr_relabel(x, style = "ggplot")
+  titley <- planktonr::pr_relabel(y, style = "ggplot")
+
+  gg <-  ggplot2::ggplot(data = df) +
+    ggplot2::geom_point(ggplot2::aes(!!rlang::sym(x), !!rlang::sym(y), colour = .data$StationName)) +
+    ggplot2::xlab(titlex) +
+    ggplot2::ylab(titley) +
+    ggplot2::scale_colour_manual(values = cols) +
+    planktonr::theme_pr()
+
+  if("SampleDepth_m" %in% colnames(df)){
+    gg <- gg + ggplot2::facet_grid(.data$SampleDepth_m ~ .)
+  }
+
+  return(gg)
+}
 
 
 
