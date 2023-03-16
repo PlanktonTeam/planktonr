@@ -119,10 +119,10 @@ CPRinfo <- planktonr::pr_get_PolicyInfo("CPR")
 
 ## Coastal station colours
 stateCol <- c(rep("#8FE388", 5), rep("#1B998B", 4), rep("#CBFF8C", 4), rep("#FFBA08",6), rep("#3185FC",2), rep("#5D2E8C",2), rep("#FF7B9C",4), rep("#FF9B85", 4))
-statePCH <- c("solid", "dashed", "dotted", "dotdash", "longdash", "solid", "dashed", "dotted", "dotdash",  "solid", "dashed", "dotted", "dotdash",
+stateLTY <- c("solid", "dashed", "dotted", "dotdash", "longdash", "solid", "dashed", "dotted", "dotdash",  "solid", "dashed", "dotted", "dotdash",
               "solid", "dashed", "dotted", "dotdash", "longdash", "twodash", "solid", "dashed", "solid", "dashed", "solid", "dashed", "dotted",
               "dotdash", "solid", "dashed", "dotted", "dotdash")
-#stateFill <- c()
+statePCH <- c(seq(0, 25, 1), 0, 1, 2, 3, 4)
 
 colCSCode <- data.frame(Code = CSCodes$StationCode,
                          Colr = stateCol) %>%
@@ -133,10 +133,18 @@ colCSName <- data.frame(Code = CSCodes$StationName,
   tibble::deframe()
 
 pchCSCode <- data.frame(Code = CSCodes$StationCode,
-                        pchr = statePCH) %>%
+                        Colr = statePCH) %>%
   tibble::deframe()
 
 pchCSName <- data.frame(Code = CSCodes$StationName,
+                        Colr = statePCH) %>%
+  tibble::deframe()
+
+ltyCSCode <- data.frame(Code = CSCodes$StationCode,
+                        pchr = statePCH) %>%
+  tibble::deframe()
+
+ltyCSName <- data.frame(Code = CSCodes$StationName,
                         pchr = statePCH) %>%
   tibble::deframe()
 
@@ -144,7 +152,8 @@ pchCSName <- data.frame(Code = CSCodes$StationName,
 #                          fillr = stateFill) %>%
 #   tibble::deframe()
 
-usethis::use_data(mbr, MapOz, meta_sf, csDAT, colNRSCode, colNRSName, colCPR, CPRinfo, CSCodes, colCSCode, pchCSCode, colCSName, pchCSName,
+usethis::use_data(mbr, MapOz, meta_sf, csDAT, colNRSCode, colNRSName, colCPR, CPRinfo,
+                  CSCodes, colCSCode, pchCSCode, ltyCSCode, colCSName, pchCSName, ltyCSName,
                   overwrite = TRUE, internal = TRUE, compress = "bzip2")
 
 # tools::checkRdaFiles("R") # Check what compression to use above

@@ -1462,15 +1462,17 @@ pr_plot_TaxaAccum <- function(dat, Survey = "NRS", Type = "Z"){
 pr_plot_scatter <- function(df, x, y){
 
   cols <- c(colNRSName, colCSName)
+  pchs <- c(rep(16,9), pchCSName)
 
   titlex <- planktonr::pr_relabel(x, style = "ggplot")
   titley <- planktonr::pr_relabel(y, style = "ggplot")
 
   gg <-  ggplot2::ggplot(data = df) +
-    ggplot2::geom_point(ggplot2::aes(!!rlang::sym(x), !!rlang::sym(y), colour = .data$StationName)) +
+    ggplot2::geom_point(ggplot2::aes(!!rlang::sym(x), !!rlang::sym(y), colour = .data$StationName, pch = .data$StationName)) +
     ggplot2::xlab(titlex) +
     ggplot2::ylab(titley) +
     ggplot2::scale_colour_manual(values = cols) +
+    ggplot2::scale_shape_manual(values = pchs) +
     planktonr::theme_pr()
 
   if("SampleDepth_m" %in% colnames(df)){
