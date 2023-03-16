@@ -1475,7 +1475,6 @@ pr_plot_scatter <- function(df, x, y){
 #' Note that this function assumes wide data with the data to plot as columns.
 #'
 #' @param df Dataframe
-#' @param x Column name for the x axis
 #' @param y Column name for the y axis
 #'
 #' @return ggplot object
