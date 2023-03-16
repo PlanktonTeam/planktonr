@@ -114,11 +114,21 @@ pchNRSName <- data.frame(Code = meta_sf$Station,
                          pchr = rep(16,9)) %>%
   tibble::deframe()
 
+pchNRSCode <- data.frame(Code = meta_sf$Code,
+                         pchr = rep(16,9)) %>%
+  tibble::deframe()
+
+ltyNRSCode <- data.frame(Code = meta_sf$Code,
+                         pchr = rep("solid",9)) %>%
+  tibble::deframe()
+
+ltyNRSName <- data.frame(Code = meta_sf$Station,
+                         pchr = rep("solid",9)) %>%
+  tibble::deframe()
+
 colCPR <- mbr %>%
   sf::st_drop_geometry() %>%
   tibble::deframe()
-
-CPRinfo <- planktonr::pr_get_PolicyInfo("CPR")
 
 ## Coastal station colours
 stateCol <- c(rep("#8FE388", 5), rep("#1B998B", 4), rep("#CBFF8C", 4), rep("#FFBA08",6), rep("#3185FC",2), rep("#5D2E8C",2), rep("#FF7B9C",4), rep("#FF9B85", 4))
@@ -151,12 +161,20 @@ ltyCSName <- data.frame(Code = CSCodes$StationName,
                         pchr = statePCH) %>%
   tibble::deframe()
 
-# fillCSName <- data.frame(Code = CSCodes$StationName,
-#                          fillr = stateFill) %>%
-#   tibble::deframe()
+colNRSCode <- c(colNRSCode, colCSCode)
+colNRSName <- c(colNRSName, colCSName)
+pchNRSCode <- c(pchNRSCode, pchCSCode)
+pchNRSName <- c(pchNRSName, pchCSName)
+ltyNRSCode <- c(ltyNRSCode, ltyCSCode)
+ltyNRSName <- c(ltyNRSName, ltyCSName)
 
-usethis::use_data(mbr, MapOz, meta_sf, csDAT, colNRSCode, colNRSName, pchNRSName, colCPR, CPRinfo,
-                  CSCodes, colCSCode, pchCSCode, ltyCSCode, colCSName, pchCSName, ltyCSName,
+rm(colCSCode, colCSName, pchCSCode, pchCSName, ltyCSCode, ltyCSName, stateCol, stateLTY, statePCH)
+
+# CPR policy info
+CPRinfo <- planktonr::pr_get_PolicyInfo("CPR")
+
+usethis::use_data(mbr, MapOz, meta_sf, csDAT, colCPR, CPRinfo,
+                  colNRSCode, colNRSName, pchNRSName, pchNRSCode, ltyNRSCode, ltyNRSName,
                   overwrite = TRUE, internal = TRUE, compress = "bzip2")
 
 # tools::checkRdaFiles("R") # Check what compression to use above

@@ -117,8 +117,8 @@ pr_plot_PCI <- function(df){
 #'
 #' @examples
 #' df <- pr_get_Indices("NRS", "Z") %>%
-#'   dplyr::filter(Parameters == "Biomass_mgm3")
-#' timeseries <- pr_plot_TimeSeries(df %>% dplyr::filter(Parameters == 'Bacterial_Temperature_Index_KD',grepl('Derwent', StationName)), Survey = "Coastal")
+#'   dplyr::filter(Parameters == "Biomass_mgm3", StationCode %in% c("NSI", "PHB"))
+#' timeseries <- pr_plot_TimeSeries(df, Survey = "NRS")
 
 pr_plot_TimeSeries <- function(df, Survey = "NRS", trans = "identity"){
 
@@ -128,26 +128,14 @@ pr_plot_TimeSeries <- function(df, Survey = "NRS", trans = "identity"){
     plotCols <- colCPR
     ltype <- "solid"
 
-  }
-
-  if(Survey == "NRS"){
+  } else {
     df <- df %>%
       dplyr::group_by(.data$SampleTime_Local, .data$StationName, .data$Parameters) %>% # accounting for microbial data different depths
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                        .groups = "drop")
     plotCols <- colNRSName
-    ltype <- "solid"
+    ltype <- ltyNRSName
   }
-
-  if(Survey == "Coastal"){
-    df <- df %>%
-      dplyr::group_by(.data$SampleTime_Local, .data$StationName, .data$Parameters) %>% # accounting for microbial data different depths
-      dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
-                       .groups = "drop")
-    plotCols <- colCSName
-    ltype <- pchCSName
-  }
-
 
   titlex <- "Sample Date (Local)"
 
@@ -305,7 +293,7 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
       dplyr::rename(StationName = "BioRegion")
     plotCols <- colCPR
   } else if (Survey != "CPR"){
-    plotCols <- c(colNRSName, colCSName)
+    plotCols <- colNRSName
   }
 
   n <- length(unique(df$StationName))
@@ -1461,8 +1449,8 @@ pr_plot_TaxaAccum <- function(dat, Survey = "NRS", Type = "Z"){
 
 pr_plot_scatter <- function(df, x, y){
 
-  cols <- c(colNRSName, colCSName)
-  pchs <- c(pchNRSName, pchCSName)
+  cols <- colNRSName
+  pchs <- pchNRSName
 
   titlex <- planktonr::pr_relabel(x, style = "ggplot")
   titley <- planktonr::pr_relabel(y, style = "ggplot")
