@@ -1444,9 +1444,9 @@ pr_plot_TaxaAccum <- function(dat, Survey = "NRS", Type = "Z"){
 #' df <- planktonr::pr_get_NRSMicro() %>% tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
 #' dplyr::filter(.data$StationCode %in% c("NSI", "PHB")) %>%
 #' tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = 'mean')
-#' gg <- pr_plot_scatter(df, "Bacterial_Temperature_Index_KD", "nitrogen_fixation_organisms")
+#' gg <- pr_plot_scatter(df, "Bacterial_Temperature_Index_KD", "nitrogen_fixation_organisms", trend = 'yes')
 
-pr_plot_scatter <- function(df, x, y){
+pr_plot_scatter <- function(df, x, y, trend = 'yes'){
 
   cols <- colNRSName
   pchs <- pchNRSName
@@ -1454,8 +1454,8 @@ pr_plot_scatter <- function(df, x, y){
   titlex <- planktonr::pr_relabel(x, style = "ggplot")
   titley <- planktonr::pr_relabel(y, style = "ggplot")
 
-  gg <-  ggplot2::ggplot(data = df) +
-    ggplot2::geom_point(ggplot2::aes(!!rlang::sym(x), !!rlang::sym(y), colour = .data$StationName, pch = .data$StationName)) +
+  gg <-  ggplot2::ggplot(data = df, ggplot2::aes(!!rlang::sym(x), !!rlang::sym(y), colour = .data$StationName, pch = .data$StationName)) +
+    ggplot2::geom_point() +
     ggplot2::xlab(titlex) +
     ggplot2::ylab(titley) +
     ggplot2::scale_colour_manual(values = cols) +
@@ -1465,6 +1465,11 @@ pr_plot_scatter <- function(df, x, y){
   if("SampleDepth_m" %in% colnames(df)){
     gg <- gg + ggplot2::facet_grid(.data$SampleDepth_m ~ ., scales = "free_y") +
       ggplot2::theme(strip.text.y = ggplot2::element_text(face = "bold", angle = 0)) # size = 12
+  }
+
+  if(trend == 'yes'){
+    gg <- gg + ggplot2::geom_smooth(method = 'lm', formula = 'y ~ x', aes(fill = .data$StationName), alpha = 0.2) +
+      ggplot2::scale_fill_manual(values = cols)
   }
 
   return(gg)
