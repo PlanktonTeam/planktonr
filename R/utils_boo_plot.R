@@ -1444,9 +1444,9 @@ pr_plot_TaxaAccum <- function(dat, Survey = "NRS", Type = "Z"){
 #' df <- planktonr::pr_get_NRSMicro() %>% tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
 #' dplyr::filter(.data$StationCode %in% c("NSI", "PHB")) %>%
 #' tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = 'mean')
-#' gg <- pr_plot_scatter(df, "Bacterial_Temperature_Index_KD", "nitrogen_fixation_organisms", trend = 'yes')
+#' gg <- pr_plot_scatter(df, "Bacterial_Temperature_Index_KD", "nitrogen_fixation_organisms", Trend = 'none')
 
-pr_plot_scatter <- function(df, x, y, trend = 'yes'){
+pr_plot_scatter <- function(df, x, y, Trend = 'none'){
 
   cols <- colNRSName
   pchs <- pchNRSName
@@ -1467,10 +1467,16 @@ pr_plot_scatter <- function(df, x, y, trend = 'yes'){
       ggplot2::theme(strip.text.y = ggplot2::element_text(face = "bold", angle = 0)) # size = 12
   }
 
-  if(trend == 'yes'){
+  if(Trend == 'linear'){
     gg <- gg + ggplot2::geom_smooth(method = 'lm', formula = 'y ~ x', aes(fill = .data$StationName), alpha = 0.2) +
       ggplot2::scale_fill_manual(values = cols)
   }
+
+  if(Trend == 'smoother'){
+    gg <- gg + ggplot2::geom_smooth(method = 'loess', formula = 'y ~ x', aes(fill = .data$StationName), alpha = 0.2) +
+      ggplot2::scale_fill_manual(values = cols)
+  }
+
 
   return(gg)
 }
