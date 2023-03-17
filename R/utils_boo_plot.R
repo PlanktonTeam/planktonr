@@ -1467,13 +1467,13 @@ pr_plot_scatter <- function(df, x, y, Trend = 'none'){
       ggplot2::theme(strip.text.y = ggplot2::element_text(face = "bold", angle = 0)) # size = 12
   }
 
-  if(Trend == 'linear'){
-    gg <- gg + ggplot2::geom_smooth(method = 'lm', formula = 'y ~ x', aes(fill = .data$StationName), alpha = 0.2) +
+  if(Trend == 'Linear'){
+    gg <- gg + ggplot2::geom_smooth(method = 'lm', formula = 'y ~ x', ggplot2::aes(fill = .data$StationName), alpha = 0.2) +
       ggplot2::scale_fill_manual(values = cols)
   }
 
-  if(Trend == 'smoother'){
-    gg <- gg + ggplot2::geom_smooth(method = 'loess', formula = 'y ~ x', aes(fill = .data$StationName), alpha = 0.2) +
+  if(Trend == 'Smoother'){
+    gg <- gg + ggplot2::geom_smooth(method = 'loess', formula = 'y ~ x', ggplot2::aes(fill = .data$StationName), alpha = 0.2) +
       ggplot2::scale_fill_manual(values = cols)
   }
 
