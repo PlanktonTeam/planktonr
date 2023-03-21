@@ -1451,18 +1451,17 @@ pr_plot_scatter <- function(df, x, y, Trend = 'none'){
   if("BioRegion" %in% colnames(df)){
     cols <- colCPR
     pchs <- pchCPR
-    df <- df %>%
-      dplyr::rename(StationName = "BioRegion")
+    gg <-  ggplot2::ggplot(data = df, ggplot2::aes(!!rlang::sym(x), !!rlang::sym(y), colour = .data$BioRegion, pch = .data$BioRegion))
     } else {
     cols <- colNRSName
     pchs <- pchNRSName
-
+    gg <-  ggplot2::ggplot(data = df, ggplot2::aes(!!rlang::sym(x), !!rlang::sym(y), colour = .data$StationName, pch = .data$StationName))
   }
 
   titlex <- planktonr::pr_relabel(x, style = "ggplot")
   titley <- planktonr::pr_relabel(y, style = "ggplot")
 
-  gg <-  ggplot2::ggplot(data = df, ggplot2::aes(!!rlang::sym(x), !!rlang::sym(y), colour = .data$StationName, pch = .data$StationName)) +
+  gg <-  gg +
     ggplot2::geom_point() +
     ggplot2::xlab(titlex) +
     ggplot2::ylab(titley) +
@@ -1511,18 +1510,19 @@ pr_plot_box <- function(df, y){
     cols <- colCPR
     pchs <- pchCPR
     ltys <- ltyCPR
-    df <- df %>%
-      dplyr::rename(StationName = "BioRegion")
+    gg <- ggplot2::ggplot(data = df,
+                          ggplot2::aes(.data$BioRegion, !!rlang::sym(y), color = .data$BioRegion, linetype = .data$BioRegion))
   } else {
     cols <- colNRSName
     pchs <- pchNRSName
     ltys <- ltyNRSName
+    gg <- ggplot2::ggplot(data = df,
+                          ggplot2::aes(.data$StationName, !!rlang::sym(y), color = .data$StationName, linetype = .data$StationName))
   }
 
   titley <- planktonr::pr_relabel(y, style = "ggplot")
 
-  gg <- ggplot2::ggplot(data = df,
-                        ggplot2::aes(.data$StationName, !!rlang::sym(y), color = .data$StationName, linetype = .data$StationName)) +
+  gg <- gg +
     ggplot2::geom_point() +
     ggplot2::geom_boxplot() +
     ggplot2::ylab(titley) +
