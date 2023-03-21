@@ -1452,10 +1452,12 @@ pr_plot_scatter <- function(df, x, y, Trend = 'none'){
     cols <- colCPR
     pchs <- pchCPR
     gg <-  ggplot2::ggplot(data = df, ggplot2::aes(!!rlang::sym(x), !!rlang::sym(y), colour = .data$BioRegion, pch = .data$BioRegion))
+    aesSN <- ggplot2::aes(fill = .data$BioRegion)
     } else {
     cols <- colNRSName
     pchs <- pchNRSName
     gg <-  ggplot2::ggplot(data = df, ggplot2::aes(!!rlang::sym(x), !!rlang::sym(y), colour = .data$StationName, pch = .data$StationName))
+    aesSN <- ggplot2::aes(fill = .data$StationName)
   }
 
   titlex <- planktonr::pr_relabel(x, style = "ggplot")
@@ -1475,12 +1477,12 @@ pr_plot_scatter <- function(df, x, y, Trend = 'none'){
   }
 
   if(Trend == 'Linear'){
-    gg <- gg + ggplot2::geom_smooth(method = 'lm', formula = 'y ~ x', ggplot2::aes(fill = .data$StationName), alpha = 0.2) +
+    gg <- gg + ggplot2::geom_smooth(method = 'lm', formula = 'y ~ x', aesSN, alpha = 0.2) +
       ggplot2::scale_fill_manual(values = cols)
   }
 
   if(Trend == 'Smoother'){
-    gg <- gg + ggplot2::geom_smooth(method = 'loess', formula = 'y ~ x', ggplot2::aes(fill = .data$StationName), alpha = 0.2) +
+    gg <- gg + ggplot2::geom_smooth(method = 'loess', formula = 'y ~ x', aesSN, alpha = 0.2) +
       ggplot2::scale_fill_manual(values = cols)
   }
 
