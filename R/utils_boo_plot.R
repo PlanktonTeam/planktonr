@@ -1448,8 +1448,16 @@ pr_plot_TaxaAccum <- function(dat, Survey = "NRS", Type = "Z"){
 
 pr_plot_scatter <- function(df, x, y, Trend = 'none'){
 
-  cols <- colNRSName
-  pchs <- pchNRSName
+  if("BioRegion" %in% colnames(df)){
+    cols <- colCPR
+    pchs <- pchCPR
+    df <- df %>%
+      dplyr::rename(StationName = "BioRegion")
+    } else {
+    cols <- colNRSName
+    pchs <- pchNRSName
+
+  }
 
   titlex <- planktonr::pr_relabel(x, style = "ggplot")
   titley <- planktonr::pr_relabel(y, style = "ggplot")
@@ -1499,8 +1507,17 @@ pr_plot_scatter <- function(df, x, y, Trend = 'none'){
 
 pr_plot_box <- function(df, y){
 
-  cols <- colNRSName
-  ltys <- ltyNRSName
+  if("BioRegion" %in% colnames(df)){
+    cols <- colCPR
+    pchs <- pchCPR
+    ltys <- ltyCPR
+    df <- df %>%
+      dplyr::rename(StationName = "BioRegion")
+  } else {
+    cols <- colNRSName
+    pchs <- pchNRSName
+    ltys <- ltyNRSName
+  }
 
   titley <- planktonr::pr_relabel(y, style = "ggplot")
 
@@ -1509,9 +1526,9 @@ pr_plot_box <- function(df, y){
     ggplot2::geom_point() +
     ggplot2::geom_boxplot() +
     ggplot2::ylab(titley) +
-    ggplot2::scale_colour_manual(values = colNRSName) +
-    ggplot2::scale_linetype_manual(values = ltyNRSName)  +
-    ggplot2::scale_shape_manual(values = pchNRSName) +
+    ggplot2::scale_colour_manual(values = cols) +
+    ggplot2::scale_linetype_manual(values = ltys)  +
+    ggplot2::scale_shape_manual(values = pchs) +
     planktonr::theme_pr()
 
   return(gg)

@@ -130,6 +130,14 @@ colCPR <- mbr %>%
   sf::st_drop_geometry() %>%
   tibble::deframe()
 
+pchCPR <- data.frame(Code = mbr$REGION,
+                         pchr = rep(16, 11)) %>%
+  tibble::deframe()
+
+ltyCPR <- data.frame(Code = mbr$REGION,
+                     pchr = rep("solid", 11)) %>%
+  tibble::deframe()
+
 ## Coastal station colours
 stateCol <- c(rep("#8FE388", 5), rep("#1B998B", 4), rep("#CBFF8C", 4), rep("#FFBA08",6), rep("#3185FC",2), rep("#5D2E8C",2), rep("#FF7B9C",4), rep("#FF9B85", 4))
 stateLTY <- c("solid", "dashed", "dotted", "dotdash", "longdash", "solid", "dashed", "dotted", "dotdash",  "solid", "dashed", "dotted", "dotdash",
@@ -173,7 +181,7 @@ rm(colCSCode, colCSName, pchCSCode, pchCSName, ltyCSCode, ltyCSName, stateCol, s
 # CPR policy info
 CPRinfo <- planktonr::pr_get_PolicyInfo("CPR")
 
-usethis::use_data(mbr, MapOz, meta_sf, csDAT, colCPR, CPRinfo, CSCodes,
+usethis::use_data(mbr, MapOz, meta_sf, csDAT, colCPR, pchCPR, ltyCPR, CPRinfo, CSCodes,
                   colNRSCode, colNRSName, pchNRSName, pchNRSCode, ltyNRSCode, ltyNRSName,
                   overwrite = TRUE, internal = TRUE, compress = "bzip2")
 
