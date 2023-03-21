@@ -173,7 +173,7 @@ rm(colCSCode, colCSName, pchCSCode, pchCSName, ltyCSCode, ltyCSName, stateCol, s
 # CPR policy info
 CPRinfo <- planktonr::pr_get_PolicyInfo("CPR")
 
-usethis::use_data(mbr, MapOz, meta_sf, csDAT, colCPR, CPRinfo,
+usethis::use_data(mbr, MapOz, meta_sf, csDAT, colCPR, CPRinfo, CSCodes,
                   colNRSCode, colNRSName, pchNRSName, pchNRSCode, ltyNRSCode, ltyNRSName,
                   overwrite = TRUE, internal = TRUE, compress = "bzip2")
 
