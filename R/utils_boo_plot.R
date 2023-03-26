@@ -474,13 +474,9 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
     p1 <- p1 +
       ggplot2::scale_x_continuous(breaks = 2, expand = c(0, 0)) +
       ggplot2::xlab("Year")
-  } else if (rlang::as_string(Trend) %in% c("SampleTime_Local") & Survey != 'Coastal'){
+  } else if (rlang::as_string(Trend) %in% c("SampleTime_Local")){
     p1 <- p1 +
       ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", expand = c(0, 0)) +
-      ggplot2::xlab("Sample Date")
-  } else if (rlang::as_string(Trend) %in% c("SampleTime_Local") & Survey == 'Coastal'){
-    p1 <- p1 +
-      ggplot2::scale_x_datetime(date_breaks = "1 year", date_labels = "%Y", expand = c(0, 0)) +
       ggplot2::xlab("Sample Date")
   }
 
