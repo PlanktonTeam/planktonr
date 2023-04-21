@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.5.3.0000</span>
+        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.5.5.0000</span>
       </span>
     </div>
 
@@ -111,6 +111,13 @@
 <div class="section level2">
 <h2 id="examine-the-frequency-of-sampling">Examine the frequency of sampling<a class="anchor" aria-label="anchor" href="#examine-the-frequency-of-sampling"></a>
 </h2>
+<p>The sampling at the National Reference Stations is predominantly
+monthly. Darwin sample on a quarterly basis and do multiple trips acorss
+the tidal samples and Kangaroo Island are restricted to sampling 5-6
+times a year by conditions. The Continuous Plankton Recorder samples
+quarterly through our main areas of interest, the Great Barrier Reef and
+the East Australian Current and on a more ad-hoc basis in other
+regions.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">datCPR</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_get_CPRTrips.html">pr_get_CPRTrips</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">datNRS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_get_NRSTrips.html">pr_get_NRSTrips</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -125,6 +132,12 @@
 <div class="section level2">
 <h2 id="plot-the-spatial-distribution-of-nrs-and-cpr-samples">Plot the spatial distribution of NRS and CPR samples<a class="anchor" aria-label="anchor" href="#plot-the-spatial-distribution-of-nrs-and-cpr-samples"></a>
 </h2>
+<p>The National Reference Stations are situated throughout the coastal
+region of Australia with most Marine Bioregions having one station. The
+West Australian stations in Ningaloo and Esperance were discontinued
+after an initial sampling period due to logistical constraints. The CPR
+tracks are also more sparse in Western Australia as shipping options are
+few.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_get_ProgressMapData.html">pr_get_ProgressMapData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NRS"</span>, <span class="st">"CPR"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -134,6 +147,14 @@
 <div class="section level2">
 <h2 id="what-functional-groups-do-we-commonly-see">What functional groups do we commonly see?<a class="anchor" aria-label="anchor" href="#what-functional-groups-do-we-commonly-see"></a>
 </h2>
+<p>We can learn a lot about the community structure of the plankton by
+using functional groups and these pie charts also show that sampling
+methods also impact on what we find in the samples. Centric diatoms
+dominate in the NRS samples whilst pennate diatoms become more important
+in the CPR samples. Note here that the CPR sampling occurs during the
+night time as well as the daylight hours and is sampling waters around
+10 meters. The net samples are integrated depth samples and are
+collected in niskin bottles.</p>
 <div class="section level3">
 <h3 id="phytoplankton">Phytoplankton<a class="anchor" aria-label="anchor" href="#phytoplankton"></a>
 </h3>
@@ -149,6 +170,10 @@
 <div class="section level3">
 <h3 id="zooplankton">Zooplankton<a class="anchor" aria-label="anchor" href="#zooplankton"></a>
 </h3>
+<p>Looking at zooplankton functional groups the copepods dominate the
+CPR and the net samples. Chaetognaths and cladocerans are also sampled
+well with the CPR whilst molluscs are caught more in the net
+samples.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_plot_PieFG.html">pr_plot_PieFG</a></span><span class="op">(</span><span class="fu"><a href="../reference/pr_get_FuncGroups.html">pr_get_FuncGroups</a></span><span class="op">(</span>Survey <span class="op">=</span> <span class="st">"NRS"</span>, Type <span class="op">=</span> <span class="st">"Z"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_plot_PieFG.html">pr_plot_PieFG</a></span><span class="op">(</span><span class="fu"><a href="../reference/pr_get_FuncGroups.html">pr_get_FuncGroups</a></span><span class="op">(</span>Survey <span class="op">=</span> <span class="st">"CPR"</span>, Type <span class="op">=</span> <span class="st">"Z"</span><span class="op">)</span><span class="op">)</span></span>
@@ -162,6 +187,12 @@
 <div class="section level2">
 <h2 id="how-many-taxa-are-we-identifying">How many taxa are we identifying?<a class="anchor" aria-label="anchor" href="#how-many-taxa-are-we-identifying"></a>
 </h2>
+<p>Over the course of the surveys, since 2009, we have improved our
+taxonomic resolution through training and exposure. We are now
+identifying over 1000 zooplankton taxa from the CPR which includes
+noting the lifestage and sex of many. As zooplankton are bigger and
+differences between species is generally more definitive than for
+phytoplankton, the diversity of zooplankton taxa is greater.</p>
 <div class="section level3">
 <h3 id="phytoplankton-1">Phytoplankton<a class="anchor" aria-label="anchor" href="#phytoplankton-1"></a>
 </h3>
