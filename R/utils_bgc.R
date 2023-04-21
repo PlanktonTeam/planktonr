@@ -215,7 +215,7 @@ pr_get_NRSMicro <- function(Survey = "NRS"){
 
     dat <- readr::read_csv("https://raw.githubusercontent.com/AusMicrobiome/microbial_ocean_atlas/main/data/oceanViz_AM_data.csv") %>%
       pr_rename() %>%
-      dplyr::filter(is.na(TripCode), StationName %in% CoastalStations) %>%
+      dplyr::filter(is.na(.data$TripCode), .data$StationName %in% CoastalStations) %>%
       dplyr::select("StationName", "SampleDateUTC", "Latitude", "Longitude", tidyselect::any_of(var_names)) %>%
       dplyr::mutate(dplyr::across(tidyselect::all_of(var_names), as.numeric),
                     tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE))
@@ -224,7 +224,7 @@ pr_get_NRSMicro <- function(Survey = "NRS"){
 
     dat <- dat %>%
       dplyr::bind_cols(SampleTime_Local = times) %>%
-      dplyr::select(-SampleDateUTC, -tz) %>%
+      dplyr::select(-"SampleDateUTC", -"tz") %>%
       dplyr::inner_join(CSCodes, by = "StationName") %>%
       tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters")
 

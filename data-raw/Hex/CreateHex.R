@@ -9,19 +9,42 @@
 
 # devtools::install_github("GuangchuangYu/hexSticker")
 
+# ORIGINAL HEX STICKER. NOW REPLACED WITH THE ONE BELOW
+# hexSticker::sticker(file.path("data-raw", "Hex", "copepod2_rotate22.svg"),
+#                     package = "planktonr",
+#                     p_y = 0.95,
+#                     p_color = "white",
+#                     p_size = 90,
+#                     s_x = 0.81,
+#                     s_y = 1.05,
+#                     s_width = 0.75,
+#                     h_fill = "#40B4ED", #"#A363C3",  #"#3BD5F0", #38EEFE", #"#3B6E8F",# "#54bceb", #
+#                     h_color = "white",
+#                     url = "https://PlanktonTeam.github.io/planktonr/",
+#                     u_color = "white",
+#                     u_family = "sans",
+#                     u_size = 13,
+#                     u_x = 1.02,
+#                     u_y = 0.07,
+#                     dpi = 1000,
+#                     asp = 1,
+#                     filename = file.path("man", "figures", "planktonr.png"))
 
-hexSticker::sticker(file.path("data-raw", "Hex", "copepod2_rotate22.svg"),
+
+
+
+hexSticker::sticker(file.path("data-raw", "MultiPlanktonImage.png"),
                     package = "planktonr",
-                    p_y = 0.95,
-                    p_color = "white",
+                    p_y = 1,
+                    p_color = "grey90",
                     p_size = 90,
-                    s_x = 0.81,
-                    s_y = 1.05,
-                    s_width = 0.75,
-                    h_fill = "#54bceb", # "#3B6E8F",
-                    h_color = "white",
-                    url = "https://PlanktonTeam.github.io/planktonr/",
-                    u_color = "white",
+                    s_x = 1.0,
+                    s_y = 1.0,
+                    s_width = 0.9,
+                    h_fill = "#3B6E8F", #"#40B4ED",# "#54bceb", #
+                    h_color = "grey90",
+                    url = "https://PlanktonTeam.github.io/planktonr",
+                    u_color = "grey90",
                     u_family = "sans",
                     u_size = 13,
                     u_x = 1.02,
@@ -29,6 +52,10 @@ hexSticker::sticker(file.path("data-raw", "Hex", "copepod2_rotate22.svg"),
                     dpi = 1000,
                     asp = 1,
                     filename = file.path("man", "figures", "planktonr.png"))
+
+
+
+
 
 
 
