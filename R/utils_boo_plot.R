@@ -954,17 +954,12 @@ pr_plot_PieFG <- function(df){
 #' @export
 #'
 #' @examples
-#' df <- data.frame(Month = rep(seq(1,12,1),2), daynight = c(rep('day', 12), rep('night', 12)),
-#' CopeAbundance_m3 = runif(24, 0.1, 10), Species = 'Acartia danae')
+#' df <- pr_get_DayNight()
 #' plot <- pr_plot_DayNight(df)
 pr_plot_DayNight <-  function(df){
 
   titlemain <- unique(df$Species)
-  if("CopeAbundance_m3" %in% names(df)){
-    ylabel <- pr_relabel("CopeAbundance_m3", style = "ggplot") # this is probably only worth doing for copepods as we don"t have a lot of data for other things
-  } else {
-    ylabel <- pr_relabel("PhytoAbund_m3", style = "ggplot")
-  }
+  ylabel <- rlang::expr(paste("Abundance (m"^-3,")"))
 
   plots <- ggplot2::ggplot(df, ggplot2::aes(.data$Month_Local, .data$Species_m3)) +
     ggplot2::geom_point() +

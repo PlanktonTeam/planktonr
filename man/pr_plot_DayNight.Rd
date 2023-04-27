@@ -16,7 +16,6 @@ plot of relative day and night abundances
 Plot of relative day and night abundances
 }
 \examples{
-df <- data.frame(Month = rep(seq(1,12,1),2), daynight = c(rep('day', 12), rep('night', 12)),
-CopeAbundance_m3 = runif(24, 0.1, 10), Species = 'Acartia danae')
+df <- pr_get_DayNight()
 plot <- pr_plot_DayNight(df)
 }
