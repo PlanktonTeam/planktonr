@@ -8,15 +8,15 @@ library(tidyverse)
 
 mbr <- sf::st_read(file.path("data-raw","marine_regions")) %>%  # Load marine regions as sf
   sf::st_transform(crs = "+proj=longlat +datum=WGS84") %>%
-  dplyr::select(-c(SHAPE_AREA, SHAPE_LEN)) %>%
+  dplyr::select(-c("SHAPE_AREA", "SHAPE_LEN")) %>%
   dplyr::filter(ENVIRON %in% "Marine") %>%
-  dplyr::select(-c(OBJECTID, ENVIRON)) %>%
+  dplyr::select(-c("OBJECTID", "ENVIRON")) %>%
   sf::st_make_valid() %>%
   rmapshaper::ms_simplify(keep = 0.005)
 
 so <- sf::st_read(file.path("data-raw","iho_SthnOcean","iho.shp")) %>%
   sf::st_transform(crs = "+proj=longlat +datum=WGS84") %>%
-  dplyr::select(name) %>%
+  dplyr::select("name") %>%
   sf::st_make_valid() %>%
   sf::st_crop(c("xmin" = 85, "xmax" = 155, "ymin" = -85, "ymax" = -50))
 
@@ -31,9 +31,9 @@ mbr <- tibble(x = c(85, 85:155, 155, 85), y = c(-61, rep(-45, 71), -61, -61)) %>
   sf::st_union(so) %>%
   sf::st_make_valid() %>%
   sf::st_difference(mbr[6,]) %>%
-  dplyr::select(-REGION) %>%
+  dplyr::select(-"REGION") %>%
   sf::st_difference(mbr[8,]) %>%
-  dplyr::select(-name) %>%
+  dplyr::select(-"name") %>%
   dplyr::mutate(REGION = "Southern Ocean Region") %>%
   dplyr::bind_rows(mbr, .)
 

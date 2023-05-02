@@ -267,7 +267,7 @@ pr_plot_Trends <- function(df, Trend = "Raw", Survey = "NRS", method = "lm",  tr
 #'
 #' @examples
 #' df <- pr_get_Indices(Survey = "NRS", Type = "P") %>%
-#'         dplyr::filter(Parameters == "PhytoBiomassCarbon_pgL", StationCode %in% c("NSI", "PHB", "MAI"))
+#' dplyr::filter(Parameters == "PhytoBiomassCarbon_pgL", StationCode %in% c("NSI", "PHB"))
 #'
 #' monthly <- pr_plot_Climatology(df, "NRS", "Month")
 #'
@@ -1432,15 +1432,18 @@ pr_plot_TaxaAccum <- function(dat, Survey = "NRS", Type = "Z"){
 #' @param df Dataframe
 #' @param x Column name for the x axis
 #' @param y Column name for the y axis
+#' @param Trend Trend line through scatter plot
 #'
 #' @return ggplot object
 #' @export
 
 #' @examples
-#' df <- planktonr::pr_get_NRSMicro() %>% tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
+#' df <- planktonr::pr_get_NRSMicro() %>%
+#' tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
 #' dplyr::filter(.data$StationCode %in% c("NSI", "PHB")) %>%
 #' tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = 'mean')
-#' gg <- pr_plot_scatter(df, "Bacterial_Temperature_Index_KD", "nitrogen_fixation_organisms", Trend = 'none')
+#' gg <- pr_plot_scatter(df, "Bacterial_Temperature_Index_KD",
+#' "nitrogen_fixation_organisms", Trend = 'none')
 
 pr_plot_scatter <- function(df, x, y, Trend = 'none'){
 
@@ -1497,7 +1500,8 @@ pr_plot_scatter <- function(df, x, y, Trend = 'none'){
 #' @export
 
 #' @examples
-#' df <- planktonr::pr_get_NRSMicro('Coastal') %>% tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
+#' df <- planktonr::pr_get_NRSMicro('Coastal') %>%
+#' tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
 #' dplyr::filter(.data$StationCode %in% c("DEE", "DEB")) %>%
 #' tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = 'mean')
 #' gg <- pr_plot_box(df, "Bacterial_Temperature_Index_KD")

@@ -6,9 +6,6 @@
 \usage{
 pr_get_CSChem()
 }
-\arguments{
-\item{Survey}{NRS or Coastal stations}
-}
 \value{
 A dataframe with NRS microbial data
 }
