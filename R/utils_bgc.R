@@ -151,7 +151,7 @@ pr_get_NRSEnvContour <- function(Data = 'Chemistry') {
 #' @export
 #'
 #' @examples
-#' df <- pr_get_NRSMicro("NRS")
+#' df <- pr_get_NRSMicro("Coastal")
 #' @importFrom rlang .data
 pr_get_NRSMicro <- function(Survey = "NRS"){
 
@@ -224,9 +224,11 @@ pr_get_NRSMicro <- function(Survey = "NRS"){
 
     dat <- dat %>%
       dplyr::bind_cols(SampleTime_Local = times) %>%
-      dplyr::select(-"SampleDateUTC", -"tz") %>%
+      planktonr::pr_apply_Time() %>%
       dplyr::inner_join(CSCodes, by = "StationName") %>%
-      tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters")
+      tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters") %>%
+      dplyr::arrange(.data$State, .data$Latitude) %>%
+      dplyr::select(-c("SampleDateUTC", "tz"))
 
     } else {
 
@@ -249,6 +251,47 @@ pr_get_NRSMicro <- function(Survey = "NRS"){
 
 }
 
+#' Load microbial data
+#'
+#' @return A dataframe with NRS microbial data
+#' @export
+#'
+#' @examples
+#' df <- pr_get_CSChem()
+#' @importFrom rlang .data
+pr_get_CSChem <- function(){
+
+  var_names <- c("Silicate_umolL", "Nitrate_umolL", "Phosphate_umolL", "Ammonium_umolL", "Chla_mgm3", "Temperature_degC",
+                 "Salinity_psu", "Oxygen_umolL", "Turbidity_NTU", "Density_kgm3")
+
+    CoastalStations <- c("Balls Head", "Salmon Haul", "Bare Island", "Cobblers Beach", "Towra Point", "Lilli Pilli",
+                         "Derwent Estuary B1", "Derwent Estuary B3", "Derwent Estuary E", "Derwent Estuary G2",
+                         "Derwent Estuary KB", "Derwent Estuary RBN", "Derwent Estuary U2", "Low Head",
+                         "Tully River Mouth mooring", "Russell-Mulgrave River mooring", "Green Island", "Port Douglas",
+                         "Cape Tribulation", "Double Island", "Yorkey's Knob", "Fairlead Buoy", "Hobsons; Port Phillip Bay",
+                         "Long Reef; Port Phillip Bay", "Geoffrey Bay", "Channel", "Pioneer Bay", "Centaur Reef",
+                         "Wreck Rock", "Inshore reef_Channel", "Inshore reef_Geoffrey Bay")
+
+    dat <- readr::read_csv("https://raw.githubusercontent.com/AusMicrobiome/microbial_ocean_atlas/main/data/oceanViz_AM_data.csv") %>%
+      pr_rename() %>%
+      dplyr::filter(is.na(.data$TripCode), .data$StationName %in% CoastalStations) %>%
+      dplyr::select("StationName", "SampleDateUTC", "Latitude", "Longitude", tidyselect::any_of(var_names)) %>%
+      dplyr::mutate(dplyr::across(tidyselect::all_of(var_names), as.numeric),
+                    tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE))
+
+    times <- purrr::map2_vec(dat$SampleDateUTC, dat$tz, function(x,y) lubridate::with_tz(x, tzone = y))
+
+    dat <- dat %>%
+      dplyr::bind_cols(SampleTime_Local = times) %>%
+      planktonr::pr_apply_Time() %>%
+      dplyr::inner_join(CSCodes, by = "StationName") %>%
+      tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters") %>%
+      dplyr::arrange(.data$State, .data$Latitude) %>%
+      dplyr::select(-c("SampleDateUTC", "tz"))
+
+  return(dat)
+
+}
 
 
 #' Load Total Suspended Solids (TSS) data

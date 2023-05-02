@@ -2,14 +2,21 @@
 #' Sidebar panel plot of selected NRS stations
 #'
 #' @param df dataframe containing station codes to plot
+#' @param Survey NRS or Coastal
 #'
 #' @return a map of the selected stations
 #' @export
 #'
 #' @examples
-#' df <- data.frame(StationCode = c("NSI", "PHB"))
+#' df <- data.frame(StationCode = c("MAI", "PHB"))
 #' pmap <- pr_plot_NRSmap(df)
-pr_plot_NRSmap <- function(df){
+pr_plot_NRSmap <- function(df, Survey = 'NRS'){
+
+  if(Survey == 'NRS'){
+    meta_sf <- meta_sf
+  } else {
+    meta_sf <- csDAT
+  }
 
   meta_sf <- meta_sf %>%
     dplyr::mutate(Colour = dplyr::if_else(.data$Code %in% df$StationCode, "Red", "Blue")) %>%
@@ -110,22 +117,24 @@ pr_plot_PCI <- function(df){
 #'
 #' @examples
 #' df <- pr_get_Indices("NRS", "Z") %>%
-#'   dplyr::filter(Parameters == "Biomass_mgm3")
-#' timeseries <- pr_plot_TimeSeries(df, "NRS")
+#'   dplyr::filter(Parameters == "Biomass_mgm3", StationCode %in% c("NSI", "PHB"))
+#' timeseries <- pr_plot_TimeSeries(df, Survey = "NRS")
+
 pr_plot_TimeSeries <- function(df, Survey = "NRS", trans = "identity"){
 
   if(Survey == "CPR"){
     df <- df %>%
       dplyr::rename(StationName = "BioRegion")
     plotCols <- colCPR
-  }
+    ltype <- "solid"
 
-  if(Survey == "NRS"){
+  } else {
     df <- df %>%
       dplyr::group_by(.data$SampleTime_Local, .data$StationName, .data$Parameters) %>% # accounting for microbial data different depths
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                        .groups = "drop")
     plotCols <- colNRSName
+    ltype <- ltyNRSName
   }
 
   titlex <- "Sample Date (Local)"
@@ -134,14 +143,22 @@ pr_plot_TimeSeries <- function(df, Survey = "NRS", trans = "identity"){
   titley <- pr_relabel(unique(df$Parameters), style = "ggplot")
 
   p1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$SampleTime_Local, y = .data$Values)) +
-    ggplot2::geom_line(ggplot2::aes(group = .data$StationName, color = .data$StationName)) +
+    ggplot2::geom_line(ggplot2::aes(group = .data$StationName, color = .data$StationName, linetype = .data$StationName)) +
     ggplot2::geom_point(ggplot2::aes(group = .data$StationName, color = .data$StationName)) +
-    ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
-    ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
+    ggplot2::scale_y_continuous(trans = trans, expand = c(0, 0)) +
     ggplot2::labs(y = titley,
                   x = titlex) +
     ggplot2::scale_colour_manual(values = plotCols, limits = force) +
+    ggplot2::scale_shape_manual(values = ltype) +
     theme_pr()
+
+  if(Survey != "Coastal") {
+    p1 +
+    ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", expand = c(0, 0))
+  } else {
+    p1 +
+      ggplot2::scale_x_datetime(date_breaks = "1 year", date_labels = "%Y", expand = c(0, 0))
+  }
 
   return(p1)
 }
@@ -178,7 +195,7 @@ pr_plot_Trends <- function(df, Trend = "Raw", Survey = "NRS", method = "lm",  tr
 
   if (Survey == "CPR"){
     site = rlang::sym("BioRegion")
-  } else if (Survey == "NRS"){
+  } else if (Survey != "CPR"){
     site = rlang::sym("StationName")
   }
 
@@ -224,9 +241,13 @@ pr_plot_Trends <- function(df, Trend = "Raw", Survey = "NRS", method = "lm",  tr
     p1 <- p1 +
       ggplot2::scale_x_continuous(breaks = 2, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
       ggplot2::xlab("Year")
-  } else if (!rlang::as_string(Trend) %in% c("Month_Local", "Year_Local")){
+  } else if (!rlang::as_string(Trend) %in% c("Month_Local", "Year_Local") & Survey != 'Coastal'){
     p1 <- p1 +
       ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
+      ggplot2::xlab("Year")
+  } else if (!rlang::as_string(Trend) %in% c("Month_Local", "Year_Local") & Survey == 'Coastal'){
+    p1 <- p1 +
+      ggplot2::scale_x_datetime(date_breaks = "1 year", date_labels = "%Y", expand = c(0, 0)) +
       ggplot2::xlab("Year")
   }
 
@@ -246,7 +267,7 @@ pr_plot_Trends <- function(df, Trend = "Raw", Survey = "NRS", method = "lm",  tr
 #'
 #' @examples
 #' df <- pr_get_Indices(Survey = "NRS", Type = "P") %>%
-#'         dplyr::filter(Parameters == "PhytoBiomassCarbon_pgL")
+#' dplyr::filter(Parameters == "PhytoBiomassCarbon_pgL", StationCode %in% c("NSI", "PHB"))
 #'
 #' monthly <- pr_plot_Climatology(df, "NRS", "Month")
 #'
@@ -271,7 +292,7 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
     df <- df %>%
       dplyr::rename(StationName = "BioRegion")
     plotCols <- colCPR
-  } else if (Survey == "NRS"){
+  } else if (Survey != "CPR"){
     plotCols <- colNRSName
   }
 
@@ -292,7 +313,8 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
       dplyr::mutate(!!Trend := lubridate::as_date(paste(!!Trend, 1, 1, sep = "-"))) #TODO Temp fix to convert to date and fix ticks below
   }
 
-  p1 <- ggplot2::ggplot(df_climate, ggplot2::aes(x = !!Trend, y = .data$mean, fill = .data$StationName, group = .data$StationName)) +
+  p1 <- ggplot2::ggplot(df_climate, ggplot2::aes(x = !!Trend, y = .data$mean, fill = .data$StationName,
+                                                 group = .data$StationName)) +
     ggplot2::geom_col(width = dodge, position = ggplot2::position_dodge(width = dodge)) +
     ggplot2::geom_errorbar(ggplot2::aes(ymin = .data$mean-.data$se, ymax = .data$mean+.data$se),
                            width = dodge/3,                    # Width of the error bars
@@ -309,10 +331,15 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
                                   labels=c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"))
   }
 
-  if("Year_Local" %in% colnames(df_climate)){
+  if("Year_Local" %in% colnames(df_climate) & Survey != 'Coastal'){
     p1 <- p1 +
       ggplot2::xlab("Year") +
-      ggplot2::scale_x_date(date_breaks = "2 years", date_labels = "%Y", expand = ggplot2::expansion(mult = c(0.02, 0.02)))
+      ggplot2::scale_x_date(date_breaks = "2 years", date_labels = "%Y", expand = c(0, 0))
+  }
+  if("Year_Local" %in% colnames(df_climate) & Survey == 'Coastal'){
+    p1 <- p1 +
+      ggplot2::xlab("Year") +
+      ggplot2::scale_x_date(date_breaks = "1 year", date_labels = "%Y", expand = c(0, 0))
   }
 
   return(p1)
@@ -1394,37 +1421,115 @@ pr_plot_TaxaAccum <- function(dat, Survey = "NRS", Type = "Z"){
 
 }
 
+#' Simple function to scatter 2 data columns using common NRS colouring
+#'
+#' Note that this function assumes wide data with the data to plot as columns.
+#'
+#' @param df Dataframe
+#' @param x Column name for the x axis
+#' @param y Column name for the y axis
+#' @param Trend Trend line through scatter plot
+#'
+#' @return ggplot object
+#' @export
+
+#' @examples
+#' df <- planktonr::pr_get_NRSMicro() %>%
+#' tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
+#' dplyr::filter(.data$StationCode %in% c("NSI", "PHB")) %>%
+#' tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = 'mean')
+#' gg <- pr_plot_scatter(df, "Bacterial_Temperature_Index_KD",
+#' "nitrogen_fixation_organisms", Trend = 'none')
+
+pr_plot_scatter <- function(df, x, y, Trend = 'none'){
+
+  if("BioRegion" %in% colnames(df)){
+    cols <- colCPR
+    pchs <- pchCPR
+    gg <-  ggplot2::ggplot(data = df, ggplot2::aes(!!rlang::sym(x), !!rlang::sym(y), colour = .data$BioRegion, pch = .data$BioRegion))
+    aesSN <- ggplot2::aes(fill = .data$BioRegion)
+    } else {
+    cols <- colNRSName
+    pchs <- pchNRSName
+    gg <-  ggplot2::ggplot(data = df, ggplot2::aes(!!rlang::sym(x), !!rlang::sym(y), colour = .data$StationName, pch = .data$StationName))
+    aesSN <- ggplot2::aes(fill = .data$StationName)
+  }
+
+  titlex <- planktonr::pr_relabel(x, style = "ggplot")
+  titley <- planktonr::pr_relabel(y, style = "ggplot")
+
+  gg <-  gg +
+    ggplot2::geom_point() +
+    ggplot2::xlab(titlex) +
+    ggplot2::ylab(titley) +
+    ggplot2::scale_colour_manual(values = cols) +
+    ggplot2::scale_shape_manual(values = pchs) +
+    planktonr::theme_pr()
+
+  if("SampleDepth_m" %in% colnames(df)){
+    gg <- gg + ggplot2::facet_grid(.data$SampleDepth_m ~ ., scales = "free_y") +
+      ggplot2::theme(strip.text.y = ggplot2::element_text(face = "bold", angle = 0)) # size = 12
+  }
+
+  if(Trend == 'Linear'){
+    gg <- gg + ggplot2::geom_smooth(method = 'lm', formula = 'y ~ x', aesSN, alpha = 0.2) +
+      ggplot2::scale_fill_manual(values = cols)
+  }
+
+  if(Trend == 'Smoother'){
+    gg <- gg + ggplot2::geom_smooth(method = 'loess', formula = 'y ~ x', aesSN, alpha = 0.2) +
+      ggplot2::scale_fill_manual(values = cols)
+  }
 
 
-# Simple function to scatter 2 data columns using common NRS colouring
-#
-# Note that this function assumes wide data with the data to plot as columns.
-#
-# @param df Dataframe
-# @param x Column name for the x axis
-# @param y Column name for the y axis
-#
-# @return ggplot object
-# @export
-#
-# @examples
-# pr_plot_scatter <- function(df, x, y){
-#
-#   # TODO Examples to fix
-#   # df <- planktonr::pr_get_NRSMicro() %>% tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>% tidyr::pivot_wider(names_from = "Parameters", values_from = "Values")
-#   # gg <- pr_plot_scatter(df, "Prochlorococcus_cellsmL", "Synechococcus_cellsmL")
-#
-#   titlex <- planktonr::pr_relabel(x, style = "ggplot")
-#   titley <- planktonr::pr_relabel(y, style = "ggplot")
-#
-#   gg <-  ggplot2::ggplot(data = df) +
-#     ggplot2::geom_point(ggplot2::aes(!!rlang::sym(x), !!rlang::sym(y), colour = .data$StationName)) +
-#     ggplot2::xlab(titlex) +
-#     ggplot2::ylab(titley) +
-#     ggplot2::scale_colour_manual(values = colNRSName)
-#
-#   return(gg)
-# }
+  return(gg)
+}
 
+#' Simple boxplot function using common NRS colouring
+#'
+#' Note that this function assumes wide data with the data to plot as columns.
+#'
+#' @param df Dataframe
+#' @param y Column name for the y axis
+#'
+#' @return ggplot object
+#' @export
+
+#' @examples
+#' df <- planktonr::pr_get_NRSMicro('Coastal') %>%
+#' tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
+#' dplyr::filter(.data$StationCode %in% c("DEE", "DEB")) %>%
+#' tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = 'mean')
+#' gg <- pr_plot_box(df, "Bacterial_Temperature_Index_KD")
+
+pr_plot_box <- function(df, y){
+
+  if("BioRegion" %in% colnames(df)){
+    cols <- colCPR
+    pchs <- pchCPR
+    ltys <- ltyCPR
+    gg <- ggplot2::ggplot(data = df,
+                          ggplot2::aes(.data$BioRegion, !!rlang::sym(y), color = .data$BioRegion, linetype = .data$BioRegion))
+  } else {
+    cols <- colNRSName
+    pchs <- pchNRSName
+    ltys <- ltyNRSName
+    gg <- ggplot2::ggplot(data = df,
+                          ggplot2::aes(.data$StationName, !!rlang::sym(y), color = .data$StationName, linetype = .data$StationName))
+  }
+
+  titley <- planktonr::pr_relabel(y, style = "ggplot")
+
+  gg <- gg +
+    ggplot2::geom_point() +
+    ggplot2::geom_boxplot() +
+    ggplot2::ylab(titley) +
+    ggplot2::scale_colour_manual(values = cols) +
+    ggplot2::scale_linetype_manual(values = ltys)  +
+    ggplot2::scale_shape_manual(values = pchs) +
+    planktonr::theme_pr()
+
+  return(gg)
+}
 
 
