@@ -79,7 +79,15 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
 
   } else if (Survey == "LTM"){
 
-    LTnuts <- pr_get_LTnuts()
+    all_vars <- c("StationName", "StationCode", "SampleTime_Local", "Month_Local", "Year_Local", "Parameters")
+
+    LTnuts <- pr_get_LTnuts() %>%
+      dplyr::filter(.data$SampleDepth_m < 11) %>%
+      dplyr::group_by(.data$StationName, .data$StationCode, .data$SampleTime_Local, .data$Month_Local,
+                      .data$Year_Local, .data$Parameters) %>%
+      dplyr::summarise(mean = mean(.data$Values, na.rm = TRUE),
+                       .groups = "drop") %>%
+      dplyr::rename(Values = mean)
 
     means <- LTnuts %>%
       dplyr::select("StationName", "Parameters", "Values") %>%
