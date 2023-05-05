@@ -1437,7 +1437,7 @@ pr_plot_TaxaAccum <- function(dat, Survey = "NRS", Type = "Z"){
 #' df <- planktonr::pr_get_NRSMicro() %>%
 #' tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
 #' dplyr::filter(.data$StationCode %in% c("NSI", "PHB")) %>%
-#' tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = 'mean')
+#' tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = mean)
 #' gg <- pr_plot_scatter(df, "Bacterial_Temperature_Index_KD",
 #' "nitrogen_fixation_organisms", Trend = 'none')
 
@@ -1499,7 +1499,7 @@ pr_plot_scatter <- function(df, x, y, Trend = 'none'){
 #' df <- planktonr::pr_get_NRSMicro('Coastal') %>%
 #' tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
 #' dplyr::filter(.data$StationCode %in% c("DEE", "DEB")) %>%
-#' tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = 'mean')
+#' tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = mean)
 #' gg <- pr_plot_box(df, "Bacterial_Temperature_Index_KD")
 
 pr_plot_box <- function(df, y){
