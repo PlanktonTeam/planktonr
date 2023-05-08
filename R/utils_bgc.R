@@ -215,7 +215,7 @@ pr_get_NRSMicro <- function(Survey = "NRS"){
     dat <- readr::read_csv("https://raw.githubusercontent.com/AusMicrobiome/microbial_ocean_atlas/main/data/oceanViz_AM_data.csv") %>%
       pr_rename() %>%
       dplyr::filter(is.na(.data$TripCode), .data$StationName %in% CoastalStations) %>%
-      dplyr::select("StationName", "SampleDateUTC", "Latitude", "Longitude", tidyselect::any_of(var_names)) %>%
+      dplyr::select("StationName", "SampleDateUTC", "Latitude", "Longitude", SampleDepth_m = "depth_m", tidyselect::any_of(var_names)) %>%
       dplyr::mutate(dplyr::across(tidyselect::all_of(var_names), as.numeric),
                     tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE))
 
@@ -236,8 +236,7 @@ pr_get_NRSMicro <- function(Survey = "NRS"){
 
     dat <- readr::read_csv("https://raw.githubusercontent.com/AusMicrobiome/microbial_ocean_atlas/main/data/oceanViz_AM_data.csv") %>%
       pr_rename() %>%
-      dplyr::select("TripCode", "TripCode_depth", tidyselect::any_of(var_names)) %>%
-      dplyr::mutate(SampleDepth_m = as.numeric(stringr::str_sub(.data$TripCode_depth, -3, -1))) %>%
+      dplyr::select("TripCode", SampleDepth_m = "depth_m", tidyselect::any_of(var_names)) %>%
       dplyr::mutate(dplyr::across(tidyselect::all_of(var_names), as.numeric))
 
     dat <- dat %>%
