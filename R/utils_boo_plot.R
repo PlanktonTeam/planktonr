@@ -589,7 +589,7 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "iden
 #' @export
 #'
 #' @examples
-#' df <- pr_get_NRSChemistry() %>% dplyr::filter(Parameters == "SecchiDepth_m")
+#' df <- pr_get_NRSChemistry() %>% dplyr::filter(Parameters == "SecchiDepth_m", StationCode %in% c('PHB', 'NSI'))
 #' pr_plot_Enviro(df)
 #'
 pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
@@ -603,7 +603,8 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
   df <- df %>%
     dplyr::mutate(SampleDepth_ms = stringr::str_c(.data$SampleDepth_m," m"))
 
-  p <- ggplot2::ggplot(df, ggplot2::aes(.data$SampleTime_Local, .data$Values, colour = .data$StationName)) +
+  p <- ggplot2::ggplot(df, ggplot2::aes(.data$SampleTime_Local, .data$Values, colour = .data$StationName,
+                                        fill = .data$StationName, linetype = .data$StationName)) +
     ggplot2::geom_line() +
     ggplot2::labs(x = "Year", y = titley) +
     ggplot2::facet_wrap(.data$SampleDepth_ms ~., scales = "free_y", ncol = 1, strip.position = "right") +
@@ -612,13 +613,15 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
                    legend.title = ggplot2::element_blank()) +
     ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
     ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
-    ggplot2::scale_colour_manual(values = colNRSName, limits = force)
+    ggplot2::scale_colour_manual(values = colNRSName, limits = force) +
+    ggplot2::scale_fill_manual(values = colNRSName, limits = force) +
+    ggplot2::scale_linetype_manual(values = ltyNRSName)
 
   if(Trend == "Smoother"){
-    p <- p + ggplot2::geom_smooth(method = "loess", formula = y ~ x)
+    p <- p + ggplot2::geom_smooth(method = "loess", formula = y ~ x, alpha = 0.2)
   }
   if(Trend == "Linear"){
-    p <- p + ggplot2::geom_smooth(method = "lm", formula = y ~ x)
+    p <- p + ggplot2::geom_smooth(method = "lm", formula = y ~ x, alpha = 0.2)
   }
 
   mdat <- df %>%
@@ -629,13 +632,16 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
                      se = sd / sqrt(.data$N),
                      .groups = "drop")
 
-  m <- ggplot2::ggplot(mdat, ggplot2::aes(.data$Month_Local, .data$MonValues, colour = .data$StationName)) +
+  m <- ggplot2::ggplot(mdat, ggplot2::aes(.data$Month_Local, .data$MonValues, colour = .data$StationName,
+                                          fill = .data$StationName, linetype = .data$StationName)) +
     ggplot2::geom_point() +
     ggplot2::facet_wrap(.data$SampleDepth_ms ~., scales = "free_y", ncol = 1, strip.position = "right") +
-    ggplot2::geom_smooth(method = "loess", formula = y ~ x) +
+    ggplot2::geom_smooth(method = "loess", formula = y ~ x, alpha = 0.2) +
     ggplot2::scale_x_continuous(breaks = seq(1,12,length.out = 12), expand = ggplot2::expansion(mult = c(0.02, 0.02)),
                                 labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
     ggplot2::scale_colour_manual(values = colNRSName, limits = force) +
+    ggplot2::scale_fill_manual(values = colNRSName, limits = force) +
+    ggplot2::scale_linetype_manual(values = ltyNRSName) +
     ggplot2::labs(x = "Month") +
     theme_pr() +
     ggplot2::theme(legend.position = 'none',
