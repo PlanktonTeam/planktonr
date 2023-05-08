@@ -205,13 +205,12 @@ pr_get_NRSMicro <- function(Survey = "NRS"){
 
   if(Survey == "Coastal"){
 
-    CoastalStations <- c("Balls Head", "Salmon Haul", "Bare Island", "Cobblers Beach", "Towra Point", "Lilli Pilli",
+    CoastalStations <- c("Bare Island", "Towra Point",
                          "Derwent Estuary B1", "Derwent Estuary B3", "Derwent Estuary E", "Derwent Estuary G2",
-                         "Derwent Estuary KB", "Derwent Estuary RBN", "Derwent Estuary U2", "Low Head",
+                         "Derwent Estuary KB", "Derwent Estuary RBN", "Derwent Estuary U2",
                          "Tully River Mouth mooring", "Russell-Mulgrave River mooring", "Green Island", "Port Douglas",
                          "Cape Tribulation", "Double Island", "Yorkey's Knob", "Fairlead Buoy", "Hobsons; Port Phillip Bay",
-                         "Long Reef; Port Phillip Bay", "Geoffrey Bay", "Channel", "Pioneer Bay", "Centaur Reef",
-                         "Wreck Rock", "Inshore reef_Channel", "Inshore reef_Geoffrey Bay")
+                         "Long Reef; Port Phillip Bay", "Inshore reef_Channel", "Inshore reef_Geoffrey Bay")
 
     dat <- readr::read_csv("https://raw.githubusercontent.com/AusMicrobiome/microbial_ocean_atlas/main/data/oceanViz_AM_data.csv") %>%
       pr_rename() %>%
