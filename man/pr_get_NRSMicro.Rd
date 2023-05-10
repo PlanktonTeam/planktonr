@@ -7,7 +7,7 @@
 pr_get_NRSMicro(Survey = "NRS")
 }
 \arguments{
-\item{Survey}{NRS or Coastal stations}
+\item{Survey}{NRS, Coastal or GO-SHIP stations}
 }
 \value{
 A dataframe with NRS microbial data
@@ -16,5 +16,5 @@ A dataframe with NRS microbial data
 Load microbial data
 }
 \examples{
-df <- pr_get_NRSMicro("Coastal")
+df <- pr_get_NRSMicro("GO-SHIP")
 }
