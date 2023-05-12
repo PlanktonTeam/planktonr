@@ -1539,3 +1539,109 @@ pr_plot_box <- function(df, y){
 }
 
 
+#' PLot for latitudinal data
+#'
+#' @param df dataframe of latitudinal series
+#' @param maxDepth depth to show plots to
+#' @param Fill_NA fill in gaps in data
+#' @param maxGap no of NAs over which to fill gaps
+#'
+#' @return patchwork object
+#' @export
+#'
+#' @examples
+#' df <- pr_get_NRSMicro('GO-SHIP')
+#' df <- df %>% filter(.data$Parameters == 'Bacterial_Temperature_Index_KD')
+#' pr_plot_latitude(df, maxDepth = 100, Fill_NA = TRUE, maxGap = 5)
+
+pr_plot_latitude <- function(df, maxDepth = 100, Fill_NA = FALSE, maxGap = 3){
+
+  param <- planktonr::pr_relabel(unique(df$Parameters), "ggplot")
+  xlabel <- rlang::expr(paste("Latitude (","\U00B0","S)"))
+  Lab <- seq(round(min(df$Values, 0)), round(max(df$Values, 0)), 5)
+  Breaks <- seq(round(min(df$Values, 0)), round(max(df$Values, 0)), 5)
+
+  df1 <- df %>%
+      dplyr::mutate(Values = ifelse(.data$Values < 0, 0, .data$Values),
+                    Latitude = round(.data$Latitude, 0),
+                    Label = .data$Latitude) %>%
+        dplyr::filter(.data$SampleDepth_m <= maxDepth) %>%
+        dplyr::arrange(.data$SampleDepth_m)
+
+  gg <- ggplot2::ggplot(df1, aes(.data$Latitude, .data$SampleDepth_m, color = .data$Values)) +
+    ggplot2::geom_point() +
+    theme_pr() +
+    ggplot2::labs(y = "Depth (m)") + ggplot2::theme(axis.title.x = ggplot2::element_blank(),
+                                                    legend.position = 'none') +
+    ggplot2::scale_color_continuous(low="thistle2", high="darkred",
+                                   guide="colorbar",na.value="white", breaks = Breaks, labels = Lab) +
+    ggplot2::scale_y_reverse()  +
+    ggplot2::scale_x_continuous(expand = c(0, 0))
+
+  df2 <- df1 %>%
+    dplyr::mutate(SampleDepth_m = round(.data$SampleDepth_m/10, 0)*10)
+
+  Lats <- seq(min(df1$Latitude), max(df1$Latitude), 1)
+  Depths <- seq(min(df2$SampleDepth_m), max(df2$SampleDepth_m), 10)
+
+  emptyGrid <- expand.grid(SampleDepth_m = Depths,
+                           Latitude = Lats)
+
+  df2 <- emptyGrid %>%
+    dplyr::left_join(df2, by = c("Latitude", "SampleDepth_m")) %>%
+    data.frame() %>%
+    dplyr::arrange(.data$Latitude, .data$SampleDepth_m)
+
+  mat <- df2 %>%
+      dplyr::select("Latitude", "SampleDepth_m", "Values") %>%
+      tidyr::pivot_wider(names_from = "Latitude", values_from = "Values", values_fn = mean) %>%
+      dplyr::select(-"SampleDepth_m") %>%
+      as.matrix.data.frame()
+
+  if(Fill_NA == TRUE){
+    mat <- t(zoo::na.approx(t(mat), maxgap = maxGap))
+    mat <- zoo::na.approx(mat, maxgap = maxGap)
+    }
+
+  interped <- expand.grid(SampleDepth_m = Depths, Latitude = Lats)
+
+  interp_vals <- pracma::interp2(y = seq(0, max(df2$SampleDepth_m, na.rm = TRUE), length.out = nrow(mat)),
+                                 x = seq(min(df2$Latitude), max(df2$Latitude), length.out = ncol(mat)),
+                                 Z = mat,
+                                 yp = interped$SampleDepth_m,
+                                 xp = interped$Latitude,
+                                 method = "linear")
+
+  dfInterp <- dplyr::bind_cols(interped, Values = interp_vals) %>% data.frame()
+
+  out <- ggplot2::ggplot(data = dfInterp, ggplot2::aes(.data$Latitude, y = .data$SampleDepth_m, fill = .data$Values)) +
+      ggplot2::geom_raster(interpolate = FALSE) +
+      ggplot2::scale_fill_continuous(low="thistle2", high="darkred",
+                             guide="colorbar",na.value="white", breaks = Breaks, labels = Lab) +
+      theme_pr() +
+      ggplot2::guides(fill = ggplot2::guide_legend(title = param, title.position = 'top')) +
+      ggplot2::scale_y_reverse(expand = c(0, 0)) +
+      ggplot2::labs(x = xlabel, y = "Depth (m)") +
+      ggplot2::scale_x_continuous(expand = c(0, 0))
+
+  plots <- patchwork::wrap_plots(gg, out, ncol = 1)
+
+  return(plots)
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -145,13 +145,13 @@ pr_get_NRSEnvContour <- function(Data = 'Chemistry') {
 
 
 #' Load microbial data
-#' @param Survey NRS or Coastal stations
+#' @param Survey NRS, Coastal or GO-SHIP stations
 #'
 #' @return A dataframe with NRS microbial data
 #' @export
 #'
 #' @examples
-#' df <- pr_get_NRSMicro("Coastal")
+#' df <- pr_get_NRSMicro("GO-SHIP")
 #' @importFrom rlang .data
 pr_get_NRSMicro <- function(Survey = "NRS"){
 
@@ -228,6 +228,28 @@ pr_get_NRSMicro <- function(Survey = "NRS"){
       tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters") %>%
       dplyr::arrange(.data$State, .data$Latitude) %>%
       dplyr::select(-c("SampleDateUTC", "tz"))
+
+    } else if (Survey == "GO-SHIP"){
+
+      GOSHIP <- c(seq(34369, 34678, 1), seq(36916, 37650, 1))
+
+      dat <- readr::read_csv("https://raw.githubusercontent.com/AusMicrobiome/microbial_ocean_atlas/main/data/oceanViz_AM_data.csv") %>%
+        pr_rename() %>%
+        dplyr::mutate(sample = as.numeric(stringr::str_sub(code, -5, -1)),
+                      StationName = ifelse(grepl("GO", StationName), stringr::str_sub(code, -3, -1), StationName)) %>%
+        dplyr::filter(sample %in% GOSHIP) %>%
+        dplyr::select("StationName", "SampleDateUTC", "Latitude", "Longitude", SampleDepth_m = "depth_m", tidyselect::any_of(var_names)) %>%
+        dplyr::mutate(dplyr::across(tidyselect::all_of(var_names), as.numeric),
+                      tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE))
+
+      times <- purrr::map2_vec(dat$SampleDateUTC, dat$tz, function(x,y) lubridate::with_tz(x, tzone = y))
+
+      dat <- dat %>%
+        dplyr::bind_cols(SampleTime_Local = times) %>%
+        planktonr::pr_apply_Time() %>%
+        tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters") %>%
+        dplyr::arrange(.data$Latitude) %>%
+        dplyr::select(-c("SampleDateUTC", "tz"))
 
     } else {
 
