@@ -589,7 +589,8 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "iden
 #' @export
 #'
 #' @examples
-#' df <- pr_get_NRSChemistry() %>% dplyr::filter(Parameters == "SecchiDepth_m", StationCode %in% c('PHB', 'NSI'))
+#' df <- pr_get_NRSChemistry() %>% dplyr::filter(Parameters == "SecchiDepth_m",
+#' StationCode %in% c('PHB', 'NSI'))
 #' pr_plot_Enviro(df)
 #'
 pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
@@ -1442,7 +1443,7 @@ pr_plot_TaxaAccum <- function(dat, Survey = "NRS", Type = "Z"){
 #' @examples
 #' df <- planktonr::pr_get_NRSMicro() %>%
 #' tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
-#' dplyr::filter(.data$StationCode %in% c("NSI", "PHB")) %>%
+#' dplyr::filter(StationCode %in% c("NSI", "PHB")) %>%
 #' tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = mean)
 #' gg <- pr_plot_scatter(df, "Bacterial_Temperature_Index_KD",
 #' "nitrogen_fixation_organisms", Trend = 'none')
@@ -1504,7 +1505,7 @@ pr_plot_scatter <- function(df, x, y, Trend = 'none'){
 #' @examples
 #' df <- planktonr::pr_get_NRSMicro('Coastal') %>%
 #' tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
-#' dplyr::filter(.data$StationCode %in% c("DEE", "DEB")) %>%
+#' dplyr::filter(StationCode %in% c("DEE", "DEB")) %>%
 #' tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = mean)
 #' gg <- pr_plot_box(df, "Bacterial_Temperature_Index_KD")
 
@@ -1551,7 +1552,7 @@ pr_plot_box <- function(df, y){
 #'
 #' @examples
 #' df <- pr_get_NRSMicro('GO-SHIP')
-#' df <- df %>% filter(.data$Parameters == 'Bacterial_Temperature_Index_KD')
+#' df <- df %>% dplyr::filter(Parameters == 'Bacterial_Temperature_Index_KD')
 #' pr_plot_latitude(df, maxDepth = 100, Fill_NA = TRUE, maxGap = 5)
 
 pr_plot_latitude <- function(df, maxDepth = 100, Fill_NA = FALSE, maxGap = 3){
@@ -1568,7 +1569,7 @@ pr_plot_latitude <- function(df, maxDepth = 100, Fill_NA = FALSE, maxGap = 3){
         dplyr::filter(.data$SampleDepth_m <= maxDepth) %>%
         dplyr::arrange(.data$SampleDepth_m)
 
-  gg <- ggplot2::ggplot(df1, aes(.data$Latitude, .data$SampleDepth_m, color = .data$Values)) +
+  gg <- ggplot2::ggplot(df1, ggplot2::aes(.data$Latitude, .data$SampleDepth_m, color = .data$Values)) +
     ggplot2::geom_point() +
     theme_pr() +
     ggplot2::labs(y = "Depth (m)") + ggplot2::theme(axis.title.x = ggplot2::element_blank(),
