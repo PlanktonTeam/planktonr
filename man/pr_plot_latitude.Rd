@@ -23,6 +23,6 @@ PLot for latitudinal data
 }
 \examples{
 df <- pr_get_NRSMicro('GO-SHIP')
-df <- df \%>\% filter(.data$Parameters == 'Bacterial_Temperature_Index_KD')
+df <- df \%>\% dplyr::filter(Parameters == 'Bacterial_Temperature_Index_KD')
 pr_plot_latitude(df, maxDepth = 100, Fill_NA = TRUE, maxGap = 5)
 }
