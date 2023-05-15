@@ -1589,7 +1589,6 @@ pr_plot_box <- function(df, y){
 #' PLot for latitudinal data
 #'
 #' @param df dataframe of latitudinal series
-#' @param maxDepth depth to show plots to
 #' @param Fill_NA fill in gaps in data
 #' @param maxGap no of NAs over which to fill gaps
 #'
