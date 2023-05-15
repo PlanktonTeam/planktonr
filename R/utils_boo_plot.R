@@ -1598,10 +1598,11 @@ pr_plot_box <- function(df, y){
 #'
 #' @examples
 #' df <- pr_get_NRSMicro('GO-SHIP')
-#' df <- df %>% dplyr::filter(Parameters == 'Archaea_unique_ASVs')
-#' pr_plot_latitude(df, maxDepth = 100, Fill_NA = TRUE, maxGap = 5)
+#' df <- df %>% dplyr::filter(Parameters == 'Archaea_unique_ASVs',
+#' SampleDepth_m < 101)
+#' pr_plot_latitude(df, Fill_NA = TRUE, maxGap = 5)
 
-pr_plot_latitude <- function(df, maxDepth = 100, Fill_NA = FALSE, maxGap = 3){
+pr_plot_latitude <- function(df, Fill_NA = FALSE, maxGap = 3){
 
   df <- df %>% tidyr::drop_na()
   param <- planktonr::pr_relabel(unique(df$Parameters), "ggplot")
@@ -1613,7 +1614,6 @@ pr_plot_latitude <- function(df, maxDepth = 100, Fill_NA = FALSE, maxGap = 3){
       dplyr::mutate(Values = ifelse(.data$Values < 0, 0, .data$Values),
                     Latitude = round(.data$Latitude, 0),
                     Label = .data$Latitude) %>%
-        dplyr::filter(.data$SampleDepth_m <= maxDepth) %>%
         dplyr::arrange(.data$SampleDepth_m)
 
   gg <- ggplot2::ggplot(df1, ggplot2::aes(.data$Latitude, .data$SampleDepth_m, color = .data$Values)) +
