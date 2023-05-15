@@ -235,8 +235,8 @@ pr_get_NRSMicro <- function(Survey = "NRS"){
 
       dat <- readr::read_csv("https://raw.githubusercontent.com/AusMicrobiome/microbial_ocean_atlas/main/data/oceanViz_AM_data.csv") %>%
         pr_rename() %>%
-        dplyr::mutate(sample = as.numeric(stringr::str_sub(code, -5, -1)),
-                      StationName = ifelse(grepl("GO", StationName), stringr::str_sub(code, -3, -1), StationName)) %>%
+        dplyr::mutate(sample = as.numeric(stringr::str_sub(.data$code, -5, -1)),
+                      StationName = ifelse(grepl("GO", .data$StationName), stringr::str_sub(.data$code, -3, -1), .data$StationName)) %>%
         dplyr::filter(sample %in% GOSHIP) %>%
         dplyr::select("StationName", "SampleDateUTC", "Latitude", "Longitude", SampleDepth_m = "depth_m", tidyselect::any_of(var_names)) %>%
         dplyr::mutate(dplyr::across(tidyselect::all_of(var_names), as.numeric),

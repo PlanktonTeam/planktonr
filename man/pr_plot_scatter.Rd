@@ -24,7 +24,7 @@ Note that this function assumes wide data with the data to plot as columns.
 \examples{
 df <- planktonr::pr_get_NRSMicro() \%>\%
 tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) \%>\%
-dplyr::filter(.data$StationCode \%in\% c("NSI", "PHB")) \%>\%
+dplyr::filter(StationCode \%in\% c("NSI", "PHB")) \%>\%
 tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = mean)
 gg <- pr_plot_scatter(df, "Bacterial_Temperature_Index_KD",
 "nitrogen_fixation_organisms", Trend = 'none')
