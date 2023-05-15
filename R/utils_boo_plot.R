@@ -80,7 +80,53 @@ pr_plot_CPRmap <-  function(df){
   return(p1)
 }
 
+#' Sidebar panel plot of voyages
+#'
+#' @param df dataframe containing all locations to plot
+#' @param dfs dataframe of sample locations to plot
+#' @param Country countries to plot on map
+#'
+#' @return a map of the selected bioregions
+#' @export
+#'
+#'
+#' @examples
+#' df <- pr_get_NRSMicro("GO-SHIP")
+#' dfs <- df %>% dplyr::slice(1:5000)
+#' voyagemap <- pr_plot_Voyagemap(df, dfs, Country = c("AUstralia", "New Zealand"))
+pr_plot_Voyagemap <-  function(df, dfs, Country = c("AUstralia")){
 
+  MapOz <- rnaturalearth::ne_countries(scale = "small", returnclass = "sf", country = Country)
+
+  voy_sf <- df %>%
+    dplyr::select("Longitude", "Latitude") %>%
+    dplyr::distinct() %>%
+    dplyr::arrange(dplyr::desc(.data$Latitude)) %>%
+    dplyr::mutate(Lat = as.factor(.data$Latitude),
+                  Colour = dplyr::if_else(.data$Latitude %in% dfs$Latitude, "Red", "Blue")) %>%
+    sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326) %>%
+    sf::st_as_sf() %>%
+    sf::st_shift_longitude()
+
+  col <- voy_sf %>%
+    sf::st_drop_geometry() %>%
+    dplyr::select("Lat", "Colour") %>%
+    tibble::deframe()
+
+  p1 <- ggplot2::ggplot() +
+    ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
+    ggplot2::geom_sf(data = voy_sf, ggplot2::aes(colour = .data$Lat), size = 3, show.legend = FALSE) +
+    ggplot2::scale_colour_manual(values = col) +
+    ggplot2::scale_x_continuous(expand = c(0, 0)) +
+    ggplot2::scale_y_continuous(expand = c(0, 0)) +
+    ggplot2::theme_void() +
+    ggplot2::theme(axis.title = ggplot2::element_blank(),
+                   axis.line = ggplot2::element_blank(),
+                   panel.background = ggplot2::element_rect(fill = "transparent", colour = NA),
+                   plot.background = ggplot2::element_rect(fill = "transparent", colour = NA))
+
+  return(p1)
+}
 
 #' PCI plot for CPR data
 #'
