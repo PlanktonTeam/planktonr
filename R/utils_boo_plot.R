@@ -1589,7 +1589,6 @@ pr_plot_box <- function(df, y){
 #' PLot for latitudinal data
 #'
 #' @param df dataframe of latitudinal series
-#' @param maxDepth depth to show plots to
 #' @param Fill_NA fill in gaps in data
 #' @param maxGap no of NAs over which to fill gaps
 #'
@@ -1598,21 +1597,22 @@ pr_plot_box <- function(df, y){
 #'
 #' @examples
 #' df <- pr_get_NRSMicro('GO-SHIP')
-#' df <- df %>% dplyr::filter(Parameters == 'Bacterial_Temperature_Index_KD')
-#' pr_plot_latitude(df, maxDepth = 100, Fill_NA = TRUE, maxGap = 5)
+#' df <- df %>% dplyr::filter(Parameters == 'Archaea_unique_ASVs',
+#' SampleDepth_m < 101)
+#' pr_plot_latitude(df, Fill_NA = TRUE, maxGap = 5)
 
-pr_plot_latitude <- function(df, maxDepth = 100, Fill_NA = FALSE, maxGap = 3){
+pr_plot_latitude <- function(df, Fill_NA = FALSE, maxGap = 3){
 
+  df <- df %>% tidyr::drop_na()
   param <- planktonr::pr_relabel(unique(df$Parameters), "ggplot")
   xlabel <- rlang::expr(paste("Latitude (","\U00B0","S)"))
-  Lab <- seq(round(min(df$Values, 0)), round(max(df$Values, 0)), 5)
-  Breaks <- seq(round(min(df$Values, 0)), round(max(df$Values, 0)), 5)
+  Lab <- seq(round(min(df$Values), 0), round(max(df$Values), 0), length.out = 5)
+  Breaks <- seq(round(min(df$Values), 0), round(max(df$Values), 0), length.out = 5)
 
   df1 <- df %>%
       dplyr::mutate(Values = ifelse(.data$Values < 0, 0, .data$Values),
                     Latitude = round(.data$Latitude, 0),
                     Label = .data$Latitude) %>%
-        dplyr::filter(.data$SampleDepth_m <= maxDepth) %>%
         dplyr::arrange(.data$SampleDepth_m)
 
   gg <- ggplot2::ggplot(df1, ggplot2::aes(.data$Latitude, .data$SampleDepth_m, color = .data$Values)) +
@@ -1660,6 +1660,9 @@ pr_plot_latitude <- function(df, maxDepth = 100, Fill_NA = FALSE, maxGap = 3){
                                  method = "linear")
 
   dfInterp <- dplyr::bind_cols(interped, Values = interp_vals) %>% data.frame()
+
+  Lab <- seq(round(min(dfInterp$Values, na.rm = TRUE), 0), round(max(dfInterp$Values, na.rm = TRUE),0), length.out = 5)
+  Breaks <- seq(round(min(dfInterp$Values, na.rm = TRUE), 0), round(max(dfInterp$Values, na.rm = TRUE), 0), length.out = 5)
 
   out <- ggplot2::ggplot(data = dfInterp, ggplot2::aes(.data$Latitude, y = .data$SampleDepth_m, fill = .data$Values)) +
       ggplot2::geom_raster(interpolate = FALSE) +

@@ -4,12 +4,10 @@
 \alias{pr_plot_latitude}
 \title{PLot for latitudinal data}
 \usage{
-pr_plot_latitude(df, maxDepth = 100, Fill_NA = FALSE, maxGap = 3)
+pr_plot_latitude(df, Fill_NA = FALSE, maxGap = 3)
 }
 \arguments{
 \item{df}{dataframe of latitudinal series}
-
-\item{maxDepth}{depth to show plots to}
 
 \item{Fill_NA}{fill in gaps in data}
 
@@ -23,6 +21,7 @@ PLot for latitudinal data
 }
 \examples{
 df <- pr_get_NRSMicro('GO-SHIP')
-df <- df \%>\% dplyr::filter(Parameters == 'Bacterial_Temperature_Index_KD')
-pr_plot_latitude(df, maxDepth = 100, Fill_NA = TRUE, maxGap = 5)
+df <- df \%>\% dplyr::filter(Parameters == 'Archaea_unique_ASVs',
+SampleDepth_m < 101)
+pr_plot_latitude(df, Fill_NA = TRUE, maxGap = 5)
 }
