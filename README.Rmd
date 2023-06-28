@@ -26,10 +26,10 @@ knitr::opts_chunk$set(
 
 ## Installation
 
-We are currently not on CRAN (hopefully soon). Be aware that this package is in the very early stages of development. Functions and documentation are not complete so installing at the moment is at your own risk. If you are still interested, you can install the development version from [GitHub](https://github.com/) with:
+Be aware that this package is in the very early stages of development. Functions and documentation are not complete so installing at the moment is at your own risk. If you are still interested, you can install the development version from [GitHub](https://github.com/) with:
 ``` r
 # install.packages("devtools")
 devtools::install_github("PlanktonTeam/planktonr")
 ```
 
-Thanks to the team at the Integration and Application Network (ian.umces.edu/media-library) for the copepod symbol used in the planktonr logo.
+Thanks to the team at the Integration and Application Network (ian.umces.edu/media-library) for the plankton symbols used in the planktonr hex sticker.
