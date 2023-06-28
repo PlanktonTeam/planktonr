@@ -442,6 +442,9 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CPRZooRawSS.html</loc>
   </url>
   <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CSChem.html</loc>
+  </url>
+  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_get_CTD.html</loc>
   </url>
   <url>
@@ -751,6 +754,12 @@
     <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_TaxaAccum.html</loc>
   </url>
   <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_Voyagemap.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_box.html</loc>
+  </url>
+  <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_climate.html</loc>
   </url>
   <url>
@@ -761,6 +770,9 @@
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_fmap.html</loc>
+  </url>
+  <url>
+    <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_latitude.html</loc>
   </url>
   <url>
     <loc>https://planktonteam.github.io/planktonr/reference/pr_plot_scatter.html</loc>
