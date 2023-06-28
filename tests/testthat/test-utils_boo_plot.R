@@ -43,20 +43,20 @@ testthat::test_that("Correct function output", {
                                  pr_plot_tsfg(Scale = "Actual", Trend = "Year"))[1], "gg")
 
   testthat::expect_equal(class(planktonr::pr_get_EOVs("NRS") %>% dplyr::filter(.data$Parameters != 'Oxygen_umolL',
-                                                                                     !.data$StationCode %in% c('NIN', 'ESP')) %>%
+                                                                               !.data$StationCode %in% c('NIN', 'ESP')) %>%
                                  pr_get_Coeffs() %>%
                                  pr_plot_EOVs(EOV = "Biomass_mgm3", Survey = "NRS", trans = "identity",
-                                             labels = "yes"))[1], "patchwork")
+                                              labels = "yes"))[1], "patchwork")
 
   testthat::expect_equal(class(planktonr::pr_get_EOVs("CPR") %>%
                                  pr_get_Coeffs() %>%
                                  pr_plot_EOVs(EOV = "Biomass_mgm3", Survey = "CPR", trans = "identity",
-                                             labels = "no"))[1], "patchwork")
+                                              labels = "no"))[1], "patchwork")
 
   testthat::expect_equal(class(planktonr::pr_get_EOVs("LTM") %>%
                                  pr_get_Coeffs() %>%
                                  pr_plot_EOVs(EOV = "Biomass_mgm3", Survey = "LTM", trans = "identity",
-                                             labels = "no"))[1], "patchwork")
+                                              labels = "no"))[1], "patchwork")
 
   testthat::expect_equal(class(pr_get_NRSChemistry() %>%
                                  dplyr::filter(Parameters == "SecchiDepth_m") %>%
@@ -137,5 +137,28 @@ testthat::test_that("Correct function output", {
 
   testthat::expect_equal(class(pr_get_PCIData() %>% pr_plot_PCI())[1], "gg")
 
+  testthat::expect_equal(class(pr_plot_Voyagemap(pr_get_NRSMicro("GO-SHIP"),
+                                                 pr_get_NRSMicro("GO-SHIP") %>% dplyr::slice(1:5000),
+                                                 Country = c("AUstralia", "New Zealand")))[1], "gg")
+
+  testthat::expect_equal(class(
+    planktonr::pr_get_NRSMicro() %>%
+      tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
+      dplyr::filter(StationCode %in% c("NSI", "PHB")) %>%
+      tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = mean) %>%
+      pr_plot_scatter("Bacterial_Temperature_Index_KD", "nitrogen_fixation_organisms", Trend = 'none'))[1], "gg")
+
+
+  testthat::expect_equal(class(
+    planktonr::pr_get_NRSMicro('Coastal') %>%
+      tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
+      dplyr::filter(StationCode %in% c("DEE", "DEB")) %>%
+      tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = mean) %>%
+      pr_plot_box("Bacterial_Temperature_Index_KD"))[1], "gg")
+
+  testthat::expect_equal(class(
+    pr_get_NRSMicro('GO-SHIP') %>%
+      dplyr::filter(Parameters == 'Archaea_unique_ASVs', SampleDepth_m < 101) %>%
+      pr_plot_latitude(Fill_NA = TRUE, maxGap = 5))[1], "patchwork")
 
 })

@@ -132,10 +132,10 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d") {
         out <- mean(RNetCDF::var.get.nc(nc, pr, start=c(idx_lon, idx_lat, 1), count = cnt, unpack = TRUE)) - 273.15
       }
 
+      RNetCDF::close.nc(nc)
       out <- purrr::map(pr, prfunc)
       names(out) <- pr
       return(out)
-      RNetCDF::close.nc(nc)
     },
     error = function(cond) {
 
