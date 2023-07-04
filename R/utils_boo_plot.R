@@ -648,7 +648,8 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
   np <- length(unique(df$SampleDepth_m))
 
   df <- df %>%
-    dplyr::mutate(SampleDepth_ms = stringr::str_c(.data$SampleDepth_m," m"))
+    dplyr::mutate(SampleDepth_ms = factor(stringr::str_c(.data$SampleDepth_m," m"),
+                                          levels = c("0 m", "10 m", "20 m", "25 m", "30 m", "40 m", "50 m", "57 m", "60 m", "75 m", "100 m")))
 
   p <- ggplot2::ggplot(df, ggplot2::aes(.data$SampleTime_Local, .data$Values, colour = .data$StationName,
                                         fill = .data$StationName, linetype = .data$StationName)) +
