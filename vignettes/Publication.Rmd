@@ -1,0 +1,374 @@
+---
+title: "5. Publication"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    number_sections: false
+vignette: >
+  %\VignetteIndexEntry{5. Publication}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE,
+  warning = FALSE, 
+  fig.width = 8
+)
+```
+
+```{r setup}
+library(planktonr)
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+```
+
+Hypothesis - warming conditions in south east Australia are affecting the plankton composition of the southern NRS.
+
+Long term plankton monitoring can provide insights into how zooplankton abundance and biomass are changing with time. This has implications for the fish communities they support and the lower trophic levels on which they depend for energy. In warmer waters the data from teh NRS stations shows that copepod abundances are higher but the copepods are smaller and the communities have a higher proportion of carnivourous copepods. The South East of Australia is recognised as an area where sea temperatures are expected to rise most quickly. Therefore we could predict that the copepod assemblages at Maria Island will become more like those of the other East Coast NRS stations.
+
+## Relationships of temperature to copepod indices
+
+```{r, fig.height=6}
+vars <- c('StationName', 'StationCode', 'SampleTime_Local', 'Year_Local', 'Month_Local')
+dat <- planktonr::pr_get_Indices("NRS", "Z") %>% 
+  dplyr::select(dplyr::any_of(vars), Parameters, Values)
+ctd <- planktonr::pr_get_NRSCTD() %>% 
+  dplyr::select(dplyr::any_of(vars), 
+                CTD_Salinity = "Salinity_psu", CTD_Temperature_degC = "Temperature_degC") %>% 
+  tidyr::pivot_longer(-c(dplyr::any_of(vars)), values_to = "Values", names_to = "Parameters") 
+
+dati <- dat %>%   
+        dplyr::bind_rows(ctd) %>%
+        dplyr::filter(.data$StationCode %in% c('YON', 'NSI', 'PHB','MAI'),
+                      .data$Parameters %in% c('AvgTotalLengthCopepod_mm', 'CTD_Temperature_degC')) %>%
+        planktonr::pr_remove_outliers(2) %>% 
+        tidyr::pivot_wider(id_cols = dplyr::any_of(vars),
+                           names_from = "Parameters", values_from = "Values", values_fn = mean) %>%
+        tidyr::drop_na() %>% 
+        planktonr::pr_reorder()
+datco <- dat %>%   
+        dplyr::bind_rows(ctd) %>%
+        dplyr::filter(.data$StationCode %in% c('YON', 'NSI', 'PHB','MAI'),
+                      .data$Parameters %in% c('OmnivoreCarnivoreCopepodRatio', 'CTD_Temperature_degC')) %>%
+        planktonr::pr_remove_outliers(2) %>% 
+        tidyr::pivot_wider(id_cols = dplyr::any_of(vars),
+                           names_from = "Parameters", values_from = "Values", values_fn = mean) %>%
+        tidyr::drop_na() %>% 
+        planktonr::pr_reorder()
+datcd <- dat %>%   
+        dplyr::bind_rows(ctd) %>%
+        dplyr::filter(.data$StationCode %in% c('YON', 'NSI', 'PHB','MAI'),
+                      .data$Parameters %in% c('CopeAbundance_m3', 'CTD_Temperature_degC')) %>%
+        planktonr::pr_remove_outliers(2) %>% 
+        tidyr::pivot_wider(id_cols = dplyr::any_of(vars),
+                           names_from = "Parameters", values_from = "Values", values_fn = mean) %>%
+        tidyr::drop_na() %>% 
+        planktonr::pr_reorder()
+
+p1 <- planktonr::pr_plot_scatter(dati, 'CTD_Temperature_degC', 'AvgTotalLengthCopepod_mm', Trend = 'Linear')
+p2 <- planktonr::pr_plot_scatter(datco, 'CTD_Temperature_degC', 'OmnivoreCarnivoreCopepodRatio', Trend = 'Linear')
+p3 <- planktonr::pr_plot_scatter(datcd, 'CTD_Temperature_degC', 'CopeAbundance_m3', Trend = 'Linear')
+
+p1/p2/p3
+
+```
+
+# Temperature time-series for East Coast NRS stations
+
+CTD profiles are collected from each of the sampling trips. Here we can look at plots of the surface temperature from the CTD casts for the east-coast stations to determine if we can see a rise in temperature over the sampling period.
+
+```{r, fig.height=6}
+
+datT <- planktonr::pr_get_EOVs(Survey = 'NRS') %>% 
+  dplyr::filter(Parameters == 'CTDTemperature_degC') %>% 
+  pr_remove_outliers(2) %>% pr_get_Coeffs()
+YONT <- planktonr::pr_plot_EOVs(datT %>% dplyr::filter(StationName == 'Yongala'), EOV = 'CTDTemperature_degC', Survey = 'NRS', trans = 'identity', col = 'blue', labels = 'yes')
+NSIT <- planktonr::pr_plot_EOVs(datT %>% dplyr::filter(StationName == 'North Stradbroke Island'), EOV = 'CTDTemperature_degC', Survey = 'NRS', trans = 'identity', col = 'blue', labels = 'yes')
+PHBT <- planktonr::pr_plot_EOVs(datT %>% dplyr::filter(StationName == 'Port Hacking'), EOV = 'CTDTemperature_degC', Survey = 'NRS', trans = 'identity', col = 'blue', labels = 'yes')
+MAIT <- planktonr::pr_plot_EOVs(datT %>% dplyr::filter(StationName == 'Maria Island'), EOV = 'CTDTemperature_degC', Survey = 'NRS', trans = 'identity', col = 'blue', labels = 'yes')
+
+YONT / NSIT / PHBT / MAIT
+
+```
+
+``` {r}
+
+sig <- datT %>% dplyr::filter(StationCode %in% c('YON', 'NSI', 'PHB','MAI')) %>% 
+  dplyr::distinct(StationName, slope, p) %>% dplyr::arrange(StationName)
+
+
+sig
+```
+
+The CTD data gives a good indication that over the sampling period the temperature of the water has increased slightly, but the trend is not significant, p > 0.05, at any of the stations. A more indepth way to look at this would be through the long term monitoring information for the sites that have been continually sampled since the 1940s, i.e. Port Hacking and Maria Island.
+
+```{r, fig.height=6}
+
+datT <- planktonr::pr_get_EOVs(Survey = 'LTM') %>% 
+  dplyr::filter(Parameters == 'Temperature_degC',
+                StationCode %in% c('MAI', 'PHB')) %>% 
+  pr_remove_outliers(2) %>% pr_get_Coeffs()
+
+PHBltm <- planktonr::pr_plot_EOVs(datT %>% dplyr::filter(StationName == 'Port Hacking'), EOV = 'Temperature_degC', Survey = 'LTM', trans = 'identity', col = 'blue', labels = 'yes') +
+  ggtitle("Port Hacking")
+MAIltm <- planktonr::pr_plot_EOVs(datT %>% dplyr::filter(StationName == 'Maria Island'), EOV = 'Temperature_degC', Survey = 'LTM', trans = 'identity', col = 'blue', labels = 'yes') +
+  ggtitle("Maria Island")
+
+PHBltm / MAIltm
+
+```
+
+Now when we look at the trend we can confirm that the temperature increase at Port Hacking and Maria Island stations is significant, p < 0.05, over a longer period.
+
+``` {r}
+
+sigltm <- datT %>% dplyr::filter(StationCode %in% c('PHB','MAI')) %>% 
+  dplyr::distinct(StationName, slope, p) %>% dplyr::arrange(StationName)
+
+sigltm
+```
+
+## Zooplankton Abundance 
+Abundance and biomass trends don't necessarily show the same temporal trends, here we show zooplankton abundance by time, followed by biomass. 
+
+```{r, fig.height=6}
+
+NRSz <- planktonr::pr_get_Indices("NRS", "Z") %>% 
+  filter(Parameters == "ZoopAbundance_m3") %>% 
+  filter(StationCode %in% c("YON", "NSI", "PHB", "MAI")) %>% 
+  pr_remove_outliers(2) %>% 
+  dplyr::mutate(Survey = 'NRS') %>% pr_get_Coeffs() %>% 
+  dplyr::rename(SampleTime_Local = "SampleDate")
+
+p1 <- planktonr::pr_plot_Trends(NRSz, Trend = "Raw", Survey = "NRS", method = "lm", trans = "log10")
+p2 <- planktonr::pr_plot_Trends(NRSz, Trend = "Month", Survey = "NRS", method = "loess")
+
+p1 + p2 + 
+  ggplot2::theme(axis.title.y = ggplot2::element_blank()) + # Remove y-title from 2nd column
+  plot_layout(widths = c(3, 1), guides = "collect")
+
+```
+
+
+``` {r}
+
+sigza <- NRSz %>% 
+  dplyr::distinct(StationName, slope, p) %>% dplyr::arrange(StationName)
+
+sigza
+```
+
+##Zooplantkon Biomass
+
+```{r, fig.height=6}
+
+NRSz <- planktonr::pr_get_Indices("NRS", "Z") %>% 
+  filter(Parameters == "Biomass_mgm3") %>% 
+  filter(StationCode %in% c("YON", "NSI", "PHB", "MAI"))  %>% 
+  pr_remove_outliers(2) %>% 
+  dplyr::mutate(Survey = 'NRS') %>% pr_get_Coeffs() %>% 
+  dplyr::rename(SampleTime_Local = "SampleDate")
+
+p1 <- planktonr::pr_plot_Trends(NRSz, Trend = "Raw", Survey = "NRS", method = "lm", trans = "log10")
+p2 <- planktonr::pr_plot_Trends(NRSz, Trend = "Month", Survey = "NRS", method = "loess")
+
+p1 + p2 + 
+  ggplot2::theme(axis.title.y = ggplot2::element_blank()) + # Remove y-title from 2nd column
+  plot_layout(widths = c(3, 1), guides = "collect")
+
+```
+
+``` {r}
+
+sigzb <- NRSz %>% dplyr::filter(StationCode %in% c('YON', 'NSI', 'PHB','MAI')) %>% 
+  dplyr::distinct(StationName, slope, p) %>% dplyr::arrange(StationName)
+
+sigzb
+```
+
+Zooplankton abundance is increasing significantly at Maria Island and Port Hacking although there are no significant changes in the biomass at these, or any of the stations. This indicates that smaller, less substantial zooplankton are becoming more common in these southern stations. This change may impact nutritional value of the copepod community.
+
+## Copepod Abundance
+
+In most areas of the ocean copepods make up around 70-80% of the zooplankton composition. In warmer waters we would expect a higher actual copepod abundance, however these more abundant copepods tend to be smaller and may have lower nutritional value.
+
+```{r, fig.height=6}
+
+NRSz <- planktonr::pr_get_Indices("NRS", "Z") %>% 
+  filter(Parameters == "CopeAbundance_m3") %>% 
+  filter(StationCode %in% c("YON", "NSI", "PHB", "MAI"))   %>% 
+  pr_remove_outliers(2) %>% 
+  dplyr::mutate(Survey = 'NRS') %>% pr_get_Coeffs() %>% 
+  dplyr::rename(SampleTime_Local = "SampleDate")
+
+p1 <- planktonr::pr_plot_Trends(NRSz, Trend = "Raw", Survey = "NRS", method = "lm", trans = "log10")
+p2 <- planktonr::pr_plot_Trends(NRSz, Trend = "Month", Survey = "NRS", method = "loess")
+
+p1 + p2 + 
+  ggplot2::theme(axis.title.y = ggplot2::element_blank()) + # Remove y-title from 2nd column
+  plot_layout(widths = c(3, 1), guides = "collect")
+
+```
+
+
+``` {r}
+
+sigca <- NRSz %>% dplyr::filter(StationCode %in% c('YON', 'NSI', 'PHB','MAI')) %>% 
+  dplyr::distinct(StationName, slope, p) %>% dplyr::arrange(StationName)
+
+
+sigca
+```
+
+The copepod abundance is increasing slightly all sites but there is no significant change to the abundance of copepods in any of the stations.
+
+```{r, fig.height=6}
+
+NRSz <- planktonr::pr_get_Indices("NRS", "Z") %>% 
+  filter(Parameters == "AvgTotalLengthCopepod_mm") %>% 
+  filter(StationCode %in% c("YON", "NSI", "PHB", "MAI"))   %>% 
+  pr_remove_outliers(2) %>% 
+  dplyr::mutate(Survey = 'NRS') %>% pr_get_Coeffs() %>% 
+  dplyr::rename(SampleTime_Local = "SampleDate")
+
+p1 <- planktonr::pr_plot_Trends(NRSz, Trend = "Raw", Survey = "NRS", method = "lm", trans = "log10")
+p2 <- planktonr::pr_plot_Trends(NRSz, Trend = "Month", Survey = "NRS", method = "loess")
+
+p1 + p2 + 
+  ggplot2::theme(axis.title.y = ggplot2::element_blank()) + # Remove y-title from 2nd column
+  plot_layout(widths = c(3, 1), guides = "collect")
+
+```
+
+``` {r}
+
+sigcl <- NRSz %>% dplyr::filter(StationCode %in% c('YON', 'NSI', 'PHB','MAI')) %>% 
+  dplyr::distinct(StationName, slope, p) %>% dplyr::arrange(StationName)
+
+
+sigcl
+```
+
+However, the average copepod length is decreasing significantly at 3 of the east coast stations. A similar abundance of smaller copepods would result in a decreasing biomass. 
+
+```{r, fig.height=6}
+
+NRSz <- planktonr::pr_get_Indices("NRS", "Z") %>% 
+  filter(Parameters == "OmnivoreCarnivoreCopepodRatio") %>% 
+  filter(StationCode %in% c("YON", "NSI", "PHB", "MAI"))   %>% 
+  pr_remove_outliers(2) %>% 
+  dplyr::mutate(Survey = 'NRS') %>% pr_get_Coeffs() %>% 
+  dplyr::rename(SampleTime_Local = "SampleDate")
+
+p1 <- planktonr::pr_plot_Trends(NRSz, Trend = "Raw", Survey = "NRS", method = "lm", trans = "log10")
+p2 <- planktonr::pr_plot_Trends(NRSz, Trend = "Month", Survey = "NRS", method = "loess")
+
+p1 + p2 + 
+  ggplot2::theme(axis.title.y = ggplot2::element_blank()) + # Remove y-title from 2nd column
+  plot_layout(widths = c(3, 1), guides = "collect")
+
+```
+
+
+``` {r}
+
+sigco <- NRSz %>% dplyr::filter(StationCode %in% c('YON', 'NSI', 'PHB','MAI')) %>% 
+  dplyr::distinct(StationName, slope, p) %>% dplyr::arrange(StationName)
+
+sigco
+```
+
+Over the sampling time the number of omnivores with respect to carnivores at Maria Island has increased. This may be due to a stronger EAC extension that is bringing smaller, warm water copepods down the coast. 
+
+If copepod abundance is increasing but overall zooplankton abundance is steady and biomass is decreasing, then the composition of the plankton maybe changing with more non-copepod zooplankton in the ecosystem at this station. 
+
+## Functional Groups
+
+We can also gain a lot of insight into the community structure by looking at how the composition (or proportions) of the functional groups changes over time, long term and seasonally. In this function we have chosen some of the more important function groups and plotted them as a time series and a seasonal cycle. Maria Island demonstrates a strong seasonal pattern with lower abundances in all groups during winter.  
+
+```{r, fig.height=6}
+FGz <- pr_get_FuncGroups(Survey = "NRS", Type = "Z") %>% 
+  dplyr::filter(StationCode %in% c("YON", "NSI", "PHB", "MAI"))
+
+p1 <- planktonr::pr_plot_tsfg(FGz, Scale = "Percent")
+p2 <- planktonr::pr_plot_tsfg(FGz, Scale = "Percent", Trend = "Month") +
+  ggplot2::theme(axis.title.y = element_blank())
+      
+p1 + p2 + 
+  patchwork::plot_layout(widths = c(3,1), guides = "collect") & 
+  theme(legend.position = "bottom")
+
+```
+
+```{r, fig.height=6}
+
+fgT <- FGz %>% dplyr::group_by(StationName, SampleTime_Local) %>% 
+  dplyr::summarise(TotalZ = sum(Values, na.rm = TRUE),
+                   .groups = 'drop') 
+
+fgC <- FGz %>% 
+  dplyr::filter(Parameters == 'Copepod') %>% 
+  dplyr::group_by(StationName, StationCode, SampleTime_Local, Parameters, Month_Local, Year_Local) %>% 
+  dplyr::summarise(TotalC = sum(Values, na.rm = TRUE),
+                   .groups = 'drop') %>% 
+  dplyr::inner_join(fgT, by = c('StationName', 'SampleTime_Local')) %>% 
+  dplyr::mutate(Values = TotalC/TotalZ,
+                Parameters = ifelse(Parameters == 'Copepod', 'CopeProp_m3', NA))   %>% 
+  dplyr::mutate(Survey = 'NRS') %>% pr_get_Coeffs() %>% 
+  dplyr::rename(SampleTime_Local = "SampleDate")
+
+p1 <- planktonr::pr_plot_Trends(fgC, Trend = "Raw", Survey = "NRS", method = "lm") +
+  ylab("Copepod Proportion")
+p2 <- planktonr::pr_plot_Trends(fgC, Trend = "Month", Survey = "NRS", method = "loess")
+
+p1 + p2 + 
+  ggplot2::theme(axis.title.y = ggplot2::element_blank()) + # Remove y-title from 2nd column
+  plot_layout(widths = c(3, 1), guides = "collect")
+```
+
+
+``` {r}
+
+sigfg <- fgC %>% dplyr::filter(StationCode %in% c('YON', 'NSI', 'PHB','MAI')) %>% 
+  dplyr::distinct(StationName, slope, p) %>% dplyr::arrange(StationName)
+
+sigfg
+```
+
+The proportion of copepods in Maria Island is decreasing significantly and the figure shows that this due to an increase in the 'Other' category of functional group. Examining the raw data in teh huhger functional group data table we can learn that this decrease in copepods is in part at least due to the increase in Noctiluca scintilans in the sampples. This is a large dinoflagellate that occurs in high numbers in the right conditions but which has negligible biomass when dried. 
+
+
+```{r, fig.height=6}
+
+dat <- planktonr::pr_get_NRSData(Type = 'zooplankton', Variable = 'abundance', Subset = 'htg')
+
+datn <- dat %>% dplyr::select(StationName, StationCode, SampleTime_Local:Month_Local, SampleDepth_m, PhytoAbundance_Cellsm3 = Noctilucaceae) %>% 
+  dplyr::filter(StationCode %in% c('YON', 'NSI', 'PHB','MAI')) %>% 
+  tidyr::pivot_longer(-c(StationName:SampleDepth_m), values_to = 'Values', names_to = 'Parameters')  %>% 
+  dplyr::mutate(Survey = 'NRS') %>% pr_get_Coeffs() %>% 
+  dplyr::rename(SampleTime_Local = "SampleDate") %>% 
+  planktonr::pr_reorder()
+
+title <- rlang::expr(paste("Noctiluca (cells m"^-3,")"))
+
+plot <- planktonr::pr_plot_Trends(datn, Trend = "Raw", Survey = "NRS", method = "lm", trans = 'log10') 
+plot
+
+``` 
+
+
+```{r}
+signoc <- datn %>% dplyr::filter(StationCode %in% c('YON', 'NSI', 'PHB','MAI')) %>% 
+  dplyr::distinct(StationName, slope, p) %>% dplyr::arrange(StationName)
+
+signoc
+
+```
+
+One reason for the decline in proportion of copepods at Maria Island is the increase in Noctiluca scintillans over the sampling period. This species has been moving south and west along the coasts of Australia and is now common in Maria Island. These are some of the indications that the warming conditions at Maria are affecting the composition of the zooplankton.
+

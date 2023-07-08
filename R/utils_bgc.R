@@ -271,7 +271,7 @@ pr_get_NRSMicro <- function(Survey = "NRS"){
 
 }
 
-#' Load microbial data
+#' Load associated data for the voyage / coastal microbial data
 #'
 #' @return A dataframe with NRS microbial data
 #' @export
@@ -312,6 +312,61 @@ pr_get_CSChem <- function(){
   return(dat)
 
 }
+
+
+#' Load microbial species data
+#' @param Survey NRS, Coastal or GO-SHIP stations
+#'
+#' @return A dataframe with NRS microbial data
+#' @export
+#'
+#' @examples
+#' df <- pr_get_NRSMicroASV()
+#' @importFrom rlang .data
+pr_get_NRSMicroASV <- function(){
+
+  var_names <- colnames(dat)
+
+  NRS <- pr_get_NRSTrips() %>%
+    dplyr::select("TripCode", "SampleTime_Local", "Year_Local", "Month_Local", "StationName", "StationCode")
+
+  dat <- readr::read_csv("https://raw.githubusercontent.com/AusMicrobiome/microbial_ocean_atlas/2.1.0/data/NRS_taxon_abundance.csv") %>%
+    dplyr::select(-c("sample_id", "nrs_sample_code", "amplicon")) %>%
+    dplyr::rename(TripCode = "nrs_trip_code", SampleDepth_m = "depth") %>%
+    tidyr::pivot_longer(-c(TripCode, SampleDepth_m), values_to = "Values", names_to = "Parameters",)
+
+  datGen <- NRS %>%
+    dplyr::left_join(dat, by = "TripCode") %>%
+    tidyr::drop_na(.data$Parameters) %>%
+    dplyr::mutate(Values = tidyr::replace_na(.data$Values, 0)) %>%
+    pr_reorder()
+
+  return(datGen)
+
+}
+
+df <- datGen %>% dplyr::filter(grepl("s__Tricho", .data$Parameters)) %>%
+  dplyr::group_by(.data$SampleTime_Local, .data$StationName, .data$Parameters) %>%
+  dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
+                   .groups = 'drop')
+#pr_plot_NRSMicroASV <- function(df){
+  gg <- ggplot2::ggplot(df, ggplot2::aes(x = .data$SampleTime_Local, y = .data$Values, colour = .data$Parameters)) +
+    ggplot2::geom_point() +
+    ggplot2::geom_line() +
+    ggplot2::facet_grid(.data$StationName ~ ., scales = "free") +
+    theme_pr()
+  gg
+#}
+
+dfd <- datGen %>% dplyr::filter(grepl("s__Tricho", .data$Parameters),
+                               StationName == 'Yongala') %>%
+  dplyr::mutate(SampleDepth_m = ifelse(.data$SampleDepth_m > 23, 25, .data$SampleDepth_m))
+ggd <- ggplot2::ggplot(dfd, ggplot2::aes(x = .data$SampleTime_Local, y = .data$Values, colour = .data$Parameters)) +
+  ggplot2::geom_point() +
+  ggplot2::geom_line() +
+  ggplot2::facet_grid(.data$SampleDepth_m ~ ., scales = "free") +
+  theme_pr()
+ggd
 
 
 #' Load Total Suspended Solids (TSS) data
