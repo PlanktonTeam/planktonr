@@ -1240,7 +1240,7 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE, labels = TRUE){
                                                 font-size: 24px;
                                                 margin: 0;
                                                 margin-right: 6px}")),
-      "Plankton sampling progress")
+      "Sampling progress")
 
     title2 <- htmltools::div(
       htmltools::tags$style(htmltools::HTML(".leaflet-control.map-title2 {
