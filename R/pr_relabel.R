@@ -273,6 +273,8 @@ pr_relabel <- function(s, style = "ggplot"){
     return(out)
   } else if (length(i) == 1){
     return(s) # If no match, return the original string
+  } else {
+    return(s)
   }
 
 }
