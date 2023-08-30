@@ -245,7 +245,7 @@ pr_plot_Trends <- function(df, Trend = "Raw", Survey = "NRS", method = "lm",  tr
     site = rlang::sym("StationName")
   }
 
-  titley <- pr_relabel(unique(df$Parameters))
+  titley <- pr_relabel(unique(df$Parameters), style = 'ggplot')
 
   # Averaging based on `Trend` ----------------------------------------------
 
