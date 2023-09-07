@@ -542,11 +542,12 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_EOVs("CPR") %>% pr_remove_outliers(2) %>%
+#' df <- pr_get_EOVs("CPR") %>%
+#'   pr_remove_outliers(2) %>%
 #'   pr_get_Coeffs()
 #' pr_plot_EOVs(df, EOV = "chl_oc3", Survey = "CPR",
-#'       trans = "identity", col = "blue", labels = "no")
-pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "identity", col = "blue", labels = "yes") {
+#'       trans = "identity", col = "blue", labels = FALSE)
+pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "identity", col = "blue", labels = TRUE) {
 
   titley <- pr_relabel(EOV, style = "ggplot")
 
@@ -571,7 +572,7 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "iden
                    #plot.subtitle = ggplot2::element_text(size = 12)
     )
 
-  if(labels == "no"){
+  if(isFALSE(labels)){
     p1 <- p1 +
       ggplot2::theme(axis.title.x = ggplot2::element_blank())
   }
@@ -588,7 +589,7 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "iden
     ggplot2::labs(y = "Anomaly") +
     theme_pr()
 
-  if(labels == "no"){
+  if(isFALSE(labels)){
     p2 <- p2 + ggplot2::theme(axis.title.x = ggplot2::element_blank())
   }
   if(Survey == "LTM"){
@@ -611,7 +612,7 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "iden
     ggplot2::theme(legend.position = "none",
                    axis.title.y = ggplot2::element_blank())
 
-  if(labels == "no"){
+  if(isFALSE(labels)){
     p3 <- p3 +
       ggplot2::theme(axis.title.x = ggplot2::element_blank())
   }

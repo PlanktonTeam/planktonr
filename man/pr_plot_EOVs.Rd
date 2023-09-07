@@ -10,7 +10,7 @@ pr_plot_EOVs(
   Survey = "NRS",
   trans = "identity",
   col = "blue",
-  labels = "yes"
+  labels = TRUE
 )
 }
 \arguments{
@@ -33,8 +33,9 @@ plot of timeseries, anomalies and climatology
 Essential Ocean Variables plot
 }
 \examples{
-df <- pr_get_EOVs("CPR") \%>\% pr_remove_outliers(2) \%>\%
+df <- pr_get_EOVs("CPR") \%>\%
+  pr_remove_outliers(2) \%>\%
   pr_get_Coeffs()
 pr_plot_EOVs(df, EOV = "chl_oc3", Survey = "CPR",
-      trans = "identity", col = "blue", labels = "no")
+      trans = "identity", col = "blue", labels = FALSE)
 }
