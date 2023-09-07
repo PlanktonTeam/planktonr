@@ -3,6 +3,8 @@
 #'
 #' @param s A string for reformatting
 #' @param style The style of plotting the string will be used for
+#' @param named Should the output be an `unnamed` (FALSE) or `named` (TRUE) vector? Only available for `style = "simple"` and `style = "plotly"`
+#'
 #'
 #' @return A reformatted expression call (ggplot)
 #' @export
@@ -10,7 +12,7 @@
 #' @examples
 #' pr_relabel("Chla_mgm3", style = "ggplot")
 #'
-pr_relabel <- function(s, style = "ggplot"){
+pr_relabel <- function(s, style = "ggplot", named = FALSE){
 
   relabel_df <- tibble::as_tibble(matrix(c(
     "AbundancePhyto_CellsL", rlang::expr(paste("Phytoplankton Abundance (cells L"^-1,")")), "Phytoplankton Abundance (cells L<sup>-1</sup>)", "Phytoplankton Abundance",
@@ -265,11 +267,24 @@ pr_relabel <- function(s, style = "ggplot"){
   if(style == "ggplot" & length(i) > 0) {
     return(relabel_df$gg[[i]]) # Returned as a list due to expr
   } else if (style == "plotly" & length(i) > 0){
-    return(unlist(relabel_df$pl[i]))
+
+    if (isFALSE(named)) { # Unnamed vector
+      out <- unlist(relabel_df$pl[i])
+    } else { # Named vector
+      out <- relabel_df$Variable[i]
+      names(out) <- unlist(relabel_df$pl[i])
+    }
+    return(out)
+
   } else if (style == "simple" & length(i) > 0){
-    out <- relabel_df$Variable[i]
-    names(out) <- relabel_df$simple[i]
-    out <- out[order(names(out))] # Put in alpha order
+
+    if (isFALSE(named)){ # Unnamed vector
+      out <- relabel_df$simple[i]
+    } else {  # Named vector
+      out <- relabel_df$Variable[i]
+      names(out) <- relabel_df$simple[i]
+      out <- out[order(names(out))] # Put in alpha order
+    }
     return(out)
   } else if (length(i) == 1){
     return(s) # If no match, return the original string

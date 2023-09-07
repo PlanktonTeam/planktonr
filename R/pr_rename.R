@@ -61,7 +61,7 @@ pr_rename <- function(df){
     "TripCode", "TRIP_CODE",
     "WoRMS AphiaID", "SPCODE",
     "ZSampleDepth_m", "ZOOPSAMPLEDEPTH_M"),
-    ncol = 2, byrow = TRUE, dimnames = list(NULL, c("New","Old"))))
+    ncol = 2, byrow = TRUE, dimnames = list(NULL, c("New", "Old"))))
 
   df <- data.table::setnames(df, old = rename_df$Old, new = rename_df$New, skip_absent = TRUE)
 
