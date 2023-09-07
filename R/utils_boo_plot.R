@@ -1243,14 +1243,14 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE, labels = TRUE){
                                                 margin-right: 6px}")),
       "Sampling progress")
 
-    title2 <- htmltools::div(
-      htmltools::tags$style(htmltools::HTML(".leaflet-control.map-title2 {
-                                                text-align: center;
-                                                background: rgba(255,255,255,0);
-                                                font-size: 16px;
-                                                margin: 0;
-                                                margin-right: 6px}")),
-      "Hover cursor over items of interest")
+    # title2 <- htmltools::div(
+    #   htmltools::tags$style(htmltools::HTML(".leaflet-control.map-title2 {
+    #                                             text-align: center;
+    #                                             background: rgba(255,255,255,0);
+    #                                             font-size: 16px;
+    #                                             margin: 0;
+    #                                             margin-right: 6px}")),
+    #   "Hover cursor over items of interest")
 
     map <- leaflet::leaflet() %>%
       leaflet::addProviderTiles(provider = "Esri", layerId = "OceanBasemap") %>%
@@ -1292,10 +1292,10 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE, labels = TRUE){
                           position = "topright",
                           className = "map-title1"
       ) %>%
-      leaflet::addControl(title2,
-                          position = "topright",
-                          className = "map-title2"
-      ) %>%
+      # leaflet::addControl(title2,
+      #                     position = "topright",
+      #                     className = "map-title2"
+      # ) %>%
       leaflet::addLayersControl( # Layers control
         overlayGroups = c("National Reference Stations",
                           "Continuous Plankton Recorder (Phyto/Zoo Counts)",

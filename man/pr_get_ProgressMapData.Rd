@@ -21,5 +21,6 @@ Data for IMOS progress map
 }
 \examples{
 df <- pr_get_ProgressMapData(c("NRS", "CPR"))
+df <- pr_get_ProgressMapData(c("NRS", "CPR", "Coastal", "GO-SHIP"))
 df <- pr_get_ProgressMapData(c("NRS", "CPR"), interactive = TRUE)
 }

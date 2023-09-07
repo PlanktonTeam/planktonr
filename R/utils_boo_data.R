@@ -85,54 +85,54 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Z", ...){
 
 pr_get_FreqMap <- function(Type = "Z"){
 
-    NRS <- pr_get_NRSData(Type = Type, Variable = "abundance", Subset = "species") %>%
-      tidyr::pivot_longer(cols = !dplyr::all_of(pr_get_NonTaxaColumns(Survey = "NRS", Type = Type)),
-                          names_to = "Species", values_to = "Counts")
+  NRS <- pr_get_NRSData(Type = Type, Variable = "abundance", Subset = "species") %>%
+    tidyr::pivot_longer(cols = !dplyr::all_of(pr_get_NonTaxaColumns(Survey = "NRS", Type = Type)),
+                        names_to = "Species", values_to = "Counts")
 
-    CountNRS <- NRS %>%
-      dplyr::rename(Sample = "TripCode") %>%
-      dplyr::mutate(Survey = 'NRS') %>%
-      dplyr::select("Sample", "Survey", "Species", "Counts", "SampleTime_Local", "Month_Local", "Latitude", "Longitude")
+  CountNRS <- NRS %>%
+    dplyr::rename(Sample = "TripCode") %>%
+    dplyr::mutate(Survey = 'NRS') %>%
+    dplyr::select("Sample", "Survey", "Species", "Counts", "SampleTime_Local", "Month_Local", "Latitude", "Longitude")
 
-    CPR <- pr_get_CPRData(Type = Type, Variable = "abundance", Subset = "species") %>%
-      tidyr::pivot_longer(cols = !dplyr::all_of(pr_get_NonTaxaColumns(Survey = "CPR", Type = Type)),
-                          names_to = "Species", values_to = "Counts")
+  CPR <- pr_get_CPRData(Type = Type, Variable = "abundance", Subset = "species") %>%
+    tidyr::pivot_longer(cols = !dplyr::all_of(pr_get_NonTaxaColumns(Survey = "CPR", Type = Type)),
+                        names_to = "Species", values_to = "Counts")
 
-    CountCPR <- CPR %>%
-      dplyr::rename(Sample = "Sample_ID") %>%
-      dplyr::mutate(Survey = 'CPR') %>%
-      dplyr::select("Sample", "Survey", "Species", "Counts", "SampleTime_Local", "Month_Local", "Latitude", "Longitude")
+  CountCPR <- CPR %>%
+    dplyr::rename(Sample = "Sample_ID") %>%
+    dplyr::mutate(Survey = 'CPR') %>%
+    dplyr::select("Sample", "Survey", "Species", "Counts", "SampleTime_Local", "Month_Local", "Latitude", "Longitude")
 
-    dat <- dplyr::bind_rows(CountCPR, CountNRS)  %>%
-      dplyr::mutate(Latitude = round(.data$Latitude/0.5, 0)*0.5,
-                    Longitude = round(.data$Longitude/0.5, 0)*0.5,
-                    Season = dplyr::case_when(.data$Month_Local > 2 & .data$Month_Local < 6 ~ "March - May",
-                                              .data$Month_Local > 5 & .data$Month_Local < 9 ~ "June - August",
-                                              .data$Month_Local > 8 & .data$Month_Local < 12 ~ "September - November",
-                                              TRUE ~ "December - February"))
+  dat <- dplyr::bind_rows(CountCPR, CountNRS)  %>%
+    dplyr::mutate(Latitude = round(.data$Latitude/0.5, 0)*0.5,
+                  Longitude = round(.data$Longitude/0.5, 0)*0.5,
+                  Season = dplyr::case_when(.data$Month_Local > 2 & .data$Month_Local < 6 ~ "March - May",
+                                            .data$Month_Local > 5 & .data$Month_Local < 9 ~ "June - August",
+                                            .data$Month_Local > 8 & .data$Month_Local < 12 ~ "September - November",
+                                            TRUE ~ "December - February"))
 
-    totals <- dat %>% dplyr::select(-c('Species', 'Counts')) %>% # All samples including where nothing is counted
-      dplyr::distinct() %>%
-      dplyr::group_by(.data$Season, .data$Survey, .data$Latitude, .data$Longitude) %>%
-      dplyr::summarise(samples = dplyr::n(), .groups = "drop")
+  totals <- dat %>% dplyr::select(-c('Species', 'Counts')) %>% # All samples including where nothing is counted
+    dplyr::distinct() %>%
+    dplyr::group_by(.data$Season, .data$Survey, .data$Latitude, .data$Longitude) %>%
+    dplyr::summarise(samples = dplyr::n(), .groups = "drop")
 
-    obs <- dat %>%  # Samples where something is counted
-      dplyr::filter(.data$Counts > 0) %>%
-      dplyr::group_by(.data$Season, .data$Survey, .data$Species, .data$Latitude, .data$Longitude) %>%
-      dplyr::summarise(freq = dplyr::n(), .groups = "drop") %>%
-      dplyr::left_join(totals, by = c('Season', 'Survey', 'Latitude', 'Longitude')) %>%
-      dplyr::mutate(freqsamp = .data$freq/.data$samples,
-                    freqfac = as.factor(dplyr::case_when(.data$freqsamp < 0.375 ~ "Seen in 25%",
-                                                         .data$freqsamp > 0.875 ~ "100% of Samples",
-                                                         .data$freqsamp > 0.375 & .data$freqsamp < 0.625 ~ "50%",
-                                                         TRUE ~ "75%")))
+  obs <- dat %>%  # Samples where something is counted
+    dplyr::filter(.data$Counts > 0) %>%
+    dplyr::group_by(.data$Season, .data$Survey, .data$Species, .data$Latitude, .data$Longitude) %>%
+    dplyr::summarise(freq = dplyr::n(), .groups = "drop") %>%
+    dplyr::left_join(totals, by = c('Season', 'Survey', 'Latitude', 'Longitude')) %>%
+    dplyr::mutate(freqsamp = .data$freq/.data$samples,
+                  freqfac = as.factor(dplyr::case_when(.data$freqsamp < 0.375 ~ "Seen in 25%",
+                                                       .data$freqsamp > 0.875 ~ "100% of Samples",
+                                                       .data$freqsamp > 0.375 & .data$freqsamp < 0.625 ~ "50%",
+                                                       TRUE ~ "75%")))
 
-    # Adding empty samples back in for absences
-    mapData <-  totals %>% dplyr::left_join(obs, by = c('Season', 'Survey', 'Latitude', 'Longitude', 'samples')) %>%
-      dplyr::mutate(freqfac = factor(.data$freqfac, levels = c("Seen in 25%",'50%', '75%', '100% of Samples'))) %>%
-      dplyr::arrange(.data$Species)
+  # Adding empty samples back in for absences
+  mapData <-  totals %>% dplyr::left_join(obs, by = c('Season', 'Survey', 'Latitude', 'Longitude', 'samples')) %>%
+    dplyr::mutate(freqfac = factor(.data$freqfac, levels = c("Seen in 25%",'50%', '75%', '100% of Samples'))) %>%
+    dplyr::arrange(.data$Species)
 
-    }
+}
 
 
 
@@ -220,14 +220,14 @@ pr_get_DayNight <- function(Type = "Z"){
 pr_get_SatData <- function(Survey = 'NRS'){
 
   if(Survey == "NRS"){
-      NRS_SatData <- readr::read_csv(system.file("extdata", "NRS_SatData.csv", package = "planktonr", mustWork = TRUE),
-                            show_col_types = FALSE,
-                            na = c("NA", "")) %>%
-        pr_rename()
+    NRS_SatData <- readr::read_csv(system.file("extdata", "NRS_SatData.csv", package = "planktonr", mustWork = TRUE),
+                                   show_col_types = FALSE,
+                                   na = c("NA", "")) %>%
+      pr_rename()
   } else {
-      CPR_SatData <- readr::read_csv(system.file("extdata", "CPR_SatData.csv", package = "planktonr", mustWork = TRUE),
-                              show_col_types = FALSE) %>%
-        pr_rename()
+    CPR_SatData <- readr::read_csv(system.file("extdata", "CPR_SatData.csv", package = "planktonr", mustWork = TRUE),
+                                   show_col_types = FALSE) %>%
+      pr_rename()
   }
 }
 
@@ -506,37 +506,69 @@ pr_get_Papers <- function(){
 #'
 #' @examples
 #' df <- pr_get_ProgressMapData(c("NRS", "CPR"))
+#' df <- pr_get_ProgressMapData(c("NRS", "CPR", "Coastal", "GO-SHIP"))
 #' df <- pr_get_ProgressMapData(c("NRS", "CPR"), interactive = TRUE)
 pr_get_ProgressMapData <- function(Survey = c("NRS", "CPR"), interactive = FALSE, ...){
 
   if (interactive == FALSE){
+
+    PMap <- list()
+
     if("NRS" %in% Survey) {
-      PMapDataNRS <- planktonr::pr_get_NRSTrips(Type = c("P", "Z")) %>%
+      PMap[[1]] <- planktonr::pr_get_NRSTrips(Type = c("P", "Z")) %>%
         dplyr::select("StationCode", "Longitude", "Latitude") %>%
         dplyr::rename(Region = "StationCode") %>%
         dplyr::mutate(Survey = "NRS") %>%
         dplyr::filter(.data$Region != "PH4")
-
-      if (("CPR" %in% Survey) == FALSE){ # Return data if no CPR
-        return(PMapDataNRS)
-      }
     }
 
     if ("CPR" %in% Survey) {
-      PMapDataCPR <- pr_get_s3("cpr_samp") %>%
+      PMap[[2]] <- pr_get_s3("cpr_samp") %>%
         dplyr::select("REGION", "LONGITUDE", "LATITUDE") %>%
         pr_rename() %>%
         dplyr::mutate(Survey = "CPR")
-      if (("NRS" %in% Survey) == FALSE){ # Return data if no NRS
-        return(PMapDataCPR)
-      }
     }
 
-    if(("NRS" %in% Survey & "CPR" %in% Survey) | "Both" %in% Survey) {
-      PMapData <- dplyr::bind_rows(PMapDataNRS, PMapDataCPR)
-      return(PMapData)
+    if ("Coastal" %in% Survey) {
+      PMap[[3]]  <- planktonr::pr_get_NRSMicro("Coastal") %>% ## coastal microbial data
+        dplyr::select("StationCode", "Longitude", "Latitude") %>%
+        dplyr::rename(Region = "StationCode") %>%
+        dplyr::mutate(Survey = "Coastal")
     }
+
+
+    if ("Coastal" %in% Survey) {
+      PMap[[4]] <- planktonr::pr_get_NRSMicro("GO-SHIP") %>%
+        dplyr::select("Longitude", "Latitude") %>%
+        dplyr::mutate(Region = "GO-Ship",
+                      Survey = "GO-Ship") %>%
+        dplyr::relocate("Region", .before = tidyselect::everything())
+
+    }
+
+    PMapData <- dplyr::bind_rows(PMap)
+    return(PMapData)
+
   } else if (interactive == TRUE){
+
+    PMapDataCoastal <- planktonr::pr_get_NRSMicro("Coastal") %>%
+      dplyr::filter(.data$Parameters == "Prochlorococcus_cellsmL") %>%
+      dplyr::mutate(Day_Local = lubridate::day(SampleTime_Local)) %>%
+      # dplyr::distinct(StationCode, SampleDepth_m, Year_Local, Month_Local, Day_Local, .keep_all = TRUE)
+      dplyr::group_by(StationCode, SampleDepth_m, Year_Local, Month_Local, Day_Local) %>%
+      dplyr::summarise(Values = mean(Values, na.rm = TRUE),
+                       Parameters = dplyr::first(Parameters),
+                       StationName = dplyr::first(StationName),
+                       Latitude = dplyr::first(Latitude),
+                       Longitude = dplyr::first(Longitude),
+                       State = dplyr::first(State),
+                       SampleTime_Local = dplyr::first(SampleTime_Local),
+                       .groups = "drop_last") %>%
+      tidyr::pivot_wider(names_from = "Parameters", values_from = "Values") %>%
+      dplyr::rename(Name = "StationName") %>%
+      dplyr::select(-"StationCode") %>%
+      dplyr::mutate(Survey = "Coastal")
+
 
     PMapDataNRS <- dplyr::bind_rows(planktonr::pr_get_Indices(Survey = "NRS", Type = "Z", ...),
                                     planktonr::pr_get_Indices(Survey = "NRS", Type = "P", ...)) %>%
@@ -545,6 +577,7 @@ pr_get_ProgressMapData <- function(Survey = c("NRS", "CPR"), interactive = FALSE
       dplyr::rename(Name = "StationName") %>%
       dplyr::select(-"StationCode") %>%
       dplyr::mutate(Survey = "NRS")
+
 
     PMapDataCPR <- dplyr::bind_rows(planktonr::pr_get_Indices(Survey = "CPR", Type = "Z", ...),
                                     planktonr::pr_get_Indices(Survey = "CPR", Type = "P", ...)) %>%
@@ -556,6 +589,7 @@ pr_get_ProgressMapData <- function(Survey = c("NRS", "CPR"), interactive = FALSE
                     Survey = "CPR") %>%
       dplyr::rename(PhytoAbundance_CellsL = "PhytoAbundance_Cellsm3",
                     Name = "BioRegion")
+
 
     PMapData <- dplyr::bind_rows(PMapDataNRS, PMapDataCPR) %>%
       dplyr::select(-c("Year_Local", "Month_Local", "tz"))
@@ -583,14 +617,14 @@ pr_get_PCIData <- function(){
   dat <- planktonr::pr_get_Indices("CPR", "W", near_dist_km = 250) %>%
     dplyr::filter(.data$Parameters == 'PCI') %>%
     dplyr::mutate(Longitude = round(.data$Longitude, 0),
-                Latitude = round(.data$Latitude, 0),
-                Season = dplyr::case_when(.data$Month_Local > 2 & .data$Month_Local < 6 ~ "March - May",
-                                          .data$Month_Local > 5 & .data$Month_Local < 9 ~ "June - August",
-                                          .data$Month_Local > 8 & .data$Month_Local < 12 ~ "September - November",
-                                          TRUE ~ "December - February")) %>%
+                  Latitude = round(.data$Latitude, 0),
+                  Season = dplyr::case_when(.data$Month_Local > 2 & .data$Month_Local < 6 ~ "March - May",
+                                            .data$Month_Local > 5 & .data$Month_Local < 9 ~ "June - August",
+                                            .data$Month_Local > 8 & .data$Month_Local < 12 ~ "September - November",
+                                            TRUE ~ "December - February")) %>%
     dplyr::group_by(.data$Longitude, .data$Latitude, .data$Season, .data$BioRegion) %>%
     dplyr::summarise(PCI = mean(.data$Values, na.rm = TRUE),
-                   .groups = 'drop')
+                     .groups = 'drop')
 
 }
 
