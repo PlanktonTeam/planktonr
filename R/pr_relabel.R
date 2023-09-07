@@ -265,14 +265,16 @@ pr_relabel <- function(s, style = "ggplot", named = FALSE){
 
 
   if(style == "ggplot" & length(i) > 0) {
+
     return(relabel_df$gg[[i]]) # Returned as a list due to expr
+
   } else if (style == "plotly" & length(i) > 0){
 
     if (isFALSE(named)) { # Unnamed vector
       out <- unlist(relabel_df$pl[i])
     } else { # Named vector
       out <- relabel_df$Variable[i]
-      names(out) <- unlist(relabel_df$pl[i])
+      names(out) <- relabel_df$pl[i]
     }
     return(out)
 
