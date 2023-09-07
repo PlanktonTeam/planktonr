@@ -4,12 +4,14 @@
 \alias{pr_relabel}
 \title{Format a parameter string for plotting}
 \usage{
-pr_relabel(s, style = "ggplot")
+pr_relabel(s, style = "ggplot", named = FALSE)
 }
 \arguments{
 \item{s}{A string for reformatting}
 
 \item{style}{The style of plotting the string will be used for}
+
+\item{named}{Should the output be an \code{unnamed} (FALSE) or \code{named} (TRUE) vector? Only available for \code{style = "simple"} and \code{style = "plotly"}}
 }
 \value{
 A reformatted expression call (ggplot)
