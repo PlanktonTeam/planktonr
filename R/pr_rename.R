@@ -20,7 +20,7 @@ pr_rename <- function(df){
     "Cell Carbon (pgN cell-1)", "PGC_CELL",
     "Cell Nitrogen (pgN cell-1)", "MONT2001PGN_CELL",
     "Diet", "DIET",
-    "Feeding", "TROPHY",
+    "Functional Type", "TROPHY",
     "Functional Group", "FUNCTIONALGROUP",
     "Genus", "GENUS",
     "Latitude", "LATITUDE",
