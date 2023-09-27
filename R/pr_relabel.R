@@ -3,6 +3,8 @@
 #'
 #' @param s A string for reformatting
 #' @param style The style of plotting the string will be used for
+#' @param named Should the output be an `unnamed` (FALSE) or `named` (TRUE) vector? Only available for `style = "simple"` and `style = "plotly"`
+#'
 #'
 #' @return A reformatted expression call (ggplot)
 #' @export
@@ -10,7 +12,7 @@
 #' @examples
 #' pr_relabel("Chla_mgm3", style = "ggplot")
 #'
-pr_relabel <- function(s, style = "ggplot"){
+pr_relabel <- function(s, style = "ggplot", named = FALSE){
 
   relabel_df <- tibble::as_tibble(matrix(c(
     "AbundancePhyto_CellsL", rlang::expr(paste("Phytoplankton Abundance (cells L"^-1,")")), "Phytoplankton Abundance (cells L<sup>-1</sup>)", "Phytoplankton Abundance",
@@ -19,7 +21,7 @@ pr_relabel <- function(s, style = "ggplot"){
     "AshFreeBiomass_mgm3", rlang::expr(paste("Ash Free Biomass (mg m"^-3,")")), "Ash Free Biomass (mg m<sup>-3</sup>)", "Zooplankton Ash Free Biomass",
     "AvgCellVol_um3", rlang::expr(paste("Average Cell Volume (mum"^3,"sample"^-1,")")), "Average Cell Volume (&#181;m<sup>3</sup> sample<sup>-1</sup>)", "Average Cell Volume",
     "AvgTotalLengthCopepod_mm", rlang::expr(paste("Avg. Copepod Length (mm)")), "Avg. Copepod Length (mm)", "Copepod Length",
-    "Biomass_mgm3", rlang::expr(paste("Biomass (mg m"^-3,")")), "Biomass (mg m<sup>-3</sup>)", "Zooplankton Biomass",
+    "Biomass_mgm3", rlang::expr(paste("Zooplankton Biomass (mg m"^-3,")")), "Zooplankton Biomass (mg m<sup>-3</sup>)", "Zooplankton Biomass",
     "BiomassIndex_mgm3", rlang::expr(paste("Biomass Index (mg m"^-3,")")), "Biomass Index (mg m<sup>-3</sup>)", "Zooplankton Biomass Index",
     "Biovolume_um3L", rlang::expr(paste("Biovolume (mum"^3," L"^-1,")")), "Biovolume (&#181;m<sup>3 L<sup>-1</sup>)", "Phytoplankton Biovolume",
     "BioVolume_um3m3", rlang::expr(paste("Biovolume (mum"^3," m"^-3,")")), "Biovolume (&#181;m<sup>3 m^-3</sup>)", "Phytoplankton Biovolume",
@@ -73,7 +75,7 @@ pr_relabel <- function(s, style = "ggplot"){
     "PhytoEvenness", rlang::expr(paste("Phytoplankton Evenness")), "Phytoplankton Evenness", "Phytoplankton Evenness",
     "Picoeukaryotes_cellsmL", rlang::expr(paste("Picoeukaryotes (cells ml"^-1,")")), "Picoeukaryotes (cells ml<sup>-1</sup>)", "Picoeukaryote Abundance",
     "Picoplankton_Cellsml", rlang::expr(paste("Picoplankton (cells ml"^-1,")")), "Picoplankton (cells ml<sup>-1</sup>)", "Picoplankton Abundance",
-    "PigmentChla_mgm3", rlang::expr(paste("Chla (mg m"^-3,")")), "Chlorophyll <i>a</i> (mg m<sup>-3</sup>)", "Chlorophyll a",
+    "PigmentChla_mgm3", rlang::expr(paste("Chlorophyll \U1D44E (mg m"^-3,")")), "Chlorophyll <i>a</i> (mg m<sup>-3</sup>)", "Chlorophyll a",
     "PPC", rlang::expr(paste("Photoprotective Carotenoids (mg m"^-3,")")), "Photoprotective Carotenoids (mg m<sup>-3</sup>)", "Photoprotective Carotenoid Abundance",
     "Pressure_dbar", rlang::expr(paste("Pressure (dbar)")), "Pressure (dbar)", "Pressure",
     "Prochlorococcus_cellsmL", rlang::expr(paste("Prochlorococcus (cells ml"^-1,")")), "Prochlorococcus (cells ml<sup>-1</sup>)", "Prochlorococcus Abundance",
@@ -263,16 +265,33 @@ pr_relabel <- function(s, style = "ggplot"){
 
 
   if(style == "ggplot" & length(i) > 0) {
+
     return(relabel_df$gg[[i]]) # Returned as a list due to expr
+
   } else if (style == "plotly" & length(i) > 0){
-    return(unlist(relabel_df$pl[i]))
+
+    if (isFALSE(named)) { # Unnamed vector
+      out <- unlist(relabel_df$pl[i])
+    } else { # Named vector
+      out <- relabel_df$Variable[i]
+      names(out) <- relabel_df$pl[i]
+    }
+    return(out)
+
   } else if (style == "simple" & length(i) > 0){
-    out <- relabel_df$Variable[i]
-    names(out) <- relabel_df$simple[i]
-    out <- out[order(names(out))] # Put in alpha order
+
+    if (isFALSE(named)){ # Unnamed vector
+      out <- relabel_df$simple[i]
+    } else {  # Named vector
+      out <- relabel_df$Variable[i]
+      names(out) <- relabel_df$simple[i]
+      out <- out[order(names(out))] # Put in alpha order
+    }
     return(out)
   } else if (length(i) == 1){
     return(s) # If no match, return the original string
+  } else {
+    return(s)
   }
 
 }

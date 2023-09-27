@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.5.5.0000</span>
+        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.5.6.0000</span>
       </span>
     </div>
 
@@ -132,10 +132,10 @@ the trend coefficients using:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">EOV_MAI</span><span class="op">$</span><span class="va">Parameters</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] "Biomass_mgm3"            "PhytoBiomassCarbon_pgL" </span></span>
 <span><span class="co">#&gt;  [3] "ShannonCopepodDiversity" "ShannonPhytoDiversity"  </span></span>
-<span><span class="co">#&gt;  [5] "PigmentChla_mgm3"        "Ammonium_umolL"         </span></span>
-<span><span class="co">#&gt;  [7] "Nitrate_umolL"           "Silicate_umolL"         </span></span>
-<span><span class="co">#&gt;  [9] "Phosphate_umolL"         "CTDTemperature_degC"    </span></span>
-<span><span class="co">#&gt; [11] "CTDSalinity_PSU"         "Oxygen_umolL"           </span></span>
+<span><span class="co">#&gt;  [5] "Salinity"                "PigmentChla_mgm3"       </span></span>
+<span><span class="co">#&gt;  [7] "Ammonium_umolL"          "Nitrate_umolL"          </span></span>
+<span><span class="co">#&gt;  [9] "Silicate_umolL"          "Phosphate_umolL"        </span></span>
+<span><span class="co">#&gt; [11] "CTDTemperature_degC"     "Oxygen_umolL"           </span></span>
 <span><span class="co">#&gt; [13] "Nitrite_umolL"</span></span></code></pre></div>
 <p>Once we have chosen the EOV we are interested in, we can plot it as
 below. Note the use of the <code>&amp;</code> to apply the theme. This
@@ -200,10 +200,10 @@ stations only.</p>
 do:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">EOV_PHB</span><span class="op">$</span><span class="va">Parameters</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] "Nitrate_umolL"     "Oxygen_umolL"      "Temperature_degC" </span></span>
-<span><span class="co">#&gt;  [4] "Salinity"          "Phosphate_umolL"   "Silicate_umolL"   </span></span>
-<span><span class="co">#&gt;  [7] "Redfield"          "DIN_umolL"         "NOx_umolL"        </span></span>
-<span><span class="co">#&gt; [10] "Ammonium_umolL"    "Alkalinity_umolkg" "DIC_umolkg"       </span></span>
+<span><span class="co">#&gt;  [1] "Nitrate_umolL"     "Temperature_degC"  "Salinity"         </span></span>
+<span><span class="co">#&gt;  [4] "Oxygen_umolL"      "Phosphate_umolL"   "Silicate_umolL"   </span></span>
+<span><span class="co">#&gt;  [7] "DIC_umolkg"        "Alkalinity_umolkg" "Ammonium_umolL"   </span></span>
+<span><span class="co">#&gt; [10] "DIN_umolL"         "NOx_umolL"         "Redfield"         </span></span>
 <span><span class="co">#&gt; [13] "Nitrite_umolL"</span></span></code></pre></div>
 <p>Do the plotting</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
