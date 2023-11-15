@@ -584,7 +584,7 @@ pr_get_Coeffs <-  function(df){
         dplyr::filter(.data$StationName == stations)
     }
 
-    m <- stats::lm(Values ~ Year_Local + pr_harmonic(Month_Local, k = 1), data = lmdat)
+    m <- stats::lm(Values ~ Year_Local + pr_harmonic(Month, k = 1), data = lmdat)
 
     lmdat <- tibble::tibble(lmdat %>%
                               dplyr::bind_cols(fv = m$fitted.values))
