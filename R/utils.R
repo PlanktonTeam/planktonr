@@ -590,14 +590,15 @@ pr_get_Coeffs <-  function(df){
                               dplyr::bind_cols(fv = m$fitted.values))
     ms <- summary(m)
     slope <- ifelse(ms$coefficients[2,1] < 0, "decreasing", "increasing")
-    p <- ifelse(ms$coefficients[2,4] < 0.005, "significantly", "but not significantly")
+    p <- ms$coefficients[2,4]
+    sig <- ifelse(ms$coefficients[2,4] < 0.005, "significantly", "but not significantly")
 
     if("StationName" %in% colnames(lmdat)) {
-      dfs <- dplyr::tibble(slope = slope, p = p, Parameters = params, StationName = stations)
+      dfs <- dplyr::tibble(slope = slope, p = p, significance = sig, Parameters = params, StationName = stations)
       dfs2 <- lmdat %>%
         dplyr::inner_join(dfs, by = c("Parameters", "StationName"))
     } else {
-      dfs <- dplyr::tibble(slope = slope, p = p, Parameters = params, BioRegion = stations)
+      dfs <- dplyr::tibble(slope = slope, p = p, significance = sig, Parameters = params, BioRegion = stations)
       dfs2 <- lmdat %>%
         dplyr::inner_join(dfs, by = c("Parameters", "BioRegion"))
     }
@@ -606,6 +607,7 @@ pr_get_Coeffs <-  function(df){
   outputs <- purrr::map2(params, stations, coeffs) %>% purrr::list_rbind()
 
 }
+
 
 
 #' Return columns that are not taxonomic
