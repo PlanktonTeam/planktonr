@@ -19,5 +19,4 @@ Removing outliers from data
 }
 \examples{
 df <- pr_get_Indices("NRS", "Z") \%>\% pr_remove_outliers(2)
-df <- pr_get_Indices("CPR", "Z") \%>\% pr_remove_outliers(2)
 }
