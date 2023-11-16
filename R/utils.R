@@ -389,7 +389,7 @@ pr_apply_Time <- function(df){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_Indices("NRS", "Z") %>% pr_remove_outliers(2)
+#' df <- pr_get_Indices("CPR", "Z") %>% pr_remove_outliers(2)
 pr_remove_outliers <- function(df, x){
 
   if("StationCode" %in% colnames(df)){
@@ -403,15 +403,13 @@ pr_remove_outliers <- function(df, x){
   df <- df %>% dplyr::mutate(Values = ifelse(.data$Values < 0, 0, .data$Values))
 
   if('SampleDepth_m' %in% colnames(df)){
-    depth <- rlang::sym("SampleDepth_m")
-    joiner2 <- "SampleDepth_m"
+    df
   } else {
-    depth <- rlang::sym("StationName") # dummy variable
-    joiner2 <- "StationName"
+    df <- df %>% dplyr::mutate(SampleDepth_m = 'integrated')
   }
 
     outliers <- df %>%
-      dplyr::group_by(.data$Parameters, !!location, !!depth) %>%
+      dplyr::group_by(.data$Parameters, !!location, .data$SampleDepth_m) %>%
       dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
                        sd2 = 2*sd(.data$Values, na.rm = TRUE),
                        meanplus = .data$means + .data$sd2,
@@ -420,10 +418,15 @@ pr_remove_outliers <- function(df, x){
       dplyr::select(-c("means", "sd2"))
 
       added <- df %>%
-        dplyr::left_join(outliers, by = c('Parameters', joiner, joiner2)) %>%
+        dplyr::left_join(outliers, by = c('Parameters', joiner, 'SampleDepth_m')) %>%
         dplyr::filter(.data$Values < .data$meanplus & .data$Values > .data$meanminus) %>%
         dplyr::select(-c("meanplus", "meanminus"))
 
+    if(unique(added$SampleDepth_m == 'integrated')){
+      added <- added %>% dplyr::select(-"SampleDepth_m")
+    } else {
+        added
+      }
 }
 
 
