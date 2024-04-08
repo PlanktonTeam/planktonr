@@ -44,7 +44,7 @@ pr_get_DataLocs <- function(Survey = 'all'){
 #' Monthly climatology (1mNy), Annual climatology (12mNy)
 #' Possible products to download are:
 #' dt_analysis, l2p_flags, quality_level, satellite_zenith_angle, sea_ice_fraction, sea_ice_fraction_dtime_from_sst,
-#' sea_surface_temperature, sea_surface_temperature_day_night, sses_bias, sses_count,sses_standard_deviation,
+#' sea_surface_temperature, sses_bias, sses_count,sses_standard_deviation,
 #' sst_count, sst_dtime, sst_mean, sst_standard_deviation, wind_speed, wind_speed_dtime_from_sst
 #'
 #' @param df dataframe containing latitude, longitude and Date
@@ -57,7 +57,7 @@ pr_get_DataLocs <- function(Survey = 'all'){
 #'
 #' @examples
 #' df <- tail(pr_get_DataLocs("CPR") %>% arrange(Date),5)
-#' pr = c("sea_surface_temperature", "sea_surface_temperature_day_night")
+#' pr = c("sea_surface_temperature", "sst_count")
 #' sstout <- pr_match_GHRSST(df, pr, res_spat = 10, res_temp = "6d")
 #' #TODO add progress bars with purrr
 #'
@@ -106,8 +106,15 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d") {
     imos_url <- paste0(url_base, df$Year,"/",df$Year,mth,dy,string,"-ABOM-L3S_GHRSST-SSTfnd-AVHRR_D-", res_temp, "_dn.nc")
 
     tryCatch({ # Not all dates will exist
+     nc <- RNetCDF::open.nc(imos_url)
+    },
+    error = function(cond) {
+      ncx <- NaN
+      return(ncx)
+    }
+    )
 
-      nc <- RNetCDF::open.nc(imos_url)
+    if(exists("nc")) {
       lat <- RNetCDF::var.get.nc(nc, variable = "lat")
       lon <- RNetCDF::var.get.nc(nc, variable = "lon")
       lengthlat <- RNetCDF::dim.inq.nc(nc, "lat")
@@ -129,24 +136,17 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d") {
       }
 
       prfunc <- function(pr){
-        out <- mean(RNetCDF::var.get.nc(nc, "sea_surface_temperature", start=c(idx_lon, idx_lat, 1), count = cnt, unpack = TRUE)) - 273.15
+        out <- mean(RNetCDF::var.get.nc(nc, pr, start=c(idx_lon, idx_lat, 1), count = cnt, unpack = TRUE)) - 273.15
       }
 
       out <- purrr::map(pr, prfunc)
       names(out) <- pr
       RNetCDF::close.nc(nc)
       return(out)
-    },
-    error = function(cond) {
-
-      erfunc <- function(pr){(as.numeric(NA))}
-      out <- purrr::map(pr, erfunc)
-      names(out) <- pr
-      return(out)
+    } else {
+      out <- NaN
     }
-    )
-
-  }
+    }
 
   sstout <- purrr::map(df, pr_get_SSTData) %>%
     data.table::rbindlist()
