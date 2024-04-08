@@ -56,7 +56,7 @@ pr_get_DataLocs <- function(Survey = 'all'){
 #' @export
 #'
 #' @examples
-#' df <- head(pr_get_DataLocs("CPR"),5)
+#' df <- tail(pr_get_DataLocs("CPR") %>% arrange(Date),5)
 #' pr = c("sea_surface_temperature", "sea_surface_temperature_day_night")
 #' sstout <- pr_match_GHRSST(df, pr, res_spat = 10, res_temp = "6d")
 #' #TODO add progress bars with purrr
@@ -129,12 +129,12 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d") {
       }
 
       prfunc <- function(pr){
-        out <- mean(RNetCDF::var.get.nc(nc, pr, start=c(idx_lon, idx_lat, 1), count = cnt, unpack = TRUE)) - 273.15
+        out <- mean(RNetCDF::var.get.nc(nc, "sea_surface_temperature", start=c(idx_lon, idx_lat, 1), count = cnt, unpack = TRUE)) - 273.15
       }
 
-      RNetCDF::close.nc(nc)
       out <- purrr::map(pr, prfunc)
       names(out) <- pr
+      RNetCDF::close.nc(nc)
       return(out)
     },
     error = function(cond) {
