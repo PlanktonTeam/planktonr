@@ -389,7 +389,6 @@ pr_apply_Time <- function(df){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_Indices("NRS", "Z") %>% pr_remove_outliers(2)
 #' df <- pr_get_Indices("CPR", "Z") %>% pr_remove_outliers(2)
 pr_remove_outliers <- function(df, x){
 
@@ -403,19 +402,31 @@ pr_remove_outliers <- function(df, x){
 
   df <- df %>% dplyr::mutate(Values = ifelse(.data$Values < 0, 0, .data$Values))
 
-  outliers <- df %>%
-    dplyr::group_by(.data$Parameters, !!location) %>%
-    dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
-                     sd2 = 2*sd(.data$Values, na.rm = TRUE),
-                     meanplus = .data$means + .data$sd2,
-                     meanminus = .data$means - .data$sd2,
-                     .groups = 'drop') %>%
-    dplyr::select(-c("means", "sd2"))
+  if('SampleDepth_m' %in% colnames(df)){
+    df
+  } else {
+    df <- df %>% dplyr::mutate(SampleDepth_m = 'integrated')
+  }
 
-  added <- df %>%
-    dplyr::left_join(outliers, by = c("Parameters", joiner)) %>%
-    dplyr::filter(.data$Values < .data$meanplus & .data$Values > .data$meanminus) %>%
-    dplyr::select(-c("meanplus", "meanminus"))
+    outliers <- df %>%
+      dplyr::group_by(.data$Parameters, !!location, .data$SampleDepth_m) %>%
+      dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
+                       sd2 = 2*sd(.data$Values, na.rm = TRUE),
+                       meanplus = .data$means + .data$sd2,
+                       meanminus = .data$means - .data$sd2,
+                       .groups = 'drop') %>%
+      dplyr::select(-c("means", "sd2"))
+
+      added <- df %>%
+        dplyr::left_join(outliers, by = c('Parameters', joiner, 'SampleDepth_m')) %>%
+        dplyr::filter(.data$Values < .data$meanplus & .data$Values > .data$meanminus) %>%
+        dplyr::select(-c("meanplus", "meanminus"))
+
+    if(unique(added$SampleDepth_m == 'integrated')){
+      added <- added %>% dplyr::select(-"SampleDepth_m")
+    } else {
+        added
+      }
 }
 
 
@@ -584,20 +595,21 @@ pr_get_Coeffs <-  function(df){
         dplyr::filter(.data$StationName == stations)
     }
 
-    m <- stats::lm(Values ~ Year_Local + pr_harmonic(Month_Local, k = 1), data = lmdat)
+    m <- stats::lm(Values ~ Year_Local + pr_harmonic(Month, k = 1), data = lmdat)
 
     lmdat <- tibble::tibble(lmdat %>%
                               dplyr::bind_cols(fv = m$fitted.values))
     ms <- summary(m)
     slope <- ifelse(ms$coefficients[2,1] < 0, "decreasing", "increasing")
-    p <- ifelse(ms$coefficients[2,4] < 0.005, "significantly", "but not significantly")
+    p <- ms$coefficients[2,4]
+    sig <- ifelse(ms$coefficients[2,4] < 0.005, "significantly", "but not significantly")
 
     if("StationName" %in% colnames(lmdat)) {
-      dfs <- dplyr::tibble(slope = slope, p = p, Parameters = params, StationName = stations)
+      dfs <- dplyr::tibble(slope = slope, p = p, significance = sig, Parameters = params, StationName = stations)
       dfs2 <- lmdat %>%
         dplyr::inner_join(dfs, by = c("Parameters", "StationName"))
     } else {
-      dfs <- dplyr::tibble(slope = slope, p = p, Parameters = params, BioRegion = stations)
+      dfs <- dplyr::tibble(slope = slope, p = p, significance = sig, Parameters = params, BioRegion = stations)
       dfs2 <- lmdat %>%
         dplyr::inner_join(dfs, by = c("Parameters", "BioRegion"))
     }
@@ -606,6 +618,7 @@ pr_get_Coeffs <-  function(df){
   outputs <- purrr::map2(params, stations, coeffs) %>% purrr::list_rbind()
 
 }
+
 
 
 #' Return columns that are not taxonomic
