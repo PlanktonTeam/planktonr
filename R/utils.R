@@ -221,7 +221,8 @@ pr_add_StationName <- function(df){
       StationCode == "KAI" ~ "Kangaroo Island",
       StationCode == "ESP" ~ "Esperance",
       StationCode == "ROT" ~ "Rottnest Island",
-      StationCode == "NIN" ~ "Ningaloo")) %>%
+      StationCode == "NIN" ~ "Ningaloo",
+      StationCode == "VBM" ~ "VBM100 - Bonney Coast")) %>%
     dplyr::relocate("StationCode", .after = "StationName")
 }
 
@@ -251,7 +252,8 @@ pr_add_StationCode <- function(df){
         StationName == "Kangaroo Island" ~ "KAI",
         StationName == "Esperance" ~ "ESP",
         StationName == "Rottnest Island" ~ "ROT",
-        StationName == "Ningaloo" ~ "NIN")) %>%
+        StationName == "Ningaloo" ~ "NIN",
+        StationName == "VBM100 - Bonney Coast" ~ "VBM")) %>%
       dplyr::relocate("StationCode", .after = "StationName")
   } else if("TripCode" %in% colnames(df)){
     df <- df %>%
@@ -285,14 +287,14 @@ pr_reorder <- function(df){
       dplyr::mutate(StationName = factor(.data$StationName,
                                          levels = c("Darwin", "Yongala", "Ningaloo", "North Stradbroke Island",
                                                     "Rottnest Island", "Esperance", "Port Hacking", "Kangaroo Island",
-                                                    "Maria Island")))
+                                                    "VBM100 - Bonney Coast", "Maria Island")))
   }
 
   if("StationCode" %in% colnames(df)){
     df <- df %>%
       dplyr::mutate(StationCode = factor(.data$StationCode,
                                          levels = c("DAR", "YON", "NIN", "NSI", "ROT",
-                                                    "ESP", "PHB", "KAI", "MAI")))
+                                                    "ESP", "PHB", "KAI", "VBM", "MAI")))
   }
   if("BioRegion" %in% colnames(df)){
     df <- df %>%
@@ -408,25 +410,25 @@ pr_remove_outliers <- function(df, x){
     df <- df %>% dplyr::mutate(SampleDepth_m = 'integrated')
   }
 
-    outliers <- df %>%
-      dplyr::group_by(.data$Parameters, !!location, .data$SampleDepth_m) %>%
-      dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
-                       sd2 = 2*sd(.data$Values, na.rm = TRUE),
-                       meanplus = .data$means + .data$sd2,
-                       meanminus = .data$means - .data$sd2,
-                       .groups = 'drop') %>%
-      dplyr::select(-c("means", "sd2"))
+  outliers <- df %>%
+    dplyr::group_by(.data$Parameters, !!location, .data$SampleDepth_m) %>%
+    dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
+                     sd2 = 2*sd(.data$Values, na.rm = TRUE),
+                     meanplus = .data$means + .data$sd2,
+                     meanminus = .data$means - .data$sd2,
+                     .groups = 'drop') %>%
+    dplyr::select(-c("means", "sd2"))
 
-      added <- df %>%
-        dplyr::left_join(outliers, by = c('Parameters', joiner, 'SampleDepth_m')) %>%
-        dplyr::filter(.data$Values < .data$meanplus & .data$Values > .data$meanminus) %>%
-        dplyr::select(-c("meanplus", "meanminus"))
+  added <- df %>%
+    dplyr::left_join(outliers, by = c('Parameters', joiner, 'SampleDepth_m')) %>%
+    dplyr::filter(.data$Values < .data$meanplus & .data$Values > .data$meanminus) %>%
+    dplyr::select(-c("meanplus", "meanminus"))
 
-    if(unique(added$SampleDepth_m == 'integrated')){
-      added <- added %>% dplyr::select(-"SampleDepth_m")
-    } else {
-        added
-      }
+  if(unique(added$SampleDepth_m == 'integrated')){
+    added <- added %>% dplyr::select(-"SampleDepth_m")
+  } else {
+    added
+  }
 }
 
 
@@ -557,7 +559,7 @@ pr_get_Coeffs <-  function(df){
                        .groups = "drop")
   }
 
-  df <-  df %>%
+  df <- df %>%
     dplyr::rename(SampleDate = "SampleTime_Local") %>%
     dplyr::mutate(Month = .data$Month_Local * 2 * 3.142 / 12) %>%
     droplevels()
@@ -595,27 +597,36 @@ pr_get_Coeffs <-  function(df){
         dplyr::filter(.data$StationName == stations)
     }
 
-    m <- stats::lm(Values ~ Year_Local + pr_harmonic(Month, k = 1), data = lmdat)
-
-    lmdat <- tibble::tibble(lmdat %>%
-                              dplyr::bind_cols(fv = m$fitted.values))
-    ms <- summary(m)
-    slope <- ifelse(ms$coefficients[2,1] < 0, "decreasing", "increasing")
-    p <- ms$coefficients[2,4]
-    sig <- ifelse(ms$coefficients[2,4] < 0.005, "significantly", "but not significantly")
-
-    if("StationName" %in% colnames(lmdat)) {
-      dfs <- dplyr::tibble(slope = slope, p = p, significance = sig, Parameters = params, StationName = stations)
-      dfs2 <- lmdat %>%
-        dplyr::inner_join(dfs, by = c("Parameters", "StationName"))
+    # If the combination of parameter and station doesn't exist, return NULL
+    if (dim(lmdat)[1] == 0){
+      return(NULL)
     } else {
-      dfs <- dplyr::tibble(slope = slope, p = p, significance = sig, Parameters = params, BioRegion = stations)
-      dfs2 <- lmdat %>%
-        dplyr::inner_join(dfs, by = c("Parameters", "BioRegion"))
+
+      m <- stats::lm(Values ~ Year_Local + pr_harmonic(Month, k = 1), data = lmdat)
+
+      lmdat <- tibble::tibble(lmdat %>%
+                                dplyr::bind_cols(fv = m$fitted.values))
+      ms <- summary(m)
+      slope <- ifelse(ms$coefficients[2,1] < 0, "decreasing", "increasing")
+      p <- ms$coefficients[2,4]
+      sig <- ifelse(ms$coefficients[2,4] < 0.005, "significantly", "but not significantly")
+
+      if("StationName" %in% colnames(lmdat)) {
+        dfs <- dplyr::tibble(slope = slope, p = p, significance = sig, Parameters = params, StationName = stations)
+        dfs2 <- lmdat %>%
+          dplyr::inner_join(dfs, by = c("Parameters", "StationName"))
+      } else {
+        dfs <- dplyr::tibble(slope = slope, p = p, significance = sig, Parameters = params, BioRegion = stations)
+        dfs2 <- lmdat %>%
+          dplyr::inner_join(dfs, by = c("Parameters", "BioRegion"))
+      }
+
     }
+
   }
 
-  outputs <- purrr::map2(params, stations, coeffs) %>% purrr::list_rbind()
+  outputs <- purrr::map2(params, stations, coeffs) %>%
+    purrr::list_rbind()
 
 }
 
