@@ -54,8 +54,8 @@ pr_get_NRSData <- function(Type = "phytoplankton", Variable = "abundance", Subse
       pr_rename()
   }
 
-  # dat <- dat %>%
-    # pr_add_SampleDate()
+  return(dat)
+
 }
 
 

@@ -1363,7 +1363,8 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE, labels = TRUE){
       gg <- gg +
         ggplot2::geom_sf(data = PMapData2 %>% dplyr::filter(.data$Survey == "CPR"),
                          size = 1, ggplot2::aes(color =.data$Region), show.legend = TRUE) +
-        ggplot2::theme(legend.position = c(.01, .99),
+        ggplot2::theme(legend.position = "inside",
+                       legend.position.inside = c(.01, .99),
                        legend.justification = c("left", "top"),
                        legend.box.just = "left",
                        legend.background = ggplot2::element_rect(fill = "transparent", colour = "NA"), #transparent legend bg

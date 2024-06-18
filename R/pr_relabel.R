@@ -29,11 +29,11 @@ pr_relabel <- function(s, style = "ggplot", named = FALSE){
     "chl_gsm", rlang::expr(paste("Chlorophyll \U1D44E (GSM) (mg m"^-3,")")), "Chlorophyll (GSM) <i>a</i> (mg m<sup>-3</sup>)", "Chlorophyll a",
     "chl_oc3", rlang::expr(paste("Chlorophyll \U1D44E (OC3) (mg m"^-3,")")), "Chlorophyll (OC3) <i>a</i> (mg m<sup>-3</sup>)", "Chlorophyll a",
     "Chla_mgm3", rlang::expr(paste("Chlorophyll \U1D44E (mg m"^-3,")")), "Chlorophyll <i>a</i> (mg m<sup>-3</sup>)", "Chlorophyll a",
-    "ChlF_mgm3", rlang::expr(paste("Chlorophyll from flouresence")), "Chlorophyll from flouresence", "Chlorophyll from flouresence",
+    "ChlF_mgm3", rlang::expr(paste("Chlorophyll from fluoresence")), "Chlorophyll from fluoresence", "Chlorophyll from fluoresence",
     "Conductivity_Sm", rlang::expr(paste("Conductivity (Sm")), "Conductivity (Sm)", "Conductivity (Sm)",
     "CopeAbundance_m3", rlang::expr(paste("Copepod Abundance (m"^-3,")")), "Copepod Abundance (m<sup>-3</sup>)", "Copepod Abundance",
     "CopepodEvenness", rlang::expr(paste("Copepod Evenness")), "Copepod Evenness", "Copepod Evenness",
-    "CTDChlaF_mgm3", rlang::expr(paste("Surface Chlorophyll from flouresence")), "Surface Chlorophyll from flouresence", "Chlorophyll from flouresence",
+    "CTDChlaF_mgm3", rlang::expr(paste("Surface Chlorophyll from fluoresence")), "Surface Chlorophyll from fluoresence", "Chlorophyll from fluoresence",
     "CTDSalinity_PSU", rlang::expr(paste("Surface Salinity CTD")), "Surface Salinity CTD", "Salinity",
     "CTD_Salinity", rlang::expr(paste("CTD Salinity")), "CTD Salinity", "Salinity",
     "CTDTemperature_degC", rlang::expr(paste("Surface Temperature CTD (","\U00B0","C)")), "Surface Temperature CTD (&#8451;)", "Temperature", # binned surface temp from CTD
