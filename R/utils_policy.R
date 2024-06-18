@@ -77,6 +77,10 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
                     Survey = 'NRS') %>%
       planktonr::pr_reorder()
 
+
+    Pol <- Pol %>%
+      dplyr::filter(.data$StationCode != "VBM") # TODO Temporarily remove VBM - Not enough data to run analyses
+
   } else if (Survey == "LTM"){
 
     all_vars <- c("StationName", "StationCode", "SampleTime_Local", "Month_Local", "Year_Local", "Parameters")
