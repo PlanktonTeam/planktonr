@@ -564,7 +564,7 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "iden
   p1 <- ggplot2::ggplot(df) +
     ggplot2::geom_point(ggplot2::aes(x = .data$SampleDate, y = .data$Values), colour = col) +
     ggplot2::geom_smooth(ggplot2::aes(x = .data$SampleDate, y = .data$fv), method = "lm", formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
-    ggplot2::labs(x = "Year", subtitle = rlang::enexpr(titley)) +
+    ggplot2::labs(x = "Year", subtitle = titley) +
     ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
     theme_pr() +
     ggplot2::theme(legend.position = "none",
@@ -578,9 +578,15 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "iden
   }
 
   if(Survey == "LTM"){
-    p1 <-  p1 + ggplot2::scale_x_datetime(date_breaks = "10 years", date_labels = "%Y", limits = lims, expand = ggplot2::expansion(mult = c(0.02, 0.02)))
+    p1 <-  p1 + ggplot2::scale_x_datetime(date_breaks = "10 years",
+                                          date_labels = "%Y",
+                                          limits = lims,
+                                          expand = ggplot2::expansion(mult = c(0.02, 0.02)))
   } else {
-    p1 <-  p1 + ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", limits = lims, expand = ggplot2::expansion(mult = c(0.02, 0.02)))
+    p1 <-  p1 + ggplot2::scale_x_datetime(date_breaks = "2 years",
+                                          date_labels = "%Y",
+                                          limits = lims,
+                                          expand = ggplot2::expansion(mult = c(0.02, 0.02)))
   }
 
   p2 <- ggplot2::ggplot(df, ggplot2::aes(.data$SampleDate, .data$anomaly)) +
@@ -594,10 +600,16 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "iden
   }
   if(Survey == "LTM"){
     p2 <- p2 +
-      ggplot2::scale_x_datetime(date_breaks = "10 years", date_labels = "%Y", limits = lims, expand = ggplot2::expansion(mult = c(0.02, 0.02)))
+      ggplot2::scale_x_datetime(date_breaks = "10 years",
+                                date_labels = "%Y",
+                                limits = lims,
+                                expand = ggplot2::expansion(mult = c(0.02, 0.02)))
   } else {
     p2 <- p2 +
-      ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", limits = lims, expand = ggplot2::expansion(mult = c(0.02, 0.02)))
+      ggplot2::scale_x_datetime(date_breaks = "2 years",
+                                date_labels = "%Y",
+                                limits = lims,
+                                expand = ggplot2::expansion(mult = c(0.02, 0.02)))
   }
 
   p3 <- ggplot2::ggplot(df) +
