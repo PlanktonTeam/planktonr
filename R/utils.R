@@ -221,7 +221,8 @@ pr_add_StationName <- function(df){
       StationCode == "KAI" ~ "Kangaroo Island",
       StationCode == "ESP" ~ "Esperance",
       StationCode == "ROT" ~ "Rottnest Island",
-      StationCode == "NIN" ~ "Ningaloo")) %>%
+      StationCode == "NIN" ~ "Ningaloo",
+      StationCode == "VBM" ~ "VBM100 - Bonney Coast")) %>%
     dplyr::relocate("StationCode", .after = "StationName")
 }
 
@@ -251,7 +252,8 @@ pr_add_StationCode <- function(df){
         StationName == "Kangaroo Island" ~ "KAI",
         StationName == "Esperance" ~ "ESP",
         StationName == "Rottnest Island" ~ "ROT",
-        StationName == "Ningaloo" ~ "NIN")) %>%
+        StationName == "Ningaloo" ~ "NIN",
+        StationName == "VBM100 - Bonney Coast" ~ "VBM")) %>%
       dplyr::relocate("StationCode", .after = "StationName")
   } else if("TripCode" %in% colnames(df)){
     df <- df %>%
@@ -285,14 +287,14 @@ pr_reorder <- function(df){
       dplyr::mutate(StationName = factor(.data$StationName,
                                          levels = c("Darwin", "Yongala", "Ningaloo", "North Stradbroke Island",
                                                     "Rottnest Island", "Esperance", "Port Hacking", "Kangaroo Island",
-                                                    "Maria Island")))
+                                                    "VBM100 - Bonney Coast", "Maria Island")))
   }
 
   if("StationCode" %in% colnames(df)){
     df <- df %>%
       dplyr::mutate(StationCode = factor(.data$StationCode,
                                          levels = c("DAR", "YON", "NIN", "NSI", "ROT",
-                                                    "ESP", "PHB", "KAI", "MAI")))
+                                                    "ESP", "PHB", "KAI", "VBM", "MAI")))
   }
   if("BioRegion" %in% colnames(df)){
     df <- df %>%
@@ -557,7 +559,7 @@ pr_get_Coeffs <-  function(df){
                        .groups = "drop")
   }
 
-  df <-  df %>%
+  df <- df %>%
     dplyr::rename(SampleDate = "SampleTime_Local") %>%
     dplyr::mutate(Month = .data$Month_Local * 2 * 3.142 / 12) %>%
     droplevels()
