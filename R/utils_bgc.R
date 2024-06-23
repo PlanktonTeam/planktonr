@@ -111,7 +111,7 @@ pr_get_NRSPico <- function(){
     pr_add_StationCode() %>%
     pr_apply_Time() %>%
     dplyr::mutate(SampleDepth_m = as.numeric(.data$SampleDepth_m)) %>%
-    dplyr::select("Project", "SampleTime_Local", "Month_Local", "Year_Local",
+    dplyr::select("Project", "TripCode", "SampleTime_Local", "Month_Local", "Year_Local",
                   "SampleDepth_m", "StationName", "StationCode",
                   tidyselect::any_of(var_names)) %>%
     tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters") %>%
