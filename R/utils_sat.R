@@ -56,12 +56,14 @@ pr_get_DataLocs <- function(Survey = 'all'){
 #' @export
 #'
 #' @examples
-#' df <- tail(pr_get_DataLocs("CPR") %>% arrange(Date),5)
+#' df <- tail(pr_get_DataLocs("CPR") %>%
+#'         dplyr::arrange(Date), 5)
 #' pr = c("sea_surface_temperature", "sst_count")
 #' sstout <- pr_match_GHRSST(df, pr, res_spat = 10, res_temp = "6d")
-#' #TODO add progress bars with purrr
 #'
 pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d") {
+
+  #TODO add progress bars with purrr
 
   # Set resolution
   # if (!exists("res_temp")){
