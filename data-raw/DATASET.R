@@ -2,9 +2,6 @@
 
 ## Shrink data-file and save as internal data file
 library(tidyverse)
-# library(rnaturalearth)
-# library(sf)
-# library(rmapshaper)
 
 mbr <- sf::st_read(file.path("data-raw","marine_regions")) %>%  # Load marine regions as sf
   sf::st_transform(crs = "+proj=longlat +datum=WGS84") %>%
@@ -39,16 +36,31 @@ mbr <- tibble(x = c(85, 85:155, 155, 85), y = c(-61, rep(-45, 71), -61, -61)) %>
 
 mbr[(dim(mbr)[1])+1,"REGION"] <- "None" # Add an empty geometry for the points that are not in a bioregion.
 
-clr <- tibble::tribble( # Set1 on colorbrewer2.org - Yellow has been updated.
+# one example from http://vrl.cs.brown.edu/color
+clr <- tibble::tribble( #
   ~REGION, ~Colour,
-  "North", "#e41a1c",
-  "Temperate East", "#377eb8",
-  "North-west", "#4daf4a",
-  "South-west", "#984ea3",
-  "South-east", "#ff7f00",
-  "Coral Sea",  "#fce205",
-  "Southern Ocean Region", "#a65628",
+  "North", "#4081ec",
+  "Temperate East", "#dc8873",
+  "North-west", "#86b5a1",
+  "South-west", "#952c3d",
+  "South-east", "#36c272",
+  "Coral Sea",  "#372a4e",
+  "Southern Ocean Region", "#8da83e",
   "None", "#808080")
+
+# clr <- tibble::tribble( # Set1 on colorbrewer2.org - Yellow has been updated.
+#   ~REGION, ~Colour,
+#   "North", "#e41a1c",
+#   "Temperate East", "#377eb8",
+#   "North-west", "#4daf4a",
+#   "South-west", "#984ea3",
+#   "South-east", "#ff7f00",
+#   "Coral Sea",  "#fce205",
+#   "Southern Ocean Region", "#a65628",
+#   "None", "#808080")
+
+
+
 
 
 mbr <- dplyr::left_join(mbr, clr, by = "REGION") %>%
@@ -100,7 +112,8 @@ csDAT <- planktonr::pr_get_NRSMicro("Coastal") %>%
 # Darwin                 Yongala                Ningaloo      North Stradbroke Island         Rottnest Island               Esperance            Port Hacking         Kangaroo Island            Maria Island
  # "#ff8500"               "#b66ee8"             "#ff9b85"           "#d00000".                 "#46237a"               "#1b998b"                  "#8fe388"                 "#ff7b9c"            "#3185fc"
 
-coolor <- c("#ff8500", "#b66ee8", "#ff9b85", "#d00000", "#46237a", "#1b998b", "#8fe388", "#ff7b9c", "#3185fc") # "#cbff8c" "#ffba08"
+
+coolor <- c("#ff8500", "#b66ee8", "#ff9b85", "#d00000", "#46237a", "#1b998b", "#8fe388", "#ff7b9c", "#3185fc", "#391d26") #"#cbff8c" "#ffba08"
 
 colNRSCode <- data.frame(Code = meta_sf$Code,
                          Colr = coolor) %>%
@@ -111,19 +124,19 @@ colNRSName <- data.frame(Code = meta_sf$Station,
   tibble::deframe()
 
 pchNRSName <- data.frame(Code = meta_sf$Station,
-                         pchr = rep(16,9)) %>%
+                         pchr = rep(16, 10)) %>%
   tibble::deframe()
 
 pchNRSCode <- data.frame(Code = meta_sf$Code,
-                         pchr = rep(16,9)) %>%
+                         pchr = rep(16, 10)) %>%
   tibble::deframe()
 
 ltyNRSCode <- data.frame(Code = meta_sf$Code,
-                         pchr = rep("solid",9)) %>%
+                         pchr = rep("solid", 10)) %>%
   tibble::deframe()
 
 ltyNRSName <- data.frame(Code = meta_sf$Station,
-                         pchr = rep("solid",9)) %>%
+                         pchr = rep("solid", 10)) %>%
   tibble::deframe()
 
 colCPR <- mbr %>%

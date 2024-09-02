@@ -7,7 +7,9 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![R-CMD-check](https://github.com/PlanktonTeam/planktonr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/PlanktonTeam/planktonr/actions/workflows/R-CMD-check.yaml)
+[![Windows](https://github.com/PlanktonTeam/planktonr/actions/workflows/Windows.yaml/badge.svg)](https://github.com/PlanktonTeam/planktonr/actions/workflows/Windows.yaml)
+[![Ubuntu](https://github.com/PlanktonTeam/planktonr/actions/workflows/Ubuntu.yaml/badge.svg)](https://github.com/PlanktonTeam/planktonr/actions/workflows/Ubuntu.yaml)
+[![MacOS](https://github.com/PlanktonTeam/planktonr/actions/workflows/MacOS.yaml/badge.svg)](https://github.com/PlanktonTeam/planktonr/actions/workflows/MacOS.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/PlanktonTeam/planktonr/branch/master/graph/badge.svg)](https://app.codecov.io/gh/PlanktonTeam/planktonr?branch=master)
 [![issues -

@@ -4,7 +4,10 @@
 \alias{theme_pr}
 \title{Define theme_pr() function}
 \usage{
-theme_pr()
+theme_pr(FontSize = 16)
+}
+\arguments{
+\item{FontSize}{use to set font size with base_size}
 }
 \value{
 planktonr theme

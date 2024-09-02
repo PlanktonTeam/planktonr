@@ -25,13 +25,13 @@ res_temp - What temporal averaging: 1 day (1d), 6 day (6d), 1 month(1m), ,...
 Monthly climatology (1mNy), Annual climatology (12mNy)
 Possible products to download are:
 dt_analysis, l2p_flags, quality_level, satellite_zenith_angle, sea_ice_fraction, sea_ice_fraction_dtime_from_sst,
-sea_surface_temperature, sea_surface_temperature_day_night, sses_bias, sses_count,sses_standard_deviation,
+sea_surface_temperature, sses_bias, sses_count,sses_standard_deviation,
 sst_count, sst_dtime, sst_mean, sst_standard_deviation, wind_speed, wind_speed_dtime_from_sst
 }
 \examples{
-df <- head(pr_get_DataLocs("CPR"),5)
-pr = c("sea_surface_temperature", "sea_surface_temperature_day_night")
+df <- tail(pr_get_DataLocs("CPR") \%>\%
+        dplyr::arrange(Date), 5)
+pr = c("sea_surface_temperature", "sst_count")
 sstout <- pr_match_GHRSST(df, pr, res_spat = 10, res_temp = "6d")
-#TODO add progress bars with purrr
 
 }

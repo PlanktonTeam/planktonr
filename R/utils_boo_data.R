@@ -52,7 +52,7 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Z", ...){
 
   if(Type == "P"){
     df <- df %>%
-      dplyr::mutate(Parameters = ifelse(.data$Parameters %in% c("Ciliate","Foraminifera", "Radiozoa", "Silicoflagellate"), "Other", .data$Parameters),
+      dplyr::mutate(Parameters = ifelse(.data$Parameters %in% c("Centric diatom", "Pennate diatom", "Dinoflagellate", "Cyanobacteria"), .data$Parameters, "Other"),
                     Parameters = factor(.data$Parameters, levels = c("Centric diatom", "Pennate diatom", "Dinoflagellate", "Cyanobacteria",
                                                                      "Other")))
   } else if(Type == "Z"){

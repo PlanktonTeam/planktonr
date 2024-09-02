@@ -65,6 +65,9 @@ pr_get_Indices <- function(Survey = "CPR", Type = "P", ...){
       tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "Parameters") %>%
       pr_reorder()
 
+    dat <- dat %>%
+      dplyr::filter(.data$StationCode != "VBM") # TODO Temporarily remove VBM - Not enough data to run analyses
+
     return(dat)
   }
 }

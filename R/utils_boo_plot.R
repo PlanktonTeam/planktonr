@@ -542,10 +542,10 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_EOVs("CPR") %>%
+#' df <- pr_get_EOVs("NRS") %>%
 #'   pr_remove_outliers(2) %>%
 #'   pr_get_Coeffs()
-#' pr_plot_EOVs(df, EOV = "chl_oc3", Survey = "CPR",
+#' pr_plot_EOVs(df, EOV = "Biomass_mgm3", Survey = "NRS",
 #'       trans = "identity", col = "blue", labels = FALSE)
 pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "identity", col = "blue", labels = TRUE) {
 
@@ -564,7 +564,7 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "iden
   p1 <- ggplot2::ggplot(df) +
     ggplot2::geom_point(ggplot2::aes(x = .data$SampleDate, y = .data$Values), colour = col) +
     ggplot2::geom_smooth(ggplot2::aes(x = .data$SampleDate, y = .data$fv), method = "lm", formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
-    ggplot2::labs(x = "Year", subtitle = rlang::enexpr(titley)) +
+    ggplot2::labs(x = "Year", subtitle = titley) +
     ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
     theme_pr() +
     ggplot2::theme(legend.position = "none",
@@ -578,9 +578,15 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "iden
   }
 
   if(Survey == "LTM"){
-    p1 <-  p1 + ggplot2::scale_x_datetime(date_breaks = "10 years", date_labels = "%Y", limits = lims, expand = ggplot2::expansion(mult = c(0.02, 0.02)))
+    p1 <-  p1 + ggplot2::scale_x_datetime(date_breaks = "10 years",
+                                          date_labels = "%Y",
+                                          limits = lims,
+                                          expand = ggplot2::expansion(mult = c(0.02, 0.02)))
   } else {
-    p1 <-  p1 + ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", limits = lims, expand = ggplot2::expansion(mult = c(0.02, 0.02)))
+    p1 <-  p1 + ggplot2::scale_x_datetime(date_breaks = "2 years",
+                                          date_labels = "%Y",
+                                          limits = lims,
+                                          expand = ggplot2::expansion(mult = c(0.02, 0.02)))
   }
 
   p2 <- ggplot2::ggplot(df, ggplot2::aes(.data$SampleDate, .data$anomaly)) +
@@ -594,15 +600,21 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "iden
   }
   if(Survey == "LTM"){
     p2 <- p2 +
-      ggplot2::scale_x_datetime(date_breaks = "10 years", date_labels = "%Y", limits = lims, expand = ggplot2::expansion(mult = c(0.02, 0.02)))
+      ggplot2::scale_x_datetime(date_breaks = "10 years",
+                                date_labels = "%Y",
+                                limits = lims,
+                                expand = ggplot2::expansion(mult = c(0.02, 0.02)))
   } else {
     p2 <- p2 +
-      ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", limits = lims, expand = ggplot2::expansion(mult = c(0.02, 0.02)))
+      ggplot2::scale_x_datetime(date_breaks = "2 years",
+                                date_labels = "%Y",
+                                limits = lims,
+                                expand = ggplot2::expansion(mult = c(0.02, 0.02)))
   }
 
   p3 <- ggplot2::ggplot(df) +
     ggplot2::geom_point(ggplot2::aes(x = .data$Month, y = .data$Values), colour = col) +
-    ggplot2::geom_smooth(ggplot2::aes(x = .data$Month, y = .data$fv), method = "loess",
+    ggplot2::geom_smooth(ggplot2::aes(x = .data$Month, y = .data$Values), method = "loess",
                          formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
     ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
     ggplot2::scale_x_continuous(breaks = seq(0.5, 6.3, length.out = 12), expand = ggplot2::expansion(mult = c(0.02, 0.02)),
@@ -1363,7 +1375,8 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE, labels = TRUE){
       gg <- gg +
         ggplot2::geom_sf(data = PMapData2 %>% dplyr::filter(.data$Survey == "CPR"),
                          size = 1, ggplot2::aes(color =.data$Region), show.legend = TRUE) +
-        ggplot2::theme(legend.position = c(.01, .99),
+        ggplot2::theme(legend.position = "inside",
+                       legend.position.inside = c(.01, .99),
                        legend.justification = c("left", "top"),
                        legend.box.just = "left",
                        legend.background = ggplot2::element_rect(fill = "transparent", colour = "NA"), #transparent legend bg
