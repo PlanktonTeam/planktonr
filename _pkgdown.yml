@@ -15,9 +15,8 @@ development:
   version_tooltip: The package is in the early stages of development. Use with caution.
 reference:
 - title: Load Data
-- contents:
   desc: Functions to access data from the AODN.
-- contents: 
+- contents:
   - starts_with("pr_get_")
 - title: Plotting
   desc: Functions for plotting.
