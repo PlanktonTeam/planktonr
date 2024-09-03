@@ -10,5 +10,5 @@ testthat::test_that("Correct function output", {
   testthat::expect_s3_class(pr_get_NRSTSS(), "data.frame")
   testthat::expect_s3_class(pr_get_NRSCTD(), "data.frame")
   testthat::expect_s3_class(pr_get_LTnuts(), "data.frame")
-  testthat::expect_s3_class (pr_get_NRSEnvContour('Pico'), "data.frame")
+  testthat::expect_s3_class(pr_get_NRSEnvContour("Pico"), "data.frame")
 })

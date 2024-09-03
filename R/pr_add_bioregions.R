@@ -7,19 +7,18 @@
 #' @export
 #'
 #' @examples
-#'  df <- pr_get_Raw("cpr_derived_indices_data") %>%
+#' df <- pr_get_Raw("cpr_derived_indices_data") %>%
 #'   pr_rename() %>%
-#'    pr_add_Bioregions()
+#'   pr_add_Bioregions()
 #'
-#'  df <- pr_get_Raw("cpr_derived_indices_data") %>%
+#' df <- pr_get_Raw("cpr_derived_indices_data") %>%
 #'   pr_rename() %>%
-#'    pr_add_Bioregions(near_dist_km = 250)
+#'   pr_add_Bioregions(near_dist_km = 250)
 #'
 #' @importFrom rlang .data
-pr_add_Bioregions <- function(df, near_dist_km = 0){
-
+pr_add_Bioregions <- function(df, near_dist_km = 0) {
   # Ensure df is of the correct class
-  if (!("sf") %in% class(df[])){
+  if (!("sf") %in% class(df[])) {
     df <- df %>%
       sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = "+proj=longlat +datum=WGS84", remove = FALSE)
   }
@@ -43,8 +42,10 @@ pr_add_Bioregions <- function(df, near_dist_km = 0){
 
   dist <- dist %>%
     as.data.frame.table(responseName = "Dist") %>%
-    dplyr::rename(cellID = "Var1",
-                  BioRegion = "Var2") %>%
+    dplyr::rename(
+      cellID = "Var1",
+      BioRegion = "Var2"
+    ) %>%
     dplyr::mutate(cellID = as.numeric(as.character(.data$cellID))) %>%
     dplyr::filter(.data$Dist <= units::set_units(near_dist_km, "km"))
 
@@ -63,17 +64,20 @@ pr_add_Bioregions <- function(df, near_dist_km = 0){
     dplyr::select(-"Dist")
 
   df <- dplyr::left_join(df, dist, by = "cellID") %>%
-    dplyr::mutate(BioRegion.z = "None",
-      BioRegion = dplyr::coalesce(.data$BioRegion.x, .data$BioRegion.y, .data$BioRegion.z)) %>%
+    dplyr::mutate(
+      BioRegion.z = "None",
+      BioRegion = dplyr::coalesce(.data$BioRegion.x, .data$BioRegion.y, .data$BioRegion.z)
+    ) %>%
     # dplyr::mutate(BioRegion = forcats::fct_explicit_na(.data$BioRegion, na_level = "None")) %>%
     dplyr::select(-c("BioRegion.x", "BioRegion.y", "BioRegion.z")) %>%
     dplyr::relocate("BioRegion", .after = "TripCode") %>%
     sf::st_drop_geometry(df) %>% # DF in, DF out
-    dplyr::left_join(mbr %>%
-                       sf::st_drop_geometry() %>%
-                       dplyr::distinct(.data$REGION, .data$Colour),
-                     by = c("BioRegion" = "REGION"))
+    dplyr::left_join(
+      mbr %>%
+        sf::st_drop_geometry() %>%
+        dplyr::distinct(.data$REGION, .data$Colour),
+      by = c("BioRegion" = "REGION")
+    )
 
   return(df)
-
 }
