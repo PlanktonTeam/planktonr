@@ -16,5 +16,5 @@ A reformatted string
 Helper function to reformat Titles
 }
 \examples{
-new_tit <- pr_title("P")
+new_tit = pr_title("P")
 }

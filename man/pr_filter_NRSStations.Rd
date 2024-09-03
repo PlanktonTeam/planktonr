@@ -16,7 +16,5 @@ Dataframe with only NRS Stations
 Filter dataframe on \code{StationCode} to return only NRS stations
 }
 \examples{
-\dontrun{
-df <- pr_filter_NRSStations(df)
-}
+\dontrun{df <- pr_filter_NRSStations(df)}
 }

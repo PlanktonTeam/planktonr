@@ -13,5 +13,5 @@ dataframe of PCI data
 Data for PCI plot from CPR data
 }
 \examples{
-head(pr_get_PCIData(), 5)
+head(pr_get_PCIData(),5)
 }

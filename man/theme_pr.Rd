@@ -16,9 +16,5 @@ planktonr theme
 Define theme_pr() function
 }
 \examples{
-\dontrun{
-ggplot() +
-  geom_blank() +
-  theme_pr()
-}
+\dontrun{ggplot() + geom_blank() + theme_pr()}
 }

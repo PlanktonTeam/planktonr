@@ -20,10 +20,8 @@ patchwork object
 Plot for latitudinal data
 }
 \examples{
-df <- pr_get_NRSMicro("GO-SHIP")
-df <- df \%>\% dplyr::filter(
-  Parameters == "Archaea_unique_ASVs",
-  SampleDepth_m < 101
-)
+df <- pr_get_NRSMicro('GO-SHIP')
+df <- df \%>\% dplyr::filter(Parameters == 'Archaea_unique_ASVs',
+SampleDepth_m < 101)
 pr_plot_latitude(df, Fill_NA = TRUE, maxGap = 5)
 }

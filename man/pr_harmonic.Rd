@@ -18,7 +18,7 @@ A harmonic function
 This function is for use in models to create a circular predictor
 }
 \examples{
-theta <- 2
-k <- 1
+theta = 2
+k = 1
 df <- pr_harmonic(theta = 2, k = 1)
 }

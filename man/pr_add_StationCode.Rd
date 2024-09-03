@@ -17,5 +17,5 @@ Add NRS StationCode to data
 }
 \examples{
 df <- pr_get_NRSStation() \%>\%
-  pr_add_StationCode()
+    pr_add_StationCode()
 }

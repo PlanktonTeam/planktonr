@@ -22,6 +22,6 @@ df with product output attached
 Match data for MODIS
 }
 \examples{
-df <- head(pr_get_DataLocs("NRS"), 5)
+df <- head(pr_get_DataLocs("NRS"),5)
 MODISout <- pr_match_MODIS(df, pr <- c("chl_gsm", "chl_oc3"), res_spat = 10)
 }

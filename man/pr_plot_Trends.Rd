@@ -32,7 +32,7 @@ Plot temporal Trends in plankton data
 }
 \examples{
 df <- pr_get_Indices("NRS", "Z") \%>\%
-  dplyr::filter(Parameters == "Biomass_mgm3")
+  dplyr::filter(Parameters == 'Biomass_mgm3')
 pr_plot_Trends(df, Trend = "Month", Survey = "NRS")
 pr_plot_Trends(df, Trend = "Year", Survey = "NRS")
 pr_plot_Trends(df, Trend = "Raw", Survey = "NRS")

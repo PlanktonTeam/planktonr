@@ -19,12 +19,12 @@ A dataframe with Marine Bioregions added
 Add bioregions data to existing df
 }
 \examples{
-df <- pr_get_Raw("cpr_derived_indices_data") \%>\%
+ df <- pr_get_Raw("cpr_derived_indices_data") \%>\%
   pr_rename() \%>\%
-  pr_add_Bioregions()
+   pr_add_Bioregions()
 
-df <- pr_get_Raw("cpr_derived_indices_data") \%>\%
+ df <- pr_get_Raw("cpr_derived_indices_data") \%>\%
   pr_rename() \%>\%
-  pr_add_Bioregions(near_dist_km = 250)
+   pr_add_Bioregions(near_dist_km = 250)
 
 }
