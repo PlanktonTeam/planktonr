@@ -1,0 +1,29 @@
+url: https://planktonteam.github.io/planktonr/
+articles:
+- title: Articles
+  navbar: ~
+  contents:
+  - EssentialOceanVariables
+  - Microbes
+  - Phytoplankton
+  - Zooplankton
+  - LarvalFish
+  - Biogeochemistry
+development:
+  destination: ~
+  version_label: info
+  version_tooltip: The package is in the early stages of development. Use with caution.
+reference:
+- title: Load Data
+  desc: Functions to access data from the AODN.
+- contents:
+  - starts_with("pr_get_")
+- title: Plotting
+  desc: Functions for plotting.
+- contents:
+  - starts_with("pr_plot_")
+- title: Utilities
+  desc: Helper functions.
+- contents:
+  - -starts_with("pr_get_")
+  - -starts_with("pr_plot_")
