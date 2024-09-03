@@ -47,4 +47,4 @@ jobs:
         with:
           clean: true
           branch: main
-          folder: docs
+          folder: ~/docs
