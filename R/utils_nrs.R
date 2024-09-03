@@ -27,35 +27,35 @@
 #' @examples
 #' df <- pr_get_NRSData(Type = "phytoplankton", Variable = "abundance", Subset = "raw")
 #' @importFrom rlang .data
-pr_get_NRSData <- function(Type = "phytoplankton", Variable = "abundance", Subset = "raw") {
-  Type <- stringr::str_to_lower(Type) # Make sure its lower case
-  if (Type == "p") {
-    Type <- "phytoplankton"
-  }
-  if (Type == "z") {
-    Type <- "zooplankton"
-  }
+pr_get_NRSData <- function(Type = "phytoplankton", Variable = "abundance", Subset = "raw"){
 
-  if (Type == "zooplankton" & Subset == "species") { # Specific case for zooplankton species
+  Type = stringr::str_to_lower(Type) # Make sure its lower case
+  if (Type == "p"){Type = "phytoplankton"}
+  if (Type == "z"){Type = "zooplankton"}
+
+  if (Type == "zooplankton" & Subset == "species"){ # Specific case for zooplankton species
 
     str <- pr_get_NonTaxaColumns(Survey = "NRS", Type = "Z")
 
     datc <- pr_get_Raw("bgc_zooplankton_abundance_copepods_data") %>%
       pr_rename()
 
-    datnc <- pr_get_Raw("bgc_zooplankton_abundance_non_copepods_data") %>%
+    datnc <-pr_get_Raw("bgc_zooplankton_abundance_non_copepods_data") %>%
       pr_rename() %>%
       dplyr::select(-str[!str %in% "TripCode"])
 
     # Add together and COPEPODS and NON-COPEPODS
     dat <- dplyr::left_join(datc, datnc, by = "TripCode")
+
   } else {
-    file <- paste("bgc", Type, Variable, Subset, "data", sep = "_")
-    dat <- pr_get_Raw(file) %>%
+
+    file = paste("bgc", Type, Variable, Subset, "data", sep = "_")
+    dat <-pr_get_Raw(file) %>%
       pr_rename()
   }
 
   return(dat)
+
 }
 
 
@@ -68,7 +68,7 @@ pr_get_NRSData <- function(Type = "phytoplankton", Variable = "abundance", Subse
 #' @examples
 #' df <- pr_get_NRSStation()
 #' @importFrom rlang .data
-pr_get_NRSStation <- function() {
+pr_get_NRSStation <- function(){
   dat <- readr::read_csv(system.file("extdata", "BGC_StationInfo.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
     pr_rename() %>%
     dplyr::filter(.data$ProjectName == "NRS")
@@ -86,12 +86,13 @@ pr_get_NRSStation <- function() {
 #' @examples
 #' df <- pr_get_NRSTrips(Type = "Z")
 #' @importFrom rlang .data
-pr_get_NRSTrips <- function(Type = c("P", "Z", "F")) {
+pr_get_NRSTrips <- function(Type = c("P", "Z", "F")){
+
   NRSTrip <- pr_get_s3("bgc_trip") %>%
     pr_rename() %>%
     dplyr::filter(.data$ProjectName == "NRS" &
-      (stringr::str_detect(.data$SampleType, paste("P", collapse = "|")) |
-        is.na(.data$SampleType))) %>%
+                    (stringr::str_detect(.data$SampleType, paste("P", collapse = "|")) |
+                       is.na(.data$SampleType))) %>%
     pr_apply_Time() %>%
     dplyr::select(-"ProjectName") %>%
     dplyr::select(-tidyselect::any_of(c("PSampleDepth_m", "ZSampleDepth_m")))
@@ -110,6 +111,7 @@ pr_get_NRSTrips <- function(Type = c("P", "Z", "F")) {
   # }
 
   return(NRSTrip)
+
 }
 
 
@@ -134,10 +136,11 @@ pr_get_NRSTrips <- function(Type = c("P", "Z", "F")) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' df <- pr_filter_NRSStations(df)
-#' }
-pr_filter_NRSStations <- function(df) {
+#' \dontrun{df <- pr_filter_NRSStations(df)}
+pr_filter_NRSStations <- function(df){
+
   df <- df %>%
     dplyr::filter(.data$StationCode %in% c("DAR", "ESP", "KAI", "MAI", "NIN", "NSI", "PHB", "ROT", "YON"))
 }
+
+

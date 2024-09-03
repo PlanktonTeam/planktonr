@@ -13,67 +13,55 @@
 #' df <- pr_get_Indices("NRS", "W")
 #' df <- pr_get_Indices("CPR", "P", near_dist_km = 250)
 #' df <- pr_get_Indices("CPR", "Z")
-pr_get_Indices <- function(Survey = "CPR", Type = "P", ...) {
-  if (Type == "Z" & Survey == "NRS") {
-    var_names <- c(
-      "Biomass_mgm3", "AshFreeBiomass_mgm3", "ZoopAbundance_m3", "CopeAbundance_m3", "AvgTotalLengthCopepod_mm",
-      "OmnivoreCarnivoreCopepodRatio", "NoCopepodSpecies_Sample", "ShannonCopepodDiversity", "CopepodEvenness"
-    )
-  } else if (Type == "Z" & Survey == "CPR") {
-    var_names <- c(
-      "BiomassIndex_mgm3", "ZoopAbundance_m3", "CopeAbundance_m3", "AvgTotalLengthCopepod_mm",
-      "OmnivoreCarnivoreCopepodRatio", "NoCopepodSpecies_Sample", "ShannonCopepodDiversity", "CopepodEvenness"
-    )
-  } else if (Type == "P" & Survey == "CPR") {
-    var_names <- c(
-      "PCI", "PhytoBiomassCarbon_pgm3", "PhytoAbundance_Cellsm3", "DiatomDinoflagellateRatio",
-      "AvgCellVol_um3", "NoPhytoSpecies_Sample", "ShannonPhytoDiversity", "PhytoEvenness",
-      "NoDiatomSpecies_Sample", "ShannonDiatomDiversity", "DiatomEvenness", "NoDinoSpecies_Sample",
-      "ShannonDinoDiversity", "DinoflagellateEvenness"
-    )
-  } else if (Type == "P" & Survey == "NRS") {
-    var_names <- c(
-      "PhytoBiomassCarbon_pgL", "PhytoAbundance_CellsL", "DiatomDinoflagellateRatio",
-      "AvgCellVol_um3", "NoPhytoSpecies_Sample", "ShannonPhytoDiversity", "PhytoEvenness",
-      "NoDiatomSpecies_Sample", "ShannonDiatomDiversity", "DiatomEvenness", "NoDinoSpecies_Sample",
-      "ShannonDinoDiversity", "DinoflagellateEvenness"
-    )
-  } else if (Type == "W" & Survey == "NRS") {
-    var_names <- c(
-      "Secchi_m", "MLDtemp_m", "MLDsal_m", "DCM_m",
-      "CTDTemperature_degC", "CTDSalinity_PSU", "CTDChlaF_mgm3"
-    )
-  } else if (Type == "W" & Survey == "CPR") {
+pr_get_Indices <- function(Survey = "CPR", Type = "P", ...){
+
+  if(Type == "Z" & Survey == "NRS"){
+    var_names <- c("Biomass_mgm3", "AshFreeBiomass_mgm3", "ZoopAbundance_m3", "CopeAbundance_m3", "AvgTotalLengthCopepod_mm",
+                   "OmnivoreCarnivoreCopepodRatio", "NoCopepodSpecies_Sample", "ShannonCopepodDiversity", "CopepodEvenness")
+  } else if(Type == "Z" & Survey == "CPR"){
+    var_names <- c("BiomassIndex_mgm3", "ZoopAbundance_m3", "CopeAbundance_m3", "AvgTotalLengthCopepod_mm",
+                   "OmnivoreCarnivoreCopepodRatio", "NoCopepodSpecies_Sample", "ShannonCopepodDiversity", "CopepodEvenness")
+  } else if(Type == "P" & Survey == "CPR"){
+    var_names <- c( "PCI", "PhytoBiomassCarbon_pgm3", "PhytoAbundance_Cellsm3", "DiatomDinoflagellateRatio",
+                    "AvgCellVol_um3", "NoPhytoSpecies_Sample", "ShannonPhytoDiversity", "PhytoEvenness",
+                    "NoDiatomSpecies_Sample", "ShannonDiatomDiversity", "DiatomEvenness", "NoDinoSpecies_Sample",
+                    "ShannonDinoDiversity", "DinoflagellateEvenness")
+  } else if(Type == "P" & Survey == "NRS"){
+    var_names <- c( "PhytoBiomassCarbon_pgL", "PhytoAbundance_CellsL", "DiatomDinoflagellateRatio",
+                    "AvgCellVol_um3", "NoPhytoSpecies_Sample", "ShannonPhytoDiversity", "PhytoEvenness",
+                    "NoDiatomSpecies_Sample", "ShannonDiatomDiversity", "DiatomEvenness", "NoDinoSpecies_Sample",
+                    "ShannonDinoDiversity", "DinoflagellateEvenness")
+  } else if(Type == "W" & Survey == "NRS"){
+    var_names <- c("Secchi_m", "MLDtemp_m", "MLDsal_m", "DCM_m",
+                   "CTDTemperature_degC", "CTDSalinity_PSU", "CTDChlaF_mgm3")
+  } else if(Type == "W" & Survey == "CPR"){
     var_names <- c("PCI")
   }
 
-  if (Survey == "CPR") {
+  if(Survey == "CPR"){
+
     dat <- pr_get_Raw("cpr_derived_indices_data") %>%
       pr_rename() %>%
       pr_add_Bioregions(...) %>%
-      pr_apply_Time() %>% # TODO added for consistency but uses etc timezones - do we changes these to the more familiar names or leave? doesn't improve with method = accurate
-      dplyr::select(
-        tidyselect::starts_with(c(
-          "SampleTime_Local", "Year_Local", "Month_Local",
-          "BioRegion", "DistanceFromBioregion_m", "tz",
-          "Latitude", "Longitude", "Sample_ID"
-        )),
-        tidyselect::all_of(var_names)
-      ) %>%
+      pr_apply_Time() %>% #TODO added for consistency but uses etc timezones - do we changes these to the more familiar names or leave? doesn't improve with method = accurate
+      dplyr::select(tidyselect::starts_with(c("SampleTime_Local", "Year_Local", "Month_Local",
+                                              "BioRegion", "DistanceFromBioregion_m", "tz",
+                                              "Latitude", "Longitude", "Sample_ID")),
+                    tidyselect::all_of(var_names)) %>%
       tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters") %>%
       pr_reorder()
 
     return(dat)
-  } else if (Survey == "NRS") {
+
+  } else if(Survey == "NRS"){
+
     dat <- pr_get_Raw("nrs_derived_indices_data") %>%
       pr_rename() %>%
       dplyr::filter(.data$StationName != "Port Hacking 4") %>%
       pr_add_StationCode() %>%
       pr_apply_Time() %>%
-      dplyr::select(
-        "TripCode", "Year_Local", "Month_Local", "SampleTime_Local", "tz", "Latitude", "Longitude",
-        "StationName", "StationCode", tidyselect::all_of(var_names)
-      ) %>%
+      dplyr::select("TripCode", "Year_Local", "Month_Local", "SampleTime_Local", "tz", "Latitude", "Longitude",
+                    "StationName", "StationCode", tidyselect::all_of(var_names)) %>%
       tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "Parameters") %>%
       pr_reorder()
 
@@ -96,24 +84,20 @@ pr_get_Indices <- function(Survey = "CPR", Type = "P", ...) {
 #'
 #' @examples
 #' df <- pr_get_Indices("CPR", "Z") %>%
-#'   pr_filter_data("BiomassIndex_mgm3", c("North", "South-west"))
+#'       pr_filter_data("BiomassIndex_mgm3", c("North", "South-west"))
 #' df <- pr_get_Indices("NRS", "P") %>%
-#'   pr_filter_data("PhytoBiomassCarbon_pgL", c("NSI", "PHB"))
-pr_filter_data <- function(df, Parameter = "Biomass_mgm3", StationRegion = "NSI") {
-  if ("StationName" %in% colnames(df)) {
-    df <- df %>%
-      dplyr::filter(
-        .data$Parameters %in% Parameter,
-        .data$StationCode %in% StationRegion
-      )
-  } else {
-    df <- df %>%
-      dplyr::filter(
-        .data$Parameters %in% Parameter,
-        .data$BioRegion %in% StationRegion
-      )
+#'       pr_filter_data("PhytoBiomassCarbon_pgL", c("NSI", "PHB"))
+pr_filter_data <- function(df, Parameter = "Biomass_mgm3", StationRegion = "NSI"){
+    if("StationName" %in% colnames(df)) {
+      df <- df %>%
+        dplyr::filter(.data$Parameters %in% Parameter,
+                      .data$StationCode %in% StationRegion)
+    } else {
+      df <- df %>%
+        dplyr::filter(.data$Parameters %in% Parameter,
+                      .data$BioRegion %in% StationRegion)
+    }
   }
-}
 
 
 #' To produce the climatology for plotting
@@ -125,21 +109,18 @@ pr_filter_data <- function(df, Parameter = "Biomass_mgm3", StationRegion = "NSI"
 #' @export
 #'
 #' @examples
-#' df <- data.frame(Month = rep(1:12, 10), StationCode = "NSI", Values = runif(120, min = 0, max = 10))
+#' df <- data.frame(Month = rep(1:12,10), StationCode = 'NSI', Values = runif(120, min=0, max=10))
 #' pr_make_climatology(df, Month)
 #' @importFrom stats sd
 #' @importFrom rlang .data
-pr_make_climatology <- function(df, x) {
+pr_make_climatology <- function(df, x){
   x <- dplyr::enquo(arg = x)
-  df_climate <- df %>%
-    dplyr::filter(!!x != "NA") %>% # TODO Can I remove this now I have removed complete?  # need to drop NA from month, added to dataset by complete(Year, StationCode)
+  df_climate <- df %>% dplyr::filter(!!x != "NA") %>% # TODO Can I remove this now I have removed complete?  # need to drop NA from month, added to dataset by complete(Year, StationCode)
     dplyr::group_by(!!x, .data$StationCode) %>%
-    dplyr::summarise(
-      mean = mean(.data$Values, na.rm = TRUE),
-      N = length(.data$Values),
-      sd = stats::sd(.data$Values, na.rm = TRUE),
-      se = sd / sqrt(.data$N),
-      .groups = "drop"
-    )
+    dplyr::summarise(mean = mean(.data$Values, na.rm = TRUE),
+                     N = length(.data$Values),
+                     sd = stats::sd(.data$Values, na.rm = TRUE),
+                     se = sd / sqrt(.data$N),
+                     .groups = "drop")
   return(df_climate)
 }

@@ -37,7 +37,7 @@ EOV <- planktonr::pr_get_EOVs("NRS")
 
 EOV_MAI <- EOV %>%
   filter(StationCode == "MAI") %>%
-  pr_remove_outliers(2) %>%
+  pr_remove_outliers(2) %>% 
   pr_get_Coeffs()
 ```
 
@@ -50,13 +50,13 @@ unique(EOV_MAI$Parameters)
 
 Once we have chosen the EOV we are interested in, we can plot it as below. Note the use of the `&` to apply the theme. This is because the resulting figure is a patchwork of ggplots.
 ```{r}
-(p1 <- pr_plot_EOVs(EOV_MAI, EOV = "Silicate_umolL") &
-  theme_bw())
+(p1 <- pr_plot_EOVs(EOV_MAI, EOV = "Silicate_umolL") & 
+  theme_bw())       
 ```
 
 We can also add other EOVs to the patchwork.
 ```{r}
-p1 / pr_plot_EOVs(EOV_MAI, EOV = "Nitrate_umolL", col = "darkgreen") &
+p1 / pr_plot_EOVs(EOV_MAI, EOV = "Nitrate_umolL", col = "darkgreen") & 
   theme_bw() &
   plot_annotation(title = "Maria Island")
 ```
@@ -81,13 +81,13 @@ Filter the data for the required bioregion.
 ```{r}
 EOV_SE <- EOV %>%
   filter(BioRegion == "South-east") %>%
-  pr_remove_outliers(2) %>%
+  pr_remove_outliers(2) %>% 
   pr_get_Coeffs()
 ```
 
 Now plot the data
 ```{r}
-pr_plot_EOVs(EOV_SE, EOV = "ShannonPhytoDiversity", col = "darkorange") /
+pr_plot_EOVs(EOV_SE, EOV = "ShannonPhytoDiversity", col = "darkorange") / 
   pr_plot_EOVs(EOV_SE, EOV = "ShannonCopepodDiversity", col = "darkred") &
   theme_bw() &
   plot_annotation(title = "South-east Bioregion")
@@ -103,7 +103,7 @@ EOV <- planktonr::pr_get_EOVs("LTM")
 
 EOV_PHB <- EOV %>%
   filter(StationCode == "PHB") %>%
-  pr_remove_outliers(2) %>%
+  pr_remove_outliers(2) %>% 
   pr_get_Coeffs()
 ```
 
@@ -114,8 +114,8 @@ unique(EOV_PHB$Parameters)
 
 Do the plotting
 ```{r}
-pr_plot_EOVs(EOV_PHB, EOV = "Temperature_degC", col = "purple") /
-  pr_plot_EOVs(EOV_PHB, EOV = "Salinity", col = "pink") &
+pr_plot_EOVs(EOV_PHB, EOV = "Temperature_degC", col = "purple") / 
+  pr_plot_EOVs(EOV_PHB, EOV = "Salinity", col = "pink") & 
   theme_bw() &
   plot_annotation(title = "Port Hacking")
 ```
