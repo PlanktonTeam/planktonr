@@ -18,6 +18,6 @@ dataframe to use in pr_plot_Climatology functions
 To produce the climatology for plotting
 }
 \examples{
-df <- data.frame(Month = rep(1:12,10), StationCode = 'NSI', Values = runif(120, min=0, max=10))
+df <- data.frame(Month = rep(1:12, 10), StationCode = "NSI", Values = runif(120, min = 0, max = 10))
 pr_make_climatology(df, Month)
 }

@@ -11,13 +11,16 @@
 #' @examples
 #' df <- pr_get_CPRData(Type = "P", Variable = "abundance", Subset = "raw")
 #' @importFrom rlang .data
-pr_get_CPRData <- function(Type = "P", Variable = "abundance", Subset = "raw"){
+pr_get_CPRData <- function(Type = "P", Variable = "abundance", Subset = "raw") {
+  Type <- stringr::str_to_lower(Type)
+  if (Type %in% c("p", "P", "Phytoplankton", "phytoplankton")) {
+    Type <- "phytoplankton"
+  }
+  if (Type %in% c("z", "Z", "Zooplankton", "zooplankton")) {
+    Type <- "zooplankton"
+  }
 
-  Type = stringr::str_to_lower(Type)
-  if (Type %in% c("p", "P", "Phytoplankton", "phytoplankton")){Type = "phytoplankton"}
-  if (Type %in% c("z", "Z", "Zooplankton", "zooplankton")){Type = "zooplankton"}
-
-  if (Type == "zooplankton" & Subset == "species"){ # Specific case for zooplankton species
+  if (Type == "zooplankton" & Subset == "species") { # Specific case for zooplankton species
 
     datc <- pr_get_Raw("cpr_zooplankton_abundance_copepods_data") %>%
       pr_rename() %>%
@@ -30,17 +33,16 @@ pr_get_CPRData <- function(Type = "P", Variable = "abundance", Subset = "raw"){
 
     # Add together and COPEPODS and NON-COPEPODS
     dat <- dplyr::bind_cols(datc, datnc)
-
   } else {
-    file = paste("cpr", Type, Variable, Subset, "data", sep = "_")
+    file <- paste("cpr", Type, Variable, Subset, "data", sep = "_")
 
     dat <- readr::read_csv(stringr::str_replace(pr_get_Site(), "LAYER_NAME", file),
-                           na = "",
-                           show_col_types = FALSE,
-                           comment = "#") %>%
+      na = "",
+      show_col_types = FALSE,
+      comment = "#"
+    ) %>%
       pr_rename()
   }
-
 }
 
 
@@ -54,8 +56,8 @@ pr_get_CPRData <- function(Type = "P", Variable = "abundance", Subset = "raw"){
 #' df <- pr_get_CPRTrips()
 #' df <- pr_get_CPRTrips(near_dist_km = 250)
 #' @importFrom rlang .data
-pr_get_CPRTrips <- function(...){
-  CPRTrips <- pr_get_s3("cpr_samp")  %>%
+pr_get_CPRTrips <- function(...) {
+  CPRTrips <- pr_get_s3("cpr_samp") %>%
     pr_rename() %>%
     pr_add_Bioregions(...) %>%
     pr_apply_Time()

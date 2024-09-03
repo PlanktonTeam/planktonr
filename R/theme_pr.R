@@ -10,10 +10,14 @@
 #' @return planktonr theme
 #'
 #' @examples
-#' \dontrun{ggplot() + geom_blank() + theme_pr()}
-theme_pr <- function(FontSize = 16){
-  font <- "Georgia"   #assign font family up front
-  ggplot2::theme_bw(base_size = FontSize) %+replace%    #replace elements we want to change
+#' \dontrun{
+#' ggplot() +
+#'   geom_blank() +
+#'   theme_pr()
+#' }
+theme_pr <- function(FontSize = 16) {
+  font <- "Georgia" # assign font family up front
+  ggplot2::theme_bw(base_size = FontSize) %+replace% # replace elements we want to change
     ggplot2::theme(
       legend.position = "bottom",
       strip.background = ggplot2::element_blank(),
@@ -21,15 +25,15 @@ theme_pr <- function(FontSize = 16){
       plot.title = ggplot2::element_text(vjust = 0.5)
 
 
-      #grid elements
+      # grid elements
       # panel.grid.major = element_blank(),    #strip major gridlines
       # panel.grid.minor = element_blank(),    #strip minor gridlines
       # axis.ticks = element_blank(),          #strip axis ticks
 
-      #since theme_minimal() already strips axis lines,
-      #we don't need to do that again
+      # since theme_minimal() already strips axis lines,
+      # we don't need to do that again
 
-      #text elements
+      # text elements
       # plot.title = element_text(             #title
       #   family = font,            #set font family
       #   size = 20,                #set font size
@@ -57,7 +61,7 @@ theme_pr <- function(FontSize = 16){
       # axis.text.x = element_text(            #margin for axis text
       #   margin=margin(5, b = 10))
 
-      #since the legend often requires manual tweaking
-      #based on plot content, don't define it here
+      # since the legend often requires manual tweaking
+      # based on plot content, don't define it here
     )
 }

@@ -25,20 +25,23 @@
 #'
 #' @examples
 #' df <- pr_get_LFData()
-pr_get_LFData <- function(){
+pr_get_LFData <- function() {
   df <- planktonr::pr_get_Raw("bgc_larval_fish_count_raw_data") %>%
     pr_rename() %>%
-    tidyr::pivot_longer(cols = -c("Project", "StationName", "Latitude", "Longitude", "TripCode",
-                                  "SampleTime_UTC", "SampleTime_Local", "Year_Local", "Month_Local",
-                                  "Day_Local", "Time_Local24hr", "SampleDepth_m", "Temperature_degC",
-                                  "Salinity_psu", "Volume_m3", "Vessel", "TowType", "GearMesh_um",
-                                  "Bathymetry_m", "QC_flag"), names_to = "Species", values_to = "Count") %>%
-    dplyr::mutate(Species2 = stringr::str_replace(.data$Species, "_3", " (3"),
-                  Species2 = stringr::str_replace(.data$Species2, "_", ": "),
-                  Species2 = stringr::str_replace(.data$Species2, stringr::coll("."), " "),
-                  Species2 = paste0(.data$Species2, ")")) %>%
-    dplyr::mutate(Abundance_1000m3 = (.data$Count/.data$Volume_m3)*1e3)
-
+    tidyr::pivot_longer(cols = -c(
+      "Project", "StationName", "Latitude", "Longitude", "TripCode",
+      "SampleTime_UTC", "SampleTime_Local", "Year_Local", "Month_Local",
+      "Day_Local", "Time_Local24hr", "SampleDepth_m", "Temperature_degC",
+      "Salinity_psu", "Volume_m3", "Vessel", "TowType", "GearMesh_um",
+      "Bathymetry_m", "QC_flag"
+    ), names_to = "Species", values_to = "Count") %>%
+    dplyr::mutate(
+      Species2 = stringr::str_replace(.data$Species, "_3", " (3"),
+      Species2 = stringr::str_replace(.data$Species2, "_", ": "),
+      Species2 = stringr::str_replace(.data$Species2, stringr::coll("."), " "),
+      Species2 = paste0(.data$Species2, ")")
+    ) %>%
+    dplyr::mutate(Abundance_1000m3 = (.data$Count / .data$Volume_m3) * 1e3)
 }
 
 
@@ -144,10 +147,3 @@ pr_get_LFData <- function(){
 #
 #
 # }
-
-
-
-
-
-
-

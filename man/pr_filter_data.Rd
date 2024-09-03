@@ -21,7 +21,7 @@ Filter data for plotting functions
 }
 \examples{
 df <- pr_get_Indices("CPR", "Z") \%>\%
-      pr_filter_data("BiomassIndex_mgm3", c("North", "South-west"))
+  pr_filter_data("BiomassIndex_mgm3", c("North", "South-west"))
 df <- pr_get_Indices("NRS", "P") \%>\%
-      pr_filter_data("PhytoBiomassCarbon_pgL", c("NSI", "PHB"))
+  pr_filter_data("PhytoBiomassCarbon_pgL", c("NSI", "PHB"))
 }

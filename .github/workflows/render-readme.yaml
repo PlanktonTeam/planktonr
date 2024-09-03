@@ -28,6 +28,7 @@ jobs:
 
       - name: Render Rmarkdown files and Commit Results
         run: |
+          Rscript -e 'install.packages("rmarkdown")'
           Rscript -e 'rmarkdown::render("README.Rmd")'
           git config --local user.name "$GITHUB_ACTOR"
           git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
