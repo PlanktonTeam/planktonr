@@ -45,6 +45,6 @@ jobs:
         if: github.event_name != 'pull_request'
         uses: JamesIves/github-pages-deploy-action@v4.6.4
         with:
-          clean: true
-          branch: main
-          folder: ~/docs
+          clean: false
+          branch: gh-pages
+          folder: docs
