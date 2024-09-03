@@ -1,4 +1,4 @@
-url: https://planktonteam.github.io/planktonr
+url: https://planktonteam.github.io/planktonr/
 articles:
 - title: Articles
   navbar: ~
@@ -10,12 +10,12 @@ articles:
   - LarvalFish
   - Biogeochemistry
 development:
-  destination:
+  destination: ~
   version_label: info
-  version_tooltip: "The package is in the early stages of development. Use with caution."
+  version_tooltip: The package is in the early stages of development. Use with caution.
 reference:
 - title: Load Data
-  desc:  Functions to access data from the AODN.
+  desc: Functions to access data from the AODN.
 - contents:
   - starts_with("pr_get_")
 - title: Plotting
