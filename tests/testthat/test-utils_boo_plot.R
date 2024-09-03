@@ -162,7 +162,7 @@ testthat::test_that("Correct function output", {
   testthat::expect_equal(class(pr_get_FuncGroups("NRS", "Z") %>% pr_plot_PieFG())[1], "gg")
 
 
-  testthat::expect_equal(class(pr_get_PCIData() %>% pr_plot_PCI())[1], "gg")
+  testthat::expect_equal(class(pr_get_PCIData() %>% pr_plot_PCImap())[1], "gg")
 
   testthat::expect_equal(class(pr_plot_Voyagemap(pr_get_NRSMicro("GO-SHIP"),
     pr_get_NRSMicro("GO-SHIP") %>% dplyr::slice(1:5000),

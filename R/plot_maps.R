@@ -6,8 +6,8 @@
 #' @export
 #'
 #' @examples
-#' pr_get_PCIData() %>% pr_plot_PCI()
-pr_plot_PCI <- function(df) {
+#' pr_get_PCIData() %>% pr_plot_PCImap()
+pr_plot_PCImap <- function(df) {
   cprmap <- ggplot2::ggplot() +
     ggplot2::geom_raster(data = df, ggplot2::aes(x = .data$Longitude, y = .data$Latitude, fill = .data$PCI), interpolate = TRUE) +
     ggplot2::scale_fill_gradient(
