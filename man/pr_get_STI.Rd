@@ -16,6 +16,6 @@ df of STI kernel density for each species
 Get STI kernel density for each species
 }
 \examples{
-df <- pr_get_STI('P')
+df <- pr_get_STI("P")
 
 }

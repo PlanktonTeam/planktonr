@@ -16,8 +16,10 @@ An ordered dataframe
 Order the Station or region in the df by latitude for consistent plotting
 }
 \examples{
-df <- data.frame(StationName = c('Port Hacking', 'Maria Island',
-'North Stradbroke Island','Esperance', 'Ningaloo', "Darwin",
-'Rottnest Island',  'Kangaroo Island', "Yongala"))
+df <- data.frame(StationName = c(
+  "Port Hacking", "Maria Island",
+  "North Stradbroke Island", "Esperance", "Ningaloo", "Darwin",
+  "Rottnest Island", "Kangaroo Island", "Yongala"
+))
 df <- pr_reorder(df)
 }

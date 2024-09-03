@@ -30,8 +30,8 @@ sst_count, sst_dtime, sst_mean, sst_standard_deviation, wind_speed, wind_speed_d
 }
 \examples{
 df <- tail(pr_get_DataLocs("CPR") \%>\%
-        dplyr::arrange(Date), 5)
-pr = c("sea_surface_temperature", "sst_count")
+  dplyr::arrange(Date), 5)
+pr <- c("sea_surface_temperature", "sst_count")
 sstout <- pr_match_GHRSST(df, pr, res_spat = 10, res_temp = "6d")
 
 }

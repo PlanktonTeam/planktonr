@@ -36,6 +36,8 @@ Essential Ocean Variables plot
 df <- pr_get_EOVs("NRS") \%>\%
   pr_remove_outliers(2) \%>\%
   pr_get_Coeffs()
-pr_plot_EOVs(df, EOV = "Biomass_mgm3", Survey = "NRS",
-      trans = "identity", col = "blue", labels = FALSE)
+pr_plot_EOVs(df,
+  EOV = "Biomass_mgm3", Survey = "NRS",
+  trans = "identity", col = "blue", labels = FALSE
+)
 }

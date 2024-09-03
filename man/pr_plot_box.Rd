@@ -18,9 +18,9 @@ ggplot object
 Note that this function assumes wide data with the data to plot as columns.
 }
 \examples{
-df <- planktonr::pr_get_NRSMicro('Coastal') \%>\%
-tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) \%>\%
-dplyr::filter(StationCode \%in\% c("DEE", "DEB")) \%>\%
-tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = mean)
+df <- planktonr::pr_get_NRSMicro("Coastal") \%>\%
+  tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) \%>\%
+  dplyr::filter(StationCode \%in\% c("DEE", "DEB")) \%>\%
+  tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = mean)
 gg <- pr_plot_box(df, "Bacterial_Temperature_Index_KD")
 }

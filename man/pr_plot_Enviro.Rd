@@ -20,8 +20,10 @@ A plot with timeseries and climatology at depths
 Combined timeseries and climatology plots for environmental variables
 }
 \examples{
-df <- pr_get_NRSChemistry() \%>\% dplyr::filter(Parameters == "SecchiDepth_m",
-StationCode \%in\% c('PHB', 'NSI'))
+df <- pr_get_NRSChemistry() \%>\% dplyr::filter(
+  Parameters == "SecchiDepth_m",
+  StationCode \%in\% c("PHB", "NSI")
+)
 pr_plot_Enviro(df)
 
 }
