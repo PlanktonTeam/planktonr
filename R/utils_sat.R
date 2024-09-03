@@ -1,3 +1,28 @@
+#' Get data for satellite data
+#' @param Survey either NRS or CPR
+#'
+#' @return df with either NRS or CPR satellite data
+#' @export
+#'
+#' @examples
+#' df <- pr_get_SatData("NRS")
+## These will be replace with proper satellite data from extractions in time
+
+pr_get_SatData <- function(Survey = 'NRS'){
+
+  if(Survey == "NRS"){
+    NRS_SatData <- readr::read_csv(system.file("extdata", "NRS_SatData.csv", package = "planktonr", mustWork = TRUE),
+                                   show_col_types = FALSE,
+                                   na = c("NA", "")) %>%
+      pr_rename()
+  } else {
+    CPR_SatData <- readr::read_csv(system.file("extdata", "CPR_SatData.csv", package = "planktonr", mustWork = TRUE),
+                                   show_col_types = FALSE) %>%
+      pr_rename()
+  }
+}
+
+
 #' Functions for matching location data to satellite products
 #'
 #' Get data for satellite matching

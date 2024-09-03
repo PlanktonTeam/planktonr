@@ -265,9 +265,6 @@ pr_add_StationCode <- function(df){
 
 
 
-
-
-
 #' Order the Station or region in the df by latitude for consistent plotting
 #'
 #' @param df A dataframe that contains StationName, StationCode or BioRegion
@@ -449,49 +446,6 @@ pr_filter_Species <- function(df){
   pat <- c("spp.", "cf.", "/", "grp", "complex", "type")
   df <- df %>%
     dplyr::filter(stringr::str_detect(.data$Species, paste(pat, collapse = "|"), negate = TRUE))
-}
-
-
-#' Add Carbon concentration to phytoplankton dataframe
-#'
-#' This is where you write the description
-#' @param df Input dataframe with BioVolume
-#' @param meth Method for data collection
-#'
-#' @return Dataframe with Carbon included
-#' @export
-#'
-#' @examples
-#' df <- data.frame(TaxonGroup = c("Dinoflagellate", "Cyanobacteria"),
-#'                           Biovolume_um3L = c(100, 150), Cells_L = c(10, 8))
-#' df <- pr_add_Carbon(df, "NRS")
-#' df <- data.frame(TaxonGroup = c("Dinoflagellate", "Cyanobacteria"),
-#'                           BioVolume_um3m3 = c(100, 150), PhytoAbund_m3 = c(10, 8))
-#' df <- pr_add_Carbon(df, "CPR")
-pr_add_Carbon <- function(df, meth){
-
-  if (meth %in% "CPR"){
-    df <- df %>%
-      dplyr::mutate(BV_Cell = .data$BioVolume_um3m3 / .data$PhytoAbund_m3, # biovolume of one cell
-                    Carbon = dplyr::case_when(.data$TaxonGroup == "Dinoflagellate" ~ 0.76*(.data$BV_Cell)^0.819, # conversion to Carbon based on taxongroup and biovolume of cell
-                                              .data$TaxonGroup == 'Ciliate' ~ 0.22*(.data$BV_Cell)^0.939,
-                                              .data$TaxonGroup == 'Cyanobacteria'~ 0.2,
-                                              TRUE ~ 0.288*(.data$BV_Cell)^0.811),
-                    Carbon_m3 = .data$PhytoAbund_m3 * .data$Carbon) # Carbon per m3
-    return(df)
-  }
-
-  if (meth %in% "NRS"){
-    df <- df %>%
-      dplyr::mutate(BV_Cell = .data$Biovolume_um3L / .data$Cells_L, # biovolume of one cell
-                    Carbon = dplyr::case_when(.data$TaxonGroup == "Dinoflagellate" ~ 0.76*(.data$BV_Cell)^0.819, # conversion to Carbon based on taxongroup and biovolume of cell
-                                              .data$TaxonGroup == "Ciliate" ~ 0.22*(.data$BV_Cell)^0.939,
-                                              .data$TaxonGroup == "Cyanobacteria" ~ 0.2,
-                                              TRUE ~ 0.288*(.data$BV_Cell)^0.811),
-                    Carbon_L = .data$Cells_L * .data$Carbon) # Carbon per litre
-    return(df)
-  }
-
 }
 
 
@@ -745,6 +699,3 @@ pr_title <- function(tit){
   return(tit)
 
 }
-
-
-
