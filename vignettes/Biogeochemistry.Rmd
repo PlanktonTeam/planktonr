@@ -35,7 +35,7 @@ Explore the data and see what parameters are available for plotting at which sta
 
 ```{r}
 
-Nuts <- pr_get_NRSEnvContour('Chemistry') 
+Nuts <- pr_get_NRSEnvContour("Chemistry") 
 unique(Nuts$Parameters)
 unique(Nuts$StationName)
 
@@ -103,7 +103,7 @@ The contour plots are a neat way to visualise the picoplankton from the NRS stat
 
 ```{r}
 
-Pico <- pr_get_NRSEnvContour('Pico') %>% 
+Pico <- pr_get_NRSEnvContour("Pico") %>% 
   dplyr::filter(Parameters %in% c("Prochlorococcus_cellsmL")) %>% 
   filter(StationCode %in% c("PHB", "MAI"))
 
