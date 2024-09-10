@@ -508,7 +508,9 @@ pr_get_Coeffs <-  function(df){
 
   if(unique(df$Survey == "LTM")) {
     df <- df %>%
-      dplyr::group_by(.data$StationCode, .data$StationName, .data$SampleTime_Local, .data$anomaly, .data$Year_Local, .data$Month_Local, .data$Parameters) %>%
+      dplyr::group_by(.data$StationCode, .data$StationName, .data$SampleTime_Local,
+                      .data$anomaly, .data$Year_Local, .data$Month_Local,
+                      .data$Parameters) %>%
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                        .groups = "drop")
   }

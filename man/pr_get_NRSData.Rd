@@ -19,23 +19,6 @@ A dataframe with requested plankton data in wide form
 \description{
 Load NRS station Data
 }
-\details{
-nrs_phytoplankton_abundance_raw_data
-nrs_phytoplankton_abundance_htg_data
-nrs_phytoplankton_abundance_genus_data
-nrs_phytoplankton_abundance_species_data
-
-nrs_phytoplankton_biovolume_raw_data
-nrs_phytoplankton_biovolume_htg_data
-nrs_phytoplankton_biovolume_genus_data
-nrs_phytoplankton_biovolume_species_data
-
-nrs_zooplankton_abundance_copepods_data
-nrs_zooplankton_abundance_non_copepods_data
-nrs_zooplankton_abundance_genus_data
-nrs_zooplankton_abundance_htg_data
-nrs_zooplankton_abundance_raw_data
-}
 \examples{
 df <- pr_get_NRSData(Type = "phytoplankton", Variable = "abundance", Subset = "raw")
 }
