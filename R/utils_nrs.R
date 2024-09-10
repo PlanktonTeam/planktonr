@@ -2,34 +2,37 @@
 #'
 #' Load NRS station Data
 #'
-#' nrs_phytoplankton_abundance_raw_data
-#' nrs_phytoplankton_abundance_htg_data
-#' nrs_phytoplankton_abundance_genus_data
-#' nrs_phytoplankton_abundance_species_data
-#'
-#' nrs_phytoplankton_biovolume_raw_data
-#' nrs_phytoplankton_biovolume_htg_data
-#' nrs_phytoplankton_biovolume_genus_data
-#' nrs_phytoplankton_biovolume_species_data
-#'
-#' nrs_zooplankton_abundance_copepods_data
-#' nrs_zooplankton_abundance_non_copepods_data
-#' nrs_zooplankton_abundance_genus_data
-#' nrs_zooplankton_abundance_htg_data
-#' nrs_zooplankton_abundance_raw_data
-#'
 #' @param Type The data of interest: Phytoplankton or Zooplankton
 #' @param Variable Variable options are: abundance or biovolume (phytoplankton only)
 #' @param Subset Data compilation. Full options are below.
 #'
 #' @return A dataframe with requested plankton data in wide form
 #' @export
+#' @importFrom rlang .data
 #' @examples
 #' df <- pr_get_NRSData(Type = "phytoplankton", Variable = "abundance", Subset = "raw")
-#' @importFrom rlang .data
+#'
 pr_get_NRSData <- function(Type = "phytoplankton", Variable = "abundance", Subset = "raw"){
 
+  # AVAILABLE NRS DATASETS
+  # nrs_phytoplankton_abundance_raw_data
+  # nrs_phytoplankton_abundance_htg_data
+  # nrs_phytoplankton_abundance_genus_data
+  # nrs_phytoplankton_abundance_species_data
+  #
+  # nrs_phytoplankton_biovolume_raw_data
+  # nrs_phytoplankton_biovolume_htg_data
+  # nrs_phytoplankton_biovolume_genus_data
+  # nrs_phytoplankton_biovolume_species_data
+  #
+  # nrs_zooplankton_abundance_copepods_data
+  # nrs_zooplankton_abundance_non_copepods_data
+  # nrs_zooplankton_abundance_genus_data
+  # nrs_zooplankton_abundance_htg_data
+  # nrs_zooplankton_abundance_raw_data
+
   Type = stringr::str_to_lower(Type) # Make sure its lower case
+
   if (Type == "p"){Type = "phytoplankton"}
   if (Type == "z"){Type = "zooplankton"}
 
