@@ -21,4 +21,5 @@ Load NRS station Data
 }
 \examples{
 df <- pr_get_NRSData(Type = "phytoplankton", Variable = "abundance", Subset = "raw")
+
 }
