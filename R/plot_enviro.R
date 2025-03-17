@@ -93,6 +93,20 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
 #' plot <- pr_plot_NRSEnvContour(df, Interpolation = TRUE, Fill_NA = FALSE, maxGap = 3)
 pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, maxGap = 3) {
 
+#
+#   if (isTRUE(Interpolation) & !requireNamespace("pracma", quietly = TRUE)) {
+#     stop(
+#       "Package \"pracma\" must be installed to use this function.",
+#       call. = FALSE
+#     )
+#   }
+
+  if (isTRUE(Interpolation)){
+    rlang::check_installed("pracma", reason = "to use `interp2()`")
+    # code that includes calls such as aaapkg::aaa_fun()
+  }
+
+
   stations <- unique(as.character(df$StationName))
   param <- planktonr::pr_relabel(unique(df$Parameters), style = 'ggplot')
 
