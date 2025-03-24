@@ -4,7 +4,7 @@
 \alias{pr_get_STI}
 \title{Get STI kernel density for each species}
 \usage{
-pr_get_STI(Type = "Z")
+pr_get_STI(Type = "Zooplankton")
 }
 \arguments{
 \item{Type}{Zooplankton (Copepods) or phytoplankton species}
@@ -16,6 +16,6 @@ df of STI kernel density for each species
 Get STI kernel density for each species
 }
 \examples{
-df <- pr_get_STI('P')
+df <- pr_get_STI("Phytoplankton")
 
 }

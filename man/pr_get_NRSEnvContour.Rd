@@ -16,5 +16,5 @@ A dataframe to be used with pr_plot_NRSEnvContour
 Data for environmental contour plots
 }
 \examples{
-df <- pr_get_NRSEnvContour('Micro')
+df <- pr_get_NRSEnvContour(Data = "Micro")
 }

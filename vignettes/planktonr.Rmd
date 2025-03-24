@@ -37,8 +37,8 @@ The Continuous Plankton Recorder samples quarterly through our main areas of int
 datCPR <- pr_get_CPRTrips()
 datNRS <- pr_get_NRSTrips()
 
-ggCPR <- planktonr::pr_plot_Gantt(datCPR, Survey = "CPR")
-ggNRS <- planktonr::pr_plot_Gantt(datNRS, Survey = "NRS")
+ggCPR <- planktonr::pr_plot_Gantt(datCPR)
+ggNRS <- planktonr::pr_plot_Gantt(datNRS)
 
 wrap_plots(ggCPR, ggNRS, ncol = 1) &
   theme(text = ggplot2::element_text(size = 12, face = "bold"))
@@ -49,7 +49,7 @@ wrap_plots(ggCPR, ggNRS, ncol = 1) &
 The National Reference Stations are situated throughout the coastal region of Australia with most Marine Bioregions having one station. The West Australian stations in Ningaloo and Esperance were discontinued after an initial sampling period due to logistical constraints. The CPR tracks are also more sparse in Western Australia as shipping options are few.
 
 ```{r}
-df <- pr_get_ProgressMapData(c("NRS", "CPR"))
+df <- pr_get_ProgressMapData(Survey = c("NRS", "CPR"))
 
 pr_plot_ProgressMap(df)
 
@@ -61,8 +61,8 @@ We can learn a lot about the community structure of the plankton by using functi
 
 ## Phytoplankton
 ```{r}
-p1 <- pr_plot_PieFG(pr_get_FuncGroups(Survey = "NRS", Type = "P"))
-p2 <- pr_plot_PieFG(pr_get_FuncGroups(Survey = "CPR", Type = "P"))
+p1 <- pr_plot_PieFG(pr_get_FuncGroups(Survey = "NRS", Type = "Phytoplankton"))
+p2 <- pr_plot_PieFG(pr_get_FuncGroups(Survey = "CPR", Type = "Phytoplankton"))
 
 (wrap_plots(p1, p2, guides = "collect", ncol = 2) &
     theme(text = element_text(size = 16), legend.position = "bottom", 
@@ -75,8 +75,8 @@ p2 <- pr_plot_PieFG(pr_get_FuncGroups(Survey = "CPR", Type = "P"))
 Looking at zooplankton functional groups the copepods dominate the CPR and the net samples. Chaetognaths and cladocerans are also sampled well with the CPR whilst molluscs are caught more in the net samples. 
 
 ```{r}
-p3 <- pr_plot_PieFG(pr_get_FuncGroups(Survey = "NRS", Type = "Z"))
-p4 <- pr_plot_PieFG(pr_get_FuncGroups(Survey = "CPR", Type = "Z"))
+p3 <- pr_plot_PieFG(pr_get_FuncGroups(Survey = "NRS", Type = "Zooplankton"))
+p4 <- pr_plot_PieFG(pr_get_FuncGroups(Survey = "CPR", Type = "Zooplankton"))
 
 (wrap_plots(p3, p4, guides = "collect", ncol = 2) &
     theme(text = element_text(size = 16), legend.position = "bottom", 
@@ -90,11 +90,11 @@ Over the course of the surveys, since 2009, we have improved our taxonomic resol
 
 ## Phytoplankton
 ```{r}
-PSpNRSAccum <- pr_get_TaxaAccum(Survey = "NRS", Type = "P")
-PSpCPRAccum <- pr_get_TaxaAccum(Survey = "CPR", Type = "P")
+PSpNRSAccum <- pr_get_TaxaAccum(Survey = "NRS", Type = "Phytoplankton")
+PSpCPRAccum <- pr_get_TaxaAccum(Survey = "CPR", Type = "Phytoplankton")
 
-p1 <- pr_plot_TaxaAccum(PSpNRSAccum, Survey = "NRS", Type = "P") 
-p2 <- pr_plot_TaxaAccum(PSpCPRAccum, Survey = "CPR", Type = "P")
+p1 <- pr_plot_TaxaAccum(PSpNRSAccum) 
+p2 <- pr_plot_TaxaAccum(PSpCPRAccum)
 
 
 wrap_plots(p1, p2, ncol = 2) &
@@ -104,11 +104,11 @@ wrap_plots(p1, p2, ncol = 2) &
 
 
 ```{r}
-ZSpNRSAccum <- pr_get_TaxaAccum(Survey = "NRS", Type = "Z")
-ZSpCPRAccum <- pr_get_TaxaAccum(Survey = "CPR", Type = "Z")
+ZSpNRSAccum <- pr_get_TaxaAccum(Survey = "NRS", Type = "Zooplankton")
+ZSpCPRAccum <- pr_get_TaxaAccum(Survey = "CPR", Type = "Zooplankton")
 
-p3 <- pr_plot_TaxaAccum(ZSpNRSAccum, Survey = "NRS", Type = "Z")
-p4 <- pr_plot_TaxaAccum(ZSpCPRAccum, Survey = "CPR", Type = "Z")
+p3 <- pr_plot_TaxaAccum(ZSpNRSAccum)
+p4 <- pr_plot_TaxaAccum(ZSpCPRAccum)
 
 wrap_plots(p3, p4, ncol = 2) &
   theme(text = element_text(size = 16, face = "bold"),

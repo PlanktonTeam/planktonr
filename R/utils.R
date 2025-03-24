@@ -106,6 +106,11 @@ pr_get_Raw <- function(file){
     col_types = col_types)
   # }
 
+  # TODO Temporarily rename Bonney Coast. Can be removed when datasets are updated. Likely after 21 March
+  if (isTRUE(exists("StationName", dat))){
+    dat <- dat %>%
+      dplyr::mutate(StationName = stringr::str_replace_all(.data$StationName, "VBM100 - Bonney Coast", "Bonney Coast"))
+  }
   return(dat)
 }
 
@@ -183,18 +188,21 @@ pr_get_s3 <- function(file){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_PlanktonInfo(Type = "P")
-#' df <- pr_get_PlanktonInfo(Type = "Z")
+#' df <- pr_get_PlanktonInfo(Type = "Phytoplankton")
+#' df <- pr_get_PlanktonInfo(Type = "Zooplankton")
 #' @importFrom rlang .data
-pr_get_PlanktonInfo <- function(Type = "Z"){
+pr_get_PlanktonInfo <- function(Type = "Zooplankton"){
 
-  if (Type == "Z"){
+  if (Type == "Zooplankton"){
     df <- pr_get_s3("zoopinfo") %>%
       pr_rename()
-  } else if (Type == "P"){
+  } else if (Type == "Phytoplankton"){
     df <- pr_get_s3("phytoinfo") %>%
       pr_rename()
   }
+
+  df <- pr_planktonr_class(df, type = Type, survey = NULL, variable = NULL)
+
   return(df)
 }
 
@@ -222,7 +230,7 @@ pr_add_StationName <- function(df){
       StationCode == "ESP" ~ "Esperance",
       StationCode == "ROT" ~ "Rottnest Island",
       StationCode == "NIN" ~ "Ningaloo",
-      StationCode == "VBM" ~ "VBM100 - Bonney Coast")) %>%
+      StationCode == "VBM" ~ "Bonney Coast")) %>%
     dplyr::relocate("StationCode", .after = "StationName")
 }
 
@@ -253,7 +261,7 @@ pr_add_StationCode <- function(df){
         StationName == "Esperance" ~ "ESP",
         StationName == "Rottnest Island" ~ "ROT",
         StationName == "Ningaloo" ~ "NIN",
-        StationName == "VBM100 - Bonney Coast" ~ "VBM")) %>%
+        StationName == "Bonney Coast" ~ "VBM")) %>%
       dplyr::relocate("StationCode", .after = "StationName")
   } else if("TripCode" %in% colnames(df)){
     df <- df %>%
@@ -284,7 +292,7 @@ pr_reorder <- function(df){
       dplyr::mutate(StationName = factor(.data$StationName,
                                          levels = c("Darwin", "Yongala", "Ningaloo", "North Stradbroke Island",
                                                     "Rottnest Island", "Esperance", "Port Hacking", "Kangaroo Island",
-                                                    "VBM100 - Bonney Coast", "Maria Island")))
+                                                    "Bonney Coast", "Maria Island")))
   }
 
   if("StationCode" %in% colnames(df)){
@@ -366,7 +374,7 @@ pr_apply_Flags <- function(df, flag_col){
 #' @importFrom rlang .data
 #'
 #' @examples
-#' df <- pr_get_Indices("NRS", "P") %>%
+#' df <- pr_get_Indices("NRS", "Phytoplankton") %>%
 #'   pr_apply_Time()
 pr_apply_Time <- function(df){
 
@@ -388,44 +396,56 @@ pr_apply_Time <- function(df){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_Indices("CPR", "Z") %>% pr_remove_outliers(2)
+#' df <- pr_get_Indices("CPR", "Zooplankton") %>% pr_remove_outliers(2)
 pr_remove_outliers <- function(df, x){
+
+  Survey <- pr_get_survey(df)
+  Type <- pr_get_type(df)
+  Variable <- pr_get_variable(df)
+
+
+  # browser()
 
   if("StationCode" %in% colnames(df)){
     location <- rlang::sym("StationCode")
-    joiner <- 'StationCode'
+    joiner <- "StationCode"
   } else {
     location <- rlang::sym("BioRegion")
-    joiner <- 'BioRegion'
+    joiner <- "BioRegion"
   }
 
-  df <- df %>% dplyr::mutate(Values = ifelse(.data$Values < 0, 0, .data$Values))
+  df <- df %>%
+    dplyr::mutate(Values = ifelse(.data$Values < 0, 0, .data$Values))
 
-  if('SampleDepth_m' %in% colnames(df)){
-    df
+  if("SampleDepth_m" %in% colnames(df)){
+    # Do nothing
   } else {
     df <- df %>% dplyr::mutate(SampleDepth_m = 'integrated')
   }
 
+  #TODO !! Doesn't work with the custom class so we convert to tibble and then back again. It would be interesting to find out why one day....
   outliers <- df %>%
-    dplyr::group_by(.data$Parameters, !!location, .data$SampleDepth_m) %>%
+    tibble::as_tibble() %>%
     dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
                      sd2 = 2*sd(.data$Values, na.rm = TRUE),
                      meanplus = .data$means + .data$sd2,
                      meanminus = .data$means - .data$sd2,
-                     .groups = 'drop') %>%
+                     .by = tidyselect::all_of(c("Parameters", rlang::as_string(location), "SampleDepth_m"))) %>%
+    pr_planktonr_class(type = Type, survey = Survey, variable = Variable) %>%
     dplyr::select(-c("means", "sd2"))
 
   added <- df %>%
-    dplyr::left_join(outliers, by = c('Parameters', joiner, 'SampleDepth_m')) %>%
+    dplyr::left_join(outliers, by = c("Parameters", joiner, "SampleDepth_m")) %>%
     dplyr::filter(.data$Values < .data$meanplus & .data$Values > .data$meanminus) %>%
     dplyr::select(-c("meanplus", "meanminus"))
 
-  if(unique(added$SampleDepth_m == 'integrated')){
-    added <- added %>% dplyr::select(-"SampleDepth_m")
+  if(unique(added$SampleDepth_m == "integrated")){
+    added <- added %>%
+      dplyr::select(-"SampleDepth_m")
   } else {
-    added
+    # added
   }
+  return(added)
 }
 
 
@@ -504,15 +524,23 @@ pr_harmonic <- function (theta, k = 4) {
 #' dplyr::filter(StationCode %in% c('PHB', 'NSI'),
 #' Parameters %in% c("Biomass_mgm3", "PhytoBiomassCarbon_pgL")) %>%
 #'   pr_get_Coeffs()
-pr_get_Coeffs <-  function(df){
+pr_get_Coeffs <- function(df){
 
-  if(unique(df$Survey == "LTM")) {
+
+  # TODO Need to ensure the models are calculated and stored against only 1
+  # parameter and 1 station. They seem to be returning results that are the same for all data regardless of location
+
+  # browser()
+
+  Survey <- pr_get_survey(df)
+  Type <- pr_get_type(df)
+  Variable <- pr_get_variable(df)
+
+  if(Survey == "LTM") {
     df <- df %>%
-      dplyr::group_by(.data$StationCode, .data$StationName, .data$SampleTime_Local,
-                      .data$anomaly, .data$Year_Local, .data$Month_Local,
-                      .data$Parameters) %>%
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
-                       .groups = "drop")
+                       .by = tidyselect::all_of(c("StationCode", "StationName", "SampleTime_Local",
+                                                  "anomaly", "Year_Local", "Month_Local", "Parameters")))
   }
 
   df <- df %>%
@@ -525,7 +553,7 @@ pr_get_Coeffs <-  function(df){
     unique()
   params <- params$Parameters
 
-  if("BioRegion" %in% colnames(df)){
+  if(Survey == "CPR"){
     stations <- df %>%
       dplyr::select("BioRegion") %>%
       unique()
@@ -541,11 +569,14 @@ pr_get_Coeffs <-  function(df){
   stations <- rep(stations, length.out = length(params))
 
   coeffs <- function(params, stations){
+
+    # browser()
+
     lmdat <- df %>%
       dplyr::filter(.data$Parameters == params) %>%
       tidyr::drop_na()
 
-    if("BioRegion" %in% colnames(df)){
+    if(Survey == "CPR"){
       lmdat <- lmdat %>%
         dplyr::filter(.data$BioRegion == stations)
     } else {
@@ -565,9 +596,9 @@ pr_get_Coeffs <-  function(df){
       ms <- summary(m)
       slope <- ifelse(ms$coefficients[2,1] < 0, "decreasing", "increasing")
       p <- ms$coefficients[2,4]
-      sig <- ifelse(ms$coefficients[2,4] < 0.005, "significantly", "but not significantly")
+      sig <- ifelse(ms$coefficients[2,4] < 0.05, "significantly", "but not significantly")
 
-      if("StationName" %in% colnames(lmdat)) {
+      if(Survey != "CPR") { # NRS and LTM
         dfs <- dplyr::tibble(slope = slope, p = p, significance = sig, Parameters = params, StationName = stations)
         dfs2 <- lmdat %>%
           dplyr::inner_join(dfs, by = c("Parameters", "StationName"))
@@ -577,13 +608,19 @@ pr_get_Coeffs <-  function(df){
           dplyr::inner_join(dfs, by = c("Parameters", "BioRegion"))
       }
 
-    }
+      # attr(dfs2, "Trend") <- m # Store the model object
 
+      return(dfs2)
+    }
   }
 
-  outputs <- purrr::map2(params, stations, coeffs) %>%
-    purrr::list_rbind()
+  # browser()
 
+  outputs <- purrr::map2(params, stations, coeffs) %>%
+    purrr::list_rbind() %>%
+    pr_planktonr_class(type = Type, survey = Survey, variable = Variable)
+
+  return(outputs)
 }
 
 
@@ -591,31 +628,33 @@ pr_get_Coeffs <-  function(df){
 #' Return columns that are not taxonomic
 #'
 #' @param Survey `NRS` or `CPR`
-#' @param Type `Z` or `P`
+#' @param Type `zooplankton` or `phytoplankton`
 #'
 #' @return a string vector of column name
 #' @export
 #'
 #' @examples
-#' str <- pr_get_NonTaxaColumns(Survey = "NRS", Type = "Z")
-pr_get_NonTaxaColumns <- function(Survey = "NRS", Type = "Z"){
+#' str <- pr_get_NonTaxaColumns(Survey = "NRS", Type = "Zooplankton")
+pr_get_NonTaxaColumns <- function(Survey = "NRS", Type = "Zooplankton"){
 
-  if (Survey == "NRS" & Type == "Z"){
+  Type <- pr_check_type(Type)
+
+  if (Survey == "NRS" & Type == "Zooplankton"){
     vars <- c("Project", "StationName", "StationCode", "TripCode", "Latitude", "Longitude",
               "SampleTime_Local", "SampleTime_UTC", "Year_Local", "Month_Local", "Day_Local", "Time_Local24hr",
               "SampleDepth_m", "CTDSST_degC", "CTDChlaSurf_mgm3", "CTDSalinity_psu", "Biomass_mgm3", "AshFreeBiomass_mgm3")
 
-  } else if (Survey == "NRS" & Type == "P"){
+  } else if (Survey == "NRS" & Type == "Phytoplankton"){
     vars <- c("Project", "StationName", "StationCode", "TripCode", "Latitude", "Longitude",
               "SampleTime_Local", "SampleTime_UTC", "Year_Local", "Month_Local", "Day_Local", "Time_Local24hr",
               "SampleDepth_m", "Method", "CTDSST_degC", "CTDChlaSurf_mgm3", "CTDSalinity_psu")
 
-  } else if (Survey == "CPR" & Type == "Z"){
+  } else if (Survey == "CPR" & Type == "Zooplankton"){
     vars <- c("TripCode", "Sample_ID", "Region", "Latitude", "Longitude", "SampleTime_UTC", "SampleTime_Local",
               "Year_Local", "Month_Local", "Day_Local", "Time_Local24hr", "SatSST_degC", "SatChlaSurf_mgm3",
               "PCI", "SampleVolume_m3", "BiomassIndex_mgm3")
 
-  } else if (Survey == "CPR" & Type == "P"){
+  } else if (Survey == "CPR" & Type == "Phytoplankton"){
     vars <- c("TripCode", "Sample_ID", "Region", "Latitude", "Longitude", "SampleTime_Local", "SampleTime_UTC",
               "Year_Local", "Month_Local", "Day_Local", "Time_Local24hr", "SatSST_degC", "SatChlaSurf_mgm3",
               "PCI", "SampleVolume_m3")
@@ -634,12 +673,14 @@ pr_get_NonTaxaColumns <- function(Survey = "NRS", Type = "Z"){
 #' @export
 #'
 #' @examples
-#' dat <- pr_get_SpeciesInfo(Type = "P")
-#' dat <- pr_get_SpeciesInfo(Type = "Z")
-pr_get_SpeciesInfo <- function(Type = "Z"){
+#' dat <- pr_get_SpeciesInfo(Type = "Phytoplankton")
+#' dat <- pr_get_SpeciesInfo(Type = "Zooplankton")
+pr_get_SpeciesInfo <- function(Type = "Zooplankton"){
 
-  if (Type == "P"){file = "phytoinfo"}
-  if (Type == "Z"){file = "zoopinfo"}
+  Type <- pr_check_type(Type)
+
+  if (Type == "Phytoplankton"){file = "phytoinfo"}
+  if (Type == "Zooplankton"){file = "zoopinfo"}
 
   dat <- pr_get_s3(file) %>%
     pr_rename()
@@ -653,20 +694,20 @@ pr_get_SpeciesInfo <- function(Type = "Z"){
 #
 # @param Type Character string
 #
-# @return "Z" or "P"
+# @return "Zooplankton" or "Phytoplankton"
 #
 # @examples
 # pr_get_Type("phytoplankton")
 # pr_get_Type("z")
 # pr_get_Type <- function(Type){
 #
-#   zoop_type <- c("Z", "z", "zooplankton", "Zooplankton")
-#   phyto_type <- c("P", "p", "phytoplankton", "Phytoplankton")
+#   zoop_type <- c("Zooplankton", "z", "Zooplankton", "Zooplankton")
+#   phyto_type <- c("Phytoplankton", "p", "phytoplankton", "Phytoplankton")
 #
 #   if(Type %in% zoop_type){
-#     Type = "Z"
+#     Type = "Zooplankton"
 #   } else if (Type %in% phyto_type){
-#     Type = "P"
+#     Type = "Phytoplankton"
 #   }
 #
 # }
@@ -680,14 +721,14 @@ pr_get_SpeciesInfo <- function(Type = "Z"){
 #' @export
 #'
 #' @examples
-#' new_tit = pr_title("P")
+#' new_tit = pr_title("Phytoplankton")
 pr_title <- function(tit){
 
-  if (tit == "Z"){
+  if (tit == "Zooplankton"){
     tit = "Zooplankton"
   }
 
-  if (tit == "P"){
+  if (tit == "Phytoplankton"){
     tit = "Phytoplankton"
   }
 

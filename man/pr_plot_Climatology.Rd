@@ -4,12 +4,10 @@
 \alias{pr_plot_Climatology}
 \title{Plot single climatology}
 \usage{
-pr_plot_Climatology(df, Survey = "NRS", Trend = "Month", trans = "identity")
+pr_plot_Climatology(df, Trend = "Month", trans = "identity")
 }
 \arguments{
 \item{df}{dataframe with specified time period, station code and parameter}
-
-\item{Survey}{CPR or NRS data}
 
 \item{Trend}{specified time period}
 
@@ -22,12 +20,12 @@ a climatology plot
 Plot single climatology
 }
 \examples{
-df <- pr_get_Indices(Survey = "NRS", Type = "P") \%>\%
+df <- pr_get_Indices(Survey = "NRS", Type = "Phytoplankton") \%>\%
 dplyr::filter(Parameters == "PhytoBiomassCarbon_pgL", StationCode \%in\% c("NSI", "PHB"))
 
-monthly <- pr_plot_Climatology(df, "NRS", "Month")
+monthly <- pr_plot_Climatology(df, Trend = "Month")
 
-df <- pr_get_Indices(Survey = "CPR", Type = "Z") \%>\%
+df <- pr_get_Indices(Survey = "CPR", Type = "Zooplankton") \%>\%
         dplyr::filter(Parameters == "ZoopAbundance_m3")
-annual <- pr_plot_Climatology(df, "CPR", "Year")
+annual <- pr_plot_Climatology(df, Trend = "Year")
 }

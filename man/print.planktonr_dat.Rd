@@ -2,13 +2,15 @@
 % Please edit documentation in R/planktonr_dat.R
 \name{print.planktonr_dat}
 \alias{print.planktonr_dat}
-\title{Example of a custom print method.}
+\title{print method for planktonr_dat}
 \usage{
 \method{print}{planktonr_dat}(x, ...)
 }
 \arguments{
-\item{...}{}
+\item{x}{The planktonr dataframe}
+
+\item{...}{Other possible objects to be passed to the tidyverse}
 }
 \description{
-Example of a custom print method.
+print method for planktonr_dat
 }

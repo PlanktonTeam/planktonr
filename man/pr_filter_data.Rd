@@ -20,8 +20,8 @@ prefiltered data frame for pr_plot_trends, ts, climate
 Filter data for plotting functions
 }
 \examples{
-df <- pr_get_Indices("CPR", "Z") \%>\%
+df <- pr_get_Indices("CPR", "Zooplankton") \%>\%
       pr_filter_data("BiomassIndex_mgm3", c("North", "South-west"))
-df <- pr_get_Indices("NRS", "P") \%>\%
+df <- pr_get_Indices("NRS", "Phytoplankton") \%>\%
       pr_filter_data("PhytoBiomassCarbon_pgL", c("NSI", "PHB"))
 }

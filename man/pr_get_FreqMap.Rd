@@ -4,7 +4,7 @@
 \alias{pr_get_FreqMap}
 \title{Get data for frequency map plots}
 \usage{
-pr_get_FreqMap(Type = "Z")
+pr_get_FreqMap(Type = "Zooplankton")
 }
 \arguments{
 \item{Type}{Phytoplankton (P) or Zooplankton (Z), defaults to phyto}
@@ -16,5 +16,5 @@ dataframe for plotting with pr_plot_FreqMap
 Get data for frequency map plots
 }
 \examples{
-df <- pr_get_FreqMap("Z")
+df <- pr_get_FreqMap("Zooplankton")
 }

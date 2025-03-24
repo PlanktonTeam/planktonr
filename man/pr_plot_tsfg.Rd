@@ -20,7 +20,7 @@ plot of fg timseries
 Time series plot of functional groups
 }
 \examples{
-df <- pr_get_FuncGroups("NRS", "P") \%>\% dplyr::filter(StationCode == 'PHB')
+df <- pr_get_FuncGroups("NRS", "Phytoplankton") \%>\% dplyr::filter(StationCode == 'PHB')
 plot <- pr_plot_tsfg(df, "Actual")
 plot
 }

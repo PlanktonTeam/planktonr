@@ -86,7 +86,7 @@ CSCodes <- tibble::tibble(StationName = c("Balls Head", "Salmon Haul", "Bare Isl
   dplyr::arrange(State)
 
 # NRS input into pl_plot_NRSmap()
-meta_sf <- planktonr::pr_get_NRSTrips("Z") %>%
+meta_sf <- planktonr::pr_get_NRSTrips("Zooplankton") %>%
   dplyr::select("StationName", "StationCode", "Longitude", "Latitude") %>%
   dplyr::distinct() %>%
   dplyr::rename(Code = "StationCode",

@@ -19,9 +19,11 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
       pr_rename() %>%
       pr_add_Bioregions(...)
 
-    polSat <- pr_get_SatData("CPR") %>% dplyr::select("Sample_ID", "SST", "chl_oc3")
+    polSat <- pr_get_SatData("CPR") %>%
+      dplyr::select("Sample_ID", "SST", "chl_oc3")
 
-    Polr <-  Polr %>% dplyr::left_join(polSat, by = "Sample_ID")
+    Polr <-  Polr %>%
+      dplyr::left_join(polSat, by = "Sample_ID")
 
     Pol <- Polr %>%
       dplyr::select(tidyselect::starts_with(c("SampleTime_Local", "Year_Local", "Month_Local", "BioRegion", "DistanceFromBioregion_m")),
@@ -32,15 +34,14 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
     means <- Polr %>%
       dplyr::select("BioRegion", tidyselect::all_of(var_names)) %>%
       tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "Parameters") %>%
-      dplyr::group_by(.data$BioRegion, .data$Parameters) %>%
       dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
                        sd = stats::sd(.data$Values, na.rm = TRUE),
-                       .groups = "drop")
+                       .by = tidyselect::all_of(c("BioRegion", "Parameters")))
 
     Pol <- Pol %>%
       dplyr::left_join(means, by = c("BioRegion", "Parameters")) %>%
       dplyr::mutate(anomaly = (.data$Values - means)/sd,
-                    Survey = 'CPR') %>%
+                    Survey = "CPR") %>%
       planktonr::pr_reorder()
 
   } else if (Survey == "NRS"){
@@ -66,20 +67,19 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
     means <- Polr %>%
       dplyr::select("StationName", tidyselect::all_of(var_names)) %>%
       tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "Parameters") %>%
-      dplyr::group_by(.data$StationName, .data$Parameters) %>%
       dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
                        sd = stats::sd(.data$Values, na.rm = TRUE),
-                       .groups = "drop")
+                       .by = tidyselect::all_of(c("StationName", "Parameters")))
 
     Pol <- Pol %>%
       dplyr::left_join(means, by = c("StationName", "Parameters")) %>%
       dplyr::mutate(anomaly = (.data$Values - means)/sd,
-                    Survey = 'NRS') %>%
+                    Survey = "NRS") %>%
       planktonr::pr_reorder()
 
 
-    Pol <- Pol %>%
-      dplyr::filter(.data$StationCode != "VBM") # TODO Temporarily remove VBM - Not enough data to run analyses
+    # Pol <- Pol %>%
+    #   dplyr::filter(.data$StationCode != "VBM") # TODO Temporarily remove VBM - Not enough data to run analyses
 
   } else if (Survey == "LTM"){
 
@@ -87,18 +87,15 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
 
     LTnuts <- pr_get_LTnuts() %>%
       dplyr::filter(.data$SampleDepth_m < 11) %>%
-      dplyr::group_by(.data$StationName, .data$StationCode, .data$SampleTime_Local, .data$Month_Local,
-                      .data$Year_Local, .data$Parameters) %>%
       dplyr::summarise(mean = mean(.data$Values, na.rm = TRUE),
-                       .groups = "drop") %>%
+                       .by = all_vars) %>%
       dplyr::rename(Values = mean)
 
     means <- LTnuts %>%
       dplyr::select("StationName", "Parameters", "Values") %>%
-      dplyr::group_by(.data$StationName, .data$Parameters) %>%
       dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
                        sd = stats::sd(.data$Values, na.rm = TRUE),
-                       .groups = "drop")
+                       .by = tidyselect::all_of(c("StationName", "Parameters")))
 
     Pol <- LTnuts %>%
       dplyr::left_join(means, by = c("StationName", "Parameters")) %>%
@@ -107,6 +104,9 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
       planktonr::pr_reorder()
 
   }
+
+  Pol <- pr_planktonr_class(Pol, type = "EOV", survey = Survey, variable = NULL)
+
 }
 
 #' Get policy information
@@ -142,9 +142,9 @@ pr_get_PolicyInfo <- function(Survey = "NRS", ...){
     # Southern ocean info from https://soe.dcceew.gov.au/antarctica/environment/physical-environment
     # All others from https://www.dcceew.gov.au/environment/marine/marine-bioregional-plans
     CPRinfo <- pr_get_CPRTrips() %>%
-      dplyr::group_by(.data$BioRegion) %>%
       dplyr::summarise(SampleStartDate = as.Date(min(.data$SampleTime_UTC)),
-                       Miles = dplyr::n() * 4 * 5) %>%
+                       Miles = dplyr::n() * 4 * 5,
+                       .by = tidyselect::all_of("BioRegion")) %>%
       dplyr::mutate(Features = dplyr::case_when(.data$BioRegion %in% c("South-east") ~ "narrow shelf intensifying currents, eddies and upwellings with low nutrient and primary productivity",
                                                 .data$BioRegion %in% c("South-west") ~ "temperate and subtropical habitats influenced by the nutrient deplete Leeuwin Current.",
                                                 .data$BioRegion %in% c("Temperate East") ~ "temperate and subtropical habitats influenced by the East Australian Current and its eddies.",

@@ -58,10 +58,10 @@ pr_plot_NRSEnvContour(Nuts, Interpolation = TRUE, Fill_NA = TRUE, maxGap = 3)
 
 ### CTD data from National Reference Stations
 
-Using "W" in the pr_get_Indices function will get the parameters associated with the water body at the time of sampling. The parameters starting CTD are mean values over the top 10m of the water column. 
+Using "Water" in the pr_get_Indices function will get the parameters associated with the water body at the time of sampling. The parameters starting CTD are mean values over the top 10m of the water column. 
 
 ```{r}
-CTD <- pr_get_Indices("NRS", "W") 
+CTD <- pr_get_Indices("NRS", "Water") 
 unique(CTD$Parameters)
 
 ```
@@ -69,12 +69,12 @@ unique(CTD$Parameters)
 As you would expect if we plot the surface temperature at North Stradbroke it is significantly warmer than that at Maria Island. Both seem reasonably stable over the plotting period with very similar seasonal trends. 
 
 ```{r}
-CTD <- pr_get_Indices("NRS", "W") %>% 
+CTD <- pr_get_Indices("NRS", "Water") %>% 
   filter(Parameters == "CTDTemperature_degC") %>% 
   filter(StationCode %in% c("NSI", "MAI"))
 
-p1 <- pr_plot_Trends(CTD, Trend = "Raw", Survey = "NRS", method = "lm", trans = "identity")
-p2 <- pr_plot_Trends(CTD, Trend = "Month", Survey = "NRS", method = "loess", trans = "identity") +
+p1 <- pr_plot_Trends(CTD, Trend = "Raw", method = "lm", trans = "identity")
+p2 <- pr_plot_Trends(CTD, Trend = "Month", method = "loess", trans = "identity") +
   ggplot2::theme(axis.title.y = ggplot2::element_blank())
 p1 + p2 + plot_layout(widths = c(3, 1), guides = "collect")
 

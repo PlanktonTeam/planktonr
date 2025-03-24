@@ -4,10 +4,10 @@
 \alias{pr_plot_CPRmap}
 \title{Title Sidebar panel plot of selected CPR bioregions}
 \usage{
-pr_plot_CPRmap(df)
+pr_plot_CPRmap(sites)
 }
 \arguments{
-\item{df}{dataframe containing CPR bioregions to plot}
+\item{sites}{A string vector containing CPR bioregions to plot}
 }
 \value{
 a map of the selected bioregions
@@ -16,6 +16,6 @@ a map of the selected bioregions
 Title Sidebar panel plot of selected CPR bioregions
 }
 \examples{
-df <- data.frame(BioRegion = c("Temperate East", "South-west", "South-east", "North", "North-west"))
-cprmap <- pr_plot_CPRmap(df)
+cprmap <- pr_plot_CPRmap(sites = c("Temperate East", "South-west",
+                                    "South-east", "North", "North-west"))
 }

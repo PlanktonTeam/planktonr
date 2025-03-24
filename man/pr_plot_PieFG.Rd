@@ -7,7 +7,7 @@
 pr_plot_PieFG(df)
 }
 \arguments{
-\item{df}{data frame binned to functional group e.g. planktonr::pr_get_FuncGroups("NRS", "Z")}
+\item{df}{data frame binned to functional group e.g. planktonr::pr_get_FuncGroups("NRS", "Zooplankton")}
 }
 \value{
 pie plot of functional groups
@@ -16,7 +16,7 @@ pie plot of functional groups
 Pie plots of functional groups for data
 }
 \examples{
-df <- pr_get_FuncGroups("CPR", "P")
+df <- pr_get_FuncGroups("CPR", "Phytoplankton")
 plot <- pr_plot_PieFG(df)
 
 }

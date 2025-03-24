@@ -36,7 +36,8 @@ Imports:
     tibble,
     tidyr,
     tidyselect,
-    units
+    units,
+    vctrs
 Suggests: 
     future,
     furrr,
