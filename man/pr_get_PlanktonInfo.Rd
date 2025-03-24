@@ -4,7 +4,7 @@
 \alias{pr_get_PlanktonInfo}
 \title{Load plankton information table with sizes etc.}
 \usage{
-pr_get_PlanktonInfo(Type = "Z")
+pr_get_PlanktonInfo(Type = "Zooplankton")
 }
 \arguments{
 \item{Type}{Get info for Phytoplankton (\code{P}) or Zooplankton(\code{Z})}
@@ -16,6 +16,6 @@ A dataframe with NRS zooplankton information
 Load plankton information table with sizes etc.
 }
 \examples{
-df <- pr_get_PlanktonInfo(Type = "P")
-df <- pr_get_PlanktonInfo(Type = "Z")
+df <- pr_get_PlanktonInfo(Type = "Phytoplankton")
+df <- pr_get_PlanktonInfo(Type = "Zooplankton")
 }

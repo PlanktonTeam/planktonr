@@ -39,6 +39,7 @@ pr_get_LFData <- function(){
                   Species2 = paste0(.data$Species2, ")")) %>%
     dplyr::mutate(Abundance_1000m3 = (.data$Count/.data$Volume_m3)*1e3)
 
+  df <- pr_planktonr_class(df, type = "Fish")
 }
 
 

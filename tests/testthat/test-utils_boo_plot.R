@@ -1,62 +1,62 @@
 testthat::test_that("Correct function output", {
-  testthat::expect_equal(class(data.frame(StationCode = c("NSI", "PHB")) %>%
-                                 pr_plot_NRSmap())[1], "gg")
 
-  testthat::expect_equal(class(data.frame(BioRegion = c("Temperate East", "South-west")) %>%
-                                 pr_plot_CPRmap())[1], "gg")
+  # TODO Just download indices once
+  testthat::expect_equal(class(pr_plot_NRSmap(sites = c("NSI", "PHB")))[1], "gg")
 
-  testthat::expect_equal(class(pr_get_Indices("NRS", "Z") %>%
+  testthat::expect_equal(class(pr_plot_CPRmap(sites = c("Temperate East", "South-west")))[1], "gg")
+
+  testthat::expect_equal(class(pr_get_Indices(Survey = "NRS", Type = "Zooplankton") %>%
                                  dplyr::filter(Parameters == "Biomass_mgm3") %>%
-                                 pr_plot_TimeSeries("NRS"))[1], "gg")
+                                 pr_plot_TimeSeries())[1], "gg")
 
-  testthat::expect_equal(class(pr_get_Indices("CPR", "Z") %>%
+  testthat::expect_equal(class(pr_get_Indices(Survey = "CPR", Type = "Zooplankton") %>%
                                  dplyr::filter(Parameters == "Biomass_mgm3") %>%
-                                 pr_plot_TimeSeries("CPR"))[1], "gg")
+                                 pr_plot_TimeSeries())[1], "gg")
 
-  testthat::expect_equal(class(pr_get_Indices("NRS", "Z") %>%
+  testthat::expect_equal(class(pr_get_Indices(Survey = "NRS", Type = "Zooplankton") %>%
                                  dplyr::filter(Parameters == "Biomass_mgm3") %>%
-                                 pr_plot_Trends(Trend = "Year", Survey = "NRS"))[1], "gg")
+                                 pr_plot_Trends(Trend = "Year"))[1], "gg")
 
-  testthat::expect_equal(class(pr_get_Indices("CPR", "Z") %>%
+  testthat::expect_equal(class(pr_get_Indices(Survey = "CPR", Type = "Zooplankton") %>%
                                  dplyr::filter(Parameters == "BiomassIndex_mgm3") %>%
-                                 pr_plot_Trends(Trend = "Month", Survey = "CPR"))[1], "gg")
+                                 pr_plot_Trends(Trend = "Month"))[1], "gg")
 
-  testthat::expect_equal(class(pr_get_Indices("CPR", "Z") %>%
+  testthat::expect_equal(class(pr_get_Indices(Survey = "CPR", Type = "Zooplankton") %>%
                                  dplyr::filter(Parameters == "Biomass_mgm3") %>%
-                                 pr_plot_Trends(Trend = "Raw", Survey = "CPR"))[1], "gg")
+                                 pr_plot_Trends(Trend = "Raw"))[1], "gg")
 
-  testthat::expect_equal(class(pr_get_Indices(Survey = "CPR", Type = "Z") %>%
+  testthat::expect_equal(class(pr_get_Indices(Survey = "CPR", Type = "Zooplankton") %>%
                                  dplyr::filter(Parameters == "ZoopAbundance_m3") %>%
-                                 pr_plot_Climatology("CPR", "Year"))[1], "gg")
+                                 pr_plot_Climatology(Trend = "Year"))[1], "gg")
 
-  testthat::expect_equal(class(pr_get_Indices(Survey = "NRS", Type = "P") %>%
+  testthat::expect_equal(class(pr_get_Indices(Survey = "NRS", Type = "Phytoplankton") %>%
                                  dplyr::filter(Parameters == "PhytoAbundance_CellsL") %>%
-                                 pr_plot_tsclimate("NRS"))[1], "patchwork")
+                                 pr_plot_tsclimate())[1], "patchwork")
 
-  testthat::expect_equal(class(pr_get_FuncGroups("NRS", "P") %>%
+  testthat::expect_equal(class(pr_get_FuncGroups(Survey = "NRS", Type = "Phytoplankton") %>%
                                  pr_plot_tsfg(Scale = "Actual", Trend = "Raw"))[1], "gg")
 
-  testthat::expect_equal(class(pr_get_FuncGroups("NRS", "P") %>%
+  testthat::expect_equal(class(pr_get_FuncGroups(Survey = "NRS", Type = "Phytoplankton") %>%
                                  pr_plot_tsfg(Scale = "Percent", Trend = "Month"))[1], "gg")
 
-  testthat::expect_equal(class(pr_get_FuncGroups("CPR", "P") %>%
+  testthat::expect_equal(class(pr_get_FuncGroups(Survey = "CPR", Type = "Phytoplankton") %>%
                                  pr_plot_tsfg(Scale = "Actual", Trend = "Year"))[1], "gg")
 
-  testthat::expect_equal(class(planktonr::pr_get_EOVs("NRS") %>%
+  testthat::expect_equal(class(planktonr::pr_get_EOVs(Survey = "NRS") %>%
                                  dplyr::filter(.data$Parameters != 'Oxygen_umolL',
                                                                                !.data$StationCode %in% c('NIN', 'ESP')) %>%
                                  pr_get_Coeffs() %>%
-                                 pr_plot_EOVs(EOV = "Biomass_mgm3", Survey = "NRS", trans = "identity",
+                                 pr_plot_EOVs(EOV = "Biomass_mgm3", trans = "identity",
                                               labels = "yes"))[1], "patchwork")
 
-  testthat::expect_equal(class(planktonr::pr_get_EOVs("CPR") %>%
+  testthat::expect_equal(class(planktonr::pr_get_EOVs(Survey = "CPR") %>%
                                  pr_get_Coeffs() %>%
-                                 pr_plot_EOVs(EOV = "Biomass_mgm3", Survey = "CPR", trans = "identity",
+                                 pr_plot_EOVs(EOV = "Biomass_mgm3", trans = "identity",
                                               labels = "no"))[1], "patchwork")
 
-  testthat::expect_equal(class(planktonr::pr_get_EOVs("LTM") %>%
+  testthat::expect_equal(class(planktonr::pr_get_EOVs(Survey = "LTM") %>%
                                  pr_get_Coeffs() %>%
-                                 pr_plot_EOVs(EOV = "Biomass_mgm3", Survey = "LTM", trans = "identity",
+                                 pr_plot_EOVs(EOV = "Biomass_mgm3", trans = "identity",
                                               labels = "no"))[1], "patchwork")
 
   testthat::expect_equal(class(pr_get_NRSChemistry() %>%
@@ -89,13 +89,13 @@ testthat::test_that("Correct function output", {
                                           Species = "Acartia danae") %>%
                                  pr_plot_STI())[1], "gg")
 
-  testthat::expect_equal(class(pr_get_ProgressMapData(c("CPR", "NRS")) %>%
+  testthat::expect_equal(class(pr_get_ProgressMapData(Survey = c("CPR", "NRS")) %>%
                                  pr_plot_ProgressMap())[1], "gg")
 
-  testthat::expect_equal(class(pr_get_ProgressMapData(c("CPR", "NRS"), interactive = TRUE) %>%
+  testthat::expect_equal(class(pr_get_ProgressMapData(Survey = c("CPR", "NRS"), interactive = TRUE) %>%
                                  pr_plot_ProgressMap(interactive = TRUE, labels = FALSE))[1], "leaflet")
 
-  testthat::expect_equal(class(pr_get_ProgressMapData(c("CPR", "NRS"), interactive = TRUE) %>%
+  testthat::expect_equal(class(pr_get_ProgressMapData(Survey = c("CPR", "NRS"), interactive = TRUE) %>%
                                  pr_plot_ProgressMap(interactive = TRUE))[1], "leaflet")
 
   testthat::expect_equal(class(data.frame(Longitude = c(110, 130, 155, 150), Latitude = c(-10, -35, -27, -45),
@@ -116,31 +116,32 @@ testthat::test_that("Correct function output", {
 
 
 
-  testthat::expect_equal(class(pr_plot_Gantt(pr_get_CPRTrips(), Survey = "CPR"))[1], "gg")
+  testthat::expect_equal(class(pr_plot_Gantt(pr_get_CPRTrips()))[1], "gg")
 
-  testthat::expect_equal(class(pr_plot_Gantt(pr_get_NRSTrips(), Survey = "NRS"))[1], "gg")
+  testthat::expect_equal(class(pr_plot_Gantt(pr_get_NRSTrips()))[1], "gg")
 
-  testthat::expect_equal(class(pr_get_TaxaAccum(Survey = "NRS", Type = "Z") %>% pr_plot_TaxaAccum(Survey = "NRS", Type = "Z"))[1], "gg")
+  testthat::expect_equal(class(pr_get_TaxaAccum(Survey = "NRS", Type = "Zooplankton") %>%
+                                 pr_plot_TaxaAccum())[1], "gg")
 
-  testthat::expect_equal(class(pr_get_NRSEnvContour("Pico") %>%
+  testthat::expect_equal(class(pr_get_NRSEnvContour(Data = "Pico") %>%
                                  dplyr::filter(Parameters == "Prochlorococcus_cellsmL",
                                                StationCode %in% c('YON', 'PHB', 'NSI')) %>%
                                  pr_plot_NRSEnvContour(Interpolation = TRUE, Fill_NA = TRUE))[1], "patchwork")
 
-  testthat::expect_equal(class(pr_get_NRSEnvContour("Pico") %>%
+  testthat::expect_equal(class(pr_get_NRSEnvContour(Data = "Pico") %>%
                                  dplyr::filter(Parameters == "Prochlorococcus_cellsmL",
                                                StationCode %in% c('YON', 'PHB', 'NSI')) %>%
                                  pr_plot_NRSEnvContour(Interpolation = FALSE))[1], "patchwork")
 
-  testthat::expect_equal(class(pr_get_FuncGroups("CPR", "P") %>% pr_plot_PieFG())[1], "gg")
-  testthat::expect_equal(class(pr_get_FuncGroups("NRS", "Z") %>% pr_plot_PieFG())[1], "gg")
+  testthat::expect_equal(class(pr_get_FuncGroups(Survey = "CPR", Type = "Phytoplankton") %>% pr_plot_PieFG())[1], "gg")
+  testthat::expect_equal(class(pr_get_FuncGroups(Survey = "NRS", Type = "Zooplankton") %>% pr_plot_PieFG())[1], "gg")
 
 
   testthat::expect_equal(class(pr_get_PCIData() %>% pr_plot_PCImap())[1], "gg")
 
-  testthat::expect_equal(class(pr_plot_Voyagemap(pr_get_NRSMicro("GO-SHIP"),
-                                                 pr_get_NRSMicro("GO-SHIP") %>% dplyr::slice(1:5000),
-                                                 Country = c("AUstralia", "New Zealand")))[1], "gg")
+  testthat::expect_equal(class(pr_plot_Voyagemap(pr_get_NRSMicro(Survey = "GO-SHIP"),
+                                                 pr_get_NRSMicro(Survey = "GO-SHIP") %>% dplyr::slice(1:5000),
+                                                 Country = c("Australia", "New Zealand")))[1], "gg")
 
   testthat::expect_equal(class(
     planktonr::pr_get_NRSMicro() %>%
@@ -151,14 +152,14 @@ testthat::test_that("Correct function output", {
 
 
   testthat::expect_equal(class(
-    planktonr::pr_get_NRSMicro('Coastal') %>%
+    planktonr::pr_get_NRSMicro(Survey = "Coastal") %>%
       tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
       dplyr::filter(StationCode %in% c("DEE", "DEB")) %>%
       tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = mean) %>%
       pr_plot_box("Bacterial_Temperature_Index_KD"))[1], "gg")
 
   testthat::expect_equal(class(
-    pr_get_NRSMicro('GO-SHIP') %>%
+    pr_get_NRSMicro(Survey = "GO-SHIP") %>%
       dplyr::filter(Parameters == 'Archaea_unique_ASVs', SampleDepth_m < 101) %>%
       pr_plot_latitude(Fill_NA = TRUE, maxGap = 5))[1], "patchwork")
 

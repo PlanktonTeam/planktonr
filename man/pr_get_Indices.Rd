@@ -4,7 +4,7 @@
 \alias{pr_get_Indices}
 \title{Access data for timeseries and climatology plots}
 \usage{
-pr_get_Indices(Survey = "CPR", Type = "P", ...)
+pr_get_Indices(Survey = "CPR", Type = "Phytoplankton", ...)
 }
 \arguments{
 \item{Survey}{CPR or NRS, defaults to NRS}
@@ -20,9 +20,9 @@ dataframe to use in pr_plot functions
 Access data for timeseries and climatology plots
 }
 \examples{
-df <- pr_get_Indices("NRS", "P")
-df <- pr_get_Indices("NRS", "Z")
-df <- pr_get_Indices("NRS", "W")
-df <- pr_get_Indices("CPR", "P", near_dist_km = 250)
-df <- pr_get_Indices("CPR", "Z")
+df <- pr_get_Indices("NRS", "Phytoplankton")
+df <- pr_get_Indices("NRS", "Zooplankton")
+df <- pr_get_Indices("NRS", "Water")
+df <- pr_get_Indices("CPR", "Phytoplankton", near_dist_km = 250)
+df <- pr_get_Indices("CPR", "Zooplankton")
 }

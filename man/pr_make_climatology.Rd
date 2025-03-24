@@ -9,7 +9,7 @@ pr_make_climatology(df, x)
 \arguments{
 \item{df}{output of pr_get_Indices}
 
-\item{x}{Year, Month, Day, time period of climatology}
+\item{x}{A string of Year, Month, Day, time period of climatology}
 }
 \value{
 dataframe to use in pr_plot_Climatology functions
@@ -18,6 +18,6 @@ dataframe to use in pr_plot_Climatology functions
 To produce the climatology for plotting
 }
 \examples{
-df <- data.frame(Month = rep(1:12,10), StationCode = 'NSI', Values = runif(120, min=0, max=10))
-pr_make_climatology(df, Month)
+df <- data.frame(Month = rep(1:12,10), StationCode = "NSI", Values = runif(120, min=0, max=10))
+pr_make_climatology(df, "Month")
 }

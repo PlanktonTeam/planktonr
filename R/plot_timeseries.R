@@ -3,30 +3,30 @@
 #' Plot basic timeseries
 #'
 #' @param df dataframe with SampleDate_Local, station code and parameter name and values
-#' @param Survey CPR or NRS data
 #' @param trans scale of y axis on plot, whatever scale_y_continuous trans accepts
 #'
 #' @return a timeseries plot
 #' @export
 #'
 #' @examples
-#' df <- pr_get_Indices("NRS", "Z") %>%
+#' df <- pr_get_Indices("NRS", "Zooplankton") %>%
 #'   dplyr::filter(Parameters == "Biomass_mgm3", StationCode %in% c("NSI", "PHB"))
-#' timeseries <- pr_plot_TimeSeries(df, Survey = "NRS")
+#' timeseries <- pr_plot_TimeSeries(df)
 
-pr_plot_TimeSeries <- function(df, Survey = "NRS", trans = "identity"){
+pr_plot_TimeSeries <- function(df, trans = "identity"){
 
-  if(Survey == "CPR"){
+  Survey <- pr_get_survey(df)
+
+  if (Survey == "CPR"){
     df <- df %>%
       dplyr::rename(StationName = "BioRegion")
     plotCols <- colCPR
     ltype <- "solid"
 
-  } else {
+  } else if (Survey == "NRS"){
     df <- df %>%
-      dplyr::group_by(.data$SampleTime_Local, .data$StationName, .data$Parameters) %>% # accounting for microbial data different depths
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
-                       .groups = "drop")
+                       .by = tidyselect::all_of(c("SampleTime_Local", "StationName", "Parameters"))) # accounting for microbial data different depths
     plotCols <- colNRSName
     ltype <- ltyNRSName
   }
@@ -48,7 +48,7 @@ pr_plot_TimeSeries <- function(df, Survey = "NRS", trans = "identity"){
 
   if(Survey != "Coastal") {
     p1 +
-    ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", expand = c(0, 0))
+      ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", expand = c(0, 0))
   } else {
     p1 +
       ggplot2::scale_x_datetime(date_breaks = "1 year", date_labels = "%Y", expand = c(0, 0))
@@ -62,7 +62,6 @@ pr_plot_TimeSeries <- function(df, Survey = "NRS", trans = "identity"){
 #'
 #' @param df A dataframe containing the plankton timeseries data.
 #' @param Trend Over what timescale to fit the Trend - "Raw", "Month" or "Year"
-#' @param Survey "NRS" or "CPR" data
 #' @param method Any method accepted by `geom_smooth()`
 #' @param trans transformation of y axis on plot, whatever `scale_y_continuous()` trans accepts
 #' #'
@@ -73,12 +72,16 @@ pr_plot_TimeSeries <- function(df, Survey = "NRS", trans = "identity"){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_Indices("NRS", "Z") %>%
+#' df <- pr_get_Indices("NRS", "Zooplankton") %>%
 #'   dplyr::filter(Parameters == 'Biomass_mgm3')
-#' pr_plot_Trends(df, Trend = "Month", Survey = "NRS")
-#' pr_plot_Trends(df, Trend = "Year", Survey = "NRS")
-#' pr_plot_Trends(df, Trend = "Raw", Survey = "NRS")
-pr_plot_Trends <- function(df, Trend = "Raw", Survey = "NRS", method = "lm",  trans = "identity"){
+#' pr_plot_Trends(df, Trend = "Month")
+#' pr_plot_Trends(df, Trend = "Year")
+#' pr_plot_Trends(df, Trend = "Raw")
+pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"){
+
+  Survey <- pr_get_survey(df)
+
+  df <- tibble::as_tibble(df)
 
   if (Trend == "Month"){
     Trend = "Month_Local"
@@ -99,32 +102,40 @@ pr_plot_Trends <- function(df, Trend = "Raw", Survey = "NRS", method = "lm",  tr
 
   if (Trend %in% c("Year_Local", "Month_Local")){
     df <- df %>%
-      dplyr::group_by(!!rlang::sym(Trend), !!site) %>%
-      dplyr::summarise(value = mean(.data$Values, na.rm = TRUE),
+      dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                        N = dplyr::n(),
                        sd = sd(.data$Values, na.rm = TRUE),
                        se = sd / sqrt(.data$N),
-                       .groups = "drop")
+                       .by = c(rlang::as_string(rlang::sym(Trend)), rlang::as_string(site)))
 
   } else {
     Trend <- "SampleTime_Local" # Rename Trend to match the column with time
-    df <- df %>%
-      dplyr::group_by(.data$SampleTime_Local, !!site, .data$Parameters) %>% # accounting for microbial data different depths
+    df2 <- df %>%
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
-                       .groups = "drop")%>%
-      dplyr::rename(value = "Values")
+                       .by = tidyselect::all_of(c(rlang::as_string(site), "SampleTime_Local", "Parameters"))) # accounting for microbial data different depths
+  }
+
+  # Remove smooth from VBM
+  if (Survey == "NRS"){
+    df <- df %>%
+      dplyr::mutate(do_smooth = !!site != "Bonney Coast")
+  } else {
+    df <- df %>%
+      dplyr::mutate(do_smooth = TRUE)
   }
 
   # Do the plotting ---------------------------------------------------------
 
-  p1 <- ggplot2::ggplot(df, ggplot2::aes(x = !!rlang::sym(Trend), y = .data$value)) + # do this logging as in pr_plot_tsclimate
-    ggplot2::geom_smooth(method = method, formula = y ~ x) +
+  p1 <- ggplot2::ggplot(df, ggplot2::aes(x = !!rlang::sym(Trend), y = .data$Values)) + # do this logging as in pr_plot_tsclimate
     ggplot2::geom_point() +
+    ggplot2::geom_smooth(data = df %>% dplyr::filter(.data$do_smooth),
+                         method = method, formula = y ~ x) +
     ggplot2::facet_wrap(rlang::enexpr(site), scales = "free_y", ncol = 1) +
     ggplot2::ylab(rlang::enexpr(titley)) +
     ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
     theme_pr() +
     ggplot2::theme(strip.text = ggplot2::element_text(hjust = 0))
+
 
   if (rlang::as_string(Trend) %in% c("Month_Local")){
     p1 <- p1 +
@@ -153,27 +164,31 @@ pr_plot_Trends <- function(df, Trend = "Raw", Survey = "NRS", method = "lm",  tr
 #'
 #' @param df dataframe with specified time period, station code and parameter
 #' @param Trend specified time period
-#' @param Survey CPR or NRS data
 #' @param trans scale of y axis on plot, whatever scale_y_continuous trans accepts
 #'
 #' @return a climatology plot
 #' @export
 #'
 #' @examples
-#' df <- pr_get_Indices(Survey = "NRS", Type = "P") %>%
+#' df <- pr_get_Indices(Survey = "NRS", Type = "Phytoplankton") %>%
 #' dplyr::filter(Parameters == "PhytoBiomassCarbon_pgL", StationCode %in% c("NSI", "PHB"))
 #'
-#' monthly <- pr_plot_Climatology(df, "NRS", "Month")
+#' monthly <- pr_plot_Climatology(df, Trend = "Month")
 #'
-#' df <- pr_get_Indices(Survey = "CPR", Type = "Z") %>%
+#' df <- pr_get_Indices(Survey = "CPR", Type = "Zooplankton") %>%
 #'         dplyr::filter(Parameters == "ZoopAbundance_m3")
-#' annual <- pr_plot_Climatology(df, "CPR", "Year")
-pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "identity"){
+#' annual <- pr_plot_Climatology(df, Trend = "Year")
+pr_plot_Climatology <- function(df, Trend = "Month", trans = "identity"){
+
+  Survey <- pr_get_survey(df)
+  Type <- pr_get_type(df)
+  Variable <- pr_get_variable(df)
 
   if (Trend == "Month"){
     Trend = "Month_Local"
     dodge <- 0.8
   }
+
   if (Trend == "Year"){
     Trend = "Year_Local"
     dodge <- 300
@@ -193,14 +208,18 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
   n <- length(unique(df$StationName))
   title <- pr_relabel(unique(df$Parameters), style = "ggplot")
 
+
+  #TODO !! Doesn't work with the custom class so we convert to tibble and then back again. It would be interesting to find out why one day....
   df_climate <- df %>%
-    dplyr::group_by(!!Trend, .data$StationName) %>%
+    tibble::as_tibble() %>%
     dplyr::summarise(mean = mean(.data$Values, na.rm = TRUE),
                      N = length(.data$Values),
                      sd = stats::sd(.data$Values, na.rm = TRUE),
                      se = sd / sqrt(.data$N),
-                     .groups = "drop") %>%
-    tidyr::complete(!!Trend, .data$StationName)
+                     .by = tidyselect::all_of(c(rlang::as_string(Trend), "StationName"))) %>%
+    tidyr::complete(!!Trend, .data$StationName) %>%
+    pr_planktonr_class(type = Type, survey = Survey, variable = Variable)
+
 
   if("Year_Local" %in% colnames(df_climate)){
     df_climate <- df_climate %>%
@@ -222,7 +241,7 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
     p1 <- p1 +
       ggplot2::xlab("Month") +
       ggplot2::scale_x_continuous(breaks = seq(1,12, length.out = 12), expand = ggplot2::expansion(mult = c(0.02, 0.02)),
-                                  labels=c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"))
+                                  labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"))
   }
 
   if("Year_Local" %in% colnames(df_climate) & Survey != 'Coastal'){
@@ -242,26 +261,27 @@ pr_plot_Climatology <- function(df, Survey = "NRS", Trend = "Month", trans = "id
 #' Combined timeseries and climatology plots
 #'
 #' @param df data frame with SampleDate_Local, time period and parameter
-#' @param Survey CPR or NRS data
 #' @param trans scale of y axis on plot, whatever scale_y_continuous trans accepts
 #'
 #' @return a combined plot
 #' @export
 #'
 #' @examples
-#' df <- pr_get_Indices(Survey = "CPR", Type = "P") %>%
+#' df <- pr_get_Indices(Survey = "CPR", Type = "Phytoplankton") %>%
 #'   dplyr::filter(Parameters == "PhytoAbundance_Cellsm3")
-#' pr_plot_tsclimate(df, "CPR")
-pr_plot_tsclimate <- function(df, Survey = "NRS", trans = "identity"){
+#' pr_plot_tsclimate(df)
+pr_plot_tsclimate <- function(df, trans = "identity"){
 
-  p1 <- pr_plot_TimeSeries(df, Survey, trans) +
+  Survey <- pr_get_survey(df)
+
+  p1 <- pr_plot_TimeSeries(df, trans) +
     ggplot2::theme(legend.position = "none",
                    axis.title.y = ggplot2::element_blank())
 
-  p2 <- pr_plot_Climatology(df, Survey, "Month", trans) +
+  p2 <- pr_plot_Climatology(df, "Month", trans) +
     ggplot2::theme(legend.position = "none")
 
-  p3 <- pr_plot_Climatology(df, Survey, "Year", trans) +
+  p3 <- pr_plot_Climatology(df, "Year", trans) +
     ggplot2::theme(axis.title.y = ggplot2::element_blank(),
                    legend.title = ggplot2::element_blank())
 
@@ -281,10 +301,12 @@ pr_plot_tsclimate <- function(df, Survey = "NRS", trans = "identity"){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_FuncGroups("NRS", "P") %>% dplyr::filter(StationCode == 'PHB')
+#' df <- pr_get_FuncGroups("NRS", "Phytoplankton") %>% dplyr::filter(StationCode == 'PHB')
 #' plot <- pr_plot_tsfg(df, "Actual")
 #' plot
 pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
+
+  df <- tibble::as_tibble(df)
 
   if (Trend == "Month"){
     Trend = "Month_Local"
@@ -326,12 +348,11 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
   if (Trend %in% c("Year_Local", "Month_Local")){
 
     df <- df %>%
-      dplyr::group_by(!!rlang::sym(Trend), !!station, .data$Parameters) %>%
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                        N = dplyr::n(),
                        sd = sd(.data$Values, na.rm = TRUE),
                        se = sd / sqrt(.data$N),
-                       .groups = "drop")
+                       .by = tidyselect::all_of(c(rlang::as_string(rlang::sym(Trend)), rlang::as_string(station), "Parameters")))
 
   } else {
     Trend <- SampleDate # Rename Trend to match the column with time
@@ -339,10 +360,9 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 
   if(Scale == "Percent") {
     df <- df %>%
-      dplyr::group_by(!!rlang::sym(Trend), !!station, .data$Parameters) %>%
-      dplyr::summarise(n = sum(.data$Values, na.rm = TRUE)) %>%
-      dplyr::mutate(Values = .data$n / sum(.data$n, na.rm = TRUE)) %>%
-      dplyr::ungroup()
+      dplyr::summarise(n = sum(.data$Values, na.rm = TRUE),
+                       .by = tidyselect::all_of(c(rlang::as_string(rlang::sym(Trend)), rlang::as_string(station), "Parameters"))) %>%
+      dplyr::mutate(Values = .data$n / sum(.data$n, na.rm = TRUE))
   } else {
     df <- df %>%
       dplyr::mutate(Values = log10(.data$Values))
@@ -383,7 +403,6 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 #'
 #' @param df dataframe containing timeseries data with Parameters and Values, output of pr_get_EOVs and pr_get_Coeffs
 #' @param EOV Essential Ocean Variable as a parameter
-#' @param Survey NRS, CPR or LTM 'Long term monitoring'
 #' @param trans scale for y axis
 #' @param col colour selection
 #' @param labels do you want to print labels on the x axes
@@ -395,12 +414,27 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 #' df <- pr_get_EOVs("NRS") %>%
 #'   pr_remove_outliers(2) %>%
 #'   pr_get_Coeffs()
-#' pr_plot_EOVs(df, EOV = "Biomass_mgm3", Survey = "NRS",
+#' pr_plot_EOVs(df, EOV = "Biomass_mgm3",
 #'       trans = "identity", col = "blue", labels = FALSE)
-pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "identity", col = "blue", labels = TRUE) {
+pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "blue", labels = TRUE) {
 
-  titley <- pr_relabel(EOV, style = "ggplot")
+  # TODO need to add assert
+  # Ensure there is only 1 station
 
+   p <- df %>%
+     dplyr::filter(.data$Parameters == EOV) %>%
+     dplyr::pull(p) %>%
+     round(digits = 3)
+
+   # The title comes back as class "call" so I need to undo and redo it to add the string
+  titley <- pr_relabel(EOV, style = "ggplot") %>%
+    as.list() %>%
+    c(paste0(" [p = ",p[1] ,"]")) %>%
+    as.call()
+
+  Survey <- pr_get_survey(df)
+
+  # TODO I don't know why this code is here. It is identical
   if(Survey == "LTM"){
     lims <- c(lubridate::floor_date(min(df$SampleDate), "year"), lubridate::ceiling_date(max(df$SampleDate), "year"))
     df <- df %>%
@@ -411,9 +445,27 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "iden
       dplyr::filter(.data$Parameters == EOV)
   }
 
+
+  if (Survey == "CPR"){
+    site = rlang::sym("BioRegion")
+  } else if (Survey != "CPR"){
+    site = rlang::sym("StationName")
+  }
+
+  # Remove smooth from VBM
+  if (Survey == "NRS"){
+    df <- df %>%
+      dplyr::mutate(do_smooth = !!site != "Bonney Coast")
+  } else {
+    df <- df %>%
+      dplyr::mutate(do_smooth = TRUE)
+  }
+
+
   p1 <- ggplot2::ggplot(df) +
     ggplot2::geom_point(ggplot2::aes(x = .data$SampleDate, y = .data$Values), colour = col) +
-    ggplot2::geom_smooth(ggplot2::aes(x = .data$SampleDate, y = .data$fv), method = "lm", formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
+    ggplot2::geom_smooth(data = df %>% dplyr::filter(.data$do_smooth),
+                         ggplot2::aes(x = .data$SampleDate, y = .data$fv), method = "lm", formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
     ggplot2::labs(x = "Year", subtitle = titley) +
     ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
     theme_pr() +
@@ -464,7 +516,8 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", Survey = "NRS", trans = "iden
 
   p3 <- ggplot2::ggplot(df) +
     ggplot2::geom_point(ggplot2::aes(x = .data$Month, y = .data$Values), colour = col) +
-    ggplot2::geom_smooth(ggplot2::aes(x = .data$Month, y = .data$Values), method = "loess",
+    ggplot2::geom_smooth(data = df %>% dplyr::filter(.data$do_smooth),
+                         ggplot2::aes(x = .data$Month, y = .data$Values), method = "loess",
                          formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
     ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
     ggplot2::scale_x_continuous(breaks = seq(0.5, 6.3, length.out = 12), expand = ggplot2::expansion(mult = c(0.02, 0.02)),
@@ -534,20 +587,19 @@ pr_plot_DayNight <-  function(df){
 #'
 #' plot <- pr_plot_STI(df)
 pr_plot_STI <-  function(df){
+
   means <- df %>%
-    dplyr::group_by(.data$Project) %>%
-    dplyr::summarise(mean = mean(.data$Species_m3, na.rm = TRUE))
+    dplyr::summarise(mean = mean(.data$Species_m3, na.rm = TRUE), .by = tidyselect::all_of("Project"))
 
   #means are so different so log data as the abundance scale is so wide
 
   sti <- df %>%
     dplyr::left_join(means, by = "Project") %>%
     dplyr::mutate(relab = .data$Species_m3/.data$mean) %>%
-    dplyr::group_by(.data$SST, .data$Species) %>%
     dplyr::summarize(relab = sum(.data$relab),
                      freq = dplyr::n(),
                      a = sum(.data$relab)/dplyr::n(),
-                     .groups = "drop")
+                     .by = tidyselect::all_of(c("SST", "Species")))
 
   n <- length(sti$SST)
   # have a stop if n < 10
@@ -617,16 +669,17 @@ pr_plot_STI <-  function(df){
 pr_plot_latitude <- function(df, Fill_NA = FALSE, maxGap = 3){
 
   df <- df %>% tidyr::drop_na()
+
   param <- planktonr::pr_relabel(unique(df$Parameters), "ggplot")
   xlabel <- rlang::expr(paste("Latitude (","\U00B0","S)"))
   Lab <- seq(round(min(df$Values), 0), round(max(df$Values), 0), length.out = 5)
   Breaks <- seq(round(min(df$Values), 0), round(max(df$Values), 0), length.out = 5)
 
   df1 <- df %>%
-      dplyr::mutate(Values = ifelse(.data$Values < 0, 0, .data$Values),
-                    Latitude = round(.data$Latitude, 0),
-                    Label = .data$Latitude) %>%
-        dplyr::arrange(.data$SampleDepth_m)
+    dplyr::mutate(Values = ifelse(.data$Values < 0, 0, .data$Values),
+                  Latitude = round(.data$Latitude, 0),
+                  Label = .data$Latitude) %>%
+    dplyr::arrange(.data$SampleDepth_m)
 
   gg <- ggplot2::ggplot(df1, ggplot2::aes(.data$Latitude, .data$SampleDepth_m, color = .data$Values)) +
     ggplot2::geom_point() +
@@ -634,7 +687,7 @@ pr_plot_latitude <- function(df, Fill_NA = FALSE, maxGap = 3){
     ggplot2::labs(y = "Depth (m)") + ggplot2::theme(axis.title.x = ggplot2::element_blank(),
                                                     legend.position = 'none') +
     ggplot2::scale_color_continuous(low="thistle2", high="darkred",
-                                   guide="colorbar",na.value="white", breaks = Breaks, labels = Lab) +
+                                    guide="colorbar",na.value="white", breaks = Breaks, labels = Lab) +
     ggplot2::scale_y_reverse()  +
     ggplot2::scale_x_continuous(expand = c(0, 0))
 
@@ -653,15 +706,15 @@ pr_plot_latitude <- function(df, Fill_NA = FALSE, maxGap = 3){
     dplyr::arrange(.data$Latitude, .data$SampleDepth_m)
 
   mat <- df2 %>%
-      dplyr::select("Latitude", "SampleDepth_m", "Values") %>%
-      tidyr::pivot_wider(names_from = "Latitude", values_from = "Values", values_fn = mean) %>%
-      dplyr::select(-"SampleDepth_m") %>%
-      as.matrix.data.frame()
+    dplyr::select("Latitude", "SampleDepth_m", "Values") %>%
+    tidyr::pivot_wider(names_from = "Latitude", values_from = "Values", values_fn = mean) %>%
+    dplyr::select(-"SampleDepth_m") %>%
+    as.matrix.data.frame()
 
   if(Fill_NA == TRUE){
     mat <- t(zoo::na.approx(t(mat), maxgap = maxGap))
     mat <- zoo::na.approx(mat, maxgap = maxGap)
-    }
+  }
 
   interped <- expand.grid(SampleDepth_m = Depths, Latitude = Lats)
 
@@ -678,18 +731,18 @@ pr_plot_latitude <- function(df, Fill_NA = FALSE, maxGap = 3){
   Breaks <- seq(round(min(dfInterp$Values, na.rm = TRUE), 0), round(max(dfInterp$Values, na.rm = TRUE), 0), length.out = 5)
 
   out <- ggplot2::ggplot(data = dfInterp, ggplot2::aes(.data$Latitude, y = .data$SampleDepth_m, fill = .data$Values)) +
-      ggplot2::geom_raster(interpolate = FALSE) +
-      ggplot2::scale_fill_continuous(low="thistle2", high="darkred",
-                             guide="colorbar",na.value="white", breaks = Breaks, labels = Lab) +
-      theme_pr() +
-      ggplot2::guides(fill = ggplot2::guide_legend(title = param, title.position = 'top')) +
-      ggplot2::scale_y_reverse(expand = c(0, 0)) +
-      ggplot2::labs(x = xlabel, y = "Depth (m)") +
-      ggplot2::scale_x_continuous(expand = c(0, 0))
+    ggplot2::geom_raster(interpolate = FALSE) +
+    ggplot2::scale_fill_continuous(low="thistle2", high="darkred",
+                                   guide="colorbar",na.value="white", breaks = Breaks, labels = Lab) +
+    theme_pr() +
+    ggplot2::guides(fill = ggplot2::guide_legend(title = param, title.position = 'top')) +
+    ggplot2::scale_y_reverse(expand = c(0, 0)) +
+    ggplot2::labs(x = xlabel, y = "Depth (m)") +
+    ggplot2::scale_x_continuous(expand = c(0, 0))
 
   plots <- patchwork::wrap_plots(gg, out, ncol = 1)
 
   return(plots)
 
-  }
+}
 

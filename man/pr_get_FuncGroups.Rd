@@ -4,7 +4,7 @@
 \alias{pr_get_FuncGroups}
 \title{Get functional group data}
 \usage{
-pr_get_FuncGroups(Survey = "NRS", Type = "Z", ...)
+pr_get_FuncGroups(Survey = "NRS", Type = "Zooplankton", ...)
 }
 \arguments{
 \item{Survey}{CPR or NRS data}
@@ -20,8 +20,8 @@ dataframe for plotting functional group time series info
 Get functional group data
 }
 \examples{
-NRSfgz <- pr_get_FuncGroups("NRS", "Z")
-NRSfgp <- pr_get_FuncGroups("NRS", "P")
-CPRfgz <- pr_get_FuncGroups("CPR", "Z", near_dist_km = 250)
-CPRfgp <- pr_get_FuncGroups("CPR", "P")
+NRSfgz <- pr_get_FuncGroups("NRS", "Zooplankton")
+NRSfgp <- pr_get_FuncGroups("NRS", "Phytoplankton")
+CPRfgz <- pr_get_FuncGroups("CPR", "Zooplankton", near_dist_km = 250)
+CPRfgp <- pr_get_FuncGroups("CPR", "Phytoplankton")
 }

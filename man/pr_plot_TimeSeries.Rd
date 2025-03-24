@@ -4,12 +4,10 @@
 \alias{pr_plot_TimeSeries}
 \title{Plot basic timeseries}
 \usage{
-pr_plot_TimeSeries(df, Survey = "NRS", trans = "identity")
+pr_plot_TimeSeries(df, trans = "identity")
 }
 \arguments{
 \item{df}{dataframe with SampleDate_Local, station code and parameter name and values}
-
-\item{Survey}{CPR or NRS data}
 
 \item{trans}{scale of y axis on plot, whatever scale_y_continuous trans accepts}
 }
@@ -20,7 +18,7 @@ a timeseries plot
 Plot basic timeseries
 }
 \examples{
-df <- pr_get_Indices("NRS", "Z") \%>\%
+df <- pr_get_Indices("NRS", "Zooplankton") \%>\%
   dplyr::filter(Parameters == "Biomass_mgm3", StationCode \%in\% c("NSI", "PHB"))
-timeseries <- pr_plot_TimeSeries(df, Survey = "NRS")
+timeseries <- pr_plot_TimeSeries(df)
 }

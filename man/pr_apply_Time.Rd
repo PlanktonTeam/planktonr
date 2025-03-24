@@ -16,6 +16,6 @@ A dataframe with extra date columns
 Add Month & year columns to df
 }
 \examples{
-df <- pr_get_Indices("NRS", "P") \%>\%
+df <- pr_get_Indices("NRS", "Phytoplankton") \%>\%
   pr_apply_Time()
 }

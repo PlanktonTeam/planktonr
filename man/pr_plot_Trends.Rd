@@ -4,20 +4,12 @@
 \alias{pr_plot_Trends}
 \title{Plot temporal Trends in plankton data}
 \usage{
-pr_plot_Trends(
-  df,
-  Trend = "Raw",
-  Survey = "NRS",
-  method = "lm",
-  trans = "identity"
-)
+pr_plot_Trends(df, Trend = "Raw", method = "lm", trans = "identity")
 }
 \arguments{
 \item{df}{A dataframe containing the plankton timeseries data.}
 
 \item{Trend}{Over what timescale to fit the Trend - "Raw", "Month" or "Year"}
-
-\item{Survey}{"NRS" or "CPR" data}
 
 \item{method}{Any method accepted by \code{geom_smooth()}}
 
@@ -31,9 +23,9 @@ a timeseries plot
 Plot temporal Trends in plankton data
 }
 \examples{
-df <- pr_get_Indices("NRS", "Z") \%>\%
+df <- pr_get_Indices("NRS", "Zooplankton") \%>\%
   dplyr::filter(Parameters == 'Biomass_mgm3')
-pr_plot_Trends(df, Trend = "Month", Survey = "NRS")
-pr_plot_Trends(df, Trend = "Year", Survey = "NRS")
-pr_plot_Trends(df, Trend = "Raw", Survey = "NRS")
+pr_plot_Trends(df, Trend = "Month")
+pr_plot_Trends(df, Trend = "Year")
+pr_plot_Trends(df, Trend = "Raw")
 }

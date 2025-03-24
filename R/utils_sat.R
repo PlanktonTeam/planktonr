@@ -38,7 +38,7 @@ pr_get_SatData <- function(Survey = 'NRS'){
 pr_get_DataLocs <- function(Survey = 'all'){
 
   if(Survey == 'NRS'){
-    df <- pr_get_NRSTrips(c('P', 'Z')) %>%
+    df <- pr_get_NRSTrips(c("Phytoplankton", "Zooplankton")) %>%
       dplyr::select("Longitude", "Latitude", "SampleTime_UTC") %>%
       dplyr::distinct(.data$Longitude, .data$Latitude, Date = as.Date(.data$SampleTime_UTC, 'UTC'))
   } else
@@ -49,7 +49,7 @@ pr_get_DataLocs <- function(Survey = 'all'){
         dplyr::distinct(.data$Longitude, .data$Latitude, Date = as.Date(.data$SampleTime_UTC, 'UTC'))
     } else {
       df <- dplyr::bind_rows(
-        pr_get_NRSTrips(c('P', 'Z')) %>%
+        pr_get_NRSTrips(c("Phytoplankton", "Zooplankton")) %>%
           dplyr::select("Longitude", "Latitude", "SampleTime_UTC"),
         pr_get_CPRTrips() %>%
           dplyr::filter(grepl("P|Z", .data$SampleType)) %>%

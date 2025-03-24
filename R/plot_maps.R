@@ -26,25 +26,32 @@ pr_plot_PCImap <- function(df) {
 
 #' Sidebar panel plot of selected NRS stations
 #'
-#' @param df dataframe containing station codes to plot
-#' @param Survey NRS or Coastal
+#' @param sites A string vector containing site codes to plot
 #'
 #' @return a map of the selected stations
 #' @export
 #'
 #' @examples
-#' df <- data.frame(StationCode = c("MAI", "PHB"))
-#' pmap <- pr_plot_NRSmap(df)
-pr_plot_NRSmap <- function(df, Survey = 'NRS'){
+#' sites <- c("MAI", "PHB")
+#' pmap <- pr_plot_NRSmap(sites)
+pr_plot_NRSmap <- function(sites){
 
-  if(Survey == 'NRS'){
+  # Check if it is NRS or Coastal
+  # TODO Write a better check urgently
+  if (sum(sites %in% meta_sf$Code) == length(sites)){
+    Survey = "NRS"
+  } else { # This else will be problematic. Need to come back to
+    Survey = "Coastal"
+  }
+
+  if(Survey == "NRS"){
     meta_sf <- meta_sf
-  } else {
+  } else if (Survey == "Coastal") {
     meta_sf <- csDAT
   }
 
   meta_sf <- meta_sf %>%
-    dplyr::mutate(Colour = dplyr::if_else(.data$Code %in% df$StationCode, "Red", "Blue")) %>%
+    dplyr::mutate(Colour = dplyr::if_else(.data$Code %in% sites, "Red", "Blue")) %>%
     sf::st_as_sf() # This seems to strip away some of the tibble stuff that makes the filter not work...
   # dplyr::filter(.data$Code %in% df$StationCode)
 
@@ -70,19 +77,19 @@ pr_plot_NRSmap <- function(df, Survey = 'NRS'){
 
 #' Title Sidebar panel plot of selected CPR bioregions
 #'
-#' @param df dataframe containing CPR bioregions to plot
+#' @param sites A string vector containing CPR bioregions to plot
 #'
 #' @return a map of the selected bioregions
 #' @export
 #'
 #'
 #' @examples
-#' df <- data.frame(BioRegion = c("Temperate East", "South-west", "South-east", "North", "North-west"))
-#' cprmap <- pr_plot_CPRmap(df)
-pr_plot_CPRmap <-  function(df){
+#' cprmap <- pr_plot_CPRmap(sites = c("Temperate East", "South-west",
+#'                                     "South-east", "North", "North-west"))
+pr_plot_CPRmap <-  function(sites){
 
   bioregionSelection <- mbr %>%
-    dplyr::mutate(Colour = dplyr::if_else(.data$REGION %in% df$BioRegion, .data$Colour, "NA"))
+    dplyr::mutate(Colour = dplyr::if_else(.data$REGION %in% sites, .data$Colour, "NA"))
 
   col <- bioregionSelection %>%
     sf::st_drop_geometry() %>%
@@ -474,15 +481,13 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE, labels = TRUE){
       sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326)
 
     PMapSum <- merge(df %>%
-                       dplyr::group_by(.data$Region, .data$Survey) %>%
                        dplyr::summarise(Sums = dplyr::n(),
-                                        .groups = "drop") %>%
+                                        .by = tidyselect::all_of(c("Region", "Survey"))) %>%
                        dplyr::mutate(label = paste0(.data$Region, ' = ', .data$Sums)),
                      df %>%
-                       dplyr::group_by(.data$Region, .data$Survey) %>%
                        dplyr::summarise(Lats = mean(.data$Latitude),
                                         Lons = mean(.data$Longitude),
-                                        .groups = "drop")) %>%
+                                        .by = tidyselect::all_of(c("Region", "Survey")))) %>%
       sf::st_as_sf(coords = c("Lons", "Lats"), crs = 4326)
 
     nudgex = c(-2,5.5,2,8.5,9.5,0,0,4)

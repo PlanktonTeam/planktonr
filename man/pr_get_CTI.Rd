@@ -4,7 +4,7 @@
 \alias{pr_get_CTI}
 \title{Get CTI for sample}
 \usage{
-pr_get_CTI(Type = "Z")
+pr_get_CTI(Type = "Zooplankton")
 }
 \arguments{
 \item{Type}{Zooplankton (Copepods) or phytoplankton species}
@@ -16,6 +16,6 @@ df of CTI for each sample
 Get CTI for sample
 }
 \examples{
-df <- pr_get_CTI("P")
+df <- pr_get_CTI("Phytoplankton")
 
 }

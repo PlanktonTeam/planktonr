@@ -33,7 +33,7 @@ Biomass and diversity are the [Essential Ocean Variables (EOVs)]("https://www.go
 
 First we get the NRS EOV data and subset it for Maria Island and add the trend coefficients using:
 ```{r}
-EOV <- planktonr::pr_get_EOVs("NRS")
+EOV <- planktonr::pr_get_EOVs(Survey = "NRS")
 
 EOV_MAI <- EOV %>%
   filter(StationCode == "MAI") %>%

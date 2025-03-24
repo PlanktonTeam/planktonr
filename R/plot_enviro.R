@@ -46,12 +46,11 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
   }
 
   mdat <- df %>%
-    dplyr::group_by(.data$StationName, .data$Month_Local, .data$SampleDepth_ms, .data$Parameters) %>%
     dplyr::summarise(MonValues = mean(.data$Values, na.rm = TRUE),
                      N = length(.data$Values),
                      sd = stats::sd(.data$Values, na.rm = TRUE),
                      se = sd / sqrt(.data$N),
-                     .groups = "drop")
+                     .by = tidyselect::all_of(c("StationName", "Month_Local", "SampleDepth_ms", "Parameters")))
 
   m <- ggplot2::ggplot(mdat, ggplot2::aes(.data$Month_Local, .data$MonValues, colour = .data$StationName,
                                           fill = .data$StationName, linetype = .data$StationName)) +
@@ -106,7 +105,6 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, max
     # code that includes calls such as aaapkg::aaa_fun()
   }
 
-
   stations <- unique(as.character(df$StationName))
   param <- planktonr::pr_relabel(unique(df$Parameters), style = 'ggplot')
 
@@ -124,7 +122,7 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, max
 
     myBreaks <- (df %>% dplyr::filter(!is.na(.data$Label)) %>% dplyr::distinct(.data$MonthSince) %>%
                    dplyr::arrange(dplyr::desc(-.data$MonthSince), .by_group = FALSE))$MonthSince
-    Label <- (df %>% dplyr::group_by(.data$Label) %>% dplyr::summarise(n = dplyr::n()) %>% tidyr::drop_na() %>%
+    Label <- (df %>% dplyr::summarise(n = dplyr::n(), .by = tidyselect::all_of("Label")) %>% tidyr::drop_na() %>%
                 dplyr::distinct(.data$Label))$Label
 
   } else {
@@ -181,7 +179,7 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, max
       dplyr::distinct() %>%
       pr_reorder()
 
-    Label <- (df %>% dplyr::group_by(.data$Label) %>% dplyr::summarise(n = dplyr::n()) %>% tidyr::drop_na() %>%
+    Label <- (df %>% dplyr::summarise(n = dplyr::n(), .by = tidyselect::all_of("Label")) %>% tidyr::drop_na() %>%
                 dplyr::distinct(.data$Label))$Label
 
     myBreaks <- (df %>% dplyr::filter(!is.na(.data$Label)) %>% dplyr::distinct(.data$MonthSince) %>%
@@ -224,9 +222,8 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, max
   }
 
   dfMon <- df %>%
-    dplyr::group_by(.data$Month_Local, .data$StationName, .data$SampleDepth_m) %>%
     dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
-                     .groups = 'drop')
+                     .by = tidyselect::all_of(c("Month_Local", "StationName", "SampleDepth_m")))
 
 
   # Plotting monthly climatology
