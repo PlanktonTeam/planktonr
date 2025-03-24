@@ -10,9 +10,9 @@
 #' @export
 #' @importFrom rlang .data
 #' @examples
-#' df <- pr_get_NRSData(Type = "phytoplankton", Variable = "abundance", Subset = "raw")
+#' df <- pr_get_NRSData(Type = "Phytoplankton", Variable = "abundance", Subset = "raw")
 #'
-pr_get_NRSData <- function(Type = "phytoplankton", Variable = "abundance", Subset = "raw"){
+pr_get_NRSData <- function(Type = "Phytoplankton", Variable = "abundance", Subset = "raw"){
 
   # AVAILABLE NRS DATASETS
   # nrs_phytoplankton_abundance_raw_data
@@ -31,14 +31,11 @@ pr_get_NRSData <- function(Type = "phytoplankton", Variable = "abundance", Subse
   # nrs_zooplankton_abundance_htg_data
   # nrs_zooplankton_abundance_raw_data
 
-  Type = stringr::str_to_lower(Type) # Make sure its lower case
+  Type <- pr_check_type(Type)
 
-  if (Type == "p"){Type = "phytoplankton"}
-  if (Type == "z"){Type = "zooplankton"}
+  if (Type == "Zooplankton" & Subset == "species"){ # Specific case for zooplankton species
 
-  if (Type == "zooplankton" & Subset == "species"){ # Specific case for zooplankton species
-
-    str <- pr_get_NonTaxaColumns(Survey = "NRS", Type = "Z")
+    str <- pr_get_NonTaxaColumns(Survey = "NRS", Type = "Zooplankton")
 
     datc <- pr_get_Raw("bgc_zooplankton_abundance_copepods_data") %>%
       pr_rename()
@@ -52,10 +49,13 @@ pr_get_NRSData <- function(Type = "phytoplankton", Variable = "abundance", Subse
 
   } else {
 
-    file = paste("bgc", Type, Variable, Subset, "data", sep = "_")
+    file = paste("bgc", tolower(Type), Variable, Subset, "data", sep = "_")
     dat <-pr_get_Raw(file) %>%
       pr_rename()
   }
+
+  # Convert to planktonr class
+  dat <- pr_planktonr_class(dat, type = Type, survey = "NRS", variable = Variable, subset = Subset)
 
   return(dat)
 
@@ -87,9 +87,9 @@ pr_get_NRSStation <- function(){
 #' @return A dataframe with NRS BGC information
 #' @export
 #' @examples
-#' df <- pr_get_NRSTrips(Type = "Z")
+#' df <- pr_get_NRSTrips(Type = "Zooplankton")
 #' @importFrom rlang .data
-pr_get_NRSTrips <- function(Type = c("P", "Z", "F")){
+pr_get_NRSTrips <- function(Type = c("Phytoplankton", "Zooplankton", "Fish")){
 
   NRSTrip <- pr_get_s3("bgc_trip") %>%
     pr_rename() %>%
@@ -98,16 +98,17 @@ pr_get_NRSTrips <- function(Type = c("P", "Z", "F")){
                        is.na(.data$SampleType))) %>%
     pr_apply_Time() %>%
     dplyr::select(-"ProjectName") %>%
-    dplyr::select(-tidyselect::any_of(c("PSampleDepth_m", "ZSampleDepth_m")))
+    dplyr::select(-tidyselect::any_of(c("PSampleDepth_m", "ZSampleDepth_m"))) %>%
+    pr_planktonr_class(type = Type, survey = "NRS", variable = NULL)
 
 
-  # if("P" %in% Type & !"Z" %in% Type){ # Only Phytoplankton
+  # if("Phytoplankton" %in% Type & !"Zooplankton" %in% Type){ # Only Phytoplankton
   #   NRSTrip <- NRSTrip %>%
   #     dplyr::rename(SampleDepth_m = "PSampleDepth_m") %>%
   #     dplyr::select(-"ZSampleDepth_m")
   # }
   #
-  # if("Z" %in% Type & !"P" %in% Type){ # Only Zooplankton
+  # if("Zooplankton" %in% Type & !"Phytoplankton" %in% Type){ # Only Zooplankton
   #   NRSTrip <- NRSTrip %>%
   #     dplyr::rename(SampleDepth_m = "ZSampleDepth_m") %>%
   #     dplyr::select(-"PSampleDepth_m")

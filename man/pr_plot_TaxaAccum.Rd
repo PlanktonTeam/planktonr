@@ -4,14 +4,10 @@
 \alias{pr_plot_TaxaAccum}
 \title{Taxa Accumulation Curve}
 \usage{
-pr_plot_TaxaAccum(dat, Survey = "NRS", Type = "Z")
+pr_plot_TaxaAccum(dat)
 }
 \arguments{
 \item{dat}{A dataframe of plankton data}
-
-\item{Survey}{"CPR" or "NRS"}
-
-\item{Type}{"P" or "Z"}
 }
 \value{
 a ggplot object.
@@ -20,8 +16,8 @@ a ggplot object.
 Plot a taxa accumulation curve for everything that is identified by the IMOS plankton team
 }
 \examples{
-dat <- pr_get_TaxaAccum(Survey = "NRS", Type = "Z")
-p <- pr_plot_TaxaAccum(dat, Survey = "NRS", Type = "Z")
-dat <- pr_get_TaxaAccum(Survey = "CPR", Type = "P")
-p <- pr_plot_TaxaAccum(dat, Survey = "CPR", Type = "P")
+dat <- pr_get_TaxaAccum(Survey = "NRS", Type = "Zooplankton")
+p <- pr_plot_TaxaAccum(dat)
+dat <- pr_get_TaxaAccum(Survey = "CPR", Type = "Phytoplankton")
+p <- pr_plot_TaxaAccum(dat)
 }

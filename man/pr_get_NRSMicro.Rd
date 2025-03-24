@@ -16,5 +16,5 @@ A dataframe with NRS microbial data
 Load microbial data
 }
 \examples{
-df <- pr_get_NRSMicro("GO-SHIP")
+df <- pr_get_NRSMicro(Survey = "GO-SHIP")
 }

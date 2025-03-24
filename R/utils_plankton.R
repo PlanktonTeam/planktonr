@@ -7,11 +7,11 @@
 #' @export
 #'
 #' @examples
-#' NRSfgz <- pr_get_FuncGroups("NRS", "Z")
-#' NRSfgp <- pr_get_FuncGroups("NRS", "P")
-#' CPRfgz <- pr_get_FuncGroups("CPR", "Z", near_dist_km = 250)
-#' CPRfgp <- pr_get_FuncGroups("CPR", "P")
-pr_get_FuncGroups <- function(Survey = "NRS", Type = "Z", ...){
+#' NRSfgz <- pr_get_FuncGroups("NRS", "Zooplankton")
+#' NRSfgp <- pr_get_FuncGroups("NRS", "Phytoplankton")
+#' CPRfgz <- pr_get_FuncGroups("CPR", "Zooplankton", near_dist_km = 250)
+#' CPRfgp <- pr_get_FuncGroups("CPR", "Phytoplankton")
+pr_get_FuncGroups <- function(Survey = "NRS", Type = "Zooplankton", ...){
 
   if(Survey == "CPR"){
     df <- pr_get_CPRData(Type, Variable = "abundance", Subset = "htg") %>%
@@ -21,10 +21,10 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Z", ...){
       dplyr::filter(.data$StationName != "Port Hacking 4")
   }
 
-  if(Type == "P"){
+  if(Type == "Phytoplankton"){
     var_names <- c("Centric diatom", "Ciliate", "Cyanobacteria", "Dinoflagellate", "Flagellate", "Foraminifera",
                    "Pennate diatom", "Radiozoa", "Silicoflagellate")
-  } else if(Type == "Z"){
+  } else if(Type == "Zooplankton"){
     var_names <- c("Ascidian", "Ciliate", "Ciliophora", "Coelenterate", "Ctenophore", "Echinoderm", "Euphausiid",
                    "Mysida", "Ostracod", "Phoronid", "Polychaete", "Urochordata", "Amphipod", "Appendicularian",
                    "Brachiopod", "Bryozoan", "Cephalochordate", "Cephalopod", "Chaetognath", "Cirripedia",
@@ -50,12 +50,12 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Z", ...){
     dplyr::filter(.data$Parameters != "Flagellate") %>%
     pr_reorder()
 
-  if(Type == "P"){
+  if(Type == "Phytoplankton"){
     df <- df %>%
       dplyr::mutate(Parameters = ifelse(.data$Parameters %in% c("Centric diatom", "Pennate diatom", "Dinoflagellate", "Cyanobacteria"), .data$Parameters, "Other"),
                     Parameters = factor(.data$Parameters, levels = c("Centric diatom", "Pennate diatom", "Dinoflagellate", "Cyanobacteria",
                                                                      "Other")))
-  } else if(Type == "Z"){
+  } else if(Type == "Zooplankton"){
     df <- df %>%
       dplyr::mutate(Parameters = ifelse(.data$Parameters %in% c("Copepod", "Appendicularian", "Mollusc", "Cladoceran", "Chaetognath", "Thaliacean"), .data$Parameters, "Other"),
                     Parameters = factor(.data$Parameters, levels = c("Copepod", "Appendicularian", "Mollusc", "Cladoceran", "Chaetognath", "Thaliacean",
@@ -68,6 +68,8 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Z", ...){
                      .groups = "drop") %>%
     dplyr::mutate(Values = ifelse(.data$Values < 1, 1, .data$Values))
 
+  df <- pr_planktonr_class(df, type = Type, survey = Survey, variable = NULL)
+
   return(df)
 }
 
@@ -78,18 +80,18 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Z", ...){
 # Get the summary plankton observations from the NRS and CPR.
 # @return a dataframe with a species summary
 #
-# @param Type The group of plankton requested. Either "Z" or "P"
+# @param Type The group of plankton requested. Either "Zooplankton" or "Phytoplankton"
 #
 # @export
 #
 # @examples
-# df <- pr_get_SppCount("P")
-# df <- pr_get_SppCount("Z")
-# pr_get_SppCount <- function(Type = "Z"){
+# df <- pr_get_SppCount("Phytoplankton")
+# df <- pr_get_SppCount("Zooplankton")
+# pr_get_SppCount <- function(Type = "Zooplankton"){
 #
-#   if (Type == "P"){
+#   if (Type == "Phytoplankton"){
 #     gp <- "Phytoplankton"
-#   } else if (Type == "Z"){
+#   } else if (Type == "Zooplankton"){
 #     gp <- "Zooplankton"
 #   }
 #
@@ -108,7 +110,8 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Z", ...){
 #' @examples
 #' head(pr_get_PCIData(),5)
 pr_get_PCIData <- function(){
-  dat <- planktonr::pr_get_Indices("CPR", "W", near_dist_km = 250) %>%
+
+  dat <- planktonr::pr_get_Indices("CPR", "Water", near_dist_km = 250) %>%
     dplyr::filter(.data$Parameters == 'PCI') %>%
     dplyr::mutate(Longitude = round(.data$Longitude, 0),
                   Latitude = round(.data$Latitude, 0),
@@ -116,9 +119,8 @@ pr_get_PCIData <- function(){
                                             .data$Month_Local > 5 & .data$Month_Local < 9 ~ "June - August",
                                             .data$Month_Local > 8 & .data$Month_Local < 12 ~ "September - November",
                                             TRUE ~ "December - February")) %>%
-    dplyr::group_by(.data$Longitude, .data$Latitude, .data$Season, .data$BioRegion) %>%
     dplyr::summarise(PCI = mean(.data$Values, na.rm = TRUE),
-                     .groups = 'drop')
+                     .by = tidyselect::all_of(c("Longitude", "Latitude", "Season", "BioRegion")))
 
 }
 
@@ -127,14 +129,14 @@ pr_get_PCIData <- function(){
 #' Get taxa accumulation data for plotting
 #'
 #' @param Survey "NRS or "CPR"
-#' @param Type "Z" or "P"
+#' @param Type "Zooplankton" or "Phytoplankton"
 #'
 #' @return A data frame
 #' @export
 #'
 #' @examples
-#' df <- pr_get_TaxaAccum(Survey = "NRS", Type = "Z")
-pr_get_TaxaAccum <- function(Survey = "NRS", Type = "Z"){
+#' df <- pr_get_TaxaAccum(Survey = "NRS", Type = "Zooplankton")
+pr_get_TaxaAccum <- function(Survey = "NRS", Type = "Zooplankton"){
 
   if (Survey == "NRS"){
     dat <- pr_get_NRSData(Type = Type, Variable = "abundance", Subset = "raw")
@@ -146,10 +148,12 @@ pr_get_TaxaAccum <- function(Survey = "NRS", Type = "Z"){
     tidyr::pivot_longer(-pr_get_NonTaxaColumns(Survey = Survey, Type = Type), names_to = "Taxa", values_to = "Abundance") %>%
     dplyr::filter(.data$Abundance > 0) %>%
     dplyr::arrange(.data$SampleTime_Local) %>%
-    dplyr::group_by(.data$Taxa) %>%
-    dplyr::summarise(First = dplyr::first(.data$SampleTime_Local), .groups = "drop") %>%
+    dplyr::summarise(First = dplyr::first(.data$SampleTime_Local), .by = tidyselect::all_of("Taxa")) %>%
     dplyr::arrange(.data$First) %>%
     dplyr::mutate(RowN = dplyr::row_number())
+
+  # Convert to planktonr class
+  # dat <- pr_planktonr_class(dat, type = Type, survey = Survey, variable = Variable, subset = Subset)
 }
 
 
@@ -164,17 +168,19 @@ pr_get_TaxaAccum <- function(Survey = "NRS", Type = "Z"){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_STIdata("P")
-#' df <- pr_get_STIdata("Z")
-pr_get_STIdata <-  function(Type = "P"){
+#' df <- pr_get_STIdata("Phytoplankton")
+#' df <- pr_get_STIdata("Zooplankton")
+pr_get_STIdata <-  function(Type = "Phytoplankton"){
 
-  if(Type == "Z"){
+  Type <- pr_check_type(Type)
+
+  if(Type == "Zooplankton"){
     cprdat <- pr_get_CPRData(Type, Variable = "abundance", Subset = "copepods")
 
     nrsdat <- pr_get_NRSData(Type, Variable = "abundance", Subset = "copepods")
     parameter <- "CopeAbundance_m3"
 
-  } else if(Type == "P"){
+  } else if(Type == "Phytoplankton"){
     cprdat <- pr_get_CPRData(Type, Variable = "abundance", Subset = "species")
 
     nrsdat <- pr_get_NRSData(Type, Variable = "abundance", Subset = "species")
@@ -185,7 +191,9 @@ pr_get_STIdata <-  function(Type = "P"){
   nrssat <- pr_get_SatData("NRS")
 
   cpr <- cprdat %>%
-    tidyr::pivot_longer(-tidyselect::all_of(pr_get_NonTaxaColumns(Survey = "CPR", Type = Type)), names_to = "Species", values_to = parameter) %>%
+    tidyr::pivot_longer(-tidyselect::all_of(pr_get_NonTaxaColumns(Survey = "CPR", Type = Type)),
+                        names_to = "Species",
+                        values_to = parameter) %>%
     dplyr::left_join(cprsat, by = c("Latitude", "Longitude", "SampleTime_UTC")) %>%
     dplyr::select("Species", "SST", tidyselect::all_of(parameter)) %>%
     dplyr::filter(!is.na(.data$SST) & .data[[parameter]] > 0) %>%
@@ -214,17 +222,17 @@ pr_get_STIdata <-  function(Type = "P"){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_STI('P')
+#' df <- pr_get_STI("Phytoplankton")
 #'
-pr_get_STI <-  function(Type = "Z"){
+pr_get_STI <-  function(Type = "Zooplankton"){
+
   df <- pr_get_STIdata(Type)
 
   species <- unique(df$Species)
 
   calc_sti <-  function(species){
     means <- df %>%
-      dplyr::group_by(.data$Project) %>%
-      dplyr::summarise(mean = mean(.data$Species_m3, na.rm = TRUE))
+      dplyr::summarise(mean = mean(.data$Species_m3, na.rm = TRUE), .by = tidyselect::all_of("Project"))
 
     #means are so different so log data as the abundance scale is so wide
 
@@ -232,11 +240,10 @@ pr_get_STI <-  function(Type = "Z"){
       dplyr::filter(.data$Species == species) %>%
       dplyr::left_join(means, by = "Project") %>%
       dplyr::mutate(relab = .data$Species_m3/.data$mean) %>%
-      dplyr::group_by(.data$SST, .data$Species) %>%
-      dplyr::summarize(relab = sum(.data$relab),
+      dplyr::summarise(relab = sum(.data$relab),
                        freq = dplyr::n(),
                        a = sum(.data$relab)/dplyr::n(),
-                       .groups = "drop")
+                       .by = tidyselect::all_of(c("SST", "Species")))
 
     n <- length(sti$SST)
     # have a stop if n < 10
@@ -280,14 +287,16 @@ pr_get_STI <-  function(Type = "Z"){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_CTI("P")
+#' df <- pr_get_CTI("Phytoplankton")
 #'
-pr_get_CTI <-  function(Type = 'Z'){
+pr_get_CTI <-  function(Type = "Zooplankton"){
+
+  Type <- pr_check_type(Type)
 
   df <- pr_get_STI(Type)
 
-  if(Type == 'Z'){
-    dat <- pr_get_NRSData("zooplankton", "abundance", "species")
+  if(Type == "Zooplankton"){
+    dat <- pr_get_NRSData("Zooplankton", "abundance", "species")
     vars <- pr_get_NonTaxaColumns(Survey = "NRS", Type)
   } else {
     dat <- pr_get_NRSData("phytoplankton", "abundance", "species")
@@ -295,13 +304,12 @@ pr_get_CTI <-  function(Type = 'Z'){
   }
 
   dat <- dat %>%
-    dplyr::mutate(StationCode = ifelse(.data$StationCode == 'PH4', 'PHB', .data$StationCode)) %>%
+    dplyr::mutate(StationCode = ifelse(.data$StationCode == "PH4", "PHB", .data$StationCode)) %>%
     dplyr::select(-(tidyselect::any_of(vars)), "SampleTime_Local", "StationCode", "Project") %>%
     tidyr::pivot_longer(-c("SampleTime_Local", "StationCode", "Project"), values_to = "Abundance", names_to = "Species") %>%
-    dplyr::inner_join(df, by = 'Species') %>%
-    dplyr::group_by(.data$SampleTime_Local, .data$StationCode, .data$Project) %>%
+    dplyr::inner_join(df, by = "Species") %>%
     dplyr::summarise(CTI = sum(.data$Abundance * .data$STI, na.rm = TRUE)/sum(.data$Abundance, na.rm = TRUE),
-                     .groups = "drop") %>%
+                     .by = tidyselect::all_of(c("SampleTime_Local", "StationCode", "Project"))) %>%
     as.data.frame()
 
   return(dat)
@@ -310,20 +318,22 @@ pr_get_CTI <-  function(Type = 'Z'){
 
 
 #' Get data for plots of species abundance by day and night using CPR data
-#' @param Type "P" or "Z" (default)
+#' @param Type "Phytoplankton" or "Zooplankton" (default)
 #'
 #' @return df to be used with pr_plot_DayNight
 #' @export
 #'
 #' @examples
-#' df <- pr_get_DayNight(Type = "Z")
-pr_get_DayNight <- function(Type = "Z"){
+#' df <- pr_get_DayNight(Type = "Zooplankton")
+pr_get_DayNight <- function(Type = "Zooplankton"){
 
-  if(Type == "Z"){
-    dat <- pr_get_CPRData(Type = "Z", Variable = "abundance", Subset = "copepods")
+  Type <- pr_check_type(Type)
 
-  } else if (Type == "P"){
-    dat <- pr_get_CPRData(Type = "P", Variable = "abundance", Subset = "species")
+  if(Type == "Zooplankton"){
+    dat <- pr_get_CPRData(Type = "Zooplankton", Variable = "abundance", Subset = "copepods")
+
+  } else if (Type == "Phytoplankton"){
+    dat <- pr_get_CPRData(Type = "Phytoplankton", Variable = "abundance", Subset = "species")
 
   }
 
@@ -344,9 +354,8 @@ pr_get_DayNight <- function(Type = "Z"){
     dplyr::bind_cols(daynight_df["daynight"]) %>%
     dplyr::select(tidyselect::all_of(pr_get_NonTaxaColumns(Survey = "CPR", Type = Type)), tidyselect::everything()) %>%
     tidyr::pivot_longer(-tidyselect::any_of(c(pr_get_NonTaxaColumns(Survey = "CPR", Type = Type), "daynight")), values_to = "Species_m3", names_to = "Species") %>%
-    dplyr::group_by(.data$Month_Local, .data$daynight, .data$Species) %>%
     dplyr::summarise(Species_m3 = mean(.data$Species_m3, na.rm = TRUE),
-                     .groups = "drop")
+                     .by = tidyselect::all_of(c("Month_Local", "daynight", "Species")))
 
 }
 
@@ -358,7 +367,7 @@ pr_get_DayNight <- function(Type = "Z"){
 # @export
 #
 # @examples
-# df <- pr_get_Indices(Survey = "NRS", Type = "Z")
+# df <- pr_get_Indices(Survey = "NRS", Type = "Zooplankton")
 # df <- pr_add_daynight(df)
 # pr_add_daynight <- function(df){
 #

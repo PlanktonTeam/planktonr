@@ -4,12 +4,12 @@
 \alias{pr_get_NonTaxaColumns}
 \title{Return columns that are not taxonomic}
 \usage{
-pr_get_NonTaxaColumns(Survey = "NRS", Type = "Z")
+pr_get_NonTaxaColumns(Survey = "NRS", Type = "Zooplankton")
 }
 \arguments{
 \item{Survey}{\code{NRS} or \code{CPR}}
 
-\item{Type}{\code{Z} or \code{P}}
+\item{Type}{\code{zooplankton} or \code{phytoplankton}}
 }
 \value{
 a string vector of column name
@@ -18,5 +18,5 @@ a string vector of column name
 Return columns that are not taxonomic
 }
 \examples{
-str <- pr_get_NonTaxaColumns(Survey = "NRS", Type = "Z")
+str <- pr_get_NonTaxaColumns(Survey = "NRS", Type = "Zooplankton")
 }

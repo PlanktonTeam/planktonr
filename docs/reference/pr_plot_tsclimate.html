@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.5.9</span>
+        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.6.1</span>
       </span>
     </div>
 
@@ -78,7 +78,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pr_plot_tsclimate</span><span class="op">(</span><span class="va">df</span>, Survey <span class="op">=</span> <span class="st">"NRS"</span>, trans <span class="op">=</span> <span class="st">"identity"</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pr_plot_tsclimate</span><span class="op">(</span><span class="va">df</span>, trans <span class="op">=</span> <span class="st">"identity"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -87,10 +87,6 @@
 
 <dl><dt id="arg-df">df<a class="anchor" aria-label="anchor" href="#arg-df"></a></dt>
 <dd><p>data frame with SampleDate_Local, time period and parameter</p></dd>
-
-
-<dt id="arg-survey">Survey<a class="anchor" aria-label="anchor" href="#arg-survey"></a></dt>
-<dd><p>CPR or NRS data</p></dd>
 
 
 <dt id="arg-trans">trans<a class="anchor" aria-label="anchor" href="#arg-trans"></a></dt>
@@ -104,16 +100,16 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr_get_Indices.html">pr_get_Indices</a></span><span class="op">(</span>Survey <span class="op">=</span> <span class="st">"CPR"</span>, Type <span class="op">=</span> <span class="st">"P"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr_get_Indices.html">pr_get_Indices</a></span><span class="op">(</span>Survey <span class="op">=</span> <span class="st">"CPR"</span>, Type <span class="op">=</span> <span class="st">"Phytoplankton"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Parameters</span> <span class="op">==</span> <span class="st">"PhytoAbundance_Cellsm3"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">pr_plot_tsclimate</span><span class="op">(</span><span class="va">df</span>, <span class="st">"CPR"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 852 rows containing missing values or values outside the scale range</span>
+<span class="r-in"><span><span class="fu">pr_plot_tsclimate</span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 1040 rows containing missing values or values outside the scale range</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_line()`).</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 23314 rows containing missing values or values outside the scale range</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 24248 rows containing missing values or values outside the scale range</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_point()`).</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 31 rows containing missing values or values outside the scale range</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 30 rows containing missing values or values outside the scale range</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_col()`).</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 67 rows containing missing values or values outside the scale range</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 63 rows containing missing values or values outside the scale range</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_col()`).</span>
 <span class="r-plt img"><img src="pr_plot_tsclimate-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
@@ -130,7 +126,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer></div>

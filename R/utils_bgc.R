@@ -31,6 +31,8 @@ pr_get_NRSChemistry <- function(){
     tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = 'Parameters') %>%
     pr_reorder()
 
+  dat <- pr_planktonr_class(dat, type = NULL, survey = "NRS", variable = NULL)
+
   return(dat)
 
 }
@@ -88,6 +90,8 @@ pr_get_NRSPigments <- function(Format = "all"){
     tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = 'Parameters') %>%
     pr_reorder()
 
+  dat <- pr_planktonr_class(dat, type = NULL, survey = "NRS", variable = NULL)
+
 }
 
 
@@ -118,6 +122,8 @@ pr_get_NRSPico <- function(){
     dplyr::mutate(Values = .data$Values + min(.data$Values[.data$Values>0], na.rm = TRUE)) %>%
     pr_reorder()
 
+  dat <- pr_planktonr_class(dat, type = NULL, survey = "NRS", variable = NULL)
+
   return(dat)
 }
 
@@ -129,9 +135,10 @@ pr_get_NRSPico <- function(){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_NRSEnvContour('Micro')
-pr_get_NRSEnvContour <- function(Data = 'Chemistry') {
-  file <- parse(text = paste('planktonr::pr_get_NRS', Data, '()', sep = ''))
+#' df <- pr_get_NRSEnvContour(Data = "Micro")
+pr_get_NRSEnvContour <- function(Data = "Chemistry") {
+
+  file <- parse(text = paste("planktonr::pr_get_NRS", Data, "()", sep = ""))
 
   dat <- eval(file) %>%
     dplyr::mutate(name = as.factor(.data$Parameters)) %>%
@@ -141,6 +148,7 @@ pr_get_NRSEnvContour <- function(Data = 'Chemistry') {
     pr_remove_outliers(2) %>%
     droplevels() %>%
     pr_reorder()
+
 }
 
 
@@ -151,8 +159,9 @@ pr_get_NRSEnvContour <- function(Data = 'Chemistry') {
 #' @export
 #'
 #' @examples
-#' df <- pr_get_NRSMicro("GO-SHIP")
+#' df <- pr_get_NRSMicro(Survey = "GO-SHIP")
 #' @importFrom rlang .data
+#'
 pr_get_NRSMicro <- function(Survey = "NRS"){
 
   var_names <- c("Prochlorococcus_cellsmL", "Synechococcus_cellsmL", "Picoeukaryotes_cellsmL",
@@ -212,7 +221,9 @@ pr_get_NRSMicro <- function(Survey = "NRS"){
                          "Cape Tribulation", "Double Island", "Yorkey's Knob", "Fairlead Buoy", "Hobsons; Port Phillip Bay",
                          "Long Reef; Port Phillip Bay", "Inshore reef_Channel", "Inshore reef_Geoffrey Bay")
 
-    dat <- readr::read_csv("https://raw.githubusercontent.com/AusMicrobiome/microbial_ocean_atlas/main/data/oceanViz_AM_data.csv") %>%
+    dat <- readr::read_csv("https://raw.githubusercontent.com/AusMicrobiome/microbial_ocean_atlas/main/data/oceanViz_AM_data.csv",
+                           show_col_types = FALSE) %>%
+      tidyr::drop_na(tidyselect::any_of(c("StationCode", "SampleDateUTC", "Time_24hr", "Year", "Month", "Day", "depth_m"))) %>%
       pr_rename() %>%
       dplyr::filter(is.na(.data$TripCode), .data$StationName %in% CoastalStations) %>%
       dplyr::select("StationName", "SampleDateUTC", "Latitude", "Longitude", SampleDepth_m = "depth_m", tidyselect::any_of(var_names)) %>%
@@ -229,34 +240,36 @@ pr_get_NRSMicro <- function(Survey = "NRS"){
       dplyr::arrange(.data$State, .data$Latitude) %>%
       dplyr::select(-c("SampleDateUTC", "tz"))
 
-    } else if (Survey == "GO-SHIP"){
+  } else if (Survey == "GO-SHIP"){
 
-      GOSHIP <- c(seq(34369, 34678, 1), seq(36916, 37650, 1))
+    GOSHIP <- c(seq(34369, 34678, 1), seq(36916, 37650, 1))
 
-      dat <- readr::read_csv("https://raw.githubusercontent.com/AusMicrobiome/microbial_ocean_atlas/main/data/oceanViz_AM_data.csv") %>%
-        pr_rename() %>%
-        dplyr::mutate(sample = as.numeric(stringr::str_sub(.data$code, -5, -1)),
-                      StationName = ifelse(grepl("GO", .data$StationName), stringr::str_sub(.data$code, -3, -1), .data$StationName)) %>%
-        dplyr::filter(sample %in% GOSHIP) %>%
-        dplyr::select("StationName", "SampleDateUTC", "Latitude", "Longitude", SampleDepth_m = "depth_m", tidyselect::any_of(var_names)) %>%
-        dplyr::mutate(dplyr::across(tidyselect::all_of(var_names), as.numeric),
-                      tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE))
+    dat <- readr::read_csv("https://raw.githubusercontent.com/AusMicrobiome/microbial_ocean_atlas/main/data/oceanViz_AM_data.csv",
+                           show_col_types = FALSE) %>%
+      pr_rename() %>%
+      dplyr::mutate(sample = as.numeric(stringr::str_sub(.data$code, -5, -1)),
+                    StationName = ifelse(grepl("GO", .data$StationName), stringr::str_sub(.data$code, -3, -1), .data$StationName)) %>%
+      dplyr::filter(sample %in% GOSHIP) %>%
+      dplyr::select("StationName", "SampleDateUTC", "Latitude", "Longitude", SampleDepth_m = "depth_m", tidyselect::any_of(var_names)) %>%
+      dplyr::mutate(dplyr::across(tidyselect::all_of(var_names), as.numeric),
+                    tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE))
 
-      times <- purrr::map2_vec(dat$SampleDateUTC, dat$tz, function(x,y) lubridate::with_tz(x, tzone = y))
+    times <- purrr::map2_vec(dat$SampleDateUTC, dat$tz, function(x,y) lubridate::with_tz(x, tzone = y))
 
-      dat <- dat %>%
-        dplyr::bind_cols(SampleTime_Local = times) %>%
-        planktonr::pr_apply_Time() %>%
-        tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters") %>%
-        dplyr::arrange(.data$Latitude) %>%
-        dplyr::select(-c("SampleDateUTC", "tz"))
+    dat <- dat %>%
+      dplyr::bind_cols(SampleTime_Local = times) %>%
+      planktonr::pr_apply_Time() %>%
+      tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters") %>%
+      dplyr::arrange(.data$Latitude) %>%
+      dplyr::select(-c("SampleDateUTC", "tz"))
 
-    } else {
+  } else if (Survey == "NRS"){
 
-      NRS <- pr_get_NRSTrips() %>%
+    NRS <- pr_get_NRSTrips() %>%
       dplyr::select("TripCode", "SampleTime_Local", "Year_Local", "Month_Local", "StationName", "StationCode")
 
-    dat <- readr::read_csv("https://raw.githubusercontent.com/AusMicrobiome/microbial_ocean_atlas/main/data/oceanViz_AM_data.csv") %>%
+    dat <- readr::read_csv("https://raw.githubusercontent.com/AusMicrobiome/microbial_ocean_atlas/main/data/oceanViz_AM_data.csv",
+                           show_col_types = FALSE) %>%
       pr_rename() %>%
       dplyr::select("TripCode", SampleDepth_m = "depth_m", tidyselect::any_of(var_names)) %>%
       dplyr::mutate(dplyr::across(tidyselect::all_of(var_names), as.numeric))
@@ -266,6 +279,8 @@ pr_get_NRSMicro <- function(Survey = "NRS"){
       dplyr::left_join(NRS, by = "TripCode") %>%
       pr_reorder()
   }
+
+  dat <- pr_planktonr_class(dat, type = NULL, survey = Survey, variable = NULL)
 
   return(dat)
 
@@ -284,30 +299,34 @@ pr_get_CSChem <- function(){
   var_names <- c("Silicate_umolL", "Nitrate_umolL", "Phosphate_umolL", "Ammonium_umolL", "Chla_mgm3", "Temperature_degC",
                  "Salinity_psu", "Oxygen_umolL", "Turbidity_NTU", "Density_kgm3")
 
-    CoastalStations <- c("Balls Head", "Salmon Haul", "Bare Island", "Cobblers Beach", "Towra Point", "Lilli Pilli",
-                         "Derwent Estuary B1", "Derwent Estuary B3", "Derwent Estuary E", "Derwent Estuary G2",
-                         "Derwent Estuary KB", "Derwent Estuary RBN", "Derwent Estuary U2", "Low Head",
-                         "Tully River Mouth mooring", "Russell-Mulgrave River mooring", "Green Island", "Port Douglas",
-                         "Cape Tribulation", "Double Island", "Yorkey's Knob", "Fairlead Buoy", "Hobsons; Port Phillip Bay",
-                         "Long Reef; Port Phillip Bay", "Geoffrey Bay", "Channel", "Pioneer Bay", "Centaur Reef",
-                         "Wreck Rock", "Inshore reef_Channel", "Inshore reef_Geoffrey Bay")
+  CoastalStations <- c("Balls Head", "Salmon Haul", "Bare Island", "Cobblers Beach", "Towra Point", "Lilli Pilli",
+                       "Derwent Estuary B1", "Derwent Estuary B3", "Derwent Estuary E", "Derwent Estuary G2",
+                       "Derwent Estuary KB", "Derwent Estuary RBN", "Derwent Estuary U2", "Low Head",
+                       "Tully River Mouth mooring", "Russell-Mulgrave River mooring", "Green Island", "Port Douglas",
+                       "Cape Tribulation", "Double Island", "Yorkey's Knob", "Fairlead Buoy", "Hobsons; Port Phillip Bay",
+                       "Long Reef; Port Phillip Bay", "Geoffrey Bay", "Channel", "Pioneer Bay", "Centaur Reef",
+                       "Wreck Rock", "Inshore reef_Channel", "Inshore reef_Geoffrey Bay")
 
-    dat <- readr::read_csv("https://raw.githubusercontent.com/AusMicrobiome/microbial_ocean_atlas/main/data/oceanViz_AM_data.csv") %>%
-      pr_rename() %>%
-      dplyr::filter(is.na(.data$TripCode), .data$StationName %in% CoastalStations) %>%
-      dplyr::select("StationName", "SampleDateUTC", "Latitude", "Longitude", SampleDepth_m = "depth_m", tidyselect::any_of(var_names)) %>%
-      dplyr::mutate(dplyr::across(tidyselect::all_of(var_names), as.numeric),
-                    tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE))
+  dat <- readr::read_csv("https://raw.githubusercontent.com/AusMicrobiome/microbial_ocean_atlas/main/data/oceanViz_AM_data.csv",
+                         show_col_types = FALSE) %>%
+    tidyr::drop_na(tidyselect::any_of(c("StationCode", "SampleDateUTC", "Time_24hr", "Year", "Month", "Day", "depth_m"))) %>% # TODO these should fixed soon
+    pr_rename() %>%
+    dplyr::filter(is.na(.data$TripCode), .data$StationName %in% CoastalStations) %>%
+    dplyr::select("StationName", "SampleDateUTC", "Latitude", "Longitude", SampleDepth_m = "depth_m", tidyselect::any_of(var_names)) %>%
+    dplyr::mutate(dplyr::across(tidyselect::all_of(var_names), as.numeric),
+                  tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE))
 
-    times <- purrr::map2_vec(dat$SampleDateUTC, dat$tz, function(x,y) lubridate::with_tz(x, tzone = y))
+  times <- purrr::map2_vec(dat$SampleDateUTC, dat$tz, function(x,y) lubridate::with_tz(x, tzone = y))
 
-    dat <- dat %>%
-      dplyr::bind_cols(SampleTime_Local = times) %>%
-      planktonr::pr_apply_Time() %>%
-      dplyr::inner_join(CSCodes, by = "StationName") %>%
-      tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters") %>%
-      dplyr::arrange(.data$State, .data$Latitude) %>%
-      dplyr::select(-c("SampleDateUTC", "tz"))
+  dat <- dat %>%
+    dplyr::bind_cols(SampleTime_Local = times) %>%
+    planktonr::pr_apply_Time() %>%
+    dplyr::inner_join(CSCodes, by = "StationName") %>%
+    tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters") %>%
+    dplyr::arrange(.data$State, .data$Latitude) %>%
+    dplyr::select(-c("SampleDateUTC", "tz"))
+
+  dat <- pr_planktonr_class(dat, type = NULL, survey = "NRS", variable = NULL)
 
   return(dat)
 
@@ -327,6 +346,8 @@ pr_get_NRSTSS <- function(){
   dat <- pr_get_Raw(file) %>%
     pr_rename() %>%
     pr_apply_Flags("TSSall_flag")
+
+  dat <- pr_planktonr_class(dat, type = NULL, survey = "NRS", variable = NULL)
 
   return(dat)
 }
@@ -357,6 +378,8 @@ pr_get_NRSCTD <- function(){
     dplyr::filter(!.data$file_id %in% c(2117, 2184, 2186, 2187)) %>% #TODO Check with Claire
     dplyr::select(tidyselect::all_of(ctd_vars)) %>%
     pr_apply_Time()
+
+  dat <- pr_planktonr_class(dat, type = NULL, survey = "NRS", variable = NULL)
 
   return(dat)
 }
@@ -413,6 +436,8 @@ pr_get_LTnuts <-  function(){
     dplyr::select(colnames(NutsLT))
 
   dat <- dplyr::bind_rows(NutsLT, Nuts, CTD)
+
+  dat <- pr_planktonr_class(dat, type = NULL, survey = "LTM", variable = NULL)
 
   return(dat)
 }

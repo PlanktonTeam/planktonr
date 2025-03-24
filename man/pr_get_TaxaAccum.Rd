@@ -4,12 +4,12 @@
 \alias{pr_get_TaxaAccum}
 \title{Get taxa accumulation data for plotting}
 \usage{
-pr_get_TaxaAccum(Survey = "NRS", Type = "Z")
+pr_get_TaxaAccum(Survey = "NRS", Type = "Zooplankton")
 }
 \arguments{
 \item{Survey}{"NRS or "CPR"}
 
-\item{Type}{"Z" or "P"}
+\item{Type}{"Zooplankton" or "Phytoplankton"}
 }
 \value{
 A data frame
@@ -18,5 +18,5 @@ A data frame
 Get taxa accumulation data for plotting
 }
 \examples{
-df <- pr_get_TaxaAccum(Survey = "NRS", Type = "Z")
+df <- pr_get_TaxaAccum(Survey = "NRS", Type = "Zooplankton")
 }

@@ -4,7 +4,7 @@
 \alias{pr_get_NRSData}
 \title{Import NRS Data}
 \usage{
-pr_get_NRSData(Type = "phytoplankton", Variable = "abundance", Subset = "raw")
+pr_get_NRSData(Type = "Phytoplankton", Variable = "abundance", Subset = "raw")
 }
 \arguments{
 \item{Type}{The data of interest: Phytoplankton or Zooplankton}
@@ -20,6 +20,6 @@ A dataframe with requested plankton data in wide form
 Load NRS station Data
 }
 \examples{
-df <- pr_get_NRSData(Type = "phytoplankton", Variable = "abundance", Subset = "raw")
+df <- pr_get_NRSData(Type = "Phytoplankton", Variable = "abundance", Subset = "raw")
 
 }

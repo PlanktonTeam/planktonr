@@ -57,9 +57,7 @@ pr_add_Bioregions <- function(df, near_dist_km = 0){
 
   # Then continue on with the addition of the other groups
   dist <- dist %>%
-    dplyr::group_by(.data$cellID) %>%
-    dplyr::slice(which.min(.data$Dist)) %>%
-    dplyr::ungroup() %>%
+    dplyr::slice(which.min(.data$Dist), .by = tidyselect::all_of("cellID")) %>%
     dplyr::select(-"Dist")
 
   df <- dplyr::left_join(df, dist, by = "cellID") %>%

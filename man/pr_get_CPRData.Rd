@@ -4,7 +4,7 @@
 \alias{pr_get_CPRData}
 \title{Import CPR Data}
 \usage{
-pr_get_CPRData(Type = "P", Variable = "abundance", Subset = "raw")
+pr_get_CPRData(Type = "Phytoplankton", Variable = "abundance", Subset = "raw")
 }
 \arguments{
 \item{Type}{The data of interest: Phytoplankton or Zooplankton}
@@ -20,5 +20,5 @@ A dataframe with requested plankton data in long form
 Load CPR Data
 }
 \examples{
-df <- pr_get_CPRData(Type = "P", Variable = "abundance", Subset = "raw")
+df <- pr_get_CPRData(Type = "Phytoplankton", Variable = "abundance", Subset = "raw")
 }

@@ -4,12 +4,10 @@
 \alias{pr_plot_tsclimate}
 \title{Combined timeseries and climatology plots}
 \usage{
-pr_plot_tsclimate(df, Survey = "NRS", trans = "identity")
+pr_plot_tsclimate(df, trans = "identity")
 }
 \arguments{
 \item{df}{data frame with SampleDate_Local, time period and parameter}
-
-\item{Survey}{CPR or NRS data}
 
 \item{trans}{scale of y axis on plot, whatever scale_y_continuous trans accepts}
 }
@@ -20,7 +18,7 @@ a combined plot
 Combined timeseries and climatology plots
 }
 \examples{
-df <- pr_get_Indices(Survey = "CPR", Type = "P") \%>\%
+df <- pr_get_Indices(Survey = "CPR", Type = "Phytoplankton") \%>\%
   dplyr::filter(Parameters == "PhytoAbundance_Cellsm3")
-pr_plot_tsclimate(df, "CPR")
+pr_plot_tsclimate(df)
 }

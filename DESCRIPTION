@@ -1,6 +1,6 @@
 Package: planktonr
 Title: Analysis and visualisation of plankton data
-Version: 0.5.9
+Version: 0.6.1
 Authors@R: c(
     person("Jason D.", "Everett", , "jase.everett@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-6681-8054")),
@@ -24,7 +24,8 @@ Imports:
     lutz,
     magrittr,
     patchwork,
-    purrr (>= 1.0.1) ,
+    progressr,
+    purrr (>= 1.0.1),
     readr (>= 2.0.0),
     rlang,
     rnaturalearth,
@@ -35,10 +36,13 @@ Imports:
     tibble,
     tidyr,
     tidyselect,
-    units
+    units,
+    vctrs
 Suggests: 
-    covr,
+    future,
+    furrr,
     knitr,
+    parallelly,
     pracma,
     rmarkdown,
     rnaturalearthdata,

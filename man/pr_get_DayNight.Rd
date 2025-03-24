@@ -4,10 +4,10 @@
 \alias{pr_get_DayNight}
 \title{Get data for plots of species abundance by day and night using CPR data}
 \usage{
-pr_get_DayNight(Type = "Z")
+pr_get_DayNight(Type = "Zooplankton")
 }
 \arguments{
-\item{Type}{"P" or "Z" (default)}
+\item{Type}{"Phytoplankton" or "Zooplankton" (default)}
 }
 \value{
 df to be used with pr_plot_DayNight
@@ -16,5 +16,5 @@ df to be used with pr_plot_DayNight
 Get data for plots of species abundance by day and night using CPR data
 }
 \examples{
-df <- pr_get_DayNight(Type = "Z")
+df <- pr_get_DayNight(Type = "Zooplankton")
 }

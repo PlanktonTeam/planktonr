@@ -4,7 +4,7 @@
 \alias{pr_get_STIdata}
 \title{Get data for STI plots of species abundance}
 \usage{
-pr_get_STIdata(Type = "P")
+pr_get_STIdata(Type = "Phytoplankton")
 }
 \arguments{
 \item{Type}{Phyto or zoo, defaults to phyto}
@@ -16,6 +16,6 @@ df to be sued with pr_plot_STI
 Get data for STI plots of species abundance
 }
 \examples{
-df <- pr_get_STIdata("P")
-df <- pr_get_STIdata("Z")
+df <- pr_get_STIdata("Phytoplankton")
+df <- pr_get_STIdata("Zooplankton")
 }

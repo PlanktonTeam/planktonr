@@ -38,24 +38,24 @@ pr_get_SatData <- function(Survey = 'NRS'){
 pr_get_DataLocs <- function(Survey = 'all'){
 
   if(Survey == 'NRS'){
-    df <- pr_get_NRSTrips(c('P', 'Z')) %>%
+    df <- pr_get_NRSTrips(c("Phytoplankton", "Zooplankton")) %>%
       dplyr::select("Longitude", "Latitude", "SampleTime_UTC") %>%
       dplyr::distinct(.data$Longitude, .data$Latitude, Date = as.Date(.data$SampleTime_UTC, 'UTC'))
   } else
-  if(Survey == 'CPR'){
-    df <- pr_get_CPRTrips() %>%
-      dplyr::filter(grepl("P|Z", .data$SampleType)) %>%
-      dplyr::select("Longitude", "Latitude", "SampleTime_UTC") %>%
-      dplyr::distinct(.data$Longitude, .data$Latitude, Date = as.Date(.data$SampleTime_UTC, 'UTC'))
-  } else {
-    df <- dplyr::bind_rows(
-      pr_get_NRSTrips(c('P', 'Z')) %>%
-        dplyr::select("Longitude", "Latitude", "SampleTime_UTC"),
-      pr_get_CPRTrips() %>%
+    if(Survey == 'CPR'){
+      df <- pr_get_CPRTrips() %>%
         dplyr::filter(grepl("P|Z", .data$SampleType)) %>%
-        dplyr::select("Longitude", "Latitude", "SampleTime_UTC")) %>%
-      dplyr::distinct(.data$Longitude, .data$Latitude, Date = as.Date(.data$SampleTime_UTC, 'UTC'))
-  }
+        dplyr::select("Longitude", "Latitude", "SampleTime_UTC") %>%
+        dplyr::distinct(.data$Longitude, .data$Latitude, Date = as.Date(.data$SampleTime_UTC, 'UTC'))
+    } else {
+      df <- dplyr::bind_rows(
+        pr_get_NRSTrips(c("Phytoplankton", "Zooplankton")) %>%
+          dplyr::select("Longitude", "Latitude", "SampleTime_UTC"),
+        pr_get_CPRTrips() %>%
+          dplyr::filter(grepl("P|Z", .data$SampleType)) %>%
+          dplyr::select("Longitude", "Latitude", "SampleTime_UTC")) %>%
+        dplyr::distinct(.data$Longitude, .data$Latitude, Date = as.Date(.data$SampleTime_UTC, 'UTC'))
+    }
 
 }
 
@@ -69,13 +69,15 @@ pr_get_DataLocs <- function(Survey = 'all'){
 #' Monthly climatology (1mNy), Annual climatology (12mNy)
 #' Possible products to download are:
 #' dt_analysis, l2p_flags, quality_level, satellite_zenith_angle, sea_ice_fraction, sea_ice_fraction_dtime_from_sst,
-#' sea_surface_temperature, sses_bias, sses_count,sses_standard_deviation,
+#' sea_surface_temperature, sses_bias, sses_count, sses_standard_deviation,
 #' sst_count, sst_dtime, sst_mean, sst_standard_deviation, wind_speed, wind_speed_dtime_from_sst
 #'
 #' @param df dataframe containing latitude, longitude and Date
 #' @param pr products from list above, single or as a list
 #' @param res_spat Number of spatial pixels to average over
 #' @param res_temp Temporal resolution of satellite data to use
+#' @param parallel Should the analysis run using parallel processing
+#' @param ncore If `parallel = TRUE` package will use all available cores, apart from 2 which will be left for system processes and multitasking. If you wish to specify how many cores the package should use, set `ncore`. Otherwise, leave it as NULL.
 #'
 #' @return df with product output attached
 #' @export
@@ -83,10 +85,10 @@ pr_get_DataLocs <- function(Survey = 'all'){
 #' @examples
 #' df <- tail(pr_get_DataLocs("CPR") %>%
 #'         dplyr::arrange(Date), 5)
-#' pr = c("sea_surface_temperature", "sst_count")
+#' pr = c("sea_surface_temperature", "quality_level", "sst_mean", "sst_standard_deviation")
 #' sstout <- pr_match_GHRSST(df, pr, res_spat = 10, res_temp = "6d")
 #'
-pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d") {
+pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d", parallel = FALSE, ncore = NULL) {
 
   #TODO add progress bars with purrr
 
@@ -107,17 +109,21 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d") {
 
   # If Day, Month, Year doesn't exist we create them
   if (sum(c("Day","Month","Year") %in% colnames(df)) != 3) {
-    df <- df %>%
+    df_dmy <- df %>%
       dplyr::mutate(Day = lubridate::day(.data$Date),
-             Month = lubridate::month(.data$Date),
-             Year = lubridate::year(.data$Date))
+                    Month = lubridate::month(.data$Date),
+                    Year = lubridate::year(.data$Date))
+  } else {
+    df_dmy <- df
   }
 
-  df <- df %>%
+  df_dmy <- df_dmy %>%
     dplyr::select("Latitude", "Longitude", "Year", "Month", "Day") %>%
     dplyr::group_split(.data$Latitude, .data$Longitude, .data$Year, .data$Month, .data$Day)
 
-  pr_get_SSTData <- function(df){
+  pr_get_SSTData <- function(df, p){
+
+    p()
 
     # Make sure month and day have a leading zero if less than 10
     mth <- stringr::str_pad(df$Month,2,"left",pad="0")
@@ -132,16 +138,26 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d") {
     url_base <- paste0("http://thredds.aodn.org.au/thredds/dodsC/IMOS/SRS/SST/ghrsst/L3S-",res_temp,"/dn/") # Base URL
     imos_url <- paste0(url_base, df$Year,"/",df$Year,mth,dy,string,"-ABOM-L3S_GHRSST-SSTfnd-AVHRR_D-", res_temp, "_dn.nc")
 
-    tryCatch({ # Not all dates will exist
-     nc <- RNetCDF::open.nc(imos_url)
-    },
-    error = function(cond) {
-      ncx <- NaN
-      return(ncx)
+    url_exists <- function(url){
+      tryCatch({ # Not all dates will exist
+        nc <- RNetCDF::open.nc(url)
+      },
+      error = function(cond) {
+        return(NULL)
+      })
     }
-    )
 
-    if(exists("nc")) {
+    nc <- url_exists(imos_url)
+
+    if(is.null(nc)) {
+
+      erfunc <- function(pr){(as.numeric(NA))}
+      out <- purrr::map(pr, erfunc)
+      names(out) <- pr
+      return(out)
+
+    } else {
+
       lat <- RNetCDF::var.get.nc(nc, variable = "lat")
       lon <- RNetCDF::var.get.nc(nc, variable = "lon")
       lengthlat <- RNetCDF::dim.inq.nc(nc, "lat")
@@ -163,22 +179,64 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d") {
       }
 
       prfunc <- function(pr){
-        out <- mean(RNetCDF::var.get.nc(nc, pr, start=c(idx_lon, idx_lat, 1), count = cnt, unpack = TRUE), na.rm = TRUE) - 273.15
+        out <- mean(RNetCDF::var.get.nc(nc, pr, start=c(idx_lon, idx_lat, 1), count = cnt, unpack = TRUE), na.rm = TRUE)
       }
 
       out <- purrr::map(pr, prfunc)
       names(out) <- pr
+
       RNetCDF::close.nc(nc)
+
       return(out)
-    } else {
-      out <- NaN
-    }
     }
 
-  sstout <- purrr::map(df, pr_get_SSTData) %>%
-    data.table::rbindlist()
+  }
+
+  p <- progressr::progressor(steps = length(df_dmy))
+
+  if (isFALSE(parallel)){
+
+    sstout <- purrr::map(df_dmy, pr_get_SSTData, p) %>%
+      data.table::rbindlist()
+
+  } else {
+
+    if (!requireNamespace("furrr", quietly = TRUE) |
+        !requireNamespace("future", quietly = TRUE) |
+        !requireNamespace("parallelly", quietly = TRUE)) {
+      stop(
+        "Packages \"furrr\" and \"future\" and \"parallelly\" must be installed to use this function.",
+        call. = FALSE
+      )
+    }
+
+    if (is.null(ncore)) { # If ncore not given, work out how many cores to utilise
+      ncore <- parallelly::availableCores(omit = 2)
+    }
+
+    future::plan(future::multisession(), workers = ncore)
+
+    sstout <- furrr::future_map(df_dmy, pr_get_SSTData, p) %>%
+      data.table::rbindlist()
+
+    ## Explicitly close multisession workers by switching plan
+    future::plan(future::sequential)
+
+    rm(ncore)
+  }
+
+  # Check which variables we retrieved that need to be changed
+  # We don't want to change SST twice
+  to_change <- c("sea_surface_temperature", "sst_mean")
+  pr2 <- to_change[to_change %in% pr]
+
   df <- dplyr::bind_rows(df) %>%
-    dplyr::bind_cols(sstout)
+    dplyr::bind_cols(sstout) %>%
+    dplyr::mutate(dplyr::across(
+      tidyselect::any_of(pr2), ~ .x - 273.15)) # Convert temp from kelvin
+
+
+  return(df)
 
 }
 
@@ -206,8 +264,8 @@ pr_match_Altimetry <- function(df, pr, res_spat = 1) {
     if (sum(stringr::str_detect(colnames(df),"Date")) == 1) { # Otherwise check that Date exists
       df <- df %>%
         dplyr::mutate(Day = lubridate::day(.data$Date),
-               Month = lubridate::month(.data$Date),
-               Year = lubridate::year(.data$Date))
+                      Month = lubridate::month(.data$Date),
+                      Year = lubridate::year(.data$Date))
     } else {
       print("Missing Date or Day/Month/Year columns")
     }
@@ -236,11 +294,11 @@ pr_match_Altimetry <- function(df, pr, res_spat = 1) {
       filename <- fileName$files
       url_base <- paste0("http://thredds.aodn.org.au/thredds/dodsC/IMOS/OceanCurrent/GSLA/DM01/") # Base URL
       imos_url <- paste0(url_base,df$Year,"/",filename)
-      },
-      error = function(cond) {
-        x <- NA
-        return(x)
-        }
+    },
+    error = function(cond) {
+      x <- NA
+      return(x)
+    }
     )
 
     if(exists("fileName") && nrow(fileName) > 0) {# Not all dates will exist
@@ -275,11 +333,11 @@ pr_match_Altimetry <- function(df, pr, res_spat = 1) {
       return(out)
 
     } else {
-        erfunc <- function(pr){(as.numeric(NA))}
-        out <- purrr::map(pr, erfunc)
-        names(out) <- pr
-        return(out)
-        }
+      erfunc <- function(pr){(as.numeric(NA))}
+      out <- purrr::map(pr, erfunc)
+      names(out) <- pr
+      return(out)
+    }
   }
 
   altout <- purrr::map(df, pr_get_SatData) %>%
@@ -325,8 +383,8 @@ pr_match_MODIS <- function(df, pr, res_spat = 1, res_temp = "1d") {
   if (sum(c("Day","Month","Year") %in% colnames(df)) != 3) {
     df <- df %>%
       dplyr::mutate(Day = lubridate::day(.data$Date),
-             Month = lubridate::month(.data$Date),
-             Year = lubridate::year(.data$Date))
+                    Month = lubridate::month(.data$Date),
+                    Year = lubridate::year(.data$Date))
   }
 
   if (min(df$Date) < as.Date("2002-07-01")){
@@ -350,11 +408,11 @@ pr_match_MODIS <- function(df, pr, res_spat = 1, res_temp = "1d") {
       url_base <- paste0("http://thredds.aodn.org.au/thredds/dodsC/IMOS/SRS/OC/gridded/aqua/P1D/") # Base URL
       imos_url <- paste0(url_base, df$Year,"/",mth,"/A.P1D.",df$Year,mth,dy,"T053000Z.aust.",df$pr,".nc")
       nc <- RNetCDF::open.nc(imos_url)
-      },
-      error = function(cond) {
-        ncx <- NaN
-        return(ncx)
-        }
+    },
+    error = function(cond) {
+      ncx <- NaN
+      return(ncx)
+    }
     )
 
     if(exists("nc")) {# Not all dates will exist

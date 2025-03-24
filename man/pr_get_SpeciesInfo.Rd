@@ -4,7 +4,7 @@
 \alias{pr_get_SpeciesInfo}
 \title{Get species information table for Phytoplankton and Zooplankton}
 \usage{
-pr_get_SpeciesInfo(Type = "Z")
+pr_get_SpeciesInfo(Type = "Zooplankton")
 }
 \arguments{
 \item{Type}{Phytoplankton (P) or Zooplankton (Z)}
@@ -16,6 +16,6 @@ A dataframe of species information
 Get species information table for Phytoplankton and Zooplankton
 }
 \examples{
-dat <- pr_get_SpeciesInfo(Type = "P")
-dat <- pr_get_SpeciesInfo(Type = "Z")
+dat <- pr_get_SpeciesInfo(Type = "Phytoplankton")
+dat <- pr_get_SpeciesInfo(Type = "Zooplankton")
 }

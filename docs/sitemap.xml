@@ -12,14 +12,18 @@
 <url><loc>https://planktonteam.github.io/planktonr/articles/planktonr.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/authors.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/index.html</loc></url>
+<url><loc>https://planktonteam.github.io/planktonr/reference/drop_na.planktonr_dat.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/index.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pipe.html</loc></url>
+<url><loc>https://planktonteam.github.io/planktonr/reference/pivot_longer.planktonr_dat.html</loc></url>
+<url><loc>https://planktonteam.github.io/planktonr/reference/pivot_wider.planktonr_dat.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_add_Bioregions.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_add_Carbon.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_add_StationCode.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_add_StationName.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_apply_Flags.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_apply_Time.html</loc></url>
+<url><loc>https://planktonteam.github.io/planktonr/reference/pr_check_type.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_filter_NRSStations.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_filter_Species.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_filter_data.html</loc></url>
@@ -60,11 +64,18 @@
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_TaxaAccum.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_s3.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_s3site.html</loc></url>
+<url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_survey.html</loc></url>
+<url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_survey.planktonr_dat.html</loc></url>
+<url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_type.html</loc></url>
+<url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_type.planktonr_dat.html</loc></url>
+<url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_variable.html</loc></url>
+<url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_variable.planktonr_dat.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_harmonic.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_make_climatology.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_match_Altimetry.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_match_GHRSST.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_match_MODIS.html</loc></url>
+<url><loc>https://planktonteam.github.io/planktonr/reference/pr_planktonr_class.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_plot_CPRmap.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_plot_Climatology.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_plot_DayNight.html</loc></url>
@@ -92,6 +103,8 @@
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_rename.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_reorder.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_title.html</loc></url>
+<url><loc>https://planktonteam.github.io/planktonr/reference/print.planktonr_dat.html</loc></url>
+<url><loc>https://planktonteam.github.io/planktonr/reference/summarise.planktonr_dat.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/theme_pr.html</loc></url>
 </urlset>
 

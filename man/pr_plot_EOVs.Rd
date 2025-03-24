@@ -7,7 +7,6 @@
 pr_plot_EOVs(
   df,
   EOV = "Biomass_mgm3",
-  Survey = "NRS",
   trans = "identity",
   col = "blue",
   labels = TRUE
@@ -17,8 +16,6 @@ pr_plot_EOVs(
 \item{df}{dataframe containing timeseries data with Parameters and Values, output of pr_get_EOVs and pr_get_Coeffs}
 
 \item{EOV}{Essential Ocean Variable as a parameter}
-
-\item{Survey}{NRS, CPR or LTM 'Long term monitoring'}
 
 \item{trans}{scale for y axis}
 
@@ -36,6 +33,6 @@ Essential Ocean Variables plot
 df <- pr_get_EOVs("NRS") \%>\%
   pr_remove_outliers(2) \%>\%
   pr_get_Coeffs()
-pr_plot_EOVs(df, EOV = "Biomass_mgm3", Survey = "NRS",
+pr_plot_EOVs(df, EOV = "Biomass_mgm3",
       trans = "identity", col = "blue", labels = FALSE)
 }

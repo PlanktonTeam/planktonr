@@ -3,26 +3,25 @@
 #' Plot Gantt Chart showing plankton sampling status
 #'
 #' @param dat Trip data for either NRS or CPR.
-#' @param Survey "NRS" or "CPR"
 #'
 #' @return a ggplot
 #' @export
 #'
 #' @examples
 #' dat <- pr_get_CPRTrips()
-#' gg <- pr_plot_Gantt(dat, Survey = "CPR")
+#' gg <- pr_plot_Gantt(dat)
 #' dat <- pr_get_NRSTrips()
-#' gg <- pr_plot_Gantt(dat, Survey = "NRS")
-pr_plot_Gantt <- function(dat, Survey = "NRS"){
+#' gg <- pr_plot_Gantt(dat)
+pr_plot_Gantt <- function(dat){
+
+  Survey <- pr_get_survey(dat)
 
   if (Survey == "CPR"){
     dat2 <- dat %>%
       dplyr::arrange(.data$Latitude) %>%
       dplyr::mutate(YearMonth = .data$Year_Local + .data$Month_Local/12) %>%
       dplyr::distinct(.data$YearMonth, .data$Region, .data$TripCode) %>%
-      dplyr::group_by(.data$YearMonth, .data$Region, .data$TripCode) %>%
-      dplyr::summarise(n = dplyr::n()) %>%
-      dplyr::ungroup()
+      dplyr::summarise(n = dplyr::n(), .by = tidyselect::all_of(c("YearMonth", "Region", "TripCode")))
 
     gg <- ggplot2::ggplot(data = dat2, ggplot2::aes(x = .data$YearMonth, y = .data$Region, width = 1/12, height = 2/12), fill = "black", colour = "black") +
       ggplot2::geom_tile() +
@@ -39,8 +38,7 @@ pr_plot_Gantt <- function(dat, Survey = "NRS"){
     dat2 <- dat %>%
       dplyr::mutate(YearMonth = .data$Year_Local + .data$Month_Local/12) %>%
       dplyr::filter(.data$StationName != "Port Hacking 4") %>%
-      dplyr::group_by(.data$YearMonth, .data$StationName) %>%
-      dplyr::summarise(n = dplyr::n(), .groups = "drop")
+      dplyr::summarise(n = dplyr::n(), .by = tidyselect::all_of(c("YearMonth", "StationName")))
 
     gg <- ggplot2::ggplot(data = dat2, ggplot2::aes(x = .data$YearMonth, y = .data$StationName, width = 1/12, height = 2/12), fill = "black", colour = "black") +
       ggplot2::geom_tile() +
@@ -62,18 +60,19 @@ pr_plot_Gantt <- function(dat, Survey = "NRS"){
 #' Plot a taxa accumulation curve for everything that is identified by the IMOS plankton team
 #'
 #' @param dat A dataframe of plankton data
-#' @param Survey "CPR" or "NRS"
-#' @param Type "P" or "Z"
 #'
 #' @return a ggplot object.
 #' @export
 #'
 #' @examples
-#' dat <- pr_get_TaxaAccum(Survey = "NRS", Type = "Z")
-#' p <- pr_plot_TaxaAccum(dat, Survey = "NRS", Type = "Z")
-#' dat <- pr_get_TaxaAccum(Survey = "CPR", Type = "P")
-#' p <- pr_plot_TaxaAccum(dat, Survey = "CPR", Type = "P")
-pr_plot_TaxaAccum <- function(dat, Survey = "NRS", Type = "Z"){
+#' dat <- pr_get_TaxaAccum(Survey = "NRS", Type = "Zooplankton")
+#' p <- pr_plot_TaxaAccum(dat)
+#' dat <- pr_get_TaxaAccum(Survey = "CPR", Type = "Phytoplankton")
+#' p <- pr_plot_TaxaAccum(dat)
+pr_plot_TaxaAccum <- function(dat){
+
+  Survey = pr_get_survey(dat)
+  Type = pr_get_type(dat)
 
   gg <- ggplot2::ggplot(data = dat, ggplot2::aes(x = .data$First, y = .data$RowN)) +
     ggplot2::geom_line() +
@@ -92,13 +91,13 @@ pr_plot_TaxaAccum <- function(dat, Survey = "NRS", Type = "Z"){
 
 #' Pie plots of functional groups for data
 #'
-#' @param df data frame binned to functional group e.g. planktonr::pr_get_FuncGroups("NRS", "Z")
+#' @param df data frame binned to functional group e.g. planktonr::pr_get_FuncGroups("NRS", "Zooplankton")
 #'
 #' @return pie plot of functional groups
 #' @export
 #'
 #' @examples
-#' df <- pr_get_FuncGroups("CPR", "P")
+#' df <- pr_get_FuncGroups("CPR", "Phytoplankton")
 #' plot <- pr_plot_PieFG(df)
 #'
 pr_plot_PieFG <- function(df){
