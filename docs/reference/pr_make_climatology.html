@@ -90,7 +90,7 @@
 
 
 <dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>Year, Month, Day, time period of climatology</p></dd>
+<dd><p>A string of Year, Month, Day, time period of climatology</p></dd>
 
 </dl></div>
     <div id="value">
@@ -100,23 +100,21 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Month <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">12</span>,<span class="fl">10</span><span class="op">)</span>, StationCode <span class="op">=</span> <span class="st">'NSI'</span>, Values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">120</span>, min<span class="op">=</span><span class="fl">0</span>, max<span class="op">=</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">pr_make_climatology</span><span class="op">(</span><span class="va">df</span>, <span class="va">Month</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 12 × 6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Month StationCode  mean     N    sd    se</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     1 NSI          5.16    10  3.68 1.16 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     2 NSI          6.56    10  2.63 0.833</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     3 NSI          3.79    10  2.29 0.724</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>     4 NSI          3.33    10  2.42 0.765</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>     5 NSI          4.42    10  2.95 0.932</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>     6 NSI          4.76    10  2.92 0.922</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>     7 NSI          6.26    10  3.21 1.01 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>     8 NSI          4.73    10  2.71 0.856</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>     9 NSI          3.99    10  1.88 0.593</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>    10 NSI          6.74    10  1.57 0.497</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span>    11 NSI          5.44    10  2.48 0.784</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span>    12 NSI          4.35    10  2.57 0.812</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Month <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">12</span>,<span class="fl">10</span><span class="op">)</span>, StationCode <span class="op">=</span> <span class="st">"NSI"</span>, Values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">120</span>, min<span class="op">=</span><span class="fl">0</span>, max<span class="op">=</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">pr_make_climatology</span><span class="op">(</span><span class="va">df</span>, <span class="st">"Month"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Month StationCode     mean  N       sd        se</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      1         NSI 5.164656 10 3.675964 1.1624418</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      2         NSI 6.564165 10 2.634430 0.8330801</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      3         NSI 3.793594 10 2.290833 0.7244249</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      4         NSI 3.327780 10 2.418098 0.7646697</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      5         NSI 4.423760 10 2.946553 0.9317817</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      6         NSI 4.761376 10 2.916079 0.9221450</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7      7         NSI 6.255200 10 3.206539 1.0139968</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      8         NSI 4.725419 10 2.706689 0.8559303</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9      9         NSI 3.992213 10 1.876342 0.5933515</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10    10         NSI 6.735503 10 1.572810 0.4973661</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11    11         NSI 5.442305 10 2.478709 0.7838365</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12    12         NSI 4.345199 10 2.567004 0.8117580</span>
 </code></pre></div>
     </div>
   </div>

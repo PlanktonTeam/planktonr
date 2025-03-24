@@ -120,7 +120,7 @@ State of Environment.</p>
 <p>First we get the NRS EOV data and subset it for Maria Island and add
 the trend coefficients using:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">EOV</span> <span class="op">&lt;-</span> <span class="fu">planktonr</span><span class="fu">::</span><span class="fu"><a href="../reference/pr_get_EOVs.html">pr_get_EOVs</a></span><span class="op">(</span><span class="st">"NRS"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">EOV</span> <span class="op">&lt;-</span> <span class="fu">planktonr</span><span class="fu">::</span><span class="fu"><a href="../reference/pr_get_EOVs.html">pr_get_EOVs</a></span><span class="op">(</span>Survey <span class="op">=</span> <span class="st">"NRS"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">EOV_MAI</span> <span class="op">&lt;-</span> <span class="va">EOV</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">StationCode</span> <span class="op">==</span> <span class="st">"MAI"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -199,10 +199,10 @@ stations only.</p>
 do:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">EOV_PHB</span><span class="op">$</span><span class="va">Parameters</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] "Nitrate_umolL"     "Temperature_degC"  "Salinity"         </span></span>
-<span><span class="co">#&gt;  [4] "Oxygen_umolL"      "Phosphate_umolL"   "Silicate_umolL"   </span></span>
-<span><span class="co">#&gt;  [7] "DIC_umolkg"        "Alkalinity_umolkg" "DIN_umolL"        </span></span>
-<span><span class="co">#&gt; [10] "Ammonium_umolL"    "NOx_umolL"         "Redfield"         </span></span>
+<span><span class="co">#&gt;  [1] "Phosphate_umolL"   "Oxygen_umolL"      "Salinity"         </span></span>
+<span><span class="co">#&gt;  [4] "Temperature_degC"  "Nitrate_umolL"     "Silicate_umolL"   </span></span>
+<span><span class="co">#&gt;  [7] "Ammonium_umolL"    "DIC_umolkg"        "Alkalinity_umolkg"</span></span>
+<span><span class="co">#&gt; [10] "NOx_umolL"         "DIN_umolL"         "Redfield"         </span></span>
 <span><span class="co">#&gt; [13] "Nitrite_umolL"</span></span></code></pre></div>
 <p>Do the plotting</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
