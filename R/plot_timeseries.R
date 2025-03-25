@@ -421,6 +421,13 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
   # TODO need to add assert
   # Ensure there is only 1 station
 
+
+  # TODO At the moment, the model parameters are still being put into columns.
+  # I want to change this to be a model object in a slot that can be extracted by
+  # a generic summary.planktonr_dat() call. I will need a different model object per variable.
+  # It should update each time it is plotted and subset so it is accuate for the data contained
+  # in the data frame. Consider using tidymodels to do it.
+
    p <- df %>%
      dplyr::filter(.data$Parameters == EOV) %>%
      dplyr::pull(p) %>%
@@ -465,14 +472,13 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
   p1 <- ggplot2::ggplot(df) +
     ggplot2::geom_point(ggplot2::aes(x = .data$SampleDate, y = .data$Values), colour = col) +
     ggplot2::geom_smooth(data = df %>% dplyr::filter(.data$do_smooth),
-                         ggplot2::aes(x = .data$SampleDate, y = .data$fv), method = "lm", formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
+                         ggplot2::aes(x = .data$SampleDate, y = .data$fv),
+                         method = "lm", formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
     ggplot2::labs(x = "Year", subtitle = titley) +
     ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
     theme_pr() +
     ggplot2::theme(legend.position = "none",
-                   axis.title.y = ggplot2::element_blank(),
-                   #plot.subtitle = ggplot2::element_text(size = 12)
-    )
+                   axis.title.y = ggplot2::element_blank())
 
   if(isFALSE(labels)){
     p1 <- p1 +
