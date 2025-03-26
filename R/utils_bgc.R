@@ -214,18 +214,11 @@ pr_get_NRSMicro <- function(Survey = "NRS"){
 
   if(Survey == "Coastal"){
 
-    CoastalStations <- c("Bare Island", "Towra Point",
-                         "Derwent Estuary B1", "Derwent Estuary B3", "Derwent Estuary E", "Derwent Estuary G2",
-                         "Derwent Estuary KB", "Derwent Estuary RBN", "Derwent Estuary U2",
-                         "Tully River Mouth mooring", "Russell-Mulgrave River mooring", "Green Island", "Port Douglas",
-                         "Cape Tribulation", "Double Island", "Yorkey's Knob", "Fairlead Buoy", "Hobsons; Port Phillip Bay",
-                         "Long Reef; Port Phillip Bay", "Inshore reef_Channel", "Inshore reef_Geoffrey Bay")
-
     dat <- readr::read_csv("https://raw.githubusercontent.com/AusMicrobiome/microbial_ocean_atlas/main/data/oceanViz_AM_data.csv",
                            show_col_types = FALSE) %>%
       tidyr::drop_na(tidyselect::any_of(c("StationCode", "SampleDateUTC", "Time_24hr", "Year", "Month", "Day", "depth_m"))) %>%
       pr_rename() %>%
-      dplyr::filter(is.na(.data$TripCode), .data$StationName %in% CoastalStations) %>%
+      dplyr::filter(is.na(.data$TripCode), .data$StationName %in% CSCodes$StationName) %>%
       dplyr::select("StationName", "SampleDateUTC", "Latitude", "Longitude", SampleDepth_m = "depth_m", tidyselect::any_of(var_names)) %>%
       dplyr::mutate(dplyr::across(tidyselect::all_of(var_names), as.numeric),
                     tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE))
@@ -299,19 +292,13 @@ pr_get_CSChem <- function(){
   var_names <- c("Silicate_umolL", "Nitrate_umolL", "Phosphate_umolL", "Ammonium_umolL", "Chla_mgm3", "Temperature_degC",
                  "Salinity_psu", "Oxygen_umolL", "Turbidity_NTU", "Density_kgm3")
 
-  CoastalStations <- c("Balls Head", "Salmon Haul", "Bare Island", "Cobblers Beach", "Towra Point", "Lilli Pilli",
-                       "Derwent Estuary B1", "Derwent Estuary B3", "Derwent Estuary E", "Derwent Estuary G2",
-                       "Derwent Estuary KB", "Derwent Estuary RBN", "Derwent Estuary U2", "Low Head",
-                       "Tully River Mouth mooring", "Russell-Mulgrave River mooring", "Green Island", "Port Douglas",
-                       "Cape Tribulation", "Double Island", "Yorkey's Knob", "Fairlead Buoy", "Hobsons; Port Phillip Bay",
-                       "Long Reef; Port Phillip Bay", "Geoffrey Bay", "Channel", "Pioneer Bay", "Centaur Reef",
-                       "Wreck Rock", "Inshore reef_Channel", "Inshore reef_Geoffrey Bay")
+
 
   dat <- readr::read_csv("https://raw.githubusercontent.com/AusMicrobiome/microbial_ocean_atlas/main/data/oceanViz_AM_data.csv",
                          show_col_types = FALSE) %>%
     tidyr::drop_na(tidyselect::any_of(c("StationCode", "SampleDateUTC", "Time_24hr", "Year", "Month", "Day", "depth_m"))) %>% # TODO these should fixed soon
     pr_rename() %>%
-    dplyr::filter(is.na(.data$TripCode), .data$StationName %in% CoastalStations) %>%
+    dplyr::filter(is.na(.data$TripCode), .data$StationName %in% CSCodes$StationName) %>%
     dplyr::select("StationName", "SampleDateUTC", "Latitude", "Longitude", SampleDepth_m = "depth_m", tidyselect::any_of(var_names)) %>%
     dplyr::mutate(dplyr::across(tidyselect::all_of(var_names), as.numeric),
                   tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE))

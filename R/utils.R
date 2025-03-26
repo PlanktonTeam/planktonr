@@ -385,7 +385,7 @@ pr_apply_Time <- function(df){
                   tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE)) %>%
     dplyr::relocate(tidyselect::all_of(c("Year_Local", "Month_Local", "tz")), .after = "SampleTime_Local")
 
-}
+} %>%
 
 #' Removing outliers from data
 #'

@@ -34,7 +34,8 @@ pr_planktonr_class <- function(data, type = NULL, survey = NULL, variable = NULL
       Survey = survey,
       Variable = variable,
       Subset = subset,
-      Trend = NULL
+      Trend = NULL,
+      Model = NULL,
     )
   } else {
     return(data)
