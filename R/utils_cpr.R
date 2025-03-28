@@ -58,7 +58,7 @@ pr_get_CPRData <- function(Type = "Phytoplankton", Variable = "abundance", Subse
 pr_get_CPRTrips <- function(...){
   CPRTrips <- pr_get_s3("cpr_samp")  %>%
     pr_rename() %>%
-    pr_add_Bioregions(...) %>%
+    pr_add_Bioregions() %>%
     pr_apply_Time() %>%
     pr_planktonr_class(type = NULL, survey = "CPR", variable = NULL)
 }

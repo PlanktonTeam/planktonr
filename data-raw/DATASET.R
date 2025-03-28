@@ -69,20 +69,21 @@ mbr <- dplyr::left_join(mbr, clr, by = "REGION") %>%
 MapOz <- rnaturalearth::ne_countries(scale = "small", country = "Australia",
                                      returnclass = "sf")
 
+
 # Details for coastal stations
-CSCodes <- tibble::tibble(StationName = c("Balls Head", "Salmon Haul", "Bare Island", "Cobblers Beach", "Towra Point", "Lilli Pilli",
-                                          "Derwent Estuary B1", "Derwent Estuary B3", "Derwent Estuary E", "Derwent Estuary G2",
+CSCodes <- tibble::tibble(StationName = c("Balls Head", "Salmon Haul", "Bare Island - Botany Bay", "Cobblers Beach", "Towra Point - Botany Bay",
+                                          "Lilli Pilli","Derwent Estuary B1", "Derwent Estuary B3", "Derwent Estuary E", "Derwent Estuary G2",
                                           "Derwent Estuary KB", "Derwent Estuary RBN", "Derwent Estuary U2", "Low Head",
                                           "Tully River Mouth mooring", "Russell-Mulgrave River mooring", "Green Island", "Port Douglas",
-                                          "Cape Tribulation", "Double Island", "Yorkey's Knob", "Fairlead Buoy", "Hobsons; Port Phillip Bay",
-                                          "Long Reef; Port Phillip Bay", "Geoffrey Bay", "Channel", "Pioneer Bay", "Centaur Reef",
+                                          "Cape Tribulation", "Double Island", "Yorkey's Knob", "Fairlead Buoy", "Hobsons - Port Phillip Bay",
+                                          "Long Reef - Port Phillip Bay", "Geoffrey Bay", "Channel", "Pioneer Bay", "Centaur Reef",
                                           "Wreck Rock", "Inshore reef_Channel", "Inshore reef_Geoffrey Bay"),
                           StationCode = c("BAH", "SAH", "BAI", "COB", "TOP", "LIP", "DEB", "DES", "DEE", "DEG", "DEK", "DER", "DEU", "LOH",
-                                     "TRM", "RMR", "GNI", "PTD", "CTL", "DBI", "YKK", "FLB", "HOB", "LOR", "GEB", "CHA", "PIB", "CER",
-                                     "WRR", "IRC", "IGB"),
+                                          "TRM", "RMR", "GNI", "PTD", "CTL", "DBI", "YKK", "FLB", "HOB", "LOR", "GEB", "CHA", "PIB", "CER",
+                                          "WRR", "IRC", "IGB"),
                           State = factor(c("NSW", "NSW", "NSW", "NSW", "NSW", "NSW", "TAS", "TAS","TAS","TAS","TAS","TAS","TAS", "TAS", "GBR",
-                                    "GBR","GBR","GBR","GBR","GBR","GBR","GBR", "VIC", "VIC","GBR","GBR","GBR","WA", "WA","GBR","GBR" ),
-                                    levels = c("GBR", "NSW", "WA", "VIC", "TAS"))) %>%
+                                           "GBR","GBR","GBR","GBR","GBR","GBR","GBR", "VIC", "VIC","GBR","GBR","GBR","WA", "WA","GBR","GBR" ),
+                                         levels = c("GBR", "NSW", "WA", "VIC", "TAS"))) %>%
   dplyr::arrange(State)
 
 # NRS input into pl_plot_NRSmap()
@@ -110,7 +111,7 @@ csDAT <- planktonr::pr_get_NRSMicro("Coastal") %>%
 
 # https://coolors.co/palette/d00000-ffba08-cbff8c-8fe388-1b998b-3185fc-5d2e8c-46237a-ff7b9c-ff9b85
 # Darwin                 Yongala                Ningaloo      North Stradbroke Island         Rottnest Island               Esperance            Port Hacking         Kangaroo Island            Maria Island
- # "#ff8500"               "#b66ee8"             "#ff9b85"           "#d00000".                 "#46237a"               "#1b998b"                  "#8fe388"                 "#ff7b9c"            "#3185fc"
+# "#ff8500"               "#b66ee8"             "#ff9b85"           "#d00000".                 "#46237a"               "#1b998b"                  "#8fe388"                 "#ff7b9c"            "#3185fc"
 
 
 coolor <- c("#ff8500", "#b66ee8", "#ff9b85", "#d00000", "#46237a", "#1b998b", "#8fe388", "#ff7b9c", "#3185fc", "#391d26") #"#cbff8c" "#ffba08"
@@ -144,7 +145,7 @@ colCPR <- mbr %>%
   tibble::deframe()
 
 pchCPR <- data.frame(Code = mbr$REGION,
-                         pchr = rep(16, 11)) %>%
+                     pchr = rep(16, 11)) %>%
   tibble::deframe()
 
 ltyCPR <- data.frame(Code = mbr$REGION,
@@ -159,7 +160,7 @@ stateLTY <- c("solid", "dashed", "dotted", "dotdash", "longdash", "solid", "dash
 statePCH <- c(seq(0, 25, 1), 0, 1, 2, 3, 4)
 
 colCSCode <- data.frame(Code = CSCodes$StationCode,
-                         Colr = stateCol) %>%
+                        Colr = stateCol) %>%
   tibble::deframe()
 
 colCSName <- data.frame(Code = CSCodes$StationName,

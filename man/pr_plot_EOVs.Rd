@@ -31,8 +31,8 @@ Essential Ocean Variables plot
 }
 \examples{
 df <- pr_get_EOVs("NRS") \%>\%
-  pr_remove_outliers(2) \%>\%
-  pr_get_Coeffs()
+  dplyr::filter(StationCode == "PHB") \%>\%
+  pr_remove_outliers(2)
 pr_plot_EOVs(df, EOV = "Biomass_mgm3",
       trans = "identity", col = "blue", labels = FALSE)
 }
