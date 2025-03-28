@@ -82,8 +82,7 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
 
   Survey <- pr_get_survey(df)
 
-  # Extract Model data
-  Models <- pr_get_model(df)
+
 
   if (Trend %in% c("Month", "Year")){
     Trend = paste0(Trend, "_Local") # Rename to match columns
@@ -96,11 +95,20 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
     site = rlang::sym("StationName")
   }
 
-  ## Does Model data exist?
-  if (is.null(Models) | Trend != "Raw"){
+  ## Should Model data be used.
+  if (Trend != "Raw"){
     df <- df %>%
       dplyr::mutate(facet_label = !!site)
   } else {
+
+    # Extract Model data
+    Models <- pr_get_model(df)
+
+    if(is.null(Models)){ # TODO Decide if we will always provide models or not. Currently we are forcing models to be run and shown.
+      df <- pr_model_data(df)
+      Models <- pr_get_model(df)
+    }
+
     coefficients <- pr_get_coeffs(Models)
 
     df <- df %>%
@@ -460,6 +468,7 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
 
   # TODO Should I be only processing 1 station/Bioregion?
 
+
   df <- pr_model_data(df %>% dplyr::filter(.data$Parameters == EOV)) %>%
     dplyr::mutate(Month = lubridate::month(.data$SampleTime_Local)  * 2 * 3.142 / 12 )
 
@@ -468,7 +477,7 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
 
   coefficients <- pr_get_coeffs(Models) %>%
     dplyr::filter(.data$term == "Year_Local") %>%
-    dplyr::mutate(p.value = dplyr::if_else(.data$p.value > 0.001, as.character(.data$p.value), format(.data$p.value, scientific = TRUE, digits = 3)))
+    dplyr::mutate(p.value = dplyr::if_else(.data$p.value > 0.001, as.character(round(.data$p.value, digits = 3)), format(.data$p.value, scientific = TRUE, digits = 3)))
 
 
   # The title comes back as class "call" so I need to undo and redo it to add the string

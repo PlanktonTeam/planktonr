@@ -15,7 +15,8 @@ pr_model_data <- function(df){
 
   # Do one parameter at a time at the moment.
   assertthat::assert_that(
-    length(unique(df$Parameters)) == 1
+    length(unique(df$Parameters)) == 1,
+    msg = "Only one parameter at a time can be run."
     )
 
   Survey <- pr_get_survey(df)
