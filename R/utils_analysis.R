@@ -1,104 +1,85 @@
-#
-#
-#
-# # pr_model_data <- function(dat){
-#
-#
-#   # TODO Need to ensure the models are calculated and stored against only 1
-#   # parameter and 1 station. They seem to be returning results that are the same for all data regardless of location
-#
-#   # browser()
-#
-#   Survey <- pr_get_survey(df)
-#   Type <- pr_get_type(df)
-#   Variable <- pr_get_variable(df)
-#
-#   #
-#   # if(Survey == "LTM") {
-#   #   df <- df %>%
-#   #     dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
-#   #                      .by = tidyselect::all_of(c("StationCode", "StationName", "SampleTime_Local",
-#   #                                                 "anomaly", "Year_Local", "Month_Local", "Parameters")))
-#   # }
-#
-#   df <- df %>%
-#     dplyr::rename(SampleDate = "SampleTime_Local") %>%
-#     dplyr::mutate(Month = .data$Month_Local * 2 * 3.142 / 12) %>%
-#     droplevels()
-#
-#
-#   if(Survey == "CPR"){
-#     stations <- df %>%
-#       dplyr::select("BioRegion") %>%
-#       unique()
-#     stations <- stations$BioRegion
-#   } else {
-#     stations <- df %>%
-#       dplyr::select("StationName") %>%
-#       unique()
-#     stations <- stations$StationName
-#   }
-#
-#   params <- rep(params, each = length(stations))
-#   stations <- rep(stations, length.out = length(params))
-#
-#   coeffs <- function(params, stations){
-#
-#     # browser()
-#
-#     lmdat <- df %>%
-#       dplyr::filter(.data$Parameters == params) %>%
-#       tidyr::drop_na()
-#
-#     if(Survey == "CPR"){
-#       lmdat <- lmdat %>%
-#         dplyr::filter(.data$BioRegion == stations)
-#     } else {
-#       lmdat <- lmdat %>%
-#         dplyr::filter(.data$StationName == stations)
-#     }
-#
-#     # If the combination of parameter and station doesn't exist, return NULL
-#     if (dim(lmdat)[1] == 0){
-#       return(NULL)
-#     } else {
-#
-#       m <- stats::lm(Values ~ Year_Local + pr_harmonic(Month, k = 1), data = lmdat)
-#
-#       lmdat <- tibble::tibble(lmdat %>%
-#                                 dplyr::bind_cols(fv = m$fitted.values))
-#       ms <- summary(m)
-#       slope <- ifelse(ms$coefficients[2,1] < 0, "decreasing", "increasing")
-#       p <- ms$coefficients[2,4]
-#       sig <- ifelse(ms$coefficients[2,4] < 0.05, "significantly", "but not significantly")
-#
-#       if(Survey != "CPR") { # NRS and LTM
-#         dfs <- dplyr::tibble(slope = slope, p = p, significance = sig, Parameters = params, StationName = stations)
-#         dfs2 <- lmdat %>%
-#           dplyr::inner_join(dfs, by = c("Parameters", "StationName"))
-#       } else {
-#         dfs <- dplyr::tibble(slope = slope, p = p, significance = sig, Parameters = params, BioRegion = stations)
-#         dfs2 <- lmdat %>%
-#           dplyr::inner_join(dfs, by = c("Parameters", "BioRegion"))
-#       }
-#
-#       # attr(dfs2, "Trend") <- m # Store the model object
-#
-#       return(dfs2)
-#     }
-#   }
-#
-#   # browser()
-#
-#   outputs <- purrr::map2(params, stations, coeffs) %>%
-#     purrr::list_rbind() %>%
-#     pr_planktonr_class(type = Type, survey = Survey, variable = Variable)
-#
-#   return(outputs)
-#
-#
-#
-#
-#
-#
-# # } # End function
+#' Run linear model on station and parameters
+#'
+#' @param df A dataframe of NR, CPR or LTM
+#'
+#' @returns A dataframe with the model attribute added
+#' @export
+#'
+#' @examples
+#' df <- planktonr::pr_get_EOVs(Survey = "NRS") %>%
+#'   dplyr::filter(StationCode != "VBM") %>%
+#'   dplyr::filter(Parameters == "PigmentChla_mgm3") %>%
+#'   pr_remove_outliers(2) %>%
+#'   pr_model_data()
+pr_model_data <- function(df){
+
+  # Do one parameter at a time at the moment.
+  assertthat::assert_that(
+    length(unique(df$Parameters)) == 1
+    )
+
+  Survey <- pr_get_survey(df)
+
+  if(Survey == "LTM") {
+    df <- df %>%
+      dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
+                       .by = tidyselect::all_of(c("StationCode", "StationName", "SampleTime_Local",
+                                                  "anomaly", "Year_Local", "Month_Local", "Parameters")))
+  }
+
+  # Prepare the data
+  lmdat <- df %>%
+    dplyr::rename(SampleDate = "SampleTime_Local") %>%
+    dplyr::mutate(Month = .data$Month_Local * 2 * 3.142 / 12) %>%
+    droplevels() %>%
+    tidyr::drop_na()
+
+  # Set Correct columns/plot titles
+  if (Survey == "CPR"){
+    site = rlang::sym("BioRegion")
+  } else if (Survey != "CPR"){
+    site = rlang::sym("StationName")
+  }
+
+  site_names <- df %>%
+    dplyr::pull(!!site) %>%
+    unique() %>%
+    as.character()
+
+  model_list <- site_names %>%
+    rlang::set_names() %>%
+    purrr::map(~ stats::lm(Values ~ Year_Local + pr_harmonic(Month, k = 1),
+                    data = lmdat %>% dplyr::filter(!!site == .x)))
+
+  # Store the model object as a Model attribute with the name of the station
+  attr(df, "Model") <- model_list
+
+  return(df)
+
+} # End function
+
+
+#' Extract tidy coefficients from model object
+#'
+#' @param Models Model object created by `planktonr::pr_model_data`
+#'
+#' @returns
+#'
+#' @examples
+#' df <- planktonr::pr_get_EOVs(Survey = "NRS") %>%
+#'   dplyr::filter(StationCode != "VBM") %>%
+#'   dplyr::filter(Parameters == "PigmentChla_mgm3") %>%
+#'   pr_remove_outliers(2) %>%
+#'   pr_model_data()
+#' coeffs <- pr_get_coeffs(pr_get_model(df))
+pr_get_coeffs <- function(Models){
+
+  coefficients <- Models %>%
+    purrr::map_dfr(broom::tidy, .id = "Station") %>%
+    dplyr::mutate(signif = dplyr::case_when(p.value <= 0.001 ~ "***",
+                                            p.value <= 0.01 ~ "**",
+                                            p.value <= 0.05 ~ "*",
+                                            .default = ""))
+  # Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+}

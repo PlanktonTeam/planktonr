@@ -34,7 +34,6 @@ pr_planktonr_class <- function(data, type = NULL, survey = NULL, variable = NULL
       Survey = survey,
       Variable = variable,
       Subset = subset,
-      Trend = NULL,
       Model = NULL,
     )
   } else {
@@ -43,9 +42,6 @@ pr_planktonr_class <- function(data, type = NULL, survey = NULL, variable = NULL
 
 }
 
-
-
-test <- c("planktonr_dat", "tbl_df", "tbl", "data.frame")
 
 #' Generic function and method for Type
 #'
@@ -132,6 +128,41 @@ pr_get_variable.planktonr_dat <- function(x){
 
 
 
+#' Generic function and method for Model
+#'
+#' @param x planktonr r data object
+#'
+#' @returns attribute `Model`
+#' @export
+#'
+#' @examples
+pr_get_model <- function(x){
+  UseMethod("pr_get_model")
+}
+
+
+
+#' Generic function and method for Model
+#'
+#' @param x planktonr r data object
+#'
+#' @returns attribute `Model`
+#' @export
+#'
+#' @examples
+pr_get_model.planktonr_dat <- function(x){
+  attr(x, "Model")
+}
+
+
+
+
+
+
+
+
+
+
 #' print method for planktonr_dat
 #'
 #' @param x The planktonr dataframe
@@ -149,7 +180,7 @@ print.planktonr_dat <- function(x, ...) {
 
 #' pivot_longer method for planktonr_dat
 #'
-#' @param data  The planktonr data object
+#' @param data The planktonr data object
 #' @param ... Other possible objects to be passed to the tidyverse
 #'
 #' @export
@@ -231,7 +262,7 @@ summarise.planktonr_dat <- function(data, ..., .by, .groups = "drop") {
 drop_na.planktonr_dat <- function(data, ...) {
 
   # Call the next method
-  NextMethod() %>%
+  NextMethod("drop_na") %>%
     pr_planktonr_class(type = pr_get_type(data),
                        survey = pr_get_survey(data),
                        variable = pr_get_variable(data),
@@ -267,9 +298,9 @@ pr_check_type <- function(Type){
 
   # Register a tidyr method example.
   if (requireNamespace("tidyr", quietly = TRUE)) {
-    vctrs::s3_register("tidyr::drop_na", "planktonr_dat")
     vctrs::s3_register("tidyr::pivot_longer", "planktonr_dat")
     vctrs::s3_register("tidyr::pivot_wider", "planktonr_dat")
+    vctrs::s3_register("tidyr::drop_na", "planktonr_dat")
   }
 
   # Register a dplyr method example.

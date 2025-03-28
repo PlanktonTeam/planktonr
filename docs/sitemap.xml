@@ -62,6 +62,8 @@
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_Site.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_SpeciesInfo.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_TaxaAccum.html</loc></url>
+<url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_model.html</loc></url>
+<url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_model.planktonr_dat.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_s3.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_s3site.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_survey.html</loc></url>
@@ -75,6 +77,7 @@
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_match_Altimetry.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_match_GHRSST.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_match_MODIS.html</loc></url>
+<url><loc>https://planktonteam.github.io/planktonr/reference/pr_model_data.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_planktonr_class.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_plot_CPRmap.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_plot_Climatology.html</loc></url>

@@ -59,11 +59,9 @@ testthat::test_that("Correct function output", {
 
   testthat::expect_type(planktonr::pr_get_EOVs(Survey = "NRS") %>%
                           dplyr::filter(.data$Parameters != 'Oxygen_umolL',
-                                        !.data$StationCode %in% c('NIN', 'ESP')) %>%
-                          pr_get_Coeffs(), "list")
+                                        !.data$StationCode %in% c('NIN', 'ESP')), "list")
 
-  testthat::expect_type(planktonr::pr_get_EOVs(Survey = "LTM") %>%
-                          pr_get_Coeffs(), "list")
+  testthat::expect_type(planktonr::pr_get_EOVs(Survey = "LTM"), "list")
 
   testthat::expect_type(pr_get_NonTaxaColumns(Survey = "NRS", Type = "Zooplankton"), "character")
   testthat::expect_equal(pr_get_NonTaxaColumns(Survey = "NRS", Type = "Zooplankton"),

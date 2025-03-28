@@ -73,7 +73,8 @@ pr_plot_TimeSeries <- function(df, trans = "identity"){
 #'
 #' @examples
 #' df <- pr_get_Indices("NRS", "Zooplankton") %>%
-#'   dplyr::filter(Parameters == 'Biomass_mgm3')
+#'   dplyr::filter(Parameters == "Biomass_mgm3") %>%
+#'   pr_model_data()
 #' pr_plot_Trends(df, Trend = "Month")
 #' pr_plot_Trends(df, Trend = "Year")
 #' pr_plot_Trends(df, Trend = "Raw")
@@ -81,34 +82,50 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
 
   Survey <- pr_get_survey(df)
 
-  df <- tibble::as_tibble(df)
+  # Extract Model data
+  Models <- pr_get_model(df)
 
-  if (Trend == "Month"){
-    Trend = "Month_Local"
-  }
-  if (Trend == "Year"){
-    Trend = "Year_Local"
+  if (Trend %in% c("Month", "Year")){
+    Trend = paste0(Trend, "_Local") # Rename to match columns
   }
 
+  # Set Correct columns/plot titles
   if (Survey == "CPR"){
     site = rlang::sym("BioRegion")
   } else if (Survey != "CPR"){
     site = rlang::sym("StationName")
   }
 
+  ## Does Model data exist?
+  if (is.null(Models) | Trend != "Raw"){
+    df <- df %>%
+      dplyr::mutate(facet_label = !!site)
+  } else {
+    coefficients <- pr_get_coeffs(Models)
+
+    df <- df %>%
+      dplyr::left_join(coefficients %>%
+                         dplyr::filter(.data$term == "Year_Local") %>%
+                         dplyr::select(c("Station", "p.value", "signif")),
+                       by = dplyr::join_by(!!site == "Station")) %>%
+      dplyr::mutate(p.value = dplyr::if_else(.data$p.value > 0.001, as.character(round(.data$p.value, 3)), format(.data$p.value, scientific = TRUE, digits = 3)),
+                    facet_label = paste0(!!site, " (p = ", .data$p.value, .data$signif,")"),
+                    facet_label = dplyr::if_else(stringr::str_detect(.data$facet_label, "Bonney"), "Bonney Coast", .data$facet_label))
+
+  }
+
+
   titley <- pr_relabel(unique(df$Parameters), style = 'ggplot')
 
-  # Averaging based on `Trend` ----------------------------------------------
+  # Averaging based on `Trend`
 
   if (Trend %in% c("Year_Local", "Month_Local")){
     df <- df %>%
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
-                       N = dplyr::n(),
-                       sd = sd(.data$Values, na.rm = TRUE),
-                       se = sd / sqrt(.data$N),
+                       facet_label = dplyr::first(.data$facet_label),
                        .by = c(rlang::as_string(rlang::sym(Trend)), rlang::as_string(site)))
 
-  } else {
+  } else { # TODO There might be an error here because the df is renamed to df2. So is it even needed?
     Trend <- "SampleTime_Local" # Rename Trend to match the column with time
     df2 <- df %>%
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
@@ -124,13 +141,14 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
       dplyr::mutate(do_smooth = TRUE)
   }
 
-  # Do the plotting ---------------------------------------------------------
+  # Do the plotting
 
-  p1 <- ggplot2::ggplot(df, ggplot2::aes(x = !!rlang::sym(Trend), y = .data$Values)) + # do this logging as in pr_plot_tsclimate
+  p1 <- ggplot2::ggplot(data = df, ggplot2::aes(x = !!rlang::sym(Trend), y = .data$Values)) +
     ggplot2::geom_point() +
     ggplot2::geom_smooth(data = df %>% dplyr::filter(.data$do_smooth),
                          method = method, formula = y ~ x) +
-    ggplot2::facet_wrap(rlang::enexpr(site), scales = "free_y", ncol = 1) +
+    # ggplot2::facet_wrap(rlang::enexpr(site), scales = "free_y", ncol = 1) +
+    ggplot2::facet_wrap("facet_label", scales = "free_y", ncol = 1) +
     ggplot2::ylab(rlang::enexpr(titley)) +
     ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
     theme_pr() +
@@ -412,15 +430,27 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 #'
 #' @examples
 #' df <- pr_get_EOVs("NRS") %>%
-#'   pr_remove_outliers(2) %>%
-#'   pr_get_Coeffs()
+#'   dplyr::filter(StationCode == "PHB") %>%
+#'   pr_remove_outliers(2)
 #' pr_plot_EOVs(df, EOV = "Biomass_mgm3",
 #'       trans = "identity", col = "blue", labels = FALSE)
 pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "blue", labels = TRUE) {
 
+  Survey <- pr_get_survey(df)
+
+  if (Survey == "CPR"){
+    site = rlang::sym("BioRegion")
+  } else if (Survey != "CPR"){
+    site = rlang::sym("StationName")
+  }
+
+
   # TODO need to add assert
   # Ensure there is only 1 station
-
+  assertthat::assert_that(
+    length(unique(df[[site]])) == 1,
+    msg = "Only 1 Station/BioRegion can be plotted. Either filter the dataset or use purrr::map to process individually."
+  )
 
   # TODO At the moment, the model parameters are still being put into columns.
   # I want to change this to be a model object in a slot that can be extracted by
@@ -428,35 +458,35 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
   # It should update each time it is plotted and subset so it is accuate for the data contained
   # in the data frame. Consider using tidymodels to do it.
 
-   p <- df %>%
-     dplyr::filter(.data$Parameters == EOV) %>%
-     dplyr::pull(p) %>%
-     round(digits = 3)
+  # TODO Should I be only processing 1 station/Bioregion?
 
-   # The title comes back as class "call" so I need to undo and redo it to add the string
+  df <- pr_model_data(df %>% dplyr::filter(.data$Parameters == EOV)) %>%
+    dplyr::mutate(Month = lubridate::month(.data$SampleTime_Local)  * 2 * 3.142 / 12 )
+
+  # Extract Model data
+  Models <- pr_get_model(df)
+
+  coefficients <- pr_get_coeffs(Models) %>%
+    dplyr::filter(.data$term == "Year_Local") %>%
+    dplyr::mutate(p.value = dplyr::if_else(.data$p.value > 0.001, as.character(.data$p.value), format(.data$p.value, scientific = TRUE, digits = 3)))
+
+
+  # The title comes back as class "call" so I need to undo and redo it to add the string
   titley <- pr_relabel(EOV, style = "ggplot") %>%
     as.list() %>%
-    c(paste0(" [p = ",p[1] ,"]")) %>%
+    c(paste0(" [p = ",coefficients$p.value ,coefficients$signif, "]")) %>%
     as.call()
 
-  Survey <- pr_get_survey(df)
 
   # TODO I don't know why this code is here. It is identical
   if(Survey == "LTM"){
-    lims <- c(lubridate::floor_date(min(df$SampleDate), "year"), lubridate::ceiling_date(max(df$SampleDate), "year"))
+    lims <- c(lubridate::floor_date(min(df$SampleTime_Local), "year"), lubridate::ceiling_date(max(df$SampleTime_Local), "year"))
     df <- df %>%
       dplyr::filter(.data$Parameters == EOV)
   } else {
-    lims <- c(lubridate::floor_date(min(df$SampleDate), "year"), lubridate::ceiling_date(max(df$SampleDate), "year"))
+    lims <- c(lubridate::floor_date(min(df$SampleTime_Local), "year"), lubridate::ceiling_date(max(df$SampleTime_Local), "year"))
     df <- df %>%
       dplyr::filter(.data$Parameters == EOV)
-  }
-
-
-  if (Survey == "CPR"){
-    site = rlang::sym("BioRegion")
-  } else if (Survey != "CPR"){
-    site = rlang::sym("StationName")
   }
 
   # Remove smooth from VBM
@@ -469,11 +499,13 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
   }
 
 
-  p1 <- ggplot2::ggplot(df) +
-    ggplot2::geom_point(ggplot2::aes(x = .data$SampleDate, y = .data$Values), colour = col) +
+  p1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$SampleTime_Local, y = .data$Values)) +
+    ggplot2::geom_point(colour = col) +
     ggplot2::geom_smooth(data = df %>% dplyr::filter(.data$do_smooth),
-                         ggplot2::aes(x = .data$SampleDate, y = .data$fv),
-                         method = "lm", formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
+                         method = "lm", formula = y ~ x) +
+    # ggplot2::geom_smooth(data = df %>% dplyr::filter(.data$do_smooth),
+    #                      ggplot2::aes(x = .data$SampleTime_Local, y = .data$fv),
+    #                      method = "lm", formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
     ggplot2::labs(x = "Year", subtitle = titley) +
     ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
     theme_pr() +
@@ -497,7 +529,7 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
                                           expand = ggplot2::expansion(mult = c(0.02, 0.02)))
   }
 
-  p2 <- ggplot2::ggplot(df, ggplot2::aes(.data$SampleDate, .data$anomaly)) +
+  p2 <- ggplot2::ggplot(df, ggplot2::aes(.data$SampleTime_Local, .data$anomaly)) +
     ggplot2::geom_col(fill = col, colour = col, alpha = 0.5) +
     ggplot2::xlab("Year") +
     ggplot2::labs(y = "Anomaly") +
@@ -520,10 +552,10 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
                                 expand = ggplot2::expansion(mult = c(0.02, 0.02)))
   }
 
-  p3 <- ggplot2::ggplot(df) +
+  p3 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$Month, y = .data$Values)) +
     ggplot2::geom_point(ggplot2::aes(x = .data$Month, y = .data$Values), colour = col) +
     ggplot2::geom_smooth(data = df %>% dplyr::filter(.data$do_smooth),
-                         ggplot2::aes(x = .data$Month, y = .data$Values), method = "loess",
+                         method = "loess",
                          formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
     ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
     ggplot2::scale_x_continuous(breaks = seq(0.5, 6.3, length.out = 12), expand = ggplot2::expansion(mult = c(0.02, 0.02)),

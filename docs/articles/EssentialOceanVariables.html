@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.6.1</span>
+        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.6.2</span>
       </span>
     </div>
 
@@ -124,8 +124,7 @@ the trend coefficients using:</p>
 <span></span>
 <span><span class="va">EOV_MAI</span> <span class="op">&lt;-</span> <span class="va">EOV</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">StationCode</span> <span class="op">==</span> <span class="st">"MAI"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/pr_remove_outliers.html">pr_remove_outliers</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="../reference/pr_get_Coeffs.html">pr_get_Coeffs</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="../reference/pr_remove_outliers.html">pr_remove_outliers</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p>To see what EOVs are available for plotting at Maria Island, do:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">EOV_MAI</span><span class="op">$</span><span class="va">Parameters</span><span class="op">)</span></span>
@@ -172,8 +171,7 @@ bioregions.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">EOV_SE</span> <span class="op">&lt;-</span> <span class="va">EOV</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BioRegion</span> <span class="op">==</span> <span class="st">"South-east"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/pr_remove_outliers.html">pr_remove_outliers</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="../reference/pr_get_Coeffs.html">pr_get_Coeffs</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="../reference/pr_remove_outliers.html">pr_remove_outliers</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p>Now plot the data</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pr_plot_EOVs.html">pr_plot_EOVs</a></span><span class="op">(</span><span class="va">EOV_SE</span>, EOV <span class="op">=</span> <span class="st">"ShannonPhytoDiversity"</span>, col <span class="op">=</span> <span class="st">"darkorange"</span><span class="op">)</span> <span class="op">/</span> </span>
@@ -193,8 +191,7 @@ stations only.</p>
 <span></span>
 <span><span class="va">EOV_PHB</span> <span class="op">&lt;-</span> <span class="va">EOV</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">StationCode</span> <span class="op">==</span> <span class="st">"PHB"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/pr_remove_outliers.html">pr_remove_outliers</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="../reference/pr_get_Coeffs.html">pr_get_Coeffs</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="../reference/pr_remove_outliers.html">pr_remove_outliers</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p>To see what EOVs are available for plotting at Port Hacking LTM,
 do:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
