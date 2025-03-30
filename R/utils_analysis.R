@@ -72,7 +72,7 @@ pr_model_data <- function(df){
 #'   dplyr::filter(Parameters == "PigmentChla_mgm3") %>%
 #'   pr_remove_outliers(2) %>%
 #'   pr_model_data()
-#' coeffs <- pr_get_coeffs(pr_get_model(df))
+#' coeffs <- planktonr:::pr_get_coeffs(pr_get_model(df))
 pr_get_coeffs <- function(Models){
 
   coefficients <- Models %>%

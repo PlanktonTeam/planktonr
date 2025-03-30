@@ -22,7 +22,7 @@ testthat::test_that("Correct function output", {
                                  pr_plot_Trends(Trend = "Month"))[1], "gg")
 
   testthat::expect_equal(class(pr_get_Indices(Survey = "CPR", Type = "Zooplankton") %>%
-                                 dplyr::filter(Parameters == "Biomass_mgm3") %>%
+                                 dplyr::filter(Parameters == "BiomassIndex_mgm3") %>%
                                  pr_plot_Trends(Trend = "Raw"))[1], "gg")
 
   testthat::expect_equal(class(pr_get_Indices(Survey = "CPR", Type = "Zooplankton") %>%

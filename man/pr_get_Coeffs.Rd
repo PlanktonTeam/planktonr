@@ -2,13 +2,21 @@
 % Please edit documentation in R/utils_analysis.R
 \name{pr_get_coeffs}
 \alias{pr_get_coeffs}
-\title{Extract tidy coefficients}
+\title{Extract tidy coefficients from model object}
 \usage{
 pr_get_coeffs(Models)
 }
 \arguments{
-\item{Models}{}
+\item{Models}{Model object created by \code{planktonr::pr_model_data}}
 }
 \description{
-Extract tidy coefficients
+Extract tidy coefficients from model object
+}
+\examples{
+df <- planktonr::pr_get_EOVs(Survey = "NRS") \%>\%
+  dplyr::filter(StationCode != "VBM") \%>\%
+  dplyr::filter(Parameters == "PigmentChla_mgm3") \%>\%
+  pr_remove_outliers(2) \%>\%
+  pr_model_data()
+coeffs <- planktonr:::pr_get_coeffs(pr_get_model(df))
 }

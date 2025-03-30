@@ -80,8 +80,13 @@ pr_plot_TimeSeries <- function(df, trans = "identity"){
 #' pr_plot_Trends(df, Trend = "Raw")
 pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"){
 
-  Survey <- pr_get_survey(df)
+  # Do one parameter at a time at the moment.
+  assertthat::assert_that(
+    nrow(df) > 0,
+    msg = "No data in the dataframe. Check download or filtering."
+  )
 
+  Survey <- pr_get_survey(df)
 
 
   if (Trend %in% c("Month", "Year")){
@@ -444,139 +449,166 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 #'       trans = "identity", col = "blue", labels = FALSE)
 pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "blue", labels = TRUE) {
 
-  Survey <- pr_get_survey(df)
+  # Ensure there is only one parameter
+  df <- df %>%
+    dplyr::filter(.data$Parameters == EOV)
 
-  if (Survey == "CPR"){
-    site = rlang::sym("BioRegion")
-  } else if (Survey != "CPR"){
-    site = rlang::sym("StationName")
-  }
+  # if (unique(df[[site]]) != "Bonney Coast"){
 
+  if (dim(df)[1] > 1){ # If only a few
 
-  # TODO need to add assert
-  # Ensure there is only 1 station
-  assertthat::assert_that(
-    length(unique(df[[site]])) == 1,
-    msg = "Only 1 Station/BioRegion can be plotted. Either filter the dataset or use purrr::map to process individually."
-  )
+    # Get the survey name
+    Survey <- pr_get_survey(df)
 
-  # TODO At the moment, the model parameters are still being put into columns.
-  # I want to change this to be a model object in a slot that can be extracted by
-  # a generic summary.planktonr_dat() call. I will need a different model object per variable.
-  # It should update each time it is plotted and subset so it is accuate for the data contained
-  # in the data frame. Consider using tidymodels to do it.
-
-  # TODO Should I be only processing 1 station/Bioregion?
+    if (Survey == "CPR"){
+      site = rlang::sym("BioRegion")
+    } else if (Survey != "CPR"){
+      site = rlang::sym("StationName")
+    }
 
 
-  df <- pr_model_data(df %>% dplyr::filter(.data$Parameters == EOV)) %>%
-    dplyr::mutate(Month = lubridate::month(.data$SampleTime_Local)  * 2 * 3.142 / 12 )
+    # TODO need to add assert
+    # Ensure there is only 1 station
+    assertthat::assert_that(
+      length(unique(df[[site]])) == 1,
+      msg = "Only 1 Station/BioRegion can be plotted. Either filter the dataset or use purrr::map to process individually."
+    )
 
-  # Extract Model data
-  Models <- pr_get_model(df)
+    # TODO At the moment, the model parameters are still being put into columns.
+    # I want to change this to be a model object in a slot that can be extracted by
+    # a generic summary.planktonr_dat() call. I will need a different model object per variable.
+    # It should update each time it is plotted and subset so it is accuate for the data contained
+    # in the data frame. Consider using tidymodels to do it.
 
-  coefficients <- pr_get_coeffs(Models) %>%
-    dplyr::filter(.data$term == "Year_Local") %>%
-    dplyr::mutate(p.value = dplyr::if_else(.data$p.value > 0.001, as.character(round(.data$p.value, digits = 3)), format(.data$p.value, scientific = TRUE, digits = 3)))
+    # TODO Should I be only processing 1 station/Bioregion?
 
+    df <- pr_model_data(df) %>%
+      dplyr::mutate(Month = lubridate::month(.data$SampleTime_Local)  * 2 * 3.142 / 12 )
 
-  # The title comes back as class "call" so I need to undo and redo it to add the string
-  titley <- pr_relabel(EOV, style = "ggplot") %>%
-    as.list() %>%
-    c(paste0(" [p = ",coefficients$p.value ,coefficients$signif, "]")) %>%
-    as.call()
+    # Extract Model data
+    Models <- pr_get_model(df)
 
-
-  # TODO I don't know why this code is here. It is identical
-  if(Survey == "LTM"){
-    lims <- c(lubridate::floor_date(min(df$SampleTime_Local), "year"), lubridate::ceiling_date(max(df$SampleTime_Local), "year"))
-    df <- df %>%
-      dplyr::filter(.data$Parameters == EOV)
-  } else {
-    lims <- c(lubridate::floor_date(min(df$SampleTime_Local), "year"), lubridate::ceiling_date(max(df$SampleTime_Local), "year"))
-    df <- df %>%
-      dplyr::filter(.data$Parameters == EOV)
-  }
-
-  # Remove smooth from VBM
-  if (Survey == "NRS"){
-    df <- df %>%
-      dplyr::mutate(do_smooth = !!site != "Bonney Coast")
-  } else {
-    df <- df %>%
-      dplyr::mutate(do_smooth = TRUE)
-  }
+    coefficients <- pr_get_coeffs(Models) %>%
+      dplyr::filter(.data$term == "Year_Local") %>%
+      dplyr::mutate(p.value = dplyr::if_else(.data$p.value > 0.001, as.character(round(.data$p.value, digits = 3)), format(.data$p.value, scientific = TRUE, digits = 3)))
 
 
-  p1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$SampleTime_Local, y = .data$Values)) +
-    ggplot2::geom_point(colour = col) +
-    ggplot2::geom_smooth(data = df %>% dplyr::filter(.data$do_smooth),
-                         method = "lm", formula = y ~ x) +
-    # ggplot2::geom_smooth(data = df %>% dplyr::filter(.data$do_smooth),
-    #                      ggplot2::aes(x = .data$SampleTime_Local, y = .data$fv),
-    #                      method = "lm", formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
-    ggplot2::labs(x = "Year", subtitle = titley) +
-    ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
-    theme_pr() +
-    ggplot2::theme(legend.position = "none",
-                   axis.title.y = ggplot2::element_blank())
+    # The title comes back as class "call" so I need to undo and redo it to add the string
+    titley <- pr_relabel(EOV, style = "ggplot") %>%
+      as.list() %>%
+      c(paste0(" [p = ",coefficients$p.value ,coefficients$signif, "]")) %>%
+      as.call()
 
-  if(isFALSE(labels)){
-    p1 <- p1 +
-      ggplot2::theme(axis.title.x = ggplot2::element_blank())
-  }
+    # TODO I don't know why this code is here. It is identical
+    if(Survey == "LTM"){
+      lims <- c(lubridate::floor_date(min(df$SampleTime_Local), "year"), lubridate::ceiling_date(max(df$SampleTime_Local), "year"))
+      df <- df %>%
+        dplyr::filter(.data$Parameters == EOV)
+    } else {
+      lims <- c(lubridate::floor_date(min(df$SampleTime_Local), "year"), lubridate::ceiling_date(max(df$SampleTime_Local), "year"))
+      df <- df %>%
+        dplyr::filter(.data$Parameters == EOV)
+    }
 
-  if(Survey == "LTM"){
-    p1 <-  p1 + ggplot2::scale_x_datetime(date_breaks = "10 years",
-                                          date_labels = "%Y",
-                                          limits = lims,
-                                          expand = ggplot2::expansion(mult = c(0.02, 0.02)))
-  } else {
-    p1 <-  p1 + ggplot2::scale_x_datetime(date_breaks = "2 years",
-                                          date_labels = "%Y",
-                                          limits = lims,
-                                          expand = ggplot2::expansion(mult = c(0.02, 0.02)))
-  }
+    # Remove smooth from VBM
+    if (Survey == "NRS"){
+      df <- df %>%
+        dplyr::mutate(do_smooth = !!site != "Bonney Coast")
+    } else {
+      df <- df %>%
+        dplyr::mutate(do_smooth = TRUE)
+    }
 
-  p2 <- ggplot2::ggplot(df, ggplot2::aes(.data$SampleTime_Local, .data$anomaly)) +
-    ggplot2::geom_col(fill = col, colour = col, alpha = 0.5) +
-    ggplot2::xlab("Year") +
-    ggplot2::labs(y = "Anomaly") +
-    theme_pr()
 
-  if(isFALSE(labels)){
-    p2 <- p2 + ggplot2::theme(axis.title.x = ggplot2::element_blank())
-  }
-  if(Survey == "LTM"){
-    p2 <- p2 +
-      ggplot2::scale_x_datetime(date_breaks = "10 years",
-                                date_labels = "%Y",
-                                limits = lims,
-                                expand = ggplot2::expansion(mult = c(0.02, 0.02)))
-  } else {
-    p2 <- p2 +
-      ggplot2::scale_x_datetime(date_breaks = "2 years",
-                                date_labels = "%Y",
-                                limits = lims,
-                                expand = ggplot2::expansion(mult = c(0.02, 0.02)))
-  }
+    p1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$SampleTime_Local, y = .data$Values)) +
+      ggplot2::geom_point(colour = col) +
+      ggplot2::geom_smooth(data = df %>% dplyr::filter(.data$do_smooth),
+                           method = "lm", formula = y ~ x) +
+      # ggplot2::geom_smooth(data = df %>% dplyr::filter(.data$do_smooth),
+      #                      ggplot2::aes(x = .data$SampleTime_Local, y = .data$fv),
+      #                      method = "lm", formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
+      ggplot2::labs(x = "Year", subtitle = titley) +
+      ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
+      theme_pr() +
+      ggplot2::theme(legend.position = "none",
+                     axis.title.y = ggplot2::element_blank())
 
-  p3 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$Month, y = .data$Values)) +
-    ggplot2::geom_point(ggplot2::aes(x = .data$Month, y = .data$Values), colour = col) +
-    ggplot2::geom_smooth(data = df %>% dplyr::filter(.data$do_smooth),
-                         method = "loess",
-                         formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
-    ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
-    ggplot2::scale_x_continuous(breaks = seq(0.5, 6.3, length.out = 12), expand = ggplot2::expansion(mult = c(0.02, 0.02)),
-                                labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
-    ggplot2::xlab("Month") +
-    theme_pr() +
-    ggplot2::theme(legend.position = "none",
-                   axis.title.y = ggplot2::element_blank())
+    if(isFALSE(labels)){
+      p1 <- p1 +
+        ggplot2::theme(axis.title.x = ggplot2::element_blank())
+    }
 
-  if(isFALSE(labels)){
-    p3 <- p3 +
-      ggplot2::theme(axis.title.x = ggplot2::element_blank())
+    if(Survey == "LTM"){
+      p1 <-  p1 + ggplot2::scale_x_datetime(date_breaks = "10 years",
+                                            date_labels = "%Y",
+                                            limits = lims,
+                                            expand = ggplot2::expansion(mult = c(0.02, 0.02)))
+    } else {
+      p1 <-  p1 + ggplot2::scale_x_datetime(date_breaks = "2 years",
+                                            date_labels = "%Y",
+                                            limits = lims,
+                                            expand = ggplot2::expansion(mult = c(0.02, 0.02)))
+    }
+
+
+
+    p2 <- ggplot2::ggplot(df, ggplot2::aes(.data$SampleTime_Local, .data$anomaly)) +
+      ggplot2::geom_col(fill = col, colour = col, alpha = 0.5) +
+      ggplot2::xlab("Year") +
+      ggplot2::labs(y = "Anomaly") +
+      theme_pr()
+
+
+    if(isFALSE(labels)){
+      p2 <- p2 + ggplot2::theme(axis.title.x = ggplot2::element_blank())
+    }
+    if(Survey == "LTM"){
+      p2 <- p2 +
+        ggplot2::scale_x_datetime(date_breaks = "10 years",
+                                  date_labels = "%Y",
+                                  limits = lims,
+                                  expand = ggplot2::expansion(mult = c(0.02, 0.02)))
+    } else {
+      p2 <- p2 +
+        ggplot2::scale_x_datetime(date_breaks = "2 years",
+                                  date_labels = "%Y",
+                                  limits = lims,
+                                  expand = ggplot2::expansion(mult = c(0.02, 0.02)))
+    }
+
+
+    p3 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$Month, y = .data$Values)) +
+      ggplot2::geom_point(ggplot2::aes(x = .data$Month, y = .data$Values), colour = col) +
+      ggplot2::geom_smooth(data = df %>% dplyr::filter(.data$do_smooth),
+                           method = "loess",
+                           formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
+      ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
+      ggplot2::scale_x_continuous(breaks = seq(0.5, 6.3, length.out = 12), expand = ggplot2::expansion(mult = c(0.02, 0.02)),
+                                  labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
+      ggplot2::xlab("Month") +
+      theme_pr() +
+      ggplot2::theme(legend.position = "none",
+                     axis.title.y = ggplot2::element_blank())
+
+    if(isFALSE(labels)){
+      p3 <- p3 +
+        ggplot2::theme(axis.title.x = ggplot2::element_blank())
+    }
+
+
+  } else { # Blank plot for VBM for the moment
+
+    p1 <- p2 <- p3 <- ggplot2::ggplot() +
+      ggplot2::theme_bw() +
+      ggplot2::annotate("text", x = 0.5, y = 0.5, label = "Not \nenough \ndata",
+                        size = 6, color = "black", fontface = "bold",
+                        hjust = 0.5, vjust = 0.5) +
+      ggplot2::theme(axis.text = ggplot2::element_blank(),
+                     axis.title = ggplot2::element_blank(),
+                     axis.ticks = ggplot2::element_blank(),
+                     panel.grid = ggplot2::element_blank()
+      )
+
   }
 
   plots <- patchwork::wrap_plots(p1, p2, p3, widths = c(3,3,2))
