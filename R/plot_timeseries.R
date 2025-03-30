@@ -490,7 +490,9 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
 
     coefficients <- pr_get_coeffs(Models) %>%
       dplyr::filter(.data$term == "Year_Local") %>%
-      dplyr::mutate(p.value = dplyr::if_else(.data$p.value > 0.001, as.character(round(.data$p.value, digits = 3)), format(.data$p.value, scientific = TRUE, digits = 3)))
+      dplyr::mutate(p.value = dplyr::if_else(.data$p.value > 0.001,
+                                             as.character(round(.data$p.value, digits = 3)),
+                                             format(.data$p.value, scientific = TRUE, digits = 3)))
 
 
     # The title comes back as class "call" so I need to undo and redo it to add the string
@@ -523,7 +525,8 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
     p1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$SampleTime_Local, y = .data$Values)) +
       ggplot2::geom_point(colour = col) +
       ggplot2::geom_smooth(data = df %>% dplyr::filter(.data$do_smooth),
-                           method = "lm", formula = y ~ x) +
+                           method = "lm", formula = y ~ x,
+                           colour = col, fill = col, alpha = 0.5) +
       # ggplot2::geom_smooth(data = df %>% dplyr::filter(.data$do_smooth),
       #                      ggplot2::aes(x = .data$SampleTime_Local, y = .data$fv),
       #                      method = "lm", formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
