@@ -22,7 +22,7 @@ testthat::test_that("Correct function output", {
                                  pr_plot_Trends(Trend = "Month"))[1], "gg")
 
   testthat::expect_equal(class(pr_get_Indices(Survey = "CPR", Type = "Zooplankton") %>%
-                                 dplyr::filter(Parameters == "Biomass_mgm3") %>%
+                                 dplyr::filter(Parameters == "BiomassIndex_mgm3") %>%
                                  pr_plot_Trends(Trend = "Raw"))[1], "gg")
 
   testthat::expect_equal(class(pr_get_Indices(Survey = "CPR", Type = "Zooplankton") %>%
@@ -43,20 +43,18 @@ testthat::test_that("Correct function output", {
                                  pr_plot_tsfg(Scale = "Actual", Trend = "Year"))[1], "gg")
 
   testthat::expect_equal(class(planktonr::pr_get_EOVs(Survey = "NRS") %>%
-                                 dplyr::filter(.data$Parameters != 'Oxygen_umolL',
-                                                                               !.data$StationCode %in% c('NIN', 'ESP')) %>%
-                                 pr_get_Coeffs() %>%
+                                 dplyr::filter(.data$Parameters != 'Oxygen_umolL', .data$StationCode =="PHB") %>%
                                  pr_plot_EOVs(EOV = "Biomass_mgm3", trans = "identity",
                                               labels = "yes"))[1], "patchwork")
 
   testthat::expect_equal(class(planktonr::pr_get_EOVs(Survey = "CPR") %>%
-                                 pr_get_Coeffs() %>%
-                                 pr_plot_EOVs(EOV = "Biomass_mgm3", trans = "identity",
+                                 dplyr::filter(BioRegion == "South-east") %>%
+                                 pr_plot_EOVs(EOV = "BiomassIndex_mgm3", trans = "identity",
                                               labels = "no"))[1], "patchwork")
 
   testthat::expect_equal(class(planktonr::pr_get_EOVs(Survey = "LTM") %>%
-                                 pr_get_Coeffs() %>%
-                                 pr_plot_EOVs(EOV = "Biomass_mgm3", trans = "identity",
+                                 dplyr::filter(.data$StationCode =="PHB") %>%
+                                 pr_plot_EOVs(EOV = "Temperature_degC", trans = "identity",
                                               labels = "no"))[1], "patchwork")
 
   testthat::expect_equal(class(pr_get_NRSChemistry() %>%

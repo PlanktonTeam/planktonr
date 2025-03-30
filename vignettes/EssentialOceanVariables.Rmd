@@ -37,8 +37,7 @@ EOV <- planktonr::pr_get_EOVs(Survey = "NRS")
 
 EOV_MAI <- EOV %>%
   filter(StationCode == "MAI") %>%
-  pr_remove_outliers(2) %>% 
-  pr_get_Coeffs()
+  pr_remove_outliers(2)
 ```
 
 
@@ -81,8 +80,7 @@ Filter the data for the required bioregion.
 ```{r}
 EOV_SE <- EOV %>%
   filter(BioRegion == "South-east") %>%
-  pr_remove_outliers(2) %>% 
-  pr_get_Coeffs()
+  pr_remove_outliers(2)
 ```
 
 Now plot the data
@@ -103,8 +101,7 @@ EOV <- planktonr::pr_get_EOVs("LTM")
 
 EOV_PHB <- EOV %>%
   filter(StationCode == "PHB") %>%
-  pr_remove_outliers(2) %>% 
-  pr_get_Coeffs()
+  pr_remove_outliers(2)
 ```
 
 To see what EOVs are available for plotting at Port Hacking LTM, do:
