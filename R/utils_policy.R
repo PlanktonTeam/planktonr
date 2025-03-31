@@ -126,14 +126,15 @@ pr_get_PolicyInfo <- function(Survey = "NRS", ...){
       dplyr::mutate(Region = dplyr::case_when(.data$StationCode %in% c("DAR") ~ "Tropical North",
                                               .data$StationCode %in% c("YON") ~ "GBR Lagoon",
                                               .data$StationCode %in% c("NSI", "PHB", "MAI") ~ "South East",
-                                              .data$StationCode %in% c("KAI") ~ "South Central",
+                                              .data$StationCode %in% c("KAI", "VBM") ~ "South Central",
                                               .data$StationCode %in% c("ROT", "ESP", "NIN") ~ "South West"),
-                    Features = dplyr::case_when(.data$StationCode %in% c("DAR") ~ "broad, shallow shelf seas with strong tidal influence and tropical neritic communities.",
-                                                .data$StationCode %in% c("YON") ~ "shallow water influenced by the EAC and Hiri currents and is floristically distinct.",
+                    Features = dplyr::case_when(.data$StationCode %in% c("DAR") ~ "broad, shallow shelf seas with strong tidal influence and tropical neritic communities",
+                                                .data$StationCode %in% c("YON") ~ "shallow water influenced by the EAC and Hiri currents and is floristically distinct",
                                                 .data$StationCode %in% c("NSI", "PHB", "MAI") ~ "very narrow shelf influenced by the EAC and its eddies with temperate neritic communities",
-                                                .data$StationCode %in% c("KAI") ~ "upwelling systems and the Leeuwin and Flinders currents and covers the GAB and SA Gulf.",
+                                                .data$StationCode %in% c("KAI") ~ "upwelling systems and the Leeuwin and Flinders currents and covers the GAB and SA Gulf",
+                                                .data$StationCode %in% c("VBM") ~ "shelf waters between Cape Jaffa in South Australia and Cape Otway in Victoria and hosts a strong seasonal wind-driven coastal upwelling system",
                                                 .data$StationCode %in% c("ROT", "ESP", "NIN") ~ "narrow shelf influenced by the Leeuwin Current with tropical oeanic communities"),
-                    now = dplyr::case_when(.data$StationCode %in% c("DAR", "YON", "NSI", "PHB", "MAI", "KAI", "ROT") ~ "and is ongoing",
+                    now = dplyr::case_when(.data$StationCode %in% c("DAR", "YON", "NSI", "PHB", "MAI", "KAI", "ROT", "VBM") ~ "and is ongoing",
                                            .data$StationCode %in% c("ESP", "NIN") ~ "and concluded in March 2013")) %>%
       dplyr::select(-c("ProjectName", "StationCode", "IMCRA"))
 

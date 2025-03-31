@@ -72,7 +72,11 @@ pr_get_NRSData <- function(Type = "Phytoplankton", Variable = "abundance", Subse
 #' df <- pr_get_NRSStation()
 #' @importFrom rlang .data
 pr_get_NRSStation <- function(){
-  dat <- readr::read_csv(system.file("extdata", "BGC_StationInfo.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
+  dat <- readr::read_csv(system.file("extdata", "BGC_StationInfo.csv", package = "planktonr", mustWork = TRUE),
+                         na = "",
+                         show_col_types = FALSE,
+                         col_types = readr::cols(
+                           StationStartDate = readr::col_date(format = ""))) %>%
     pr_rename() %>%
     dplyr::filter(.data$ProjectName == "NRS")
 
