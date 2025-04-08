@@ -403,9 +403,6 @@ pr_remove_outliers <- function(df, x){
   Type <- pr_get_type(df)
   Variable <- pr_get_variable(df)
 
-
-  # browser()
-
   if("StationCode" %in% colnames(df)){
     location <- rlang::sym("StationCode")
     joiner <- "StationCode"
@@ -530,8 +527,6 @@ pr_harmonic <- function (theta, k = 4) {
 #   # TODO Need to ensure the models are calculated and stored against only 1
 #   # parameter and 1 station. They seem to be returning results that are the same for all data regardless of location
 #
-#   # browser()
-#
 #   Survey <- pr_get_survey(df)
 #   Type <- pr_get_type(df)
 #   Variable <- pr_get_variable(df)
@@ -569,8 +564,6 @@ pr_harmonic <- function (theta, k = 4) {
 #   stations <- rep(stations, length.out = length(params))
 #
 #   coeffs <- function(params, stations){
-#
-#     # browser()
 #
 #     lmdat <- df %>%
 #       dplyr::filter(.data$Parameters == params) %>%
@@ -613,8 +606,6 @@ pr_harmonic <- function (theta, k = 4) {
 #       return(dfs2)
 #     }
 #   }
-#
-#   # browser()
 #
 #   outputs <- purrr::map2(params, stations, coeffs) %>%
 #     purrr::list_rbind() %>%

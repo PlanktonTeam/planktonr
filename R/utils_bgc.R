@@ -292,8 +292,6 @@ pr_get_CSChem <- function(){
   var_names <- c("Silicate_umolL", "Nitrate_umolL", "Phosphate_umolL", "Ammonium_umolL", "Chla_mgm3", "Temperature_degC",
                  "Salinity_psu", "Oxygen_umolL", "Turbidity_NTU", "Density_kgm3")
 
-
-
   dat <- readr::read_csv("https://raw.githubusercontent.com/AusMicrobiome/microbial_ocean_atlas/main/data/oceanViz_AM_data.csv",
                          show_col_types = FALSE) %>%
     tidyr::drop_na(tidyselect::any_of(c("StationCode", "SampleDateUTC", "Time_24hr", "Year", "Month", "Day", "depth_m"))) %>% # TODO these should fixed soon
