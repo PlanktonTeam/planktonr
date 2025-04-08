@@ -9,6 +9,9 @@ pr_get_coeffs(Models)
 \arguments{
 \item{Models}{Model object created by \code{planktonr::pr_model_data}}
 }
+\value{
+tibble of model coefficients
+}
 \description{
 Extract tidy coefficients from model object
 }

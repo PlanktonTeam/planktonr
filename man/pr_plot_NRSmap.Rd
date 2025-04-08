@@ -4,10 +4,12 @@
 \alias{pr_plot_NRSmap}
 \title{Sidebar panel plot of selected NRS stations}
 \usage{
-pr_plot_NRSmap(sites)
+pr_plot_NRSmap(sites, Survey = "NRS")
 }
 \arguments{
 \item{sites}{A string vector containing site codes to plot}
+
+\item{Survey}{Which Survey to plot ("NRS", "Coastal", "LTM")}
 }
 \value{
 a map of the selected stations
@@ -18,4 +20,5 @@ Sidebar panel plot of selected NRS stations
 \examples{
 sites <- c("MAI", "PHB")
 pmap <- pr_plot_NRSmap(sites)
+pmap <- pr_plot_NRSmap(sites, Survey = "LTM")
 }

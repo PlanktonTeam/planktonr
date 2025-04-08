@@ -64,7 +64,7 @@ pr_model_data <- function(df){
 #'
 #' @param Models Model object created by `planktonr::pr_model_data`
 #'
-#' @returns
+#' @returns tibble of model coefficients
 #'
 #' @examples
 #' df <- planktonr::pr_get_EOVs(Survey = "NRS") %>%
