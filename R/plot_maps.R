@@ -27,6 +27,7 @@ pr_plot_PCImap <- function(df) {
 #' Sidebar panel plot of selected NRS stations
 #'
 #' @param sites A string vector containing site codes to plot
+#' @param Survey Which Survey to plot ("NRS", "Coastal", "LTM")
 #'
 #' @return a map of the selected stations
 #' @export
@@ -34,18 +35,15 @@ pr_plot_PCImap <- function(df) {
 #' @examples
 #' sites <- c("MAI", "PHB")
 #' pmap <- pr_plot_NRSmap(sites)
-pr_plot_NRSmap <- function(sites){
+#' pmap <- pr_plot_NRSmap(sites, Survey = "LTM")
+pr_plot_NRSmap <- function(sites, Survey = "NRS"){
 
-  # Check if it is NRS or Coastal
-  # TODO Write a better check urgently
-  if (sum(sites %in% meta_sf$Code) == length(sites)){
-    Survey = "NRS"
-  } else { # This else will be problematic. Need to come back to
-    Survey = "Coastal"
-  }
 
   if(Survey == "NRS"){
     meta_sf <- meta_sf
+  } else if (Survey == "LTM") {
+    meta_sf <- meta_sf %>%
+      dplyr::filter(.data$Code %in% c("MAI", "PHB", "ROT"))
   } else if (Survey == "Coastal") {
     meta_sf <- csDAT
   }
