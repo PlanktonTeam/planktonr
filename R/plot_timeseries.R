@@ -23,7 +23,7 @@ pr_plot_TimeSeries <- function(df, trans = "identity"){
     plotCols <- colCPR
     ltype <- "solid"
 
-  } else if (Survey == "NRS"){
+  } else if (Survey == "NRS" | Survey == "Coastal"){
     df <- df %>%
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                        .by = tidyselect::all_of(c("SampleTime_Local", "StationName", "Parameters"))) # accounting for microbial data different depths
