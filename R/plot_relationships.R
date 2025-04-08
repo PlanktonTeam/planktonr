@@ -76,7 +76,7 @@ pr_plot_scatter <- function(df, x, y, Trend = 'none'){
 #' @examples
 #' df <- planktonr::pr_get_NRSMicro('Coastal') %>%
 #' tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
-#' dplyr::filter(StationCode %in% c("DEE", "DEB")) %>%
+#' dplyr::filter(StationCode %in% c("TOP", "BAI")) %>%
 #' tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = mean)
 #' gg <- pr_plot_box(df, "Bacterial_Temperature_Index_KD")
 
@@ -103,8 +103,8 @@ pr_plot_box <- function(df, y){
     ggplot2::geom_boxplot() +
     ggplot2::ylab(titley) +
     ggplot2::scale_colour_manual(values = cols) +
-    ggplot2::scale_linetype_manual(values = ltys)  +
-    ggplot2::scale_shape_manual(values = pchs) +
+    ggplot2::scale_linetype_manual(values = ltys) +
+    # ggplot2::scale_shape_manual(values = pchs) +
     planktonr::theme_pr()
 
   return(gg)
