@@ -332,8 +332,9 @@ pr_plot_tsclimate <- function(df, trans = "identity"){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_FuncGroups("NRS", "Phytoplankton") %>% dplyr::filter(StationCode == 'PHB')
-#' plot <- pr_plot_tsfg(df, "Actual")
+#' df <- pr_get_FuncGroups("NRS", "Phytoplankton") %>%
+#' dplyr::filter(StationCode == 'PHB')
+#' plot <- pr_plot_tsfg(df, "Actual", Trend = 'Raw')
 #' plot
 pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 
@@ -411,8 +412,10 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
                    strip.text = ggplot2::element_text(hjust = 0))
 
   if (rlang::as_string(Trend) %in% c("Month_Local")){
+    lims <- c(1, 12)
     p1 <- p1 +
       ggplot2::scale_x_continuous(breaks = seq(1, 12, length.out = 12), expand = ggplot2::expansion(mult = c(0.02, 0.02)),
+                                  limits = lims,
                                   labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
       ggplot2::xlab("Month")
   } else if (rlang::as_string(Trend) %in% c("Year_Local")){
@@ -420,8 +423,9 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
       ggplot2::scale_x_continuous(breaks = 2, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
       ggplot2::xlab("Year")
   } else if (rlang::as_string(Trend) %in% c("SampleTime_Local")){
+    lims <- as.POSIXct(strptime(c(min(df$SampleTime_Local),max(df$SampleTime_Local)), format = "%Y-%m-%d %H:%M"))
     p1 <- p1 +
-      ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", expand = ggplot2::expansion(add = c(0.15, 0.15))) +
+      ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", limits = lims, expand = ggplot2::expansion(add = c(0.15, 0.15))) +
       ggplot2::xlab("Sample Date")
   }
 
