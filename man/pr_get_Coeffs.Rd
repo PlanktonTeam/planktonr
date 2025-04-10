@@ -4,10 +4,12 @@
 \alias{pr_get_coeffs}
 \title{Extract tidy coefficients from model object}
 \usage{
-pr_get_coeffs(Models)
+pr_get_coeffs(Models, id = "Station")
 }
 \arguments{
 \item{Models}{Model object created by \code{planktonr::pr_model_data}}
+
+\item{id}{What to name column of model ids}
 }
 \value{
 tibble of model coefficients
