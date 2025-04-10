@@ -76,7 +76,7 @@ pr_get_NRSStation <- function(){
                          na = "",
                          show_col_types = FALSE,
                          col_types = readr::cols(
-                           StationStartDate = readr::col_date(format = ""))) %>%
+                           StationStartDate = readr::col_date(format = "%d/%m/%Y"))) %>%
     pr_rename() %>%
     dplyr::filter(.data$ProjectName == "NRS")
 
