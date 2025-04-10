@@ -4,22 +4,21 @@
 #'
 #' @importFrom ggplot2 '%+replace%'
 #'
-#' @param FontSize use to set font size with base_size
+#' @param base_size use to set font size with base_size
 #'
 #' @export
 #' @return planktonr theme
 #'
 #' @examples
 #' \dontrun{ggplot() + geom_blank() + theme_pr()}
-theme_pr <- function(FontSize = 16){
+theme_pr <- function(base_size = 15){
   font <- "Georgia"   #assign font family up front
-  ggplot2::theme_bw(base_size = FontSize) %+replace%    #replace elements we want to change
+  ggplot2::theme_bw(base_size = base_size) %+replace%    # replace elements we want to change
     ggplot2::theme(
       legend.position = "bottom",
       strip.background = ggplot2::element_blank(),
       strip.text = ggplot2::element_text(hjust = 0, vjust = 0.5),
       plot.title = ggplot2::element_text(vjust = 0.5)
-
 
       #grid elements
       # panel.grid.major = element_blank(),    #strip major gridlines
