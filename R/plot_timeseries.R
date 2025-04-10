@@ -95,15 +95,18 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
 
   # Set Correct columns/plot titles
   if (Survey == "CPR"){
-    site = rlang::sym("BioRegion")
+    site <- rlang::sym("BioRegion")
   } else if (Survey != "CPR"){
-    site = rlang::sym("StationName")
+    site <- rlang::sym("StationName")
   }
 
   ## Should Model data be used.
   if (Trend != "Raw"){
-    df <- df %>%
-      dplyr::mutate(facet_label = !!site)
+    labels <- df %>%
+      dplyr::select(site) %>%
+      dplyr::distinct() %>%
+      tibble::deframe()
+
   } else {
 
     # Extract Model data
@@ -114,19 +117,18 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
       Models <- pr_get_model(df)
     }
 
-    coefficients <- pr_get_coeffs(Models)
+    coefficients <- pr_get_coeffs(Models, id = as.character(site))
 
-    df <- df %>%
-      dplyr::left_join(coefficients %>%
-                         dplyr::filter(.data$term == "Year_Local") %>%
-                         dplyr::select(c("Station", "p.value", "signif")),
-                       by = dplyr::join_by(!!site == "Station")) %>%
+    labels <- coefficients %>%
+      dplyr::filter(.data$term == "Year_Local") %>%
+      dplyr::select(c(site, "p.value", "signif")) %>%
       dplyr::mutate(p.value = dplyr::if_else(.data$p.value > 0.001, as.character(round(.data$p.value, 3)), format(.data$p.value, scientific = TRUE, digits = 3)),
-                    facet_label = paste0(!!site, " (p = ", .data$p.value, .data$signif,")"),
-                    facet_label = dplyr::if_else(stringr::str_detect(.data$facet_label, "Bonney"), "Bonney Coast", .data$facet_label))
+                                    facet_label = paste0(!!site, " (p = ", .data$p.value, .data$signif,")"),
+                                    facet_label = dplyr::if_else(stringr::str_detect(.data$facet_label, "Bonney"), "Bonney Coast", .data$facet_label)) %>%
+      dplyr::select(site, "facet_label") %>%
+      tibble::deframe()
 
   }
-
 
   titley <- pr_relabel(unique(df$Parameters), style = 'ggplot')
 
@@ -135,7 +137,7 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
   if (Trend %in% c("Year_Local", "Month_Local")){
     df <- df %>%
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
-                       facet_label = dplyr::first(.data$facet_label),
+                       # facet_label = dplyr::first(.data$facet_label),
                        .by = c(rlang::as_string(rlang::sym(Trend)), rlang::as_string(site)))
 
   } else { # TODO There might be an error here because the df is renamed to df2. So is it even needed?
@@ -155,13 +157,11 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
   }
 
   # Do the plotting
-
   p1 <- ggplot2::ggplot(data = df, ggplot2::aes(x = !!rlang::sym(Trend), y = .data$Values)) +
     ggplot2::geom_point() +
     ggplot2::geom_smooth(data = df %>% dplyr::filter(.data$do_smooth),
                          method = method, formula = y ~ x) +
-    # ggplot2::facet_wrap(rlang::enexpr(site), scales = "free_y", ncol = 1) +
-    ggplot2::facet_wrap("facet_label", scales = "free_y", ncol = 1) +
+    ggplot2::facet_wrap(site, scales = "free_y", ncol = 1, labeller = ggplot2::labeller(!!site := labels)) +
     ggplot2::ylab(rlang::enexpr(titley)) +
     ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
     theme_pr() +
@@ -492,7 +492,7 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
     # Extract Model data
     Models <- pr_get_model(df)
 
-    coefficients <- pr_get_coeffs(Models) %>%
+    coefficients <- pr_get_coeffs(Models, id = as.character(site)) %>%
       dplyr::filter(.data$term == "Year_Local") %>%
       dplyr::mutate(p.value = dplyr::if_else(.data$p.value > 0.001,
                                              as.character(round(.data$p.value, digits = 3)),
@@ -524,7 +524,6 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
       df <- df %>%
         dplyr::mutate(do_smooth = TRUE)
     }
-
 
     p1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$SampleTime_Local, y = .data$Values)) +
       ggplot2::geom_point(colour = col) +

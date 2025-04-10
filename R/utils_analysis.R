@@ -17,7 +17,7 @@ pr_model_data <- function(df){
   assertthat::assert_that(
     length(unique(df$Parameters)) == 1,
     msg = "Only one parameter at a time can be run."
-    )
+  )
 
   Survey <- pr_get_survey(df)
 
@@ -50,7 +50,7 @@ pr_model_data <- function(df){
   model_list <- site_names %>%
     rlang::set_names() %>%
     purrr::map(~ stats::lm(Values ~ Year_Local + pr_harmonic(Month, k = 1),
-                    data = lmdat %>% dplyr::filter(!!site == .x)))
+                           data = lmdat %>% dplyr::filter(!!site == .x)))
 
   # Store the model object as a Model attribute with the name of the station
   attr(df, "Model") <- model_list
@@ -63,6 +63,7 @@ pr_model_data <- function(df){
 #' Extract tidy coefficients from model object
 #'
 #' @param Models Model object created by `planktonr::pr_model_data`
+#' @param id What to name column of model ids
 #'
 #' @returns tibble of model coefficients
 #'
@@ -73,14 +74,23 @@ pr_model_data <- function(df){
 #'   pr_remove_outliers(2) %>%
 #'   pr_model_data()
 #' coeffs <- planktonr:::pr_get_coeffs(pr_get_model(df))
-pr_get_coeffs <- function(Models){
+pr_get_coeffs <- function(Models, id = "Station"){
 
   coefficients <- Models %>%
-    purrr::map_dfr(broom::tidy, .id = "Station") %>%
+    purrr::map_dfr(broom::tidy, .id = id) %>%
     dplyr::mutate(signif = dplyr::case_when(p.value <= 0.001 ~ "***",
                                             p.value <= 0.01 ~ "**",
                                             p.value <= 0.05 ~ "*",
                                             .default = ""))
   # Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+  if (id == "StationName") {
+    coefficients <- coefficients %>%
+      pr_add_StationCode()
+  }
+
+  coefficients <- coefficients %>%
+    pr_reorder()
 
 }

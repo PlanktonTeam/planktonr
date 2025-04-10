@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.6.2</span>
+        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.6.3</span>
       </span>
     </div>
 
@@ -78,7 +78,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pr_get_coeffs</span><span class="op">(</span><span class="va">Models</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pr_get_coeffs</span><span class="op">(</span><span class="va">Models</span>, id <span class="op">=</span> <span class="st">"Station"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -88,7 +88,15 @@
 <dl><dt id="arg-models">Models<a class="anchor" aria-label="anchor" href="#arg-models"></a></dt>
 <dd><p>Model object created by <code><a href="pr_model_data.html">planktonr::pr_model_data</a></code></p></dd>
 
+
+<dt id="arg-id">id<a class="anchor" aria-label="anchor" href="#arg-id"></a></dt>
+<dd><p>What to name column of model ids</p></dd>
+
 </dl></div>
+    <div id="value">
+    <h2>Value</h2>
+    <p>tibble of model coefficients</p>
+    </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
