@@ -149,13 +149,13 @@ pr_plot_Trends <- function(df, Trend = "Year", method = "lm",  trans = "identity
       Year_Local = median(df$Year_Local))
 
     df <- purrr::imap(Models, ~ predict(.x, newdata = newdata, se.fit = TRUE)) %>%
-      dplyr::bind_rows(.id = 'StationName') %>% data.frame() %>%
-      dplyr::mutate(Month = rep(term_vals, 10),
-                    Month_Local = round(rep(term_vals, 10) * 12 / (3.142 * 2),0),
+      dplyr::bind_rows(.id = as.character(site)) %>% data.frame() %>%
+      dplyr::mutate(Month = rep(term_vals, length(Models)),
+                    Month_Local = round(rep(term_vals, length(Models)) * 12 / (3.142 * 2),0),
                     upper = fit + 1.96*se.fit,
                     lower = fit -1.96*se.fit) %>%
-      dplyr::select(StationName, Month_Local, Month, fit, upper, lower) %>%
-      dplyr::left_join(means, by = c('Month_Local', 'StationName')) %>%
+      dplyr::select(site, Month_Local, Month, fit, upper, lower) %>%
+      dplyr::left_join(means, by = c('Month_Local', as.character(site))) %>%
       planktonr::pr_reorder()
   } else {
     Trend <- "SampleTime_Local"
@@ -172,7 +172,7 @@ pr_plot_Trends <- function(df, Trend = "Year", method = "lm",  trans = "identity
 
   # Do the plotting
   if (rlang::as_string(Trend) %in% c("Month_Local")){
-    df <- dfm
+    df <- df
     labx = "Month"
     yvals <- 'fit'
   } else {
@@ -193,7 +193,7 @@ pr_plot_Trends <- function(df, Trend = "Year", method = "lm",  trans = "identity
 
   if (rlang::as_string(Trend) %in% c("Month_Local")){
     p1 <- p1 +
-      ggplot2::geom_ribbon(data = dfm, ggplot2::aes(ymin = lower, ymax = upper), fill = 'grey', alpha = 0.5) +
+      ggplot2::geom_ribbon(data = df, ggplot2::aes(ymin = lower, ymax = upper), fill = 'grey', alpha = 0.5) +
       ggplot2::scale_x_continuous(breaks = seq(1, 12, length.out = 12),
                                   labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"),
                                   guide = ggplot2::guide_axis(check.overlap = FALSE))
@@ -524,12 +524,12 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
 
     # extract monthly climatogology data from model
     dfm <- purrr::imap(Models, ~ predict(.x, newdata = newdata, se.fit = TRUE)) %>%
-      dplyr::bind_rows(.id = 'StationName') %>% data.frame() %>%
+      dplyr::bind_rows(.id = as.character(site)) %>% data.frame() %>%
       dplyr::mutate(Month_Local = rep(term_vals, length(Models)),
                     upper = fit + 1.96*se.fit,
                     lower = fit -1.96*se.fit,
                     do_smooth = !!site != "Bonney Coast") %>%
-      dplyr::select(StationName, Month_Local, do_smooth, Values = fit, upper, lower) %>%
+      dplyr::select(site, Month_Local, do_smooth, Values = fit, upper, lower) %>%
       planktonr::pr_reorder()
 
 
