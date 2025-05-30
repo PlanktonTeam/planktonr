@@ -116,7 +116,7 @@ pr_plot_Trends <- function(df, Trend = "Year", method = "lm",  trans = "identity
 
   } else {
 
-    coefficients <- planktonr::pr_get_coeffs(Models, id = as.character(site))
+    coefficients <- pr_get_coeffs(Models, id = as.character(site))
 
     labels <- coefficients %>%
       dplyr::filter(.data$term == "Year_Local") %>%
@@ -508,7 +508,7 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
     # Extract Model data
     Models <- pr_get_model(df)
 
-    coefficients <- planktonr::pr_get_coeffs(Models, id = as.character(site)) %>%
+    coefficients <- pr_get_coeffs(Models, id = as.character(site)) %>%
       dplyr::filter(.data$term == "Year_Local") %>%
       dplyr::mutate(p.value = dplyr::if_else(.data$p.value > 0.001,
                                              as.character(round(.data$p.value, digits = 3)),
