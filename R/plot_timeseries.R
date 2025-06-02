@@ -75,7 +75,7 @@ pr_plot_TimeSeries <- function(df, trans = "identity"){
 #' df <- pr_get_Indices("NRS", "Zooplankton") %>%
 #'   dplyr::filter(Parameters == "Biomass_mgm3") %>%
 #'   pr_model_data()
-#' pr_plot_Trends(df, Trend = "Month")
+#' pr_plot_Trends(df, method = "loess", Trend = "Month")
 #' pr_plot_Trends(df, Trend = "Year")
 #' pr_plot_Trends(df, Trend = "Raw")
 pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"){
@@ -88,6 +88,13 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
 
   Survey <- pr_get_survey(df)
 
+  # Extract Model data
+  Models <- pr_get_model(df)
+
+  if(is.null(Models)){ # TODO Decide if we will always provide models or not. Currently we are forcing models to be run and shown.
+    df <- pr_model_data(df)
+    Models <- pr_get_model(df)
+  }
 
   if (Trend %in% c("Month", "Year")){
     Trend = paste0(Trend, "_Local") # Rename to match columns
@@ -101,21 +108,13 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
   }
 
   ## Should Model data be used.
-  if (Trend != "Raw"){
+  if (Trend != 'Raw'){
     labels <- df %>%
-      dplyr::select(tidyselect::all_of(site)) %>%
+      dplyr::select(site) %>%
       dplyr::distinct() %>%
       tibble::deframe()
 
   } else {
-
-    # Extract Model data
-    Models <- pr_get_model(df)
-
-    if(is.null(Models)){ # TODO Decide if we will always provide models or not. Currently we are forcing models to be run and shown.
-      df <- pr_model_data(df)
-      Models <- pr_get_model(df)
-    }
 
     coefficients <- pr_get_coeffs(Models, id = as.character(site))
 
@@ -123,8 +122,8 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
       dplyr::filter(.data$term == "Year_Local") %>%
       dplyr::select(c(site, "p.value", "signif")) %>%
       dplyr::mutate(p.value = dplyr::if_else(.data$p.value > 0.001, as.character(round(.data$p.value, 3)), format(.data$p.value, scientific = TRUE, digits = 3)),
-                                    facet_label = paste0(!!site, " (p = ", .data$p.value, .data$signif,")"),
-                                    facet_label = dplyr::if_else(stringr::str_detect(.data$facet_label, "Bonney"), "Bonney Coast", .data$facet_label)) %>%
+                    facet_label = paste0(!!site, " (p = ", .data$p.value, .data$signif,")"),
+                    facet_label = dplyr::if_else(stringr::str_detect(.data$facet_label, "Bonney"), "Bonney Coast", .data$facet_label)) %>%
       dplyr::select(site, "facet_label") %>%
       tibble::deframe()
 
@@ -132,20 +131,39 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
 
   titley <- pr_relabel(unique(df$Parameters), style = 'ggplot')
 
-  # Averaging based on `Trend`
+  # Averaging based on `Trend` or taking climatology from model for month
 
-  if (Trend %in% c("Year_Local", "Month_Local")){
+  if (Trend %in% c("Year_Local")){
     df <- df %>%
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                        # facet_label = dplyr::first(.data$facet_label),
                        .by = c(rlang::as_string(rlang::sym(Trend)), rlang::as_string(site)))
 
-  } else { # TODO There might be an error here because the df is renamed to df2. So is it even needed?
-    Trend <- "SampleTime_Local" # Rename Trend to match the column with time
-    df2 <- df %>%
-      dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
-                       .by = tidyselect::all_of(c(rlang::as_string(site), "SampleTime_Local", "Parameters"))) # accounting for microbial data different depths
-  }
+  } else if (Trend %in% c("Month_Local")){
+    term_vals <- seq(0.524, 6.284, length.out = 12)
+    means <- df %>%
+      dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE), .by = c('Month_Local', rlang::as_string(site)))
+
+    newdata <- data.frame(
+      Month = term_vals,
+      Year_Local = stats::median(df$Year_Local))
+
+    df <- purrr::imap(Models, ~ predict(.x, newdata = newdata, se.fit = TRUE)) %>%
+      dplyr::bind_rows(.id = as.character(site)) %>% data.frame() %>%
+      dplyr::mutate(Month = rep(term_vals, length(Models)),
+                    Month_Local = round(rep(term_vals, length(Models)) * 12 / (3.142 * 2),0),
+                    upper = .data$fit + 1.96*.data$se.fit,
+                    lower = .data$fit -1.96*.data$se.fit) %>%
+      dplyr::select(site, .data$Month_Local, .data$Month, .data$fit, .data$upper, .data$lower) %>%
+      dplyr::left_join(means, by = c('Month_Local', as.character(site)))
+
+    if(Survey %in% c("NRS", "CPR")){ # TODO we don't have the coastal stations in the reorder function
+      df <- df %>% pr_reorder()
+    }
+
+  } else {
+    Trend <- "SampleTime_Local"
+    }
 
   # Remove smooth from VBM
   if (Survey == "NRS"){
@@ -157,39 +175,41 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
   }
 
   # Do the plotting
+  if (rlang::as_string(Trend) %in% c("Month_Local")){
+    labx = "Month"
+    yvals <- 'fit'
+  } else {
+    labx = 'Year'
+    yvals <- 'Values'
+  }
+
   p1 <- ggplot2::ggplot(data = df, ggplot2::aes(x = !!rlang::sym(Trend), y = .data$Values)) +
     ggplot2::geom_point() +
-    ggplot2::geom_smooth(data = df %>% dplyr::filter(.data$do_smooth),
+    ggplot2::geom_smooth(data = df %>% dplyr::filter(.data$do_smooth), ggplot2::aes(x = !!rlang::sym(Trend), y = !!rlang::sym(yvals)),
                          method = method, formula = y ~ x) +
     ggplot2::facet_wrap(site, scales = "free_y", ncol = 1, labeller = ggplot2::labeller(!!site := labels)) +
     ggplot2::ylab(rlang::enexpr(titley)) +
     ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
     theme_pr() +
+    ggplot2::xlab(labx) +
     ggplot2::theme(strip.text = ggplot2::element_text(hjust = 0))
-
 
   if (rlang::as_string(Trend) %in% c("Month_Local")){
     p1 <- p1 +
-      ggplot2::scale_x_continuous(breaks = seq(1, 12, length.out = 12), expand = ggplot2::expansion(mult = c(0.02, 0.02)),
-                                  labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
-      ggplot2::xlab("Month")
-  } else if (rlang::as_string(Trend) %in% "Year_Local"){
-    p1 <- p1 +
-      ggplot2::scale_x_continuous(breaks = 2, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
-      ggplot2::xlab("Year")
+      ggplot2::geom_ribbon(data = df, ggplot2::aes(ymin = .data$lower, ymax = .data$upper), fill = 'grey', alpha = 0.5) +
+      ggplot2::scale_x_continuous(breaks = seq(1, 12, length.out = 12),
+                                  labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"),
+                                  guide = ggplot2::guide_axis(check.overlap = FALSE))
   } else if (!rlang::as_string(Trend) %in% c("Month_Local", "Year_Local") & Survey != 'Coastal'){
     p1 <- p1 +
-      ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
-      ggplot2::xlab("Year")
+      ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y")
   } else if (!rlang::as_string(Trend) %in% c("Month_Local", "Year_Local") & Survey == 'Coastal'){
     p1 <- p1 +
-      ggplot2::scale_x_datetime(date_breaks = "1 year", date_labels = "%Y", expand = c(0, 0)) +
-      ggplot2::xlab("Year")
+      ggplot2::scale_x_datetime(date_breaks = "1 year", date_labels = "%Y")
   }
 
   return(p1)
 }
-
 
 #' Plot single climatology
 #'
@@ -249,7 +269,7 @@ pr_plot_Climatology <- function(df, Trend = "Month", trans = "identity"){
                      se = sd / sqrt(.data$N),
                      .by = tidyselect::all_of(c(rlang::as_string(Trend), "StationName"))) %>%
     tidyr::complete(!!Trend, .data$StationName) %>%
-    planktonr_dat(type = Type, survey = Survey, variable = Variable)
+    pr_planktonr_class(type = Type, survey = Survey, variable = Variable)
 
 
   if("Year_Local" %in% colnames(df_climate)){
@@ -334,7 +354,7 @@ pr_plot_tsclimate <- function(df, trans = "identity"){
 #' @examples
 #' df <- pr_get_FuncGroups("NRS", "Phytoplankton") %>%
 #' dplyr::filter(StationCode == 'PHB')
-#' plot <- pr_plot_tsfg(df, "Actual", Trend = 'Raw')
+#' plot <- pr_plot_tsfg(df, "Actual", Trend = 'Month')
 #' plot
 pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 
@@ -470,7 +490,6 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
       site = rlang::sym("StationName")
     }
 
-
     # TODO need to add assert
     # Ensure there is only 1 station
     assertthat::assert_that(
@@ -498,6 +517,24 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
                                              as.character(round(.data$p.value, digits = 3)),
                                              format(.data$p.value, scientific = TRUE, digits = 3)))
 
+    # plot monthyl climatology from model
+    #set up newdata fro predictions
+    term_vals <- seq(0, 6.284, length.out = 24)
+
+    newdata <- data.frame(
+      Month = term_vals,
+      Year_Local = stats::median(df$Year_Local))
+
+    # extract monthly climatogology data from model
+    dfm <- purrr::imap(Models, ~ predict(.x, newdata = newdata, se.fit = TRUE)) %>%
+      dplyr::bind_rows(.id = as.character(site)) %>% data.frame() %>%
+      dplyr::mutate(Month_Local = rep(term_vals, length(Models)),
+                    upper = .data$fit + 1.96*.data$se.fit,
+                    lower = .data$fit -1.96*.data$se.fit,
+                    do_smooth = !!site != "Bonney Coast") %>%
+      dplyr::select(site, .data$Month_Local, .data$do_smooth, Values = .data$fit, .data$upper, .data$lower) %>%
+      planktonr::pr_reorder()
+
 
     # The title comes back as class "call" so I need to undo and redo it to add the string
     titley <- pr_relabel(EOV, style = "ggplot") %>%
@@ -505,16 +542,9 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
       c(paste0(" [p = ",coefficients$p.value ,coefficients$signif, "]")) %>%
       as.call()
 
-    # TODO I don't know why this code is here. It is identical
-    if(Survey == "LTM"){
-      lims <- c(lubridate::floor_date(min(df$SampleTime_Local), "year"), lubridate::ceiling_date(max(df$SampleTime_Local), "year"))
-      df <- df %>%
+    lims <- c(lubridate::floor_date(min(df$SampleTime_Local), "year"), lubridate::ceiling_date(max(df$SampleTime_Local), "year"))
+    df <- df %>%
         dplyr::filter(.data$Parameters == EOV)
-    } else {
-      lims <- c(lubridate::floor_date(min(df$SampleTime_Local), "year"), lubridate::ceiling_date(max(df$SampleTime_Local), "year"))
-      df <- df %>%
-        dplyr::filter(.data$Parameters == EOV)
-    }
 
     # Remove smooth from VBM
     if (Survey == "NRS"){
@@ -529,10 +559,7 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
       ggplot2::geom_point(colour = col) +
       ggplot2::geom_smooth(data = df %>% dplyr::filter(.data$do_smooth),
                            method = "lm", formula = y ~ x,
-                           colour = col, fill = col, alpha = 0.5) +
-      # ggplot2::geom_smooth(data = df %>% dplyr::filter(.data$do_smooth),
-      #                      ggplot2::aes(x = .data$SampleTime_Local, y = .data$fv),
-      #                      method = "lm", formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
+                           colour = col, fill = col, alpha = 0.4) +
       ggplot2::labs(x = "Year", subtitle = titley) +
       ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
       theme_pr() +
@@ -582,12 +609,11 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
                                   expand = ggplot2::expansion(mult = c(0.02, 0.02)))
     }
 
-
     p3 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$Month, y = .data$Values)) +
-      ggplot2::geom_point(ggplot2::aes(x = .data$Month, y = .data$Values), colour = col) +
-      ggplot2::geom_smooth(data = df %>% dplyr::filter(.data$do_smooth),
+      ggplot2::geom_point(colour = col) +
+      ggplot2::geom_smooth(data = dfm %>% dplyr::filter(.data$do_smooth), ggplot2::aes(x = .data$Month_Local, y = .data$Values),
                            method = "loess",
-                           formula = "y ~ x", colour = col, fill = col, alpha = 0.5) +
+                           formula = "y ~ x", colour = col, fill = col, alpha = 0.4) +
       ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
       ggplot2::scale_x_continuous(breaks = seq(0.5, 6.3, length.out = 12), expand = ggplot2::expansion(mult = c(0.02, 0.02)),
                                   labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
