@@ -155,8 +155,12 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
                     upper = .data$fit + 1.96*.data$se.fit,
                     lower = .data$fit -1.96*.data$se.fit) %>%
       dplyr::select(site, .data$Month_Local, .data$Month, .data$fit, .data$upper, .data$lower) %>%
-      dplyr::left_join(means, by = c('Month_Local', as.character(site))) %>%
-      planktonr::pr_reorder()
+      dplyr::left_join(means, by = c('Month_Local', as.character(site)))
+
+    if(Survey %in% c("NRS", "CPR")){ # TODO we don't have the coastal stations in the reorder function
+      df <- df %>% pr_reorder()
+    }
+
   } else {
     Trend <- "SampleTime_Local"
     }
@@ -172,7 +176,6 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
 
   # Do the plotting
   if (rlang::as_string(Trend) %in% c("Month_Local")){
-    df <- df
     labx = "Month"
     yvals <- 'fit'
   } else {
