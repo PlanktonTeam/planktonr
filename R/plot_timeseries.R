@@ -78,7 +78,7 @@ pr_plot_TimeSeries <- function(df, trans = "identity"){
 #' pr_plot_Trends(df, method = "loess", Trend = "Month")
 #' pr_plot_Trends(df, Trend = "Year")
 #' pr_plot_Trends(df, Trend = "Raw")
-pr_plot_Trends <- function(df, Trend = "Year", method = "lm",  trans = "identity"){
+pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"){
 
   # Do one parameter at a time at the moment.
   assertthat::assert_that(
@@ -146,15 +146,15 @@ pr_plot_Trends <- function(df, Trend = "Year", method = "lm",  trans = "identity
 
     newdata <- data.frame(
       Month = term_vals,
-      Year_Local = median(df$Year_Local))
+      Year_Local = stats::median(df$Year_Local))
 
     df <- purrr::imap(Models, ~ predict(.x, newdata = newdata, se.fit = TRUE)) %>%
       dplyr::bind_rows(.id = as.character(site)) %>% data.frame() %>%
       dplyr::mutate(Month = rep(term_vals, length(Models)),
                     Month_Local = round(rep(term_vals, length(Models)) * 12 / (3.142 * 2),0),
-                    upper = fit + 1.96*se.fit,
-                    lower = fit -1.96*se.fit) %>%
-      dplyr::select(site, Month_Local, Month, fit, upper, lower) %>%
+                    upper = .data$fit + 1.96*.data$se.fit,
+                    lower = .data$fit -1.96*.data$se.fit) %>%
+      dplyr::select(site, .data$Month_Local, .data$Month, .data$fit, .data$upper, .data$lower) %>%
       dplyr::left_join(means, by = c('Month_Local', as.character(site))) %>%
       planktonr::pr_reorder()
   } else {
@@ -193,7 +193,7 @@ pr_plot_Trends <- function(df, Trend = "Year", method = "lm",  trans = "identity
 
   if (rlang::as_string(Trend) %in% c("Month_Local")){
     p1 <- p1 +
-      ggplot2::geom_ribbon(data = df, ggplot2::aes(ymin = lower, ymax = upper), fill = 'grey', alpha = 0.5) +
+      ggplot2::geom_ribbon(data = df, ggplot2::aes(ymin = .data$lower, ymax = .data$upper), fill = 'grey', alpha = 0.5) +
       ggplot2::scale_x_continuous(breaks = seq(1, 12, length.out = 12),
                                   labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"),
                                   guide = ggplot2::guide_axis(check.overlap = FALSE))
@@ -520,16 +520,16 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
 
     newdata <- data.frame(
       Month = term_vals,
-      Year_Local = median(df$Year_Local))
+      Year_Local = stats::median(df$Year_Local))
 
     # extract monthly climatogology data from model
     dfm <- purrr::imap(Models, ~ predict(.x, newdata = newdata, se.fit = TRUE)) %>%
       dplyr::bind_rows(.id = as.character(site)) %>% data.frame() %>%
       dplyr::mutate(Month_Local = rep(term_vals, length(Models)),
-                    upper = fit + 1.96*se.fit,
-                    lower = fit -1.96*se.fit,
+                    upper = .data$fit + 1.96*.data$se.fit,
+                    lower = .data$fit -1.96*.data$se.fit,
                     do_smooth = !!site != "Bonney Coast") %>%
-      dplyr::select(site, Month_Local, do_smooth, Values = fit, upper, lower) %>%
+      dplyr::select(site, .data$Month_Local, .data$do_smooth, Values = .data$fit, .data$upper, .data$lower) %>%
       planktonr::pr_reorder()
 
 

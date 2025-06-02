@@ -22,6 +22,6 @@ Time series plot of functional groups
 \examples{
 df <- pr_get_FuncGroups("NRS", "Phytoplankton") \%>\%
 dplyr::filter(StationCode == 'PHB')
-plot <- pr_plot_tsfg(df, "Actual", Trend = 'Raw')
+plot <- pr_plot_tsfg(df, "Actual", Trend = 'Month')
 plot
 }
