@@ -163,7 +163,7 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
 
   } else {
     Trend <- "SampleTime_Local"
-    }
+  }
 
   # Remove smooth from VBM
   if (Survey == "NRS"){
@@ -269,7 +269,7 @@ pr_plot_Climatology <- function(df, Trend = "Month", trans = "identity"){
                      se = sd / sqrt(.data$N),
                      .by = tidyselect::all_of(c(rlang::as_string(Trend), "StationName"))) %>%
     tidyr::complete(!!Trend, .data$StationName) %>%
-    pr_planktonr_class(type = Type, survey = Survey, variable = Variable)
+    planktonr_data(type = Type, survey = Survey, variable = Variable)
 
 
   if("Year_Local" %in% colnames(df_climate)){
@@ -544,7 +544,7 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
 
     lims <- c(lubridate::floor_date(min(df$SampleTime_Local), "year"), lubridate::ceiling_date(max(df$SampleTime_Local), "year"))
     df <- df %>%
-        dplyr::filter(.data$Parameters == EOV)
+      dplyr::filter(.data$Parameters == EOV)
 
     # Remove smooth from VBM
     if (Survey == "NRS"){
@@ -856,4 +856,3 @@ pr_plot_latitude <- function(df, Fill_NA = FALSE, maxGap = 3){
   return(plots)
 
 }
-
