@@ -2,16 +2,19 @@
 % Please edit documentation in R/planktonr_dat.R
 \name{pr_get_model}
 \alias{pr_get_model}
-\title{Generic function and method for Model}
+\alias{pr_get_model.planktonr_dat}
+\title{Generic function to get the Model attribute}
 \usage{
 pr_get_model(x)
+
+\method{pr_get_model}{planktonr_dat}(x)
 }
 \arguments{
-\item{x}{planktonr r data object}
+\item{x}{A \code{planktonr_dat} object.}
 }
 \value{
-attribute \code{Model}
+The \code{Model} attribute from the object.
 }
 \description{
-Generic function and method for Model
+Generic function to get the Model attribute
 }

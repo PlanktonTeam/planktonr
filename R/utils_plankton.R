@@ -66,9 +66,9 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Zooplankton", ...){
     dplyr::group_by(dplyr::across(-"Values")) %>%
     dplyr::summarise(Values = sum(.data$Values, na.rm = TRUE),
                      .groups = "drop") %>%
-    dplyr::mutate(Values = ifelse(.data$Values < 1, 1, .data$Values))
+    dplyr::mutate(Values = dplyr::if_else(.data$Values < 1, 1, .data$Values))
 
-  df <- pr_planktonr_class(df, type = Type, survey = Survey, variable = NULL)
+  df <- planktonr_dat(df, type = Type, survey = Survey, variable = NULL)
 
   return(df)
 }
@@ -144,7 +144,7 @@ pr_get_TaxaAccum <- function(Survey = "NRS", Type = "Zooplankton"){
     dat <- pr_get_CPRData(Type = Type, Variable = "abundance", Subset = "raw")
   }
 
-  dat <- dat %>%
+  dat %>%
     tidyr::pivot_longer(-pr_get_NonTaxaColumns(Survey = Survey, Type = Type), names_to = "Taxa", values_to = "Abundance") %>%
     dplyr::filter(.data$Abundance > 0) %>%
     dplyr::arrange(.data$SampleTime_Local) %>%
@@ -152,8 +152,6 @@ pr_get_TaxaAccum <- function(Survey = "NRS", Type = "Zooplankton"){
     dplyr::arrange(.data$First) %>%
     dplyr::mutate(RowN = dplyr::row_number())
 
-  # Convert to planktonr class
-  # dat <- pr_planktonr_class(dat, type = Type, survey = Survey, variable = Variable, subset = Subset)
 }
 
 

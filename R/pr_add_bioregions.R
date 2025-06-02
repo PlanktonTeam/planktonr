@@ -26,14 +26,14 @@ pr_add_Bioregions <- function(df, near_dist_km = 0){
 
   # First add Marine Bioregions
   df <- df %>%
-    sf::st_join(mbr %>% dplyr::select(-"Colour"), join = sf::st_within) %>%
+    sf::st_join(mbr %>% dplyr::select(-tidyselect::all_of("Colour")), join = sf::st_within) %>%
     dplyr::rename(BioRegion = "REGION") %>%
     dplyr::mutate(cellID = dplyr::row_number())
 
   # Then do the ones that are missing
   dfna <- df %>%
     dplyr::filter(is.na(.data$BioRegion)) %>%
-    dplyr::select(-"BioRegion")
+    dplyr::select(-tidyselect::all_of("BioRegion"))
 
   dist <- dfna %>%
     sf::st_distance(mbr)
@@ -58,13 +58,13 @@ pr_add_Bioregions <- function(df, near_dist_km = 0){
   # Then continue on with the addition of the other groups
   dist <- dist %>%
     dplyr::slice(which.min(.data$Dist), .by = tidyselect::all_of("cellID")) %>%
-    dplyr::select(-"Dist")
+    dplyr::select(-tidyselect::all_of("Dist"))
 
   df <- dplyr::left_join(df, dist, by = "cellID") %>%
     dplyr::mutate(BioRegion.z = "None",
       BioRegion = dplyr::coalesce(.data$BioRegion.x, .data$BioRegion.y, .data$BioRegion.z)) %>%
     # dplyr::mutate(BioRegion = forcats::fct_explicit_na(.data$BioRegion, na_level = "None")) %>%
-    dplyr::select(-c("BioRegion.x", "BioRegion.y", "BioRegion.z")) %>%
+    dplyr::select(-tidyselect::all_of(c("BioRegion.x", "BioRegion.y", "BioRegion.z"))) %>%
     dplyr::relocate("BioRegion", .after = "TripCode") %>%
     sf::st_drop_geometry(df) %>% # DF in, DF out
     dplyr::left_join(mbr %>%

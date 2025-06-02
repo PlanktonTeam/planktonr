@@ -35,25 +35,27 @@ pr_get_SatData <- function(Survey = 'NRS'){
 #' @examples
 #' df <- pr_get_DataLocs("NRS")
 
-pr_get_DataLocs <- function(Survey = 'all'){
+pr_get_DataLocs <- function(Survey = "all"){
 
-  if(Survey == 'NRS'){
-    df <- pr_get_NRSTrips(c("Phytoplankton", "Zooplankton")) %>%
-      dplyr::select("Longitude", "Latitude", "SampleTime_UTC") %>%
+  vars <- c("Longitude", "Latitude", "SampleTime_UTC")
+
+  if(Survey == "NRS"){
+    df <- pr_get_NRSTrips() %>%
+      dplyr::select(tidyselect::all_of(vars)) %>%
       dplyr::distinct(.data$Longitude, .data$Latitude, Date = as.Date(.data$SampleTime_UTC, 'UTC'))
   } else
-    if(Survey == 'CPR'){
+    if(Survey == "CPR"){
       df <- pr_get_CPRTrips() %>%
         dplyr::filter(grepl("P|Z", .data$SampleType)) %>%
-        dplyr::select("Longitude", "Latitude", "SampleTime_UTC") %>%
+        dplyr::select(tidyselect::all_of(vars)) %>%
         dplyr::distinct(.data$Longitude, .data$Latitude, Date = as.Date(.data$SampleTime_UTC, 'UTC'))
     } else {
       df <- dplyr::bind_rows(
-        pr_get_NRSTrips(c("Phytoplankton", "Zooplankton")) %>%
-          dplyr::select("Longitude", "Latitude", "SampleTime_UTC"),
+        pr_get_NRSTrips() %>%
+          dplyr::select(tidyselect::all_of(vars)),
         pr_get_CPRTrips() %>%
           dplyr::filter(grepl("P|Z", .data$SampleType)) %>%
-          dplyr::select("Longitude", "Latitude", "SampleTime_UTC")) %>%
+          dplyr::select(tidyselect::all_of(vars))) %>%
         dplyr::distinct(.data$Longitude, .data$Latitude, Date = as.Date(.data$SampleTime_UTC, 'UTC'))
     }
 
@@ -118,7 +120,7 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d", parallel = FA
   }
 
   df_dmy <- df_dmy %>%
-    dplyr::select("Latitude", "Longitude", "Year", "Month", "Day") %>%
+    dplyr::select(tidyselect::all_of(c("Latitude", "Longitude", "Year", "Month", "Day"))) %>%
     dplyr::group_split(.data$Latitude, .data$Longitude, .data$Year, .data$Month, .data$Day)
 
   pr_get_SSTData <- function(df, p){
@@ -126,8 +128,8 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d", parallel = FA
     p()
 
     # Make sure month and day have a leading zero if less than 10
-    mth <- stringr::str_pad(df$Month,2,"left",pad="0")
-    dy <- stringr::str_pad(df$Day,2,"left",pad="0")
+    mth <- stringr::str_pad(df$Month, 2, "left", pad = "0")
+    dy <- stringr::str_pad(df$Day, 2, "left", pad = "0")
 
     if(res_temp == '6d'){
       string = "212000"
@@ -275,9 +277,11 @@ pr_match_Altimetry <- function(df, pr, res_spat = 1) {
     print("Only data before 2020 is available via this product and will be returned from this function")
   }
 
+
   df <- df %>%
-    dplyr::select("Latitude", "Longitude", "Year", "Month", "Day") %>%
-    dplyr::group_split(.data$Latitude, .data$Longitude, .data$Year, .data$Month, .data$Day)
+    dplyr::select(tidyselect::all_of(c("Latitude", "Longitude", "Year", "Month", "Day"))) %>% # Select relevant columns
+    dplyr::group_by(.data$Latitude, .data$Longitude, .data$Year, .data$Month, .data$Day) %>%
+    tidyr::nest()
 
 
   pr_get_SatData <- function(df){
@@ -340,8 +344,13 @@ pr_match_Altimetry <- function(df, pr, res_spat = 1) {
     }
   }
 
-  altout <- purrr::map(df, pr_get_SatData) %>%
+
+  # browser()
+
+
+  altout <- purrr::map(dplyr::pull(df), pr_get_SatData) %>%
     data.table::rbindlist()
+
   df <- dplyr::bind_rows(df) %>%
     dplyr::bind_cols(altout)
 }

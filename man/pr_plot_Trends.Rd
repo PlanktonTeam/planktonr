@@ -26,7 +26,7 @@ Plot temporal Trends in plankton data
 df <- pr_get_Indices("NRS", "Zooplankton") \%>\%
   dplyr::filter(Parameters == "Biomass_mgm3") \%>\%
   pr_model_data()
-pr_plot_Trends(df, method = "loess", Trend = "Month")
+pr_plot_Trends(df, Trend = "Month")
 pr_plot_Trends(df, Trend = "Year")
 pr_plot_Trends(df, Trend = "Raw")
 }

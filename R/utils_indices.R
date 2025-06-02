@@ -72,7 +72,7 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
   }
 
   # Convert to planktonr class
-  dat <- pr_planktonr_class(dat, type = Type, survey = Survey, variable = NULL, subset = NULL)
+  dat <- planktonr_dat(dat, type = Type, survey = Survey, variable = NULL, subset = NULL)
 
 }
 

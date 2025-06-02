@@ -201,7 +201,7 @@ pr_get_PlanktonInfo <- function(Type = "Zooplankton"){
       pr_rename()
   }
 
-  df <- pr_planktonr_class(df, type = Type, survey = NULL, variable = NULL)
+  df <- planktonr_dat(df, type = Type, survey = NULL, variable = NULL)
 
   return(df)
 }
@@ -428,7 +428,7 @@ pr_remove_outliers <- function(df, x){
                      meanplus = .data$means + .data$sd2,
                      meanminus = .data$means - .data$sd2,
                      .by = tidyselect::all_of(c("Parameters", rlang::as_string(location), "SampleDepth_m"))) %>%
-    pr_planktonr_class(type = Type, survey = Survey, variable = Variable) %>%
+    planktonr_dat(type = Type, survey = Survey, variable = Variable) %>%
     dplyr::select(-c("means", "sd2"))
 
   added <- df %>%
@@ -609,7 +609,7 @@ pr_harmonic <- function (theta, k = 4) {
 #
 #   outputs <- purrr::map2(params, stations, coeffs) %>%
 #     purrr::list_rbind() %>%
-#     pr_planktonr_class(type = Type, survey = Survey, variable = Variable)
+#     planktonr_dat(type = Type, survey = Survey, variable = Variable)
 #
 #   return(outputs)
 # }

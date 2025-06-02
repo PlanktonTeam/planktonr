@@ -31,7 +31,7 @@ pr_get_NRSChemistry <- function(){
     tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = 'Parameters') %>%
     pr_reorder()
 
-  dat <- pr_planktonr_class(dat, type = NULL, survey = "NRS", variable = NULL)
+  dat <- planktonr_dat(dat, type = NULL, survey = "NRS", variable = NULL)
 
   return(dat)
 
@@ -90,7 +90,7 @@ pr_get_NRSPigments <- function(Format = "all"){
     tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = 'Parameters') %>%
     pr_reorder()
 
-  dat <- pr_planktonr_class(dat, type = NULL, survey = "NRS", variable = NULL)
+  dat <- planktonr_dat(dat, type = NULL, survey = "NRS", variable = NULL)
 
 }
 
@@ -122,7 +122,7 @@ pr_get_NRSPico <- function(){
     dplyr::mutate(Values = .data$Values + min(.data$Values[.data$Values>0], na.rm = TRUE)) %>%
     pr_reorder()
 
-  dat <- pr_planktonr_class(dat, type = NULL, survey = "NRS", variable = NULL)
+  dat <- planktonr_dat(dat, type = NULL, survey = "NRS", variable = NULL)
 
   return(dat)
 }
@@ -273,7 +273,7 @@ pr_get_NRSMicro <- function(Survey = "NRS"){
       pr_reorder()
   }
 
-  dat <- pr_planktonr_class(dat, type = NULL, survey = Survey, variable = NULL)
+  dat <- planktonr_dat(dat, type = NULL, survey = Survey, variable = NULL)
 
   return(dat)
 
@@ -311,7 +311,7 @@ pr_get_CSChem <- function(){
     dplyr::arrange(.data$State, .data$Latitude) %>%
     dplyr::select(-c("SampleDateUTC", "tz"))
 
-  dat <- pr_planktonr_class(dat, type = NULL, survey = "NRS", variable = NULL)
+  dat <- planktonr_dat(dat, type = NULL, survey = "NRS", variable = NULL)
 
   return(dat)
 
@@ -332,7 +332,7 @@ pr_get_NRSTSS <- function(){
     pr_rename() %>%
     pr_apply_Flags("TSSall_flag")
 
-  dat <- pr_planktonr_class(dat, type = NULL, survey = "NRS", variable = NULL)
+  dat <- planktonr_dat(dat, type = NULL, survey = "NRS", variable = NULL)
 
   return(dat)
 }
@@ -364,7 +364,7 @@ pr_get_NRSCTD <- function(){
     dplyr::select(tidyselect::all_of(ctd_vars)) %>%
     pr_apply_Time()
 
-  dat <- pr_planktonr_class(dat, type = NULL, survey = "NRS", variable = NULL)
+  dat <- planktonr_dat(dat, type = NULL, survey = "NRS", variable = NULL)
 
   return(dat)
 }
@@ -422,7 +422,7 @@ pr_get_LTnuts <-  function(){
 
   dat <- dplyr::bind_rows(NutsLT, Nuts, CTD)
 
-  dat <- pr_planktonr_class(dat, type = NULL, survey = "LTM", variable = NULL)
+  dat <- planktonr_dat(dat, type = NULL, survey = "LTM", variable = NULL)
 
   return(dat)
 }

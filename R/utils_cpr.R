@@ -40,7 +40,7 @@ pr_get_CPRData <- function(Type = "Phytoplankton", Variable = "abundance", Subse
   }
 
   # Convert to planktonr class
-  dat <- pr_planktonr_class(dat, type = Type, survey = "CPR", variable = Variable, subset = Subset)
+  dat <- planktonr_dat(dat, type = Type, survey = "CPR", variable = Variable, subset = Subset)
 
 }
 
@@ -60,7 +60,7 @@ pr_get_CPRTrips <- function(...){
     pr_rename() %>%
     pr_add_Bioregions() %>%
     pr_apply_Time() %>%
-    pr_planktonr_class(type = NULL, survey = "CPR", variable = NULL)
+    planktonr_dat(type = NULL, survey = "CPR", variable = NULL)
 }
 
 

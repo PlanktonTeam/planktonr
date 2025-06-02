@@ -105,7 +105,7 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
 
   }
 
-  Pol <- pr_planktonr_class(Pol, type = "EOV", survey = Survey, variable = NULL)
+  Pol <- planktonr_dat(Pol, type = "EOV", survey = Survey, variable = NULL)
 
 }
 
