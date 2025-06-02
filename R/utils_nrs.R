@@ -102,7 +102,6 @@ pr_get_NRSTrips <- function(){
     pr_apply_Time() %>%
     dplyr::select(-"ProjectName") %>%
     dplyr::select(-tidyselect::any_of(c("PSampleDepth_m", "ZSampleDepth_m"))) %>%
-    pr_planktonr_class(type = Type, survey = "NRS", variable = NULL)
     planktonr_dat(type = NULL, survey = "NRS", variable = NULL)
 
   return(NRSTrip)
