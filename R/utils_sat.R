@@ -283,8 +283,7 @@ pr_match_Altimetry <- function(df, pr, res_spat = 1) {
   df <- df %>%
     dplyr::select(tidyselect::all_of(c("Latitude", "Longitude", "Year", "Month", "Day"))) %>% # Select relevant columns
     dplyr::group_split(.data$Latitude, .data$Longitude, .data$Year, .data$Month, .data$Day)
-    # dplyr::group_by(.data$Latitude, .data$Longitude, .data$Year, .data$Month, .data$Day) %>%
-    # tidyr::nest()
+
 
   pr_get_SatData <- function(df){
 
