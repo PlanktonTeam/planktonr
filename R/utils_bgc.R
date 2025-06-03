@@ -31,8 +31,6 @@ pr_get_NRSChemistry <- function(){
     tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = 'Parameters') %>%
     pr_reorder()
 
-  dat <- planktonr_dat(dat, type = NULL, survey = "NRS", variable = NULL)
-
   return(dat)
 
 }
@@ -90,8 +88,6 @@ pr_get_NRSPigments <- function(Format = "all"){
     tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = 'Parameters') %>%
     pr_reorder()
 
-  dat <- planktonr_dat(dat, type = NULL, survey = "NRS", variable = NULL)
-
 }
 
 
@@ -122,7 +118,7 @@ pr_get_NRSPico <- function(){
     dplyr::mutate(Values = .data$Values + min(.data$Values[.data$Values>0], na.rm = TRUE)) %>%
     pr_reorder()
 
-  dat <- planktonr_dat(dat, type = NULL, survey = "NRS", variable = NULL)
+  # dat <- planktonr_dat(dat, type = NULL, survey = "NRS", variable = NULL)
 
   return(dat)
 }
@@ -263,6 +259,7 @@ pr_get_NRSMicro <- function(Survey = "NRS"){
 
     dat <- readr::read_csv("https://raw.githubusercontent.com/AusMicrobiome/microbial_ocean_atlas/main/data/oceanViz_AM_data.csv",
                            show_col_types = FALSE) %>%
+      planktonr_dat(Type = "Microbes", Survey = Survey) %>%
       pr_rename() %>%
       dplyr::select("TripCode", SampleDepth_m = "depth_m", tidyselect::any_of(var_names)) %>%
       dplyr::mutate(dplyr::across(tidyselect::all_of(var_names), as.numeric))
@@ -273,15 +270,15 @@ pr_get_NRSMicro <- function(Survey = "NRS"){
       pr_reorder()
   }
 
-  dat <- planktonr_dat(dat, type = NULL, survey = Survey, variable = NULL)
+  dat <- planktonr_dat(dat, Type = "Microbes", Survey = Survey, Variable = NULL)
 
   return(dat)
 
 }
 
-#' Load microbial data
+#' Load chemistry data
 #'
-#' @return A dataframe with NRS microbial data
+#' @return A dataframe with NRS chemistry data
 #' @export
 #'
 #' @examples
@@ -311,7 +308,7 @@ pr_get_CSChem <- function(){
     dplyr::arrange(.data$State, .data$Latitude) %>%
     dplyr::select(-c("SampleDateUTC", "tz"))
 
-  dat <- planktonr_dat(dat, type = NULL, survey = "NRS", variable = NULL)
+  # dat <- planktonr_dat(dat, type = NULL, survey = "NRS", variable = NULL)
 
   return(dat)
 
@@ -330,9 +327,8 @@ pr_get_NRSTSS <- function(){
 
   dat <- pr_get_Raw(file) %>%
     pr_rename() %>%
-    pr_apply_Flags("TSSall_flag")
-
-  dat <- planktonr_dat(dat, type = NULL, survey = "NRS", variable = NULL)
+    pr_apply_Flags("TSSall_flag") %>%
+    planktonr_dat(Type = "Water", Survey = "NRS")
 
   return(dat)
 }
@@ -356,15 +352,14 @@ pr_get_NRSCTD <- function(){
                 "Turbidity_NTU", "Conductivity_Sm", "WaterDensity_kgm3")
 
   dat <- pr_get_Raw(file) %>%
+    planktonr_dat(Type = "Water", Survey = "NRS") %>%
     pr_rename() %>%
     pr_add_StationCode() %>%
     dplyr::rename(ChlF_mgm3 = "Chla_mgm3") %>%
-    #pr_apply_Flags() %>%  #TODO flags are small f, make function work with both
+    #pr_apply_Flags() %>%  # TODO flags are small f, make function work with both
     dplyr::filter(!.data$file_id %in% c(2117, 2184, 2186, 2187)) %>% #TODO Check with Claire
     dplyr::select(tidyselect::all_of(ctd_vars)) %>%
     pr_apply_Time()
-
-  dat <- planktonr_dat(dat, type = NULL, survey = "NRS", variable = NULL)
 
   return(dat)
 }
@@ -389,6 +384,7 @@ pr_get_LTnuts <-  function(){
                                                     NITRITE_QC_FLAG = readr::col_number(),
                                                     AMMONIA_VALUE = readr::col_number(),
                                                     AMMONIA_QC_FLAG = readr::col_number())) %>%
+    planktonr_dat(Type = "Water", Survey = "LTM") %>%
     dplyr::mutate(StationCode = gsub(".*[-]([^.]+)[-].*", "\\1", .data$SURVEY_NAME),
                   Project = 'LTM',
                   Month_Local = lubridate::month(.data$START_TIME),
@@ -411,18 +407,16 @@ pr_get_LTnuts <-  function(){
     dplyr::filter(.data$StationCode %in% c("MAI", "ROT", "PHB"),
                   .data$Parameters != 'SecchiDepth_m') %>%
     dplyr::mutate(Year_Local = lubridate::year(.data$SampleTime_Local)) %>%
-    dplyr::select(colnames(NutsLT)) # Ensure columns are in the same order
+    dplyr::select(tidyselect::all_of(colnames(NutsLT))) # Ensure columns are in the same order
 
   CTD <- pr_get_NRSCTD() %>%
     dplyr::select("Project", "StationCode", "StationName", "Month_Local", "Year_Local",
                   "SampleTime_Local", "SampleDepth_m", "Temperature_degC") %>%
     dplyr::filter(.data$StationCode %in% c("MAI", "ROT", "PHB")) %>%
     tidyr::pivot_longer(-c("Project":"SampleDepth_m"), values_to = "Values", names_to = "Parameters") %>%
-    dplyr::select(colnames(NutsLT))
+    dplyr::select(tidyselect::all_of(colnames(NutsLT)))
 
   dat <- dplyr::bind_rows(NutsLT, Nuts, CTD)
-
-  dat <- planktonr_dat(dat, type = NULL, survey = "LTM", variable = NULL)
 
   return(dat)
 }

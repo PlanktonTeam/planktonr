@@ -1,15 +1,3 @@
-# Get location of raw plankton data
-#
-# Internal function to load the location of the raw plankton data files.
-# @return A string with location of raw plankton data
-# @export
-# @examples
-# file_loc <- pr_get_Site()
-# @importFrom rlang .data
-# pr_get_Site_bgc <- function(){
-#   # raw <-"http://geoserver-123.aodn.org.au/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=imos:LAYER_NAME&outputFormat=csv-with-metadata-header"
-#   raw = "https://geoserver-portal.aodn.org.au/geoserver/ows?typeName=LAYER_NAME&SERVICE=WFS&outputFormat=csv&REQUEST=GetFeature&VERSION=1.0.0&userId=Guest"
-# }
 
 #' Get location of raw plankton data
 #'
@@ -56,55 +44,71 @@ pr_get_s3site <- function(){
 #' dat <- pr_get_Raw("bgc_tss_data")
 #'
 pr_get_Raw <- function(file){
-  # stringr::str_detect(file, "bgc_"
+
   if (file == "bgc_chemistry_data"){ # additional probs possible in chemistry. No WC.
-    col_types = list(Project = readr::col_character(),
-                     TripCode = readr::col_character(),
-                     SampleTime_Local = readr::col_datetime(),
-                     DIC_umolkg = readr::col_double(),
-                     Oxygen_umolL = readr::col_double())
+    col_types <- list(Project = readr::col_character(),
+                      TripCode = readr::col_character(),
+                      SampleTime_Local = readr::col_datetime(),
+                      DIC_umolkg = readr::col_double(),
+                      Oxygen_umolL = readr::col_double())
+    Type <- "Water"
+
   } else if (file == "bgc_tss_data"){ # Add specific filter for bgc files to deal with potential problems from 'WC' depth
-    col_types = list(Project = readr::col_character(),
-                     TripCode = readr::col_character(),
-                     SampleTime_Local = readr::col_datetime(),
-                     SampleDepth_m = readr::col_character())
+    col_types <- list(Project = readr::col_character(),
+                      TripCode = readr::col_character(),
+                      SampleTime_Local = readr::col_datetime(),
+                      SampleDepth_m = readr::col_character())
+    Type <- "Water"
+
   } else if (file == "bgc_picoplankton_data"){ # Add specific filter for bgc files to deal with potential problems from 'WC' depth
-    col_types = list(Project = readr::col_character(),
-                     TripCode = readr::col_character(),
-                     SampleTime_Local = readr::col_datetime(),
-                     SampleDepth_m = readr::col_character(),
-                     Virus_cellsmL = readr::col_number(),
-                     Virus_flag = readr::col_number())
+    col_types <- list(Project = readr::col_character(),
+                      TripCode = readr::col_character(),
+                      SampleTime_Local = readr::col_datetime(),
+                      SampleDepth_m = readr::col_character(),
+                      Virus_cellsmL = readr::col_number(),
+                      Virus_flag = readr::col_number())
+    Type <- NULL
+
   } else if (file ==  "bgc_pigments_data"){ # Add specific filter for bgc files to deal with potential problems from 'WC' depth
-    col_types = list(Project = readr::col_character(),
-                     TripCode = readr::col_character(),
-                     SampleTime_Local = readr::col_datetime(),
-                     SampleDepth_m = readr::col_character())
-  } else if(stringr::str_detect(file, "bgc_zooplankton")){
-    col_types = list(Project = readr::col_character(),
-                     TripCode = readr::col_character(),
-                     SampleTime_Local = readr::col_datetime(),
-                     SampleDepth_m = readr::col_character())
+    col_types <- list(Project = readr::col_character(),
+                      TripCode = readr::col_character(),
+                      SampleTime_Local = readr::col_datetime(),
+                      SampleDepth_m = readr::col_character())
+    Type <- NULL
+
   } else {
-    col_types = list()
+    col_types <- list()
   }
 
-  # if (file ==  "bgc_pigments_data" | file == "bgc_tss_data" |
-  #     file == "bgc_picoplankton_data" | file == "bgc_chemistry_data"){
-  #   dat <- readr::read_csv(stringr::str_replace(
-  #     pr_get_Site_bgc(), "LAYER_NAME", file),
-  #     na = c("", NaN, "NaN", NA, "NA"),
-  #     show_col_types = FALSE,
-  #     comment = "#",
-  #     col_types = col_types)
-  # } else{
+  if (stringr::str_starts(file, "cpr_")){
+    Survey <- "CPR"
+  } else if (stringr::str_starts(file, "bgc_") | stringr::str_starts(file, "nrs_")){
+    Survey <- "NRS"
+  }
+
+  if (stringr::str_ends(file, "indices_data")){
+    Type <- NULL
+  } else if (stringr::str_detect(file, "_phytoplankton_")){
+    Type <- "Phytoplankton"
+  } else if (stringr::str_detect(file, "_zooplankton_")){
+    Type <- "Zooplankton"
+  } else if (stringr::str_detect(file, "_fish_")){
+    Type <- "Fish"
+  } else if (stringr::str_ends(file, "_ctd_data")){
+    Type <- "Water"
+  }
+
+
+
+
   dat <- readr::read_csv(stringr::str_replace(
     pr_get_Site(), "LAYER_NAME", file),
     na = c("", NaN, "NaN", NA, "NA"),
     show_col_types = FALSE,
     comment = "#",
-    col_types = col_types)
-  # }
+    col_types = col_types) %>%
+    tibble::as_tibble() %>%  # Loads as a spec_tbl_df when columns are specified. Better to convert it back for use of planktonr_dat
+    planktonr_dat(Survey = Survey, Type = Type)
 
   # TODO Temporarily rename Bonney Coast. Can be removed when datasets are updated. Likely after 21 March
   if (isTRUE(exists("StationName", dat))){
@@ -150,35 +154,6 @@ pr_get_s3 <- function(file){
 }
 
 
-# Add the SampleDate to dataframes that only have SampleTime
-#
-# @param df Dataframe containing `SampleTime_Local` or `SampleTime_UTC`
-#
-# @return A dataframe with `SampleDate` included.
-# @export
-#
-# @examples
-# df <- # pr_add_SampleDate(data.frame(SampleTime_Local = Sys.time()))
-# # pr_add_SampleDate <- function(df){
-#
-#   if("SampleTime_Local" %in% colnames(df)) {
-#     df <- df %>%
-#       dplyr::mutate(SampleDate_Local = lubridate::as_date(.data$SampleTime_Local)) %>%
-#       dplyr::relocate(.data$SampleDate_Local, .after = .data$SampleTime_Local)
-#   }
-#
-#   if("SampleTime_UTC" %in% colnames(df)) {
-#     df <- df %>%
-#       dplyr::mutate(SampleDate_UTC = lubridate::as_date(.data$SampleTime_UTC)) %>%
-#       dplyr::relocate(.data$SampleDate_UTC, .after = .data$SampleTime_UTC)
-#   }
-#
-#   return(df)
-# }
-
-
-
-
 
 #' Load plankton information table with sizes etc.
 #'
@@ -201,7 +176,7 @@ pr_get_PlanktonInfo <- function(Type = "Zooplankton"){
       pr_rename()
   }
 
-  df <- planktonr_dat(df, type = Type, survey = NULL, variable = NULL)
+  # df <- planktonr_dat(df, type = Type, survey = NULL, variable = NULL)
 
   return(df)
 }
@@ -283,32 +258,64 @@ pr_add_StationCode <- function(df){
 #' @examples
 #' df <- data.frame(StationName = c('Port Hacking', 'Maria Island',
 #' 'North Stradbroke Island','Esperance', 'Ningaloo', "Darwin",
-#' 'Rottnest Island',  'Kangaroo Island', "Yongala"))
+#' 'Rottnest Island',  'Kangaroo Island', "Yongala")) %>%
+#' planktonr_dat(Survey = "NRS")
 #' df <- pr_reorder(df)
 pr_reorder <- function(df){
 
 
-  if("StationName" %in% colnames(df)){
-    df <- df %>%
-      dplyr::mutate(StationName = factor(.data$StationName,
-                                         levels = c("Darwin", "Yongala", "Ningaloo", "North Stradbroke Island",
-                                                    "Rottnest Island", "Esperance", "Port Hacking", "Kangaroo Island",
-                                                    "Bonney Coast", "Maria Island")))
+  if (pr_get_survey(df) == "NRS"){
+
+    if("StationName" %in% colnames(df)){
+      df <- df %>%
+        dplyr::mutate(StationName = factor(.data$StationName,
+                                           levels = c("Darwin", "Yongala", "Ningaloo", "North Stradbroke Island",
+                                                      "Rottnest Island", "Esperance", "Port Hacking", "Kangaroo Island",
+                                                      "Bonney Coast", "Maria Island")))
+    }
+
+    if("StationCode" %in% colnames(df)){
+      df <- df %>%
+        dplyr::mutate(StationCode = factor(.data$StationCode,
+                                           levels = c("DAR", "YON", "NIN", "NSI", "ROT",
+                                                      "ESP", "PHB", "KAI", "VBM", "MAI")))
+    }
   }
 
-  if("StationCode" %in% colnames(df)){
-    df <- df %>%
-      dplyr::mutate(StationCode = factor(.data$StationCode,
-                                         levels = c("DAR", "YON", "NIN", "NSI", "ROT",
-                                                    "ESP", "PHB", "KAI", "VBM", "MAI")))
+  if (pr_get_survey(df) == "CPR"){
+    if("BioRegion" %in% colnames(df)){
+      df <- df %>%
+        dplyr::mutate(BioRegion = factor(.data$BioRegion,
+                                         levels = c("North", "North-west", "Coral Sea",
+                                                    "Temperate East", "South-east", "South-west",
+                                                    "Southern Ocean Region", "None")))
+    }
   }
-  if("BioRegion" %in% colnames(df)){
-    df <- df %>%
-      dplyr::mutate(BioRegion = factor(.data$BioRegion,
-                                       levels = c("North", "North-west", "Coral Sea",
-                                                  "Temperate East", "South-east", "South-west",
-                                                  "Southern Ocean Region", "None")))
+
+  if (pr_get_survey(df) == "Coastal"){
+
+    if("StationName" %in% colnames(df)){
+      df <- df %>%
+        dplyr::mutate(StationName = factor(.data$StationName,
+                                           levels = c("Tully River Mouth mooring", "Russell-Mulgrave River mooring", "Green Island", "Port Douglas", "Cape Tribulation",
+                                                      "Double Island", "Yorkey's Knob", "Fairlead Buoy", "Geoffrey Bay", "Channel",
+                                                      "Pioneer Bay", "Inshore reef_Channel", "Inshore reef_Geoffrey Bay", "Balls Head", "Salmon Haul",
+                                                      "Bare Island - Botany Bay", "Cobblers Beach", "Towra Point - Botany Bay", "Lilli Pilli", "Centaur Reef",
+                                                      "Wreck Rock", "Hobsons - Port Phillip Bay", "Long Reef - Port Phillip Bay", "Derwent Estuary B1", "Derwent Estuary B3",
+                                                      "Derwent Estuary E", "Derwent Estuary G2", "Derwent Estuary KB", "Derwent Estuary RBN", "Derwent Estuary U2", "Low Head")))
+    }
+
+    if("StationCode" %in% colnames(df)){
+      df <- df %>%
+        dplyr::mutate(StationCode = factor(.data$StationCode,
+                                           levels = c("TRM", "RMR", "GNI", "PTD", "CTL", "DBI", "YKK", "FLB", "GEB", "CHA", "PIB",
+                                                      "IRC", "IGB", "BAH", "SAH", "BAI", "COB", "TOP", "LIP", "CER", "WRR", "HOB",
+                                                      "LOR", "DEB", "DES", "DEE", "DEG", "DEK", "DER", "DEU", "LOH")))
+    }
+
   }
+
+
   return(df)
 }
 
@@ -382,7 +389,6 @@ pr_apply_Time <- function(df){
   df <- df %>%
     dplyr::mutate(Year_Local = lubridate::year(.data$SampleTime_Local),
                   Month_Local = lubridate::month(.data$SampleTime_Local),
-                  # Day_Local = lubridate::day(.data$SampleTime_Local),
                   tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE)) %>%
     dplyr::relocate(tidyselect::all_of(c("Year_Local", "Month_Local", "tz")), .after = "SampleTime_Local")
 
@@ -421,15 +427,12 @@ pr_remove_outliers <- function(df, x){
     df <- df %>% dplyr::mutate(SampleDepth_m = 'integrated')
   }
 
-  #TODO !! Doesn't work with the custom class so we convert to tibble and then back again. It would be interesting to find out why one day....
   outliers <- df %>%
-    tibble::as_tibble() %>%
     dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
                      sd2 = 2*sd(.data$Values, na.rm = TRUE),
                      meanplus = .data$means + .data$sd2,
                      meanminus = .data$means - .data$sd2,
                      .by = tidyselect::all_of(c("Parameters", rlang::as_string(location), "SampleDepth_m"))) %>%
-    planktonr_dat(type = Type, survey = Survey, variable = Variable) %>%
     dplyr::select(-c("means", "sd2"))
 
   added <- df %>%
@@ -509,111 +512,6 @@ pr_harmonic <- function (theta, k = 4) {
   }
   X
 }
-
-# Get coefficients from linear model
-#
-# @param df dataframe containing Year, Month, Parameters, values
-#
-# @return coefficients from linear model
-# @export
-#
-# @examples
-# df <- planktonr::pr_get_EOVs("NRS") %>%
-# dplyr::filter(StationCode %in% c('PHB', 'NSI'),
-# Parameters %in% c("Biomass_mgm3", "PhytoBiomassCarbon_pgL")) %>%
-#   pr_get_Coeffs()
-# pr_get_Coeffs <- function(df){
-#
-#
-#   # TODO Need to ensure the models are calculated and stored against only 1
-#   # parameter and 1 station. They seem to be returning results that are the same for all data regardless of location
-#
-#   Survey <- pr_get_survey(df)
-#   Type <- pr_get_type(df)
-#   Variable <- pr_get_variable(df)
-#
-#   if(Survey == "LTM") {
-#     df <- df %>%
-#       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
-#                        .by = tidyselect::all_of(c("StationCode", "StationName", "SampleTime_Local",
-#                                                   "anomaly", "Year_Local", "Month_Local", "Parameters")))
-#   }
-#
-#   df <- df %>%
-#     dplyr::rename(SampleDate = "SampleTime_Local") %>%
-#     dplyr::mutate(Month = .data$Month_Local * 2 * 3.142 / 12) %>%
-#     droplevels()
-#
-#   params <- df %>%
-#     dplyr::select("Parameters") %>%
-#     unique()
-#   params <- params$Parameters
-#
-#   if(Survey == "CPR"){
-#     stations <- df %>%
-#       dplyr::select("BioRegion") %>%
-#       unique()
-#     stations <- stations$BioRegion
-#   } else {
-#     stations <- df %>%
-#       dplyr::select("StationName") %>%
-#       unique()
-#     stations <- stations$StationName
-#   }
-#
-#   params <- rep(params, each = length(stations))
-#   stations <- rep(stations, length.out = length(params))
-#
-#   coeffs <- function(params, stations){
-#
-#     lmdat <- df %>%
-#       dplyr::filter(.data$Parameters == params) %>%
-#       tidyr::drop_na()
-#
-#     if(Survey == "CPR"){
-#       lmdat <- lmdat %>%
-#         dplyr::filter(.data$BioRegion == stations)
-#     } else {
-#       lmdat <- lmdat %>%
-#         dplyr::filter(.data$StationName == stations)
-#     }
-#
-#     # If the combination of parameter and station doesn't exist, return NULL
-#     if (dim(lmdat)[1] == 0){
-#       return(NULL)
-#     } else {
-#
-#       m <- stats::lm(Values ~ Year_Local + pr_harmonic(Month, k = 1), data = lmdat)
-#
-#       lmdat <- tibble::tibble(lmdat %>%
-#                                 dplyr::bind_cols(fv = m$fitted.values))
-#       ms <- summary(m)
-#       slope <- ifelse(ms$coefficients[2,1] < 0, "decreasing", "increasing")
-#       p <- ms$coefficients[2,4]
-#       sig <- ifelse(ms$coefficients[2,4] < 0.05, "significantly", "but not significantly")
-#
-#       if(Survey != "CPR") { # NRS and LTM
-#         dfs <- dplyr::tibble(slope = slope, p = p, significance = sig, Parameters = params, StationName = stations)
-#         dfs2 <- lmdat %>%
-#           dplyr::inner_join(dfs, by = c("Parameters", "StationName"))
-#       } else {
-#         dfs <- dplyr::tibble(slope = slope, p = p, significance = sig, Parameters = params, BioRegion = stations)
-#         dfs2 <- lmdat %>%
-#           dplyr::inner_join(dfs, by = c("Parameters", "BioRegion"))
-#       }
-#
-#       # attr(dfs2, "Trend") <- m # Store the model object
-#
-#       return(dfs2)
-#     }
-#   }
-#
-#   outputs <- purrr::map2(params, stations, coeffs) %>%
-#     purrr::list_rbind() %>%
-#     planktonr_dat(type = Type, survey = Survey, variable = Variable)
-#
-#   return(outputs)
-# }
 
 
 

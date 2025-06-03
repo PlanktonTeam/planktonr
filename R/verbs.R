@@ -269,3 +269,65 @@ arrange.planktonr_dat <- function(.data, ..., .by_group = FALSE) {
   }
   result
 }
+
+
+#' Convert a planktonr_dat object to a rowwise data frame
+#'
+#' This is an S3 method for `dplyr::rowwise` that ensures
+#' `planktonr_dat` attributes are preserved and the object correctly
+#' becomes a `rowwise_df` while retaining its `planktonr_dat` class.
+#'
+#' @param data A `planktonr_dat` object.
+#' @param ... <[`data-masking`][dplyr::dplyr_data_masking]> Columns to group by.
+#'   `rowwise()` groups by all columns by default.
+#' @param .rows Not currently used by `dplyr::rowwise()`, but included for
+#'   compatibility with future `dplyr` updates.
+#' @returns A `planktonr_dat` object that is also a `rowwise_df`,
+#'   preserving original attributes.
+#' @export
+#' @importFrom dplyr rowwise
+rowwise.planktonr_dat <- function(data, ..., .rows = NULL) {
+  original_attrs <- get_custom_attributes(data)
+
+  # Call the next method (dplyr::rowwise.tbl_df)
+  result <- NextMethod()
+
+  # Re-apply the planktonr_dat class and custom attributes
+  # Crucial: Prepend "planktonr_dat" to preserve "rowwise_df" class
+  class(result) <- unique(c("planktonr_dat", class(result)))
+  for (attr_name in names(original_attrs)) {
+    attr(result, attr_name) <- original_attrs[[attr_name]]
+  }
+  result
+}
+
+
+#' Relocate columns in a planktonr_dat object
+#'
+#' This is an S3 method for `dplyr::relocate` that ensures
+#' `planktonr_dat` attributes are preserved when moving columns.
+#'
+#' @param .data A `planktonr_dat` object.
+#' @param ... <[`tidy-select`][dplyr::dplyr_tidy_select]> Columns to relocate.
+#' @param .before <[`tidy-select`][dplyr::dplyr_tidy_select]> Columns to move other columns before.
+#' @param .after <[`tidy-select`][dplyr::dplyr_tidy_select]> Columns to move other columns after.
+#' @returns A `planktonr_dat` object with columns reordered,
+#'   preserving original attributes.
+#' @export
+#' @importFrom dplyr relocate
+relocate.planktonr_dat <- function(.data, ..., .before = NULL, .after = NULL) {
+  original_attrs <- get_custom_attributes(.data)
+
+  # Call the next method (dplyr::relocate.tbl_df)
+  result <- NextMethod()
+
+  # Re-apply the planktonr_dat class and custom attributes
+  class(result) <- unique(c("planktonr_dat", class(result)))
+  for (attr_name in names(original_attrs)) {
+    attr(result, attr_name) <- original_attrs[[attr_name]]
+  }
+  result
+}
+
+
+

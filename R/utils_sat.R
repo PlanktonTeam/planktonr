@@ -120,7 +120,7 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d", parallel = FA
   }
 
   df_dmy <- df_dmy %>%
-    dplyr::select(tidyselect::all_of(c("Latitude", "Longitude", "Year", "Month", "Day"))) %>%
+    dplyr::select("Latitude", "Longitude", "Year", "Month", "Day") %>%
     dplyr::group_split(.data$Latitude, .data$Longitude, .data$Year, .data$Month, .data$Day)
 
   pr_get_SSTData <- function(df, p){
@@ -253,7 +253,9 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d", parallel = FA
 #' @export
 #'
 #' @examples
-#' df <- tail(pr_get_DataLocs("NRS"), 5)
+#' df <- pr_get_DataLocs("NRS") %>%
+#'   dplyr::filter(Date < lubridate::ymd("2019-12-31")) %>%
+#'   head(5)
 #' altout <- pr_match_Altimetry(df, pr = "GSLA", res_spat = 10)
 pr_match_Altimetry <- function(df, pr, res_spat = 1) {
 
@@ -280,23 +282,24 @@ pr_match_Altimetry <- function(df, pr, res_spat = 1) {
 
   df <- df %>%
     dplyr::select(tidyselect::all_of(c("Latitude", "Longitude", "Year", "Month", "Day"))) %>% # Select relevant columns
-    dplyr::group_by(.data$Latitude, .data$Longitude, .data$Year, .data$Month, .data$Day) %>%
-    tidyr::nest()
-
+    dplyr::group_split(.data$Latitude, .data$Longitude, .data$Year, .data$Month, .data$Day)
+    # dplyr::group_by(.data$Latitude, .data$Longitude, .data$Year, .data$Month, .data$Day) %>%
+    # tidyr::nest()
 
   pr_get_SatData <- function(df){
+
     # Make sure month and day have a leading zero if less than 10
-    mth <- stringr::str_pad(df$Month,2,"left",pad="0")
-    dy <- stringr::str_pad(df$Day,2,"left",pad="0")
+    mth <- stringr::str_pad(df$Month, 2, "left", pad = "0")
+    dy <- stringr::str_pad(df$Day, 2 , "left", pad = "0")
 
     tryCatch({
-      thredd_url <- paste0("http://thredds.aodn.org.au/thredds/catalog/IMOS/OceanCurrent/GSLA/DM01/",df$Year,"/catalog.xml")
+      thredd_url <- paste0("http://thredds.aodn.org.au/thredds/catalog/IMOS/OceanCurrent/GSLA/DM/",df$Year,"/catalog.xml")
       f <- thredds::CatalogNode$new(thredd_url)
       files <- data.frame(files = f$get_dataset_names())
       pattern <- paste0(df$Year,mth,dy,"T000000Z")
       fileName <- files %>% dplyr::filter(grepl(pattern, files))
       filename <- fileName$files
-      url_base <- paste0("http://thredds.aodn.org.au/thredds/dodsC/IMOS/OceanCurrent/GSLA/DM01/") # Base URL
+      url_base <- paste0("http://thredds.aodn.org.au/thredds/dodsC/IMOS/OceanCurrent/GSLA/DM/") # Base URL
       imos_url <- paste0(url_base,df$Year,"/",filename)
     },
     error = function(cond) {
@@ -306,6 +309,7 @@ pr_match_Altimetry <- function(df, pr, res_spat = 1) {
     )
 
     if(exists("fileName") && nrow(fileName) > 0) {# Not all dates will exist
+
       nc <- RNetCDF::open.nc(imos_url)
       lat <- RNetCDF::var.get.nc(nc, variable = "LATITUDE")
       lon <- RNetCDF::var.get.nc(nc, variable = "LONGITUDE")
@@ -317,8 +321,10 @@ pr_match_Altimetry <- function(df, pr, res_spat = 1) {
       maxlon <- max(lon)
 
       # Approximate nearest neighbour
-      idx_lon <- (yaImpute::ann(as.matrix(seq(minlon, maxlon, length.out = lengthlon$length)), as.matrix(df$Longitude), k = 1, verbose = FALSE)$knnIndexDist[,1])[1]
-      idx_lat <- (yaImpute::ann(as.matrix(seq(maxlat, minlat, length.out = lengthlat$length)), as.matrix(df$Latitude), k = 1, verbose = FALSE)$knnIndexDist[,1])[1]
+      idx_lon <- (yaImpute::ann(as.matrix(seq(minlon, maxlon, length.out = lengthlon$length)),
+                                as.matrix(df$Longitude), k = 1, verbose = FALSE)$knnIndexDist[,1])[1]
+      idx_lat <- (yaImpute::ann(as.matrix(seq(maxlat, minlat, length.out = lengthlat$length)),
+                                as.matrix(df$Latitude), k = 1, verbose = FALSE)$knnIndexDist[,1])[1]
       cnt <- c(1,1,1)
 
       if (res_spat > 1) { # If more than 1x1 pixel is requested we adjust the idx by res_spat/2 and count by res_spa
@@ -344,11 +350,7 @@ pr_match_Altimetry <- function(df, pr, res_spat = 1) {
     }
   }
 
-
-  # browser()
-
-
-  altout <- purrr::map(dplyr::pull(df), pr_get_SatData) %>%
+  altout <- purrr::map(df, pr_get_SatData) %>%
     data.table::rbindlist()
 
   df <- dplyr::bind_rows(df) %>%

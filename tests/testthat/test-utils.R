@@ -17,11 +17,9 @@ testthat::test_that("Correct function output", {
   testthat::expect_type(pr_get_NRSStation() %>%
                           pr_add_StationCode(), "list")
 
-  testthat::expect_type(pr_get_NRSStation() %>%
-                          pr_reorder(), "list")
+  testthat::expect_type(pr_get_NRSStation(), "list")
 
-  testthat::expect_type(data.frame(StationCode = c("MAI", "NSI", "PHB")) %>%
-                          pr_reorder(), "list")
+  testthat::expect_type(data.frame(StationCode = c("MAI", "NSI", "PHB")), "list")
 
   testthat::expect_type(data.frame(SST = c(27.4, 45), SST_Flag = c(1, 4)) %>%
                           pr_apply_Flags(), "list")

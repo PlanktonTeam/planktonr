@@ -42,7 +42,7 @@ pr_get_NRSData <- function(Type = "Phytoplankton", Variable = "abundance", Subse
 
     datnc <-pr_get_Raw("bgc_zooplankton_abundance_non_copepods_data") %>%
       pr_rename() %>%
-      dplyr::select(-str[!str %in% "TripCode"])
+      dplyr::select(-tidyselect::all_of(str[!str %in% "TripCode"]))
 
     # Add together and COPEPODS and NON-COPEPODS
     dat <- dplyr::left_join(datc, datnc, by = "TripCode")
@@ -55,7 +55,7 @@ pr_get_NRSData <- function(Type = "Phytoplankton", Variable = "abundance", Subse
   }
 
   # Convert to planktonr class
-  dat <- planktonr_dat(dat, type = Type, survey = "NRS", variable = Variable, subset = Subset)
+  # # dat <- planktonr_dat(dat, type = Type, survey = "NRS", variable = Variable, subset = Subset)
 
   return(dat)
 
@@ -102,7 +102,7 @@ pr_get_NRSTrips <- function(){
     pr_apply_Time() %>%
     dplyr::select(-"ProjectName") %>%
     dplyr::select(-tidyselect::any_of(c("PSampleDepth_m", "ZSampleDepth_m"))) %>%
-    planktonr_dat(type = NULL, survey = "NRS", variable = NULL)
+    planktonr_dat(Type = NULL, Survey = "NRS", Variable = NULL)
 
   return(NRSTrip)
 
@@ -120,6 +120,8 @@ pr_get_NRSTrips <- function(){
 #   dat <- readr::read_csv(system.file("extdata", "BGC_Zoop_Raw.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
 #     pr_rename()
 # }
+
+
 
 #' Filter dataframe on `StationCode` to return only NRS stations
 #'

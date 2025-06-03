@@ -13,8 +13,6 @@
 #' @importFrom rlang .data
 pr_get_CPRData <- function(Type = "Phytoplankton", Variable = "abundance", Subset = "raw"){
 
-  Type <- pr_check_type(Type)
-
   if (Type == "Zooplankton" & Subset == "species"){ # Specific case for zooplankton species
 
     datc <- pr_get_Raw("cpr_zooplankton_abundance_copepods_data") %>%
@@ -36,11 +34,9 @@ pr_get_CPRData <- function(Type = "Phytoplankton", Variable = "abundance", Subse
                            na = "",
                            show_col_types = FALSE,
                            comment = "#") %>%
-      pr_rename()
+      pr_rename() %>%
+      planktonr_dat(Type = Type, Survey = "CPR")
   }
-
-  # Convert to planktonr class
-  dat <- planktonr_dat(dat, type = Type, survey = "CPR", variable = Variable, subset = Subset)
 
 }
 
@@ -56,31 +52,9 @@ pr_get_CPRData <- function(Type = "Phytoplankton", Variable = "abundance", Subse
 #' df <- pr_get_CPRTrips(near_dist_km = 250)
 #' @importFrom rlang .data
 pr_get_CPRTrips <- function(...){
-  CPRTrips <- pr_get_s3("cpr_samp")  %>%
+  CPRTrips <- pr_get_s3("cpr_samp") %>%
+    planktonr_dat(Type = NULL, Survey = "CPR", Variable = NULL) %>%
     pr_rename() %>%
     pr_add_Bioregions() %>%
-    pr_apply_Time() %>%
-    planktonr_dat(type = NULL, survey = "CPR", variable = NULL)
+    pr_apply_Time()
 }
-
-
-# #' Get CPR samples
-# #' @param ... to allow use of join when used within another function
-# #'
-# #' @return A dataframe with CPR Samples
-# #' @export
-# #'
-# #' @examples
-# #' df <- pr_get_CPRSamps(near_dist_km = 250)
-# #' df <- pr_get_CPRSamps()
-# #'
-# #' #' @importFrom rlang .data
-# pr_get_CPRSamps <- function(...){
-#
-#   df <- pr_get_Raw("cpr_derived_indices_data") %>%
-#     pr_rename() %>%
-#     pr_add_Bioregions(...) %>%
-#     dplyr::select(tidyselect::starts_with(c("geometry", "FID", "TripCode", "Latitude", "Longitude", "BioRegion", "DistanceFromBioregion_m",
-#                                             "IMCRA", "SampleTime", "SampleDate", "Year", "Month", "Day", "Time", "Region")))
-#
-# }

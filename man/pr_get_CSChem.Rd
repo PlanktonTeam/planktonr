@@ -2,15 +2,15 @@
 % Please edit documentation in R/utils_bgc.R
 \name{pr_get_CSChem}
 \alias{pr_get_CSChem}
-\title{Load microbial data}
+\title{Load chemistry data}
 \usage{
 pr_get_CSChem()
 }
 \value{
-A dataframe with NRS microbial data
+A dataframe with NRS chemistry data
 }
 \description{
-Load microbial data
+Load chemistry data
 }
 \examples{
 df <- pr_get_CSChem()

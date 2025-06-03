@@ -37,7 +37,8 @@ pr_get_FreqMap <- function(Type = "Zooplankton"){
                                             .data$Month_Local > 8 & .data$Month_Local < 12 ~ "September - November",
                                             TRUE ~ "December - February"))
 
-  totals <- dat %>% dplyr::select(-c('Species', 'Counts')) %>% # All samples including where nothing is counted
+  totals <- dat %>%
+    dplyr::select(-c('Species', 'Counts')) %>% # All samples including where nothing is counted
     dplyr::distinct() %>%
     dplyr::summarise(samples = dplyr::n(),
                      .by = tidyselect::all_of(c("Season", "Survey", "Latitude", "Longitude")))

@@ -2,7 +2,7 @@
 
 .onLoad <- function(libname, pkgname) {
   # Register the print method for my_class
-  vctrs::s3_register("base::print", "planktonr_dat")
+  # vctrs::s3_register("base::print", "planktonr_dat")
 
   # Register tidyr methods
   if (requireNamespace("tidyr", quietly = TRUE)) {
@@ -19,5 +19,7 @@
     vctrs::s3_register("dplyr::filter", "planktonr_dat")
     vctrs::s3_register("dplyr::select", "planktonr_dat")
     vctrs::s3_register("dplyr::arrange", "planktonr_dat")
+    vctrs::s3_register("dplyr::rowwise", "planktonr_dat")
+    vctrs::s3_register("dplyr::relocate", "planktonr_dat")
   }
 }

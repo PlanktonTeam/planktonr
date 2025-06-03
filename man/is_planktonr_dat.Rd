@@ -7,17 +7,27 @@
 is_planktonr_dat(x)
 }
 \arguments{
-\item{x}{An R object.}
+\item{x}{An R object to check.}
 }
 \value{
-\code{TRUE} if \code{x} is a \code{planktonr_dat} object, otherwise \code{FALSE}.
+A logical value: \code{TRUE} if \code{x} is a \code{planktonr_dat} object, otherwise \code{FALSE}.
 }
 \description{
-This function tests if the given object \code{x} inherits from the \code{planktonr_dat} class.
+This function tests if the given object \code{x} inherits from the \code{planktonr_dat} S3 class.
+It's a standard way to verify if an object is of your custom data type.
 }
 \examples{
 # Assuming planktonr_dat constructor exists:
-my_data <- planktonr_dat(tibble::tibble(a = 1:3), type = "Phytoplankton")
+my_data <- planktonr_dat(tibble::tibble(a = 1:3, b = 4:6),
+                         type = "Phytoplankton",
+                         survey = "NRS")
+
+# Check if it's a planktonr_dat object
 is_planktonr_dat(my_data) # Returns TRUE
+
+# Check a regular tibble
 is_planktonr_dat(tibble::tibble(a = 1:3)) # Returns FALSE
+
+# Check a data.frame
+is_planktonr_dat(data.frame(x = 1)) # Returns FALSE
 }

@@ -6,24 +6,24 @@
 \usage{
 planktonr_dat(
   .data,
-  type = NULL,
-  survey = NULL,
-  variable = NULL,
-  model = NULL,
+  Type = NULL,
+  Survey = NULL,
+  Variable = NULL,
+  Model = NULL,
   ...
 )
 }
 \arguments{
-\item{.data}{The data tibble to be converted to the \code{planktonr_dat} class.}
+\item{.data}{The data \code{data.frame} or \code{tibble} to be converted to the \code{planktonr_dat} class.}
 
-\item{type}{The data type. Must be one of "Microbes", "Phytoplankton",
+\item{Type}{The data type. Must be one of "Microbes", "Phytoplankton",
 "Zooplankton", "Water", or "EOV".}
 
-\item{survey}{The survey of the data. E.g., "NRS", "CPR", "LTM", "GO-SHIP", "Coastal".}
+\item{Survey}{The survey of the data. E.g., "NRS", "CPR", "LTM", "GO-SHIP", "Coastal".}
 
-\item{variable}{What variable is being described or subsetted by this data.}
+\item{Variable}{What variable is being described or subsetted by this data.}
 
-\item{model}{Optional model associated with the data.}
+\item{Model}{Optional model associated with the data.}
 
 \item{...}{Additional attributes to be stored with the \code{planktonr_dat} object.
 These will be stored as attributes on the object.}
@@ -33,19 +33,34 @@ An object of class \code{planktonr_dat}.
 }
 \description{
 This function creates a \code{planktonr_dat} object, which is a tibble
-with additional custom attributes for metadata.
+with additional custom attributes for metadata. It can accept
+either a \code{data.frame} or a \code{tibble}, coercing \code{data.frame} inputs to \code{tibble}.
 }
 \examples{
-data_tibble <- tibble::tibble(
+# Create from a tibble (existing behavior)
+tibble_data <- tibble::tibble(
   time = as.Date(c("2023-01-01", "2023-01-02")),
   value = c(10, 20)
 )
-pr_obj <- planktonr_dat(
-  .data = data_tibble,
-  type = "Phytoplankton",
-  survey = "NRS",
-  variable = "Chlorophyll_a",
-  notes = "Example data set"
+pr_obj_tibble <- planktonr_dat(
+  .data = tibble_data,
+  Type = "Phytoplankton",
+  Survey = "NRS",
+  Variable = "Chlorophyll_a"
 )
-print(pr_obj)
+print(pr_obj_tibble)
+
+# Create from a base R data.frame (newly supported)
+df_data <- data.frame(
+  time = as.Date(c("2023-01-03", "2023-01-04")),
+  value = c(30, 40)
+)
+pr_obj_df <- planktonr_dat(
+  .data = df_data,
+  Type = "Zooplankton",
+  Survey = "CPR",
+  Variable = "Biomass"
+)
+print(pr_obj_df)
+class(pr_obj_df) # Still a planktonr_dat (which inherits from tibble)
 }

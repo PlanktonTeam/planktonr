@@ -18,6 +18,9 @@
 #' @importFrom rlang .data
 pr_add_Bioregions <- function(df, near_dist_km = 0){
 
+  Type <- pr_get_type(df)
+  Survey <- pr_get_survey(df)
+
   # Ensure df is of the correct class
   if (!("sf") %in% class(df[])){
     df <- df %>%
@@ -26,14 +29,14 @@ pr_add_Bioregions <- function(df, near_dist_km = 0){
 
   # First add Marine Bioregions
   df <- df %>%
-    sf::st_join(mbr %>% dplyr::select(-tidyselect::all_of("Colour")), join = sf::st_within) %>%
+    sf::st_join(mbr %>% dplyr::select(-"Colour"), join = sf::st_within) %>%
     dplyr::rename(BioRegion = "REGION") %>%
     dplyr::mutate(cellID = dplyr::row_number())
 
   # Then do the ones that are missing
   dfna <- df %>%
     dplyr::filter(is.na(.data$BioRegion)) %>%
-    dplyr::select(-tidyselect::all_of("BioRegion"))
+    dplyr::select(-"BioRegion")
 
   dist <- dfna %>%
     sf::st_distance(mbr)
@@ -70,7 +73,8 @@ pr_add_Bioregions <- function(df, near_dist_km = 0){
     dplyr::left_join(mbr %>%
                        sf::st_drop_geometry() %>%
                        dplyr::distinct(.data$REGION, .data$Colour),
-                     by = c("BioRegion" = "REGION"))
+                     by = c("BioRegion" = "REGION")) %>%
+    planktonr_dat(Survey = Survey, Type = Type)
 
   return(df)
 

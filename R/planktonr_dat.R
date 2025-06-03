@@ -3,21 +3,22 @@
 # Internal constructor (low-level, no validation)
 new_planktonr_dat <- function(x, ...) {
   # All arguments in '...' become attributes
-  # `x` is the underlying tibble
+  # `x` is the underlying tibble (ensured by planktonr_dat constructor)
   tibble::new_tibble(x, ..., class = "planktonr_dat")
 }
 
 #' Define the constructor function for the planktonr data class
 #'
 #' This function creates a `planktonr_dat` object, which is a tibble
-#' with additional custom attributes for metadata.
+#' with additional custom attributes for metadata. It can accept
+#' either a `data.frame` or a `tibble`, coercing `data.frame` inputs to `tibble`.
 #'
-#' @param .data The data tibble to be converted to the `planktonr_dat` class.
-#' @param type The data type. Must be one of "Microbes", "Phytoplankton",
+#' @param .data The data `data.frame` or `tibble` to be converted to the `planktonr_dat` class.
+#' @param Type The data type. Must be one of "Microbes", "Phytoplankton",
 #'   "Zooplankton", "Water", or "EOV".
-#' @param survey The survey of the data. E.g., "NRS", "CPR", "LTM", "GO-SHIP", "Coastal".
-#' @param variable What variable is being described or subsetted by this data.
-#' @param model Optional model associated with the data.
+#' @param Survey The survey of the data. E.g., "NRS", "CPR", "LTM", "GO-SHIP", "Coastal".
+#' @param Variable What variable is being described or subsetted by this data.
+#' @param Model Optional model associated with the data.
 #' @param ... Additional attributes to be stored with the `planktonr_dat` object.
 #'   These will be stored as attributes on the object.
 #'
@@ -25,54 +26,90 @@ new_planktonr_dat <- function(x, ...) {
 #' @export
 #'
 #' @examples
-#' data_tibble <- tibble::tibble(
+#' # Create from a tibble (existing behavior)
+#' tibble_data <- tibble::tibble(
 #'   time = as.Date(c("2023-01-01", "2023-01-02")),
 #'   value = c(10, 20)
 #' )
-#' pr_obj <- planktonr_dat(
-#'   .data = data_tibble,
-#'   type = "Phytoplankton",
-#'   survey = "NRS",
-#'   variable = "Chlorophyll_a",
-#'   notes = "Example data set"
+#' pr_obj_tibble <- planktonr_dat(
+#'   .data = tibble_data,
+#'   Type = "Phytoplankton",
+#'   Survey = "NRS",
+#'   Variable = "Chlorophyll_a"
 #' )
-#' print(pr_obj)
+#' print(pr_obj_tibble)
+#'
+#' # Create from a base R data.frame (newly supported)
+#' df_data <- data.frame(
+#'   time = as.Date(c("2023-01-03", "2023-01-04")),
+#'   value = c(30, 40)
+#' )
+#' pr_obj_df <- planktonr_dat(
+#'   .data = df_data,
+#'   Type = "Zooplankton",
+#'   Survey = "CPR",
+#'   Variable = "Biomass"
+#' )
+#' print(pr_obj_df)
+#' class(pr_obj_df) # Still a planktonr_dat (which inherits from tibble)
 planktonr_dat <- function(.data,
-                          type = NULL,
-                          survey = NULL,
-                          variable = NULL,
-                          model = NULL,
+                          Type = NULL,
+                          Survey = NULL,
+                          Variable = NULL,
+                          Model = NULL,
                           ...) {
 
-  # Input Checks using assertthat
-  # Input Checks using assertthat
-  assertthat::assert_that(is.data.frame(.data), msg = "'.data' must be a data frame.")
-  assertthat::assert_that(inherits(.data, "tbl_df"), msg = "'.data' must be a tibble (tbl_df).")
-  assertthat::assert_that(is.null(type) || is.character(type), msg = "'type' must be a character string or NULL.")
-  assertthat::assert_that(is.null(survey) || is.character(survey), msg = "'survey' must be a character string or NULL.")
-  assertthat::assert_that(is.null(variable) || is.character(variable), msg = "'variable' must be a character string or NULL.")
-  assertthat::assert_that(is.null(model) || is.character(model), msg = "'model' must be a character string or NULL.")
-  if (!is.null(type)) {
-    type <- pr_check_type(type) # Use your helper to standardize
-    type <- rlang::arg_match0(type, values = c("Microbes", "Phytoplankton", "Zooplankton", "Fish", "Water", "EOV"),
-                              arg_nm = "type") # Added arg_nm for better error message
+  # Input Checks
+  # 1. Ensure it's at least a data frame
+  assertthat::assert_that(is.data.frame(.data), msg = "'.data' must be a data frame or tibble.")
+
+  # 2. Coerce to tibble if it's not already one
+  if (!inherits(.data, "tbl_df")) {
+    .data <- tibble::as_tibble(.data)
+    # message("'.data' coerced from data.frame to tibble.") # Optional: inform the user
   }
-  if (!is.null(survey)) {
-    survey <- rlang::arg_match0(survey, values = c("NRS", "CPR", "LTM", "GO-SHIP", "Coastal"),
-                                arg_nm = "survey") # Added arg_nm for better error message
+
+  # 3. Remove 'spec_tbl_df' class and 'spec' attribute if present
+  # This ensures the underlying tibble is always a standard 'tbl_df'
+  if (inherits(.data, "spec_tbl_df")) {
+    class(.data) <- setdiff(class(.data), "spec_tbl_df")
+    attr(.data, "spec") <- NULL
+    # message("Removed 'spec_tbl_df' class and 'spec' attribute from .data for consistent printing.")
+  }
+
+  # 4. Remove 'problems' attribute if present
+  # This attribute is often from readr and not relevant for custom S3 objects
+  if (!is.null(attr(.data, "problems"))) {
+    attr(.data, "problems") <- NULL
+    # message("Removed 'problems' attribute from .data.")
+  }
+
+  # Validate metadata arguments (unchanged)
+  assertthat::assert_that(is.null(Type) || is.character(Type), msg = "'Type' must be a character string or NULL.")
+  assertthat::assert_that(is.null(Survey) || is.character(Survey), msg = "'Survey' must be a character string or NULL.")
+  assertthat::assert_that(is.null(Variable) || is.character(Variable), msg = "'Variable' must be a character string or NULL.")
+  assertthat::assert_that(is.null(Model) || is.character(Model), msg = "'Model' must be a character string or NULL.")
+
+  if (!is.null(Type)) {
+    Type <- pr_check_type(Type) # Use your helper to standardize
+    Type <- rlang::arg_match0(Type, values = c("Microbes", "Phytoplankton", "Zooplankton", "Fish", "Water", "EOV"),
+                              arg_nm = "Type")
+  }
+  if (!is.null(Survey)) {
+    Survey <- rlang::arg_match0(Survey, values = c("NRS", "CPR", "LTM", "GO-SHIP", "Coastal", "SOTS"),
+                                arg_nm = "Survey")
   }
 
   # Capture additional attributes passed via ...
   extra_attrs <- list(...)
 
   # Create the new planktonr_dat object using the internal constructor
-  # All metadata are passed as attributes
   obj <- new_planktonr_dat(
-    x = .data,
-    Type = type,
-    Survey = survey,
-    Variable = variable,
-    Model = model,
+    x = .data, # .data is now guaranteed to be a tibble
+    Type = Type,
+    Survey = Survey,
+    Variable = Variable,
+    Model = Model,
     !!!extra_attrs # Splice in any extra attributes
   )
 
@@ -81,49 +118,40 @@ planktonr_dat <- function(.data,
 
 #' Check if an object is of class `planktonr_dat`
 #'
-#' This function tests if the given object `x` inherits from the `planktonr_dat` class.
+#' This function tests if the given object `x` inherits from the `planktonr_dat` S3 class.
+#' It's a standard way to verify if an object is of your custom data type.
 #'
-#' @param x An R object.
-#' @returns `TRUE` if `x` is a `planktonr_dat` object, otherwise `FALSE`.
+#' @param x An R object to check.
+#' @returns A logical value: `TRUE` if `x` is a `planktonr_dat` object, otherwise `FALSE`.
 #' @export
+#'
 #' @examples
 #' # Assuming planktonr_dat constructor exists:
-#' my_data <- planktonr_dat(tibble::tibble(a = 1:3), type = "Phytoplankton")
+#' my_data <- planktonr_dat(tibble::tibble(a = 1:3, b = 4:6),
+#'                          type = "Phytoplankton",
+#'                          survey = "NRS")
+#'
+#' # Check if it's a planktonr_dat object
 #' is_planktonr_dat(my_data) # Returns TRUE
+#'
+#' # Check a regular tibble
 #' is_planktonr_dat(tibble::tibble(a = 1:3)) # Returns FALSE
+#'
+#' # Check a data.frame
+#' is_planktonr_dat(data.frame(x = 1)) # Returns FALSE
 is_planktonr_dat <- function(x) {
   inherits(x, "planktonr_dat")
 }
 
-#' Create a `planktonr_dat` object with example data
-#'
-#' This is a convenience constructor function that wraps `planktonr_dat()` to
-#' easily create a `planktonr_dat` object from a tibble, providing default
-#' values for `type` and `survey`, and adding a 'notes' attribute.
-#' This is useful for quickly generating sample `planktonr_dat` objects for testing or examples.
-#'
-#' @param ... Arguments passed to `tibble::tibble()` to create the underlying data.
-#' @returns An object of class `planktonr_dat`.
-#' @export
-#' @examples
-#' # Create an example planktonr_dat object
-#' pr_example_data <- planktonr_data(
-#'   species = c("copepod", "diatom"),
-#'   count = c(100, 50)
-#' )
-#' print(pr_example_data)
-#'
-#' # Accessing custom attributes
-#' attr(pr_example_data, "type")
-#' attr(pr_example_data, "survey")
-#' attr(pr_example_data, "notes")
+# Example of a constructor function to make it easy to create data
+# (No changes needed here as it calls planktonr_dat, which now handles coercion)
 planktonr_data <- function(...) {
-  x <- tibble::tibble(...)
+  x <- tibble::tibble(...) # This always creates a tibble internally
   # Here, we're setting 'created_at' and 'source' as direct attributes
   planktonr_dat(
     .data = x,
-    type = "Phytoplankton", # Provide a default type for this helper
-    survey = "NRS",        # Provide a default survey for this helper
+    Type = "Phytoplankton", # Provide a default Type for this helper
+    Survey = "NRS",        # Provide a default survey for this helper
     notes = "Example data set created by planktonr_data helper" # Example of an extra attribute
   )
 }

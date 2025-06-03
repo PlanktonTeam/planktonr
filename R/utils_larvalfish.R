@@ -28,6 +28,7 @@
 pr_get_LFData <- function(){
   df <- planktonr::pr_get_Raw("bgc_larval_fish_count_raw_data") %>%
     pr_rename() %>%
+    planktonr_dat(Survey = "NRS", Type = "Fish") %>%
     tidyr::pivot_longer(cols = -c("Project", "StationName", "Latitude", "Longitude", "TripCode",
                                   "SampleTime_UTC", "SampleTime_Local", "Year_Local", "Month_Local",
                                   "Day_Local", "Time_Local24hr", "SampleDepth_m", "Temperature_degC",
@@ -39,7 +40,6 @@ pr_get_LFData <- function(){
                   Species2 = paste0(.data$Species2, ")")) %>%
     dplyr::mutate(Abundance_1000m3 = (.data$Count/.data$Volume_m3)*1e3)
 
-  df <- planktonr_dat(df, type = "Fish")
 }
 
 
