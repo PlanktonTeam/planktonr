@@ -20,6 +20,8 @@ df with product output attached
 Match data for altimetry
 }
 \examples{
-df <- tail(pr_get_DataLocs("NRS"), 5)
+df <- pr_get_DataLocs("NRS") \%>\%
+  dplyr::filter(Date < lubridate::ymd("2019-12-31")) \%>\%
+  head(5)
 altout <- pr_match_Altimetry(df, pr = "GSLA", res_spat = 10)
 }

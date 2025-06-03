@@ -2,16 +2,19 @@
 % Please edit documentation in R/planktonr_dat.R
 \name{pr_get_survey}
 \alias{pr_get_survey}
-\title{Generic function and method for Survey}
+\alias{pr_get_survey.planktonr_dat}
+\title{Generic function to get the Survey attribute}
 \usage{
 pr_get_survey(x)
+
+\method{pr_get_survey}{planktonr_dat}(x)
 }
 \arguments{
-\item{x}{planktonr r data object}
+\item{x}{A \code{planktonr_dat} object.}
 }
 \value{
-attribute \code{Survey}
+The \code{Survey} attribute from the object.
 }
 \description{
-Generic function and method for Survey
+Generic function to get the Survey attribute
 }

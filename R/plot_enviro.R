@@ -87,23 +87,20 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
 #' @export
 #'
 #' @examples
-#' df <- pr_get_NRSEnvContour("Chemistry") %>% dplyr::filter(Parameters == "Nitrate_umolL",
-#' StationCode %in% c('YON', 'MAI', 'PHB', 'NSI'))
+#' df <- pr_get_NRSEnvContour("Chemistry") %>%
+#'   dplyr::filter(Parameters == "Nitrate_umolL",
+#'   StationCode %in% c('YON', 'MAI', 'PHB', 'NSI'))
 #' plot <- pr_plot_NRSEnvContour(df, Interpolation = TRUE, Fill_NA = FALSE, maxGap = 3)
+#'
 pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, maxGap = 3) {
-
-#
-#   if (isTRUE(Interpolation) & !requireNamespace("pracma", quietly = TRUE)) {
-#     stop(
-#       "Package \"pracma\" must be installed to use this function.",
-#       call. = FALSE
-#     )
-#   }
 
   if (isTRUE(Interpolation)){
     rlang::check_installed("pracma", reason = "to use `interp2()`")
     # code that includes calls such as aaapkg::aaa_fun()
   }
+
+  Type <- pr_get_type(df)
+  Survey <- pr_get_survey(df)
 
   stations <- unique(as.character(df$StationName))
   param <- planktonr::pr_relabel(unique(df$Parameters), style = 'ggplot')
@@ -128,7 +125,7 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, max
   } else {
     plotfunc <- function(stations) {
       df <- df %>% dplyr::filter(.data$StationName == stations) %>%
-        dplyr::select("MonthSince", "SampleDepth_m", "Values")
+        dplyr::select(tidyselect::all_of(c("MonthSince", "SampleDepth_m", "Values")))
 
       min <- min(df$MonthSince)
       Depths = unique(df$SampleDepth_m)
@@ -144,7 +141,7 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, max
 
       mat <- df %>%
         tidyr::pivot_wider(names_from = "MonthSince", values_from = "Values", values_fn = mean) %>%
-        dplyr::select(-"SampleDepth_m") %>%
+        dplyr::select(-tidyselect::all_of("SampleDepth_m")) %>%
         as.matrix.data.frame()
 
       if(Fill_NA == TRUE){
@@ -171,10 +168,9 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, max
 
     }
 
-    PlotData <- purrr::map_dfr(stations, plotfunc) # Interpolating across time and depth for the station
-
-    df <- PlotData %>%
-      dplyr::left_join(df %>% dplyr::select('MonthSince', 'SampleDepth_m', 'StationName', 'Label', 'Month_Local'),
+    df <- purrr::map_dfr(stations, plotfunc) %>% # Interpolating across time and depth for the station
+      planktonr_dat(Type = Type, Survey = Survey) %>%
+      dplyr::left_join(df %>% dplyr::select(tidyselect::all_of(c("MonthSince", "SampleDepth_m", "StationName", "Label", "Month_Local"))),
                        by = c("MonthSince", "SampleDepth_m", "StationName")) %>%
       dplyr::distinct() %>%
       pr_reorder()
@@ -212,12 +208,12 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, max
 
   if(Fill_NA == TRUE){
     selecs <- df %>%
-      dplyr::select("MonthSince", "Month_Local") %>%
+      dplyr::select(tidyselect::all_of(c("MonthSince", "Month_Local"))) %>%
       dplyr::distinct() %>%
       tidyr::drop_na()
 
     df <- df %>%
-      dplyr::select(-"Month_Local") %>%
+      dplyr::select(-tidyselect::all_of("Month_Local")) %>%
       dplyr::left_join(selecs, by = c("MonthSince"))
   }
 

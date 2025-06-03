@@ -86,6 +86,8 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
     msg = "No data in the dataframe. Check download or filtering."
   )
 
+  Type <- pr_get_type(df)
+
   Survey <- pr_get_survey(df)
 
   # Extract Model data
@@ -110,7 +112,7 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
   ## Should Model data be used.
   if (Trend != 'Raw'){
     labels <- df %>%
-      dplyr::select(site) %>%
+      dplyr::select(tidyselect::all_of(site)) %>%
       dplyr::distinct() %>%
       tibble::deframe()
 
@@ -120,11 +122,11 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
 
     labels <- coefficients %>%
       dplyr::filter(.data$term == "Year_Local") %>%
-      dplyr::select(c(site, "p.value", "signif")) %>%
+      dplyr::select(tidyselect::all_of(site), "p.value", "signif") %>%
       dplyr::mutate(p.value = dplyr::if_else(.data$p.value > 0.001, as.character(round(.data$p.value, 3)), format(.data$p.value, scientific = TRUE, digits = 3)),
                     facet_label = paste0(!!site, " (p = ", .data$p.value, .data$signif,")"),
                     facet_label = dplyr::if_else(stringr::str_detect(.data$facet_label, "Bonney"), "Bonney Coast", .data$facet_label)) %>%
-      dplyr::select(site, "facet_label") %>%
+      dplyr::select(tidyselect::all_of(site), "facet_label") %>%
       tibble::deframe()
 
   }
@@ -149,21 +151,19 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
       Year_Local = stats::median(df$Year_Local))
 
     df <- purrr::imap(Models, ~ predict(.x, newdata = newdata, se.fit = TRUE)) %>%
-      dplyr::bind_rows(.id = as.character(site)) %>% data.frame() %>%
+      dplyr::bind_rows(.id = as.character(site)) %>%
+      planktonr_dat(Type = Type, Survey = Survey) %>%
       dplyr::mutate(Month = rep(term_vals, length(Models)),
                     Month_Local = round(rep(term_vals, length(Models)) * 12 / (3.142 * 2),0),
                     upper = .data$fit + 1.96*.data$se.fit,
                     lower = .data$fit -1.96*.data$se.fit) %>%
-      dplyr::select(site, .data$Month_Local, .data$Month, .data$fit, .data$upper, .data$lower) %>%
-      dplyr::left_join(means, by = c('Month_Local', as.character(site)))
-
-    if(Survey %in% c("NRS", "CPR")){ # TODO we don't have the coastal stations in the reorder function
-      df <- df %>% pr_reorder()
-    }
+      dplyr::select(tidyselect::all_of(site), "Month_Local", "Month", "fit", "upper", "lower") %>%
+      dplyr::left_join(means, by = c('Month_Local', as.character(site))) %>%
+      pr_reorder()
 
   } else {
     Trend <- "SampleTime_Local"
-    }
+  }
 
   # Remove smooth from VBM
   if (Survey == "NRS"){
@@ -262,14 +262,14 @@ pr_plot_Climatology <- function(df, Trend = "Month", trans = "identity"){
 
   #TODO !! Doesn't work with the custom class so we convert to tibble and then back again. It would be interesting to find out why one day....
   df_climate <- df %>%
-    tibble::as_tibble() %>%
+    # tibble::as_tibble() %>%
     dplyr::summarise(mean = mean(.data$Values, na.rm = TRUE),
                      N = length(.data$Values),
                      sd = stats::sd(.data$Values, na.rm = TRUE),
                      se = sd / sqrt(.data$N),
                      .by = tidyselect::all_of(c(rlang::as_string(Trend), "StationName"))) %>%
-    tidyr::complete(!!Trend, .data$StationName) %>%
-    pr_planktonr_class(type = Type, survey = Survey, variable = Variable)
+    tidyr::complete(!!Trend, .data$StationName) # %>%
+    # planktonr_dat(Type = Type, Survey = Survey, Variable = Variable)
 
 
   if("Year_Local" %in% colnames(df_climate)){
@@ -477,8 +477,6 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
   df <- df %>%
     dplyr::filter(.data$Parameters == EOV)
 
-  # if (unique(df[[site]]) != "Bonney Coast"){
-
   if (dim(df)[1] > 1){ # If only a few
 
     # Get the survey name
@@ -517,23 +515,23 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
                                              as.character(round(.data$p.value, digits = 3)),
                                              format(.data$p.value, scientific = TRUE, digits = 3)))
 
-    # plot monthyl climatology from model
-    #set up newdata fro predictions
+    # plot monthly climatology from model
+    # set up new data from predictions
     term_vals <- seq(0, 6.284, length.out = 24)
 
     newdata <- data.frame(
       Month = term_vals,
       Year_Local = stats::median(df$Year_Local))
 
-    # extract monthly climatogology data from model
+    # extract monthly climatology data from model
     dfm <- purrr::imap(Models, ~ predict(.x, newdata = newdata, se.fit = TRUE)) %>%
-      dplyr::bind_rows(.id = as.character(site)) %>% data.frame() %>%
+      dplyr::bind_rows(.id = as.character(site)) %>%
+      # data.frame() %>%
       dplyr::mutate(Month_Local = rep(term_vals, length(Models)),
                     upper = .data$fit + 1.96*.data$se.fit,
                     lower = .data$fit -1.96*.data$se.fit,
                     do_smooth = !!site != "Bonney Coast") %>%
-      dplyr::select(site, .data$Month_Local, .data$do_smooth, Values = .data$fit, .data$upper, .data$lower) %>%
-      planktonr::pr_reorder()
+      dplyr::select(tidyselect::all_of(site), "Month_Local", "do_smooth", Values = .data$fit, "upper", "lower")
 
 
     # The title comes back as class "call" so I need to undo and redo it to add the string
@@ -542,9 +540,10 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
       c(paste0(" [p = ",coefficients$p.value ,coefficients$signif, "]")) %>%
       as.call()
 
-    lims <- c(lubridate::floor_date(min(df$SampleTime_Local), "year"), lubridate::ceiling_date(max(df$SampleTime_Local), "year"))
+    lims <- c(lubridate::floor_date(min(df$SampleTime_Local), "year"),
+              lubridate::ceiling_date(max(df$SampleTime_Local), "year"))
     df <- df %>%
-        dplyr::filter(.data$Parameters == EOV)
+      dplyr::filter(.data$Parameters == EOV)
 
     # Remove smooth from VBM
     if (Survey == "NRS"){
@@ -856,4 +855,3 @@ pr_plot_latitude <- function(df, Fill_NA = FALSE, maxGap = 3){
   return(plots)
 
 }
-

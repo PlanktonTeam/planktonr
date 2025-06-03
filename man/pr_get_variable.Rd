@@ -2,16 +2,19 @@
 % Please edit documentation in R/planktonr_dat.R
 \name{pr_get_variable}
 \alias{pr_get_variable}
-\title{Generic function and method for Variable}
+\alias{pr_get_variable.planktonr_dat}
+\title{Generic function to get the Variable attribute}
 \usage{
 pr_get_variable(x)
+
+\method{pr_get_variable}{planktonr_dat}(x)
 }
 \arguments{
-\item{x}{planktonr r data object}
+\item{x}{A \code{planktonr_dat} object.}
 }
 \value{
-attribute \code{Variable}
+The \code{Variable} attribute from the object.
 }
 \description{
-Generic function and method for Variable
+Generic function to get the Variable attribute
 }

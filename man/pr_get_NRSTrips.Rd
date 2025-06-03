@@ -4,10 +4,7 @@
 \alias{pr_get_NRSTrips}
 \title{Import NRS BGC information}
 \usage{
-pr_get_NRSTrips(Type = c("Phytoplankton", "Zooplankton", "Fish"))
-}
-\arguments{
-\item{Type}{A character string on which to filter data (P = Phytoplankton, Z = Zooplankton, F = Fish)}
+pr_get_NRSTrips()
 }
 \value{
 A dataframe with NRS BGC information
@@ -16,5 +13,5 @@ A dataframe with NRS BGC information
 Load NRS station BGC information
 }
 \examples{
-df <- pr_get_NRSTrips(Type = "Zooplankton")
+df <- pr_get_NRSTrips()
 }

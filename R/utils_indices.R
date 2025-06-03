@@ -43,6 +43,7 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
   if(Survey == "CPR"){
 
     dat <- pr_get_Raw("cpr_derived_indices_data") %>%
+      planktonr_dat(Survey = Survey, Type = Type) %>%
       pr_rename() %>%
       pr_add_Bioregions(...) %>%
       pr_apply_Time() %>% #TODO added for consistency but uses etc timezones - do we changes these to the more familiar names or leave? doesn't improve with method = accurate
@@ -57,6 +58,7 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
   } else if (Survey == "NRS"){
 
     dat <- pr_get_Raw("nrs_derived_indices_data") %>%
+      planktonr_dat(Survey = Survey, Type = Type) %>%
       pr_rename() %>%
       dplyr::filter(.data$StationName != "Port Hacking 4") %>%
       pr_add_StationCode() %>%
@@ -66,13 +68,7 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
       tidyr::pivot_longer(tidyselect::all_of(var_names), values_to = "Values", names_to = "Parameters") %>%
       pr_reorder()
 
-    # dat <- dat %>%
-    #   dplyr::filter(.data$StationCode != "VBM") # TODO Temporarily remove VBM - Not enough data to run analyses
-
   }
-
-  # Convert to planktonr class
-  dat <- pr_planktonr_class(dat, type = Type, survey = Survey, variable = NULL, subset = NULL)
 
 }
 

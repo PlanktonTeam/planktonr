@@ -37,7 +37,8 @@ pr_get_FreqMap <- function(Type = "Zooplankton"){
                                             .data$Month_Local > 8 & .data$Month_Local < 12 ~ "September - November",
                                             TRUE ~ "December - February"))
 
-  totals <- dat %>% dplyr::select(-c('Species', 'Counts')) %>% # All samples including where nothing is counted
+  totals <- dat %>%
+    dplyr::select(-c('Species', 'Counts')) %>% # All samples including where nothing is counted
     dplyr::distinct() %>%
     dplyr::summarise(samples = dplyr::n(),
                      .by = tidyselect::all_of(c("Season", "Survey", "Latitude", "Longitude")))
@@ -54,7 +55,8 @@ pr_get_FreqMap <- function(Type = "Zooplankton"){
                                                        TRUE ~ "75%")))
 
   # Adding empty samples back in for absences
-  mapData <-  totals %>% dplyr::left_join(obs, by = c('Season', 'Survey', 'Latitude', 'Longitude', 'samples')) %>%
+  mapData <-  totals %>%
+    dplyr::left_join(obs, by = c('Season', 'Survey', 'Latitude', 'Longitude', 'samples')) %>%
     dplyr::mutate(freqfac = factor(.data$freqfac, levels = c("Seen in 25%",'50%', '75%', '100% of Samples'))) %>%
     dplyr::arrange(.data$Species)
 
@@ -78,7 +80,7 @@ pr_get_ProgressMapData <- function(Survey = c("NRS", "CPR"), interactive = FALSE
 
   if (interactive == FALSE){
     if("NRS" %in% Survey) {
-      PMapDataNRS <- planktonr::pr_get_NRSTrips(Type = c("Phytoplankton", "Zooplankton")) %>%
+      PMapDataNRS <- planktonr::pr_get_NRSTrips() %>%
         dplyr::select("StationCode", "Longitude", "Latitude") %>%
         dplyr::rename(Region = "StationCode") %>%
         dplyr::mutate(Survey = "NRS") %>%

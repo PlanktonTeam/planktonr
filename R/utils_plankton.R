@@ -7,10 +7,10 @@
 #' @export
 #'
 #' @examples
-#' NRSfgz <- pr_get_FuncGroups("NRS", "Zooplankton")
-#' NRSfgp <- pr_get_FuncGroups("NRS", "Phytoplankton")
-#' CPRfgz <- pr_get_FuncGroups("CPR", "Zooplankton", near_dist_km = 250)
-#' CPRfgp <- pr_get_FuncGroups("CPR", "Phytoplankton")
+#' NRSfgz <- pr_get_FuncGroups(Survey = "NRS", Type = "Zooplankton")
+#' NRSfgp <- pr_get_FuncGroups(Survey = "NRS", Type = "Phytoplankton")
+#' CPRfgz <- pr_get_FuncGroups(Survey = "CPR", Type = "Zooplankton", near_dist_km = 250)
+#' CPRfgp <- pr_get_FuncGroups(Survey = "CPR", Type = "Phytoplankton")
 pr_get_FuncGroups <- function(Survey = "NRS", Type = "Zooplankton", ...){
 
   if(Survey == "CPR"){
@@ -44,6 +44,7 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Zooplankton", ...){
                     "Month_Local", "Year_Local", tidyselect::any_of(var_names))
   }
 
+
   df <- df %>%
     tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters")  %>%
     dplyr::mutate(Values = .data$Values + min(.data$Values[.data$Values>0], na.rm = TRUE)) %>%
@@ -66,9 +67,9 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Zooplankton", ...){
     dplyr::group_by(dplyr::across(-"Values")) %>%
     dplyr::summarise(Values = sum(.data$Values, na.rm = TRUE),
                      .groups = "drop") %>%
-    dplyr::mutate(Values = ifelse(.data$Values < 1, 1, .data$Values))
+    dplyr::mutate(Values = dplyr::if_else(.data$Values < 1, 1, .data$Values))
 
-  df <- pr_planktonr_class(df, type = Type, survey = Survey, variable = NULL)
+  # df <- planktonr_dat(df, type = Type, survey = Survey, variable = NULL)
 
   return(df)
 }
@@ -144,7 +145,7 @@ pr_get_TaxaAccum <- function(Survey = "NRS", Type = "Zooplankton"){
     dat <- pr_get_CPRData(Type = Type, Variable = "abundance", Subset = "raw")
   }
 
-  dat <- dat %>%
+  dat %>%
     tidyr::pivot_longer(-pr_get_NonTaxaColumns(Survey = Survey, Type = Type), names_to = "Taxa", values_to = "Abundance") %>%
     dplyr::filter(.data$Abundance > 0) %>%
     dplyr::arrange(.data$SampleTime_Local) %>%
@@ -152,8 +153,6 @@ pr_get_TaxaAccum <- function(Survey = "NRS", Type = "Zooplankton"){
     dplyr::arrange(.data$First) %>%
     dplyr::mutate(RowN = dplyr::row_number())
 
-  # Convert to planktonr class
-  # dat <- pr_planktonr_class(dat, type = Type, survey = Survey, variable = Variable, subset = Subset)
 }
 
 
@@ -171,8 +170,6 @@ pr_get_TaxaAccum <- function(Survey = "NRS", Type = "Zooplankton"){
 #' df <- pr_get_STIdata("Phytoplankton")
 #' df <- pr_get_STIdata("Zooplankton")
 pr_get_STIdata <-  function(Type = "Phytoplankton"){
-
-  Type <- pr_check_type(Type)
 
   if(Type == "Zooplankton"){
     cprdat <- pr_get_CPRData(Type, Variable = "abundance", Subset = "copepods")
@@ -291,8 +288,6 @@ pr_get_STI <-  function(Type = "Zooplankton"){
 #'
 pr_get_CTI <-  function(Type = "Zooplankton"){
 
-  Type <- pr_check_type(Type)
-
   df <- pr_get_STI(Type)
 
   if(Type == "Zooplankton"){
@@ -358,37 +353,6 @@ pr_get_DayNight <- function(Type = "Zooplankton"){
                      .by = tidyselect::all_of(c("Month_Local", "daynight", "Species")))
 
 }
-
-
-# Add day/night marker to dataframe
-# @param Type Phyto or zoo, defaults to phyto
-#
-# @return df to be used with pr_plot_DayNight
-# @export
-#
-# @examples
-# df <- pr_get_Indices(Survey = "NRS", Type = "Zooplankton")
-# df <- pr_add_daynight(df)
-# pr_add_daynight <- function(df){
-#
-#   dates <- df %>%
-#     dplyr::select("SampleTime_Local", "Latitude", "Longitude") %>%
-#     dplyr::rename(date = .data$SampleTime_Local,
-#                   lat = .data$Latitude,
-#                   lon = .data$Longitude) %>%
-#     dplyr::mutate(date = lubridate::as_date(.data$date))
-#
-#   daynight_df <- suncalc::getSunlightTimes(data = dates, #TODO quicker to change to Local now that it exists.
-#                                            keep = c("sunrise", "sunset"),
-#                                            tz = lutz::tz_lookup_coords(dates$lat, dates$lon, method = "fast", warn = FALSE)) %>% # TODO remove this when we can get tz into all dataframes
-#     dplyr::bind_cols(df["SampleTime_Local"]) %>%
-#     dplyr::mutate(daynight = dplyr::if_else(.data$SampleTime_Local > .data$sunrise &
-#                                       .data$SampleTime_Local < .data$sunset, "Day", "Night"))
-#
-#   df <- df %>%
-#     dplyr::bind_cols(daynight_df["daynight"])
-#
-# }
 
 
 

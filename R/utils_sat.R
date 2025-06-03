@@ -35,25 +35,27 @@ pr_get_SatData <- function(Survey = 'NRS'){
 #' @examples
 #' df <- pr_get_DataLocs("NRS")
 
-pr_get_DataLocs <- function(Survey = 'all'){
+pr_get_DataLocs <- function(Survey = "all"){
 
-  if(Survey == 'NRS'){
-    df <- pr_get_NRSTrips(c("Phytoplankton", "Zooplankton")) %>%
-      dplyr::select("Longitude", "Latitude", "SampleTime_UTC") %>%
+  vars <- c("Longitude", "Latitude", "SampleTime_UTC")
+
+  if(Survey == "NRS"){
+    df <- pr_get_NRSTrips() %>%
+      dplyr::select(tidyselect::all_of(vars)) %>%
       dplyr::distinct(.data$Longitude, .data$Latitude, Date = as.Date(.data$SampleTime_UTC, 'UTC'))
   } else
-    if(Survey == 'CPR'){
+    if(Survey == "CPR"){
       df <- pr_get_CPRTrips() %>%
         dplyr::filter(grepl("P|Z", .data$SampleType)) %>%
-        dplyr::select("Longitude", "Latitude", "SampleTime_UTC") %>%
+        dplyr::select(tidyselect::all_of(vars)) %>%
         dplyr::distinct(.data$Longitude, .data$Latitude, Date = as.Date(.data$SampleTime_UTC, 'UTC'))
     } else {
       df <- dplyr::bind_rows(
-        pr_get_NRSTrips(c("Phytoplankton", "Zooplankton")) %>%
-          dplyr::select("Longitude", "Latitude", "SampleTime_UTC"),
+        pr_get_NRSTrips() %>%
+          dplyr::select(tidyselect::all_of(vars)),
         pr_get_CPRTrips() %>%
           dplyr::filter(grepl("P|Z", .data$SampleType)) %>%
-          dplyr::select("Longitude", "Latitude", "SampleTime_UTC")) %>%
+          dplyr::select(tidyselect::all_of(vars))) %>%
         dplyr::distinct(.data$Longitude, .data$Latitude, Date = as.Date(.data$SampleTime_UTC, 'UTC'))
     }
 
@@ -126,8 +128,8 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d", parallel = FA
     p()
 
     # Make sure month and day have a leading zero if less than 10
-    mth <- stringr::str_pad(df$Month,2,"left",pad="0")
-    dy <- stringr::str_pad(df$Day,2,"left",pad="0")
+    mth <- stringr::str_pad(df$Month, 2, "left", pad = "0")
+    dy <- stringr::str_pad(df$Day, 2, "left", pad = "0")
 
     if(res_temp == '6d'){
       string = "212000"
@@ -251,7 +253,9 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d", parallel = FA
 #' @export
 #'
 #' @examples
-#' df <- tail(pr_get_DataLocs("NRS"), 5)
+#' df <- pr_get_DataLocs("NRS") %>%
+#'   dplyr::filter(Date < lubridate::ymd("2019-12-31")) %>%
+#'   head(5)
 #' altout <- pr_match_Altimetry(df, pr = "GSLA", res_spat = 10)
 pr_match_Altimetry <- function(df, pr, res_spat = 1) {
 
@@ -275,24 +279,26 @@ pr_match_Altimetry <- function(df, pr, res_spat = 1) {
     print("Only data before 2020 is available via this product and will be returned from this function")
   }
 
+
   df <- df %>%
-    dplyr::select("Latitude", "Longitude", "Year", "Month", "Day") %>%
+    dplyr::select(tidyselect::all_of(c("Latitude", "Longitude", "Year", "Month", "Day"))) %>% # Select relevant columns
     dplyr::group_split(.data$Latitude, .data$Longitude, .data$Year, .data$Month, .data$Day)
 
 
   pr_get_SatData <- function(df){
+
     # Make sure month and day have a leading zero if less than 10
-    mth <- stringr::str_pad(df$Month,2,"left",pad="0")
-    dy <- stringr::str_pad(df$Day,2,"left",pad="0")
+    mth <- stringr::str_pad(df$Month, 2, "left", pad = "0")
+    dy <- stringr::str_pad(df$Day, 2 , "left", pad = "0")
 
     tryCatch({
-      thredd_url <- paste0("http://thredds.aodn.org.au/thredds/catalog/IMOS/OceanCurrent/GSLA/DM01/",df$Year,"/catalog.xml")
+      thredd_url <- paste0("http://thredds.aodn.org.au/thredds/catalog/IMOS/OceanCurrent/GSLA/DM/",df$Year,"/catalog.xml")
       f <- thredds::CatalogNode$new(thredd_url)
       files <- data.frame(files = f$get_dataset_names())
       pattern <- paste0(df$Year,mth,dy,"T000000Z")
       fileName <- files %>% dplyr::filter(grepl(pattern, files))
       filename <- fileName$files
-      url_base <- paste0("http://thredds.aodn.org.au/thredds/dodsC/IMOS/OceanCurrent/GSLA/DM01/") # Base URL
+      url_base <- paste0("http://thredds.aodn.org.au/thredds/dodsC/IMOS/OceanCurrent/GSLA/DM/") # Base URL
       imos_url <- paste0(url_base,df$Year,"/",filename)
     },
     error = function(cond) {
@@ -302,6 +308,7 @@ pr_match_Altimetry <- function(df, pr, res_spat = 1) {
     )
 
     if(exists("fileName") && nrow(fileName) > 0) {# Not all dates will exist
+
       nc <- RNetCDF::open.nc(imos_url)
       lat <- RNetCDF::var.get.nc(nc, variable = "LATITUDE")
       lon <- RNetCDF::var.get.nc(nc, variable = "LONGITUDE")
@@ -313,8 +320,10 @@ pr_match_Altimetry <- function(df, pr, res_spat = 1) {
       maxlon <- max(lon)
 
       # Approximate nearest neighbour
-      idx_lon <- (yaImpute::ann(as.matrix(seq(minlon, maxlon, length.out = lengthlon$length)), as.matrix(df$Longitude), k = 1, verbose = FALSE)$knnIndexDist[,1])[1]
-      idx_lat <- (yaImpute::ann(as.matrix(seq(maxlat, minlat, length.out = lengthlat$length)), as.matrix(df$Latitude), k = 1, verbose = FALSE)$knnIndexDist[,1])[1]
+      idx_lon <- (yaImpute::ann(as.matrix(seq(minlon, maxlon, length.out = lengthlon$length)),
+                                as.matrix(df$Longitude), k = 1, verbose = FALSE)$knnIndexDist[,1])[1]
+      idx_lat <- (yaImpute::ann(as.matrix(seq(maxlat, minlat, length.out = lengthlat$length)),
+                                as.matrix(df$Latitude), k = 1, verbose = FALSE)$knnIndexDist[,1])[1]
       cnt <- c(1,1,1)
 
       if (res_spat > 1) { # If more than 1x1 pixel is requested we adjust the idx by res_spat/2 and count by res_spa
@@ -342,6 +351,7 @@ pr_match_Altimetry <- function(df, pr, res_spat = 1) {
 
   altout <- purrr::map(df, pr_get_SatData) %>%
     data.table::rbindlist()
+
   df <- dplyr::bind_rows(df) %>%
     dplyr::bind_cols(altout)
 }

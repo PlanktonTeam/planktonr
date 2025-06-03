@@ -22,7 +22,9 @@ a contour plot
 Contour plots for depth stratified environmental data
 }
 \examples{
-df <- pr_get_NRSEnvContour("Chemistry") \%>\% dplyr::filter(Parameters == "Nitrate_umolL",
-StationCode \%in\% c('YON', 'MAI', 'PHB', 'NSI'))
+df <- pr_get_NRSEnvContour("Chemistry") \%>\%
+  dplyr::filter(Parameters == "Nitrate_umolL",
+  StationCode \%in\% c('YON', 'MAI', 'PHB', 'NSI'))
 plot <- pr_plot_NRSEnvContour(df, Interpolation = TRUE, Fill_NA = FALSE, maxGap = 3)
+
 }
