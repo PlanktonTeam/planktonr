@@ -89,155 +89,86 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
 #' @examples
 #' df <- pr_get_NRSEnvContour("Chemistry") %>% dplyr::filter(Parameters == "Nitrate_umolL",
 #' StationCode %in% c('YON', 'MAI', 'PHB', 'NSI'))
-#' plot <- pr_plot_NRSEnvContour(df, Interpolation = TRUE, Fill_NA = FALSE, maxGap = 3)
-pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE, Fill_NA = FALSE, maxGap = 3) {
+#' plot <- pr_plot_NRSEnvContour(df, Interpolation = FALSE)
+pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE) {
 
-#
-#   if (isTRUE(Interpolation) & !requireNamespace("pracma", quietly = TRUE)) {
-#     stop(
-#       "Package \"pracma\" must be installed to use this function.",
-#       call. = FALSE
-#     )
-#   }
-
-  if (isTRUE(Interpolation)){
-    rlang::check_installed("pracma", reason = "to use `interp2()`")
-    # code that includes calls such as aaapkg::aaa_fun()
-  }
-
-  stations <- unique(as.character(df$StationName))
-  param <- planktonr::pr_relabel(unique(df$Parameters), style = 'ggplot')
-
-  minDate <- lubridate::floor_date(min(df$SampleTime_Local, na.rm = TRUE), unit = 'month')
+  # if (isTRUE(Interpolation)){
+  #   rlang::check_installed("metR", reason = "to use `geom_contour_fill()`")
+  #   # code that includes calls such as aaapkg::aaa_fun()
+  # }
 
   df <- df %>%
-    dplyr::mutate(Values = ifelse(.data$Values < 0, 0, .data$Values),
-                  SampleDepth_m = dplyr::case_when(.data$StationName %in% c('Darwin') ~ round(.data$SampleDepth_m/10, 0)*10,
-                                                   TRUE ~ round(.data$SampleDepth_m/5, 0)*5)) %>%
-    dplyr::mutate(MonthSince = lubridate::interval(minDate, .data$SampleTime_Local) %/% months(1)) %>%
-    dplyr::mutate(Year = lubridate::year(.data$SampleTime_Local),
-                  Label = ifelse(.data$Month_Local == 6, .data$Year, NA))
+    mutate(SampleDepth_m = round(.data$SampleDepth_m/10, 0)*10,  ## leave in for SOTS
+           MonthSince = lubridate::interval(min(.data$SampleTime_Local), .data$SampleTime_Local) %/% months(1)) %>%
+    filter(SampleDepth_m < 600) ## leave in for SOTS
 
-  if (Interpolation == FALSE) {
+  # data for timeseries
+  dfts <- df %>%
+    group_by(SampleDepth_m, MonthSince, Parameters, StationName) %>%
+    summarise(Values = mean(Values, na.rm = TRUE),
+              .groups = 'drop')
 
-    myBreaks <- (df %>% dplyr::filter(!is.na(.data$Label)) %>% dplyr::distinct(.data$MonthSince) %>%
-                   dplyr::arrange(dplyr::desc(-.data$MonthSince), .by_group = FALSE))$MonthSince
-    Label <- (df %>% dplyr::summarise(n = dplyr::n(), .by = tidyselect::all_of("Label")) %>% tidyr::drop_na() %>%
-                dplyr::distinct(.data$Label))$Label
+  #data for climatology
+  dfMon <- df %>%
+    dplyr::group_by(Month_Local, StationName, SampleDepth_m) %>%
+    dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
+                     .groups = 'drop')
 
-  } else {
-    plotfunc <- function(stations) {
-      df <- df %>% dplyr::filter(.data$StationName == stations) %>%
-        dplyr::select("MonthSince", "SampleDepth_m", "Values")
+  # breaks and legend titles for timeseries and climatology
 
-      min <- min(df$MonthSince)
-      Depths = unique(df$SampleDepth_m)
-      Months <- seq(min(df$MonthSince), max(df$MonthSince), 1)
+  titleg <- pr_relabel(unique(df$Parameters), style = "ggplot")
+  limitMin <- min(dfts$Values, na.rm = TRUE)
+  limitMax <- max(dfts$Values, na.rm = TRUE)
 
-      emptyGrid <- expand.grid(SampleDepth_m = Depths,
-                               MonthSince = Months)
-
-      df <- emptyGrid %>%
-        dplyr::left_join(df, by = c("MonthSince", "SampleDepth_m")) %>%
-        data.frame() %>%
-        dplyr::arrange(.data$MonthSince, .data$SampleDepth_m)
-
-      mat <- df %>%
-        tidyr::pivot_wider(names_from = "MonthSince", values_from = "Values", values_fn = mean) %>%
-        dplyr::select(-"SampleDepth_m") %>%
-        as.matrix.data.frame()
-
-      if(Fill_NA == TRUE){
-        mat <- t(zoo::na.approx(t(mat), maxgap = maxGap))
-        mat <- zoo::na.approx(mat, maxgap = maxGap)
-      }
-
-      Months2 <- seq(0, length(Months)-1, 1)
-
-      interped <- expand.grid(SampleDepth_m = Depths,
-                              MonthSince = Months2)
-
-      interp_vals <- pracma::interp2(y = seq(0, max(df$SampleDepth_m, na.rm = TRUE), length.out = nrow(mat)),
-                                     x = seq(0, max(df$MonthSince), length.out = ncol(mat)),
-                                     Z = mat,
-                                     yp = interped$SampleDepth_m,
-                                     xp = interped$MonthSince,
-                                     method = "linear")
-
-      dfInterp <- dplyr::bind_cols(interped, Values = interp_vals) %>% data.frame() %>%
-        dplyr::mutate(StationName = stations,
-                      Values = ifelse(.data$Values < 0, 0, .data$Values),
-                      MonthSince = .data$MonthSince + min)
-
+  ## Using metR
+  plotting <- function(plt){
+    if(plt == 'ts'){
+      minDate <- min(df$SampleTime_Local)
+      maxMonths <- max(lubridate::interval(min(df$SampleTime_Local), df$SampleTime_Local) %/% months(1))
+      myBreaks <- seq(9, maxMonths, 24)
+      myLabels <- year(minDate %m+% months(myBreaks))
+      df <- dfts
+      xvals <- "MonthSince"
+    } else {
+      myBreaks <- seq(1, 12, length.out = 12)
+      myLabels <- c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")
+      df <- dfMon
+      xvals <- "Month_Local"
     }
 
-    PlotData <- purrr::map_dfr(stations, plotfunc) # Interpolating across time and depth for the station
+    if(Interpolation == TRUE){
+      p1 <- ggplot2::ggplot() +
+        metR::geom_contour_fill(data = df, ggplot2::aes(x = !!rlang::sym(xvals), y = .data$SampleDepth_m, z = .data$Values), na.fill = TRUE) +
+        ggplot2::scale_fill_continuous(type = "viridis", name = titleg, limits = c(limitMin, limitMax))+
+        ggplot2::guides(fill = guide_colourbar(barwidth = 4, barheight = 1))
+    } else{
+      p1 <- ggplot2::ggplot(data = df, ggplot2::aes(x = !!rlang::sym(xvals), y = .data$SampleDepth_m, z = .data$Values)) +
+        ggplot2::geom_contour_filled(bins = 8) +
+        ggplot2::guides(fill = ggplot2::guide_legend(title = titleg))
+    }
 
-    df <- PlotData %>%
-      dplyr::left_join(df %>% dplyr::select('MonthSince', 'SampleDepth_m', 'StationName', 'Label', 'Month_Local'),
-                       by = c("MonthSince", "SampleDepth_m", "StationName")) %>%
-      dplyr::distinct() %>%
-      pr_reorder()
+    p1 <- p1 +
+    ggplot2::geom_point(data = df, ggplot2::aes(x = !!rlang::sym(xvals), y = .data$SampleDepth_m), size = 1) +
+    ggplot2::facet_wrap(~.data$StationName, scales = "free_y", ncol = 1) +
+    ggplot2::scale_x_continuous(breaks = myBreaks, labels = myLabels, expand = c(0, 0)) +
+    ggplot2::scale_y_continuous(expand = c(0, 0)) +
+      planktonr::theme_pr() +
+      ggplot2::theme(strip.text = ggplot2::element_text(hjust = 0),
+                     legend.position = 'bottom')
 
-    Label <- (df %>% dplyr::summarise(n = dplyr::n(), .by = tidyselect::all_of("Label")) %>% tidyr::drop_na() %>%
-                dplyr::distinct(.data$Label))$Label
+    return(p1)
 
-    myBreaks <- (df %>% dplyr::filter(!is.na(.data$Label)) %>% dplyr::distinct(.data$MonthSince) %>%
-                   dplyr::arrange(dplyr::desc(-.data$MonthSince), .by_group = FALSE))$MonthSince
   }
 
-  # Function for plots
-  outPlot <- function(df, x, just = "left"){
-    out <- ggplot2::ggplot(data = df, ggplot2::aes(x, y = .data$SampleDepth_m, z = .data$Values)) +
-      ggplot2::geom_contour_filled(bins = 8) +
-      ggplot2::facet_wrap(.data$StationName ~ ., scales = "free_y", ncol = 1, strip.position = "top") +
-      theme_pr() +
-      ggplot2::theme(legend.justification = just) +
-      ggplot2::guides(fill = ggplot2::guide_legend(title = param, title.position = 'top')) +
-      ggplot2::scale_y_reverse(expand = c(0, 0))
-    return(out)
-  }
+  pts <- plotting(plt = 'ts') +
+    ggplot2::labs(x = "Year", y = "Depth (m)")
 
-  # Plotting year time series
-  out <- outPlot(df, df$MonthSince, "left") +
-    ggplot2::labs(x = "Year", y = 'Depth (m)') +
-    ggplot2::scale_x_continuous(breaks = myBreaks, labels = Label, expand = c(0, 0))
-
-  if(Interpolation == FALSE){
-    out <- out +
-      ggplot2::geom_point(colour = 'dark grey', cex = 0.75)
-  }
-
-  # Prepare monthly climatology data
-
-  if(Fill_NA == TRUE){
-    selecs <- df %>%
-      dplyr::select("MonthSince", "Month_Local") %>%
-      dplyr::distinct() %>%
-      tidyr::drop_na()
-
-    df <- df %>%
-      dplyr::select(-"Month_Local") %>%
-      dplyr::left_join(selecs, by = c("MonthSince"))
-  }
-
-  dfMon <- df %>%
-    dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
-                     .by = tidyselect::all_of(c("Month_Local", "StationName", "SampleDepth_m")))
-
-
-  # Plotting monthly climatology
-  outMon <- outPlot(dfMon, dfMon$Month_Local, "right") +
+  pmc <-  plotting(plt = 'mc') +
     ggplot2::labs(x = "Month") +
-    ggplot2::theme(axis.title.y = ggplot2::element_blank(),
-                   #strip.text = ggplot2::element_blank(),
-    ) +
-    ggplot2::scale_x_continuous(breaks = seq(1, 12, length.out = 12),
-                                labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"),
-                                expand = c(0, 0))
+    ggplot2::theme(axis.title.y = ggplot2::element_blank())
 
-  plots <- patchwork::wrap_plots(out, outMon, ncol = 2) +
-    patchwork::plot_layout(widths = c(3,1), heights = length(stations) * 200)
+  plots <- patchwork::wrap_plots(pts, pmc, ncol = 2) +
+    patchwork::plot_layout(widths = c(3,1))
 
   return(plots)
 
