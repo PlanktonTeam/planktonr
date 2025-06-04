@@ -136,7 +136,7 @@ pr_get_NRSTrips <- function(){
 pr_filter_NRSStations <- function(df){
 
   df <- df %>%
-    dplyr::filter(.data$StationCode %in% c("DAR", "ESP", "KAI", "MAI", "NIN", "NSI", "PHB", "ROT", "YON"))
+    dplyr::filter(.data$StationCode %in% c("DAR", "ESP", "KAI", "MAI", "NIN", "NSI", "PHB", "ROT", "VBM", "YON"))
 }
 
 
