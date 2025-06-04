@@ -1,277 +1,160 @@
+# R/planktonr_dat.R
+
+# Internal constructor (low-level, no validation)
+new_planktonr_dat <- function(x, ...) {
+  # All arguments in '...' become attributes
+  # `x` is the underlying tibble (ensured by planktonr_dat constructor)
+  tibble::new_tibble(x, ..., class = "planktonr_dat")
+}
 
 #' Define the constructor function for the planktonr data class
 #'
-#' @param data The data tibble to be updated to the planktonr class
-#' @param type The data type - Microbes, Phytoplankton or Zooplankton
-#' @param survey The survey of the data - NRS, CPR, LTM
-#' @param variable What variable is being subsetted
-#' @param subset NOT USED AT THE MOMENT
+#' This function creates a `planktonr_dat` object, which is a tibble
+#' with additional custom attributes for metadata. It can accept
+#' either a `data.frame` or a `tibble`, coercing `data.frame` inputs to `tibble`.
 #'
-#' @returns An object of class planktonr_dat
+#' @param .data The data `data.frame` or `tibble` to be converted to the `planktonr_dat` class.
+#' @param Type The data type. Must be one of "Microbes", "Phytoplankton",
+#'   "Zooplankton", "Water", or "EOV".
+#' @param Survey The survey of the data. E.g., "NRS", "CPR", "LTM", "GO-SHIP", "Coastal".
+#' @param Variable What variable is being described or subsetted by this data.
+#' @param Model Optional model associated with the data.
+#' @param ... Additional attributes to be stored with the `planktonr_dat` object.
+#'   These will be stored as attributes on the object.
+#'
+#' @returns An object of class `planktonr_dat`.
 #' @export
 #'
 #' @examples
-pr_planktonr_class <- function(data, type = NULL, survey = NULL, variable = NULL, subset = NULL) {
+#' # Create from a tibble (existing behavior)
+#' tibble_data <- tibble::tibble(
+#'   time = as.Date(c("2023-01-01", "2023-01-02")),
+#'   value = c(10, 20)
+#' )
+#' pr_obj_tibble <- planktonr_dat(
+#'   .data = tibble_data,
+#'   Type = "Phytoplankton",
+#'   Survey = "NRS",
+#'   Variable = "Chlorophyll_a"
+#' )
+#' print(pr_obj_tibble)
+#'
+#' # Create from a base R data.frame (newly supported)
+#' df_data <- data.frame(
+#'   time = as.Date(c("2023-01-03", "2023-01-04")),
+#'   value = c(30, 40)
+#' )
+#' pr_obj_df <- planktonr_dat(
+#'   .data = df_data,
+#'   Type = "Zooplankton",
+#'   Survey = "CPR",
+#'   Variable = "Biomass"
+#' )
+#' print(pr_obj_df)
+#' class(pr_obj_df) # Still a planktonr_dat (which inherits from tibble)
+planktonr_dat <- function(.data,
+                          Type = NULL,
+                          Survey = NULL,
+                          Variable = NULL,
+                          Model = NULL,
+                          ...) {
 
-  # TODO Add assert to function
+  # Input Checks
+  # 1. Ensure it's at least a data frame
+  assertthat::assert_that(is.data.frame(.data), msg = "'.data' must be a data frame or tibble.")
 
-  # TODO Can we add Chemistry, Micro, Pico, TSS, CTD etc this - All the NRS BGC ones? (and in pr_get_NRSEnvContour)
-  # if (!(type %in% c("Microbes", "Phytoplankton", "Zooplankton", "Water", "EOV"))) {
-  #   stop("Invalid Type. Must be 'Microbes', 'Phytoplankton' or 'Zooplankton'.")
-  # }
+  # 2. Coerce to tibble if it's not already one
+  if (!inherits(.data, "tbl_df")) {
+    .data <- tibble::as_tibble(.data)
+    # message("'.data' coerced from data.frame to tibble.") # Optional: inform the user
+  }
 
-  # Survey - NRS, CPR, Coastal, LTM, "GO-SHIP"
+  # 3. Remove 'spec_tbl_df' class and 'spec' attribute if present
+  # This ensures the underlying tibble is always a standard 'tbl_df'
+  if (inherits(.data, "spec_tbl_df")) {
+    class(.data) <- setdiff(class(.data), "spec_tbl_df")
+    attr(.data, "spec") <- NULL
+    # message("Removed 'spec_tbl_df' class and 'spec' attribute from .data for consistent printing.")
+  }
 
-  # Variable - Can we also replace `EOV =` with `Variable =`
+  # 4. Remove 'problems' attribute if present
+  # This attribute is often from readr and not relevant for custom S3 objects
+  if (!is.null(attr(.data, "problems"))) {
+    attr(.data, "problems") <- NULL
+    # message("Removed 'problems' attribute from .data.")
+  }
 
-  stopifnot(inherits(data, "tbl_df")) # Add input checks.
+  # Validate metadata arguments (unchanged)
+  assertthat::assert_that(is.null(Type) || is.character(Type), msg = "'Type' must be a character string or NULL.")
+  assertthat::assert_that(is.null(Survey) || is.character(Survey), msg = "'Survey' must be a character string or NULL.")
+  assertthat::assert_that(is.null(Variable) || is.character(Variable), msg = "'Variable' must be a character string or NULL.")
+  assertthat::assert_that(is.null(Model) || is.character(Model), msg = "'Model' must be a character string or NULL.")
 
-  if (!"planktonr_dat" %in% class(data)) { # Only do this if data isn't of class planktonr_dat
-    tibble::new_tibble(
-      data,
-      class = c("planktonr_dat", class(data)),
-      Type = type,
-      Survey = survey,
-      Variable = variable,
-      Subset = subset,
-      Model = NULL,
-    )
-  } else {
-    return(data)
-    }
+  if (!is.null(Type)) {
+    Type <- pr_check_type(Type) # Use your helper to standardize
+    Type <- rlang::arg_match0(Type, values = c("Microbes", "Phytoplankton", "Zooplankton", "Fish", "Water", "EOV"),
+                              arg_nm = "Type")
+  }
+  if (!is.null(Survey)) {
+    Survey <- rlang::arg_match0(Survey, values = c("NRS", "CPR", "LTM", "GO-SHIP", "Coastal", "SOTS"),
+                                arg_nm = "Survey")
+  }
 
+  # Capture additional attributes passed via ...
+  extra_attrs <- list(...)
+
+  # Create the new planktonr_dat object using the internal constructor
+  obj <- new_planktonr_dat(
+    x = .data, # .data is now guaranteed to be a tibble
+    Type = Type,
+    Survey = Survey,
+    Variable = Variable,
+    Model = Model,
+    !!!extra_attrs # Splice in any extra attributes
+  )
+
+  obj
 }
 
-
-#' Generic function and method for Type
+#' Check if an object is of class `planktonr_dat`
 #'
-#' @param x planktonr r data object
+#' This function tests if the given object `x` inherits from the `planktonr_dat` S3 class.
+#' It's a standard way to verify if an object is of your custom data type.
 #'
-#' @returns attribute `Survey`
+#' @param x An R object to check.
+#' @returns A logical value: `TRUE` if `x` is a `planktonr_dat` object, otherwise `FALSE`.
 #' @export
 #'
 #' @examples
-pr_get_type <- function(x){
-  UseMethod("pr_get_type")
+#' # Assuming planktonr_dat constructor exists:
+#' my_data <- planktonr_dat(tibble::tibble(a = 1:3, b = 4:6),
+#'                          type = "Phytoplankton",
+#'                          survey = "NRS")
+#'
+#' # Check if it's a planktonr_dat object
+#' is_planktonr_dat(my_data) # Returns TRUE
+#'
+#' # Check a regular tibble
+#' is_planktonr_dat(tibble::tibble(a = 1:3)) # Returns FALSE
+#'
+#' # Check a data.frame
+#' is_planktonr_dat(data.frame(x = 1)) # Returns FALSE
+is_planktonr_dat <- function(x) {
+  inherits(x, "planktonr_dat")
 }
 
-
-
-#' Generic function and method for Type
-#'
-#' @param x planktonr r data object
-#'
-#' @returns attribute `Type`
-#' @export
-#'
-#' @examples
-pr_get_type.planktonr_dat <- function(x){
-  attr(x, "Type")
+# Example of a constructor function to make it easy to create data
+# (No changes needed here as it calls planktonr_dat, which now handles coercion)
+planktonr_data <- function(...) {
+  x <- tibble::tibble(...) # This always creates a tibble internally
+  # Here, we're setting 'created_at' and 'source' as direct attributes
+  planktonr_dat(
+    .data = x,
+    Type = "Phytoplankton", # Provide a default Type for this helper
+    Survey = "NRS",        # Provide a default survey for this helper
+    notes = "Example data set created by planktonr_data helper" # Example of an extra attribute
+  )
 }
-
-
-
-
-#' Generic function and method for Survey
-#'
-#' @param x planktonr r data object
-#'
-#' @returns attribute `Survey`
-#' @export
-#'
-#' @examples
-pr_get_survey <- function(x){
-  UseMethod("pr_get_survey")
-}
-
-
-
-#' Generic function and method for Survey
-#'
-#' @param x planktonr r data object
-#'
-#' @returns attribute `Survey`
-#' @export
-#'
-#' @examples
-pr_get_survey.planktonr_dat <- function(x){
-  attr(x, "Survey")
-}
-
-
-
-#' Generic function and method for Variable
-#'
-#' @param x planktonr r data object
-#'
-#' @returns attribute `Variable`
-#' @export
-#'
-#' @examples
-pr_get_variable <- function(x){
-  UseMethod("pr_get_variable")
-}
-
-
-
-#' Generic function and method for Variable
-#'
-#' @param x planktonr r data object
-#'
-#' @returns attribute `Variable`
-#' @export
-#'
-#' @examples
-pr_get_variable.planktonr_dat <- function(x){
-  attr(x, "Variable")
-}
-
-
-
-#' Generic function and method for Model
-#'
-#' @param x planktonr r data object
-#'
-#' @returns attribute `Model`
-#' @export
-#'
-#' @examples
-pr_get_model <- function(x){
-  UseMethod("pr_get_model")
-}
-
-
-
-#' Generic function and method for Model
-#'
-#' @param x planktonr r data object
-#'
-#' @returns attribute `Model`
-#' @export
-#'
-#' @examples
-pr_get_model.planktonr_dat <- function(x){
-  attr(x, "Model")
-}
-
-
-
-
-
-
-
-
-
-
-#' print method for planktonr_dat
-#'
-#' @param x The planktonr dataframe
-#' @param ... Other possible objects to be passed to the tidyverse
-#'
-#' @export
-print.planktonr_dat <- function(x, ...) {
-  cat("planktonr Data Object\n")
-  if(!is.null(attr(x, "Survey"))){cat("Survey:", attr(x, "Survey"), "\n")}
-  if(!is.null(attr(x, "Type"))){cat("Type:", attr(x, "Type"), "\n")}
-  if(!is.null(attr(x, "Variable"))){cat("Variable:", attr(x, "Variable"), "\n")}
-  cat("--------------------\n")
-  print(tibble::as_tibble(x)) # print the tibble part.
-}
-
-#' pivot_longer method for planktonr_dat
-#'
-#' @param data The planktonr data object
-#' @param ... Other possible objects to be passed to the tidyverse
-#'
-#' @export
-pivot_longer.planktonr_dat <- function(data, ...) {
-
-  # Call the next method (pivot_longer for tbl_df)
-  NextMethod("pivot_longer") %>%
-    pr_planktonr_class(type = pr_get_type(data),
-                       survey = pr_get_survey(data),
-                       variable = pr_get_variable(data),
-                       # subset = pr_get_type(data),
-    ) # Re-apply the plankton_data class
-
-}
-
-
-
-#' pivot_longer method for planktonr_dat
-#'
-#' @param data  The planktonr data object
-#' @param ... Other possible objects to be passed to the tidyverse
-#'
-#' @export
-pivot_wider.planktonr_dat <- function(data, ...) {
-
-  # Call the next method (pivot_wider for tbl_df)
-  NextMethod("pivot_wider") %>%
-    pr_planktonr_class(type = pr_get_type(data),
-                       survey = pr_get_survey(data),
-                       variable = pr_get_variable(data),
-                       # subset = pr_get_type(data),
-    ) # Re-apply the plankton_data class
-
-}
-
-
-# # Define a method for using....
-# group_by.planktonr_dat <- function(data, ..., .add = FALSE) {
-#
-#   # Call the next method
-#   NextMethod("group_by", ..., .add = .add) %>%
-#     pr_planktonr_class(type = pr_get_type(data),
-#                        survey = pr_get_survey(data),
-#                        variable = pr_get_variable(data),
-#                        # subset = pr_get_type(data),
-#     ) # Re-apply the plankton_data class
-#
-# }
-
-
-
-#' summarise method for planktonr_dat
-#'
-#' @param data The planktonr data object
-#' @param ... Other possible objects to be passed to the tidyverse
-#' @param .by Group by
-#' @param .groups Should the groups be dropped
-#'
-#' @export
-summarise.planktonr_dat <- function(data, ..., .by, .groups = "drop") {
-
-  # Call the next method
-  NextMethod("summarise", .by = tidyselect::all_of(.by), .groups = .groups) %>%
-    pr_planktonr_class(type = pr_get_type(data),
-                       survey = pr_get_survey(data),
-                       variable = pr_get_variable(data),
-                       # subset = pr_get_type(data),
-    ) # Re-apply the plankton_data class
-
-}
-
-
-#' drop_na method for planktonr_dat
-#'
-#' @param data The planktonr data object
-#' @param ... Other possible objects to be passed to the tidyverse
-#'
-#' @export
-drop_na.planktonr_dat <- function(data, ...) {
-
-  # Call the next method
-  NextMethod("drop_na") %>%
-    pr_planktonr_class(type = pr_get_type(data),
-                       survey = pr_get_survey(data),
-                       variable = pr_get_variable(data),
-                       # subset = pr_get_type(data),
-    ) # Re-apply the plankton_data class
-
-}
-
-
 
 
 #' Check and update Type as required
@@ -279,7 +162,7 @@ drop_na.planktonr_dat <- function(data, ...) {
 #' @param Type Data type
 #'
 #' @returns Type as a standardised string
-#'
+#' @noRd
 pr_check_type <- function(Type){
 
   Type = stringr::str_to_lower(Type)
@@ -287,29 +170,72 @@ pr_check_type <- function(Type){
   if (Type %in% c("p", "phyto", "phytoplankton")){Type = "Phytoplankton"}
   if (Type %in% c("z", "zoop", "zooplankton")){Type = "Zooplankton"}
   if (Type %in% c("w", "water")){Type = "Water"}
+  if (Type %in% c("eov")){Type = "EOV"} # Added EOV based on your constructor comment
+  if (Type %in% c("m", "microbes")){Type = "Microbes"} # Added Microbes
+  if (Type %in% c("f", "fish")){Type = "Fish"}
 
   return(Type)
 }
 
 
-.onLoad <- function(libname, pkgname) {
-  # Register the print method for my_class
-  vctrs::s3_register("base::print", "planktonr_dat")
+# R/getters.R
 
-  # Register a tidyr method example.
-  if (requireNamespace("tidyr", quietly = TRUE)) {
-    vctrs::s3_register("tidyr::pivot_longer", "planktonr_dat")
-    vctrs::s3_register("tidyr::pivot_wider", "planktonr_dat")
-    vctrs::s3_register("tidyr::drop_na", "planktonr_dat")
-  }
-
-  # Register a dplyr method example.
-  if (requireNamespace("dplyr", quietly = TRUE)) {
-    vctrs::s3_register("dplyr::summarise", "planktonr_dat")
-  }
+#' Generic function to get the Type attribute
+#'
+#' @param x A `planktonr_dat` object.
+#' @returns The `Type` attribute from the object.
+#' @export
+pr_get_type <- function(x){
+  UseMethod("pr_get_type")
 }
 
-# Convert to planktonr class
-# dat <- pr_planktonr_class(dat, type = Type, survey = Survey, variable = Variable, subset = Subset)
+#' @rdname pr_get_type
+#' @export
+pr_get_type.planktonr_dat <- function(x){
+  attr(x, "Type")
+}
 
+#' Generic function to get the Survey attribute
+#'
+#' @param x A `planktonr_dat` object.
+#' @returns The `Survey` attribute from the object.
+#' @export
+pr_get_survey <- function(x){
+  UseMethod("pr_get_survey")
+}
 
+#' @rdname pr_get_survey
+#' @export
+pr_get_survey.planktonr_dat <- function(x){
+  attr(x, "Survey")
+}
+
+#' Generic function to get the Variable attribute
+#'
+#' @param x A `planktonr_dat` object.
+#' @returns The `Variable` attribute from the object.
+#' @export
+pr_get_variable <- function(x){
+  UseMethod("pr_get_variable")
+}
+
+#' @rdname pr_get_variable
+#' @export
+pr_get_variable.planktonr_dat <- function(x){
+  attr(x, "Variable")
+}
+
+#' Generic function to get the Model attribute
+#'
+#' @param x A `planktonr_dat` object.
+#' @returns The `Model` attribute from the object.
+#' @export
+pr_get_model <- function(x){
+  UseMethod("pr_get_model")
+}
+
+#' @rdname pr_get_model
+#' @export
+pr_get_model.planktonr_dat <- function(x){
+  attr(x, "Model")
+}

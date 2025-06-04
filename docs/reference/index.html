@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.6.3</span>
+        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.6.5</span>
       </span>
     </div>
 
@@ -86,7 +86,7 @@
       </tr><tr><td>
           <p><code><a href="pr_get_CSChem.html">pr_get_CSChem()</a></code> </p>
         </td>
-        <td><p>Load microbial data</p></td>
+        <td><p>Load chemistry data</p></td>
       </tr><tr><td>
           <p><code><a href="pr_get_CTI.html">pr_get_CTI()</a></code> </p>
         </td>
@@ -218,11 +218,7 @@
       </tr><tr><td>
           <p><code><a href="pr_get_model.html">pr_get_model()</a></code> </p>
         </td>
-        <td><p>Generic function and method for Model</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_model.planktonr_dat.html">pr_get_model(<i>&lt;planktonr_dat&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Generic function and method for Model</p></td>
+        <td><p>Generic function to get the Model attribute</p></td>
       </tr><tr><td>
           <p><code><a href="pr_get_s3.html">pr_get_s3()</a></code> </p>
         </td>
@@ -234,27 +230,15 @@
       </tr><tr><td>
           <p><code><a href="pr_get_survey.html">pr_get_survey()</a></code> </p>
         </td>
-        <td><p>Generic function and method for Survey</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_survey.planktonr_dat.html">pr_get_survey(<i>&lt;planktonr_dat&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Generic function and method for Survey</p></td>
+        <td><p>Generic function to get the Survey attribute</p></td>
       </tr><tr><td>
           <p><code><a href="pr_get_type.html">pr_get_type()</a></code> </p>
         </td>
-        <td><p>Generic function and method for Type</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_type.planktonr_dat.html">pr_get_type(<i>&lt;planktonr_dat&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Generic function and method for Type</p></td>
+        <td><p>Generic function to get the Type attribute</p></td>
       </tr><tr><td>
           <p><code><a href="pr_get_variable.html">pr_get_variable()</a></code> </p>
         </td>
-        <td><p>Generic function and method for Variable</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_variable.planktonr_dat.html">pr_get_variable(<i>&lt;planktonr_dat&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Generic function and method for Variable</p></td>
+        <td><p>Generic function to get the Variable attribute</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="plotting">Plotting <a href="#plotting" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>Functions for plotting.</p>
@@ -352,17 +336,41 @@
           <p class="section-desc"></p><p>Helper functions.</p>
         </th>
       </tr></tbody><tbody><tr><td>
-          <p><code><a href="drop_na.planktonr_dat.html">drop_na.planktonr_dat()</a></code> </p>
+          <p><code><a href="arrange.planktonr_dat.html">arrange(<i>&lt;planktonr_dat&gt;</i>)</a></code> </p>
         </td>
-        <td><p>drop_na method for planktonr_dat</p></td>
+        <td><p>Arrange rows of a planktonr_dat object</p></td>
       </tr><tr><td>
-          <p><code><a href="pivot_longer.planktonr_dat.html">pivot_longer.planktonr_dat()</a></code> </p>
+          <p><code><a href="drop_na.planktonr_dat.html">drop_na(<i>&lt;planktonr_dat&gt;</i>)</a></code> </p>
         </td>
-        <td><p>pivot_longer method for planktonr_dat</p></td>
+        <td><p>Drop rows containing missing values for planktonr_dat objects</p></td>
       </tr><tr><td>
-          <p><code><a href="pivot_wider.planktonr_dat.html">pivot_wider.planktonr_dat()</a></code> </p>
+          <p><code><a href="filter.planktonr_dat.html">filter(<i>&lt;planktonr_dat&gt;</i>)</a></code> </p>
         </td>
-        <td><p>pivot_longer method for planktonr_dat</p></td>
+        <td><p>Filter rows of a planktonr_dat object</p></td>
+      </tr><tr><td>
+          <p><code><a href="group_by.planktonr_dat.html">group_by(<i>&lt;planktonr_dat&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Group a planktonr_dat object by one or more variables</p></td>
+      </tr><tr><td>
+          <p><code><a href="is_planktonr_dat.html">is_planktonr_dat()</a></code> </p>
+        </td>
+        <td><p>Check if an object is of class <code>planktonr_dat</code></p></td>
+      </tr><tr><td>
+          <p><code><a href="mutate.planktonr_dat.html">mutate(<i>&lt;planktonr_dat&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Create or modify columns in a planktonr_dat object</p></td>
+      </tr><tr><td>
+          <p><code><a href="pivot_longer.planktonr_dat.html">pivot_longer(<i>&lt;planktonr_dat&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Reshape data from wide to long format for planktonr_dat objects</p></td>
+      </tr><tr><td>
+          <p><code><a href="pivot_wider.planktonr_dat.html">pivot_wider(<i>&lt;planktonr_dat&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Reshape data from long to wide format for planktonr_dat objects</p></td>
+      </tr><tr><td>
+          <p><code><a href="planktonr_dat.html">planktonr_dat()</a></code> </p>
+        </td>
+        <td><p>Define the constructor function for the planktonr data class</p></td>
       </tr><tr><td>
           <p><code><a href="pr_add_Bioregions.html">pr_add_Bioregions()</a></code> </p>
         </td>
@@ -387,10 +395,6 @@
           <p><code><a href="pr_apply_Time.html">pr_apply_Time()</a></code> </p>
         </td>
         <td><p>Add Month &amp; year columns to df</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_check_type.html">pr_check_type()</a></code> </p>
-        </td>
-        <td><p>Check and update Type as required</p></td>
       </tr><tr><td>
           <p><code><a href="pr_filter_NRSStations.html">pr_filter_NRSStations()</a></code> </p>
         </td>
@@ -428,10 +432,6 @@
         </td>
         <td><p>Run linear model on station and parameters</p></td>
       </tr><tr><td>
-          <p><code><a href="pr_planktonr_class.html">pr_planktonr_class()</a></code> </p>
-        </td>
-        <td><p>Define the constructor function for the planktonr data class</p></td>
-      </tr><tr><td>
           <p><code><a href="pr_relabel.html">pr_relabel()</a></code> </p>
         </td>
         <td><p>Format a parameter string for plotting</p></td>
@@ -454,11 +454,23 @@
       </tr><tr><td>
           <p><code><a href="print.planktonr_dat.html">print(<i>&lt;planktonr_dat&gt;</i>)</a></code> </p>
         </td>
-        <td><p>print method for planktonr_dat</p></td>
+        <td><p>Print method for planktonr_dat objects</p></td>
       </tr><tr><td>
-          <p><code><a href="summarise.planktonr_dat.html">summarise.planktonr_dat()</a></code> </p>
+          <p><code><a href="relocate.planktonr_dat.html">relocate(<i>&lt;planktonr_dat&gt;</i>)</a></code> </p>
         </td>
-        <td><p>summarise method for planktonr_dat</p></td>
+        <td><p>Relocate columns in a planktonr_dat object</p></td>
+      </tr><tr><td>
+          <p><code><a href="rowwise.planktonr_dat.html">rowwise(<i>&lt;planktonr_dat&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Convert a planktonr_dat object to a rowwise data frame</p></td>
+      </tr><tr><td>
+          <p><code><a href="select.planktonr_dat.html">select(<i>&lt;planktonr_dat&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Select, rename, or reorder columns in a planktonr_dat object</p></td>
+      </tr><tr><td>
+          <p><code><a href="summarise.planktonr_dat.html">summarise(<i>&lt;planktonr_dat&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Summarise data in a planktonr_dat object</p></td>
       </tr><tr><td>
           <p><code><a href="theme_pr.html">theme_pr()</a></code> </p>
         </td>
@@ -476,7 +488,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer></div>

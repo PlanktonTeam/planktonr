@@ -42,7 +42,7 @@ pr_get_NRSData <- function(Type = "Phytoplankton", Variable = "abundance", Subse
 
     datnc <-pr_get_Raw("bgc_zooplankton_abundance_non_copepods_data") %>%
       pr_rename() %>%
-      dplyr::select(-str[!str %in% "TripCode"])
+      dplyr::select(-tidyselect::all_of(str[!str %in% "TripCode"]))
 
     # Add together and COPEPODS and NON-COPEPODS
     dat <- dplyr::left_join(datc, datnc, by = "TripCode")
@@ -55,7 +55,7 @@ pr_get_NRSData <- function(Type = "Phytoplankton", Variable = "abundance", Subse
   }
 
   # Convert to planktonr class
-  dat <- pr_planktonr_class(dat, type = Type, survey = "NRS", variable = Variable, subset = Subset)
+  # # dat <- planktonr_dat(dat, type = Type, survey = "NRS", variable = Variable, subset = Subset)
 
   return(dat)
 
@@ -87,13 +87,12 @@ pr_get_NRSStation <- function(){
 #' Import NRS BGC information
 #'
 #' Load NRS station BGC information
-#' @param Type A character string on which to filter data (P = Phytoplankton, Z = Zooplankton, F = Fish)
 #' @return A dataframe with NRS BGC information
 #' @export
 #' @examples
-#' df <- pr_get_NRSTrips(Type = "Zooplankton")
+#' df <- pr_get_NRSTrips()
 #' @importFrom rlang .data
-pr_get_NRSTrips <- function(Type = c("Phytoplankton", "Zooplankton", "Fish")){
+pr_get_NRSTrips <- function(){
 
   NRSTrip <- pr_get_s3("bgc_trip") %>%
     pr_rename() %>%
@@ -103,20 +102,7 @@ pr_get_NRSTrips <- function(Type = c("Phytoplankton", "Zooplankton", "Fish")){
     pr_apply_Time() %>%
     dplyr::select(-"ProjectName") %>%
     dplyr::select(-tidyselect::any_of(c("PSampleDepth_m", "ZSampleDepth_m"))) %>%
-    pr_planktonr_class(type = Type, survey = "NRS", variable = NULL)
-
-
-  # if("Phytoplankton" %in% Type & !"Zooplankton" %in% Type){ # Only Phytoplankton
-  #   NRSTrip <- NRSTrip %>%
-  #     dplyr::rename(SampleDepth_m = "PSampleDepth_m") %>%
-  #     dplyr::select(-"ZSampleDepth_m")
-  # }
-  #
-  # if("Zooplankton" %in% Type & !"Phytoplankton" %in% Type){ # Only Zooplankton
-  #   NRSTrip <- NRSTrip %>%
-  #     dplyr::rename(SampleDepth_m = "ZSampleDepth_m") %>%
-  #     dplyr::select(-"PSampleDepth_m")
-  # }
+    planktonr_dat(Type = NULL, Survey = "NRS", Variable = NULL)
 
   return(NRSTrip)
 
@@ -134,6 +120,8 @@ pr_get_NRSTrips <- function(Type = c("Phytoplankton", "Zooplankton", "Fish")){
 #   dat <- readr::read_csv(system.file("extdata", "BGC_Zoop_Raw.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
 #     pr_rename()
 # }
+
+
 
 #' Filter dataframe on `StationCode` to return only NRS stations
 #'

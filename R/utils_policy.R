@@ -42,7 +42,7 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
       dplyr::left_join(means, by = c("BioRegion", "Parameters")) %>%
       dplyr::mutate(anomaly = (.data$Values - means)/sd,
                     Survey = "CPR") %>%
-      planktonr::pr_reorder()
+      pr_reorder()
 
   } else if (Survey == "NRS"){
 
@@ -75,11 +75,7 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
       dplyr::left_join(means, by = c("StationName", "Parameters")) %>%
       dplyr::mutate(anomaly = (.data$Values - means)/sd,
                     Survey = "NRS") %>%
-      planktonr::pr_reorder()
-
-
-    # Pol <- Pol %>%
-    #   dplyr::filter(.data$StationCode != "VBM") # TODO Temporarily remove VBM - Not enough data to run analyses
+      pr_reorder()
 
   } else if (Survey == "LTM"){
 
@@ -101,11 +97,9 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
       dplyr::left_join(means, by = c("StationName", "Parameters")) %>%
       dplyr::mutate(anomaly = (.data$Values - .data$means)/.data$sd,
                     Survey = 'LTM') %>%
-      planktonr::pr_reorder()
+      pr_reorder()
 
   }
-
-  Pol <- pr_planktonr_class(Pol, type = "EOV", survey = Survey, variable = NULL)
 
 }
 

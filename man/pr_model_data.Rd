@@ -16,7 +16,7 @@ A dataframe with the model attribute added
 Run linear model on station and parameters
 }
 \examples{
-df <- planktonr::pr_get_EOVs(Survey = "NRS") \%>\%
+df <- pr_get_EOVs(Survey = "NRS") \%>\%
   dplyr::filter(StationCode != "VBM") \%>\%
   dplyr::filter(Parameters == "PigmentChla_mgm3") \%>\%
   pr_remove_outliers(2) \%>\%

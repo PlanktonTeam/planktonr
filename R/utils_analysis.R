@@ -6,7 +6,7 @@
 #' @export
 #'
 #' @examples
-#' df <- planktonr::pr_get_EOVs(Survey = "NRS") %>%
+#' df <- pr_get_EOVs(Survey = "NRS") %>%
 #'   dplyr::filter(StationCode != "VBM") %>%
 #'   dplyr::filter(Parameters == "PigmentChla_mgm3") %>%
 #'   pr_remove_outliers(2) %>%
@@ -90,7 +90,6 @@ pr_get_coeffs <- function(Models, id = "Station"){
       pr_add_StationCode()
   }
 
-  coefficients <- coefficients %>%
-    pr_reorder()
+  return(coefficients)
 
 }

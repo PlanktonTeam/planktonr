@@ -20,8 +20,8 @@ dataframe for plotting functional group time series info
 Get functional group data
 }
 \examples{
-NRSfgz <- pr_get_FuncGroups("NRS", "Zooplankton")
-NRSfgp <- pr_get_FuncGroups("NRS", "Phytoplankton")
-CPRfgz <- pr_get_FuncGroups("CPR", "Zooplankton", near_dist_km = 250)
-CPRfgp <- pr_get_FuncGroups("CPR", "Phytoplankton")
+NRSfgz <- pr_get_FuncGroups(Survey = "NRS", Type = "Zooplankton")
+NRSfgp <- pr_get_FuncGroups(Survey = "NRS", Type = "Phytoplankton")
+CPRfgz <- pr_get_FuncGroups(Survey = "CPR", Type = "Zooplankton", near_dist_km = 250)
+CPRfgp <- pr_get_FuncGroups(Survey = "CPR", Type = "Phytoplankton")
 }

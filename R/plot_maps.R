@@ -55,7 +55,7 @@ pr_plot_NRSmap <- function(sites, Survey = "NRS"){
 
   col <- meta_sf %>%
     sf::st_drop_geometry() %>%
-    dplyr::select("Code", "Colour") %>%
+    dplyr::select(tidyselect::all_of(c("Code", "Colour"))) %>%
     tibble::deframe()
 
   p1 <- ggplot2::ggplot() +
@@ -92,7 +92,7 @@ pr_plot_CPRmap <-  function(sites){
   col <- bioregionSelection %>%
     sf::st_drop_geometry() %>%
     dplyr::distinct() %>%
-    dplyr::select("REGION", "Colour") %>%
+    dplyr::select(tidyselect::all_of(c("REGION", "Colour"))) %>%
     tibble::deframe()
 
   p1 <- ggplot2::ggplot() +
@@ -129,7 +129,7 @@ pr_plot_Voyagemap <-  function(df, dfs, Country = c("AUstralia")){
   MapOz <- rnaturalearth::ne_countries(scale = "small", returnclass = "sf", country = Country)
 
   voy_sf <- df %>%
-    dplyr::select("Longitude", "Latitude") %>%
+    dplyr::select(tidyselect::all_of(c("Longitude", "Latitude"))) %>%
     dplyr::distinct() %>%
     dplyr::arrange(dplyr::desc(.data$Latitude)) %>%
     dplyr::mutate(Lat = as.factor(.data$Latitude),
@@ -140,7 +140,7 @@ pr_plot_Voyagemap <-  function(df, dfs, Country = c("AUstralia")){
 
   col <- voy_sf %>%
     sf::st_drop_geometry() %>%
-    dplyr::select("Lat", "Colour") %>%
+    dplyr::select(tidyselect::all_of(c("Lat", "Colour"))) %>%
     tibble::deframe()
 
   p1 <- ggplot2::ggplot() +
@@ -179,7 +179,8 @@ pr_plot_Voyagemap <-  function(df, dfs, Country = c("AUstralia")){
 #' plot <- pr_plot_FreqMap(df, species = 'Acartia danae', interactive = TRUE)
 pr_plot_FreqMap <- function(df, species, interactive = TRUE){
 
-  dfa <- df %>% dplyr::select('Season', 'Latitude', 'Longitude', 'Survey') %>%
+  dfa <- df %>%
+    dplyr::select(tidyselect::all_of(c("Season", "Latitude", "Longitude", "Survey"))) %>%
     dplyr::distinct()
 
   dff <- df %>%
@@ -493,7 +494,7 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE, labels = TRUE){
     # GAB, GBR, NA, NEAC, SEAC, SO, Tas, WA
 
     Survey <- df %>%
-      dplyr::select("Survey") %>%
+      dplyr::select(tidyselect::all_of("Survey")) %>%
       dplyr::distinct()
 
     gg <- ggplot2::ggplot() +
