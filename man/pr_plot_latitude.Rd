@@ -4,14 +4,12 @@
 \alias{pr_plot_latitude}
 \title{Plot for latitudinal data}
 \usage{
-pr_plot_latitude(df, Fill_NA = FALSE, maxGap = 3)
+pr_plot_latitude(df, na.fill = TRUE)
 }
 \arguments{
 \item{df}{dataframe of latitudinal series}
 
-\item{Fill_NA}{fill in gaps in data}
-
-\item{maxGap}{no of NAs over which to fill gaps}
+\item{na.fill}{TRUE, FALSE or function like mean to fill in gaps in data}
 }
 \value{
 patchwork object
@@ -21,7 +19,7 @@ Plot for latitudinal data
 }
 \examples{
 df <- pr_get_NRSMicro('GO-SHIP')
-df <- df \%>\% dplyr::filter(Parameters == 'Archaea_unique_ASVs',
+df <- df \%>\% dplyr::filter(Parameters == 'Bacteria_unique_ASVs',
 SampleDepth_m < 101)
-pr_plot_latitude(df, Fill_NA = TRUE, maxGap = 5)
+pr_plot_latitude(df, na.fill = mean)
 }

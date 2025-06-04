@@ -79,9 +79,7 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
 #' Contour plots for depth stratified environmental data
 #'
 #' @param df dataframe from pr_get_NRSEnvContour
-#' @param Interpolation If TRUE data is interpolated at 5m intervals (DAR = 10m)
-#' @param Fill_NA to fill in NA's or not via zoo::na_approx, only used when interpolation is TRUE
-#' @param maxGap maximum gap across which to interpolate across NAs
+#' @param na.fill TRUE, FALSE or function like mean to fill in gaps in data
 #'
 #' @return a contour plot
 #' @export
@@ -89,36 +87,19 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
 #' @examples
 #' df <- pr_get_NRSEnvContour("Chemistry") %>% dplyr::filter(Parameters == "Nitrate_umolL",
 #' StationCode %in% c('YON', 'MAI', 'PHB', 'NSI'))
-#' plot <- pr_plot_NRSEnvContour(df, Interpolation = FALSE)
-pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE) {
-
-  # if (isTRUE(Interpolation)){
-  #   rlang::check_installed("metR", reason = "to use `geom_contour_fill()`")
-  #   # code that includes calls such as aaapkg::aaa_fun()
-  # }
+#' plot <- pr_plot_NRSEnvContour(df, na.fill = TRUE)
+pr_plot_NRSEnvContour <- function(df, na.fill = TRUE) {
 
   df <- df %>%
-    mutate(SampleDepth_m = round(.data$SampleDepth_m/10, 0)*10,  ## leave in for SOTS
+    dplyr::mutate(SampleDepth_m = round(.data$SampleDepth_m/10, 0)*10,  ## leave in for SOTS
            MonthSince = lubridate::interval(min(.data$SampleTime_Local), .data$SampleTime_Local) %/% months(1)) %>%
-    filter(SampleDepth_m < 600) ## leave in for SOTS
-
-  # data for timeseries
-  dfts <- df %>%
-    group_by(SampleDepth_m, MonthSince, Parameters, StationName) %>%
-    summarise(Values = mean(Values, na.rm = TRUE),
-              .groups = 'drop')
-
-  #data for climatology
-  dfMon <- df %>%
-    dplyr::group_by(Month_Local, StationName, SampleDepth_m) %>%
-    dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
-                     .groups = 'drop')
+    dplyr::filter(.data$SampleDepth_m < 600) ## leave in for SOTS
 
   # breaks and legend titles for timeseries and climatology
 
-  titleg <- pr_relabel(unique(df$Parameters), style = "ggplot")
-  limitMin <- min(dfts$Values, na.rm = TRUE)
-  limitMax <- max(dfts$Values, na.rm = TRUE)
+  titleg <- planktonr::pr_relabel(unique(df$Parameters), style = "ggplot")
+  limitMin <- min(df$Values, na.rm = TRUE)
+  limitMax <- max(df$Values, na.rm = TRUE)
 
   ## Using metR
   plotting <- function(plt){
@@ -126,34 +107,29 @@ pr_plot_NRSEnvContour <- function(df, Interpolation = TRUE) {
       minDate <- min(df$SampleTime_Local)
       maxMonths <- max(lubridate::interval(min(df$SampleTime_Local), df$SampleTime_Local) %/% months(1))
       myBreaks <- seq(9, maxMonths, 24)
-      myLabels <- year(minDate %m+% months(myBreaks))
-      df <- dfts
+      myLabels <- lubridate::year(minDate %m+% months(myBreaks))
       xvals <- "MonthSince"
     } else {
       myBreaks <- seq(1, 12, length.out = 12)
       myLabels <- c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")
-      df <- dfMon
       xvals <- "Month_Local"
     }
 
-    if(Interpolation == TRUE){
-      p1 <- ggplot2::ggplot() +
-        metR::geom_contour_fill(data = df, ggplot2::aes(x = !!rlang::sym(xvals), y = .data$SampleDepth_m, z = .data$Values), na.fill = TRUE) +
-        ggplot2::scale_fill_continuous(type = "viridis", name = titleg, limits = c(limitMin, limitMax))+
-        ggplot2::guides(fill = guide_colourbar(barwidth = 4, barheight = 1))
-    } else{
-      p1 <- ggplot2::ggplot(data = df, ggplot2::aes(x = !!rlang::sym(xvals), y = .data$SampleDepth_m, z = .data$Values)) +
-        ggplot2::geom_contour_filled(bins = 8) +
-        ggplot2::guides(fill = ggplot2::guide_legend(title = titleg))
-    }
+    df <- df %>%
+      dplyr::group_by(!!rlang::sym(xvals), .data$StationName, .data$SampleDepth_m) %>%
+      dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
+                       .groups = 'drop')
 
-    p1 <- p1 +
-    ggplot2::geom_point(data = df, ggplot2::aes(x = !!rlang::sym(xvals), y = .data$SampleDepth_m), size = 1) +
-    ggplot2::facet_wrap(~.data$StationName, scales = "free_y", ncol = 1) +
-    ggplot2::scale_x_continuous(breaks = myBreaks, labels = myLabels, expand = c(0, 0)) +
-    ggplot2::scale_y_continuous(expand = c(0, 0)) +
-      planktonr::theme_pr() +
-      ggplot2::theme(strip.text = ggplot2::element_text(hjust = 0),
+      p1 <- ggplot2::ggplot() +
+        metR::geom_contour_fill(data = df, ggplot2::aes(x = !!rlang::sym(xvals), y = .data$SampleDepth_m, z = .data$Values), na.fill = na.fill) +
+        ggplot2::scale_fill_continuous(type = "viridis", name = titleg, limits = c(limitMin, limitMax))+
+        ggplot2::guides(fill = ggplot2::guide_colourbar(barwidth = 4, barheight = 1)) +
+        ggplot2::geom_point(data = df, ggplot2::aes(x = !!rlang::sym(xvals), y = .data$SampleDepth_m), size = 1) +
+        ggplot2::facet_wrap(~.data$StationName, scales = "free_y", ncol = 1) +
+        ggplot2::scale_x_continuous(breaks = myBreaks, labels = myLabels, expand = c(0, 0)) +
+        ggplot2::scale_y_continuous(expand = c(0, 0)) +
+        planktonr::theme_pr() +
+        ggplot2::theme(strip.text = ggplot2::element_text(hjust = 0),
                      legend.position = 'bottom')
 
     return(p1)

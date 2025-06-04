@@ -327,6 +327,8 @@ pr_get_CTI <-  function(Type = "Zooplankton"){
 #' df <- pr_get_DayNight(Type = "Zooplankton")
 pr_get_DayNight <- function(Type = "Zooplankton"){
 
+  rlang::check_installed("suncalc", reason = "to run this function")
+
   Type <- pr_check_type(Type)
 
   if(Type == "Zooplankton"){
@@ -358,38 +360,6 @@ pr_get_DayNight <- function(Type = "Zooplankton"){
                      .by = tidyselect::all_of(c("Month_Local", "daynight", "Species")))
 
 }
-
-
-# Add day/night marker to dataframe
-# @param Type Phyto or zoo, defaults to phyto
-#
-# @return df to be used with pr_plot_DayNight
-# @export
-#
-# @examples
-# df <- pr_get_Indices(Survey = "NRS", Type = "Zooplankton")
-# df <- pr_add_daynight(df)
-# pr_add_daynight <- function(df){
-#
-#   dates <- df %>%
-#     dplyr::select("SampleTime_Local", "Latitude", "Longitude") %>%
-#     dplyr::rename(date = .data$SampleTime_Local,
-#                   lat = .data$Latitude,
-#                   lon = .data$Longitude) %>%
-#     dplyr::mutate(date = lubridate::as_date(.data$date))
-#
-#   daynight_df <- suncalc::getSunlightTimes(data = dates, #TODO quicker to change to Local now that it exists.
-#                                            keep = c("sunrise", "sunset"),
-#                                            tz = lutz::tz_lookup_coords(dates$lat, dates$lon, method = "fast", warn = FALSE)) %>% # TODO remove this when we can get tz into all dataframes
-#     dplyr::bind_cols(df["SampleTime_Local"]) %>%
-#     dplyr::mutate(daynight = dplyr::if_else(.data$SampleTime_Local > .data$sunrise &
-#                                       .data$SampleTime_Local < .data$sunset, "Day", "Night"))
-#
-#   df <- df %>%
-#     dplyr::bind_cols(daynight_df["daynight"])
-#
-# }
-
 
 
 #' Add Carbon concentration to phytoplankton dataframe
