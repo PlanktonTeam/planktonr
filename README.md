@@ -11,7 +11,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 [![Ubuntu](https://github.com/PlanktonTeam/planktonr/actions/workflows/Ubuntu.yaml/badge.svg)](https://github.com/PlanktonTeam/planktonr/actions/workflows/Ubuntu.yaml)
 [![MacOS](https://github.com/PlanktonTeam/planktonr/actions/workflows/MacOS.yaml/badge.svg)](https://github.com/PlanktonTeam/planktonr/actions/workflows/MacOS.yaml)
 [![Codecov test
-coverage](https://codecov.io/gh/PlanktonTeam/planktonr/branch/master/graph/badge.svg)](https://app.codecov.io/gh/PlanktonTeam/planktonr?branch=master)
+coverage](https://codecov.io/gh/PlanktonTeam/planktonr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/PlanktonTeam/planktonr?branch=main)
 [![issues -
 planktonr](https://img.shields.io/github/issues/PlanktonTeam/planktonr)](https://github.com/PlanktonTeam/planktonr/issues)
 <!-- badges: end -->
