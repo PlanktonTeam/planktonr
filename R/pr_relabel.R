@@ -53,6 +53,7 @@ pr_relabel <- function(s, style = "ggplot", named = FALSE){
     "GearMesh_um", rlang::expr(paste("Gear Mesh (","\U00B5","m")), "Gear Mesh (&#181; m)", "GearMesh",
     "HerbivoreCarnivoreCopepodRatio", rlang::expr(paste("Copepod Herbivore:Carnivore Ratio")), "Copepod Herbivore:Carnivore Ratio", "Copepod Herbivore:Carnivore Ratio",
     "InorganicFraction_mgL", rlang::expr(paste("Inorganic Fraction (mg L"^-1,")")), "Inorganic Fraction (mg L<sup>-1</sup>)", "Inorganic Fraction",
+    "Latitude", rlang::expr(paste("Latitude (","\U00B0","S)")), "Latitude (<sup>o</sup>S)", "Latitude",
     "Length_mm", rlang::expr(paste("Length (mm)")), "Length (mm)", "Length",
     "MLD_m", rlang::expr(paste("Mixed Layer Depth (m)")), "Mixed Layer Depth (m)", "Mixed Layer Depth (m)",
     "Nitrite_umolL", rlang::expr(paste("Nitrite (","\U00B5","mol L"^-1,")")), "Nitrite (&#181; mol L<sup>-1</sup>)", "Nitrite",

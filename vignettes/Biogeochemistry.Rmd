@@ -51,7 +51,7 @@ Nuts <- pr_get_NRSEnvContour("Chemistry") %>%
   mutate(name = as.factor(.data$Parameters)) %>% #TODO Check
   drop_na() 
 
-pr_plot_NRSEnvContour(Nuts, Interpolation = TRUE, Fill_NA = TRUE, maxGap = 3)
+pr_plot_NRSEnvContour(Nuts, na.fill = TRUE)
 
 ```
 
@@ -107,7 +107,7 @@ Pico <- pr_get_NRSEnvContour("Pico") %>%
   dplyr::filter(Parameters %in% c("Prochlorococcus_cellsmL")) %>% 
   filter(StationCode %in% c("PHB", "MAI"))
 
-pr_plot_NRSEnvContour(Pico, Interpolation = TRUE, Fill_NA = TRUE, maxGap = 3)
+pr_plot_NRSEnvContour(Pico, na.fill = TRUE)
 
 
 ```

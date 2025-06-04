@@ -94,16 +94,7 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d", parallel = FA
 
   #TODO add progress bars with purrr
 
-  # Set resolution
-  # if (!exists("res_temp")){
-  #   print("Defaulting to daily satellite data. Provide res_temp if you want to change")
-  #   res_temp <-  "1d"
-  # }
-  #
-  # if (!exists("res_spat")){
-  #   print("Defaulting to 1 pixel x 1 pixel. Provide res_spat if you want to increase")
-  #   res_spat <-  1
-  # }
+  rlang::check_installed("progressr", reason = "to run this function")
 
   if (("Date" %in% colnames(df))==FALSE) {
     stop("No Date column found in data. Please include a Date column in POSIXct format")

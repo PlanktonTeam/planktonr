@@ -124,12 +124,12 @@ testthat::test_that("Correct function output", {
   testthat::expect_equal(class(pr_get_NRSEnvContour(Data = "Pico") %>%
                                  dplyr::filter(Parameters == "Prochlorococcus_cellsmL",
                                                StationCode %in% c('YON', 'PHB', 'NSI')) %>%
-                                 pr_plot_NRSEnvContour(Interpolation = TRUE, Fill_NA = TRUE))[1], "patchwork")
+                                 pr_plot_NRSEnvContour(na.fill = TRUE))[1], "patchwork")
 
   testthat::expect_equal(class(pr_get_NRSEnvContour(Data = "Pico") %>%
                                  dplyr::filter(Parameters == "Prochlorococcus_cellsmL",
                                                StationCode %in% c('YON', 'PHB', 'NSI')) %>%
-                                 pr_plot_NRSEnvContour(Interpolation = FALSE))[1], "patchwork")
+                                 pr_plot_NRSEnvContour(na.fill = FALSE))[1], "patchwork")
 
   testthat::expect_equal(class(pr_get_FuncGroups(Survey = "CPR", Type = "Phytoplankton") %>% pr_plot_PieFG())[1], "gg")
   testthat::expect_equal(class(pr_get_FuncGroups(Survey = "NRS", Type = "Zooplankton") %>% pr_plot_PieFG())[1], "gg")
@@ -159,6 +159,6 @@ testthat::test_that("Correct function output", {
   testthat::expect_equal(class(
     pr_get_NRSMicro(Survey = "GO-SHIP") %>%
       dplyr::filter(Parameters == 'Archaea_unique_ASVs', SampleDepth_m < 101) %>%
-      pr_plot_latitude(Fill_NA = TRUE, maxGap = 5))[1], "patchwork")
+      pr_plot_latitude(na.fill = TRUE))[1], "patchwork")
 
 })

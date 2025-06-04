@@ -25,8 +25,8 @@ Imports:
     lubridate,
     lutz,
     magrittr,
+    metR,
     patchwork,
-    progressr,
     purrr (>= 1.0.1),
     readr (>= 2.0.0),
     rlang,
@@ -34,7 +34,6 @@ Imports:
     sf,
     stats,
     stringr,
-    suncalc,
     tibble,
     tidyr,
     tidyselect,
@@ -45,14 +44,14 @@ Suggests:
     furrr,
     knitr,
     parallelly,
-    pracma,
+    progressr,
     rmarkdown,
     rnaturalearthdata,
     RNetCDF,
+    suncalc,
     testthat (>= 3.0.0),
     thredds,
-    yaImpute,
-    zoo
+    yaImpute
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3
