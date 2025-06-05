@@ -205,7 +205,9 @@ pr_add_StationName <- function(df){
       StationCode == "ESP" ~ "Esperance",
       StationCode == "ROT" ~ "Rottnest Island",
       StationCode == "NIN" ~ "Ningaloo",
-      StationCode == "VBM" ~ "Bonney Coast")) %>%
+      StationCode == "VBM" ~ "Bonney Coast",
+      StationCode == "SOTS" ~ "Southern Ocean Time Series",
+      StationCode == "SOTS-RAS" ~ "Southern Ocean Time Series - Remote Access Sampler")) %>%
     dplyr::relocate("StationCode", .after = "StationName")
 }
 
@@ -236,7 +238,9 @@ pr_add_StationCode <- function(df){
         StationName == "Esperance" ~ "ESP",
         StationName == "Rottnest Island" ~ "ROT",
         StationName == "Ningaloo" ~ "NIN",
-        StationName == "Bonney Coast" ~ "VBM")) %>%
+        StationName == "Bonney Coast" ~ "VBM",
+        StationName == 'Southern Ocean Time Series' ~ 'SOTS',
+        StationName == 'Southern Ocean Time Series - Remote Access Sampler' ~ 'SOTS-RAS')) %>%
       dplyr::relocate("StationCode", .after = "StationName")
   } else if("TripCode" %in% colnames(df)){
     df <- df %>%
@@ -271,14 +275,15 @@ pr_reorder <- function(df){
         dplyr::mutate(StationName = factor(.data$StationName,
                                            levels = c("Darwin", "Yongala", "Ningaloo", "North Stradbroke Island",
                                                       "Rottnest Island", "Esperance", "Port Hacking", "Kangaroo Island",
-                                                      "Bonney Coast", "Maria Island")))
+                                                      "Bonney Coast", "Maria Island", "Southern Ocean Time Series",
+                                                      "Southern Ocean Time Series - Remote Access Sampler")))
     }
 
     if("StationCode" %in% colnames(df)){
       df <- df %>%
         dplyr::mutate(StationCode = factor(.data$StationCode,
                                            levels = c("DAR", "YON", "NIN", "NSI", "ROT",
-                                                      "ESP", "PHB", "KAI", "VBM", "MAI")))
+                                                      "ESP", "PHB", "KAI", "VBM", "MAI", "SOTS", "SOTS-RAS")))
     }
   }
 
