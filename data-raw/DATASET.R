@@ -48,20 +48,6 @@ clr <- tibble::tribble( #
   "Southern Ocean Region", "#8da83e",
   "None", "#808080")
 
-# clr <- tibble::tribble( # Set1 on colorbrewer2.org - Yellow has been updated.
-#   ~REGION, ~Colour,
-#   "North", "#e41a1c",
-#   "Temperate East", "#377eb8",
-#   "North-west", "#4daf4a",
-#   "South-west", "#984ea3",
-#   "South-east", "#ff7f00",
-#   "Coral Sea",  "#fce205",
-#   "Southern Ocean Region", "#a65628",
-#   "None", "#808080")
-
-
-
-
 
 mbr <- dplyr::left_join(mbr, clr, by = "REGION") %>%
   dplyr::arrange("REGION")

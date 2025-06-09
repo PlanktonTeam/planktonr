@@ -28,16 +28,16 @@ pr_plot_PCImap <- function(df) {
 #'
 #' @param sites A string vector containing site codes to plot
 #' @param Survey Which Survey to plot ("NRS", "Coastal", "LTM")
+#' @param Type Must be phytoplankton for SOTS to plot, otherwise it has no impact on the plot
 #'
 #' @return a map of the selected stations
 #' @export
 #'
 #' @examples
 #' sites <- c("MAI", "PHB")
-#' pmap <- pr_plot_NRSmap(sites)
+#' pmap <- pr_plot_NRSmap(sites, Type = 'Phytoplankton')
 #' pmap <- pr_plot_NRSmap(sites, Survey = "LTM")
-pr_plot_NRSmap <- function(sites, Survey = "NRS"){
-
+pr_plot_NRSmap <- function(sites, Survey = "NRS", Type = 'Zooplankton'){
 
   if(Survey == "NRS"){
     meta_sf <- meta_sf
@@ -46,6 +46,23 @@ pr_plot_NRSmap <- function(sites, Survey = "NRS"){
       dplyr::filter(.data$Code %in% c("MAI", "PHB", "ROT"))
   } else if (Survey == "Coastal") {
     meta_sf <- csDAT
+  }
+
+  if (Type == 'Phytoplankton'){
+    meta_sf <- readr::read_csv(system.file("extdata", "BGC_StationInfo.csv", package = "planktonr", mustWork = TRUE),
+                           na = "",
+                           show_col_types = FALSE,
+                           col_types = readr::cols(
+                             StationStartDate = readr::col_date(format = "%d/%m/%Y"))) %>%
+      pr_rename() %>%
+      dplyr::filter(.data$StationCode == "SOTS") %>%
+      dplyr::select(Station = StationName, Code = StationCode, Latitude, Longitude) %>%
+      sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326) %>%
+      dplyr::bind_rows(meta_sf)
+    limlatmin <- -50
+  } else {
+    meta_sf
+    limlatmin <- -45
   }
 
   meta_sf <- meta_sf %>%
@@ -63,7 +80,7 @@ pr_plot_NRSmap <- function(sites, Survey = "NRS"){
     ggplot2::geom_sf(data = meta_sf, ggplot2::aes(colour = .data$Code), size = 5, show.legend = FALSE) +
     ggplot2::scale_colour_manual(values = col) +
     ggplot2::scale_x_continuous(expand = c(0, 0), limits = c(112, 155)) +
-    ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(-45, -9)) +
+    ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(limlatmin, -9)) +
     ggplot2::theme_void() +
     ggplot2::theme(axis.title = ggplot2::element_blank(),
                    axis.line = ggplot2::element_blank(),
