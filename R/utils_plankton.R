@@ -8,7 +8,7 @@
 #'
 #' @examples
 #' NRSfgz <- pr_get_FuncGroups(Survey = "NRS", Type = "Zooplankton")
-#' NRSfgp <- pr_get_FuncGroups(Survey = "NRS", Type = "Phytoplankton")
+#' NRSfgp <- pr_get_FuncGroups(Survey = "SOTS", Type = "Phytoplankton")
 #' CPRfgz <- pr_get_FuncGroups(Survey = "CPR", Type = "Zooplankton", near_dist_km = 250)
 #' CPRfgp <- pr_get_FuncGroups(Survey = "CPR", Type = "Phytoplankton")
 pr_get_FuncGroups <- function(Survey = "NRS", Type = "Zooplankton", ...){
@@ -19,7 +19,13 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Zooplankton", ...){
   } else if(Survey == "NRS"){
     df <- pr_get_NRSData(Type, Variable = "abundance", Subset = "htg") %>%
       dplyr::filter(.data$StationName != "Port Hacking 4")
-  }
+  } else if(Survey == 'SOTS'){
+    df <- pr_get_NRSData(Type, Variable = "abundance", Subset = "htg") %>%
+      dplyr::filter(grepl('SOTS', StationCode),
+                    Method == 'LM') %>%
+      dplyr::mutate(StationName = 'Southern Ocean Time Series', #TODO - once we get rid of SOTS_RAS we can delete this
+                    StationCode = 'SOTS')
+    }
 
   if(Type == "Phytoplankton"){
     var_names <- c("Centric diatom", "Ciliate", "Cyanobacteria", "Dinoflagellate", "Flagellate", "Foraminifera",
@@ -38,12 +44,11 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Zooplankton", ...){
       dplyr::select("BioRegion", "SampleTime_Local", "Month_Local", "Year_Local", tidyselect::any_of(var_names)) %>%
       dplyr::filter(!is.na(.data$BioRegion), !.data$BioRegion %in% c("North", "North-west")) %>%
       droplevels()
-  } else if(Survey == "NRS"){
+  } else { #if(Survey == "NRS"){ # include SOTS and NRS
     df <- df %>%
       dplyr::select("StationName", "StationCode", "SampleTime_Local",
                     "Month_Local", "Year_Local", tidyselect::any_of(var_names))
   }
-
 
   df <- df %>%
     tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters")  %>%

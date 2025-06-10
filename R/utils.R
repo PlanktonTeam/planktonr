@@ -265,6 +265,7 @@ pr_reorder <- function(df){
   if (pr_get_survey(df) == "NRS"){
 
     if("StationName" %in% colnames(df) && any(grepl('Southern', df$StationName))){ #TODO - managing order when NRS and SOTS combined, is there a better way.
+      # this effects the phyto monthly climatology plotting order if not adjusted for
       df <- df %>%
         dplyr::mutate(StationName = factor(.data$StationName,
                                            levels = c("Darwin", "Yongala", "Ningaloo", "North Stradbroke Island",
