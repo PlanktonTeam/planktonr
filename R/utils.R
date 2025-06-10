@@ -234,7 +234,8 @@ pr_add_StationCode <- function(df){
         StationName == "Esperance" ~ "ESP",
         StationName == "Rottnest Island" ~ "ROT",
         StationName == "Ningaloo" ~ "NIN",
-        StationName == "Bonney Coast" ~ "VBM")) %>%
+        StationName == "Bonney Coast" ~ "VBM",
+        StationName == 'Southern Ocean Time Series' ~ 'SOTS')) %>%
       dplyr::relocate("StationCode", .after = "StationName")
   } else if("TripCode" %in% colnames(df)){
     df <- df %>%
