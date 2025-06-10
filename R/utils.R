@@ -205,13 +205,9 @@ pr_add_StationName <- function(df){
       StationCode == "ESP" ~ "Esperance",
       StationCode == "ROT" ~ "Rottnest Island",
       StationCode == "NIN" ~ "Ningaloo",
-      StationCode == "VBM" ~ "Bonney Coast",
-      StationCode == "SOTS" ~ "Southern Ocean Time Series",
-      StationCode == "SOTS-RAS" ~ "Southern Ocean Time Series")) %>% #TODO - get rid of this line if we can get a name change
+      StationCode == "VBM" ~ "Bonney Coast")) %>%
     dplyr::relocate("StationCode", .after = "StationName")
 }
-
-
 
 #' Add NRS StationCode to data
 #'
@@ -238,9 +234,7 @@ pr_add_StationCode <- function(df){
         StationName == "Esperance" ~ "ESP",
         StationName == "Rottnest Island" ~ "ROT",
         StationName == "Ningaloo" ~ "NIN",
-        StationName == "Bonney Coast" ~ "VBM",
-        StationName == 'Southern Ocean Time Series' ~ 'SOTS',
-        StationName == 'Southern Ocean Time Series - Remote Access Sampler' ~ 'SOTS')) %>% #TODO - get rid of this line if we can get a name change
+        StationName == "Bonney Coast" ~ "VBM")) %>%
       dplyr::relocate("StationCode", .after = "StationName")
   } else if("TripCode" %in% colnames(df)){
     df <- df %>%
@@ -271,19 +265,17 @@ pr_reorder <- function(df){
 
     if("StationName" %in% colnames(df)){
       df <- df %>%
-        dplyr::mutate(StationName = ifelse(.data$StationName == "Southern Ocean Time Series - Remote Access Sampler", "Southern Ocean Time Series", .data$StationName), #TODO - temp fix if we can get a name change to the SOTS data
-                      StationName = factor(.data$StationName,
+        dplyr::mutate(StationName = factor(.data$StationName,
                                            levels = c("Darwin", "Yongala", "Ningaloo", "North Stradbroke Island",
                                                       "Rottnest Island", "Esperance", "Port Hacking", "Kangaroo Island",
-                                                      "Bonney Coast", "Maria Island", "Southern Ocean Time Series")))
+                                                      "Bonney Coast", "Maria Island")))
     }
 
     if("StationCode" %in% colnames(df)){
       df <- df %>%
-        dplyr::mutate(StationCode = ifelse(.data$StationCode == "SOTS_RAS", "SOTS", .data$StationCode), #TODO - temp fix if we can get a name change to the SOTS data
-                      StationCode = factor(.data$StationCode,
+        dplyr::mutate(StationCode = factor(.data$StationCode,
                                            levels = c("DAR", "YON", "NIN", "NSI", "ROT",
-                                                      "ESP", "PHB", "KAI", "VBM", "MAI", "SOTS")))
+                                                      "ESP", "PHB", "KAI", "VBM", "MAI")))
     }
   }
 
@@ -319,7 +311,6 @@ pr_reorder <- function(df){
     }
 
   }
-
 
   return(df)
 }
