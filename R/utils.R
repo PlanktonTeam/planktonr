@@ -280,7 +280,7 @@ pr_reorder <- function(df){
 
     if("StationCode" %in% colnames(df)){
       df <- df %>%
-        dplyr::mutate(StationCode = ifelse(.data$StationCode == "SOTS-RAS", "SOTS", .data$StationCode), #TODO - temp fix if we can get a name change to the SOTS data
+        dplyr::mutate(StationCode = ifelse(.data$StationCode == "SOTS_RAS", "SOTS", .data$StationCode), #TODO - temp fix if we can get a name change to the SOTS data
                       StationCode = factor(.data$StationCode,
                                            levels = c("DAR", "YON", "NIN", "NSI", "ROT",
                                                       "ESP", "PHB", "KAI", "VBM", "MAI", "SOTS")))
