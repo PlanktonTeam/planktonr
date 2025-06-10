@@ -271,7 +271,7 @@ pr_reorder <- function(df){
 
     if("StationName" %in% colnames(df)){
       df <- df %>%
-        dplyr::mutate(StationName = ifelse(.data$StationName == "Southern Ocean Time Series - Remote Access Sampler", "Southern Ocean Time Series", .data$SStationName), #TODO - temp fix if we can get a name change to the SOTS data
+        dplyr::mutate(StationName = ifelse(.data$StationName == "Southern Ocean Time Series - Remote Access Sampler", "Southern Ocean Time Series", .data$StationName), #TODO - temp fix if we can get a name change to the SOTS data
                       StationName = factor(.data$StationName,
                                            levels = c("Darwin", "Yongala", "Ningaloo", "North Stradbroke Island",
                                                       "Rottnest Island", "Esperance", "Port Hacking", "Kangaroo Island",
