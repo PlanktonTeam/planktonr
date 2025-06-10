@@ -52,7 +52,7 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Zooplankton", ...){
 
   df <- df %>%
     tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters")  %>%
-    dplyr::mutate(Values = .data$Values + min(.data$Values[.data$Values>0], na.rm = TRUE)) %>%
+    #dplyr::mutate(Values = .data$Values + min(.data$Values[.data$Values>0], na.rm = TRUE)) %>%
     dplyr::filter(.data$Parameters != "Flagellate") %>%
     pr_reorder()
 
@@ -71,8 +71,8 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Zooplankton", ...){
   df <- df %>%
     dplyr::group_by(dplyr::across(-"Values")) %>%
     dplyr::summarise(Values = sum(.data$Values, na.rm = TRUE),
-                     .groups = "drop") %>%
-    dplyr::mutate(Values = dplyr::if_else(.data$Values < 1, 1, .data$Values))
+                     .groups = "drop") #%>%
+    #dplyr::mutate(Values = dplyr::if_else(.data$Values < 1, 1, .data$Values))
 
   # df <- planktonr_dat(df, type = Type, survey = Survey, variable = NULL)
 
