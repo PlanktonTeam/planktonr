@@ -159,11 +159,7 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
                     lower = .data$fit -1.96*.data$se.fit) %>%
       dplyr::select(tidyselect::all_of(site), "Month_Local", "Month", "fit", "upper", "lower") %>%
       dplyr::left_join(means, by = c('Month_Local', as.character(site))) %>%
-      dplyr::mutate(StationName = factor(.data$StationName, #TODO - have to reorder a df which has NRS sites and SOTS for phytoplankton data. Is there a better way?
-                                         levels = c("Darwin", "Yongala", "Ningaloo", "North Stradbroke Island",
-                                                    "Rottnest Island", "Esperance", "Port Hacking", "Kangaroo Island",
-                                                    "Bonney Coast", "Maria Island", "Southern Ocean Time Series"))) %>%
-      droplevels()
+      pr_reorder()
 
   } else {
     Trend <- "SampleTime_Local"

@@ -255,7 +255,7 @@ pr_add_StationCode <- function(df){
 #' @export
 #'
 #' @examples
-#' df <- data.frame(StationName = c('Port Hacking', 'Maria Island',
+#' df <- data.frame(StationName = c('Port Hacking', 'Maria Island', 'Southern Ocean Time Series',
 #' 'North Stradbroke Island','Esperance', 'Ningaloo', "Darwin",
 #' 'Rottnest Island',  'Kangaroo Island', "Yongala")) %>%
 #' planktonr_dat(Survey = "NRS")
@@ -264,15 +264,30 @@ pr_reorder <- function(df){
 
   if (pr_get_survey(df) == "NRS"){
 
-    if("StationName" %in% colnames(df)){
+    if("StationName" %in% colnames(df) && any(grepl('Southern', df$StationName))){ #TODO - managing order when NRS and SOTS combined, is there a better way.
+      df <- df %>%
+        dplyr::mutate(StationName = factor(.data$StationName,
+                                           levels = c("Darwin", "Yongala", "Ningaloo", "North Stradbroke Island",
+                                                      "Rottnest Island", "Esperance", "Port Hacking", "Kangaroo Island",
+                                                      "Bonney Coast", "Maria Island", "Southern Ocean Time Series",
+                                                      "Southern Ocean Time Series - Remote Access Sampler"))) %>%
+        droplevels()
+    } else if ("StationName" %in% colnames(df)){
       df <- df %>%
         dplyr::mutate(StationName = factor(.data$StationName,
                                            levels = c("Darwin", "Yongala", "Ningaloo", "North Stradbroke Island",
                                                       "Rottnest Island", "Esperance", "Port Hacking", "Kangaroo Island",
                                                       "Bonney Coast", "Maria Island")))
+
     }
 
-    if("StationCode" %in% colnames(df)){
+    if("StationCode" %in% colnames(df) && any(grepl('SOTS', df$StationCode))){
+      df <- df %>%
+        dplyr::mutate(StationCode = factor(.data$StationCode,
+                                           levels = c("DAR", "YON", "NIN", "NSI", "ROT",
+                                                      "ESP", "PHB", "KAI", "VBM", "MAI", "SOTS", "SOTS_RAS"))) %>%
+        droplevels()
+    } else if ("StationCode" %in% colnames(df)){
       df <- df %>%
         dplyr::mutate(StationCode = factor(.data$StationCode,
                                            levels = c("DAR", "YON", "NIN", "NSI", "ROT",
