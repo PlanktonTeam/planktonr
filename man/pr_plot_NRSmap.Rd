@@ -4,12 +4,14 @@
 \alias{pr_plot_NRSmap}
 \title{Sidebar panel plot of selected NRS stations}
 \usage{
-pr_plot_NRSmap(sites, Survey = "NRS")
+pr_plot_NRSmap(sites, Survey = "NRS", Type = "Zooplankton")
 }
 \arguments{
 \item{sites}{A string vector containing site codes to plot}
 
 \item{Survey}{Which Survey to plot ("NRS", "Coastal", "LTM")}
+
+\item{Type}{Must be phytoplankton for SOTS to plot, otherwise it has no impact on the plot}
 }
 \value{
 a map of the selected stations
@@ -19,6 +21,6 @@ Sidebar panel plot of selected NRS stations
 }
 \examples{
 sites <- c("MAI", "PHB")
-pmap <- pr_plot_NRSmap(sites)
+pmap <- pr_plot_NRSmap(sites, Type = 'Phytoplankton')
 pmap <- pr_plot_NRSmap(sites, Survey = "LTM")
 }

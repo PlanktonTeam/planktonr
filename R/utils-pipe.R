@@ -17,7 +17,7 @@ NULL
 #' Pipe operator
 #'
 #' @name %m+%
-#' @rdname ops-m+
+#' @rdname grapes-m-plus-grapes
 #' @keywords internal
 #' @export
 #' @importFrom lubridate %m+%

@@ -16,6 +16,6 @@ A dataframe with StationCode added
 Add NRS StationCode to data
 }
 \examples{
-df <- pr_get_NRSStation() \%>\%
+df <- pr_get_Stations() \%>\%
     pr_add_StationCode()
 }

@@ -21,7 +21,7 @@ Get functional group data
 }
 \examples{
 NRSfgz <- pr_get_FuncGroups(Survey = "NRS", Type = "Zooplankton")
-NRSfgp <- pr_get_FuncGroups(Survey = "NRS", Type = "Phytoplankton")
+NRSfgp <- pr_get_FuncGroups(Survey = "SOTS", Type = "Phytoplankton")
 CPRfgz <- pr_get_FuncGroups(Survey = "CPR", Type = "Zooplankton", near_dist_km = 250)
 CPRfgp <- pr_get_FuncGroups(Survey = "CPR", Type = "Phytoplankton")
 }
