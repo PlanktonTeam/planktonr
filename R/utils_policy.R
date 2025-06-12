@@ -134,9 +134,9 @@ pr_get_PolicyInfo <- function(Survey = "NRS", ...){
 
   } else if (Survey == 'SOTS') {
 
-    SotsInfo <- pr_get_Stations() %>%
-      data.frame(StationCode = 'SOTS',
-                 Region = 'Southern Ocean',
+    SotsInfo <- pr_get_Stations('SOTS') %>%
+      dplyr::filter(StationCode == 'SOTS') %>%
+      dplyr::mutate(Region = 'Southern Ocean',
                  Features = "deep water moorings in the sub-Antarctic Zone",
                  now = 'and is ongoing') %>%
       dplyr::select(-c("ProjectName", "StationCode", "IMCRA"))
