@@ -8,16 +8,16 @@ testthat::test_that("Correct function output", {
   testthat::expect_type(pr_get_PlanktonInfo(Type = "Phytoplankton"), "list")
   testthat::expect_type(pr_get_PlanktonInfo(Type = "Zooplankton"), "list")
 
-  testthat::expect_type(pr_get_NRSStation() %>%
+  testthat::expect_type(pr_get_Stations() %>%
                           pr_add_StationName(), "list")
 
   testthat::expect_type(data.frame(TripCode = "MAI20220628") %>%
                           pr_add_StationCode(), "list")
 
-  testthat::expect_type(pr_get_NRSStation() %>%
+  testthat::expect_type(pr_get_Stations() %>%
                           pr_add_StationCode(), "list")
 
-  testthat::expect_type(pr_get_NRSStation(), "list")
+  testthat::expect_type(pr_get_Stations(), "list")
 
   testthat::expect_type(data.frame(StationCode = c("MAI", "NSI", "PHB")), "list")
 

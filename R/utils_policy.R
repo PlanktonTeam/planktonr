@@ -116,7 +116,7 @@ pr_get_PolicyInfo <- function(Survey = "NRS", ...){
 
   if(Survey == "NRS"){
 
-    NRSinfo <- pr_get_NRSStation() %>%
+    NRSinfo <- pr_get_Stations() %>%
       dplyr::mutate(Region = dplyr::case_when(.data$StationCode %in% c("DAR") ~ "Tropical North",
                                               .data$StationCode %in% c("YON") ~ "GBR Lagoon",
                                               .data$StationCode %in% c("NSI", "PHB", "MAI") ~ "South East",
@@ -132,7 +132,17 @@ pr_get_PolicyInfo <- function(Survey = "NRS", ...){
                                            .data$StationCode %in% c("ESP", "NIN") ~ "and concluded in March 2013")) %>%
       dplyr::select(-c("ProjectName", "StationCode", "IMCRA"))
 
-  } else {
+  } else if (Survey == 'SOTS') {
+
+    SotsInfo <- pr_get_Stations() %>%
+      data.frame(StationCode = 'SOTS',
+                 Region = 'Southern Ocean',
+                 Features = "deep water moorings in the sub-Antarctic Zone",
+                 now = 'and is ongoing') %>%
+      dplyr::select(-c("ProjectName", "StationCode", "IMCRA"))
+
+    } else
+  {
 
     # Southern ocean info from https://soe.dcceew.gov.au/antarctica/environment/physical-environment
     # All others from https://www.dcceew.gov.au/environment/marine/marine-bioregional-plans

@@ -190,7 +190,7 @@ pr_get_PlanktonInfo <- function(Type = "Zooplankton"){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_NRSStation() %>%
+#' df <- pr_get_Stations() %>%
 #'     pr_add_StationName()
 #' @importFrom rlang .data
 pr_add_StationName <- function(df){
@@ -216,7 +216,7 @@ pr_add_StationName <- function(df){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_NRSStation() %>%
+#' df <- pr_get_Stations() %>%
 #'     pr_add_StationCode()
 #' @importFrom rlang .data
 pr_add_StationCode <- function(df){
