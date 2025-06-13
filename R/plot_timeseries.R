@@ -473,6 +473,9 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 #'       trans = "identity", col = "blue", labels = FALSE)
 pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "blue", labels = TRUE) {
 
+  lims <- c(lubridate::floor_date(min(df$SampleTime_Local), "year"),
+            lubridate::ceiling_date(max(df$SampleTime_Local), "year")) # moving this to start so that in BOO the date scales for different parameters are equal.
+
   # Ensure there is only one parameter
   df <- df %>%
     dplyr::filter(.data$Parameters == EOV)
@@ -540,8 +543,6 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
       c(paste0(" [p = ",coefficients$p.value ,coefficients$signif, "]")) %>%
       as.call()
 
-    lims <- c(lubridate::floor_date(min(df$SampleTime_Local), "year"),
-              lubridate::ceiling_date(max(df$SampleTime_Local), "year"))
     df <- df %>%
       dplyr::filter(.data$Parameters == EOV)
 
