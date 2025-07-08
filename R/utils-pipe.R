@@ -17,7 +17,7 @@ NULL
 #' Pipe operator
 #'
 #' @name %m+%
-#' @rdname ops-m+
+#' @rdname opsm
 #' @keywords internal
 #' @export
 #' @importFrom lubridate %m+%

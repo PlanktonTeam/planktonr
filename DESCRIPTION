@@ -34,6 +34,7 @@ Imports:
     sf,
     stats,
     stringr,
+    suncalc,
     tibble,
     tidyr,
     tidyselect,
