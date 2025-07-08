@@ -49,7 +49,6 @@ Suggests:
     rmarkdown,
     rnaturalearthdata,
     RNetCDF,
-    suncalc,
     testthat (>= 3.0.0),
     thredds,
     yaImpute

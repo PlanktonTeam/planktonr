@@ -14,15 +14,15 @@
 NULL
 
 
-#' Pipe operator
+#' Pipe operator for adding time periods to dates
 #'
 #' @name %m+%
-#' @rdname opsm
+#' @rdname mplus
 #' @keywords internal
 #' @export
 #' @importFrom lubridate %m+%
-#' @usage lhs \%m+\% rhs
-#' @param lhs A period or a date-time object of class.
-#' @param rhs A period or a date-time object of class.
-#' @return The result of calling `rhs(lhs)`.
+#' @usage e1 \%m+\% e2
+#' @param e1 A period or a date-time object of class.
+#' @param e2 A period or a date-time object of class.
+#' @return A date-time object of class POSIXlt, POSIXct or Date.
 NULL
