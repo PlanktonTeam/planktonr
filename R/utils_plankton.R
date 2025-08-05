@@ -46,7 +46,7 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Zooplankton", ...){
       droplevels()
   } else { #if(Survey == "NRS"){ # include SOTS and NRS
     df <- df %>%
-      dplyr::select("StationName", "StationCode", "SampleTime_Local",
+      dplyr::select("StationName", "StationCode", "SampleTime_Local", "SampleDepth_m",
                     "Month_Local", "Year_Local", tidyselect::any_of(var_names))
   }
 
