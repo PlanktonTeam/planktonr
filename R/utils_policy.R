@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-#' df <- pr_get_EOVs("SOTS")
+#' df <- pr_get_EOVs("NRS")
 pr_get_EOVs <- function(Survey = "NRS", ...){
 
   if(Survey == "CPR") {
@@ -100,7 +100,7 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
       pr_reorder()
 
   } else if (Survey == 'SOTS'){
-    cat("This may take a few minutes as none of the data is pre-processed for SOTS")
+    cat("This may take a few minutes as none of the SOTS data is pre-processed")
 
     var_names <- c("PhytoBiomassCarbon_pgL","ShannonPhytoDiversity",
                    "Temperature_degC", "Salinity", "ChlF_mgm3",
@@ -108,15 +108,12 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
                    "Phosphate_umolL", "DissolvedOxygen_umolL")
 
     SOTSwater <- planktonr::pr_get_SOTSMoorData(Type = 'Physical') %>%
-      dplyr::filter(.data$Parameters %in% c('Salinity', 'Temperature_degC')) %>%
-      planktonr::pr_remove_outliers(2)
+      dplyr::filter(.data$Parameters %in% c('Salinity', 'Temperature_degC'))
     NutsSots <- pr_get_SOTSMoorData(Type = 'Nutrients') %>%
-      dplyr::filter(!.data$Parameters %in% c('Salinity', 'Temperature_degC')) %>% # remove duplicate data from above
-      planktonr::pr_remove_outliers(2)
+      dplyr::filter(!.data$Parameters %in% c('Salinity', 'Temperature_degC'))  # remove duplicate data from above
 
     PolSOTS <- pr_get_Indices(Survey = "SOTS", Type = "Phytoplankton") %>%
-      dplyr::filter(.data$Parameters %in% var_names,
-                    .data$SampleDepth_m < 50) %>%
+      dplyr::filter(.data$Parameters %in% var_names) %>%
       dplyr::select(-c(.data$tz, .data$TripCode, .data$Latitude, .data$Longitude)) %>%
       dplyr::mutate(SampleDepth_m = ifelse(.data$SampleDepth_m < 15, 0, 30)) %>%
       dplyr::bind_rows(SOTSwater %>% dplyr::filter(.data$Parameters %in% var_names)) %>%
