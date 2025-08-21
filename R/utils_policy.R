@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-#' df <- pr_get_EOVs("CPR")
+#' df <- pr_get_EOVs("SOTS")
 pr_get_EOVs <- function(Survey = "NRS", ...){
 
   if(Survey == "CPR") {
@@ -99,6 +99,39 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
                     Survey = 'LTM') %>%
       pr_reorder()
 
+  } else if (Survey == 'SOTS'){
+    cat("This may take a few minutes as none of the data is pre-processed for SOTS")
+
+    var_names <- c("PhytoBiomassCarbon_pgL","ShannonPhytoDiversity",
+                   "Temperature_degC", "Salinity", "ChlF_mgm3",
+                   "Nitrate_umolL",  "Silicate_umolL", "ph",
+                   "Phosphate_umolL", "DissolvedOxygen_umolL")
+
+    # SOTSwater <- planktonr::pr_get_SOTSMoorData(Type = 'Physical') %>%
+    #   dplyr::filter(!Parameters %in% c('Salinity', 'Temperature_degC')) %>%
+    #   planktonr::pr_remove_outliers(2)
+    NutsSots <- pr_get_SOTSMoorData(Type = 'Nutrients') %>%
+#      dplyr::filter(!Parameters %in% c('Salinity', 'Temperature_degC')) %>% # duplicate data from above
+      planktonr::pr_remove_outliers(2)
+
+    PolSOTS <- pr_get_Indices(Survey = "SOTS", Type = "Phytoplankton") %>%
+      dplyr::filter(.data$Parameters %in% var_names,
+                    .data$SampleDepth_m < 50) %>%
+      dplyr::select(-c(.data$tz, .data$TripCode, .data$Latitude, .data$Longitude)) %>%
+      dplyr::mutate(SampleDepth_m = ifelse(.data$SampleDepth_m < 15, 0, 30)) %>%
+      #dplyr::bind_rows(SOTSwater %>% dplyr::filter(.data$Parameters %in% var_names)) %>% # TODO - check for duplicates between nuts and water
+      dplyr::bind_rows(NutsSots %>% dplyr::filter(.data$Parameters %in% var_names))
+
+    means <- PolSOTS %>%
+      pr_remove_outliers(2) %>%
+      dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
+                       sd = stats::sd(.data$Values, na.rm = TRUE),
+                       .by = tidyselect::all_of(c("StationName", "SampleDepth_m", "Parameters")))
+
+    PolSOTS <-  PolSOTS %>%
+      dplyr::left_join(means, by = c("StationName", "SampleDepth_m", "Parameters")) %>%
+      dplyr::mutate(anomaly = (.data$Values - means)/sd,
+                    Survey = "SOTS")
   }
 
 }
@@ -135,7 +168,7 @@ pr_get_PolicyInfo <- function(Survey = "NRS", ...){
   } else if (Survey == 'SOTS') {
 
     SotsInfo <- pr_get_Stations('SOTS') %>%
-      dplyr::filter(StationCode == 'SOTS') %>%
+      dplyr::filter(.data$StationCode == 'SOTS') %>%
       dplyr::mutate(Region = 'Southern Ocean',
                  Features = "deep water moorings in the sub-Antarctic Zone",
                  now = 'and is ongoing') %>%

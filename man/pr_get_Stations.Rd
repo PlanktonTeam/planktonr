@@ -6,6 +6,9 @@
 \usage{
 pr_get_Stations(Survey = "NRS")
 }
+\arguments{
+\item{Survey}{NRS is default, could be SOTS}
+}
 \value{
 A dataframe with NRS Station information
 }
@@ -13,5 +16,5 @@ A dataframe with NRS Station information
 Load NRS station information including codes, location, and sampling interval.
 }
 \examples{
-df <- pr_get_Stations('SOTS')
+df <- pr_get_Stations('NRS')
 }

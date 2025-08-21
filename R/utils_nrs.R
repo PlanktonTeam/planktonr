@@ -66,10 +66,11 @@ pr_get_NRSData <- function(Type = "Phytoplankton", Variable = "abundance", Subse
 #'
 #' Load NRS station information including codes, location, and sampling interval.
 #'
+#' @param Survey NRS is default, could be SOTS
 #' @return A dataframe with NRS Station information
 #' @export
 #' @examples
-#' df <- pr_get_Stations('SOTS')
+#' df <- pr_get_Stations('NRS')
 #' @importFrom rlang .data
 pr_get_Stations <- function(Survey = 'NRS'){
   dat <- readr::read_csv(system.file("extdata", "BGC_StationInfo.csv", package = "planktonr", mustWork = TRUE),

@@ -128,12 +128,12 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d", parallel = FA
       string = "092000"
     }
 
-    url_base <- paste0("http://thredds.aodn.org.au/thredds/dodsC/IMOS/SRS/SST/ghrsst/L3S-",res_temp,"/dn/") # Base URL
+    url_base <- paste0("https://thredds.aodn.org.au/thredds/dodsC/IMOS/SRS/SST/ghrsst/L3S-",res_temp,"/dn/") # Base URL
     imos_url <- paste0(url_base, df$Year,"/",df$Year,mth,dy,string,"-ABOM-L3S_GHRSST-SSTfnd-AVHRR_D-", res_temp, "_dn.nc")
 
     url_exists <- function(url){
       tryCatch({ # Not all dates will exist
-        nc <- RNetCDF::open.nc(url)
+        nc <- ncdf4::nc_open(url)
       },
       error = function(cond) {
         return(NULL)
@@ -151,18 +151,18 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d", parallel = FA
 
     } else {
 
-      lat <- RNetCDF::var.get.nc(nc, variable = "lat")
-      lon <- RNetCDF::var.get.nc(nc, variable = "lon")
-      lengthlat <- RNetCDF::dim.inq.nc(nc, "lat")
-      lengthlon <- RNetCDF::dim.inq.nc(nc, "lon")
+      lat <- ncdf4::ncvar_get(nc, varid = "lat")
+      lon <- ncdf4::ncvar_get(nc, varid = "lon")
+      lengthlat <- length(lat)
+      lengthlon <- length(lon)
       minlat <- min(lat)
       maxlat <- max(lat)
       minlon <- min(lon)
       maxlon <- max(lon)
 
       # Approximate nearest neighbour
-      idx_lon <- yaImpute::ann(as.matrix(seq(minlon, maxlon, length.out = lengthlon$length)), as.matrix(df$Longitude), k = 1, verbose = FALSE)$knnIndexDist[,1]
-      idx_lat <- yaImpute::ann(as.matrix(seq(maxlat, minlat, length.out = lengthlat$length)), as.matrix(df$Latitude), k = 1, verbose = FALSE)$knnIndexDist[,1]
+      idx_lon <- yaImpute::ann(as.matrix(seq(minlon, maxlon, length.out = lengthlon)), as.matrix(df$Longitude), k = 1, verbose = FALSE)$knnIndexDist[,1]
+      idx_lat <- yaImpute::ann(as.matrix(seq(maxlat, minlat, length.out = lengthlat)), as.matrix(df$Latitude), k = 1, verbose = FALSE)$knnIndexDist[,1]
       cnt <- c(1,1,1)
 
       if (res_spat > 1) { # If more than 1x1 pixel is requested we adjust the idx by res_spat/2 and count by res_spa
@@ -172,13 +172,13 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d", parallel = FA
       }
 
       prfunc <- function(pr){
-        out <- mean(RNetCDF::var.get.nc(nc, pr, start=c(idx_lon, idx_lat, 1), count = cnt, unpack = TRUE), na.rm = TRUE)
+        out <- mean(ncdf4::ncvar_get(nc, pr, start=c(idx_lon, idx_lat, 1), count = cnt), na.rm = TRUE)
       }
 
       out <- purrr::map(pr, prfunc)
       names(out) <- pr
 
-      RNetCDF::close.nc(nc)
+      ncdf4::nc_close(nc)
 
       return(out)
     }
@@ -283,13 +283,13 @@ pr_match_Altimetry <- function(df, pr, res_spat = 1) {
     dy <- stringr::str_pad(df$Day, 2 , "left", pad = "0")
 
     tryCatch({
-      thredd_url <- paste0("http://thredds.aodn.org.au/thredds/catalog/IMOS/OceanCurrent/GSLA/DM/",df$Year,"/catalog.xml")
+      thredd_url <- paste0("https://thredds.aodn.org.au/thredds/catalog/IMOS/OceanCurrent/GSLA/DM/",df$Year,"/catalog.xml")
       f <- thredds::CatalogNode$new(thredd_url)
       files <- data.frame(files = f$get_dataset_names())
       pattern <- paste0(df$Year,mth,dy,"T000000Z")
       fileName <- files %>% dplyr::filter(grepl(pattern, files))
       filename <- fileName$files
-      url_base <- paste0("http://thredds.aodn.org.au/thredds/dodsC/IMOS/OceanCurrent/GSLA/DM/") # Base URL
+      url_base <- paste0("https://thredds.aodn.org.au/thredds/dodsC/IMOS/OceanCurrent/GSLA/DM/") # Base URL
       imos_url <- paste0(url_base,df$Year,"/",filename)
     },
     error = function(cond) {
@@ -300,20 +300,20 @@ pr_match_Altimetry <- function(df, pr, res_spat = 1) {
 
     if(exists("fileName") && nrow(fileName) > 0) {# Not all dates will exist
 
-      nc <- RNetCDF::open.nc(imos_url)
-      lat <- RNetCDF::var.get.nc(nc, variable = "LATITUDE")
-      lon <- RNetCDF::var.get.nc(nc, variable = "LONGITUDE")
-      lengthlat <- RNetCDF::dim.inq.nc(nc, "LATITUDE")
-      lengthlon <- RNetCDF::dim.inq.nc(nc, "LONGITUDE")
+      nc <- ncdf4::nc_open(imos_url)
+      lat <- ncdf4::ncvar_get(nc, varid = "LATITUDE")
+      lon <- ncdf4::ncvar_get(nc, varid = "LONGITUDE")
+      lengthlat <- length(lat)
+      lengthlon <- length(lon)
       minlat <- min(lat)
       maxlat <- max(lat)
       minlon <- min(lon)
       maxlon <- max(lon)
 
       # Approximate nearest neighbour
-      idx_lon <- (yaImpute::ann(as.matrix(seq(minlon, maxlon, length.out = lengthlon$length)),
+      idx_lon <- (yaImpute::ann(as.matrix(seq(minlon, maxlon, length.out = lengthlon)),
                                 as.matrix(df$Longitude), k = 1, verbose = FALSE)$knnIndexDist[,1])[1]
-      idx_lat <- (yaImpute::ann(as.matrix(seq(maxlat, minlat, length.out = lengthlat$length)),
+      idx_lat <- (yaImpute::ann(as.matrix(seq(maxlat, minlat, length.out = lengthlat)),
                                 as.matrix(df$Latitude), k = 1, verbose = FALSE)$knnIndexDist[,1])[1]
       cnt <- c(1,1,1)
 
@@ -324,12 +324,12 @@ pr_match_Altimetry <- function(df, pr, res_spat = 1) {
       }
 
       prfunc <- function(pr){
-        out <- mean(RNetCDF::var.get.nc(nc, pr, start=c(idx_lon, idx_lat, 1), count = cnt, unpack = TRUE))
+        out <- mean(ncdf4::ncvar_get(nc, pr, start=c(idx_lon, idx_lat, 1), count = cnt))
       }
 
       out <- purrr::map(pr, prfunc)
       names(out) <- pr
-      RNetCDF::close.nc(nc)
+      ncdf4::nc_close(nc)
       return(out)
 
     } else {
@@ -408,7 +408,7 @@ pr_match_MODIS <- function(df, pr, res_spat = 1, res_temp = "1d") {
     tryCatch({ # Not all dates will exist
       url_base <- paste0("http://thredds.aodn.org.au/thredds/dodsC/IMOS/SRS/OC/gridded/aqua/P1D/") # Base URL
       imos_url <- paste0(url_base, df$Year,"/",mth,"/A.P1D.",df$Year,mth,dy,"T053000Z.aust.",df$pr,".nc")
-      nc <- RNetCDF::open.nc(imos_url)
+      nc <- ncdf4::nc_open(imos_url)
     },
     error = function(cond) {
       ncx <- NaN
@@ -418,18 +418,18 @@ pr_match_MODIS <- function(df, pr, res_spat = 1, res_temp = "1d") {
 
     if(exists("nc")) {# Not all dates will exist
 
-      lat <- RNetCDF::var.get.nc(nc, variable = "latitude")
-      lon <- RNetCDF::var.get.nc(nc, variable = "longitude")
-      lengthlat <- RNetCDF::dim.inq.nc(nc, "latitude")
-      lengthlon <- RNetCDF::dim.inq.nc(nc, "longitude")
+      lat <- ncdf4::ncvar_get(nc, varid = "latitude")
+      lon <- ncdf4::ncvar_get(nc, varid = "longitude")
+      lengthlat <- length(lat)
+      lengthlon <- length(lon)
       minlat <- min(lat)
       maxlat <- max(lat)
       minlon <- min(lon)
       maxlon <- max(lon)
 
       # Approximate nearest neighbour
-      idx_lon <- yaImpute::ann(as.matrix(seq(minlon, maxlon, length.out = lengthlon$length)), as.matrix(df$Longitude), k = 1, verbose = FALSE)$knnIndexDist[,1]
-      idx_lat <- yaImpute::ann(as.matrix(seq(maxlat, minlat, length.out = lengthlat$length)), as.matrix(df$Latitude), k = 1, verbose = FALSE)$knnIndexDist[,1]
+      idx_lon <- yaImpute::ann(as.matrix(seq(minlon, maxlon, length.out = lengthlon)), as.matrix(df$Longitude), k = 1, verbose = FALSE)$knnIndexDist[,1]
+      idx_lat <- yaImpute::ann(as.matrix(seq(maxlat, minlat, length.out = lengthlat)), as.matrix(df$Latitude), k = 1, verbose = FALSE)$knnIndexDist[,1]
       cnt <- c(1,1,1)
 
       if (res_spat > 1) { # If more than 1x1 pixel is requested we adjust the idx by res_spat/2 and count by res_spa
@@ -437,11 +437,11 @@ pr_match_MODIS <- function(df, pr, res_spat = 1, res_temp = "1d") {
         idx_lat <- idx_lat - floor(res_spat/2)
         cnt <- c(res_spat, res_spat, 1)
       }
-      out <- RNetCDF::var.get.nc(nc, df$pr, start=c(idx_lon, idx_lat, 1), count = cnt, unpack = TRUE)
+      out <- ncdf4::ncvar_get(nc, df$pr, start=c(idx_lon, idx_lat, 1), count = cnt)
 
       out <- mean(out, na.rm = TRUE)
       return(out)
-      RNetCDF::close.nc(nc)
+      ncdf4::nc_close(nc)
     } else {
       out <- NaN
     }

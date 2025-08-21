@@ -89,32 +89,33 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
 
     dat <- planktonr::pr_get_NRSData(Type = 'phytoplankton', Variable = 'abundance', Subset = 'raw') %>%
       dplyr::filter(grepl('SOTS', .data$StationCode),
-                    Method == 'LM') %>% # only use LM at this stage
+                    .data$Method == 'LM', # only use LM at this stage
+                    .data$SampleDepth_m < 50) %>% # remove deep samples taken at CTD depths
       tidyr::pivot_longer(-c(.data$Project:.data$Method), names_to = 'TaxonName', values_to = 'abund') %>%
-      dplyr::select(tidyselect::any_of(main_vars), TaxonName, abund) %>%
+      dplyr::select(tidyselect::any_of(main_vars), .data$TaxonName, .data$abund) %>%
       dplyr::left_join(trophy, by = 'TaxonName') %>%
       dplyr::filter(.data$abund > 0) %>%
       dplyr::mutate(TaxonName = paste0(.data$genus, " ", .data$species),
                     tz = "Australia/Hobart",
                     StationName = 'Southern Ocean Time Series',
                     StationCode = 'SOTS') %>%
-      dplyr::group_by(across(tidyselect::any_of(main_vars)), TaxonName, FunctionalGroup, CellBioV, Carbon) %>%
+      dplyr::group_by(dplyr::across(tidyselect::any_of(main_vars)), .data$TaxonName, .data$FunctionalGroup, .data$CellBioV, .data$Carbon) %>%
       dplyr::summarise(abund = sum(.data$abund, na.rm = TRUE), ## add up all occurrences of spp. within one sample
                        .groups = 'drop') %>%
-      dplyr::group_by(across(tidyselect::any_of(main_vars))) %>%
+      dplyr::group_by(dplyr::across(tidyselect::any_of(main_vars))) %>%
       dplyr::summarise(AvgCellVol_um3 = mean(.data$CellBioV*.data$abund/sum(.data$abund), na.rm = TRUE),
                        DiatomDinoflagellateRatio = sum(.data$abund[grepl('iatom', .data$FunctionalGroup)])/sum(.data$abund[grepl('iatom|Dinof', .data$FunctionalGroup)]),
                        NoPhytoSpecies_Sample = length(.data$abund[!grepl('NA|spp', .data$TaxonName)]),
                        NoDiatomSpecies_Sample = length(.data$abund[grepl('iatom', .data$FunctionalGroup) & !grepl('NA|spp', .data$TaxonName)]),
                        NoDinoSpecies_Sample = length(.data$abund[.data$FunctionalGroup == 'Dinoflagellate' & !grepl('NA|spp', .data$TaxonName)]),
                        PhytoAbundance_CellsL = sum(.data$abund, na.rm = TRUE),
-                       PhytoBiomassCarbon_pgL = sum(.data$abund * Carbon, na.rm = TRUE),
+                       PhytoBiomassCarbon_pgL = sum(.data$abund * .data$Carbon, na.rm = TRUE),
                        ShannonPhytoDiversity = vegan::diversity(.data$abund[!grepl('NA|spp', .data$TaxonName)], index = 'shannon'),
                        ShannonDiatomDiversity = vegan::diversity(.data$abund[grepl('iatom', .data$FunctionalGroup) & !grepl('NA|spp', .data$TaxonName)], index = 'shannon'),
                        ShannonDinoDiversity = vegan::diversity(.data$abund[grepl('Dinof', .data$FunctionalGroup) & !grepl('NA|spp', .data$TaxonName)], index = 'shannon'),
-                       PhytoEvenness = ShannonPhytoDiversity/log10(NoPhytoSpecies_Sample),
-                       DiatomEvenness = ShannonDiatomDiversity/log10(NoDiatomSpecies_Sample),
-                       DinoflagellateEvenness = ShannonDinoDiversity/log10(NoDinoSpecies_Sample),
+                       PhytoEvenness = .data$ShannonPhytoDiversity/log10(.data$NoPhytoSpecies_Sample),
+                       DiatomEvenness = .data$ShannonDiatomDiversity/log10(.data$NoDiatomSpecies_Sample),
+                       DinoflagellateEvenness = .data$ShannonDinoDiversity/log10(.data$NoDinoSpecies_Sample),
                        .groups = 'drop') %>%
       tidyr::pivot_longer(-tidyselect::any_of(main_vars), values_to = 'Values', names_to = 'Parameters') %>%
       planktonr::pr_remove_outliers(2) %>%

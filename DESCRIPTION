@@ -44,13 +44,16 @@ Suggests:
     future,
     furrr,
     knitr,
+    ncdf4,
     parallelly,
     progressr,
+    RCurl,
     rmarkdown,
     rnaturalearthdata,
-    RNetCDF,
+    rvest,
     testthat (>= 3.0.0),
     thredds,
+    vegan,
     yaImpute
 VignetteBuilder: 
     knitr

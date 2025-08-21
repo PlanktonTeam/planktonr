@@ -56,7 +56,7 @@ pr_plot_NRSmap <- function(sites, Survey = "NRS", Type = 'Zooplankton'){
                              StationStartDate = readr::col_date(format = "%d/%m/%Y"))) %>%
       pr_rename() %>%
       dplyr::filter(.data$StationCode == "SOTS") %>%
-      dplyr::select(Station = StationName, Code = StationCode, Latitude, Longitude) %>%
+      dplyr::select(Station = .data$StationName, Code = .data$StationCode, .data$Latitude, .data$Longitude) %>%
       sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326) %>%
       dplyr::bind_rows(meta_sf)
     limlatmin <- -50
