@@ -1,3 +1,5 @@
+utils::globalVariables(".")
+
 #' Get data files available from SOTS moorings
 #' @param Type Physical or nutrients
 #'
