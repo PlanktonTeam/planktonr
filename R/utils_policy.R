@@ -107,11 +107,11 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
                    "Nitrate_umolL",  "Silicate_umolL", "ph",
                    "Phosphate_umolL", "DissolvedOxygen_umolL")
 
-    # SOTSwater <- planktonr::pr_get_SOTSMoorData(Type = 'Physical') %>%
-    #   dplyr::filter(!Parameters %in% c('Salinity', 'Temperature_degC')) %>%
-    #   planktonr::pr_remove_outliers(2)
+    SOTSwater <- planktonr::pr_get_SOTSMoorData(Type = 'Physical') %>%
+      dplyr::filter(!.data$Parameters %in% c('Salinity', 'Temperature_degC')) %>%
+      planktonr::pr_remove_outliers(2)
     NutsSots <- pr_get_SOTSMoorData(Type = 'Nutrients') %>%
-#      dplyr::filter(!Parameters %in% c('Salinity', 'Temperature_degC')) %>% # duplicate data from above
+      dplyr::filter(!.data$Parameters %in% c('Salinity', 'Temperature_degC')) %>% # remove duplicate data from above
       planktonr::pr_remove_outliers(2)
 
     PolSOTS <- pr_get_Indices(Survey = "SOTS", Type = "Phytoplankton") %>%
@@ -119,7 +119,7 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
                     .data$SampleDepth_m < 50) %>%
       dplyr::select(-c(.data$tz, .data$TripCode, .data$Latitude, .data$Longitude)) %>%
       dplyr::mutate(SampleDepth_m = ifelse(.data$SampleDepth_m < 15, 0, 30)) %>%
-      #dplyr::bind_rows(SOTSwater %>% dplyr::filter(.data$Parameters %in% var_names)) %>% # TODO - check for duplicates between nuts and water
+      dplyr::bind_rows(SOTSwater %>% dplyr::filter(.data$Parameters %in% var_names)) %>%
       dplyr::bind_rows(NutsSots %>% dplyr::filter(.data$Parameters %in% var_names))
 
     means <- PolSOTS %>%
