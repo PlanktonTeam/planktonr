@@ -108,7 +108,7 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
                    "Phosphate_umolL", "DissolvedOxygen_umolL")
 
     SOTSwater <- planktonr::pr_get_SOTSMoorData(Type = 'Physical') %>%
-      dplyr::filter(.data$Parameters %in% c('Salinity', 'Temperature_degC'))
+      dplyr::filter(.data$Parameters %in% c('Salinity', 'Temperature_degC')) # remove duplicate data from below
     NutsSots <- pr_get_SOTSMoorData(Type = 'Nutrients') %>%
       dplyr::filter(!.data$Parameters %in% c('Salinity', 'Temperature_degC'))  # remove duplicate data from above
 
@@ -116,8 +116,8 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
       dplyr::filter(.data$Parameters %in% var_names) %>%
       dplyr::select(-c(.data$tz, .data$TripCode, .data$Latitude, .data$Longitude)) %>%
       dplyr::mutate(SampleDepth_m = ifelse(.data$SampleDepth_m < 15, 0, 30)) %>%
-      dplyr::bind_rows(SOTSwater %>% dplyr::filter(.data$Parameters %in% var_names)) %>%
-      dplyr::bind_rows(NutsSots %>% dplyr::filter(.data$Parameters %in% var_names))
+      dplyr::bind_rows(SOTSwater) %>%
+      dplyr::bind_rows(NutsSots)
 
     means <- PolSOTS %>%
       pr_remove_outliers(2) %>%

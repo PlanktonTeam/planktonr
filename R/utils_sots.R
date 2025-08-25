@@ -58,7 +58,7 @@ pr_get_SOTSvariables <- function(Type = 'Physical'){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_SOTSMoorData(Type = 'Nutrients')
+#' df <- pr_get_SOTSMoorData(Type = 'Physical')
 
 pr_get_SOTSMoorData <- function(Type = 'Physical'){
 
