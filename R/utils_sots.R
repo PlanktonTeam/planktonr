@@ -162,7 +162,7 @@ pr_get_SOTSMoorData <- function(Type = 'Physical'){
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                        .groups = 'drop') %>%
       dplyr::mutate(Year_Local = lubridate::year(.data$SampleTime_Local),
-                    SampleDepth_m = round(.data$SampleDepth_m/5, 0)*5) %>%
+                    SampleDepth_m = round(.data$SampleDepth_m/10, 0)*10) %>%
       dplyr::filter(.data$SampleDepth_m %in% c(0, 30, 50, 100, 200, 500)) %>%
       tidyr::drop_na(.data$Parameters, .data$Values)
 
