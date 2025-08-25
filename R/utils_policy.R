@@ -108,7 +108,7 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
                    "Phosphate_umolL", "DissolvedOxygen_umolL")
 
     SOTSwater <- planktonr::pr_get_SOTSMoorData(Type = 'Physical') %>%
-      dplyr::filter(.data$Parameters %in% c('Salinity', 'Temperature_degC')) # remove duplicate data from below
+      dplyr::filter(.data$Parameters %in% c('Salinity', 'Temperature_degC', "ChlF_mgm3")) # remove duplicate data from below
     NutsSots <- pr_get_SOTSMoorData(Type = 'Nutrients') %>%
       dplyr::filter(!.data$Parameters %in% c('Salinity', 'Temperature_degC'))  # remove duplicate data from above
 
