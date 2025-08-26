@@ -132,7 +132,7 @@ pr_get_SOTSMoorData <- function(Type = 'Physical'){
           dplyr::filter(.data$Flags %in% c(1, 2)) %>%
           dplyr::mutate(SampleDepth_m = Depthvars[as.numeric(gsub("[^0-9]", "", .data$SampleDepth_m))],
                         Parameters = paste0(variablesAvailable)) %>%
-          dplyr::summarise(Values = sum(.data$Values, na.rm = TRUE), .by = setdiff(colnames(.), "Values"))
+          dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE), .by = setdiff(colnames(.), "Values"))
       }
     }
 
