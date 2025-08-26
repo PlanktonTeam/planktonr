@@ -13,6 +13,8 @@
 #' @importFrom rlang .data
 pr_get_CPRData <- function(Type = "Phytoplankton", Variable = "abundance", Subset = "raw"){
 
+  Type <- pr_check_type(Type)
+
   if (Type == "Zooplankton" & Subset == "species"){ # Specific case for zooplankton species
 
     datc <- pr_get_Raw("cpr_zooplankton_abundance_copepods_data") %>%

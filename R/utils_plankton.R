@@ -19,7 +19,13 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Zooplankton", ...){
   } else if(Survey == "NRS"){
     df <- pr_get_NRSData(Type, Variable = "abundance", Subset = "htg") %>%
       dplyr::filter(.data$StationName != "Port Hacking 4")
-  }
+  } else if(Survey == 'SOTS'){
+    df <- pr_get_NRSData(Type, Variable = "abundance", Subset = "htg") %>%
+      dplyr::filter(grepl('SOTS', .data$StationCode),
+                    .data$Method == 'LM') %>%
+      dplyr::mutate(StationName = 'Southern Ocean Time Series', #TODO - once we get rid of SOTS_RAS we can delete this
+                    StationCode = 'SOTS')
+    }
 
   if(Type == "Phytoplankton"){
     var_names <- c("Centric diatom", "Ciliate", "Cyanobacteria", "Dinoflagellate", "Flagellate", "Foraminifera",
@@ -38,16 +44,15 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Zooplankton", ...){
       dplyr::select("BioRegion", "SampleTime_Local", "Month_Local", "Year_Local", tidyselect::any_of(var_names)) %>%
       dplyr::filter(!is.na(.data$BioRegion), !.data$BioRegion %in% c("North", "North-west")) %>%
       droplevels()
-  } else if(Survey == "NRS"){
+  } else { #if(Survey == "NRS"){ # include SOTS and NRS
     df <- df %>%
-      dplyr::select("StationName", "StationCode", "SampleTime_Local",
+      dplyr::select("StationName", "StationCode", "SampleTime_Local", "SampleDepth_m",
                     "Month_Local", "Year_Local", tidyselect::any_of(var_names))
   }
 
-
   df <- df %>%
     tidyr::pivot_longer(tidyselect::any_of(var_names), values_to = "Values", names_to = "Parameters")  %>%
-    dplyr::mutate(Values = .data$Values + min(.data$Values[.data$Values>0], na.rm = TRUE)) %>%
+    #dplyr::mutate(Values = .data$Values + min(.data$Values[.data$Values>0], na.rm = TRUE)) %>%
     dplyr::filter(.data$Parameters != "Flagellate") %>%
     pr_reorder()
 
@@ -66,8 +71,8 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Zooplankton", ...){
   df <- df %>%
     dplyr::group_by(dplyr::across(-"Values")) %>%
     dplyr::summarise(Values = sum(.data$Values, na.rm = TRUE),
-                     .groups = "drop") %>%
-    dplyr::mutate(Values = dplyr::if_else(.data$Values < 1, 1, .data$Values))
+                     .groups = "drop") #%>%
+    #dplyr::mutate(Values = dplyr::if_else(.data$Values < 1, 1, .data$Values))
 
   # df <- planktonr_dat(df, type = Type, survey = Survey, variable = NULL)
 

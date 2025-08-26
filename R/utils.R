@@ -190,7 +190,7 @@ pr_get_PlanktonInfo <- function(Type = "Zooplankton"){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_NRSStation() %>%
+#' df <- pr_get_Stations() %>%
 #'     pr_add_StationName()
 #' @importFrom rlang .data
 pr_add_StationName <- function(df){
@@ -209,8 +209,6 @@ pr_add_StationName <- function(df){
     dplyr::relocate("StationCode", .after = "StationName")
 }
 
-
-
 #' Add NRS StationCode to data
 #'
 #' @param df A dataframe that contains `StationName` but no `StationCode`
@@ -218,7 +216,7 @@ pr_add_StationName <- function(df){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_NRSStation() %>%
+#' df <- pr_get_Stations() %>%
 #'     pr_add_StationCode()
 #' @importFrom rlang .data
 pr_add_StationCode <- function(df){
@@ -236,7 +234,8 @@ pr_add_StationCode <- function(df){
         StationName == "Esperance" ~ "ESP",
         StationName == "Rottnest Island" ~ "ROT",
         StationName == "Ningaloo" ~ "NIN",
-        StationName == "Bonney Coast" ~ "VBM")) %>%
+        StationName == "Bonney Coast" ~ "VBM",
+        StationName == 'Southern Ocean Time Series' ~ 'SOTS')) %>%
       dplyr::relocate("StationCode", .after = "StationName")
   } else if("TripCode" %in% colnames(df)){
     df <- df %>%
@@ -256,25 +255,40 @@ pr_add_StationCode <- function(df){
 #' @export
 #'
 #' @examples
-#' df <- data.frame(StationName = c('Port Hacking', 'Maria Island',
+#' df <- data.frame(StationName = c('Port Hacking', 'Maria Island', 'Southern Ocean Time Series',
 #' 'North Stradbroke Island','Esperance', 'Ningaloo', "Darwin",
 #' 'Rottnest Island',  'Kangaroo Island', "Yongala")) %>%
 #' planktonr_dat(Survey = "NRS")
 #' df <- pr_reorder(df)
 pr_reorder <- function(df){
 
-
   if (pr_get_survey(df) == "NRS"){
 
-    if("StationName" %in% colnames(df)){
+    if("StationName" %in% colnames(df) && any(grepl('Southern', df$StationName))){ #TODO - managing order when NRS and SOTS combined, is there a better way.
+      # this effects the phyto monthly climatology plotting order if not adjusted for
+      df <- df %>%
+        dplyr::mutate(StationName = factor(.data$StationName,
+                                           levels = c("Darwin", "Yongala", "Ningaloo", "North Stradbroke Island",
+                                                      "Rottnest Island", "Esperance", "Port Hacking", "Kangaroo Island",
+                                                      "Bonney Coast", "Maria Island", "Southern Ocean Time Series",
+                                                      "Southern Ocean Time Series - Remote Access Sampler"))) %>%
+        droplevels()
+    } else if ("StationName" %in% colnames(df)){
       df <- df %>%
         dplyr::mutate(StationName = factor(.data$StationName,
                                            levels = c("Darwin", "Yongala", "Ningaloo", "North Stradbroke Island",
                                                       "Rottnest Island", "Esperance", "Port Hacking", "Kangaroo Island",
                                                       "Bonney Coast", "Maria Island")))
+
     }
 
-    if("StationCode" %in% colnames(df)){
+    if("StationCode" %in% colnames(df) && any(grepl('SOTS', df$StationCode))){
+      df <- df %>%
+        dplyr::mutate(StationCode = factor(.data$StationCode,
+                                           levels = c("DAR", "YON", "NIN", "NSI", "ROT",
+                                                      "ESP", "PHB", "KAI", "VBM", "MAI", "SOTS", "SOTS_RAS"))) %>%
+        droplevels()
+    } else if ("StationCode" %in% colnames(df)){
       df <- df %>%
         dplyr::mutate(StationCode = factor(.data$StationCode,
                                            levels = c("DAR", "YON", "NIN", "NSI", "ROT",
@@ -314,7 +328,6 @@ pr_reorder <- function(df){
     }
 
   }
-
 
   return(df)
 }

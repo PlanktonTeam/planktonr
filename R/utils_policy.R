@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-#' df <- pr_get_EOVs("CPR")
+#' df <- pr_get_EOVs("NRS")
 pr_get_EOVs <- function(Survey = "NRS", ...){
 
   if(Survey == "CPR") {
@@ -99,6 +99,36 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
                     Survey = 'LTM') %>%
       pr_reorder()
 
+  } else if (Survey == 'SOTS'){
+    cat("This may take a few minutes as none of the SOTS data is pre-processed")
+
+    var_names <- c("PhytoBiomassCarbon_pgL","ShannonPhytoDiversity",
+                   "Temperature_degC", "Salinity", "ChlF_mgm3",
+                   "Nitrate_umolL",  "Silicate_umolL", "ph",
+                   "Phosphate_umolL", "DissolvedOxygen_umolL")
+
+    SOTSwater <- planktonr::pr_get_SOTSMoorData(Type = 'Physical') %>%
+      dplyr::filter(.data$Parameters %in% c('Salinity', 'Temperature_degC', "ChlF_mgm3")) # remove duplicate data from below
+    NutsSots <- pr_get_SOTSMoorData(Type = 'Nutrients') %>%
+      dplyr::filter(!.data$Parameters %in% c('Salinity', 'Temperature_degC'))  # remove duplicate data from above
+
+    PolSOTS <- pr_get_Indices(Survey = "SOTS", Type = "Phytoplankton") %>%
+      dplyr::filter(.data$Parameters %in% var_names) %>%
+      dplyr::select(-c(.data$tz, .data$TripCode, .data$Latitude, .data$Longitude)) %>%
+      dplyr::mutate(SampleDepth_m = ifelse(.data$SampleDepth_m < 15, 0, 30)) %>%
+      dplyr::bind_rows(SOTSwater) %>%
+      dplyr::bind_rows(NutsSots)
+
+    means <- PolSOTS %>%
+      pr_remove_outliers(2) %>%
+      dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
+                       sd = stats::sd(.data$Values, na.rm = TRUE),
+                       .by = tidyselect::all_of(c("StationName", "SampleDepth_m", "Parameters")))
+
+    PolSOTS <-  PolSOTS %>%
+      dplyr::left_join(means, by = c("StationName", "SampleDepth_m", "Parameters")) %>%
+      dplyr::mutate(anomaly = (.data$Values - means)/sd,
+                    Survey = "SOTS")
   }
 
 }
@@ -116,7 +146,7 @@ pr_get_PolicyInfo <- function(Survey = "NRS", ...){
 
   if(Survey == "NRS"){
 
-    NRSinfo <- pr_get_NRSStation() %>%
+    NRSinfo <- pr_get_Stations() %>%
       dplyr::mutate(Region = dplyr::case_when(.data$StationCode %in% c("DAR") ~ "Tropical North",
                                               .data$StationCode %in% c("YON") ~ "GBR Lagoon",
                                               .data$StationCode %in% c("NSI", "PHB", "MAI") ~ "South East",
@@ -132,7 +162,17 @@ pr_get_PolicyInfo <- function(Survey = "NRS", ...){
                                            .data$StationCode %in% c("ESP", "NIN") ~ "and concluded in March 2013")) %>%
       dplyr::select(-c("ProjectName", "StationCode", "IMCRA"))
 
-  } else {
+  } else if (Survey == 'SOTS') {
+
+    SotsInfo <- pr_get_Stations('SOTS') %>%
+      dplyr::filter(.data$StationCode == 'SOTS') %>%
+      dplyr::mutate(Region = 'Southern Ocean',
+                 Features = "deep water moorings in the sub-Antarctic Zone",
+                 now = 'and is ongoing') %>%
+      dplyr::select(-c("ProjectName", "StationCode", "IMCRA"))
+
+    } else
+  {
 
     # Southern ocean info from https://soe.dcceew.gov.au/antarctica/environment/physical-environment
     # All others from https://www.dcceew.gov.au/environment/marine/marine-bioregional-plans

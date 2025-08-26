@@ -33,7 +33,7 @@ pr_model_data <- function(df){
     dplyr::rename(SampleDate = "SampleTime_Local") %>%
     dplyr::mutate(Month = .data$Month_Local * 2 * 3.142 / 12) %>%
     droplevels() %>%
-    tidyr::drop_na()
+    tidyr::drop_na(.data$Values)
 
   # Set Correct columns/plot titles
   if (Survey == "CPR"){
@@ -82,8 +82,6 @@ pr_get_coeffs <- function(Models, id = "Station"){
                                             p.value <= 0.01 ~ "**",
                                             p.value <= 0.05 ~ "*",
                                             .default = ""))
-  # Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-
 
   if (id == "StationName") {
     coefficients <- coefficients %>%

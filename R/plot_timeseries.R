@@ -352,8 +352,8 @@ pr_plot_tsclimate <- function(df, trans = "identity"){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_FuncGroups("NRS", "Phytoplankton") %>%
-#' dplyr::filter(StationCode == 'PHB')
+#' df <- pr_get_FuncGroups("SOTS", "Phytoplankton") %>%
+#' dplyr::filter(StationCode == 'SOTS')
 #' plot <- pr_plot_tsfg(df, "Actual", Trend = 'Month')
 #' plot
 pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
@@ -425,7 +425,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
     ggplot2::geom_area(alpha = 0.9 , linewidth = 0.2, colour = "white") +
     ggplot2::facet_wrap(rlang::enexpr(station), scales = "free", ncol = 1) +
     ggplot2::labs(y = titley) +
-    ggplot2::scale_fill_brewer(palette = "Set1") +
+    ggplot2::scale_fill_brewer(palette = "Set1", drop = FALSE) +
     theme_pr() +
     ggplot2::scale_y_continuous(expand = c(0,0)) +
     ggplot2::theme(legend.title = ggplot2::element_blank(),
@@ -472,6 +472,9 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 #' pr_plot_EOVs(df, EOV = "Biomass_mgm3",
 #'       trans = "identity", col = "blue", labels = FALSE)
 pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "blue", labels = TRUE) {
+
+  lims <- c(lubridate::floor_date(min(df$SampleTime_Local), "year"),
+            lubridate::ceiling_date(max(df$SampleTime_Local), "year")) # moving this to start so that in BOO the date scales for different parameters are equal.
 
   # Ensure there is only one parameter
   df <- df %>%
@@ -540,8 +543,6 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
       c(paste0(" [p = ",coefficients$p.value ,coefficients$signif, "]")) %>%
       as.call()
 
-    lims <- c(lubridate::floor_date(min(df$SampleTime_Local), "year"),
-              lubridate::ceiling_date(max(df$SampleTime_Local), "year"))
     df <- df %>%
       dplyr::filter(.data$Parameters == EOV)
 

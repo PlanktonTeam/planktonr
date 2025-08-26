@@ -97,6 +97,7 @@ planktonr_dat <- function(.data,
   }
   if (!is.null(Survey)) {
     Survey <- rlang::arg_match0(Survey, values = c("NRS", "CPR", "LTM", "GO-SHIP", "Coastal", "SOTS"),
+                                # Assuming NRS may include SOTS where that matches, but SOTS is for SOTS data where it is different from NRS
                                 arg_nm = "Survey")
   }
 
