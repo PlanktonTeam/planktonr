@@ -132,12 +132,14 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d", parallel = FA
     imos_url <- paste0(url_base, df$Year,"/",df$Year,mth,dy,string,"-ABOM-L3S_GHRSST-SSTfnd-AVHRR_D-", res_temp, "_dn.nc")
 
     url_exists <- function(url){
+      nc <- NULL
       tryCatch({ # Not all dates will exist
         nc <- ncdf4::nc_open(url)
       },
       error = function(cond) {
-        return(NULL)
+        nc <- NULL
       })
+      return(nc)
     }
 
     nc <- url_exists(imos_url)
