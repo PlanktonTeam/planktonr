@@ -18,5 +18,5 @@ A dataframe with policy data
 Get Essential Ocean Variables
 }
 \examples{
-df <- pr_get_EOVs("SOTS")
+df <- pr_get_EOVs("NRS")
 }
