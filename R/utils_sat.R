@@ -5,7 +5,7 @@
 #' @export
 #'
 #' @examples
-#' df <- pr_get_SatData("NRS")
+#' df <- pr_get_SatData("CPR")
 ## These will be replace with proper satellite data from extractions in time
 
 pr_get_SatData <- function(Survey = 'NRS'){
@@ -225,7 +225,7 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d", parallel = FA
   to_change <- c("sea_surface_temperature", "sst_mean")
   pr2 <- to_change[to_change %in% pr]
 
-  df <- dplyr::bind_rows(df) %>%
+  df <- dplyr::bind_rows(df_dmy) %>%
     dplyr::bind_cols(sstout) %>%
     dplyr::mutate(dplyr::across(
       tidyselect::any_of(pr2), ~ .x - 273.15)) # Convert temp from kelvin
