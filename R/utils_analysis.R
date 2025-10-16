@@ -33,7 +33,7 @@ pr_model_data <- function(df){
     dplyr::rename(SampleDate = "SampleTime_Local") %>%
     dplyr::mutate(Month = .data$Month_Local * 2 * 3.142 / 12) %>%
     droplevels() %>%
-    tidyr::drop_na(.data$Values)
+    tidyr::drop_na("Values")
 
   # Set Correct columns/plot titles
   if (Survey == "CPR"){

@@ -95,7 +95,7 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
     LTnuts <- pr_get_LTnuts() %>%
       dplyr::filter(.data$SampleDepth_m < 11) %>%
       dplyr::summarise(mean = mean(.data$Values, na.rm = TRUE),
-                       .by = all_vars) %>%
+                       .by = tidyselect::all_of(all_vars)) %>%
       dplyr::rename(Values = mean)
 
     means <- LTnuts %>%
@@ -125,7 +125,7 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
 
     Pol <- pr_get_Indices(Survey = "SOTS", Type = "Phytoplankton") %>%
       dplyr::filter(.data$Parameters %in% var_names) %>%
-      dplyr::select(-c(.data$tz, .data$TripCode, .data$Latitude, .data$Longitude)) %>%
+      dplyr::select(-c("tz", "TripCode", "Latitude", "Longitude")) %>%
       dplyr::mutate(SampleDepth_m = ifelse(.data$SampleDepth_m < 15, 0, 30)) %>%
       dplyr::bind_rows(SOTSwater) %>%
       dplyr::bind_rows(NutsSots)

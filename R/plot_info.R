@@ -29,8 +29,8 @@ pr_plot_Gantt <- function(dat){
       dplyr::distinct(.data$YearMonth, .data$Region, .data$TripCode) %>%
       dplyr::summarise(n = dplyr::n(), .by = tidyselect::all_of(c("YearMonth", "Region", "TripCode")))
 
-    gg <- ggplot2::ggplot(data = dat2, ggplot2::aes(x = .data$YearMonth, y = .data$Region, width = 1/12, height = 2/12), fill = "black", colour = "black") +
-      ggplot2::geom_tile() +
+    gg <- ggplot2::ggplot(data = dat2, ggplot2::aes(x = .data$YearMonth, y = .data$Region, width = 1/12, height = 2/12)) +
+      ggplot2::geom_tile(fill = "black", colour = "black") +
       theme_pr() +
       ggplot2::labs(x = ggplot2::element_blank(), y = ggplot2::element_blank()) +
       ggplot2::ggtitle("Continuous Plankton Recorder Sampling") +
@@ -46,8 +46,8 @@ pr_plot_Gantt <- function(dat){
       dplyr::filter(.data$StationName != "Port Hacking 4") %>%
       dplyr::summarise(n = dplyr::n(), .by = tidyselect::all_of(c("YearMonth", "StationName")))
 
-    gg <- ggplot2::ggplot(data = dat2, ggplot2::aes(x = .data$YearMonth, y = .data$StationName, width = 1/12, height = 2/12), fill = "black", colour = "black") +
-      ggplot2::geom_tile() +
+    gg <- ggplot2::ggplot(data = dat2, ggplot2::aes(x = .data$YearMonth, y = .data$StationName, width = 1/12, height = 2/12)) +
+      ggplot2::geom_tile(fill = "black", colour = "black") +
       theme_pr() +
       ggplot2::labs(x = ggplot2::element_blank(), y = ggplot2::element_blank()) +
       ggplot2::ggtitle("National Reference Station Sampling") +
