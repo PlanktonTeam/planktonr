@@ -4,16 +4,13 @@
 \alias{summarise.planktonr_dat}
 \title{Summarise data in a planktonr_dat object}
 \usage{
-\method{summarise}{planktonr_dat}(.data, ..., .by = NULL, .groups = "drop")
+\method{summarise}{planktonr_dat}(.data, ...)
 }
 \arguments{
 \item{.data}{A \code{planktonr_dat} object.}
 
-\item{...}{<\code{\link[dplyr:dplyr_data_masking]{data-masking}}> Name-value pairs of summary statistics.}
-
-\item{.by}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Optional grouping variables.}
-
-\item{.groups}{Control the grouping structure of the result.}
+\item{...}{<\code{\link[dplyr:dplyr_data_masking]{data-masking}}> Name-value pairs of summary statistics,
+and optional arguments \code{.by} and \code{.groups}. See \code{\link[dplyr:summarise]{dplyr::summarise()}} for details.}
 }
 \value{
 A \code{planktonr_dat} object with summarised data,

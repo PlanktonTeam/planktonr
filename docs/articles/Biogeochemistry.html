@@ -123,9 +123,10 @@ Island and Rottnest Island.</p>
 <span><span class="co">#&gt;  [7] "Salinity"          "NOx_umolL"         "DIN_umolL"        </span></span>
 <span><span class="co">#&gt; [10] "Redfield"          "Nitrite_umolL"     "Oxygen_umolL"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">Nuts</span><span class="op">$</span><span class="va">StationName</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] Darwin                  Esperance               Kangaroo Island        </span></span>
-<span><span class="co">#&gt; [4] Maria Island            Ningaloo                North Stradbroke Island</span></span>
-<span><span class="co">#&gt; [7] Port Hacking            Rottnest Island         Yongala                </span></span>
+<span><span class="co">#&gt;  [1] Darwin                  Esperance               Kangaroo Island        </span></span>
+<span><span class="co">#&gt;  [4] Maria Island            Ningaloo                North Stradbroke Island</span></span>
+<span><span class="co">#&gt;  [7] Port Hacking            Rottnest Island         Bonney Coast           </span></span>
+<span><span class="co">#&gt; [10] Yongala                </span></span>
 <span><span class="co">#&gt; 10 Levels: Darwin Yongala Ningaloo North Stradbroke Island ... Maria Island</span></span></code></pre></div>
 <p>Here we use a contour plot to visualise Nitrate at the east coast
 stations. This function can be used with raw data, interpolated data and
@@ -140,8 +141,8 @@ Hacking and can be seen to be lowest in the winter months.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">Parameters</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="co">#TODO Check</span></span>
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/drop_na.html" class="external-link">drop_na</a></span><span class="op">(</span><span class="op">)</span> </span>
 <span></span>
-<span><span class="fu"><a href="../reference/pr_plot_NRSEnvContour.html">pr_plot_NRSEnvContour</a></span><span class="op">(</span><span class="va">Nuts</span>, Interpolation <span class="op">=</span> <span class="cn">TRUE</span>, Fill_NA <span class="op">=</span> <span class="cn">TRUE</span>, maxGap <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Biogeochemistry_files/figure-html/unnamed-chunk-3-1.png" width="672"></p>
+<span><span class="fu"><a href="../reference/pr_plot_NRSEnvContour.html">pr_plot_NRSEnvContour</a></span><span class="op">(</span><span class="va">Nuts</span>, na.fill <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Biogeochemistry_files/figure-html/unnamed-chunk-3-1.png" width="100%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4">
 <h4 id="ctd-data-from-national-reference-stations">CTD data from National Reference Stations<a class="anchor" aria-label="anchor" href="#ctd-data-from-national-reference-stations"></a>
@@ -168,7 +169,7 @@ seasonal trends.</p>
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_plot_Trends.html">pr_plot_Trends</a></span><span class="op">(</span><span class="va">CTD</span>, Trend <span class="op">=</span> <span class="st">"Month"</span>, method <span class="op">=</span> <span class="st">"loess"</span>, trans <span class="op">=</span> <span class="st">"identity"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.title.y <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_layout.html" class="external-link">plot_layout</a></span><span class="op">(</span>widths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span>, guides <span class="op">=</span> <span class="st">"collect"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Biogeochemistry_files/figure-html/unnamed-chunk-5-1.png" width="672"></p>
+<p><img src="Biogeochemistry_files/figure-html/unnamed-chunk-5-1.png" width="100%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="pigments-at-national-reference-stations">Pigments at National Reference Stations<a class="anchor" aria-label="anchor" href="#pigments-at-national-reference-stations"></a>
@@ -187,7 +188,7 @@ to round the depths for a neater plot.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">StationCode</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NSI"</span>, <span class="st">"MAI"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="op">(</span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_plot_Enviro.html">pr_plot_Enviro</a></span><span class="op">(</span><span class="va">Pigs</span>, Trend <span class="op">=</span> <span class="st">"Smoother"</span>, trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span> <span class="op">&amp;</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Biogeochemistry_files/figure-html/unnamed-chunk-6-1.png" width="672"></p>
+<p><img src="Biogeochemistry_files/figure-html/unnamed-chunk-6-1.png" width="100%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="picophytoplankton-at-national-reference-stations">Picophytoplankton at National Reference Stations<a class="anchor" aria-label="anchor" href="#picophytoplankton-at-national-reference-stations"></a>
@@ -201,8 +202,8 @@ interpolated with gap filling.</p>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Parameters</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Prochlorococcus_cellsmL"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">StationCode</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PHB"</span>, <span class="st">"MAI"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/pr_plot_NRSEnvContour.html">pr_plot_NRSEnvContour</a></span><span class="op">(</span><span class="va">Pico</span>, Interpolation <span class="op">=</span> <span class="cn">TRUE</span>, Fill_NA <span class="op">=</span> <span class="cn">TRUE</span>, maxGap <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Biogeochemistry_files/figure-html/unnamed-chunk-7-1.png" width="672"></p>
+<span><span class="fu"><a href="../reference/pr_plot_NRSEnvContour.html">pr_plot_NRSEnvContour</a></span><span class="op">(</span><span class="va">Pico</span>, na.fill <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Biogeochemistry_files/figure-html/unnamed-chunk-7-1.png" width="100%" style="display: block; margin: auto;"></p>
 </div>
   </div>
 

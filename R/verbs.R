@@ -139,21 +139,19 @@ group_by.planktonr_dat <- function(.data, ..., .add = FALSE, .drop = dplyr::grou
 #' `planktonr_dat` attributes are preserved during summarisation.
 #'
 #' @param .data A `planktonr_dat` object.
-#' @param ... <[`data-masking`][dplyr::dplyr_data_masking]> Name-value pairs of summary statistics.
-#' @param .by <[`tidy-select`][dplyr::dplyr_tidy_select]> Optional grouping variables.
-#' @param .groups Control the grouping structure of the result.
+#' @param ... <[`data-masking`][dplyr::dplyr_data_masking]> Name-value pairs of summary statistics,
+#'   and optional arguments `.by` and `.groups`. See [dplyr::summarise()] for details.
 #' @returns A `planktonr_dat` object with summarised data,
 #'   preserving original attributes. The grouping structure depends on `.groups`.
 #' @export
 #' @importFrom dplyr summarise
-#' @importFrom rlang enquo inject
-summarise.planktonr_dat <- function(.data, ..., .by = NULL, .groups = "drop") {
+summarise.planktonr_dat <- function(.data, ...) {
 
   original_attrs <- get_custom_attributes(.data)
 
-  # CRUCIAL FIX: Call NextMethod() without explicit arguments.
-  # This ensures that `.data`, `...` (the data-masking expressions),
-  # `.by` (the tidy-select expression), and `.groups` are all passed
+  # Call NextMethod() without explicit arguments.
+  # This ensures that `.data`, `...` (including all data-masking expressions
+  # and optional arguments like `.by` and `.groups`) are all passed
   # correctly to `dplyr::summarise.tbl_df` in their original evaluation context.
   result <- NextMethod()
 
@@ -172,14 +170,14 @@ summarise.planktonr_dat <- function(.data, ..., .by = NULL, .groups = "drop") {
 #' `planktonr_dat` attributes are preserved when adding or modifying columns.
 #'
 #' @param .data A `planktonr_dat` object.
-#' @param ... <[`data-masking`][dplyr::dplyr_data_masking]> Name-value pairs of expressions.
-#' @param .before,.after,.keep,.width Control the placement and selection of columns.
-#'   See [dplyr::mutate()] for details.
+#' @param ... <[`data-masking`][dplyr::dplyr_data_masking]> Name-value pairs of expressions,
+#'   and optional arguments `.before`, `.after`, `.keep`, `.width` to control
+#'   column placement and selection. See [dplyr::mutate()] for details.
 #' @returns A `planktonr_dat` object with modified or new columns,
 #'   preserving original attributes.
 #' @export
 #' @importFrom dplyr mutate
-mutate.planktonr_dat <- function(.data, ..., .before = NULL, .after = NULL, .keep = "all", .width = NULL) {
+mutate.planktonr_dat <- function(.data, ...) {
   original_attrs <- get_custom_attributes(.data)
 
   # Call the next method (dplyr::mutate.tbl_df)
@@ -308,14 +306,14 @@ rowwise.planktonr_dat <- function(data, ..., .rows = NULL) {
 #' `planktonr_dat` attributes are preserved when moving columns.
 #'
 #' @param .data A `planktonr_dat` object.
-#' @param ... <[`tidy-select`][dplyr::dplyr_tidy_select]> Columns to relocate.
-#' @param .before <[`tidy-select`][dplyr::dplyr_tidy_select]> Columns to move other columns before.
-#' @param .after <[`tidy-select`][dplyr::dplyr_tidy_select]> Columns to move other columns after.
+#' @param ... <[`tidy-select`][dplyr::dplyr_tidy_select]> Columns to relocate,
+#'   and optional arguments `.before` and `.after` to control placement.
+#'   See [dplyr::relocate()] for details.
 #' @returns A `planktonr_dat` object with columns reordered,
 #'   preserving original attributes.
 #' @export
 #' @importFrom dplyr relocate
-relocate.planktonr_dat <- function(.data, ..., .before = NULL, .after = NULL) {
+relocate.planktonr_dat <- function(.data, ...) {
   original_attrs <- get_custom_attributes(.data)
 
   # Call the next method (dplyr::relocate.tbl_df)

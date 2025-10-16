@@ -11,6 +11,17 @@ utils::globalVariables(".")
 
 pr_get_SOTSvariables <- function(Type = 'Physical'){
 
+  # Input validation
+  assertthat::assert_that(
+    is.character(Type) && length(Type) == 1,
+    msg = "'Type' must be a single character string. Valid options are 'Physical' or 'Nutrients'."
+  )
+  
+  assertthat::assert_that(
+    Type %in% c("Physical", "Nutrients"),
+    msg = "'Type' must be one of 'Physical' or 'Nutrients'."
+  )
+
   if(Type == 'Nutrients'){
     years <- seq(1997, lubridate::year(Sys.Date()), 1)
 
@@ -61,6 +72,17 @@ pr_get_SOTSvariables <- function(Type = 'Physical'){
 #' df <- pr_get_SOTSMoorData(Type = 'Nutrients')
 
 pr_get_SOTSMoorData <- function(Type = 'Physical'){
+
+  # Input validation
+  assertthat::assert_that(
+    is.character(Type) && length(Type) == 1,
+    msg = "'Type' must be a single character string. Valid options are 'Physical' or 'Nutrients'."
+  )
+  
+  assertthat::assert_that(
+    Type %in% c("Physical", "Nutrients"),
+    msg = "'Type' must be one of 'Physical' or 'Nutrients'."
+  )
 
   if(Type == 'Nutrients'){
     years <- seq(1997, lubridate::year(Sys.Date()), 1)
@@ -130,8 +152,8 @@ pr_get_SOTSMoorData <- function(Type = 'Physical'){
           tidyr::pivot_longer(-.data$SampleTime_Local, values_to = 'Values', names_to = 'SampleDepth_m') %>%
           dplyr::left_join(qcdat, by = c('SampleDepth_m', 'SampleTime_Local')) %>%
           dplyr::filter(.data$Flags %in% c(1, 2)) %>%
-          dplyr::mutate(SampleDepth_m = Depthvars[as.numeric(gsub("[^0-9]", "", .data$SampleDepth_m))],
-                        Parameters = paste0(variablesAvailable)) %>%
+      dplyr::mutate(SampleDepth_m = Depthvars[as.numeric(gsub("[^0-9]", "", .data$SampleDepth_m))],
+                    Parameters = paste0(variablesAvailable)) %>%
           dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE), .by = setdiff(colnames(.), "Values"))
       }
     }
@@ -164,7 +186,7 @@ pr_get_SOTSMoorData <- function(Type = 'Physical'){
       dplyr::mutate(Year_Local = lubridate::year(.data$SampleTime_Local),
                     SampleDepth_m = round(.data$SampleDepth_m/10, 0)*10) %>%
       dplyr::filter(.data$SampleDepth_m %in% c(0, 30, 50, 100, 200, 500)) %>%
-      tidyr::drop_na(.data$Parameters, .data$Values)
+      tidyr::drop_na("Parameters", "Values")
 
   }
 

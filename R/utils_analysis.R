@@ -33,7 +33,7 @@ pr_model_data <- function(df){
     dplyr::rename(SampleDate = "SampleTime_Local") %>%
     dplyr::mutate(Month = .data$Month_Local * 2 * 3.142 / 12) %>%
     droplevels() %>%
-    tidyr::drop_na(.data$Values)
+    tidyr::drop_na("Values")
 
   # Set Correct columns/plot titles
   if (Survey == "CPR"){
@@ -75,6 +75,17 @@ pr_model_data <- function(df){
 #'   pr_model_data()
 #' coeffs <- planktonr:::pr_get_coeffs(pr_get_model(df))
 pr_get_coeffs <- function(Models, id = "Station"){
+
+  # Input validation
+  assertthat::assert_that(
+    is.list(Models),
+    msg = "'Models' must be a list of model objects created by pr_get_model()."
+  )
+  
+  assertthat::assert_that(
+    is.character(id) && length(id) == 1,
+    msg = "'id' must be a single character string specifying the name for the model ID column (e.g., 'Station', 'StationName')."
+  )
 
   coefficients <- Models %>%
     purrr::map_dfr(broom::tidy, .id = id) %>%

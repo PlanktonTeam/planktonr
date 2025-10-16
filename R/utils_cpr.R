@@ -13,7 +13,39 @@
 #' @importFrom rlang .data
 pr_get_CPRData <- function(Type = "Phytoplankton", Variable = "abundance", Subset = "raw"){
 
+  # Input validation
+  assertthat::assert_that(
+    is.character(Type) && length(Type) == 1,
+    msg = "'Type' must be a single character string. Valid options are 'Phytoplankton' or 'Zooplankton'."
+  )
+  
+  assertthat::assert_that(
+    is.character(Variable) && length(Variable) == 1,
+    msg = "'Variable' must be a single character string. Valid options are 'abundance' or 'biovolume'."
+  )
+  
+  assertthat::assert_that(
+    Variable %in% c("abundance", "biovolume"),
+    msg = "'Variable' must be one of 'abundance' or 'biovolume'."
+  )
+  
+  assertthat::assert_that(
+    is.character(Subset) && length(Subset) == 1,
+    msg = "'Subset' must be a single character string. Valid options are 'raw', 'htg', 'genus', 'species', or 'copepods'."
+  )
+  
+  assertthat::assert_that(
+    Subset %in% c("raw", "htg", "genus", "species", "copepods"),
+    msg = "'Subset' must be one of 'raw', 'htg', 'genus', 'species', or 'copepods'."
+  )
+
   Type <- pr_check_type(Type)
+  
+  # Check biovolume is only used with phytoplankton
+  assertthat::assert_that(
+    !(Variable == "biovolume" && Type == "Zooplankton"),
+    msg = "'biovolume' is only available for Phytoplankton data. Please use 'abundance' for Zooplankton."
+  )
 
   if (Type == "Zooplankton" & Subset == "species"){ # Specific case for zooplankton species
 

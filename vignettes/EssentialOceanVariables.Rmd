@@ -16,8 +16,14 @@ knitr::opts_chunk$set(
   comment = "#>",
   message = FALSE,
   warning = FALSE,
-  fig.width = 7
+  fig.width = 7,
+  out.width = "100%",
+  fig.align = "center",
+  dpi = 150
 )
+
+# Set smaller base font size for vignette plots
+options(planktonr.base_size = 9)
 ```
 
 ```{r setup}
@@ -48,18 +54,15 @@ unique(EOV_MAI$Parameters)
 
 
 Once we have chosen the EOV we are interested in, we can plot it as below. Note the use of the `&` to apply the theme. This is because the resulting figure is a patchwork of ggplots.
-```{r}
-(p1 <- pr_plot_EOVs(EOV_MAI, EOV = "Silicate_umolL") & 
-  theme_bw())       
+```{r, fig.height=4}
+(p1 <- pr_plot_EOVs(EOV_MAI, EOV = "Silicate_umolL"))       
 ```
 
 We can also add other EOVs to the patchwork.
-```{r}
-p1 / pr_plot_EOVs(EOV_MAI, EOV = "Nitrate_umolL", col = "darkgreen") & 
-  theme_bw() &
+```{r, fig.height=4}
+p1 / pr_plot_EOVs(EOV_MAI, EOV = "Nitrate_umolL", col = "darkgreen") &
   plot_annotation(title = "Maria Island")
 ```
-
 
 # Continuous Plankton Recorder
 
@@ -87,7 +90,6 @@ Now plot the data
 ```{r}
 pr_plot_EOVs(EOV_SE, EOV = "ShannonPhytoDiversity", col = "darkorange") / 
   pr_plot_EOVs(EOV_SE, EOV = "ShannonCopepodDiversity", col = "darkred") &
-  theme_bw() &
   plot_annotation(title = "South-east Bioregion")
 ```
 
@@ -112,7 +114,6 @@ unique(EOV_PHB$Parameters)
 Do the plotting
 ```{r}
 pr_plot_EOVs(EOV_PHB, EOV = "Temperature_degC", col = "purple") / 
-  pr_plot_EOVs(EOV_PHB, EOV = "Salinity", col = "pink") & 
-  theme_bw() &
+  pr_plot_EOVs(EOV_PHB, EOV = "Salinity", col = "pink") &
   plot_annotation(title = "Port Hacking")
 ```
