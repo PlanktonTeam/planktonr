@@ -15,6 +15,34 @@
 
 pr_plot_TimeSeries <- function(df, trans = "identity"){
 
+  # Input validation
+  assertthat::assert_that(
+    is.data.frame(df),
+    msg = "'df' must be a data frame."
+  )
+  
+  assertthat::assert_that(
+    inherits(df, "planktonr_dat"),
+    msg = "'df' must be a planktonr_dat object. Use pr_get_Indices() or similar functions to create the data."
+  )
+  
+  assertthat::assert_that(
+    nrow(df) > 0,
+    msg = "The data frame 'df' is empty. Check your data source or filtering criteria."
+  )
+  
+  assertthat::assert_that(
+    is.character(trans) && length(trans) == 1,
+    msg = "'trans' must be a single character string specifying the y-axis transformation (e.g., 'identity', 'log10', 'sqrt')."
+  )
+  
+  # Check required columns
+  required_cols <- c("SampleTime_Local", "Values", "Parameters")
+  assertthat::assert_that(
+    all(required_cols %in% names(df)),
+    msg = paste0("'df' must contain the following columns: ", paste(required_cols, collapse = ", "), ".")
+  )
+
   Survey <- pr_get_survey(df)
 
   if (Survey == "CPR"){
@@ -79,6 +107,37 @@ pr_plot_TimeSeries <- function(df, trans = "identity"){
 #' pr_plot_Trends(df, Trend = "Year")
 #' pr_plot_Trends(df, Trend = "Raw")
 pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"){
+
+  # Input validation
+  assertthat::assert_that(
+    is.data.frame(df),
+    msg = "'df' must be a data frame."
+  )
+  
+  assertthat::assert_that(
+    inherits(df, "planktonr_dat"),
+    msg = "'df' must be a planktonr_dat object. Use pr_get_Indices() or similar functions to create the data."
+  )
+  
+  assertthat::assert_that(
+    is.character(Trend) && length(Trend) == 1,
+    msg = "'Trend' must be a single character string. Valid options are 'Raw', 'Month', or 'Year'."
+  )
+  
+  assertthat::assert_that(
+    Trend %in% c("Raw", "Month", "Year"),
+    msg = "'Trend' must be one of 'Raw', 'Month', or 'Year'."
+  )
+  
+  assertthat::assert_that(
+    is.character(method) && length(method) == 1,
+    msg = "'method' must be a single character string (e.g., 'lm', 'loess', 'gam')."
+  )
+  
+  assertthat::assert_that(
+    is.character(trans) && length(trans) == 1,
+    msg = "'trans' must be a single character string specifying the y-axis transformation (e.g., 'identity', 'log10', 'sqrt')."
+  )
 
   # Do one parameter at a time at the moment.
   assertthat::assert_that(
@@ -231,6 +290,44 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
 #' annual <- pr_plot_Climatology(df, Trend = "Year")
 pr_plot_Climatology <- function(df, Trend = "Month", trans = "identity"){
 
+  # Input validation
+  assertthat::assert_that(
+    is.data.frame(df),
+    msg = "'df' must be a data frame."
+  )
+  
+  assertthat::assert_that(
+    inherits(df, "planktonr_dat"),
+    msg = "'df' must be a planktonr_dat object. Use pr_get_Indices() or similar functions to create the data."
+  )
+  
+  assertthat::assert_that(
+    nrow(df) > 0,
+    msg = "The data frame 'df' is empty. Check your data source or filtering criteria."
+  )
+  
+  assertthat::assert_that(
+    is.character(Trend) && length(Trend) == 1,
+    msg = "'Trend' must be a single character string. Valid options are 'Month' or 'Year'."
+  )
+  
+  assertthat::assert_that(
+    Trend %in% c("Month", "Year"),
+    msg = "'Trend' must be one of 'Month' or 'Year'."
+  )
+  
+  assertthat::assert_that(
+    is.character(trans) && length(trans) == 1,
+    msg = "'trans' must be a single character string specifying the y-axis transformation (e.g., 'identity', 'log10', 'sqrt')."
+  )
+  
+  # Check required columns
+  required_cols <- c("Values", "Parameters")
+  assertthat::assert_that(
+    all(required_cols %in% names(df)),
+    msg = paste0("'df' must contain the following columns: ", paste(required_cols, collapse = ", "), ".")
+  )
+
   Survey <- pr_get_survey(df)
   Type <- pr_get_type(df)
   Variable <- pr_get_variable(df)
@@ -325,6 +422,22 @@ pr_plot_Climatology <- function(df, Trend = "Month", trans = "identity"){
 #' pr_plot_tsclimate(df)
 pr_plot_tsclimate <- function(df, trans = "identity"){
 
+  # Input validation
+  assertthat::assert_that(
+    inherits(df, "planktonr_dat"),
+    msg = "'df' must be a planktonr_dat object. Use pr_get_Indices() to create the data."
+  )
+  
+  assertthat::assert_that(
+    is.character(trans) && length(trans) == 1,
+    msg = "'trans' must be a single character string. Valid options are 'identity', 'log10', 'sqrt'."
+  )
+  
+  assertthat::assert_that(
+    trans %in% c("identity", "log10", "sqrt"),
+    msg = "'trans' must be one of 'identity', 'log10', or 'sqrt'."
+  )
+
   Survey <- pr_get_survey(df)
 
   p1 <- pr_plot_TimeSeries(df, trans) +
@@ -359,6 +472,44 @@ pr_plot_tsclimate <- function(df, trans = "identity"){
 #' plot <- pr_plot_tsfg(df, "Actual", Trend = 'Month')
 #' plot
 pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
+
+  # Input validation
+  assertthat::assert_that(
+    is.data.frame(df),
+    msg = "'df' must be a data frame."
+  )
+  
+  assertthat::assert_that(
+    nrow(df) > 0,
+    msg = "The data frame 'df' is empty. Check your data source or filtering criteria."
+  )
+  
+  assertthat::assert_that(
+    is.character(Scale) && length(Scale) == 1,
+    msg = "'Scale' must be a single character string. Valid options are 'Actual' or 'Percent'."
+  )
+  
+  assertthat::assert_that(
+    Scale %in% c("Actual", "Percent"),
+    msg = "'Scale' must be one of 'Actual' or 'Percent'."
+  )
+  
+  assertthat::assert_that(
+    is.character(Trend) && length(Trend) == 1,
+    msg = "'Trend' must be a single character string. Valid options are 'Raw', 'Month', or 'Year'."
+  )
+  
+  assertthat::assert_that(
+    Trend %in% c("Raw", "Month", "Year"),
+    msg = "'Trend' must be one of 'Raw', 'Month', or 'Year'."
+  )
+  
+  # Check required columns
+  required_cols <- c("Values", "Parameters", "SampleTime_Local")
+  assertthat::assert_that(
+    all(required_cols %in% names(df)),
+    msg = paste0("'df' must contain the following columns: ", paste(required_cols, collapse = ", "), ".")
+  )
 
   df <- tibble::as_tibble(df)
 
@@ -495,6 +646,37 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 #' pr_plot_EOVs(df, EOV = "Biomass_mgm3",
 #'       trans = "identity", col = "blue", labels = FALSE)
 pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "blue", labels = TRUE) {
+
+  # Input validation
+  assertthat::assert_that(
+    inherits(df, "planktonr_dat"),
+    msg = "'df' must be a planktonr_dat object. Use pr_get_EOVs() to create the data."
+  )
+  
+  assertthat::assert_that(
+    is.character(EOV) && length(EOV) == 1,
+    msg = "'EOV' must be a single character string specifying the Essential Ocean Variable parameter (e.g., 'Biomass_mgm3')."
+  )
+  
+  assertthat::assert_that(
+    is.character(trans) && length(trans) == 1,
+    msg = "'trans' must be a single character string. Valid options are 'identity', 'log10', 'sqrt'."
+  )
+  
+  assertthat::assert_that(
+    trans %in% c("identity", "log10", "sqrt"),
+    msg = "'trans' must be one of 'identity', 'log10', or 'sqrt'."
+  )
+  
+  assertthat::assert_that(
+    is.character(col) && length(col) == 1,
+    msg = "'col' must be a single character string specifying a color (e.g., 'blue')."
+  )
+  
+  assertthat::assert_that(
+    is.logical(labels) && length(labels) == 1,
+    msg = "'labels' must be a single logical value (TRUE or FALSE)."
+  )
 
   pt_size <- 0.8 # TODO Could make this an argument.
 
@@ -801,6 +983,23 @@ pr_plot_STI <-  function(df){
 #' pr_plot_latitude(df, na.fill = mean)
 
 pr_plot_latitude <- function(df, na.fill = TRUE){
+
+  # Input validation
+  assertthat::assert_that(
+    inherits(df, "planktonr_dat"),
+    msg = "'df' must be a planktonr_dat object. Use pr_get_NRSMicro() or similar functions to create the data."
+  )
+  
+  required_cols <- c("Parameters", "Values", "Latitude", "SampleDepth_m")
+  assertthat::assert_that(
+    all(required_cols %in% colnames(df)),
+    msg = paste0("'df' must contain the following columns: ", paste(required_cols, collapse = ", "), ".")
+  )
+  
+  assertthat::assert_that(
+    is.logical(na.fill) || is.function(na.fill),
+    msg = "'na.fill' must be a logical value (TRUE or FALSE) or a function (e.g., mean)."
+  )
 
   df <- df %>% tidyr::drop_na()
 

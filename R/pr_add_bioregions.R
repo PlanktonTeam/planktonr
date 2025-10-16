@@ -18,6 +18,22 @@
 #' @importFrom rlang .data
 pr_add_Bioregions <- function(df, near_dist_km = 0){
 
+  # Input validation
+  assertthat::assert_that(
+    is.data.frame(df),
+    msg = "'df' must be a data frame."
+  )
+  
+  assertthat::assert_that(
+    all(c("Longitude", "Latitude") %in% colnames(df)),
+    msg = "'df' must contain 'Longitude' and 'Latitude' columns."
+  )
+  
+  assertthat::assert_that(
+    is.numeric(near_dist_km) && length(near_dist_km) == 1 && near_dist_km >= 0,
+    msg = "'near_dist_km' must be a single non-negative numeric value (distance in km)."
+  )
+
   Type <- pr_get_type(df)
   Survey <- pr_get_survey(df)
 

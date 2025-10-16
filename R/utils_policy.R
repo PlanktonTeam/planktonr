@@ -10,6 +10,17 @@
 #' df <- pr_get_EOVs("NRS")
 pr_get_EOVs <- function(Survey = "NRS", ...){
 
+  # Input validation
+  assertthat::assert_that(
+    is.character(Survey) && length(Survey) == 1,
+    msg = "'Survey' must be a single character string. Valid options are 'NRS', 'CPR', or 'LTM'."
+  )
+
+  assertthat::assert_that(
+    Survey %in% c("NRS", "CPR", "LTM"),
+    msg = "'Survey' must be one of 'NRS', 'CPR', or 'LTM'."
+  )
+
   if(Survey == "CPR") {
 
     var_names <- c("BiomassIndex_mgm3", "PhytoBiomassCarbon_pgm3",
@@ -96,10 +107,10 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
     Pol <- LTnuts %>%
       dplyr::left_join(means, by = c("StationName", "Parameters")) %>%
       dplyr::mutate(anomaly = (.data$Values - .data$means)/.data$sd,
-                    Survey = 'LTM') %>%
+                    Survey = "LTM") %>%
       pr_reorder()
 
-  } else if (Survey == 'SOTS'){
+  } else if (Survey == "SOTS"){
     cat("This may take a few minutes as none of the SOTS data is pre-processed")
 
     var_names <- c("PhytoBiomassCarbon_pgL","ShannonPhytoDiversity",
@@ -107,29 +118,31 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
                    "Nitrate_umolL",  "Silicate_umolL", "ph",
                    "Phosphate_umolL", "DissolvedOxygen_umolL")
 
-    SOTSwater <- planktonr::pr_get_SOTSMoorData(Type = 'Physical') %>%
-      dplyr::filter(.data$Parameters %in% c('Salinity', 'Temperature_degC', "ChlF_mgm3")) # remove duplicate data from below
-    NutsSots <- pr_get_SOTSMoorData(Type = 'Nutrients') %>%
-      dplyr::filter(!.data$Parameters %in% c('Salinity', 'Temperature_degC'))  # remove duplicate data from above
+    SOTSwater <- planktonr::pr_get_SOTSMoorData(Type = "Physical") %>%
+      dplyr::filter(.data$Parameters %in% c("Salinity", "Temperature_degC", "ChlF_mgm3")) # remove duplicate data from below
+    NutsSots <- pr_get_SOTSMoorData(Type = "Nutrients") %>%
+      dplyr::filter(!.data$Parameters %in% c("Salinity", "Temperature_degC"))  # remove duplicate data from above
 
-    PolSOTS <- pr_get_Indices(Survey = "SOTS", Type = "Phytoplankton") %>%
+    Pol <- pr_get_Indices(Survey = "SOTS", Type = "Phytoplankton") %>%
       dplyr::filter(.data$Parameters %in% var_names) %>%
       dplyr::select(-c(.data$tz, .data$TripCode, .data$Latitude, .data$Longitude)) %>%
       dplyr::mutate(SampleDepth_m = ifelse(.data$SampleDepth_m < 15, 0, 30)) %>%
       dplyr::bind_rows(SOTSwater) %>%
       dplyr::bind_rows(NutsSots)
 
-    means <- PolSOTS %>%
+    means <- Pol %>%
       pr_remove_outliers(2) %>%
       dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
                        sd = stats::sd(.data$Values, na.rm = TRUE),
                        .by = tidyselect::all_of(c("StationName", "SampleDepth_m", "Parameters")))
 
-    PolSOTS <-  PolSOTS %>%
+    Pol <-  Pol %>%
       dplyr::left_join(means, by = c("StationName", "SampleDepth_m", "Parameters")) %>%
       dplyr::mutate(anomaly = (.data$Values - means)/sd,
                     Survey = "SOTS")
   }
+
+  return(Pol)
 
 }
 
@@ -143,6 +156,17 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
 #' @examples
 #' df <- pr_get_PolicyInfo("CPR")
 pr_get_PolicyInfo <- function(Survey = "NRS", ...){
+
+  # Input validation
+  assertthat::assert_that(
+    is.character(Survey) && length(Survey) == 1,
+    msg = "'Survey' must be a single character string. Valid options are 'NRS', 'CPR', or 'SOTS'."
+  )
+
+  assertthat::assert_that(
+    Survey %in% c("NRS", "CPR", "SOTS"),
+    msg = "'Survey' must be one of 'NRS', 'CPR', or 'SOTS'."
+  )
 
   if(Survey == "NRS"){
 

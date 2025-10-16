@@ -14,6 +14,27 @@
 #'
 pr_relabel <- function(s, style = "ggplot", named = FALSE){
 
+  # Input validation
+  assertthat::assert_that(
+    is.character(s),
+    msg = "'s' must be a character vector containing parameter names."
+  )
+  
+  assertthat::assert_that(
+    is.character(style) && length(style) == 1,
+    msg = "'style' must be a single character string. Valid options are 'ggplot', 'plotly', or 'simple'."
+  )
+  
+  assertthat::assert_that(
+    style %in% c("ggplot", "plotly", "simple"),
+    msg = "'style' must be one of 'ggplot', 'plotly', or 'simple'."
+  )
+  
+  assertthat::assert_that(
+    is.logical(named) && length(named) == 1,
+    msg = "'named' must be a single logical value (TRUE or FALSE)."
+  )
+
   relabel_df <- tibble::as_tibble(matrix(c(
     "AbundancePhyto_CellsL", rlang::expr(paste("Phytoplankton Abundance (cells L"^-1,")")), "Phytoplankton Abundance (cells L<sup>-1</sup>)", "Phytoplankton Abundance",
     "Alkalinity_umolkg", rlang::expr(paste("TAlkalinity (","\U00B5","mol kg"^-1,")")), "Total Alkalinity (&#181; mol kg<sup>-1</sup>)", "Total Alkalinity",

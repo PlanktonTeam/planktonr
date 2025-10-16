@@ -8,6 +8,19 @@
 #' @examples
 #' pr_get_PCIData() %>% pr_plot_PCImap()
 pr_plot_PCImap <- function(df) {
+  
+  # Input validation
+  assertthat::assert_that(
+    is.data.frame(df),
+    msg = "'df' must be a data frame. Use pr_get_PCIData() to create the data."
+  )
+  
+  required_cols <- c("Longitude", "Latitude", "PCI", "Season")
+  assertthat::assert_that(
+    all(required_cols %in% colnames(df)),
+    msg = paste0("'df' must contain the following columns: ", paste(required_cols, collapse = ", "), ". Use pr_get_PCIData() to create the data.")
+  )
+  
   cprmap <- ggplot2::ggplot() +
     ggplot2::geom_raster(data = df, ggplot2::aes(x = .data$Longitude, y = .data$Latitude, fill = .data$PCI), interpolate = TRUE) +
     ggplot2::scale_fill_gradient(low = "light green", high = "darkgreen",
@@ -38,6 +51,37 @@ pr_plot_PCImap <- function(df) {
 #' pmap <- pr_plot_NRSmap(sites, Type = 'Phytoplankton')
 #' pmap <- pr_plot_NRSmap(sites, Survey = "LTM")
 pr_plot_NRSmap <- function(sites, Survey = "NRS", Type = 'Zooplankton'){
+
+  # Input validation
+  assertthat::assert_that(
+    is.character(sites) || is.factor(sites),
+    msg = "'sites' must be a character vector or factor of station codes (e.g., c('MAI', 'PHB'))."
+  )
+  
+  assertthat::assert_that(
+    length(sites) > 0,
+    msg = "'sites' must contain at least one station code."
+  )
+  
+  assertthat::assert_that(
+    is.character(Survey) && length(Survey) == 1,
+    msg = "'Survey' must be a single character string. Valid options are 'NRS', 'LTM', or 'Coastal'."
+  )
+  
+  assertthat::assert_that(
+    Survey %in% c("NRS", "LTM", "Coastal"),
+    msg = "'Survey' must be one of 'NRS', 'LTM', or 'Coastal'."
+  )
+  
+  assertthat::assert_that(
+    is.character(Type) && length(Type) == 1,
+    msg = "'Type' must be a single character string. Valid options are 'Phytoplankton' or 'Zooplankton'."
+  )
+  
+  assertthat::assert_that(
+    Type %in% c("Phytoplankton", "Zooplankton"),
+    msg = "'Type' must be one of 'Phytoplankton' or 'Zooplankton'."
+  )
 
   if(Survey == "NRS"){
     meta_sf <- meta_sf
@@ -99,6 +143,17 @@ pr_plot_NRSmap <- function(sites, Survey = "NRS", Type = 'Zooplankton'){
 #' cprmap <- pr_plot_CPRmap(sites = c("Temperate East", "South-west",
 #'                                     "South-east", "North", "North-west"))
 pr_plot_CPRmap <-  function(sites){
+
+  # Input validation
+  assertthat::assert_that(
+    is.character(sites) || is.factor(sites),
+    msg = "'sites' must be a character vector or factor of CPR bioregion names (e.g., c('Temperate East', 'South-west'))."
+  )
+  
+  assertthat::assert_that(
+    length(sites) > 0,
+    msg = "'sites' must contain at least one bioregion name."
+  )
 
   bioregionSelection <- mbr %>%
     dplyr::mutate(Colour = dplyr::if_else(.data$REGION %in% sites, .data$Colour, "NA"))
@@ -192,6 +247,28 @@ pr_plot_Voyagemap <-  function(df, dfs, Country = c("AUstralia")){
 #'                  Survey = 'CPR')
 #' plot <- pr_plot_FreqMap(df, species = 'Acartia danae', interactive = TRUE)
 pr_plot_FreqMap <- function(df, species, interactive = TRUE){
+
+  # Input validation
+  assertthat::assert_that(
+    is.data.frame(df),
+    msg = "'df' must be a data frame. Use pr_get_FreqMap() to create the data."
+  )
+  
+  required_cols <- c("Season", "Latitude", "Longitude", "Survey", "Taxon", "freqfac")
+  assertthat::assert_that(
+    all(required_cols %in% colnames(df)),
+    msg = paste0("'df' must contain the following columns: ", paste(required_cols, collapse = ", "), ". Use pr_get_FreqMap() to create the data.")
+  )
+  
+  assertthat::assert_that(
+    is.character(species) && length(species) == 1,
+    msg = "'species' must be a single character string specifying the species name."
+  )
+  
+  assertthat::assert_that(
+    is.logical(interactive) && length(interactive) == 1,
+    msg = "'interactive' must be a single logical value (TRUE or FALSE)."
+  )
 
   dfa <- df %>%
     dplyr::select(tidyselect::all_of(c("Season", "Latitude", "Longitude", "Survey"))) %>%
@@ -312,6 +389,22 @@ pr_plot_FreqMap <- function(df, species, interactive = TRUE){
 #' df <- pr_get_ProgressMapData("NRS")
 #' plot <- pr_plot_ProgressMap(df)
 pr_plot_ProgressMap <- function(df, interactive = FALSE, labels = TRUE){
+
+  # Input validation
+  assertthat::assert_that(
+    is.data.frame(df) || is.list(df),
+    msg = "'df' must be a data frame or list. Use pr_get_ProgressMapData() to create the data."
+  )
+  
+  assertthat::assert_that(
+    is.logical(interactive) && length(interactive) == 1,
+    msg = "'interactive' must be a single logical value (TRUE or FALSE)."
+  )
+  
+  assertthat::assert_that(
+    is.logical(labels) && length(labels) == 1,
+    msg = "'labels' must be a single logical value (TRUE or FALSE)."
+  )
 
   if (interactive == TRUE){
 

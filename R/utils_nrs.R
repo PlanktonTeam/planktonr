@@ -14,6 +14,32 @@
 #'
 pr_get_NRSData <- function(Type = "Phytoplankton", Variable = "abundance", Subset = "raw"){
 
+  # Input validation
+  assertthat::assert_that(
+    is.character(Type) && length(Type) == 1,
+    msg = "'Type' must be a single character string. Valid options are 'Phytoplankton' or 'Zooplankton'."
+  )
+  
+  assertthat::assert_that(
+    is.character(Variable) && length(Variable) == 1,
+    msg = "'Variable' must be a single character string. Valid options are 'abundance' or 'biovolume'."
+  )
+  
+  assertthat::assert_that(
+    Variable %in% c("abundance", "biovolume"),
+    msg = "'Variable' must be one of 'abundance' or 'biovolume'."
+  )
+  
+  assertthat::assert_that(
+    is.character(Subset) && length(Subset) == 1,
+    msg = "'Subset' must be a single character string. Valid options are 'raw', 'htg', 'genus', 'species', or 'copepods'."
+  )
+  
+  assertthat::assert_that(
+    Subset %in% c("raw", "htg", "genus", "species", "copepods"),
+    msg = "'Subset' must be one of 'raw', 'htg', 'genus', 'species', or 'copepods'."
+  )
+
   # AVAILABLE NRS DATASETS
   # nrs_phytoplankton_abundance_raw_data
   # nrs_phytoplankton_abundance_htg_data
@@ -32,6 +58,12 @@ pr_get_NRSData <- function(Type = "Phytoplankton", Variable = "abundance", Subse
   # nrs_zooplankton_abundance_raw_data
 
   Type <- pr_check_type(Type)
+  
+  # Check biovolume is only used with phytoplankton
+  assertthat::assert_that(
+    !(Variable == "biovolume" && Type == "Zooplankton"),
+    msg = "'biovolume' is only available for Phytoplankton data. Please use 'abundance' for Zooplankton."
+  )
 
   if (Type == "Zooplankton" & Subset == "species"){ # Specific case for zooplankton species
 
@@ -73,6 +105,17 @@ pr_get_NRSData <- function(Type = "Phytoplankton", Variable = "abundance", Subse
 #' df <- pr_get_Stations('NRS')
 #' @importFrom rlang .data
 pr_get_Stations <- function(Survey = 'NRS'){
+  
+  # Input validation
+  assertthat::assert_that(
+    is.character(Survey) && length(Survey) == 1,
+    msg = "'Survey' must be a single character string. Valid options are 'NRS' or 'SOTS'."
+  )
+  
+  assertthat::assert_that(
+    Survey %in% c("NRS", "SOTS"),
+    msg = "'Survey' must be one of 'NRS' or 'SOTS'."
+  )
   dat <- readr::read_csv(system.file("extdata", "BGC_StationInfo.csv", package = "planktonr", mustWork = TRUE),
                          na = "",
                          show_col_types = FALSE,

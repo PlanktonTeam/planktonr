@@ -10,6 +10,17 @@
 
 pr_get_SatData <- function(Survey = 'NRS'){
 
+  # Input validation
+  assertthat::assert_that(
+    is.character(Survey) && length(Survey) == 1,
+    msg = "'Survey' must be a single character string. Valid options are 'NRS' or 'CPR'."
+  )
+  
+  assertthat::assert_that(
+    Survey %in% c("NRS", "CPR"),
+    msg = "'Survey' must be one of 'NRS' or 'CPR'."
+  )
+
   if(Survey == "NRS"){
     NRS_SatData <- readr::read_csv(system.file("extdata", "NRS_SatData.csv", package = "planktonr", mustWork = TRUE),
                                    show_col_types = FALSE,
@@ -36,6 +47,17 @@ pr_get_SatData <- function(Survey = 'NRS'){
 #' df <- pr_get_DataLocs("NRS")
 
 pr_get_DataLocs <- function(Survey = "all"){
+
+  # Input validation
+  assertthat::assert_that(
+    is.character(Survey) && length(Survey) == 1,
+    msg = "'Survey' must be a single character string. Valid options are 'NRS', 'CPR', or 'all'."
+  )
+  
+  assertthat::assert_that(
+    Survey %in% c("NRS", "CPR", "all"),
+    msg = "'Survey' must be one of 'NRS', 'CPR', or 'all'."
+  )
 
   vars <- c("Longitude", "Latitude", "SampleTime_UTC")
 
@@ -91,6 +113,42 @@ pr_get_DataLocs <- function(Survey = "all"){
 #' sstout <- pr_match_GHRSST(df, pr, res_spat = 10, res_temp = "6d")
 #'
 pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d", parallel = FALSE, ncore = NULL) {
+
+  # Input validation
+  assertthat::assert_that(
+    is.data.frame(df),
+    msg = "'df' must be a data frame."
+  )
+  
+  assertthat::assert_that(
+    all(c("Latitude", "Longitude") %in% colnames(df)),
+    msg = "'df' must contain 'Latitude' and 'Longitude' columns."
+  )
+  
+  assertthat::assert_that(
+    is.character(pr) || is.list(pr),
+    msg = "'pr' must be a character vector or list of product names (e.g., 'sea_surface_temperature')."
+  )
+  
+  assertthat::assert_that(
+    is.numeric(res_spat) && length(res_spat) == 1 && res_spat >= 1,
+    msg = "'res_spat' must be a single numeric value >= 1 (number of spatial pixels to average over)."
+  )
+  
+  assertthat::assert_that(
+    is.character(res_temp) && length(res_temp) == 1,
+    msg = "'res_temp' must be a single character string specifying temporal resolution (e.g., '1d', '6d')."
+  )
+  
+  assertthat::assert_that(
+    is.logical(parallel) && length(parallel) == 1,
+    msg = "'parallel' must be a single logical value (TRUE or FALSE)."
+  )
+  
+  assertthat::assert_that(
+    is.null(ncore) || (is.numeric(ncore) && length(ncore) == 1 && ncore > 0),
+    msg = "'ncore' must be NULL or a single positive numeric value specifying the number of cores to use."
+  )
 
   #TODO add progress bars with purrr
 
@@ -252,6 +310,27 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d", parallel = FA
 #' altout <- pr_match_Altimetry(df, pr = "GSLA", res_spat = 10)
 pr_match_Altimetry <- function(df, pr, res_spat = 1) {
 
+  # Input validation
+  assertthat::assert_that(
+    is.data.frame(df),
+    msg = "'df' must be a data frame."
+  )
+  
+  assertthat::assert_that(
+    all(c("Latitude", "Longitude") %in% colnames(df)),
+    msg = "'df' must contain 'Latitude' and 'Longitude' columns."
+  )
+  
+  assertthat::assert_that(
+    is.character(pr) || is.list(pr),
+    msg = "'pr' must be a character vector or list of product names (e.g., 'GSLA', 'GSL', 'UCUR', 'VCUR')."
+  )
+  
+  assertthat::assert_that(
+    is.numeric(res_spat) && length(res_spat) == 1 && res_spat >= 1,
+    msg = "'res_spat' must be a single numeric value >= 1 (number of spatial pixels to average over)."
+  )
+
   # if (!exists("res_spat")){
   #   print("Defaulting to 1 pixel x 1 pixel. Provide res_spat if you want to increase")
   #   res_spat <-  1
@@ -363,6 +442,32 @@ pr_match_Altimetry <- function(df, pr, res_spat = 1) {
 #' df <- head(pr_get_DataLocs("NRS"),5)
 #' MODISout <- pr_match_MODIS(df, pr <- c("chl_gsm", "chl_oc3"), res_spat = 10)
 pr_match_MODIS <- function(df, pr, res_spat = 1, res_temp = "1d") {
+
+  # Input validation
+  assertthat::assert_that(
+    is.data.frame(df),
+    msg = "'df' must be a data frame."
+  )
+  
+  assertthat::assert_that(
+    all(c("Latitude", "Longitude") %in% colnames(df)),
+    msg = "'df' must contain 'Latitude' and 'Longitude' columns."
+  )
+  
+  assertthat::assert_that(
+    is.character(pr) || is.list(pr),
+    msg = "'pr' must be a character vector or list of product names (e.g., 'chl_gsm', 'chl_oc3', 'K_490')."
+  )
+  
+  assertthat::assert_that(
+    is.numeric(res_spat) && length(res_spat) == 1 && res_spat >= 1,
+    msg = "'res_spat' must be a single numeric value >= 1 (number of spatial pixels to average over)."
+  )
+  
+  assertthat::assert_that(
+    is.character(res_temp) && length(res_temp) == 1,
+    msg = "'res_temp' must be a single character string specifying temporal resolution (e.g., '1d')."
+  )
 
   # # Set resolution
   # if (!exists("res_temp")){

@@ -76,6 +76,17 @@ pr_model_data <- function(df){
 #' coeffs <- planktonr:::pr_get_coeffs(pr_get_model(df))
 pr_get_coeffs <- function(Models, id = "Station"){
 
+  # Input validation
+  assertthat::assert_that(
+    is.list(Models),
+    msg = "'Models' must be a list of model objects created by pr_get_model()."
+  )
+  
+  assertthat::assert_that(
+    is.character(id) && length(id) == 1,
+    msg = "'id' must be a single character string specifying the name for the model ID column (e.g., 'Station', 'StationName')."
+  )
+
   coefficients <- Models %>%
     purrr::map_dfr(broom::tidy, .id = id) %>%
     dplyr::mutate(signif = dplyr::case_when(p.value <= 0.001 ~ "***",

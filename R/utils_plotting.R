@@ -11,6 +11,17 @@
 
 pr_get_FreqMap <- function(Type = "Zooplankton"){
 
+  # Input validation
+  assertthat::assert_that(
+    is.character(Type) && length(Type) == 1,
+    msg = "'Type' must be a single character string. Valid options are 'Phytoplankton' or 'Zooplankton'."
+  )
+  
+  assertthat::assert_that(
+    Type %in% c("Phytoplankton", "Zooplankton"),
+    msg = "'Type' must be one of 'Phytoplankton' or 'Zooplankton'."
+  )
+
   NRS <- pr_get_NRSData(Type = Type, Variable = "abundance", Subset = "species") %>%
     tidyr::pivot_longer(cols = !dplyr::all_of(pr_get_NonTaxaColumns(Survey = "NRS", Type = Type)),
                         names_to = "Species", values_to = "Counts")
@@ -77,6 +88,22 @@ pr_get_FreqMap <- function(Type = "Zooplankton"){
 #' df <- pr_get_ProgressMapData(c("NRS", "CPR"))
 #' df <- pr_get_ProgressMapData(c("NRS", "CPR"), interactive = TRUE)
 pr_get_ProgressMapData <- function(Survey = c("NRS", "CPR"), interactive = FALSE, ...){
+
+  # Input validation
+  assertthat::assert_that(
+    is.character(Survey),
+    msg = "'Survey' must be a character vector. Valid options are 'NRS', 'CPR', or c('NRS', 'CPR')."
+  )
+  
+  assertthat::assert_that(
+    all(Survey %in% c("NRS", "CPR", "Both")),
+    msg = "'Survey' must be one or more of 'NRS', 'CPR', or 'Both'."
+  )
+  
+  assertthat::assert_that(
+    is.logical(interactive) && length(interactive) == 1,
+    msg = "'interactive' must be a single logical value (TRUE or FALSE)."
+  )
 
   if (interactive == FALSE){
     if("NRS" %in% Survey) {

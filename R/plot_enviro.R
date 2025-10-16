@@ -15,6 +15,39 @@
 #'
 pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
 
+  # Input validation
+  assertthat::assert_that(
+    is.data.frame(df),
+    msg = "'df' must be a data frame."
+  )
+  
+  assertthat::assert_that(
+    nrow(df) > 0,
+    msg = "The data frame 'df' is empty. Check your data source or filtering criteria."
+  )
+  
+  assertthat::assert_that(
+    is.character(Trend) && length(Trend) == 1,
+    msg = "'Trend' must be a single character string. Valid options are 'None', 'Smoother', or 'Linear'."
+  )
+  
+  assertthat::assert_that(
+    Trend %in% c("None", "Smoother", "Linear"),
+    msg = "'Trend' must be one of 'None', 'Smoother', or 'Linear'."
+  )
+  
+  assertthat::assert_that(
+    is.character(trans) && length(trans) == 1,
+    msg = "'trans' must be a single character string specifying the y-axis transformation (e.g., 'identity', 'log10', 'sqrt')."
+  )
+  
+  # Check required columns
+  required_cols <- c("SampleTime_Local", "Values", "Parameters", "StationName", "SampleDepth_m", "Month_Local")
+  assertthat::assert_that(
+    all(required_cols %in% names(df)),
+    msg = paste0("'df' must contain the following columns: ", paste(required_cols, collapse = ", "), ".")
+  )
+
   n <- length(unique(df$StationName))
 
   titley <- pr_relabel(unique(df$Parameters), style = "ggplot")
@@ -89,6 +122,29 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
 #' StationCode %in% c('YON', 'MAI', 'PHB', 'NSI'))
 #' plot <- pr_plot_NRSEnvContour(df, na.fill = TRUE)
 pr_plot_NRSEnvContour <- function(df, na.fill = TRUE) {
+
+  # Input validation
+  assertthat::assert_that(
+    is.data.frame(df),
+    msg = "'df' must be a data frame."
+  )
+  
+  assertthat::assert_that(
+    nrow(df) > 0,
+    msg = "The data frame 'df' is empty. Check your data source or filtering criteria."
+  )
+  
+  assertthat::assert_that(
+    is.logical(na.fill) || is.function(na.fill),
+    msg = "'na.fill' must be TRUE, FALSE, or a function (e.g., mean) to fill in gaps in data."
+  )
+  
+  # Check required columns
+  required_cols <- c("SampleTime_Local", "Values", "Parameters", "SampleDepth_m")
+  assertthat::assert_that(
+    all(required_cols %in% names(df)),
+    msg = paste0("'df' must contain the following columns: ", paste(required_cols, collapse = ", "), ".")
+  )
 
   df <- df %>%
     dplyr::mutate(SampleDepth_m = round(.data$SampleDepth_m/10, 0)*10,  ## leave in for SOTS

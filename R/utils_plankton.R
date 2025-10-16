@@ -13,6 +13,27 @@
 #' CPRfgp <- pr_get_FuncGroups(Survey = "CPR", Type = "Phytoplankton")
 pr_get_FuncGroups <- function(Survey = "NRS", Type = "Zooplankton", ...){
 
+  # Input validation
+  assertthat::assert_that(
+    is.character(Survey) && length(Survey) == 1,
+    msg = "'Survey' must be a single character string. Valid options are 'NRS', 'CPR', or 'SOTS'."
+  )
+  
+  assertthat::assert_that(
+    Survey %in% c("NRS", "CPR", "SOTS"),
+    msg = "'Survey' must be one of 'NRS', 'CPR', or 'SOTS'."
+  )
+  
+  assertthat::assert_that(
+    is.character(Type) && length(Type) == 1,
+    msg = "'Type' must be a single character string. Valid options are 'Phytoplankton' or 'Zooplankton'."
+  )
+  
+  assertthat::assert_that(
+    Type %in% c("Phytoplankton", "Zooplankton"),
+    msg = "'Type' must be one of 'Phytoplankton' or 'Zooplankton'."
+  )
+
   if(Survey == "CPR"){
     df <- pr_get_CPRData(Type, Variable = "abundance", Subset = "htg") %>%
       pr_add_Bioregions(...)
@@ -144,6 +165,27 @@ pr_get_PCIData <- function(){
 #' df <- pr_get_TaxaAccum(Survey = "NRS", Type = "Zooplankton")
 pr_get_TaxaAccum <- function(Survey = "NRS", Type = "Zooplankton"){
 
+  # Input validation
+  assertthat::assert_that(
+    is.character(Survey) && length(Survey) == 1,
+    msg = "'Survey' must be a single character string. Valid options are 'NRS' or 'CPR'."
+  )
+  
+  assertthat::assert_that(
+    Survey %in% c("NRS", "CPR"),
+    msg = "'Survey' must be one of 'NRS' or 'CPR'."
+  )
+  
+  assertthat::assert_that(
+    is.character(Type) && length(Type) == 1,
+    msg = "'Type' must be a single character string. Valid options are 'Phytoplankton' or 'Zooplankton'."
+  )
+  
+  assertthat::assert_that(
+    Type %in% c("Phytoplankton", "Zooplankton"),
+    msg = "'Type' must be one of 'Phytoplankton' or 'Zooplankton'."
+  )
+
   if (Survey == "NRS"){
     dat <- pr_get_NRSData(Type = Type, Variable = "abundance", Subset = "raw")
   } else if (Survey == "CPR"){
@@ -175,6 +217,17 @@ pr_get_TaxaAccum <- function(Survey = "NRS", Type = "Zooplankton"){
 #' df <- pr_get_STIdata("Phytoplankton")
 #' df <- pr_get_STIdata("Zooplankton")
 pr_get_STIdata <-  function(Type = "Phytoplankton"){
+
+  # Input validation
+  assertthat::assert_that(
+    is.character(Type) && length(Type) == 1,
+    msg = "'Type' must be a single character string. Valid options are 'Phytoplankton' or 'Zooplankton'."
+  )
+  
+  assertthat::assert_that(
+    Type %in% c("Phytoplankton", "Zooplankton"),
+    msg = "'Type' must be one of 'Phytoplankton' or 'Zooplankton'."
+  )
 
   if(Type == "Zooplankton"){
     cprdat <- pr_get_CPRData(Type, Variable = "abundance", Subset = "copepods")
@@ -227,6 +280,17 @@ pr_get_STIdata <-  function(Type = "Phytoplankton"){
 #' df <- pr_get_STI("Phytoplankton")
 #'
 pr_get_STI <-  function(Type = "Zooplankton"){
+
+  # Input validation
+  assertthat::assert_that(
+    is.character(Type) && length(Type) == 1,
+    msg = "'Type' must be a single character string. Valid options are 'Phytoplankton' or 'Zooplankton'."
+  )
+  
+  assertthat::assert_that(
+    Type %in% c("Phytoplankton", "Zooplankton"),
+    msg = "'Type' must be one of 'Phytoplankton' or 'Zooplankton'."
+  )
 
   df <- pr_get_STIdata(Type)
 
@@ -293,6 +357,17 @@ pr_get_STI <-  function(Type = "Zooplankton"){
 #'
 pr_get_CTI <-  function(Type = "Zooplankton"){
 
+  # Input validation
+  assertthat::assert_that(
+    is.character(Type) && length(Type) == 1,
+    msg = "'Type' must be a single character string. Valid options are 'Phytoplankton' or 'Zooplankton'."
+  )
+  
+  assertthat::assert_that(
+    Type %in% c("Phytoplankton", "Zooplankton"),
+    msg = "'Type' must be one of 'Phytoplankton' or 'Zooplankton'."
+  )
+
   df <- pr_get_STI(Type)
 
   if(Type == "Zooplankton"){
@@ -326,6 +401,17 @@ pr_get_CTI <-  function(Type = "Zooplankton"){
 #' @examples
 #' df <- pr_get_DayNight(Type = "Zooplankton")
 pr_get_DayNight <- function(Type = "Zooplankton"){
+
+  # Input validation
+  assertthat::assert_that(
+    is.character(Type) && length(Type) == 1,
+    msg = "'Type' must be a single character string. Valid options are 'Phytoplankton' or 'Zooplankton'."
+  )
+  
+  assertthat::assert_that(
+    Type %in% c("Phytoplankton", "Zooplankton"),
+    msg = "'Type' must be one of 'Phytoplankton' or 'Zooplankton'."
+  )
 
   Type <- pr_check_type(Type)
 
