@@ -245,47 +245,49 @@ pr_plot_Climatology <- function(df, Trend = "Month", trans = "identity"){
     dodge <- 300
   }
 
-  # Trend <- dplyr::enquo(arg = Trend)
   Trend <- rlang::sym(Trend)
 
   if(Survey == "CPR"){
     df <- df %>%
       dplyr::rename(StationName = "BioRegion")
+    legendTitle <- "Bioregion"
     plotCols <- colCPR
   } else if (Survey != "CPR"){
     plotCols <- colNRSName
+    legendTitle <- "Station Name"
   }
 
   n <- length(unique(df$StationName))
   title <- pr_relabel(unique(df$Parameters), style = "ggplot")
 
-
-  #TODO !! Doesn't work with the custom class so we convert to tibble and then back again. It would be interesting to find out why one day....
   df_climate <- df %>%
-    # tibble::as_tibble() %>%
     dplyr::summarise(mean = mean(.data$Values, na.rm = TRUE),
                      N = length(.data$Values),
                      sd = stats::sd(.data$Values, na.rm = TRUE),
                      se = sd / sqrt(.data$N),
                      .by = tidyselect::all_of(c(rlang::as_string(Trend), "StationName"))) %>%
-    tidyr::complete(!!Trend, .data$StationName) # %>%
-    # planktonr_dat(Type = Type, Survey = Survey, Variable = Variable)
-
+    dplyr::mutate(StationName = as.character(.data$StationName)) %>%
+    tidyr::complete(!!Trend, .data$StationName)
 
   if("Year_Local" %in% colnames(df_climate)){
     df_climate <- df_climate %>%
       dplyr::mutate(!!Trend := lubridate::as_date(paste(!!Trend, 1, 1, sep = "-"))) #TODO Temp fix to convert to date and fix ticks below
   }
 
-  p1 <- ggplot2::ggplot(df_climate, ggplot2::aes(x = !!Trend, y = .data$mean, fill = .data$StationName,
+  p1 <- ggplot2::ggplot(df_climate, ggplot2::aes(x = !!Trend,
+                                                 y = .data$mean,
+                                                 fill = .data$StationName,
                                                  group = .data$StationName)) +
     ggplot2::geom_col(width = dodge, position = ggplot2::position_dodge(width = dodge)) +
     ggplot2::geom_errorbar(ggplot2::aes(ymin = .data$mean-.data$se, ymax = .data$mean+.data$se),
                            width = dodge/3,                    # Width of the error bars
                            position = ggplot2::position_dodge(width = dodge)) +
     ggplot2::labs(y = title) +
-    ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
-    ggplot2::scale_fill_manual(values = plotCols, limits = force, guide = ggplot2::guide_legend(byrow = TRUE)) +
+    ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0, 0.02))) +
+    ggplot2::scale_fill_manual(values = plotCols,
+                               limits = force,
+                               name = legendTitle,
+                               guide = ggplot2::guide_legend(byrow = TRUE)) +
     theme_pr()
 
   if("Month_Local" %in% colnames(df_climate)){
@@ -344,7 +346,7 @@ pr_plot_tsclimate <- function(df, trans = "identity"){
 #' Time series plot of functional groups
 #'
 #' @param df dataframe in format of output from pr_get_FuncGroups
-#' @param Scale y axis scale Actual or Percent
+#' @param Scale y axis scale Actual or Proportion
 #' @param Trend Over what timescale to fit the Trend - "Raw", "Month" or "Year"
 #'
 #'
@@ -391,7 +393,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
   }
 
   # Overwrite titley if its a proportion
-  if (Scale == "Percent"){
+  if (Scale == "Proportion"){
     titley <- "Proportion"
   }
 
@@ -404,48 +406,69 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
                        N = dplyr::n(),
                        sd = sd(.data$Values, na.rm = TRUE),
                        se = sd / sqrt(.data$N),
-                       .by = tidyselect::all_of(c(rlang::as_string(rlang::sym(Trend)), rlang::as_string(station), "Parameters")))
+                       .by = tidyselect::all_of(c(rlang::as_string(rlang::sym(Trend)),
+                                                  rlang::as_string(station),
+                                                  "Parameters")))
 
   } else {
     Trend <- SampleDate # Rename Trend to match the column with time
   }
 
-  if(Scale == "Percent") {
+  df <- df %>%
+    dplyr::mutate(Values = .data$Values + 1) # Add a small number so plot doesn't go weird
+
+  if(Scale == "Proportion") {
+
     df <- df %>%
-      dplyr::summarise(n = sum(.data$Values, na.rm = TRUE),
-                       .by = tidyselect::all_of(c(rlang::as_string(rlang::sym(Trend)), rlang::as_string(station), "Parameters"))) %>%
-      dplyr::mutate(Values = .data$n / sum(.data$n, na.rm = TRUE))
-  } else {
-    df <- df %>%
-      dplyr::mutate(Values = log10(.data$Values))
+      dplyr::mutate(Total = sum(.data$Values, na.rm = TRUE),
+                       .by = tidyselect::all_of(c(rlang::as_string(rlang::sym(Trend)),
+                                                  rlang::as_string(station)))) %>%
+      dplyr::mutate(Values = .data$Values / sum(.data$Total, na.rm = TRUE),
+                    .by = tidyselect::all_of(c(rlang::as_string(rlang::sym(Trend)),
+                                               rlang::as_string(station),
+                                               "Parameters")))
   }
 
-
-  p1 <- ggplot2::ggplot(df, ggplot2::aes(x = !!rlang::sym(Trend), y = .data$Values, fill = .data$Parameters)) +
-    ggplot2::geom_area(alpha = 0.9 , linewidth = 0.2, colour = "white") +
+  p1 <- ggplot2::ggplot(df, ggplot2::aes(x = !!rlang::sym(Trend),
+                                         y = .data$Values,
+                                         fill = .data$Parameters)) +
+    ggplot2::geom_area(alpha = 0.9, linewidth = 0.2, colour = "white") +
     ggplot2::facet_wrap(rlang::enexpr(station), scales = "free", ncol = 1) +
     ggplot2::labs(y = titley) +
-    ggplot2::scale_fill_brewer(palette = "Set1", drop = FALSE) +
+    ggplot2::scale_fill_brewer(palette = "Set1", drop = FALSE, name = "Functional Group") +
     theme_pr() +
-    ggplot2::scale_y_continuous(expand = c(0,0)) +
-    ggplot2::theme(legend.title = ggplot2::element_blank(),
-                   strip.text = ggplot2::element_text(hjust = 0))
+    ggplot2::theme(strip.text = ggplot2::element_text(hjust = 0))
+
+  if(Scale == "Proportion") {
+    p1 <- p1 +
+      ggplot2::scale_y_continuous(expand = c(0, 0))
+  } else if (Scale == "Actual") {
+    p1 <- p1 +
+      ggplot2::scale_y_log10(expand = c(0, 0))
+  }
 
   if (rlang::as_string(Trend) %in% c("Month_Local")){
     lims <- c(1, 12)
     p1 <- p1 +
-      ggplot2::scale_x_continuous(breaks = seq(1, 12, length.out = 12), expand = ggplot2::expansion(mult = c(0.02, 0.02)),
+      ggplot2::scale_x_continuous(breaks = seq(1, 12, length.out = 12),
+                                  expand = ggplot2::expansion(mult = c(0, 0)),
                                   limits = lims,
                                   labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
       ggplot2::xlab("Month")
   } else if (rlang::as_string(Trend) %in% c("Year_Local")){
     p1 <- p1 +
-      ggplot2::scale_x_continuous(breaks = 2, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
+      ggplot2::scale_x_continuous(breaks = 2,
+                                  expand = ggplot2::expansion(mult = c(0, 0))) +
       ggplot2::xlab("Year")
   } else if (rlang::as_string(Trend) %in% c("SampleTime_Local")){
-    lims <- as.POSIXct(strptime(c(min(df$SampleTime_Local),max(df$SampleTime_Local)), format = "%Y-%m-%d %H:%M"))
+    lims <- as.POSIXct(strptime(c(min(df$SampleTime_Local),
+                                  max(df$SampleTime_Local)),
+                                format = "%Y-%m-%d %H:%M"))
     p1 <- p1 +
-      ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", limits = lims, expand = ggplot2::expansion(add = c(0.15, 0.15))) +
+      ggplot2::scale_x_datetime(date_breaks = "2 years",
+                                date_labels = "%Y",
+                                limits = lims,
+                                expand = ggplot2::expansion(add = c(0, 0))) +
       ggplot2::xlab("Sample Date")
   }
 
@@ -472,6 +495,8 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 #' pr_plot_EOVs(df, EOV = "Biomass_mgm3",
 #'       trans = "identity", col = "blue", labels = FALSE)
 pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "blue", labels = TRUE) {
+
+  pt_size <- 0.8 # TODO Could make this an argument.
 
   lims <- c(lubridate::floor_date(min(df$SampleTime_Local), "year"),
             lubridate::ceiling_date(max(df$SampleTime_Local), "year")) # moving this to start so that in BOO the date scales for different parameters are equal.
@@ -529,7 +554,6 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
     # extract monthly climatology data from model
     dfm <- purrr::imap(Models, ~ predict(.x, newdata = newdata, se.fit = TRUE)) %>%
       dplyr::bind_rows(.id = as.character(site)) %>%
-      # data.frame() %>%
       dplyr::mutate(Month_Local = rep(term_vals, length(Models)),
                     upper = .data$fit + 1.96*.data$se.fit,
                     lower = .data$fit -1.96*.data$se.fit,
@@ -556,7 +580,7 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
     }
 
     p1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$SampleTime_Local, y = .data$Values)) +
-      ggplot2::geom_point(colour = col) +
+      ggplot2::geom_point(colour = col, size = pt_size) +
       ggplot2::geom_smooth(data = df %>% dplyr::filter(.data$do_smooth),
                            method = "lm", formula = y ~ x,
                            colour = col, fill = col, alpha = 0.4) +
@@ -610,7 +634,7 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
     }
 
     p3 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$Month, y = .data$Values)) +
-      ggplot2::geom_point(colour = col) +
+      ggplot2::geom_point(colour = col, size = pt_size) +
       ggplot2::geom_smooth(data = dfm %>% dplyr::filter(.data$do_smooth), ggplot2::aes(x = .data$Month_Local, y = .data$Values),
                            method = "loess",
                            formula = "y ~ x", colour = col, fill = col, alpha = 0.4) +
@@ -806,14 +830,14 @@ pr_plot_latitude <- function(df, na.fill = TRUE){
     dplyr::mutate(SampleDepth_m = round(.data$SampleDepth_m/10, 0)*10)
 
   p1 <- ggplot2::ggplot() +
-      metR::geom_contour_fill(data = df2, ggplot2::aes(x = .data$Latitude, y = .data$SampleDepth_m, z = .data$Values), na.fill = na.fill) +
-      ggplot2::scale_fill_continuous(type = "viridis", name = param) +
-      ggplot2::geom_point(data = df, ggplot2::aes(x = .data$Latitude, y = .data$SampleDepth_m), size = 1) +
-      ggplot2::scale_x_continuous(expand = c(0, 0)) +
-      ggplot2::scale_y_reverse(expand = c(0, 0)) +
-      ggplot2::labs(y = "Depth (m)", x = xlabel) +
-      planktonr::theme_pr() +
-      ggplot2::theme(strip.text = ggplot2::element_text(hjust = 0),
+    metR::geom_contour_fill(data = df2, ggplot2::aes(x = .data$Latitude, y = .data$SampleDepth_m, z = .data$Values), na.fill = na.fill) +
+    ggplot2::scale_fill_continuous(type = "viridis", name = param) +
+    ggplot2::geom_point(data = df, ggplot2::aes(x = .data$Latitude, y = .data$SampleDepth_m), size = 1) +
+    ggplot2::scale_x_continuous(expand = c(0, 0)) +
+    ggplot2::scale_y_reverse(expand = c(0, 0)) +
+    ggplot2::labs(y = "Depth (m)", x = xlabel) +
+    planktonr::theme_pr() +
+    ggplot2::theme(strip.text = ggplot2::element_text(hjust = 0),
                    legend.position = 'bottom')
 
   plots <- patchwork::wrap_plots(gg, p1, ncol = 1)

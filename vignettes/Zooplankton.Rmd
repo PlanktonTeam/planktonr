@@ -16,8 +16,14 @@ knitr::opts_chunk$set(
   comment = "#>",
   message = FALSE,
   warning = FALSE,
-  fig.width = 7
+  fig.width = 7,
+  out.width = "100%",
+  fig.align = "center",
+  dpi = 150
 )
+
+# Set smaller base font size for vignette plots
+options(planktonr.base_size = 9)
 ```
 
 ```{r setup}
@@ -133,7 +139,9 @@ p2 <- planktonr::pr_plot_Climatology(CPRz, Trend = "Month", trans = "log10")
 
 p3 <- planktonr::pr_plot_Climatology(CPRz, Trend = "Year", trans = "log10") + theme(axis.title.y = element_blank())
 
-wrap_plots(p1, p2, p3, ncol = 1, guides = "collect") & theme(legend.position = "bottom")
+wrap_plots(p1, p2, p3, ncol = 1, guides = "collect") & 
+  theme(legend.position = "bottom") & 
+  guides(color = guide_legend(nrow = 2), fill = guide_legend(nrow = 2))
 
 ```
 

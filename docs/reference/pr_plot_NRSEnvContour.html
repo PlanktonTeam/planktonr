@@ -78,7 +78,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pr_plot_NRSEnvContour</span><span class="op">(</span><span class="va">df</span>, Interpolation <span class="op">=</span> <span class="cn">TRUE</span>, Fill_NA <span class="op">=</span> <span class="cn">FALSE</span>, maxGap <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pr_plot_NRSEnvContour</span><span class="op">(</span><span class="va">df</span>, na.fill <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -89,16 +89,8 @@
 <dd><p>dataframe from pr_get_NRSEnvContour</p></dd>
 
 
-<dt id="arg-interpolation">Interpolation<a class="anchor" aria-label="anchor" href="#arg-interpolation"></a></dt>
-<dd><p>If TRUE data is interpolated at 5m intervals (DAR = 10m)</p></dd>
-
-
-<dt id="arg-fill-na">Fill_NA<a class="anchor" aria-label="anchor" href="#arg-fill-na"></a></dt>
-<dd><p>to fill in NA's or not via zoo::na_approx, only used when interpolation is TRUE</p></dd>
-
-
-<dt id="arg-maxgap">maxGap<a class="anchor" aria-label="anchor" href="#arg-maxgap"></a></dt>
-<dd><p>maximum gap across which to interpolate across NAs</p></dd>
+<dt id="arg-na-fill">na.fill<a class="anchor" aria-label="anchor" href="#arg-na-fill"></a></dt>
+<dd><p>TRUE, FALSE or function like mean to fill in gaps in data</p></dd>
 
 </dl></div>
     <div id="value">
@@ -108,11 +100,9 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr_get_NRSEnvContour.html">pr_get_NRSEnvContour</a></span><span class="op">(</span><span class="st">"Chemistry"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
-<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Parameters</span> <span class="op">==</span> <span class="st">"Nitrate_umolL"</span>,</span></span>
-<span class="r-in"><span>  <span class="va">StationCode</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'YON'</span>, <span class="st">'MAI'</span>, <span class="st">'PHB'</span>, <span class="st">'NSI'</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu">pr_plot_NRSEnvContour</span><span class="op">(</span><span class="va">df</span>, Interpolation <span class="op">=</span> <span class="cn">TRUE</span>, Fill_NA <span class="op">=</span> <span class="cn">FALSE</span>, maxGap <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr_get_NRSEnvContour.html">pr_get_NRSEnvContour</a></span><span class="op">(</span><span class="st">"Chemistry"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Parameters</span> <span class="op">==</span> <span class="st">"Nitrate_umolL"</span>,</span></span>
+<span class="r-in"><span><span class="va">StationCode</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'YON'</span>, <span class="st">'MAI'</span>, <span class="st">'PHB'</span>, <span class="st">'NSI'</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu">pr_plot_NRSEnvContour</span><span class="op">(</span><span class="va">df</span>, na.fill <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>

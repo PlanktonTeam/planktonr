@@ -49,38 +49,35 @@ pr_plot_NRSmap <- function(sites, Survey = "NRS", Type = 'Zooplankton'){
   }
 
   if (Type == 'Phytoplankton'){
-    meta_sf <- readr::read_csv(system.file("extdata", "BGC_StationInfo.csv", package = "planktonr", mustWork = TRUE),
-                           na = "",
-                           show_col_types = FALSE,
-                           col_types = readr::cols(
-                             StationStartDate = readr::col_date(format = "%d/%m/%Y"))) %>%
+    meta_sf <- pr_get_Stations() %>%
       pr_rename() %>%
       dplyr::filter(.data$StationCode == "SOTS") %>%
-      dplyr::select(Station = .data$StationName, Code = .data$StationCode, .data$Latitude, .data$Longitude) %>%
-      sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326) %>%
+      dplyr::select(Station = .data$StationName,
+                    Code = .data$StationCode,
+                    .data$Latitude, .data$Longitude) %>%
+      sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = "EPSG:4326") %>%
       dplyr::bind_rows(meta_sf)
     limlatmin <- -50
   } else {
     meta_sf
-    limlatmin <- -45
+    limlatmin <- -44
   }
 
   meta_sf <- meta_sf %>%
     dplyr::mutate(Colour = dplyr::if_else(.data$Code %in% sites, "Red", "Blue")) %>%
-    sf::st_as_sf() # This seems to strip away some of the tibble stuff that makes the filter not work...
-  # dplyr::filter(.data$Code %in% df$StationCode)
+    sf::st_as_sf()
 
   col <- meta_sf %>%
     sf::st_drop_geometry() %>%
-    dplyr::select(tidyselect::all_of(c("Code", "Colour"))) %>%
+    dplyr::select(tidyselect::all_of(c("Station", "Colour"))) %>%
     tibble::deframe()
 
   p1 <- ggplot2::ggplot() +
     ggplot2::geom_sf(data = MapOz, size = 0.05, fill = "grey80") +
-    ggplot2::geom_sf(data = meta_sf, ggplot2::aes(colour = .data$Code), size = 5, show.legend = FALSE) +
+    ggplot2::geom_sf(data = meta_sf, ggplot2::aes(colour = .data$Station), size = 5, show.legend = FALSE) +
     ggplot2::scale_colour_manual(values = col) +
-    ggplot2::scale_x_continuous(expand = c(0, 0), limits = c(112, 155)) +
-    ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(limlatmin, -9)) +
+    ggplot2::scale_x_continuous(expand = c(0, 0), limits = c(112.8, 154.5)) +
+    ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(limlatmin, -10.5)) +
     ggplot2::theme_void() +
     ggplot2::theme(axis.title = ggplot2::element_blank(),
                    axis.line = ggplot2::element_blank(),

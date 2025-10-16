@@ -19,6 +19,7 @@
 <url><loc>https://planktonteam.github.io/planktonr/reference/group_by.planktonr_dat.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/index.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/is_planktonr_dat.html</loc></url>
+<url><loc>https://planktonteam.github.io/planktonr/reference/mplus.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/mutate.planktonr_dat.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pipe.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pivot_longer.planktonr_dat.html</loc></url>
@@ -63,11 +64,14 @@
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_PolicyInfo.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_ProgressMapData.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_Raw.html</loc></url>
+<url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_SOTSMoorData.html</loc></url>
+<url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_SOTSvariables.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_STI.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_STIdata.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_SatData.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_Site.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_SpeciesInfo.html</loc></url>
+<url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_Stations.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_TaxaAccum.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_model.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_s3.html</loc></url>

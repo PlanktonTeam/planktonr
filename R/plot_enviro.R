@@ -123,7 +123,7 @@ pr_plot_NRSEnvContour <- function(df, na.fill = TRUE) {
       p1 <- ggplot2::ggplot() +
         metR::geom_contour_fill(data = df, ggplot2::aes(x = !!rlang::sym(xvals), y = .data$SampleDepth_m, z = .data$Values), na.fill = na.fill) +
         ggplot2::scale_fill_continuous(type = "viridis", name = titleg, limits = c(limitMin, limitMax))+
-        ggplot2::guides(fill = ggplot2::guide_colourbar(barwidth = 4, barheight = 1)) +
+        ggplot2::guides(fill = ggplot2::guide_colourbar(barwidth = grid::unit(0.3, "npc"), barheight = grid::unit(0.04, "npc"))) +
         ggplot2::geom_point(data = df, ggplot2::aes(x = !!rlang::sym(xvals), y = .data$SampleDepth_m), size = 1) +
         ggplot2::facet_wrap(~.data$StationName, scales = "free_y", ncol = 1) +
         ggplot2::scale_x_continuous(breaks = myBreaks, labels = myLabels, expand = c(0, 0)) +
@@ -143,8 +143,14 @@ pr_plot_NRSEnvContour <- function(df, na.fill = TRUE) {
     ggplot2::labs(x = "Month") +
     ggplot2::theme(axis.title.y = ggplot2::element_blank())
 
-  plots <- patchwork::wrap_plots(pts, pmc, ncol = 2) +
-    patchwork::plot_layout(widths = c(3,1))
+  plots <- patchwork::wrap_plots(pts, pmc, ncol = 2, guides = "collect") +
+    patchwork::plot_layout(widths = c(3,1)) +
+    patchwork::plot_annotation(theme = ggplot2::theme(
+      legend.position = "bottom",
+      legend.direction = "horizontal",
+      legend.box = "horizontal"
+    ))
+
 
   return(plots)
 

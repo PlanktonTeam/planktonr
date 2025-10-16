@@ -11,7 +11,12 @@
 #'
 #' @examples
 #' \dontrun{ggplot() + geom_blank() + theme_pr()}
-theme_pr <- function(base_size = 15){
+theme_pr <- function(base_size = NULL){
+  # Check for global option first, then use default if not set
+  if (is.null(base_size)) {
+    base_size <- getOption("planktonr.base_size", default = 15)
+  }
+  
   font <- "Georgia"   #assign font family up front
   ggplot2::theme_bw(base_size = base_size) %+replace%    # replace elements we want to change
     ggplot2::theme(

@@ -16,8 +16,14 @@ knitr::opts_chunk$set(
   comment = "#>",
   message = FALSE,
   warning = FALSE,
-  fig.width = 7
+  fig.width = 7,
+  out.width = "100%",
+  fig.align = "center",
+  dpi = 150
 )
+
+# Set smaller base font size for vignette plots
+options(planktonr.base_size = 9)
 ```
 
 ```{r setup}

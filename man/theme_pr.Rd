@@ -4,7 +4,7 @@
 \alias{theme_pr}
 \title{Define theme_pr() function}
 \usage{
-theme_pr(base_size = 15)
+theme_pr(base_size = NULL)
 }
 \arguments{
 \item{base_size}{use to set font size with base_size}
