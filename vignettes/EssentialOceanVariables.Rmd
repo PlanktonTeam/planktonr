@@ -54,7 +54,7 @@ unique(EOV_MAI$Parameters)
 
 
 Once we have chosen the EOV we are interested in, we can plot it as below. Note the use of the `&` to apply the theme. This is because the resulting figure is a patchwork of ggplots.
-```{r, fig.height=4}
+```{r, fig.height=2}
 (p1 <- pr_plot_EOVs(EOV_MAI, EOV = "Silicate_umolL"))       
 ```
 
