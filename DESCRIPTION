@@ -41,6 +41,7 @@ Imports:
     units,
     vctrs
 Suggests: 
+    curl,
     future,
     furrr,
     knitr,
