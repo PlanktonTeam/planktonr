@@ -68,13 +68,18 @@ p1 + p2 +
 
 Here we plot the same information but change the format of the figures. 
 
-```{r}
+First we plot zooplankton abundance at the 4 east coast NRS stations with log10 scaling.
+```{r, fig.height=2}
 (p1 <- planktonr::pr_plot_TimeSeries(NRSz, trans = "log10"))
 ```
-```{r}
+
+Then we can plot the same data as monthly means.
+```{r, fig.height=2}
 (p2 <- planktonr::pr_plot_Climatology(NRSz, Trend = "Month", trans = "log10"))
 ```
-```{r}
+
+And then as Annual means.
+```{r, fig.height=2}
 (p3 <- planktonr::pr_plot_Climatology(NRSz, Trend = "Year", trans = "log10"))
 ```
 

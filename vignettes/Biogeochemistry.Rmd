@@ -74,7 +74,7 @@ unique(CTD$Parameters)
 
 As you would expect if we plot the surface temperature at North Stradbroke it is significantly warmer than that at Maria Island. Both seem reasonably stable over the plotting period with very similar seasonal trends. 
 
-```{r}
+```{r, fig.height=2}
 CTD <- pr_get_Indices("NRS", "Water") %>% 
   filter(Parameters == "CTDTemperature_degC") %>% 
   filter(StationCode %in% c("NSI", "MAI"))

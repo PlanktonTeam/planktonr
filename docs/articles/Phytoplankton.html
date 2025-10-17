@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.6.5</span>
+        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.6.6</span>
       </span>
     </div>
 
@@ -159,12 +159,16 @@ the base of the food web.</p>
 </h3>
 <p>We can plot this same data in a different format to better compare
 between stations.</p>
+<p>First we plot phytoplankton abundance at the 4 east coast NRS
+stations with log10 scaling.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">planktonr</span><span class="fu">::</span><span class="fu"><a href="../reference/pr_plot_TimeSeries.html">pr_plot_TimeSeries</a></span><span class="op">(</span><span class="va">NRSp</span>, trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Phytoplankton_files/figure-html/unnamed-chunk-4-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p>Then we can plot the same data as monthly means.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">planktonr</span><span class="fu">::</span><span class="fu"><a href="../reference/pr_plot_Climatology.html">pr_plot_Climatology</a></span><span class="op">(</span><span class="va">NRSp</span>, Trend <span class="op">=</span> <span class="st">"Month"</span>, trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Phytoplankton_files/figure-html/unnamed-chunk-5-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p>And then as Annual means.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu">planktonr</span><span class="fu">::</span><span class="fu"><a href="../reference/pr_plot_Climatology.html">pr_plot_Climatology</a></span><span class="op">(</span><span class="va">NRSp</span>, Trend <span class="op">=</span> <span class="st">"Year"</span>, trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Phytoplankton_files/figure-html/unnamed-chunk-6-1.png" width="100%" style="display: block; margin: auto;"></p>

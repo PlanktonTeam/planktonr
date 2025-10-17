@@ -18,7 +18,7 @@ planktonr_dat attributes are preserved when adding or modifying columns."><!-- m
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.6.5</span>
+        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.6.6</span>
       </span>
     </div>
 
@@ -81,7 +81,7 @@ planktonr_dat attributes are preserved when adding or modifying columns."><!-- m
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for class 'planktonr_dat'</span></span>
-<span><span class="fu">mutate</span><span class="op">(</span><span class="va">.data</span>, <span class="va">...</span>, .before <span class="op">=</span> <span class="cn">NULL</span>, .after <span class="op">=</span> <span class="cn">NULL</span>, .keep <span class="op">=</span> <span class="st">"all"</span>, .width <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">mutate</span><span class="op">(</span><span class="va">.data</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -93,12 +93,9 @@ planktonr_dat attributes are preserved when adding or modifying columns."><!-- m
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>&lt;<code><a href="https://dplyr.tidyverse.org/reference/dplyr_data_masking.html" class="external-link">data-masking</a></code>&gt; Name-value pairs of expressions.</p></dd>
-
-
-<dt id="arg--before-after-keep-width">.before, .after, .keep, .width<a class="anchor" aria-label="anchor" href="#arg--before-after-keep-width"></a></dt>
-<dd><p>Control the placement and selection of columns.
-See <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">dplyr::mutate()</a></code> for details.</p></dd>
+<dd><p>&lt;<code><a href="https://dplyr.tidyverse.org/reference/dplyr_data_masking.html" class="external-link">data-masking</a></code>&gt; Name-value pairs of expressions,
+and optional arguments <code>.before</code>, <code>.after</code>, <code>.keep</code>, <code>.width</code> to control
+column placement and selection. See <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">dplyr::mutate()</a></code> for details.</p></dd>
 
 </dl></div>
     <div id="value">
