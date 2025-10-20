@@ -154,8 +154,8 @@ Centric diatoms dominate the CPR samples especially in the winter months when th
 FG <- pr_get_FuncGroups(Survey = "CPR", Type = "Phytoplankton") %>% 
   filter(BioRegion %in% c("South-east", "Temperate East"))
 
-p1 <- pr_plot_tsfg(FG, Scale = "Percent")
-p2 <- pr_plot_tsfg(FG, Scale = "Percent", Trend = "Month") +
+p1 <- pr_plot_tsfg(FG, Scale = "Proportion")
+p2 <- pr_plot_tsfg(FG, Scale = "Proportion", Trend = "Month") +
   theme(axis.title.y = element_blank())
       
 p1 + p2 + 

@@ -50,6 +50,7 @@ pr_plot_TimeSeries <- function(df, trans = "identity"){
       dplyr::rename(StationName = "BioRegion")
     plotCols <- colCPR
     ltype <- "solid"
+    legendTitle <- "Bioregion"
 
   } else if (Survey == "NRS" | Survey == "Coastal"){
     df <- df %>%
@@ -57,6 +58,7 @@ pr_plot_TimeSeries <- function(df, trans = "identity"){
                        .by = tidyselect::all_of(c("SampleTime_Local", "StationName", "Parameters"))) # accounting for microbial data different depths
     plotCols <- colNRSName
     ltype <- ltyNRSName
+    legendTitle <- "Station Name"
   }
 
   titlex <- "Sample Date (Local)"
@@ -70,7 +72,7 @@ pr_plot_TimeSeries <- function(df, trans = "identity"){
     ggplot2::scale_y_continuous(trans = trans, expand = c(0, 0)) +
     ggplot2::labs(y = titley,
                   x = titlex) +
-    ggplot2::scale_colour_manual(values = plotCols, limits = force) +
+    ggplot2::scale_colour_manual(values = plotCols, limits = force, name = legendTitle) +
     ggplot2::scale_shape_manual(values = ltype) +
     theme_pr()
 
@@ -490,8 +492,8 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
   )
 
   assertthat::assert_that(
-    Scale %in% c("Actual", "Percent"),
-    msg = "'Scale' must be one of 'Actual' or 'Percent'."
+    Scale %in% c("Actual", "Proportion"),
+    msg = "'Scale' must be one of 'Actual' or 'Proportion'."
   )
 
   assertthat::assert_that(
