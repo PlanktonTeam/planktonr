@@ -123,7 +123,7 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
       dplyr::filter(grepl("SOTS", .data$StationCode),
                     .data$Method == "LM", # only use LM at this stage
                     .data$SampleDepth_m < 50) %>% # remove deep samples taken at CTD depths
-      tidyr::pivot_longer(-c(.data$Project:.data$Method), names_to = "TaxonName", values_to = "abund") %>%
+      tidyr::pivot_longer(-c("Project":"Method"), names_to = "TaxonName", values_to = "abund") %>%
       dplyr::select(tidyselect::any_of(main_vars), "TaxonName", "abund") %>%
       dplyr::left_join(trophy, by = "TaxonName") %>%
       dplyr::filter(.data$abund > 0) %>%
