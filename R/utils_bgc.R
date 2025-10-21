@@ -51,7 +51,7 @@ pr_get_NRSPigments <- function(Format = "all"){
     is.character(Format) && length(Format) == 1,
     msg = "'Format' must be a single character string. Valid options are 'all' or 'binned'."
   )
-  
+
   assertthat::assert_that(
     Format %in% c("all", "binned"),
     msg = "'Format' must be one of 'all' or 'binned'."
@@ -148,12 +148,12 @@ pr_get_NRSEnvContour <- function(Data = "Chemistry") {
   # Input validation
   assertthat::assert_that(
     is.character(Data) && length(Data) == 1,
-    msg = "'Data' must be a single character string. Valid options are 'Chemistry', 'Pico', 'Pigments', 'CTD', or 'Micro'."
+    msg = "'Data' must be a single character string. Valid options are 'Chemistry', 'Pico' or 'Micro'."
   )
-  
+
   assertthat::assert_that(
-    Data %in% c("Chemistry", "Pico", "Pigments", "CTD", "Micro"),
-    msg = "'Data' must be one of 'Chemistry', 'Pico', 'Pigments', 'CTD', or 'Micro'."
+    Data %in% c("Chemistry", "Pico", "Micro"),
+    msg = "'Data' must be one of 'Chemistry', 'Pico', or 'Micro'."
   )
 
   file <- parse(text = paste("planktonr::pr_get_NRS", Data, "()", sep = ""))
@@ -186,7 +186,7 @@ pr_get_NRSMicro <- function(Survey = "NRS"){
     is.character(Survey) && length(Survey) == 1,
     msg = "'Survey' must be a single character string. Valid options are 'NRS', 'Coastal', or 'GO-SHIP'."
   )
-  
+
   assertthat::assert_that(
     Survey %in% c("NRS", "Coastal", "GO-SHIP"),
     msg = "'Survey' must be one of 'NRS', 'Coastal', or 'GO-SHIP'."

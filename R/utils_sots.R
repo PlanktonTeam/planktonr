@@ -7,9 +7,9 @@ utils::globalVariables(".")
 #' @export
 #'
 #' @examples
-#' df <- pr_get_SOTSvariables(Type = 'Physical')
+#' df <- pr_get_SOTSvariables(Type = "Physical")
 
-pr_get_SOTSvariables <- function(Type = 'Physical'){
+pr_get_SOTSvariables <- function(Type = "Physical"){
 
   # Input validation
   assertthat::assert_that(
@@ -22,7 +22,7 @@ pr_get_SOTSvariables <- function(Type = 'Physical'){
     msg = "'Type' must be one of 'Physical' or 'Nutrients'."
   )
 
-  if(Type == 'Nutrients'){
+  if(Type == "Nutrients"){
     years <- seq(1997, lubridate::year(Sys.Date()), 1)
 
     nutsFiles <- function(years){
@@ -69,9 +69,9 @@ pr_get_SOTSvariables <- function(Type = 'Physical'){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_SOTSMoorData(Type = 'Nutrients')
+#' df <- pr_get_SOTSMoorData(Type = "Nutrients")
 
-pr_get_SOTSMoorData <- function(Type = 'Physical'){
+pr_get_SOTSMoorData <- function(Type = "Physical"){
 
   # Input validation
   assertthat::assert_that(
@@ -84,7 +84,7 @@ pr_get_SOTSMoorData <- function(Type = 'Physical'){
     msg = "'Type' must be one of 'Physical' or 'Nutrients'."
   )
 
-  if(Type == 'Nutrients'){
+  if(Type == "Nutrients"){
     years <- seq(1997, lubridate::year(Sys.Date()), 1)
 
     nutsFiles <- function(years){
@@ -117,40 +117,40 @@ pr_get_SOTSMoorData <- function(Type = 'Physical'){
 
     dimensions <- names(nc$var)
 
-    variables <- c("NOMINAL_DEPTH_TEMP", "TEMP","NOMINAL_DEPTH_CPHL", 'CPHL', # "NOMINAL_DEPTH_SST", "SST",
-                   "NOMINAL_DEPTH_PSAL", 'PSAL', 'MLD', #'PAR', 'NOMINAL_DEPTH_PAR', "NOMINAL_DEPTH_DOX2", 'DOX2',
-                   'pHt', 'NOMINAL_DEPTH_pHt', 'NTRI_CONC', "NTRI", "PHOS_CONC", "PHOS", "SLCA_CONC", "SLCA",
+    variables <- c("NOMINAL_DEPTH_TEMP", "TEMP","NOMINAL_DEPTH_CPHL", "CPHL", # "NOMINAL_DEPTH_SST", "SST",
+                   "NOMINAL_DEPTH_PSAL", "PSAL", "MLD", #"PAR", "NOMINAL_DEPTH_PAR", "NOMINAL_DEPTH_DOX2", "DOX2",
+                   "pHt", "NOMINAL_DEPTH_pHt", "NTRI_CONC", "NTRI", "PHOS_CONC", "PHOS", "SLCA_CONC", "SLCA",
                    "ALKA_CONC", "TALK","TCO2", "DEPTH", "NOMINAL_DEPTH")
 
-    variablesAvailable <- intersect(dimensions, variables) %>% stringr::str_subset(pattern = 'DEPTH', negate = TRUE)
+    variablesAvailable <- intersect(dimensions, variables) %>% stringr::str_subset(pattern = "DEPTH", negate = TRUE)
 
-    dates <- as.POSIXct((nc$dim$TIME)$vals*3600*24, origin = '1950-01-01 00:00:00', tz = 'UTC')
+    dates <- as.POSIXct((nc$dim$TIME)$vals*3600*24, origin = "1950-01-01 00:00:00", tz = "UTC")
 
     vardat <- function(variablesAvailable){
-      if('MLD' %in% variablesAvailable){
+      if("MLD" %in% variablesAvailable){
         vdat <- data.frame(ncdf4::ncvar_get(nc, varid = variablesAvailable),
                            dates)
-        colnames(vdat) <- c('0', 'SampleTime_Local')
-        vdat %>% tidyr::pivot_longer(-.data$SampleTime_Local, values_to = 'Values', names_to = 'SampleDepth_m') %>%
+        colnames(vdat) <- c("0", "SampleTime_Local")
+        vdat %>% tidyr::pivot_longer(-"SampleTime_Local", values_to = "Values", names_to = "SampleDepth_m") %>%
           dplyr::mutate(SampleDepth_m = as.numeric(.data$SampleDepth_m),
                         Parameters = paste0(variablesAvailable))
       } else {
-        if(length(stringr::str_subset(pattern = 'NOMINAL_DEPTH_', dimensions)) > 0) {
+        if(length(stringr::str_subset(pattern = "NOMINAL_DEPTH_", dimensions)) > 0) {
           Depthvars <- ncdf4::ncvar_get(nc, varid=paste0("NOMINAL_DEPTH_", variablesAvailable))}
-        else if(length(stringr::str_subset(pattern = 'NOMINAL_DEPTH', dimensions)) > 0) {
+        else if(length(stringr::str_subset(pattern = "NOMINAL_DEPTH", dimensions)) > 0) {
           Depthvars <- ncdf4::ncvar_get(nc, varid=paste0("NOMINAL_DEPTH"))}
         else {
           Depthvars <- ncdf4::ncvar_get(nc, varid=paste0("DEPTH"))}
 
         vdat <- data.frame(ncdf4::ncvar_get(nc, varid = variablesAvailable), SampleTime_Local = dates)
-        if(grepl('ncdf', colnames(vdat[1]))){names(vdat) = c('X1', 'SampleTime_Local')}
+        if(grepl("ncdf", colnames(vdat[1]))){names(vdat) = c("X1", "SampleTime_Local")}
         qcdat <- data.frame(ncdf4::ncvar_get(nc, varid = paste0(variablesAvailable, "_quality_control")), SampleTime_Local = dates)
-        if(grepl('ncdf', colnames(qcdat[1]))){names(qcdat) = c('X1', 'SampleTime_Local')}
+        if(grepl("ncdf", colnames(qcdat[1]))){names(qcdat) = c("X1", "SampleTime_Local")}
         qcdat <- qcdat %>%
-          tidyr::pivot_longer(-.data$SampleTime_Local, values_to = 'Flags', names_to = 'SampleDepth_m')
+          tidyr::pivot_longer(-"SampleTime_Local", values_to = "Flags", names_to = "SampleDepth_m")
         vdat %>%
-          tidyr::pivot_longer(-.data$SampleTime_Local, values_to = 'Values', names_to = 'SampleDepth_m') %>%
-          dplyr::left_join(qcdat, by = c('SampleDepth_m', 'SampleTime_Local')) %>%
+          tidyr::pivot_longer(-"SampleTime_Local", values_to = "Values", names_to = "SampleDepth_m") %>%
+          dplyr::left_join(qcdat, by = c("SampleDepth_m", "SampleTime_Local")) %>%
           dplyr::filter(.data$Flags %in% c(1, 2)) %>%
       dplyr::mutate(SampleDepth_m = Depthvars[as.numeric(gsub("[^0-9]", "", .data$SampleDepth_m))],
                     Parameters = paste0(variablesAvailable)) %>%
@@ -164,10 +164,10 @@ pr_get_SOTSMoorData <- function(Type = 'Physical'){
     ncdf4::nc_close(nc)
 
     df <- df %>%
-      dplyr::mutate(StationName = 'Southern Ocean Time Series',
-                    StationCode = 'SOTS',
+      dplyr::mutate(StationName = "Southern Ocean Time Series",
+                    StationCode = "SOTS",
                     Month_Local = lubridate::month(.data$SampleTime_Local),
-                    SampleTime_Local = lubridate::floor_date(.data$SampleTime_Local, unit = 'day'),
+                    SampleTime_Local = lubridate::floor_date(.data$SampleTime_Local, unit = "day"),
                     Parameters = dplyr::case_when(grepl("CPHL", .data$Parameters) ~ "ChlF_mgm3",
                                                   grepl("DOX2", .data$Parameters) ~ "DissolvedOxygen_umolkg",
                                                   grepl("MLD", .data$Parameters) ~ "MLD_m",
@@ -182,7 +182,7 @@ pr_get_SOTSMoorData <- function(Type = 'Physical'){
                                                   .default = .data$Parameters)) %>%
       dplyr::group_by(.data$StationName, .data$StationCode, .data$Month_Local, .data$SampleTime_Local, .data$Parameters, .data$SampleDepth_m) %>%
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
-                       .groups = 'drop') %>%
+                       .groups = "drop") %>%
       dplyr::mutate(Year_Local = lubridate::year(.data$SampleTime_Local),
                     SampleDepth_m = round(.data$SampleDepth_m/10, 0)*10) %>%
       dplyr::filter(.data$SampleDepth_m %in% c(0, 30, 50, 100, 200, 500)) %>%

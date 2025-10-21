@@ -160,8 +160,8 @@ If we look at way the proportion of different functional groups varies over time
 FG <- pr_get_FuncGroups(Survey = "CPR", Type = "Zooplankton") %>% 
   filter(BioRegion %in% c("South-east", "Temperate East"))
 
-p1 <- planktonr::pr_plot_tsfg(FG, Scale = "Percent")
-p2 <- planktonr::pr_plot_tsfg(FG, Scale = "Percent", Trend = "Month") +
+p1 <- planktonr::pr_plot_tsfg(FG, Scale = "Proportion")
+p2 <- planktonr::pr_plot_tsfg(FG, Scale = "Proportion", Trend = "Month") +
   ggplot2::theme(axis.title.y = element_blank())
       
 p1 + p2 + 
