@@ -81,7 +81,7 @@ testthat::test_that("pr_plot_tsfg creates ggplot with Percent scale and Month tr
   skip_if_offline()
   testthat::skip_on_cran()
   testthat::expect_equal(class(pr_get_FuncGroups(Survey = "NRS", Type = "Phytoplankton") %>%
-                                 pr_plot_tsfg(Scale = "Percent", Trend = "Month"))[1], "ggplot2::ggplot")
+                                 pr_plot_tsfg(Scale = "Proportion", Trend = "Month"))[1], "ggplot2::ggplot")
 })
 
 testthat::test_that("pr_plot_tsfg creates ggplot with Actual scale and Year trend for CPR Phytoplankton", {
@@ -320,7 +320,7 @@ testthat::test_that("pr_plot_Trends handles invalid Trend parameter", {
 })
 
 testthat::test_that("pr_plot_FreqMap handles missing species parameter", {
-  test_data <- data.frame(Longitude = 110, Latitude = -35, freqfac = "Seen in 25%", 
+  test_data <- data.frame(Longitude = 110, Latitude = -35, freqfac = "Seen in 25%",
                           Season = "December - February", Taxon = 'Species A')
   testthat::expect_error(pr_plot_FreqMap(test_data, species = NULL))
 })
