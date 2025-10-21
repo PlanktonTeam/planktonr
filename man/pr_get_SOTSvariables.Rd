@@ -16,5 +16,5 @@ List of variables available from SOTS files
 Get data files available from SOTS moorings
 }
 \examples{
-df <- pr_get_SOTSvariables(Type = 'Physical')
+df <- pr_get_SOTSvariables(Type = "Physical")
 }

@@ -16,5 +16,5 @@ SOTS nutrients or physical parameters data
 Get data available from SOTS moorings (limited to use in BOO atm, other variables could be added, select from pr_get_SOTSvariables)
 }
 \examples{
-df <- pr_get_SOTSMoorData(Type = 'Nutrients')
+df <- pr_get_SOTSMoorData(Type = "Nutrients")
 }
