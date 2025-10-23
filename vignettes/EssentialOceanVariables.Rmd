@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 )
 
 # Set smaller base font size for vignette plots
-options(planktonr.base_size = 9)
+options(planktonr.base_size = 8)
 ```
 
 ```{r setup}

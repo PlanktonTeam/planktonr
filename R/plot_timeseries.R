@@ -49,7 +49,7 @@ pr_plot_TimeSeries <- function(df, trans = "identity"){
     df <- df %>%
       dplyr::rename(StationName = "BioRegion")
     plotCols <- colCPR
-    ltype <- "solid"
+    ltype <- ltyCPR
     legendTitle <- "Bioregion"
 
   } else if (Survey == "NRS" | Survey == "Coastal"){
@@ -73,7 +73,7 @@ pr_plot_TimeSeries <- function(df, trans = "identity"){
     ggplot2::labs(y = titley,
                   x = titlex) +
     ggplot2::scale_colour_manual(values = plotCols, limits = force, name = legendTitle) +
-    ggplot2::scale_shape_manual(values = ltype) +
+    ggplot2::scale_linetype_manual(values = ltype, limits = force, name = legendTitle) +
     theme_pr()
 
   if(Survey != "Coastal") {
