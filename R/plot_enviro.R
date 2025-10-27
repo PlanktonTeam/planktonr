@@ -15,6 +15,39 @@
 #'
 pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
 
+  # Input validation
+  assertthat::assert_that(
+    is.data.frame(df),
+    msg = "'df' must be a data frame."
+  )
+
+  assertthat::assert_that(
+    nrow(df) > 0,
+    msg = "The data frame 'df' is empty. Check your data source or filtering criteria."
+  )
+
+  assertthat::assert_that(
+    is.character(Trend) && length(Trend) == 1,
+    msg = "'Trend' must be a single character string. Valid options are 'None', 'Smoother', or 'Linear'."
+  )
+
+  assertthat::assert_that(
+    Trend %in% c("None", "Smoother", "Linear"),
+    msg = "'Trend' must be one of 'None', 'Smoother', or 'Linear'."
+  )
+
+  assertthat::assert_that(
+    is.character(trans) && length(trans) == 1,
+    msg = "'trans' must be a single character string specifying the y-axis transformation (e.g., 'identity', 'log10', 'sqrt')."
+  )
+
+  # Check required columns
+  required_cols <- c("SampleTime_Local", "Values", "Parameters", "StationName", "SampleDepth_m", "Month_Local")
+  assertthat::assert_that(
+    all(required_cols %in% names(df)),
+    msg = paste0("'df' must contain the following columns: ", paste(required_cols, collapse = ", "), ".")
+  )
+
   n <- length(unique(df$StationName))
 
   titley <- pr_relabel(unique(df$Parameters), style = "ggplot")
@@ -29,14 +62,14 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
     ggplot2::geom_line() +
     ggplot2::labs(x = "Year", y = titley) +
     ggplot2::facet_wrap(.data$SampleDepth_ms ~., scales = "free_y", ncol = 1, strip.position = "right") +
-    theme_pr() +
-    ggplot2::theme(strip.text = ggplot2::element_blank(),
-                   legend.title = ggplot2::element_blank()) +
     ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
     ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
-    ggplot2::scale_colour_manual(values = colNRSName, limits = force) +
-    ggplot2::scale_fill_manual(values = colNRSName, limits = force) +
-    ggplot2::scale_linetype_manual(values = ltyNRSName)
+    ggplot2::scale_colour_manual(values = colNRSName, limits = force, name = "Station Name") +
+    ggplot2::scale_fill_manual(values = colNRSName, limits = force, name = "Station Name") +
+    ggplot2::scale_linetype_manual(values = ltyNRSName, name = "Station Name") +
+    theme_pr() +
+    ggplot2::theme(strip.text = ggplot2::element_blank())
+
 
   if(Trend == "Smoother"){
     p <- p + ggplot2::geom_smooth(method = "loess", formula = y ~ x, alpha = 0.2)
@@ -69,7 +102,11 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
                    strip.text.y = ggplot2::element_text(face = "bold", angle = 0)) # size = 12
 
   plots <- p +
-    m + patchwork::plot_layout(widths = c(3,1), heights = np * 200)
+    m + patchwork::plot_layout(widths = c(3,1), heights = np * 200, guides = "collect") &
+    patchwork::plot_annotation(theme = ggplot2::theme(
+      legend.position = "bottom",
+      legend.direction = "horizontal",
+      legend.box = "horizontal"))
 
   return(plots)
 
@@ -89,6 +126,29 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
 #' StationCode %in% c('YON', 'MAI', 'PHB', 'NSI'))
 #' plot <- pr_plot_NRSEnvContour(df, na.fill = TRUE)
 pr_plot_NRSEnvContour <- function(df, na.fill = TRUE) {
+
+  # Input validation
+  assertthat::assert_that(
+    is.data.frame(df),
+    msg = "'df' must be a data frame."
+  )
+
+  assertthat::assert_that(
+    nrow(df) > 0,
+    msg = "The data frame 'df' is empty. Check your data source or filtering criteria."
+  )
+
+  assertthat::assert_that(
+    is.logical(na.fill) || is.function(na.fill),
+    msg = "'na.fill' must be TRUE, FALSE, or a function (e.g., mean) to fill in gaps in data."
+  )
+
+  # Check required columns
+  required_cols <- c("SampleTime_Local", "Values", "Parameters", "SampleDepth_m")
+  assertthat::assert_that(
+    all(required_cols %in% names(df)),
+    msg = paste0("'df' must contain the following columns: ", paste(required_cols, collapse = ", "), ".")
+  )
 
   df <- df %>%
     dplyr::mutate(SampleDepth_m = round(.data$SampleDepth_m/10, 0)*10,  ## leave in for SOTS
@@ -123,7 +183,7 @@ pr_plot_NRSEnvContour <- function(df, na.fill = TRUE) {
       p1 <- ggplot2::ggplot() +
         metR::geom_contour_fill(data = df, ggplot2::aes(x = !!rlang::sym(xvals), y = .data$SampleDepth_m, z = .data$Values), na.fill = na.fill) +
         ggplot2::scale_fill_continuous(type = "viridis", name = titleg, limits = c(limitMin, limitMax))+
-        ggplot2::guides(fill = ggplot2::guide_colourbar(barwidth = 4, barheight = 1)) +
+        ggplot2::guides(fill = ggplot2::guide_colourbar(barwidth = grid::unit(0.3, "npc"), barheight = grid::unit(0.04, "npc"))) +
         ggplot2::geom_point(data = df, ggplot2::aes(x = !!rlang::sym(xvals), y = .data$SampleDepth_m), size = 1) +
         ggplot2::facet_wrap(~.data$StationName, scales = "free_y", ncol = 1) +
         ggplot2::scale_x_continuous(breaks = myBreaks, labels = myLabels, expand = c(0, 0)) +
@@ -143,8 +203,14 @@ pr_plot_NRSEnvContour <- function(df, na.fill = TRUE) {
     ggplot2::labs(x = "Month") +
     ggplot2::theme(axis.title.y = ggplot2::element_blank())
 
-  plots <- patchwork::wrap_plots(pts, pmc, ncol = 2) +
-    patchwork::plot_layout(widths = c(3,1))
+  plots <- patchwork::wrap_plots(pts, pmc, ncol = 2, guides = "collect") +
+    patchwork::plot_layout(widths = c(3,1)) +
+    patchwork::plot_annotation(theme = ggplot2::theme(
+      legend.position = "bottom",
+      legend.direction = "horizontal",
+      legend.box = "horizontal"
+    ))
+
 
   return(plots)
 

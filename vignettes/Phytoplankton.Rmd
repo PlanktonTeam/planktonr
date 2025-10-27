@@ -16,8 +16,14 @@ knitr::opts_chunk$set(
   comment = "#>",
   message = FALSE,
   warning = FALSE,
-  fig.width = 7
+  fig.width = 7,
+  out.width = "100%",
+  fig.align = "center",
+  dpi = 150
 )
+
+# Set smaller base font size for vignette plots
+options(planktonr.base_size = 8)
 ```
 
 ```{r setup}
@@ -43,7 +49,7 @@ unique(NRSz$StationName)
 
 Here we plot the abundance of phytoplankton as a time series and a monthly climatology for the National Reference Stations around Australia. This can give us some information on the long term trends. At this time, early 2023, phytoplankton abundance seem to be generally decreasing along the east coast and this may have implications for zooplankton and higher trophic levels as phytoplankton is thought of as the base of the food web.  
 
-```{r}
+```{r, fig.height=3}
 
 NRSp <- planktonr::pr_get_Indices(Survey = "NRS", Type = "Phytoplankton") %>% 
   filter(Parameters == "PhytoAbundance_CellsL") %>% 
@@ -62,21 +68,29 @@ p1 + p2 +
 
 We can plot this same data in a different format to better compare between stations. 
 
-```{r}
-(p1 <- planktonr::pr_plot_TimeSeries(NRSp, trans = "log10"))
+First we plot phytoplankton abundance at the 4 east coast NRS stations with log10 scaling.
+```{r, fig.height=2}
+(p1 <- planktonr::pr_plot_TimeSeries(NRSp, trans = "log10") + 
+   ylab(rlang::expr(paste("Abundance (cells L"^-1,")"))))
 ```
-```{r}
-(p2 <- planktonr::pr_plot_Climatology(NRSp, Trend = "Month", trans = "log10"))
+
+Then we can plot the same data as monthly means.
+```{r, fig.height=2}
+(p2 <- planktonr::pr_plot_Climatology(NRSp, Trend = "Month", trans = "log10") +
+   ylab(rlang::expr(paste("Abundance (cells L"^-1,")"))))
 ```
-```{r}
-(p3 <- planktonr::pr_plot_Climatology(NRSp, Trend = "Year", trans = "log10"))
+
+And then as Annual means.
+```{r, fig.height=2}
+(p3 <- planktonr::pr_plot_Climatology(NRSp, Trend = "Year", trans = "log10") +
+   ylab(rlang::expr(paste("Abundance (cells L"^-1,")"))))
 ```
 
 ## Functional Groups
 
 We can learn more by looking at the abundances in terms of functional groups. These two stations are at similar latitudes but Rottnest is on the West Coast and Port Hacking is on the East Coast. There patterns look similar for both stations but there is a clearer seasonal response at Rottnest as cyanobacteria becomes less abundant in winter.  
 
-```{r}
+```{r, fig.height=3}
 FG <- pr_get_FuncGroups(Survey = "NRS", Type = "Phytoplankton") %>% 
   dplyr::filter(StationCode %in% c("ROT", "PHB"))
 
@@ -106,7 +120,7 @@ unique(CPRz$BioRegion)
 
 Here we can compare the long term time series phytoplankton abundance data for the South-east and Temperate-east areas of Australia. Due to way the CPR data is collected this is easier to visualise in a regional context. Here we are plotting the Shannon diversity of phytoplankton in two regions, the time series data indicates whilst this is stable in the South-east region it may be increasing in the Temperate-east region. There is also more distinct seasonal variation in the South-east region. 
 
-```{r}
+```{r, fig.height=2}
 CPRp <- planktonr::pr_get_Indices("CPR", "Phytoplankton") %>% 
   filter(Parameters == "ShannonPhytoDiversity") %>% 
   filter(BioRegion %in% c("South-east", "Temperate East"))
@@ -124,7 +138,7 @@ p1 + p2 +
 
 We can visualise this data in a different format to better show the variation between regions.
 
-```{r}
+```{r, fig.height=4}
 p1 <- planktonr::pr_plot_TimeSeries(CPRp, trans = "identity") + theme(legend.position = "none", axis.title.y = element_blank())
 
 p2 <- planktonr::pr_plot_Climatology(CPRp, Trend = "Month", trans = "identity") + theme(legend.position = "none")
@@ -139,12 +153,12 @@ wrap_plots(p1, p2, p3, ncol = 1)
 
 Centric diatoms dominate the CPR samples especially in the winter months when the proportion of dinoflagellates in the samples reduces. This pattern is similar in both regions. 
 
-```{r}
+```{r, fig.height=3}
 FG <- pr_get_FuncGroups(Survey = "CPR", Type = "Phytoplankton") %>% 
   filter(BioRegion %in% c("South-east", "Temperate East"))
 
-p1 <- pr_plot_tsfg(FG, Scale = "Percent")
-p2 <- pr_plot_tsfg(FG, Scale = "Percent", Trend = "Month") +
+p1 <- pr_plot_tsfg(FG, Scale = "Proportion")
+p2 <- pr_plot_tsfg(FG, Scale = "Proportion", Trend = "Month") +
   theme(axis.title.y = element_blank())
       
 p1 + p2 + 

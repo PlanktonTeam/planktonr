@@ -16,5 +16,5 @@ df with either NRS or CPR satellite data
 Get data for satellite data
 }
 \examples{
-df <- pr_get_SatData("NRS")
+df <- pr_get_SatData("CPR")
 }

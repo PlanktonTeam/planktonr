@@ -14,6 +14,12 @@
 #' gg <- pr_plot_Gantt(dat)
 pr_plot_Gantt <- function(dat){
 
+  # Input validation
+  assertthat::assert_that(
+    is.data.frame(dat),
+    msg = "'dat' must be a data frame. Use pr_get_CPRTrips() or pr_get_NRSTrips() to create the data."
+  )
+
   Survey <- pr_get_survey(dat)
 
   if (Survey == "CPR"){
@@ -23,8 +29,8 @@ pr_plot_Gantt <- function(dat){
       dplyr::distinct(.data$YearMonth, .data$Region, .data$TripCode) %>%
       dplyr::summarise(n = dplyr::n(), .by = tidyselect::all_of(c("YearMonth", "Region", "TripCode")))
 
-    gg <- ggplot2::ggplot(data = dat2, ggplot2::aes(x = .data$YearMonth, y = .data$Region, width = 1/12, height = 2/12), fill = "black", colour = "black") +
-      ggplot2::geom_tile() +
+    gg <- ggplot2::ggplot(data = dat2, ggplot2::aes(x = .data$YearMonth, y = .data$Region, width = 1/12, height = 2/12)) +
+      ggplot2::geom_tile(fill = "black", colour = "black") +
       theme_pr() +
       ggplot2::labs(x = ggplot2::element_blank(), y = ggplot2::element_blank()) +
       ggplot2::ggtitle("Continuous Plankton Recorder Sampling") +
@@ -40,8 +46,8 @@ pr_plot_Gantt <- function(dat){
       dplyr::filter(.data$StationName != "Port Hacking 4") %>%
       dplyr::summarise(n = dplyr::n(), .by = tidyselect::all_of(c("YearMonth", "StationName")))
 
-    gg <- ggplot2::ggplot(data = dat2, ggplot2::aes(x = .data$YearMonth, y = .data$StationName, width = 1/12, height = 2/12), fill = "black", colour = "black") +
-      ggplot2::geom_tile() +
+    gg <- ggplot2::ggplot(data = dat2, ggplot2::aes(x = .data$YearMonth, y = .data$StationName, width = 1/12, height = 2/12)) +
+      ggplot2::geom_tile(fill = "black", colour = "black") +
       theme_pr() +
       ggplot2::labs(x = ggplot2::element_blank(), y = ggplot2::element_blank()) +
       ggplot2::ggtitle("National Reference Station Sampling") +
@@ -70,6 +76,18 @@ pr_plot_Gantt <- function(dat){
 #' dat <- pr_get_TaxaAccum(Survey = "CPR", Type = "Phytoplankton")
 #' p <- pr_plot_TaxaAccum(dat)
 pr_plot_TaxaAccum <- function(dat){
+
+  # Input validation
+  assertthat::assert_that(
+    is.data.frame(dat),
+    msg = "'dat' must be a data frame. Use pr_get_TaxaAccum() to create the data."
+  )
+  
+  required_cols <- c("First", "RowN")
+  assertthat::assert_that(
+    all(required_cols %in% colnames(dat)),
+    msg = paste0("'dat' must contain the following columns: ", paste(required_cols, collapse = ", "), ". Use pr_get_TaxaAccum() to create the data.")
+  )
 
   Survey = pr_get_survey(dat)
   Type = pr_get_type(dat)
@@ -101,6 +119,17 @@ pr_plot_TaxaAccum <- function(dat){
 #' plot <- pr_plot_PieFG(df)
 #'
 pr_plot_PieFG <- function(df){
+
+  # Input validation
+  assertthat::assert_that(
+    inherits(df, "planktonr_dat"),
+    msg = "'df' must be a planktonr_dat object. Use pr_get_FuncGroups() to create the data."
+  )
+  
+  assertthat::assert_that(
+    "Parameters" %in% colnames(df) && "Values" %in% colnames(df),
+    msg = "'df' must contain 'Parameters' and 'Values' columns. Use pr_get_FuncGroups() to create the data."
+  )
 
   if('BioRegion' %in% colnames(df)){
     Survey = 'CPR'

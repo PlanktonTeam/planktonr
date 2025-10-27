@@ -46,6 +46,17 @@ pr_get_NRSChemistry <- function(){
 #' df <- pr_get_NRSPigments(Format = "binned")
 pr_get_NRSPigments <- function(Format = "all"){
 
+  # Input validation
+  assertthat::assert_that(
+    is.character(Format) && length(Format) == 1,
+    msg = "'Format' must be a single character string. Valid options are 'all' or 'binned'."
+  )
+
+  assertthat::assert_that(
+    Format %in% c("all", "binned"),
+    msg = "'Format' must be one of 'all' or 'binned'."
+  )
+
   file <- "bgc_pigments_data"
   if(Format == "binned") {
     var_names <- c("TotalChla", "TotalChl", "PPC", "PSC", "PSP", "TCaro", "TAcc", "TPig", "TDP")
@@ -134,6 +145,17 @@ pr_get_NRSPico <- function(){
 #' df <- pr_get_NRSEnvContour(Data = "Micro")
 pr_get_NRSEnvContour <- function(Data = "Chemistry") {
 
+  # Input validation
+  assertthat::assert_that(
+    is.character(Data) && length(Data) == 1,
+    msg = "'Data' must be a single character string. Valid options are 'Chemistry', 'Pico' or 'Micro'."
+  )
+
+  assertthat::assert_that(
+    Data %in% c("Chemistry", "Pico", "Micro"),
+    msg = "'Data' must be one of 'Chemistry', 'Pico', or 'Micro'."
+  )
+
   file <- parse(text = paste("planktonr::pr_get_NRS", Data, "()", sep = ""))
 
   dat <- eval(file) %>%
@@ -158,6 +180,17 @@ pr_get_NRSEnvContour <- function(Data = "Chemistry") {
 #' @importFrom rlang .data
 #'
 pr_get_NRSMicro <- function(Survey = "NRS"){
+
+  # Input validation
+  assertthat::assert_that(
+    is.character(Survey) && length(Survey) == 1,
+    msg = "'Survey' must be a single character string. Valid options are 'NRS', 'Coastal', or 'GO-SHIP'."
+  )
+
+  assertthat::assert_that(
+    Survey %in% c("NRS", "Coastal", "GO-SHIP"),
+    msg = "'Survey' must be one of 'NRS', 'Coastal', or 'GO-SHIP'."
+  )
 
   var_names <- c("Prochlorococcus_cellsmL", "Synechococcus_cellsmL", "Picoeukaryotes_cellsmL",
                  "NifH_genes_per_mil_reads", "RuBisCo_genes_per_mil_reads", "fish_parasites",

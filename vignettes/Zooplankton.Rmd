@@ -16,8 +16,14 @@ knitr::opts_chunk$set(
   comment = "#>",
   message = FALSE,
   warning = FALSE,
-  fig.width = 7
+  fig.width = 7,
+  out.width = "100%",
+  fig.align = "center",
+  dpi = 150
 )
+
+# Set smaller base font size for vignette plots
+options(planktonr.base_size = 8)
 ```
 
 ```{r setup}
@@ -43,7 +49,7 @@ unique(NRSz$StationName)
 
 Long term plankton monitoring can provide insights into how zooplankton abundance and biomass are changing with time. This has implications for the fish communities they support and the lower trophic levels on which they depend for energy. Abundance and biomass trends don't necessarily show the same temporal trends, here we show zooplankton abundance by time, but biomass can also be chosen as the parameter. Seasonal cycles can also be important for understanding planktonic communities, for examples in these plots it is clear that there is a much stronger seasonal cycle at Maria Island in a temperate location than at Yongala, a more tropical station.   
 
-```{r}
+```{r, fig.height=3}
 
 NRSz <- planktonr::pr_get_Indices(Survey = "NRS", Type = "Zooplankton") %>% 
   filter(Parameters == "ZoopAbundance_m3") %>% 
@@ -62,21 +68,30 @@ p1 + p2 +
 
 Here we plot the same information but change the format of the figures. 
 
-```{r}
-(p1 <- planktonr::pr_plot_TimeSeries(NRSz, trans = "log10"))
+First we plot zooplankton abundance at the 4 east coast NRS stations with log10 scaling.
+```{r, fig.height=2}
+(p1 <- planktonr::pr_plot_TimeSeries(NRSz, trans = "log10") +
+   ylab(rlang::expr(paste("Abundance (m"^-3,")"))))
 ```
-```{r}
-(p2 <- planktonr::pr_plot_Climatology(NRSz, Trend = "Month", trans = "log10"))
+
+Then we can plot the same data as monthly means.
+```{r, fig.height=2}
+(p2 <- planktonr::pr_plot_Climatology(NRSz, Trend = "Month", trans = "log10") +
+   ylab(rlang::expr(paste("Abundance (m"^-3,")"))))
 ```
-```{r}
-(p3 <- planktonr::pr_plot_Climatology(NRSz, Trend = "Year", trans = "log10"))
+
+And then as Annual means.
+```{r, fig.height=2}
+(p3 <- planktonr::pr_plot_Climatology(NRSz, Trend = "Year", trans = "log10") +
+   ylab(rlang::expr(paste("Abundance (m"^-3,")"))))
 ```
 
 ## Functional Groups
 
 We can also gain a lot of insight into the community structure by looking at how the composition (or proportions) of the functional groups changes over time, long term and seasonally. In this function we have chosen some of the more important function groups and plotted them as a time series and a seasonal cycle. Again you can see that Maria Island demonstrates a strong seasonal pattern with lower abundances in all groups during winter.  
 
-```{r}
+```{r, fig.height=3}
+
 FGz <- pr_get_FuncGroups(Survey = "NRS", Type = "Zooplankton") %>% 
   dplyr::filter(StationCode %in% c("ROT", "MAI"))
 
@@ -107,7 +122,8 @@ unique(CPRz$BioRegion)
 
 Here we can compare the long term time series copepod abundance data for the South-east and Temperate-east areas of Australia. Due to way the CPR data is collected this is easier to visualise in a regional context. There is not a noticeable difference in the abundance of copepods in these two regions from the plots but again you can see that the seasonal cycle is more distinct in the South-east. 
 
-```{r}
+```{r, fig.height=3}
+
 CPRz <- planktonr::pr_get_Indices(Survey = "CPR", Type = "Zooplankton") %>% 
   filter(Parameters == "CopeAbundance_m3") %>% 
   filter(BioRegion %in% c("South-east", "Temperate East"))
@@ -126,14 +142,15 @@ p1 + p2 +
 
 Plotting the same data as climatologies can provide another way to visualise the differences between sampling regions. 
 
-```{r}
-p1 <- planktonr::pr_plot_TimeSeries(CPRz, trans = "log10") + theme(axis.title.y = element_blank())
+```{r, fig.height=4}
 
-p2 <- planktonr::pr_plot_Climatology(CPRz, Trend = "Month", trans = "log10")
+p1 <- planktonr::pr_plot_TimeSeries(CPRz, trans = "identity") + theme(legend.position = "none", axis.title.y = element_blank())
 
-p3 <- planktonr::pr_plot_Climatology(CPRz, Trend = "Year", trans = "log10") + theme(axis.title.y = element_blank())
+p2 <- planktonr::pr_plot_Climatology(CPRz, Trend = "Month", trans = "identity") + theme(legend.position = "none")
 
-wrap_plots(p1, p2, p3, ncol = 1, guides = "collect") & theme(legend.position = "bottom")
+p3 <- planktonr::pr_plot_Climatology(CPRz, Trend = "Year", trans = "identity") + theme(legend.position = "bottom", axis.title.y = element_blank())
+
+wrap_plots(p1, p2, p3, ncol = 1)
 
 ```
 
@@ -143,12 +160,13 @@ wrap_plots(p1, p2, p3, ncol = 1, guides = "collect") & theme(legend.position = "
 
 If we look at way the proportion of different functional groups varies over time we can see that copeopds, red, dominate the plankton in both areas, especially towards the end of winter, and that there is a notable bloom period of cladocerans in the South-east over the summer months. 
 
-```{r}
+```{r, fig.height=3}
+
 FG <- pr_get_FuncGroups(Survey = "CPR", Type = "Zooplankton") %>% 
   filter(BioRegion %in% c("South-east", "Temperate East"))
 
-p1 <- planktonr::pr_plot_tsfg(FG, Scale = "Percent")
-p2 <- planktonr::pr_plot_tsfg(FG, Scale = "Percent", Trend = "Month") +
+p1 <- planktonr::pr_plot_tsfg(FG, Scale = "Proportion")
+p2 <- planktonr::pr_plot_tsfg(FG, Scale = "Proportion", Trend = "Month") +
   ggplot2::theme(axis.title.y = element_blank())
       
 p1 + p2 + 

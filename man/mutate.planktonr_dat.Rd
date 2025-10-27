@@ -4,15 +4,14 @@
 \alias{mutate.planktonr_dat}
 \title{Create or modify columns in a planktonr_dat object}
 \usage{
-\method{mutate}{planktonr_dat}(.data, ..., .before = NULL, .after = NULL, .keep = "all", .width = NULL)
+\method{mutate}{planktonr_dat}(.data, ...)
 }
 \arguments{
 \item{.data}{A \code{planktonr_dat} object.}
 
-\item{...}{<\code{\link[dplyr:dplyr_data_masking]{data-masking}}> Name-value pairs of expressions.}
-
-\item{.before, .after, .keep, .width}{Control the placement and selection of columns.
-See \code{\link[dplyr:mutate]{dplyr::mutate()}} for details.}
+\item{...}{<\code{\link[dplyr:dplyr_data_masking]{data-masking}}> Name-value pairs of expressions,
+and optional arguments \code{.before}, \code{.after}, \code{.keep}, \code{.width} to control
+column placement and selection. See \code{\link[dplyr:mutate]{dplyr::mutate()}} for details.}
 }
 \value{
 A \code{planktonr_dat} object with modified or new columns,

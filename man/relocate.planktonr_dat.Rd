@@ -4,16 +4,14 @@
 \alias{relocate.planktonr_dat}
 \title{Relocate columns in a planktonr_dat object}
 \usage{
-\method{relocate}{planktonr_dat}(.data, ..., .before = NULL, .after = NULL)
+\method{relocate}{planktonr_dat}(.data, ...)
 }
 \arguments{
 \item{.data}{A \code{planktonr_dat} object.}
 
-\item{...}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Columns to relocate.}
-
-\item{.before}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Columns to move other columns before.}
-
-\item{.after}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Columns to move other columns after.}
+\item{...}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Columns to relocate,
+and optional arguments \code{.before} and \code{.after} to control placement.
+See \code{\link[dplyr:relocate]{dplyr::relocate()}} for details.}
 }
 \value{
 A \code{planktonr_dat} object with columns reordered,

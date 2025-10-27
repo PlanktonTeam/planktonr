@@ -9,7 +9,7 @@ pr_plot_tsfg(df, Scale = "Actual", Trend = "Raw")
 \arguments{
 \item{df}{dataframe in format of output from pr_get_FuncGroups}
 
-\item{Scale}{y axis scale Actual or Percent}
+\item{Scale}{y axis scale Actual or Proportion}
 
 \item{Trend}{Over what timescale to fit the Trend - "Raw", "Month" or "Year"}
 }
