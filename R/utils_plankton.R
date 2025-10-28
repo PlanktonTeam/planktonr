@@ -255,13 +255,11 @@ pr_get_STIdata <-  function(Type = "Phytoplankton"){
     dplyr::mutate(Project = "cpr",
                   Species_m3 = .data[[parameter]] + min(.data[[parameter]][.data[[parameter]]>0], na.rm = TRUE))
 
-  # TODO THERE IS A MANY-TO-MANY JOIN ERROR HERE DUR TO MULTIPLE SOTS ENTRIES IN THE SAT DATA. RUN TESTS TO SEE ISSUE IF UNSURE
-  # TODO THERE ARE PROBLEMS WITH THE JOIN WITH LOTS OF DUPLICATE .X AND .Y COLUMNS
   nrs <- nrsdat %>%
-    tidyr::pivot_longer(-tidyselect::all_of(pr_get_NonTaxaColumns(Survey = "NRS", Type = Type)),
-                        names_to = "Species",
+    tidyr::pivot_longer(-tidyselect::all_of(pr_get_NonTaxaColumns(Survey = "NRS", Type = Type)), 
+                        names_to = "Species", 
                         values_to = parameter) %>%
-    dplyr::left_join(nrssat, by = c("Latitude", "Longitude", "SampleTime_Local")) %>%
+    dplyr::left_join(nrssat, by = c("TripCode")) %>% #TripCode needed for SOTS as other parameters are repeated
     dplyr::select("Species", "SST", tidyselect::all_of(parameter)) %>%
     dplyr::filter(!is.na(.data$SST) & .data[[parameter]] > 0) %>%
     dplyr::mutate(Project = "nrs",
