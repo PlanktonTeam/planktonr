@@ -7,7 +7,7 @@
 pr_harmonic(theta, k = 4)
 }
 \arguments{
-\item{theta}{Paramter to model in radians}
+\item{theta}{Parameter to model in radians}
 
 \item{k}{degrees of freedom}
 }

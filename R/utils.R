@@ -503,7 +503,7 @@ pr_filter_Species <- function(df){
 #' For use in models to create a circular predictor
 #'
 #' This function is for use in models to create a circular predictor
-#' @param theta Paramter to model in radians
+#' @param theta Parameter to model in radians
 #' @param k degrees of freedom
 #'
 #' @return A harmonic function
