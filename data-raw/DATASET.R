@@ -92,7 +92,7 @@ csDAT <- planktonr::pr_get_NRSMicro("Coastal") %>%
                    .groups = "drop") %>%
   dplyr::distinct() %>%
   dplyr::arrange(desc(State), desc(Latitude)) %>%
-  sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326)
+  sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326, remove = FALSE)
 
 # https://coolors.co/palette/d00000-ffba08-cbff8c-8fe388-1b998b-3185fc-5d2e8c-46237a-ff7b9c-ff9b85
 # Darwin                 Yongala                Ningaloo      North Stradbroke Island         Rottnest Island               Esperance            Port Hacking         Kangaroo Island            Maria Island
@@ -184,7 +184,7 @@ usethis::use_data(mbr, MapOz, meta_sf, csDAT, colCPR, pchCPR, ltyCPR, CPRinfo, C
                   colNRSCode, colNRSName, pchNRSName, pchNRSCode, ltyNRSCode, ltyNRSName,
                   overwrite = TRUE, internal = TRUE, compress = "bzip2")
 
-usethis::use_data(mbr, overwrite = TRUE, internal = FALSE, compress = "bzip2")
+usethis::use_data(mbr, csDAT, overwrite = TRUE, internal = FALSE, compress = "bzip2")
 
 # tools::checkRdaFiles("R") # Check what compression to use above
 # OK - bzip2
