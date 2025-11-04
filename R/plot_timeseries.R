@@ -700,7 +700,6 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
       site = rlang::sym("StationName")
     }
 
-    # TODO need to add assert
     # Ensure there is only 1 station
     assertthat::assert_that(
       length(unique(df[[site]])) == 1,
@@ -729,7 +728,7 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
 
     # plot monthly climatology from model
     # set up new data from predictions
-    term_vals <- seq(0, 6.284, length.out = 24)
+    term_vals <- seq(0.5236667, 6.284000, length.out = 24) # range(df$Month)
 
     newdata <- data.frame(
       Month = term_vals,
@@ -769,7 +768,8 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
                            method = "lm", formula = y ~ x,
                            colour = col, fill = col, alpha = 0.4) +
       ggplot2::labs(x = "Year", subtitle = titley) +
-      ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
+      ggplot2::scale_y_continuous(trans = trans,
+                                  expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
       theme_pr() +
       ggplot2::theme(legend.position = "none",
                      axis.title.y = ggplot2::element_blank())
@@ -819,11 +819,15 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
 
     p3 <- ggplot2::ggplot(df, ggplot2::aes(x = .data$Month, y = .data$Values)) +
       ggplot2::geom_point(colour = col, size = pt_size) +
-      ggplot2::geom_smooth(data = dfm %>% dplyr::filter(.data$do_smooth), ggplot2::aes(x = .data$Month_Local, y = .data$Values),
+      ggplot2::geom_smooth(data = dfm %>% dplyr::filter(.data$do_smooth),
+                           ggplot2::aes(x = .data$Month_Local, y = .data$Values),
                            method = "loess",
                            formula = "y ~ x", colour = col, fill = col, alpha = 0.4) +
-      ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
-      ggplot2::scale_x_continuous(breaks = seq(0.5, 6.3, length.out = 12), expand = ggplot2::expansion(mult = c(0.02, 0.02)),
+      ggplot2::scale_y_continuous(trans = trans,
+                                  expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
+      ggplot2::scale_x_continuous(breaks = seq(0.5, 6.3, length.out = 12),
+                                  expand = ggplot2::expansion(mult = c(0.02, 0.02)),
+
                                   labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
       ggplot2::xlab("Month") +
       theme_pr() +

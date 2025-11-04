@@ -17,7 +17,6 @@ so <- sf::st_read(file.path("data-raw","iho_SthnOcean","iho.shp")) %>%
   sf::st_make_valid() %>%
   sf::st_crop(c("xmin" = 85, "xmax" = 155, "ymin" = -85, "ymax" = -50))
 
-
 mbr <- tibble(x = c(85, 85:155, 155, 85), y = c(-61, rep(-45, 71), -61, -61)) %>%
   as.matrix() %>%
   list() %>%
@@ -85,15 +84,15 @@ meta_sf <- planktonr::pr_get_NRSTrips() %>%
 # Microbial Coastal station input into pl_plot_NRSmap()
 csDAT <- planktonr::pr_get_NRSMicro("Coastal") %>%
   dplyr::select("StationName", "StationCode", "Longitude", "Latitude", "State") %>%
-  dplyr::rename(Code = "StationCode",
-                Station = "StationName") %>%
-  dplyr::group_by(Code, Station, State) %>%
+  # dplyr::rename(Code = "StationCode",
+  #               Station = "StationName") %>%
+  dplyr::group_by(StationCode, StationName, State) %>%
   dplyr::summarise(Latitude = mean(Latitude, na.rm = TRUE),
                    Longitude = mean(Longitude, na.rm = TRUE),
                    .groups = "drop") %>%
   dplyr::distinct() %>%
   dplyr::arrange(desc(State), desc(Latitude)) %>%
-  sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326)
+  sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326, remove = FALSE)
 
 # https://coolors.co/palette/d00000-ffba08-cbff8c-8fe388-1b998b-3185fc-5d2e8c-46237a-ff7b9c-ff9b85
 # Darwin                 Yongala                Ningaloo      North Stradbroke Island         Rottnest Island               Esperance            Port Hacking         Kangaroo Island            Maria Island
@@ -184,6 +183,8 @@ CPRinfo <- planktonr::pr_get_PolicyInfo("CPR")
 usethis::use_data(mbr, MapOz, meta_sf, csDAT, colCPR, pchCPR, ltyCPR, CPRinfo, CSCodes,
                   colNRSCode, colNRSName, pchNRSName, pchNRSCode, ltyNRSCode, ltyNRSName,
                   overwrite = TRUE, internal = TRUE, compress = "bzip2")
+
+usethis::use_data(mbr, csDAT, overwrite = TRUE, internal = FALSE, compress = "bzip2")
 
 # tools::checkRdaFiles("R") # Check what compression to use above
 # OK - bzip2
