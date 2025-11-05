@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_timeseries.R
 \name{pr_plot_STI}
 \alias{pr_plot_STI}
-\title{Plot of STI kernel density for species}
+\title{Plot Species Temperature Index (STI) kernel density distributions}
 \usage{
 pr_plot_STI(df)
 }
@@ -13,7 +13,7 @@ pr_plot_STI(df)
 plot of STI kernel density
 }
 \description{
-Plot of STI kernel density for species
+Plot Species Temperature Index (STI) kernel density distributions
 }
 \examples{
 df <- data.frame(SST = runif(24, 5, 25),

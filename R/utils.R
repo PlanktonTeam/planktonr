@@ -1,19 +1,19 @@
 
-#' Get location of raw plankton data
+#' Get URL template for AODN GeoServer WFS plankton data access
 #'
 #' Internal function to load the location of the raw plankton data files.
 #' @return A string with location of raw plankton data
 #' @export
 #' @examples
 #' file_loc <- pr_get_Site()
-#' @importFrom rlang .data
+
 pr_get_Site <- function(){
   raw <-"http://geoserver-123.aodn.org.au/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=imos:LAYER_NAME&outputFormat=csv-with-metadata-header"
   # raw = "https://geoserver-portal.aodn.org.au/geoserver/ows?typeName=LAYER_NAME&SERVICE=WFS&outputFormat=csv&REQUEST=GetFeature&VERSION=1.0.0&userId=Guest"
 }
 
 
-#' Get location of s3 plankton data
+#' Get IMOS S3 bucket URL for internal plankton data storage
 #'
 #' Internal function to load the location of the s3 plankton data files. Browse files here:
 #' http://imos-data.s3-website-ap-southeast-2.amazonaws.com/?prefix=IMOS/BGC_DB/harvested_from_CSIRO/
@@ -21,12 +21,12 @@ pr_get_Site <- function(){
 #' @export
 #' @examples
 #' file_loc <- pr_get_s3site()
-#' @importFrom rlang .data
+
 pr_get_s3site <- function(){
   raw <-"https://s3-ap-southeast-2.amazonaws.com/imos-data/IMOS/BGC_DB/harvested_from_CSIRO/"
 }
 
-#' Download Raw Data from IMOS
+#' Download raw unprocessed data files directly from IMOS S3 storage
 #'
 #' This function is not intended for use by most people. It downloads the raw data file from IMOS with NO QC or data manipulation done. User beware. It can be used to view the raw data that IMOS provides behind the scenes.
 #'
@@ -118,7 +118,7 @@ pr_get_Raw <- function(file){
   return(dat)
 }
 
-#' Download Raw Data from IMOS
+#' Download raw data files from IMOS internal S3 storage (advanced users)
 #'
 #' This function is not intended for use by most people. It downloads the raw data file from IMOS with NO QC or data manipulation done. User beware. It can be used to view the raw data that IMOS provides behind the scenes.
 #'
@@ -155,17 +155,63 @@ pr_get_s3 <- function(file){
 
 
 
-#' Load plankton information table with sizes etc.
+#' Load taxonomic information and trait data for plankton species
 #'
-#' @param Type Get info for Phytoplankton (`P`) or Zooplankton(`Z`)
+#' Retrieve reference tables containing taxonomic classification, size ranges,
+#' carbon content, and other trait information for phytoplankton or zooplankton
+#' taxa observed in IMOS surveys.
 #'
-#' @return A dataframe with NRS zooplankton information
+#' @param Type Which plankton group to retrieve:
+#'   * `"Zooplankton"` - Information on copepods, appendicularians, salps, etc. (default)
+#'   * `"Phytoplankton"` - Information on diatoms, dinoflagellates, ciliates, etc.
+#'
+#' @details
+#' ## Data Contents
+#' The information tables typically include:
+#' * **Taxonomic classification**: Phylum, class, order, family, genus, species
+#' * **Size information**: Length and/or width ranges (micrometres)
+#' * **Biovolume**: Estimated cell/organism volume (µm³)
+#' * **Carbon content**: Biomass conversion factors (µg C per individual or per cell)
+#' * **Functional groups**: Ecological groupings used in [pr_get_FuncGroups()]
+#' * **WoRMS identifiers**: AphiaID for linking to World Register of Marine Species
+#'
+#' ## Use Cases
+#' These reference tables are useful for:
+#' * Converting abundance to biomass or carbon
+#' * Understanding size distributions of plankton communities
+#' * Linking taxa to functional roles
+#' * Checking taxonomic classification and nomenclature
+#' * Quality control - identifying potentially misidentified taxa
+#'
+#' ## Size-Based Carbon Conversions
+#' Many analyses require converting abundance counts to biomass or carbon. The
+#' trait data in these tables enable such conversions using established
+#' allometric relationships between organism size and carbon content.
+#'
+#' ## Updates
+#' These tables are curated alongside IMOS data and updated as:
+#' * New taxa are identified in samples
+#' * Taxonomic classifications change
+#' * Improved trait measurements become available
+#'
+#' @return A dataframe with taxonomic and trait information. Columns vary by
+#'   plankton type but typically include TaxonName, Classification, Size_um,
+#'   CarbonContent_ugC, FunctionalGroup, and WoRMS_AphiaID.
+#'
+#' @seealso
+#' * [pr_get_NRSData()], [pr_get_CPRData()] for abundance data that can be
+#'   linked to these traits
+#' * [pr_get_FuncGroups()] which uses functional group assignments from these tables
+#'
 #' @export
 #'
 #' @examples
-#' df <- pr_get_PlanktonInfo(Type = "Phytoplankton")
-#' df <- pr_get_PlanktonInfo(Type = "Zooplankton")
-#' @importFrom rlang .data
+#' # Get zooplankton trait information
+#' zoo_info <- pr_get_PlanktonInfo(Type = "Zooplankton")
+#'
+#' # Get phytoplankton trait information
+#' phyto_info <- pr_get_PlanktonInfo(Type = "Phytoplankton")
+#'
 pr_get_PlanktonInfo <- function(Type = "Zooplankton"){
 
   if (Type == "Zooplankton"){
@@ -183,16 +229,45 @@ pr_get_PlanktonInfo <- function(Type = "Zooplankton"){
 
 
 
-#' Add NRS StationName to data
+#' Add NRS station full names to data
 #'
-#' @param df A dataframe that contains `StationCode` but no `StationName`
-#' @return A dataframe with StationName added
+#' Convert three-letter station codes to full station names for labelling plots
+#' and tables. Useful for creating publication-ready figures with descriptive
+#' location names.
+#'
+#' @param df A dataframe containing a `StationCode` column with NRS station codes
+#'
+#' @details
+#' ## Station Code Mapping
+#' The function converts the following codes to full names:
+#' * `DAR` → "Darwin" (Northern Territory)
+#' * `YON` → "Yongala" (Queensland, Great Barrier Reef)
+#' * `NSI` → "North Stradbroke Island" (Queensland, near Brisbane)
+#' * `PHB` → "Port Hacking" (New South Wales, Sydney)
+#' * `MAI` → "Maria Island" (Tasmania, east coast)
+#' * `KAI` → "Kangaroo Island" (South Australia)
+#' * `ESP` → "Esperance" (Western Australia, south coast)
+#' * `ROT` → "Rottnest Island" (Western Australia, Perth)
+#' * `NIN` → "Ningaloo" (Western Australia, north coast)
+#' * `VBM` → "Bonney Coast" (South Australia/Victoria border)
+#'
+#' ## Column Arrangement
+#' The function adds a `StationName` column and positions it before `StationCode`
+#' for logical ordering.
+#'
+#' @return A dataframe with a new `StationName` column containing full station names
+#'
+#' @seealso
+#' * [pr_add_StationCode()] for the reverse conversion
+#' * [pr_get_Stations()] for station metadata
+#'
 #' @export
 #'
 #' @examples
+#' # Add station names to station metadata
 #' df <- pr_get_Stations() %>%
-#'     pr_add_StationName()
-#' @importFrom rlang .data
+#'   pr_add_StationName()
+#'
 pr_add_StationName <- function(df){
   df <- df %>%
     dplyr::mutate(StationName = dplyr::case_when(
@@ -209,16 +284,58 @@ pr_add_StationName <- function(df){
     dplyr::relocate("StationCode", .after = "StationName")
 }
 
-#' Add NRS StationCode to data
+#' Add NRS station codes to data
 #'
-#' @param df A dataframe that contains `StationName` but no `StationCode`
-#' @return A dataframe with StationCode added
+#' Convert station names or trip codes to three-letter station codes. Useful
+#' for standardising location identifiers in datasets that use full names or
+#' for extracting station information from trip codes.
+#'
+#' @param df A dataframe containing either:
+#'   * `StationName` column with full station names, or
+#'   * `TripCode` column where first 3 characters are the station code
+#'
+#' @details
+#' ## Station Name Conversion
+#' The function converts full names to three-letter codes:
+#' * "Darwin" → `DAR`
+#' * "Yongala" → `YON`
+#' * "North Stradbroke Island" or "North Stradbroke" → `NSI`
+#' * "Port Hacking" → `PHB`
+#' * "Maria Island" → `MAI`
+#' * "Kangaroo Island" → `KAI`
+#' * "Esperance" → `ESP`
+#' * "Rottnest Island" → `ROT`
+#' * "Ningaloo" → `NIN`
+#' * "Bonney Coast" → `VBM`
+#' * "Southern Ocean Time Series" → `SOTS`
+#'
+#' ## Trip Code Extraction
+#' If the dataframe contains `TripCode` but not `StationName`, the function
+#' extracts the first three characters as the station code. NRS trip codes
+#' follow the format `XXX######` where `XXX` is the station code.
+#'
+#' ## Column Arrangement
+#' The function adds a `StationCode` column and positions it after `StationName`
+#' (if present) or `TripCode` for logical ordering.
+#'
+#' @return A dataframe with a new `StationCode` column
+#'
+#' @seealso
+#' * [pr_add_StationName()] for the reverse conversion
+#' * [pr_get_Stations()] for station metadata
+#' * [pr_get_NRSTrips()] which returns data with trip codes
+#'
 #' @export
 #'
 #' @examples
+#' # Add station codes from station names
 #' df <- pr_get_Stations() %>%
-#'     pr_add_StationCode()
-#' @importFrom rlang .data
+#'   pr_add_StationCode()
+#'
+#' # Extract station codes from trip codes
+#' df <- pr_get_NRSTrips() %>%
+#'   pr_add_StationCode()
+#'
 pr_add_StationCode <- function(df){
 
   if("StationName" %in% colnames(df)){
@@ -333,7 +450,7 @@ pr_reorder <- function(df){
 }
 
 
-#' Remove flagged data in df
+#' Remove flagged data points based on IMOS quality control flags
 #'
 #' @param df A dataframe containing data with associated flags
 #' @param flag_col A string specifying the column with the flag. Optional. If specified, all rows will be filter by the flag.
@@ -344,7 +461,7 @@ pr_reorder <- function(df){
 #' df <- data.frame(SST = c(27.4, 28.9, 45), SST_Flag = c(1, 1, 4))
 #' df <- pr_apply_Flags(df)
 #' @importFrom data.table ":="
-#' @importFrom rlang .data
+
 pr_apply_Flags <- function(df, flag_col){
 
   # qc_scheme_short_name,flag_value,flag_meaning,flag_description
@@ -392,7 +509,7 @@ pr_apply_Flags <- function(df, flag_col){
 #' @return A dataframe with extra date columns
 #' @export
 #'
-#' @importFrom rlang .data
+
 #'
 #' @examples
 #' df <- pr_get_Indices("NRS", "Phytoplankton") %>%
@@ -407,16 +524,66 @@ pr_apply_Time <- function(df){
 
 }
 
-#' Removing outliers from data
+#' Remove statistical outliers from plankton data
 #'
-#' @param df data frame with Parameters, Values and StationCode or BioRegion
-#' @param x no of sd from mean to remove
+#' Identify and remove outliers using a threshold based on standard deviations
+#' from the mean. Outliers are determined separately for each combination of
+#' parameter, location (station or bioregion), and depth.
 #'
-#' @return df
+#' @param df A dataframe from [pr_get_Indices()], [pr_get_EOVs()], or similar
+#'   functions containing plankton data
+#' @param x Number of standard deviations from the mean to use as the threshold.
+#'   Typical values are:
+#'   * `2` - Removes extreme outliers (~5% of data if normally distributed)
+#'   * `3` - More conservative, removes only very extreme values (~0.3%)
+#'   * `1.5` - More aggressive, removes more data
+#'
+#' @details
+#' The function calculates outlier thresholds for each combination of:
+#' * Parameter (e.g., biomass, diversity)
+#' * Location (station code or bioregion)
+#' * Depth (if present in data)
+#'
+#' Values outside the range `mean ± (x × SD)` are removed. This approach:
+#' * Preserves natural variability while removing measurement errors
+#' * Handles each parameter-location-depth combination independently
+#' * Automatically converts negative values to zero (biological data should be non-negative)
+#'
+#' ## When to Use
+#' Use outlier removal when:
+#' * Data contain obvious measurement or transcription errors
+#' * Preparing data for statistical modelling
+#' * Creating publication figures
+#'
+#' ## Caution
+#' * Real extreme events (e.g., blooms, upwelling) may be removed
+#' * Always inspect data before and after removal
+#' * Consider whether removed values represent true outliers or important biological events
+#' * Document outlier removal in methods sections
+#'
+#' Typically use `x = 2` as a reasonable balance between removing errors and
+#' preserving real variability.
+#'
+#' @return A dataframe with outliers removed, maintaining the same structure as input
+#'
+#' @seealso [pr_model_data()] which typically follows outlier removal for trend analysis
+#'
 #' @export
 #'
 #' @examples
-#' df <- pr_get_Indices("CPR", "Zooplankton") %>% pr_remove_outliers(2)
+#' # Remove outliers using 2 SD threshold (recommended)
+#' df <- pr_get_Indices("NRS", "Zooplankton") %>%
+#'   pr_remove_outliers(2)
+#'
+#' # More conservative removal (3 SD)
+#' df <- pr_get_Indices("CPR", "Phytoplankton") %>%
+#'   pr_remove_outliers(3)
+#'
+#' # Check how many values were removed
+#' df_before <- pr_get_EOVs("NRS") %>%
+#'   dplyr::filter(Parameters == "Biomass_mgm3")
+#' df_after <- df_before %>% pr_remove_outliers(2)
+#' nrow(df_before) - nrow(df_after)
 pr_remove_outliers <- function(df, x){
 
   Survey <- pr_get_survey(df)
@@ -470,7 +637,7 @@ pr_remove_outliers <- function(df, x){
 #' @return A dataframe with all correct species names
 #' @export
 #'
-#' @importFrom rlang .data
+
 #'
 #' @examples
 #' df <- data.frame(Species = c("IncorrectSpecies cf.", "CorrectSpecies1", NA,

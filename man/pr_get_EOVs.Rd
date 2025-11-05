@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_policy.R
 \name{pr_get_EOVs}
 \alias{pr_get_EOVs}
-\title{Get Essential Ocean Variables}
+\title{Load Essential Ocean Variables (EOVs) for plankton biomass and diversity}
 \usage{
 pr_get_EOVs(Survey = "NRS", ...)
 }
@@ -15,7 +15,7 @@ pr_get_EOVs(Survey = "NRS", ...)
 A dataframe with policy data
 }
 \description{
-Get Essential Ocean Variables
+Load Essential Ocean Variables (EOVs) for plankton biomass and diversity
 }
 \examples{
 df <- pr_get_EOVs("NRS")

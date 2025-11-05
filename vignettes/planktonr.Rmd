@@ -34,10 +34,46 @@ library(ggplot2)
 library(patchwork)
 ```
 
+# Introduction
+
+The `planktonr` package provides access to plankton and biogeochemical data collected by the Integrated Marine Observing System (IMOS) around Australia. This vignette introduces the main data sources and demonstrates how to visualise sampling effort and taxonomic coverage.
+
+## Data Sources
+
+### National Reference Stations (NRS)
+
+The NRS network consists of nine coastal monitoring stations around Australia that collect plankton, biogeochemical, and physical oceanographic data. Most stations sample monthly using:
+
+* **Niskin bottles** - For phytoplankton (0.5-5 L samples from 0-50 m depths)
+* **Vertical net tows** - For zooplankton (100 µm mesh, 0-50 m integrated samples)
+
+Stations include: Darwin (DAR), Yongala (YON), North Stradbroke Island (NSI), Port Hacking (PHB), Maria Island (MAI), Rottnest Island (ROT), Esperance (ESP), Ningaloo (NIN), and Kangaroo Island (KAI).
+
+Some stations have limited sampling:
+* Darwin samples quarterly to capture monsoonal variability
+* Kangaroo Island samples 5-6 times per year due to weather constraints
+* Esperance and Ningaloo were discontinued after initial sampling periods
+
+### Continuous Plankton Recorder (CPR)
+
+The CPR is a high-speed plankton sampler towed behind ships of opportunity at ~10 m depth. It samples plankton continuously, with each sample representing approximately 3 nautical miles (~5.6 km). 
+
+The CPR primarily samples in:
+* The Great Barrier Reef region
+* The East Australian Current region
+* Bass Strait and the South-east region
+
+CPR sampling is quarterly in main areas of interest and more ad-hoc in other regions. Unlike NRS samples which are collected during daylight hours, CPR samples are collected day and night as ships operate continuously.
+
+### Southern Ocean Time Series (SOTS)
+
+The SOTS mooring south of Tasmania provides high-frequency physical and biogeochemical measurements, with intermittent biological sampling similar to NRS protocols.
+
 # Examine the frequency of sampling
 
-The sampling at the National Reference Stations is predominantly monthly. Darwin sample on a quarterly basis and do multiple trips acorss the tidal samples and Kangaroo Island are restricted to sampling 5-6 times a year by conditions. 
-The Continuous Plankton Recorder samples quarterly through our main areas of interest, the Great Barrier Reef and the East Australian Current and on a more ad-hoc basis in other regions. 
+The sampling at the National Reference Stations is predominantly monthly. Darwin samples on a quarterly basis and completes multiple trips across the tidal cycle. Kangaroo Island sampling is restricted to 5-6 times per year by sea conditions. 
+
+The Continuous Plankton Recorder samples quarterly through our main areas of interest (the Great Barrier Reef and the East Australian Current) and on a more ad-hoc basis in other regions, depending on ship availability.
 
 ```{r}
 datCPR <- pr_get_CPRTrips()
@@ -52,7 +88,9 @@ wrap_plots(ggCPR, ggNRS, ncol = 1) &
 
 # Plot the spatial distribution of NRS and CPR samples
 
-The National Reference Stations are situated throughout the coastal region of Australia with most Marine Bioregions having one station. The West Australian stations in Ningaloo and Esperance were discontinued after an initial sampling period due to logistical constraints. The CPR tracks are also more sparse in Western Australia as shipping options are few.
+The National Reference Stations are situated throughout the coastal region of Australia, with most Marine Bioregions having at least one station. The Western Australian stations at Ningaloo and Esperance were discontinued after an initial sampling period due to logistical constraints. 
+
+The CPR tracks are also more sparse in Western Australia as shipping options are limited. CPR sampling is concentrated along major shipping routes, particularly the east coast and Bass Strait.
 
 ```{r}
 df <- pr_get_ProgressMapData(Survey = c("NRS", "CPR"))
@@ -63,9 +101,19 @@ pr_plot_ProgressMap(df)
 
 # What functional groups do we commonly see?
 
-We can learn a lot about the community structure of the plankton by using functional groups and these pie charts also show that sampling methods also impact on what we find in the samples. Centric diatoms dominate in the NRS samples whilst pennate diatoms become more important in the CPR samples. Note here that the CPR sampling occurs during the night time as well as the daylight hours and is sampling waters around 10 meters. The net samples are integrated depth samples and are collected in niskin bottles. 
+We can learn a lot about the community structure of plankton by examining functional groups. These pie charts also show how sampling methods impact what we find in the samples. 
+
+**Functional groups** represent taxa with similar ecological roles or morphological characteristics. For example:
+* **Phytoplankton**: Centric diatoms, pennate diatoms, dinoflagellates, cyanobacteria
+* **Zooplankton**: Copepods, appendicularians, chaetognaths, molluscs
 
 ## Phytoplankton
+
+Centric diatoms dominate in the NRS samples, whilst pennate diatoms become more important in the CPR samples. This likely reflects differences in sampling depth and method:
+
+* **NRS**: Niskin bottle samples from discrete depths (0-50 m), collected in daylight
+* **CPR**: Continuous sampling at ~10 m depth, collected day and night
+
 ```{r}
 p1 <- pr_plot_PieFG(pr_get_FuncGroups(Survey = "NRS", Type = "Phytoplankton"))
 p2 <- pr_plot_PieFG(pr_get_FuncGroups(Survey = "CPR", Type = "Phytoplankton"))
@@ -78,7 +126,14 @@ p2 <- pr_plot_PieFG(pr_get_FuncGroups(Survey = "CPR", Type = "Phytoplankton"))
 
 ## Zooplankton
 
-Looking at zooplankton functional groups the copepods dominate the CPR and the net samples. Chaetognaths and cladocerans are also sampled well with the CPR whilst molluscs are caught more in the net samples. 
+Copepods dominate both the CPR and the NRS net samples, which is typical for marine zooplankton communities. However, the relative abundance of other groups differs:
+
+* **Chaetognaths** (arrow worms) and **cladocerans** (water fleas) are sampled more effectively with the CPR
+* **Molluscs** (primarily pteropods) are caught more frequently in the NRS net samples
+
+These differences reflect the different mesh sizes and sampling methods:
+* **NRS**: 100 µm mesh net, vertical tows (0-50 m)
+* **CPR**: Silk mesh (~270 µm), horizontal tow at ~10 m
 
 ```{r}
 p3 <- pr_plot_PieFG(pr_get_FuncGroups(Survey = "NRS", Type = "Zooplankton"))
@@ -92,9 +147,20 @@ p4 <- pr_plot_PieFG(pr_get_FuncGroups(Survey = "CPR", Type = "Zooplankton"))
 
 # How many taxa are we identifying?
 
-Over the course of the surveys, since 2009, we have improved our taxonomic resolution through training and exposure. We are now identifying over 1000 zooplankton taxa from the CPR which includes noting the lifestage and sex of many. As zooplankton are bigger and differences between species is generally more definitive than for phytoplankton, the diversity of zooplankton taxa is greater. 
+Over the course of the surveys since 2009, taxonomic resolution has improved through analyst training and exposure to diverse assemblages. We are now identifying:
+
+* **>600 phytoplankton taxa** from the CPR
+* **>1000 zooplankton taxa** from the CPR, including life stage and sex for many taxa
+
+Zooplankton diversity is generally higher than phytoplankton diversity because:
+* Zooplankton are larger and morphological differences between species are more definitive
+* Zooplankton identification includes life stages (nauplii, copepodites, adults) and sex
+* Zooplankton sampling captures a wider size range of organisms
 
 ## Phytoplankton
+
+These accumulation curves show the cumulative number of taxa identified over time as sampling effort increases. The curves are not yet asymptotic, suggesting more taxa will be discovered with continued sampling.
+
 ```{r}
 PSpNRSAccum <- pr_get_TaxaAccum(Survey = "NRS", Type = "Phytoplankton")
 PSpCPRAccum <- pr_get_TaxaAccum(Survey = "CPR", Type = "Phytoplankton")
@@ -108,6 +174,9 @@ wrap_plots(p1, p2, ncol = 2) &
         aspect.ratio = 1)
 ```
 
+## Zooplankton
+
+The higher taxonomic diversity in zooplankton is evident in these accumulation curves. The CPR has now identified over 1000 zooplankton taxa, while the NRS continues to add new taxa regularly.
 
 ```{r}
 ZSpNRSAccum <- pr_get_TaxaAccum(Survey = "NRS", Type = "Zooplankton")

@@ -7,14 +7,46 @@
 pr_get_Stations(Survey = "NRS")
 }
 \arguments{
-\item{Survey}{NRS is default, could be SOTS}
+\item{Survey}{Survey type:
+\itemize{
+\item \code{"NRS"} - National Reference Stations (default) - includes all active and
+discontinued coastal monitoring stations
+\item \code{"SOTS"} - Southern Ocean Time Series mooring site south of Tasmania
+}}
 }
 \value{
-A dataframe with NRS Station information
+A dataframe with station information including:
+\itemize{
+\item \code{StationCode} - Three-letter station code
+\item \code{StationName} - Full station name
+\item \code{Latitude}, \code{Longitude} - Geographic coordinates
+\item \code{StationStartDate} - Date sampling commenced
+\item Additional metadata about sampling schedule and location
+}
 }
 \description{
-Load NRS station information including codes, location, and sampling interval.
+Load station metadata including station codes, names, geographic coordinates,
+and sampling schedules for National Reference Stations and Southern Ocean
+Time Series sites.
+}
+\details{
+The National Reference Stations (NRS) network consists of coastal mooring sites
+around Australia. Most stations sample monthly, though Darwin samples quarterly
+and some stations have discontinued sampling. The returned dataframe includes
+station start dates, sampling frequencies, and geographic information.
+
+Station codes include: DAR (Darwin), YON (Yongala), NSI (North Stradbroke Island),
+PHB (Port Hacking), MAI (Maria Island), ROT (Rottnest Island), ESP (Esperance),
+NIN (Ningaloo), and KAI (Kangaroo Island).
 }
 \examples{
+# Get all NRS station information
 df <- pr_get_Stations('NRS')
+
+# Get SOTS station information
+df <- pr_get_Stations('SOTS')
+
+}
+\seealso{
+\code{\link[=pr_get_NRSTrips]{pr_get_NRSTrips()}} for sampling trip metadata
 }

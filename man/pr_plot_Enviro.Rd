@@ -2,26 +2,93 @@
 % Please edit documentation in R/plot_enviro.R
 \name{pr_plot_Enviro}
 \alias{pr_plot_Enviro}
-\title{Combined timeseries and climatology plots for environmental variables}
+\title{Plot environmental data with depth profiles}
 \usage{
 pr_plot_Enviro(df, Trend = "None", trans = "identity")
 }
 \arguments{
-\item{df}{A dataframe from pr_get_nuts or pr_get_pigments}
+\item{df}{A dataframe from \code{\link[=pr_get_NRSChemistry]{pr_get_NRSChemistry()}}, \code{\link[=pr_get_NRSPigments]{pr_get_NRSPigments()}},
+or \code{\link[=pr_get_NRSPico]{pr_get_NRSPico()}} containing environmental data with depth information}
 
-\item{Trend}{Trend line to be used, options None, Smoother, Linear}
+\item{Trend}{Type of trend line to add:
+\itemize{
+\item \code{"None"} - No trend line
+\item \code{"Smoother"} - LOESS smooth (default, good for non-linear patterns)
+\item \code{"Linear"} - Linear regression line
+}}
 
-\item{trans}{scale on which to plot y axis}
+\item{trans}{Transformation for the y-axis scale:
+\itemize{
+\item \code{"identity"} - No transformation (default)
+\item \code{"log10"} - Log base 10 transformation (useful for pigments, nutrients)
+\item \code{"sqrt"} - Square root transformation
+\item Any other transformation accepted by \code{\link[ggplot2:scale_continuous]{ggplot2::scale_y_continuous()}}
+}}
 }
 \value{
-A plot with timeseries and climatology at depths
+A patchwork object containing two ggplot2 panels side-by-side
 }
 \description{
-Combined timeseries and climatology plots for environmental variables
+Create a two-panel figure showing environmental variables (nutrients, pigments,
+picophytoplankton) as both time series and climatology plots, with separate lines
+for different sampling depths. This is useful for visualising vertical structure
+and temporal patterns in water column properties.
+}
+\details{
+This function creates a two-panel figure:
+\subsection{Panel 1: Time Series (left, wider)}{
+
+Shows the full time series with different colours/line types for each depth.
+Useful for identifying:
+\itemize{
+\item Long-term trends at different depths
+\item Episodic events (e.g., upwelling, mixing)
+\item Vertical stratification patterns
+\item Deep chlorophyll maximum dynamics
+}
+}
+
+\subsection{Panel 2: Monthly Climatology (right, narrower)}{
+
+Shows the mean seasonal cycle at each depth. Useful for identifying:
+\itemize{
+\item Typical seasonal patterns (e.g., spring bloom, summer stratification)
+\item Depth of maximum values by season
+\item Seasonal vertical migration of features
+}
+
+The function automatically rounds depth values and creates appropriate legends.
+Use \code{\link[=pr_remove_outliers]{pr_remove_outliers()}} before plotting if extreme values are present.
+}
 }
 \examples{
+# Plot total chlorophyll a with depth
+df <- pr_get_NRSPigments(Format = "binned") \%>\%
+  pr_remove_outliers(2) \%>\%
+  dplyr::filter(Parameters == "TotalChla",
+                StationCode \%in\% c("NSI", "MAI"))
+pr_plot_Enviro(df, Trend = "Smoother", trans = "log10")
+
+# Plot nitrate concentrations
+df <- pr_get_NRSChemistry() \%>\%
+  dplyr::filter(Parameters == "Nitrate_umolL",
+                StationCode == "PHB")
+pr_plot_Enviro(df, Trend = "Linear", trans = "identity")
+
+# Plot Prochlorococcus abundance
+df <- pr_get_NRSPico() \%>\%
+  dplyr::filter(Parameters == "Prochlorococcus_cellsmL",
+                StationCode == "NSI")
+pr_plot_Enviro(df, Trend = "Smoother", trans = "log10")
+
 df <- pr_get_NRSChemistry() \%>\% dplyr::filter(Parameters == "SecchiDepth_m",
 StationCode \%in\% c('PHB', 'NSI'))
 pr_plot_Enviro(df)
 
+}
+\seealso{
+\code{\link[=pr_get_NRSChemistry]{pr_get_NRSChemistry()}} for nutrient data,
+\code{\link[=pr_get_NRSPigments]{pr_get_NRSPigments()}} for pigment data,
+\code{\link[=pr_get_NRSPico]{pr_get_NRSPico()}} for picophytoplankton data,
+\code{\link[=pr_plot_NRSEnvContour]{pr_plot_NRSEnvContour()}} for contour plot visualisation
 }

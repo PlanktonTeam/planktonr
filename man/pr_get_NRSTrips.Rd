@@ -2,16 +2,42 @@
 % Please edit documentation in R/utils_nrs.R
 \name{pr_get_NRSTrips}
 \alias{pr_get_NRSTrips}
-\title{Import NRS BGC information}
+\title{Import NRS sampling trip metadata}
 \usage{
 pr_get_NRSTrips()
 }
 \value{
-A dataframe with NRS BGC information
+A dataframe with NRS trip information including:
+\itemize{
+\item \code{TripCode} - Unique trip identifier
+\item \code{StationCode}, \code{StationName} - Station information
+\item \code{SampleTime_Local} - Local sampling date and time
+\item \code{Year_Local}, \code{Month_Local} - Temporal components
+\item \code{Latitude}, \code{Longitude} - Geographic coordinates
+\item Additional metadata fields
+}
 }
 \description{
-Load NRS station BGC information
+Load metadata for all National Reference Station sampling trips, including
+dates, locations, and environmental conditions at the time of sampling.
+}
+\details{
+Returns information about each NRS sampling trip (voyage), including the trip
+code, station, date/time, and basic metadata. This is useful for understanding
+sampling effort over time and for joining with other datasets.
+
+Only NRS project trips are included (SOTS trips are excluded). Samples
+designated as 'P' (plankton) samples or with no sample type designation are
+included.
 }
 \examples{
 df <- pr_get_NRSTrips()
+
+# Examine sampling frequency by station
+table(df$StationName, df$Year_Local)
+
+}
+\seealso{
+\code{\link[=pr_get_Stations]{pr_get_Stations()}} for station-level metadata,
+\code{\link[=pr_get_CPRTrips]{pr_get_CPRTrips()}} for CPR sampling trips
 }

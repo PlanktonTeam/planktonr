@@ -1,4 +1,4 @@
-#' Get data for satellite data
+#' Load satellite-derived environmental data matched to plankton sampling locations
 #' @param Survey either NRS or CPR
 #'
 #' @return df with either NRS or CPR satellite data
@@ -34,7 +34,7 @@ pr_get_SatData <- function(Survey = 'NRS'){
 }
 
 
-#' Functions for matching location data to satellite products
+#' Extract sample locations and dates for satellite data matching
 #'
 #' Get data for satellite matching
 #'
@@ -85,7 +85,7 @@ pr_get_DataLocs <- function(Survey = "all"){
 
 
 
-#' Match locations to GHRSST
+#' Match plankton sample locations to GHRSST sea surface temperature data
 #'
 #' Optional Inputs:
 #' res_spat - Spatial resolution. How many pixels (n x n) to download in each direction
@@ -294,7 +294,7 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d", parallel = FA
 }
 
 
-#' Match data for altimetry
+#' Match plankton samples to satellite altimetry data (sea level, currents)
 #'
 #' @param df dataframe containing Latitude, Longitude and Date
 #' @param pr products from GSLA, GSL, UCUR, UCUR, VCUR, UCUR_MEAN, VCUR_MEAN, single or as a list
@@ -428,7 +428,7 @@ pr_match_Altimetry <- function(df, pr, res_spat = 1) {
     dplyr::bind_cols(altout)
 }
 
-#' Match data for MODIS
+#' Match plankton samples to MODIS ocean colour data (chlorophyll, PAR, SST)
 #'
 #' @param df dataframe containing latitude, longitude and Date
 #' @param pr products from K_490, chl_carder, chl_gsm, chl_oc3, chl_oci, dt, ipar, l2_flags, owtd, par, sst, sst_quality single or as a list

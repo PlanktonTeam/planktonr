@@ -2,23 +2,50 @@
 % Please edit documentation in R/plot_timeseries.R
 \name{pr_plot_TimeSeries}
 \alias{pr_plot_TimeSeries}
-\title{Plot basic timeseries}
+\title{Plot basic timeseries of plankton indices}
 \usage{
 pr_plot_TimeSeries(df, trans = "identity")
 }
 \arguments{
-\item{df}{dataframe with SampleDate_Local, station code and parameter name and values}
+\item{df}{A dataframe from \code{\link[=pr_get_Indices]{pr_get_Indices()}} containing timeseries data}
 
-\item{trans}{scale of y axis on plot, whatever scale_y_continuous trans accepts}
+\item{trans}{Transformation for the y-axis scale. Options include:
+\itemize{
+\item \code{"identity"} - No transformation (default)
+\item \code{"log10"} - Log base 10 transformation (useful for abundance data)
+\item \code{"sqrt"} - Square root transformation
+\item \code{"log"} - Natural log transformation
+\item Any other transformation accepted by \code{\link[ggplot2:scale_continuous]{ggplot2::scale_y_continuous()}}
+}}
 }
 \value{
-a timeseries plot
+A ggplot2 object showing the timeseries
 }
 \description{
-Plot basic timeseries
+Create a time series plot showing how plankton indices vary over time at
+different stations or bioregions. This is a simple line plot without trend
+analysis or aggregation.
+}
+\details{
+For NRS data, values are averaged across depths if multiple depths are present
+(relevant for microbial data). For CPR data, bioregions are treated as "stations"
+for plotting purposes.
+
+The plot uses colour and line type to distinguish between stations/bioregions.
+Points show individual observations, connected by lines.
 }
 \examples{
+# Plot NRS zooplankton biomass
 df <- pr_get_Indices("NRS", "Zooplankton") \%>\%
   dplyr::filter(Parameters == "Biomass_mgm3", StationCode \%in\% c("NSI", "PHB"))
-timeseries <- pr_plot_TimeSeries(df)
+pr_plot_TimeSeries(df)
+
+# Use log scale for abundance data
+df <- pr_get_Indices("NRS", "Phytoplankton") \%>\%
+  dplyr::filter(Parameters == "PhytoAbundance_CellsL", StationCode \%in\% c("MAI", "PHB"))
+pr_plot_TimeSeries(df, trans = "log10")
+}
+\seealso{
+\code{\link[=pr_plot_Trends]{pr_plot_Trends()}} for timeseries with trend lines,
+\code{\link[=pr_plot_Climatology]{pr_plot_Climatology()}} for seasonal patterns
 }

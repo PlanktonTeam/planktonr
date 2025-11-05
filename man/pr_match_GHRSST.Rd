@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_sat.R
 \name{pr_match_GHRSST}
 \alias{pr_match_GHRSST}
-\title{Match locations to GHRSST}
+\title{Match plankton sample locations to GHRSST sea surface temperature data}
 \usage{
 pr_match_GHRSST(
   df,

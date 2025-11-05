@@ -226,7 +226,7 @@ pr_get_variable.planktonr_dat <- function(x){
   attr(x, "Variable")
 }
 
-#' Generic function to get the Model attribute
+#' Extract fitted model objects from planktonr data with trend analysis
 #'
 #' @param x A `planktonr_dat` object.
 #' @returns The `Model` attribute from the object.

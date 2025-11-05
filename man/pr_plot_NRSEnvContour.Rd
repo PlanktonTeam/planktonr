@@ -2,23 +2,68 @@
 % Please edit documentation in R/plot_enviro.R
 \name{pr_plot_NRSEnvContour}
 \alias{pr_plot_NRSEnvContour}
-\title{Contour plots for depth stratified environmental data}
+\title{Plot environmental contours showing depth-time patterns}
 \usage{
 pr_plot_NRSEnvContour(df, na.fill = TRUE)
 }
 \arguments{
-\item{df}{dataframe from pr_get_NRSEnvContour}
+\item{df}{A dataframe from \code{\link[=pr_get_NRSEnvContour]{pr_get_NRSEnvContour()}} containing environmental
+data formatted for contour plotting}
 
-\item{na.fill}{TRUE, FALSE or function like mean to fill in gaps in data}
+\item{na.fill}{How to handle missing data (gaps) in the contour:
+\itemize{
+\item \code{TRUE} - Fill gaps using linear interpolation (default, creates smoother contours)
+\item \code{FALSE} - Leave gaps as-is (shows only measured data)
+\item A function - Use custom interpolation (e.g., \code{mean}, \code{median})
+}}
 }
 \value{
-a contour plot
+A ggplot2 object with contour plots faceted by station and parameter
 }
 \description{
-Contour plots for depth stratified environmental data
+Create contour plots showing how environmental variables change with both time
+(x-axis) and depth (y-axis). This visualisation is particularly effective for
+identifying vertical structure, stratification, and the deep chlorophyll maximum.
+}
+\details{
+Contour plots are excellent for visualising:
+\subsection{Vertical Structure}{
+\itemize{
+\item Deep chlorophyll maximum (DCM) depth and intensity
+\item Nutricline depth and strength
+\item Stratification patterns (steep vs. gradual gradients)
+\item Surface vs. subsurface maxima
+}
+}
+
+\subsection{Temporal Patterns}{
+\itemize{
+\item Seasonal shoaling/deepening of features
+\item Upwelling events (nutrient-rich water at surface)
+\item Mixing events (homogenisation of the water column)
+\item Long-term changes in vertical structure
+}
+}
+
+\subsection{Gap Filling}{
+
+When \code{na.fill = TRUE}, the function uses \code{metR::geom_contour_fill()} with
+linear interpolation to create smooth contours. This is appropriate for
+environmental data with regular sampling patterns and small gaps. For irregular
+sampling or large gaps, consider setting \code{na.fill = FALSE} to show only measured
+data.
+
+The function automatically creates one facet per station and parameter combination.
+Contours are filled with a colour scale, and contour lines are overlaid in grey.
+}
 }
 \examples{
 df <- pr_get_NRSEnvContour("Chemistry") \%>\% dplyr::filter(Parameters == "Nitrate_umolL",
 StationCode \%in\% c('YON', 'MAI', 'PHB', 'NSI'))
 plot <- pr_plot_NRSEnvContour(df, na.fill = TRUE)
+}
+\seealso{
+\code{\link[=pr_get_NRSEnvContour]{pr_get_NRSEnvContour()}} for preparing the input data,
+\code{\link[=pr_plot_Enviro]{pr_plot_Enviro()}} for alternative line plot visualisation,
+\code{\link[=pr_get_NRSChemistry]{pr_get_NRSChemistry()}}, \code{\link[=pr_get_NRSPigments]{pr_get_NRSPigments()}}, \code{\link[=pr_get_NRSPico]{pr_get_NRSPico()}} for data sources
 }

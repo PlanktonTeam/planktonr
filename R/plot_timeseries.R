@@ -1,17 +1,44 @@
 
 
-#' Plot basic timeseries
+#' Plot basic timeseries of plankton indices
 #'
-#' @param df dataframe with SampleDate_Local, station code and parameter name and values
-#' @param trans scale of y axis on plot, whatever scale_y_continuous trans accepts
+#' Create a time series plot showing how plankton indices vary over time at 
+#' different stations or bioregions. This is a simple line plot without trend 
+#' analysis or aggregation.
 #'
-#' @return a timeseries plot
+#' @param df A dataframe from [pr_get_Indices()] containing timeseries data
+#' @param trans Transformation for the y-axis scale. Options include:
+#'   * `"identity"` - No transformation (default)
+#'   * `"log10"` - Log base 10 transformation (useful for abundance data)
+#'   * `"sqrt"` - Square root transformation
+#'   * `"log"` - Natural log transformation
+#'   * Any other transformation accepted by [ggplot2::scale_y_continuous()]
+#'
+#' @details
+#' For NRS data, values are averaged across depths if multiple depths are present 
+#' (relevant for microbial data). For CPR data, bioregions are treated as "stations" 
+#' for plotting purposes.
+#' 
+#' The plot uses colour and line type to distinguish between stations/bioregions. 
+#' Points show individual observations, connected by lines.
+#'
+#' @return A ggplot2 object showing the timeseries
+#' 
+#' @seealso [pr_plot_Trends()] for timeseries with trend lines,
+#'   [pr_plot_Climatology()] for seasonal patterns
+#' 
 #' @export
 #'
 #' @examples
+#' # Plot NRS zooplankton biomass
 #' df <- pr_get_Indices("NRS", "Zooplankton") %>%
 #'   dplyr::filter(Parameters == "Biomass_mgm3", StationCode %in% c("NSI", "PHB"))
-#' timeseries <- pr_plot_TimeSeries(df)
+#' pr_plot_TimeSeries(df)
+#' 
+#' # Use log scale for abundance data
+#' df <- pr_get_Indices("NRS", "Phytoplankton") %>%
+#'   dplyr::filter(Parameters == "PhytoAbundance_CellsL", StationCode %in% c("MAI", "PHB"))
+#' pr_plot_TimeSeries(df, trans = "log10")
 
 pr_plot_TimeSeries <- function(df, trans = "identity"){
 
@@ -88,26 +115,71 @@ pr_plot_TimeSeries <- function(df, trans = "identity"){
 }
 
 
-#' Plot temporal Trends in plankton data
+#' Plot temporal trends in plankton data with fitted lines
 #'
-#' @param df A dataframe containing the plankton timeseries data.
-#' @param Trend Over what timescale to fit the Trend - "Raw", "Month" or "Year"
-#' @param method Any method accepted by `geom_smooth()`
-#' @param trans transformation of y axis on plot, whatever `scale_y_continuous()` trans accepts
-#' #'
-#' @return a timeseries plot
+#' Create time series plots with fitted trend lines to examine long-term changes, 
+#' seasonal patterns, or interannual variability in plankton indices. The function 
+#' can plot raw data over time, monthly climatologies, or annual means.
 #'
+#' @param df A dataframe from [pr_get_Indices()] containing timeseries data
+#' @param Trend The temporal scale for trend analysis:
+#'   * `"Raw"` - Plot all data points over time with a trend line through the full timeseries
+#'   * `"Month"` - Monthly climatology showing seasonal patterns (averaged across years)
+#'   * `"Year"` - Annual means showing interannual variability
+#' @param method Smoothing method for the trend line. Options include:
+#'   * `"lm"` - Linear regression (default, good for detecting long-term trends)
+#'   * `"loess"` - Local polynomial regression (good for non-linear trends)
+#'   * `"gam"` - Generalised additive model (requires mgcv package)
+#'   * Any other method accepted by [ggplot2::geom_smooth()]
+#' @param trans Transformation for the y-axis scale:
+#'   * `"identity"` - No transformation (default)
+#'   * `"log10"` - Log base 10 transformation (useful for abundance data)
+#'   * `"sqrt"` - Square root transformation
+#'   * Any other transformation accepted by [ggplot2::scale_y_continuous()]
+#'
+#' @details
+#' This function is designed to help identify temporal trends in plankton data:
+#' 
+#' * **Raw trends**: Shows all observations over time with a smoothed trend line. 
+#'   Useful for detecting long-term changes (e.g., increasing or decreasing abundance).
+#' 
+#' * **Monthly trends**: Aggregates data by month across all years to show seasonal 
+#'   patterns (e.g., winter blooms, summer stratification effects).
+#' 
+#' * **Annual trends**: Shows year-to-year variability, useful for detecting regime 
+#'   shifts or responses to climate oscillations (e.g., ENSO).
+#' 
+#' The shaded ribbon around trend lines represents the 95% confidence interval.
+#' For NRS data, values are averaged across depths if present.
+#'
+#' @return A ggplot2 object showing the timeseries with fitted trend line(s)
+#' 
+#' @seealso [pr_plot_TimeSeries()] for plots without trend lines,
+#'   [pr_plot_Climatology()] for alternative climatology visualisations,
+#'   [pr_get_model()] for extracting model coefficients
+#' 
 #' @importFrom rlang "!!"
 #'
 #' @export
 #'
 #' @examples
+#' # Examine long-term trends in zooplankton biomass
 #' df <- pr_get_Indices("NRS", "Zooplankton") %>%
 #'   dplyr::filter(Parameters == "Biomass_mgm3") %>%
 #'   pr_model_data()
-#' pr_plot_Trends(df, method = "loess", Trend = "Month")
-#' pr_plot_Trends(df, Trend = "Year")
-#' pr_plot_Trends(df, Trend = "Raw")
+#' pr_plot_Trends(df, Trend = "Raw", method = "lm")
+#' 
+#' # Examine seasonal patterns
+#' pr_plot_Trends(df, Trend = "Month", method = "loess")
+#' 
+#' # Examine interannual variability
+#' pr_plot_Trends(df, Trend = "Year", method = "lm")
+#' 
+#' # Use log transformation for abundance data
+#' df <- pr_get_Indices("CPR", "Phytoplankton", near_dist_km = 250) %>%
+#'   dplyr::filter(Parameters == "PhytoAbundance_Cellsm3",
+#'                 BioRegion %in% c("South-east", "Temperate East"))
+#' pr_plot_Trends(df, Trend = "Raw", method = "lm", trans = "log10")
 pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"){
 
   # Input validation
@@ -272,13 +344,50 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
   return(p1)
 }
 
-#' Plot single climatology
+#' Plot climatologies showing seasonal or interannual patterns
 #'
-#' @param df dataframe with specified time period, station code and parameter
-#' @param Trend specified time period
-#' @param trans scale of y axis on plot, whatever scale_y_continuous trans accepts
+#' Create bar plots showing monthly or annual climatologies (mean values with 
+#' error bars) to examine seasonal cycles or interannual variability in plankton 
+#' indices. Data are aggregated across years (monthly) or within years (annual) 
+#' to show typical patterns.
 #'
-#' @return a climatology plot
+#' @param df A dataframe from [pr_get_Indices()] containing timeseries data
+#' @param Trend The temporal aggregation for climatology:
+#'   * `"Month"` - Monthly climatology averaged across all years (shows seasonal patterns)
+#'   * `"Year"` - Annual means for each year (shows interannual variability)
+#' @param trans Transformation for the y-axis scale:
+#'   * `"identity"` - No transformation (default)
+#'   * `"log10"` - Log base 10 transformation (useful for abundance data)
+#'   * `"sqrt"` - Square root transformation
+#'   * Any other transformation accepted by [ggplot2::scale_y_continuous()]
+#'
+#' @details
+#' ## Monthly Climatology (Trend = "Month")
+#' Calculates the mean value for each month across all years in the dataset. 
+#' This shows the typical seasonal cycle, useful for identifying:
+#' * Spring phytoplankton blooms
+#' * Summer stratification effects
+#' * Winter mixing impacts
+#' * Seasonal migration patterns in zooplankton
+#' 
+#' ## Annual Climatology (Trend = "Year")
+#' Calculates the mean value for each calendar year. This shows year-to-year 
+#' variability, useful for identifying:
+#' * Long-term trends (increasing or decreasing)
+#' * Regime shifts
+#' * Responses to climate oscillations (e.g., ENSO, SAM)
+#' * Extreme years (e.g., marine heatwaves)
+#' 
+#' Error bars represent standard error of the mean (±SE), calculated as 
+#' SD/√N where N is the number of observations.
+#' 
+#' For NRS data, values are averaged across depths if present.
+#'
+#' @return A ggplot2 bar plot with error bars showing climatology patterns
+#' 
+#' @seealso [pr_plot_Trends()] for alternative climatology visualisation with trend lines,
+#'   [pr_plot_TimeSeries()] for raw time series plots
+#' 
 #' @export
 #'
 #' @examples
@@ -458,21 +567,81 @@ pr_plot_tsclimate <- function(df, trans = "identity"){
   return(plots)
 }
 
-#' Time series plot of functional groups
+#' Time series plot of functional group composition
 #'
-#' @param df dataframe in format of output from pr_get_FuncGroups
-#' @param Scale y axis scale Actual or Proportion
-#' @param Trend Over what timescale to fit the Trend - "Raw", "Month" or "Year"
+#' Create stacked area or bar plots showing the relative or absolute abundance 
+#' of different functional groups over time. This visualisation is particularly 
+#' useful for examining changes in community composition.
 #'
+#' @param df A dataframe from [pr_get_FuncGroups()] containing functional group data
+#' @param Scale Scaling of the y-axis:
+#'   * `"Actual"` - Plot actual abundance values (stacked)
+#'   * `"Proportion"` - Plot as proportions summing to 1 (or 100%)
+#' @param Trend The temporal scale for plotting:
+#'   * `"Raw"` - Plot all data points over time (default)
+#'   * `"Month"` - Monthly climatology averaged across years
+#'   * `"Year"` - Annual means for each year
 #'
-#' @return plot of fg timseries
+#' @details
+#' This function creates stacked area plots (for Raw trends) or stacked bar plots 
+#' (for Month/Year trends) showing how functional group composition changes over time.
+#' 
+#' ## Functional Groups Plotted
+#' 
+#' **Phytoplankton** (5 groups):
+#' * Centric diatoms (radially symmetrical, bloom-forming)
+#' * Pennate diatoms (bilaterally symmetrical)
+#' * Dinoflagellates (flagellated protists)
+#' * Cyanobacteria (photosynthetic bacteria)
+#' * Other (remaining groups)
+#' 
+#' **Zooplankton** (7 groups):
+#' * Copepods (dominant marine zooplankton)
+#' * Appendicularians (larvaceans, gelatinous filter feeders)
+#' * Molluscs (pteropods - sea butterflies and angels)
+#' * Cladocerans (water fleas, e.g., Penilia, Evadne)
+#' * Chaetognaths (arrow worms, predatory)
+#' * Thaliaceans (salps, doliolids, pyrosomes)
+#' * Other (remaining groups)
+#' 
+#' ## Interpretation
+#' 
+#' **Actual Scale**: Shows true abundance patterns. Useful for seeing:
+#' * Total community biomass/abundance changes
+#' * Bloom events
+#' * Which groups dominate numerically
+#' 
+#' **Proportion Scale**: Shows relative composition. Useful for seeing:
+#' * Community shifts (e.g., diatoms to dinoflagellates)
+#' * Seasonal succession patterns
+#' * Long-term regime shifts
+#' * Changes that might be masked by overall abundance changes
+#' 
+#' Colours are assigned consistently across plots for each functional group.
+#'
+#' @return A ggplot2 object showing functional group composition over time
+#' 
+#' @seealso [pr_get_FuncGroups()] for preparing the input data,
+#'   [pr_plot_PieFG()] for pie chart visualisation of functional groups
+#' 
 #' @export
 #'
 #' @examples
-#' df <- pr_get_FuncGroups("SOTS", "Phytoplankton") %>%
-#' dplyr::filter(StationCode == 'SOTS')
-#' plot <- pr_plot_tsfg(df, "Actual", Trend = 'Month')
-#' plot
+#' # Plot actual abundances over time
+#' df <- pr_get_FuncGroups("NRS", "Phytoplankton") %>%
+#'   dplyr::filter(StationCode %in% c('MAI', 'PHB'))
+#' pr_plot_tsfg(df, Scale = "Actual", Trend = "Raw")
+#' 
+#' # Plot as proportions to see community shifts
+#' pr_plot_tsfg(df, Scale = "Proportion", Trend = "Raw")
+#' 
+#' # Monthly climatology showing seasonal patterns
+#' pr_plot_tsfg(df, Scale = "Proportion", Trend = "Month")
+#' 
+#' # Zooplankton functional groups
+#' df_zoo <- pr_get_FuncGroups("CPR", "Zooplankton", near_dist_km = 250) %>%
+#'   dplyr::filter(BioRegion == "South-east")
+#' pr_plot_tsfg(df_zoo, Scale = "Actual", Trend = "Raw")
 pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 
   # Input validation
@@ -630,23 +799,74 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 
 
 
-#' Essential Ocean Variables plot
+#' Essential Ocean Variables (EOV) plot for reporting
 #'
-#' @param df dataframe containing timeseries data with Parameters and Values, output of pr_get_EOVs and pr_get_Coeffs
-#' @param EOV Essential Ocean Variable as a parameter
-#' @param trans scale for y axis
-#' @param col colour selection
-#' @param labels do you want to print labels on the x axes
+#' Create a three-panel figure showing Essential Ocean Variables over time, 
+#' including the raw time series, anomalies, and climatology. This format is 
+#' designed for scientific reporting and State of Environment assessments.
 #'
-#' @return plot of timeseries, anomalies and climatology
+#' @param df A dataframe from [pr_get_EOVs()] containing Essential Ocean Variable data
+#' @param EOV The Essential Ocean Variable parameter to plot (must match a parameter in df)
+#' @param trans Transformation for the y-axis scale:
+#'   * `"identity"` - No transformation (default)
+#'   * `"log10"` - Log base 10 transformation
+#'   * `"sqrt"` - Square root transformation
+#' @param col Colour for the time series line and points (e.g., `"blue"`, `"darkred"`, `"#FF5733"`)
+#' @param labels Logical. Should x-axis labels be shown? Set to `FALSE` when combining 
+#'   multiple plots vertically to save space.
+#'
+#' @details
+#' Essential Ocean Variables (EOVs) are key measurements identified by the Global 
+#' Ocean Observing System (GOOS) as critical for understanding ocean health and 
+#' change. For plankton, the two primary EOVs are:
+#' * **Biomass** - Total plankton biomass (proxy for ecosystem productivity)
+#' * **Diversity** - Species richness and diversity (proxy for ecosystem health)
+#' 
+#' This function creates a three-panel figure:
+#' 
+#' ## Panel 1: Time Series
+#' Shows the raw data over time with a smoothed trend line (LOESS). Useful for 
+#' identifying long-term trends and interannual variability.
+#' 
+#' ## Panel 2: Anomalies
+#' Shows deviations from the long-term mean, highlighting periods of unusually 
+#' high (positive anomalies) or low (negative anomalies) values. Anomalies are 
+#' calculated by subtracting the overall mean from each observation.
+#' 
+#' ## Panel 3: Climatology
+#' Shows the monthly climatology (mean ± standard error), revealing the typical 
+#' seasonal cycle. Useful for understanding natural seasonal variability.
+#' 
+#' The function automatically handles NRS station data and CPR bioregion data, 
+#' detecting which type is present in the input dataframe.
+#'
+#' @return A patchwork object containing three ggplot2 panels stacked vertically
+#' 
+#' @seealso [pr_get_EOVs()] for preparing the input data,
+#'   [pr_remove_outliers()] for outlier removal before plotting,
+#'   [pr_get_coeffs()] for extracting trend coefficients
+#' 
 #' @export
 #'
 #' @examples
+#' # Plot zooplankton biomass EOV for Port Hacking
 #' df <- pr_get_EOVs("NRS") %>%
 #'   dplyr::filter(StationCode == "PHB") %>%
 #'   pr_remove_outliers(2)
-#' pr_plot_EOVs(df, EOV = "Biomass_mgm3",
-#'       trans = "identity", col = "blue", labels = FALSE)
+#' pr_plot_EOVs(df, EOV = "Biomass_mgm3", trans = "identity", col = "blue")
+#' 
+#' # Stack multiple EOVs by removing x-axis labels on upper panels
+#' library(patchwork)
+#' p1 <- pr_plot_EOVs(df, EOV = "Biomass_mgm3", col = "blue", labels = FALSE)
+#' p2 <- pr_plot_EOVs(df, EOV = "ShannonCopepodDiversity", col = "darkgreen")
+#' p1 / p2
+#' 
+#' # Plot phytoplankton diversity for CPR South-east bioregion
+#' df_cpr <- pr_get_EOVs("CPR") %>%
+#'   dplyr::filter(BioRegion == "South-east") %>%
+#'   pr_remove_outliers(2)
+#' pr_plot_EOVs(df_cpr, EOV = "ShannonPhytoDiversity", 
+#'              trans = "identity", col = "darkgreen")
 pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "blue", labels = TRUE) {
 
   # Input validation
@@ -864,7 +1084,7 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
 
 
 
-#' Plot of relative day and night abundances
+#' Visualise diel vertical migration patterns showing day vs night abundances
 #'
 #' @param df dataframe as output of pr_get_DayNight() filtered for one species
 #'
@@ -895,7 +1115,7 @@ pr_plot_DayNight <-  function(df){
 }
 
 
-#' Plot of STI kernel density for species
+#' Plot Species Temperature Index (STI) kernel density distributions
 #'
 #' @param df dataframe as output of pr_get_STIdata() filtered for one species
 #'
@@ -974,7 +1194,7 @@ pr_plot_STI <-  function(df){
 
 
 
-#' Plot for latitudinal data
+#' Create Hovmöller diagram showing latitudinal patterns over time
 #'
 #' @param df dataframe of latitudinal series
 #' @param na.fill TRUE, FALSE or function like mean to fill in gaps in data

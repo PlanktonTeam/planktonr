@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_info.R
 \name{pr_plot_TaxaAccum}
 \alias{pr_plot_TaxaAccum}
-\title{Taxa Accumulation Curve}
+\title{Plot taxonomic accumulation curves showing cumulative species discovery over time}
 \usage{
 pr_plot_TaxaAccum(dat)
 }

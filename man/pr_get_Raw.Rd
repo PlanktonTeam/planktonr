@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{pr_get_Raw}
 \alias{pr_get_Raw}
-\title{Download Raw Data from IMOS}
+\title{Download raw unprocessed data files directly from IMOS S3 storage}
 \usage{
 pr_get_Raw(file)
 }

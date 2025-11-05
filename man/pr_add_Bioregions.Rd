@@ -2,29 +2,98 @@
 % Please edit documentation in R/pr_add_bioregions.R
 \name{pr_add_Bioregions}
 \alias{pr_add_Bioregions}
-\title{Add bioregions data to existing df}
+\title{Assign Australian Marine Bioregions to sample locations}
 \usage{
 pr_add_Bioregions(df, near_dist_km = 0)
 }
 \arguments{
-\item{df}{A dataframe with columns \code{.data$Longitude} and \code{.data$Latitude}}
+\item{df}{A dataframe containing columns \code{Longitude} and \code{Latitude} with
+geographic coordinates in decimal degrees (WGS84)}
 
-\item{near_dist_km}{What buffer distance to use to find a BioRegion match
-#'}
+\item{near_dist_km}{Buffer distance (in kilometres) to use when assigning
+bioregions to samples that fall outside boundaries. Default is \code{0} (no
+buffer). Typical values:
+\itemize{
+\item \code{0} - Exact match only, samples outside boundaries are labelled "None"
+\item \code{50} - Assigns samples within 50 km of a bioregion
+\item \code{250} - More generous buffer, useful for CPR transects near boundaries
+}}
 }
 \value{
-A dataframe with Marine Bioregions added
+A dataframe with two additional columns:
+\itemize{
+\item \code{BioRegion}: Name of the marine bioregion
+\item \code{Colour}: Hex colour code for that bioregion (for plotting)
+}
 }
 \description{
-Add bioregions data to existing df
+Add bioregion classification to samples based on their geographic coordinates.
+Uses Australian marine bioregion boundaries (IMCRA 4.0) from the Integrated
+Marine and Coastal Regionalisation of Australia.
+}
+\details{
+\subsection{Bioregion Classification}{
+
+The function assigns samples to one of the following Australian marine bioregions:
+\itemize{
+\item \strong{Temperate East}: Coastal waters off NSW and southern Queensland
+\item \strong{South-east}: Bass Strait and waters off Tasmania
+\item \strong{South-west}: Southern and western Australian waters
+\item \strong{North-west}: Waters off northwest Western Australia
+\item \strong{Coral Sea}: Offshore waters northeast of Queensland
+\item \strong{None}: Samples that don't fall within any bioregion
+}
+}
+
+\subsection{Assignment Method}{
+
+The function uses spatial operations to:
+\enumerate{
+\item Convert coordinates to spatial features (sf objects)
+\item Match samples to bioregions using polygon intersection
+\item For samples outside boundaries, find the nearest bioregion within \code{near_dist_km}
+\item Prioritise Coral Sea assignments to handle boundary overlaps
+\item Add a colour column for plotting consistency
+}
+}
+
+\subsection{Buffer Distance}{
+
+The \code{near_dist_km} parameter is particularly useful for:
+\itemize{
+\item CPR samples collected near bioregion boundaries
+\item Offshore samples that may fall just outside defined regions
+\item Creating continuous coverage for transect data
+}
+
+Use larger buffers (e.g., 250 km) for offshore CPR data, smaller or no buffer
+for coastal NRS data.
+}
+
+\subsection{Data Requirements}{
+
+Input dataframe must include \code{Longitude} and \code{Latitude} columns. The function
+handles coordinate transformations automatically.
+}
 }
 \examples{
- df <- pr_get_Raw("cpr_derived_indices_data") \%>\%
+# Add bioregions with exact matching (no buffer)
+df <- pr_get_Raw("cpr_derived_indices_data") \%>\%
   pr_rename() \%>\%
-   pr_add_Bioregions()
+  pr_add_Bioregions()
 
- df <- pr_get_Raw("cpr_derived_indices_data") \%>\%
+# Add bioregions with 250 km buffer for offshore samples
+df <- pr_get_Raw("cpr_derived_indices_data") \%>\%
   pr_rename() \%>\%
-   pr_add_Bioregions(near_dist_km = 250)
+  pr_add_Bioregions(near_dist_km = 250)
+  
+# Check bioregion assignments
+table(df$BioRegion)
 
+}
+\seealso{
+\itemize{
+\item \code{\link[=pr_get_CPRData]{pr_get_CPRData()}} which calls this function internally
+\item \link{mbr} for the marine bioregion spatial data
+}
 }

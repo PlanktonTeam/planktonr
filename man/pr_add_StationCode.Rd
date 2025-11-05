@@ -2,20 +2,71 @@
 % Please edit documentation in R/utils.R
 \name{pr_add_StationCode}
 \alias{pr_add_StationCode}
-\title{Add NRS StationCode to data}
+\title{Add NRS station codes to data}
 \usage{
 pr_add_StationCode(df)
 }
 \arguments{
-\item{df}{A dataframe that contains \code{StationName} but no \code{StationCode}}
+\item{df}{A dataframe containing either:
+\itemize{
+\item \code{StationName} column with full station names, or
+\item \code{TripCode} column where first 3 characters are the station code
+}}
 }
 \value{
-A dataframe with StationCode added
+A dataframe with a new \code{StationCode} column
 }
 \description{
-Add NRS StationCode to data
+Convert station names or trip codes to three-letter station codes. Useful
+for standardising location identifiers in datasets that use full names or
+for extracting station information from trip codes.
+}
+\details{
+\subsection{Station Name Conversion}{
+
+The function converts full names to three-letter codes:
+\itemize{
+\item "Darwin" → \code{DAR}
+\item "Yongala" → \code{YON}
+\item "North Stradbroke Island" or "North Stradbroke" → \code{NSI}
+\item "Port Hacking" → \code{PHB}
+\item "Maria Island" → \code{MAI}
+\item "Kangaroo Island" → \code{KAI}
+\item "Esperance" → \code{ESP}
+\item "Rottnest Island" → \code{ROT}
+\item "Ningaloo" → \code{NIN}
+\item "Bonney Coast" → \code{VBM}
+\item "Southern Ocean Time Series" → \code{SOTS}
+}
+}
+
+\subsection{Trip Code Extraction}{
+
+If the dataframe contains \code{TripCode} but not \code{StationName}, the function
+extracts the first three characters as the station code. NRS trip codes
+follow the format \code{XXX######} where \code{XXX} is the station code.
+}
+
+\subsection{Column Arrangement}{
+
+The function adds a \code{StationCode} column and positions it after \code{StationName}
+(if present) or \code{TripCode} for logical ordering.
+}
 }
 \examples{
+# Add station codes from station names
 df <- pr_get_Stations() \%>\%
-    pr_add_StationCode()
+  pr_add_StationCode()
+
+# Extract station codes from trip codes
+df <- pr_get_NRSTrips() \%>\%
+  pr_add_StationCode()
+
+}
+\seealso{
+\itemize{
+\item \code{\link[=pr_add_StationName]{pr_add_StationName()}} for the reverse conversion
+\item \code{\link[=pr_get_Stations]{pr_get_Stations()}} for station metadata
+\item \code{\link[=pr_get_NRSTrips]{pr_get_NRSTrips()}} which returns data with trip codes
+}
 }

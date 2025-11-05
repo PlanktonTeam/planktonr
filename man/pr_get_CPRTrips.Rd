@@ -2,20 +2,54 @@
 % Please edit documentation in R/utils_cpr.R
 \name{pr_get_CPRTrips}
 \alias{pr_get_CPRTrips}
-\title{Get CPR trips}
+\title{Get CPR sampling trip metadata}
 \usage{
 pr_get_CPRTrips(...)
 }
 \arguments{
-\item{...}{ability to choose join for bioregions}
+\item{...}{Additional variables passed to \code{\link[=pr_add_Bioregions]{pr_add_Bioregions()}}. Currently supports:
+\itemize{
+\item \code{near_dist_km} - Distance in kilometres to pad bioregion boundaries when
+assigning samples to regions (default behaviour uses exact boundaries)
+}}
 }
 \value{
-A dataframe with CPR Trips
+A dataframe with CPR trip information including:
+\itemize{
+\item \code{TripCode} - Unique trip identifier
+\item \code{SampleTime_Local} - Local sampling date and time
+\item \code{Year_Local}, \code{Month_Local} - Temporal components
+\item \code{Latitude}, \code{Longitude} - Geographic coordinates
+\item \code{BioRegion} - Australian marine bioregion assignment
+\item Additional metadata fields
+}
 }
 \description{
-Get CPR trips
+Load metadata for all Continuous Plankton Recorder sampling trips, including
+dates, locations, and bioregion assignments. Each trip represents a tow
+segment sampled by the CPR.
+}
+\details{
+The CPR samples continuously as it is towed behind ships of opportunity. Each
+"trip" in this context represents a segment of the tow, typically covering
+approximately 3 nautical miles.
+
+Samples are automatically assigned to Australian marine bioregions using
+\code{\link[=pr_add_Bioregions]{pr_add_Bioregions()}}. Bioregions include: Temperate East, South-east,
+South-west, North, and North-west.
 }
 \examples{
+# Get all CPR trips with default bioregion assignment
 df <- pr_get_CPRTrips()
+
+# Get CPR trips with expanded bioregion boundaries (250 km padding)
 df <- pr_get_CPRTrips(near_dist_km = 250)
+
+# Examine sampling effort by bioregion and year
+table(df$BioRegion, df$Year_Local)
+
+}
+\seealso{
+\code{\link[=pr_get_NRSTrips]{pr_get_NRSTrips()}} for NRS sampling trips,
+\code{\link[=pr_add_Bioregions]{pr_add_Bioregions()}} for bioregion assignment details
 }

@@ -2,21 +2,83 @@
 % Please edit documentation in R/plot_info.R
 \name{pr_plot_PieFG}
 \alias{pr_plot_PieFG}
-\title{Pie plots of functional groups for data}
+\title{Create pie charts showing functional group composition}
 \usage{
 pr_plot_PieFG(df)
 }
 \arguments{
-\item{df}{data frame binned to functional group e.g. planktonr::pr_get_FuncGroups("NRS", "Zooplankton")}
+\item{df}{A dataframe from \code{\link[=pr_get_FuncGroups]{pr_get_FuncGroups()}} containing functional group
+abundance or biomass data}
 }
 \value{
-pie plot of functional groups
+A ggplot2 object that can be further customised or saved with \code{ggsave()}
 }
 \description{
-Pie plots of functional groups for data
+Visualise the relative proportion of plankton functional groups averaged
+across all samples. Useful for summarising community composition in a simple,
+accessible format.
+}
+\details{
+\subsection{Plot Structure}{
+
+The pie chart shows:
+\itemize{
+\item Each functional group as a wedge
+\item Wedge size proportional to mean abundance/biomass across all samples
+\item Colours from the "Set1" palette for clear distinction
+\item Legend below plot listing all functional groups
+}
+}
+
+\subsection{Interpretation}{
+
+This plot provides a quick overview of which functional groups dominate the
+plankton community on average. Use this for:
+\itemize{
+\item Initial data exploration
+\item Comparing overall community structure between surveys or regions
+\item Educational presentations requiring simple visualisations
+}
+}
+
+\subsection{Limitations}{
+\itemize{
+\item Shows average composition only, hiding temporal variability
+\item Cannot show changes over time (use \code{\link[=pr_plot_tsfg]{pr_plot_tsfg()}} for that)
+\item Works best with 5-10 functional groups; too many makes wedges hard to distinguish
+}
+}
+
+\subsection{Functional Groups}{
+
+The plot automatically detects whether data are:
+\itemize{
+\item \strong{Phytoplankton}: Diatoms, dinoflagellates, ciliates, etc.
+\item \strong{Zooplankton}: Copepods, appendicularians, fish larvae, etc.
+}
+
+And labels the legend accordingly.
+}
 }
 \examples{
+# Phytoplankton functional groups from CPR
 df <- pr_get_FuncGroups("CPR", "Phytoplankton")
 plot <- pr_plot_PieFG(df)
+print(plot)
 
+# Zooplankton functional groups from NRS
+df <- pr_get_FuncGroups("NRS", "Zooplankton")
+pr_plot_PieFG(df)
+
+# Save to file
+df <- pr_get_FuncGroups("CPR", "Zooplankton")
+p <- pr_plot_PieFG(df)
+ggplot2::ggsave("functional_groups_pie.png", p, width = 8, height = 6)
+
+}
+\seealso{
+\itemize{
+\item \code{\link[=pr_get_FuncGroups]{pr_get_FuncGroups()}} to generate input data
+\item \code{\link[=pr_plot_tsfg]{pr_plot_tsfg()}} for time series of functional group composition
+}
 }

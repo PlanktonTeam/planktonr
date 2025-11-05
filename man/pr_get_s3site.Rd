@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{pr_get_s3site}
 \alias{pr_get_s3site}
-\title{Get location of s3 plankton data}
+\title{Get IMOS S3 bucket URL for internal plankton data storage}
 \usage{
 pr_get_s3site()
 }
