@@ -17,8 +17,8 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
   )
 
   assertthat::assert_that(
-    Survey %in% c("NRS", "CPR", "LTM"),
-    msg = "'Survey' must be one of 'NRS', 'CPR', or 'LTM'."
+    Survey %in% c("NRS", "CPR", "LTM", "SOTS"),
+    msg = "'Survey' must be one of 'NRS', 'CPR', 'SOTS' or 'LTM'."
   )
 
   if(Survey == "CPR") {
