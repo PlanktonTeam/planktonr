@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Analysis and visualisation of plankton data • planktonr</title>
+<title>Analysis and Visualisation of Plankton Data • planktonr</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="Analysis and visualisation of plankton data">
-<meta property="og:description" content="planktonr is an r package that facilitates the download, analysis and visualisation of phytoplankton and zooplankton data. Our initial focus will be on plankton data stored on the Australian Ocean Data Network ([AODN](https://portal.aodn.org.au)) and collected by the Integrated Marine Observing System ([IMOS](www.imos.org.au)), but we hope to expand to other plankton data sets in the future.">
+<script src="pkgdown.js"></script><meta property="og:title" content="Analysis and Visualisation of Plankton Data">
+<meta property="og:description" content="Facilitates access, analysis, and visualisation of phytoplankton, zooplankton, and biogeochemical data from the Integrated Marine Observing System (IMOS). Provides functions to download data from the Australian Ocean Data Network (AODN), calculate ecological indices, perform trend analysis, and create publication-ready visualisations. Primary data sources include the National Reference Stations (NRS) network, Continuous Plankton Recorder (CPR) survey, and Southern Ocean Time Series (SOTS).">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -98,15 +98,117 @@
 </h1></div>
 <!-- badges: start -->
 
-<p><code>planktonr</code> is an r package that facilitates the download, analysis and visualisation of phytoplankton and zooplankton data. Our initial focus will be on plankton data stored on the Australian Ocean Data Network (<a href="https://portal.aodn.org.au" class="external-link">AODN</a>) and collected by the Integrated Marine Observing System (<a href="www.imos.org.au">IMOS</a>), but we hope to expand to other plankton data sets in the future.</p>
+<p><code>planktonr</code> is an R package that facilitates the download, analysis, and visualisation of phytoplankton and zooplankton data. The package primarily focuses on plankton data from the Australian Ocean Data Network (<a href="https://portal.aodn.org.au" class="external-link">AODN</a>) collected by the Integrated Marine Observing System (<a href="https://www.imos.org.au" class="external-link">IMOS</a>), including:</p>
+<ul>
+<li>
+<strong>National Reference Stations (NRS)</strong> - Coastal monitoring stations with monthly sampling</li>
+<li>
+<strong>Continuous Plankton Recorder (CPR)</strong> - Ship-based transect sampling across ocean basins<br>
+</li>
+<li>
+<strong>Southern Ocean Time Series (SOTS)</strong> - Deep ocean mooring south of Tasmania</li>
+</ul>
+<p>The package provides access to phytoplankton, zooplankton, larval fish, and biogeochemical data, along with tools for trend analysis, biodiversity assessment, and data visualisation.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>Be aware that this package is in the very early stages of development. Functions and documentation are not complete so installing at the moment is at your own risk. If you are still interested, you can install the development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<p>The package is under active development. You can install the development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"PlanktonTeam/planktonr"</span><span class="op">)</span></span></code></pre></div>
-<p>Thanks to the team at the Integration and Application Network (ian.umces.edu/media-library) for the plankton symbols used in the planktonr hex sticker.</p>
+<p>Some optional features require additional packages:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># For satellite data access</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"thredds"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># For parallel processing (speeds up large data downloads)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"future"</span>, <span class="st">"furrr"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># For community analysis functions</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"vegan"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="quick-start">Quick Start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
+</h2>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PlanktonTeam/planktonr" class="external-link">planktonr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Get zooplankton biomass from NRS stations</span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/pr_get_Indices.html">pr_get_Indices</a></span><span class="op">(</span><span class="st">"NRS"</span>, <span class="st">"Zooplankton"</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Parameters</span> <span class="op">==</span> <span class="st">"Biomass_mgm3"</span>, </span>
+<span>         <span class="va">StationCode</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"MAI"</span>, <span class="st">"PHB"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Plot time series</span></span>
+<span><span class="fu"><a href="reference/pr_plot_TimeSeries.html">pr_plot_TimeSeries</a></span><span class="op">(</span><span class="va">df</span>, trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Examine long-term trends</span></span>
+<span><span class="fu"><a href="reference/pr_plot_Trends.html">pr_plot_Trends</a></span><span class="op">(</span><span class="va">df</span>, Trend <span class="op">=</span> <span class="st">"Raw"</span>, method <span class="op">=</span> <span class="st">"lm"</span>, trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Look at seasonal patterns</span></span>
+<span><span class="fu"><a href="reference/pr_plot_Trends.html">pr_plot_Trends</a></span><span class="op">(</span><span class="va">df</span>, Trend <span class="op">=</span> <span class="st">"Month"</span>, method <span class="op">=</span> <span class="st">"loess"</span>, trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="key-features">Key Features<a class="anchor" aria-label="anchor" href="#key-features"></a>
+</h2>
+<div class="section level3">
+<h3 id="data-access">Data Access<a class="anchor" aria-label="anchor" href="#data-access"></a>
+</h3>
+<ul>
+<li>
+<strong><code><a href="reference/pr_get_NRSData.html">pr_get_NRSData()</a></code></strong> - Raw taxonomic data from NRS stations</li>
+<li>
+<strong><code><a href="reference/pr_get_CPRData.html">pr_get_CPRData()</a></code></strong> - Raw taxonomic data from CPR surveys</li>
+<li>
+<strong><code><a href="reference/pr_get_Indices.html">pr_get_Indices()</a></code></strong> - Pre-calculated ecological indices (biomass, diversity, abundance)</li>
+<li>
+<strong><code><a href="reference/pr_get_FuncGroups.html">pr_get_FuncGroups()</a></code></strong> - Functional group abundance (diatoms, copepods, etc.)</li>
+<li>
+<strong><code><a href="reference/pr_get_NRSChemistry.html">pr_get_NRSChemistry()</a></code></strong> - Nutrient and carbon chemistry data</li>
+<li>
+<strong><code><a href="reference/pr_get_NRSPigments.html">pr_get_NRSPigments()</a></code></strong> - Photosynthetic pigment concentrations</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="visualisation">Visualisation<a class="anchor" aria-label="anchor" href="#visualisation"></a>
+</h3>
+<ul>
+<li>
+<strong><code><a href="reference/pr_plot_TimeSeries.html">pr_plot_TimeSeries()</a></code></strong> - Basic time series plots</li>
+<li>
+<strong><code><a href="reference/pr_plot_Trends.html">pr_plot_Trends()</a></code></strong> - Time series with fitted trend lines</li>
+<li>
+<strong><code><a href="reference/pr_plot_Climatology.html">pr_plot_Climatology()</a></code></strong> - Seasonal and annual climatologies</li>
+<li>
+<strong><code><a href="reference/pr_plot_tsfg.html">pr_plot_tsfg()</a></code></strong> - Functional group composition over time</li>
+<li>
+<strong><code><a href="reference/pr_plot_EOVs.html">pr_plot_EOVs()</a></code></strong> - Essential Ocean Variable plots for reporting</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="analysis">Analysis<a class="anchor" aria-label="anchor" href="#analysis"></a>
+</h3>
+<ul>
+<li>
+<strong><code><a href="reference/pr_remove_outliers.html">pr_remove_outliers()</a></code></strong> - Statistical outlier detection and removal</li>
+<li>
+<strong><code><a href="reference/pr_add_Bioregions.html">pr_add_Bioregions()</a></code></strong> - Assign samples to Australian marine bioregions</li>
+<li>
+<strong><code><a href="reference/pr_filter_data.html">pr_filter_data()</a></code></strong> - Helper for filtering datasets for analysis</li>
+</ul>
+</div>
+</div>
+<div class="section level2">
+<h2 id="learn-more">Learn More<a class="anchor" aria-label="anchor" href="#learn-more"></a>
+</h2>
+<p>See the package vignettes for detailed examples: * <code><a href="articles/planktonr.html">vignette("planktonr")</a></code> - Overview and sampling frequency maps * <code><a href="articles/EssentialOceanVariables.html">vignette("EssentialOceanVariables")</a></code> - EOV analysis and reporting * <code><a href="articles/Phytoplankton.html">vignette("Phytoplankton")</a></code> - Phytoplankton data analysis examples * <code><a href="articles/Zooplankton.html">vignette("Zooplankton")</a></code> - Zooplankton data analysis examples * <code><a href="articles/Biogeochemistry.html">vignette("Biogeochemistry")</a></code> - Nutrient and pigment data * <code><a href="articles/LarvalFish.html">vignette("LarvalFish")</a></code> - Larval fish distribution data</p>
+</div>
+<div class="section level2">
+<h2 id="acknowledgements">Acknowledgements<a class="anchor" aria-label="anchor" href="#acknowledgements"></a>
+</h2>
+<p>This package accesses data from the Integrated Marine Observing System (IMOS). IMOS is enabled by the National Collaborative Research Infrastructure Strategy (NCRIS) and is supported by the Australian Government.</p>
+<p>Thanks to the Integration and Application Network (<a href="https://ian.umces.edu/media-library" class="external-link">ian.umces.edu/media-library</a>) for the plankton symbols used in the planktonr hex sticker.</p>
 </div>
 </div>
   </div>

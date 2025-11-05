@@ -1,5 +1,5 @@
 
-#' Get data for frequency map plots
+#' Prepare species occurrence data for frequency mapping
 #'
 #' @param Type Phytoplankton (P) or Zooplankton (Z), defaults to phyto
 #'
@@ -75,7 +75,7 @@ pr_get_FreqMap <- function(Type = "Zooplankton"){
 
 
 
-#' Data for IMOS progress map
+#' Prepare sampling coverage data for IMOS progress map visualisation
 #'
 #' @param Survey one of NRS, CPR or Both
 #' @param interactive A logical TRUE/FALSE if the data is to be used for an interactive plot.

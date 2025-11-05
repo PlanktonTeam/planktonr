@@ -2,7 +2,7 @@
 % Please edit documentation in R/pr_rename.R
 \name{pr_rename}
 \alias{pr_rename}
-\title{Rename variables within dataframe}
+\title{Standardise column names in IMOS plankton dataframes}
 \usage{
 pr_rename(df)
 }
@@ -13,7 +13,7 @@ pr_rename(df)
 Dataframe with new column names
 }
 \description{
-Rename variables within dataframe
+Standardise column names in IMOS plankton dataframes
 }
 \examples{
 df <- data.frame(LATITUDE = -32, LONGITUDE = 160) \%>\%

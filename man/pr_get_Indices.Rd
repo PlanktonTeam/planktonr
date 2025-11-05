@@ -2,27 +2,134 @@
 % Please edit documentation in R/utils_indices.R
 \name{pr_get_Indices}
 \alias{pr_get_Indices}
-\title{Access data for timeseries and climatology plots}
+\title{Access derived ecological indices for timeseries and climatology plots}
 \usage{
 pr_get_Indices(Survey = "CPR", Type = "Phytoplankton", ...)
 }
 \arguments{
-\item{Survey}{CPR or NRS, defaults to NRS}
+\item{Survey}{Survey type:
+\itemize{
+\item \code{"NRS"} - National Reference Stations (coastal fixed-point stations)
+\item \code{"CPR"} - Continuous Plankton Recorder (ship-based transects)
+\item \code{"SOTS"} - Southern Ocean Time Series (calculated from NRS data for SOTS station)
+}}
 
-\item{Type}{Phyto, zoo or physical water props, defaults to phyto}
+\item{Type}{Data type:
+\itemize{
+\item \code{"Phytoplankton"} - Phytoplankton community indices
+\item \code{"Zooplankton"} - Zooplankton community indices
+\item \code{"Water"} - Physical and chemical water properties
+}}
 
-\item{...}{variables to be passed to pr_add_Bioregions. At the moment it only supports \code{near_dist_km} which is the distance (km) around each bioregion to pad the allocation of points.}
+\item{...}{Additional variables passed to \code{\link[=pr_add_Bioregions]{pr_add_Bioregions()}}. Currently supports:
+\itemize{
+\item \code{near_dist_km} - Distance in kilometres around each bioregion boundary to pad
+the allocation of CPR samples to bioregions (useful for samples near boundaries)
+}}
 }
 \value{
-dataframe to use in pr_plot functions
+A dataframe in long format with columns:
+\itemize{
+\item For NRS: \code{StationCode}, \code{StationName}, \code{SampleTime_Local}, \code{Latitude}, \code{Longitude}
+\item For CPR: \code{BioRegion}, \code{SampleTime_Local}, \code{Latitude}, \code{Longitude}
+\item Common: \code{Year_Local}, \code{Month_Local}, \code{Parameters} (index name), \code{Values} (index value)
+}
 }
 \description{
-Access data for timeseries and climatology plots
+Get pre-calculated ecological indices and summary statistics from IMOS plankton
+data. These indices include biodiversity metrics (Shannon diversity, evenness),
+biomass estimates, abundance measures, and community structure indicators.
+}
+\details{
+\subsection{Available Parameters by Survey and Type}{
+\subsection{NRS Zooplankton:}{
+\itemize{
+\item \code{Biomass_mgm3} - Total zooplankton biomass (mg/m³)
+\item \code{AshFreeBiomass_mgm3} - Ash-free dry weight biomass (mg/m³)
+\item \code{ZoopAbundance_m3} - Total zooplankton abundance (individuals/m³)
+\item \code{CopeAbundance_m3} - Copepod abundance (individuals/m³)
+\item \code{AvgTotalLengthCopepod_mm} - Mean copepod body length (mm)
+\item \code{OmnivoreCarnivoreCopepodRatio} - Ratio of omnivorous/carnivorous to total copepods
+\item \code{NoCopepodSpecies_Sample} - Number of copepod species per sample
+\item \code{ShannonCopepodDiversity} - Shannon diversity index for copepods
+\item \code{CopepodEvenness} - Pielou's evenness for copepods
+}
+}
+
+\subsection{CPR Zooplankton:}{
+\itemize{
+\item \code{BiomassIndex_mgm3} - Zooplankton biomass index (mg/m³)
+\item \code{ZoopAbundance_m3}, \code{CopeAbundance_m3}, \code{AvgTotalLengthCopepod_mm},
+\code{OmnivoreCarnivoreCopepodRatio}, \code{NoCopepodSpecies_Sample},
+\code{ShannonCopepodDiversity}, \code{CopepodEvenness} (as above)
+}
+}
+
+\subsection{NRS Phytoplankton:}{
+\itemize{
+\item \code{PhytoBiomassCarbon_pgL} - Phytoplankton carbon biomass (pg/L)
+\item \code{PhytoAbundance_CellsL} - Phytoplankton abundance (cells/L)
+\item \code{DiatomDinoflagellateRatio} - Ratio of diatoms to diatoms+dinoflagellates
+\item \code{AvgCellVol_um3} - Mean cell volume (µm³)
+\item \code{NoPhytoSpecies_Sample} - Number of phytoplankton species per sample
+\item \code{ShannonPhytoDiversity} - Shannon diversity index for phytoplankton
+\item \code{PhytoEvenness} - Pielou's evenness for phytoplankton
+\item Plus diversity metrics for diatoms and dinoflagellates separately
+}
+}
+
+\subsection{CPR Phytoplankton:}{
+\itemize{
+\item \code{PCI} - Phytoplankton Colour Index (visual estimate of phytoplankton biomass)
+\item \code{PhytoBiomassCarbon_pgm3} - Carbon biomass (pg/m³)
+\item \code{PhytoAbundance_Cellsm3} - Abundance (cells/m³)
+\item Plus similar metrics as NRS phytoplankton
+}
+}
+
+\subsection{NRS Water:}{
+\itemize{
+\item \code{Secchi_m} - Secchi depth (m)
+\item \code{MLDtemp_m} - Mixed layer depth from temperature (m)
+\item \code{MLDsal_m} - Mixed layer depth from salinity (m)
+\item \code{DCM_m} - Deep chlorophyll maximum depth (m)
+\item \code{CTDTemperature_degC} - Mean temperature in top 10m (°C)
+\item \code{CTDSalinity_PSU} - Mean salinity in top 10m (PSU)
+\item \code{CTDChlaF_mgm3} - Mean chlorophyll fluorescence in top 10m (mg/m³)
+}
+}
+
+\subsection{CPR Water:}{
+\itemize{
+\item \code{PCI} - Phytoplankton Colour Index
+}
+}
+
+}
+
+\subsection{SOTS Data}{
+
+For SOTS (Southern Ocean Time Series), phytoplankton indices are calculated
+from raw NRS data as they are not provided directly by AODN. Only samples
+from the LM (Light Microscopy) method at depths <50m are included.
+}
 }
 \examples{
+# Get NRS phytoplankton indices
 df <- pr_get_Indices("NRS", "Phytoplankton")
-df <- pr_get_Indices("NRS", "Zooplankton")
+unique(df$Parameters)
+
+# Get CPR zooplankton indices with expanded bioregion boundaries
+df <- pr_get_Indices("CPR", "Zooplankton", near_dist_km = 250)
+
+# Get water properties from NRS
 df <- pr_get_Indices("NRS", "Water")
-df <- pr_get_Indices("CPR", "Phytoplankton", near_dist_km = 250)
-df <- pr_get_Indices("CPR", "Zooplankton")
+
+# Filter for specific parameter and stations
+df <- pr_get_Indices("NRS", "Zooplankton") \%>\%
+  pr_filter_data("Biomass_mgm3", c("MAI", "PHB"))
+}
+\seealso{
+\code{\link[=pr_filter_data]{pr_filter_data()}} to filter the output for specific parameters and stations,
+\code{\link[=pr_plot_Trends]{pr_plot_Trends()}}, \code{\link[=pr_plot_TimeSeries]{pr_plot_TimeSeries()}}, \code{\link[=pr_plot_Climatology]{pr_plot_Climatology()}} for visualisation
 }

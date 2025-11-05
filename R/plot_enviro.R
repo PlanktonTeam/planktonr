@@ -1,14 +1,72 @@
 
-#' Combined timeseries and climatology plots for environmental variables
+#' Plot environmental data with depth profiles
 #'
-#' @param df A dataframe from pr_get_nuts or pr_get_pigments
-#' @param Trend Trend line to be used, options None, Smoother, Linear
-#' @param trans scale on which to plot y axis
+#' Create a two-panel figure showing environmental variables (nutrients, pigments,
+#' picophytoplankton) as both time series and climatology plots, with separate lines
+#' for different sampling depths. This is useful for visualising vertical structure
+#' and temporal patterns in water column properties.
 #'
-#' @return A plot with timeseries and climatology at depths
+#' @param df A dataframe from [pr_get_NRSChemistry()], [pr_get_NRSPigments()],
+#'   or [pr_get_NRSPico()] containing environmental data with depth information
+#' @param Trend Type of trend line to add:
+#'   * `"None"` - No trend line
+#'   * `"Smoother"` - LOESS smooth (default, good for non-linear patterns)
+#'   * `"Linear"` - Linear regression line
+#' @param trans Transformation for the y-axis scale:
+#'   * `"identity"` - No transformation (default)
+#'   * `"log10"` - Log base 10 transformation (useful for pigments, nutrients)
+#'   * `"sqrt"` - Square root transformation
+#'   * Any other transformation accepted by [ggplot2::scale_y_continuous()]
+#'
+#' @details
+#' This function creates a two-panel figure:
+#'
+#' ## Panel 1: Time Series (left, wider)
+#' Shows the full time series with different colours/line types for each depth.
+#' Useful for identifying:
+#' * Long-term trends at different depths
+#' * Episodic events (e.g., upwelling, mixing)
+#' * Vertical stratification patterns
+#' * Deep chlorophyll maximum dynamics
+#'
+#' ## Panel 2: Monthly Climatology (right, narrower)
+#' Shows the mean seasonal cycle at each depth. Useful for identifying:
+#' * Typical seasonal patterns (e.g., spring bloom, summer stratification)
+#' * Depth of maximum values by season
+#' * Seasonal vertical migration of features
+#'
+#' The function automatically rounds depth values and creates appropriate legends.
+#' Use [pr_remove_outliers()] before plotting if extreme values are present.
+#'
+#' @return A patchwork object containing two ggplot2 panels side-by-side
+#'
+#' @seealso [pr_get_NRSChemistry()] for nutrient data,
+#'   [pr_get_NRSPigments()] for pigment data,
+#'   [pr_get_NRSPico()] for picophytoplankton data,
+#'   [pr_plot_NRSEnvContour()] for contour plot visualisation
+#'
 #' @export
 #'
 #' @examples
+#' # Plot total chlorophyll a with depth
+#' df <- pr_get_NRSPigments(Format = "binned") %>%
+#'   pr_remove_outliers(2) %>%
+#'   dplyr::filter(Parameters == "TotalChla",
+#'                 StationCode %in% c("NSI", "MAI"))
+#' pr_plot_Enviro(df, Trend = "Smoother", trans = "log10")
+#'
+#' # Plot nitrate concentrations
+#' df <- pr_get_NRSChemistry() %>%
+#'   dplyr::filter(Parameters == "Nitrate_umolL",
+#'                 StationCode == "PHB")
+#' pr_plot_Enviro(df, Trend = "Linear", trans = "identity")
+#'
+#' # Plot Prochlorococcus abundance
+#' df <- pr_get_NRSPico() %>%
+#'   dplyr::filter(Parameters == "Prochlorococcus_cellsmL",
+#'                 StationCode == "NSI")
+#' pr_plot_Enviro(df, Trend = "Smoother", trans = "log10")
+#'
 #' df <- pr_get_NRSChemistry() %>% dplyr::filter(Parameters == "SecchiDepth_m",
 #' StationCode %in% c('PHB', 'NSI'))
 #' pr_plot_Enviro(df)
@@ -113,12 +171,50 @@ pr_plot_Enviro <- function(df, Trend = "None", trans = "identity") {
 }
 
 
-#' Contour plots for depth stratified environmental data
+#' Plot environmental contours showing depth-time patterns
 #'
-#' @param df dataframe from pr_get_NRSEnvContour
-#' @param na.fill TRUE, FALSE or function like mean to fill in gaps in data
+#' Create contour plots showing how environmental variables change with both time
+#' (x-axis) and depth (y-axis). This visualisation is particularly effective for
+#' identifying vertical structure, stratification, and the deep chlorophyll maximum.
 #'
-#' @return a contour plot
+#' @param df A dataframe from [pr_get_NRSEnvContour()] containing environmental
+#'   data formatted for contour plotting
+#' @param na.fill How to handle missing data (gaps) in the contour:
+#'   * `TRUE` - Fill gaps using linear interpolation (default, creates smoother contours)
+#'   * `FALSE` - Leave gaps as-is (shows only measured data)
+#'   * A function - Use custom interpolation (e.g., `mean`, `median`)
+#'
+#' @details
+#' Contour plots are excellent for visualising:
+#'
+#' ## Vertical Structure
+#' * Deep chlorophyll maximum (DCM) depth and intensity
+#' * Nutricline depth and strength
+#' * Stratification patterns (steep vs. gradual gradients)
+#' * Surface vs. subsurface maxima
+#'
+#' ## Temporal Patterns
+#' * Seasonal shoaling/deepening of features
+#' * Upwelling events (nutrient-rich water at surface)
+#' * Mixing events (homogenisation of the water column)
+#' * Long-term changes in vertical structure
+#'
+#' ## Gap Filling
+#' When `na.fill = TRUE`, the function uses `metR::geom_contour_fill()` with
+#' linear interpolation to create smooth contours. This is appropriate for
+#' environmental data with regular sampling patterns and small gaps. For irregular
+#' sampling or large gaps, consider setting `na.fill = FALSE` to show only measured
+#' data.
+#'
+#' The function automatically creates one facet per station and parameter combination.
+#' Contours are filled with a colour scale, and contour lines are overlaid in grey.
+#'
+#' @return A ggplot2 object with contour plots faceted by station and parameter
+#'
+#' @seealso [pr_get_NRSEnvContour()] for preparing the input data,
+#'   [pr_plot_Enviro()] for alternative line plot visualisation,
+#'   [pr_get_NRSChemistry()], [pr_get_NRSPigments()], [pr_get_NRSPico()] for data sources
+#'
 #' @export
 #'
 #' @examples

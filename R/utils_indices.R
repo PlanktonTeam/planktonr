@@ -1,18 +1,98 @@
-#' Access data for timeseries and climatology plots
+#' Access derived ecological indices for timeseries and climatology plots
 #'
-#' @param Survey CPR or NRS, defaults to NRS
-#' @param Type Phyto, zoo or physical water props, defaults to phyto
-#' @param ... variables to be passed to pr_add_Bioregions. At the moment it only supports `near_dist_km` which is the distance (km) around each bioregion to pad the allocation of points.
+#' Get pre-calculated ecological indices and summary statistics from IMOS plankton 
+#' data. These indices include biodiversity metrics (Shannon diversity, evenness), 
+#' biomass estimates, abundance measures, and community structure indicators.
 #'
-#' @return dataframe to use in pr_plot functions
+#' @param Survey Survey type:
+#'   * `"NRS"` - National Reference Stations (coastal fixed-point stations)
+#'   * `"CPR"` - Continuous Plankton Recorder (ship-based transects)
+#'   * `"SOTS"` - Southern Ocean Time Series (calculated from NRS data for SOTS station)
+#' @param Type Data type:
+#'   * `"Phytoplankton"` - Phytoplankton community indices
+#'   * `"Zooplankton"` - Zooplankton community indices  
+#'   * `"Water"` - Physical and chemical water properties
+#' @param ... Additional variables passed to [pr_add_Bioregions()]. Currently supports:
+#'   * `near_dist_km` - Distance in kilometres around each bioregion boundary to pad 
+#'     the allocation of CPR samples to bioregions (useful for samples near boundaries)
+#'
+#' @details
+#' ## Available Parameters by Survey and Type
+#' 
+#' ### NRS Zooplankton:
+#' * `Biomass_mgm3` - Total zooplankton biomass (mg/m³)
+#' * `AshFreeBiomass_mgm3` - Ash-free dry weight biomass (mg/m³)
+#' * `ZoopAbundance_m3` - Total zooplankton abundance (individuals/m³)
+#' * `CopeAbundance_m3` - Copepod abundance (individuals/m³)
+#' * `AvgTotalLengthCopepod_mm` - Mean copepod body length (mm)
+#' * `OmnivoreCarnivoreCopepodRatio` - Ratio of omnivorous/carnivorous to total copepods
+#' * `NoCopepodSpecies_Sample` - Number of copepod species per sample
+#' * `ShannonCopepodDiversity` - Shannon diversity index for copepods
+#' * `CopepodEvenness` - Pielou's evenness for copepods
+#' 
+#' ### CPR Zooplankton:
+#' * `BiomassIndex_mgm3` - Zooplankton biomass index (mg/m³)
+#' * `ZoopAbundance_m3`, `CopeAbundance_m3`, `AvgTotalLengthCopepod_mm`,
+#'   `OmnivoreCarnivoreCopepodRatio`, `NoCopepodSpecies_Sample`, 
+#'   `ShannonCopepodDiversity`, `CopepodEvenness` (as above)
+#' 
+#' ### NRS Phytoplankton:
+#' * `PhytoBiomassCarbon_pgL` - Phytoplankton carbon biomass (pg/L)
+#' * `PhytoAbundance_CellsL` - Phytoplankton abundance (cells/L)
+#' * `DiatomDinoflagellateRatio` - Ratio of diatoms to diatoms+dinoflagellates
+#' * `AvgCellVol_um3` - Mean cell volume (µm³)
+#' * `NoPhytoSpecies_Sample` - Number of phytoplankton species per sample
+#' * `ShannonPhytoDiversity` - Shannon diversity index for phytoplankton
+#' * `PhytoEvenness` - Pielou's evenness for phytoplankton
+#' * Plus diversity metrics for diatoms and dinoflagellates separately
+#' 
+#' ### CPR Phytoplankton:
+#' * `PCI` - Phytoplankton Colour Index (visual estimate of phytoplankton biomass)
+#' * `PhytoBiomassCarbon_pgm3` - Carbon biomass (pg/m³)
+#' * `PhytoAbundance_Cellsm3` - Abundance (cells/m³)
+#' * Plus similar metrics as NRS phytoplankton
+#' 
+#' ### NRS Water:
+#' * `Secchi_m` - Secchi depth (m)
+#' * `MLDtemp_m` - Mixed layer depth from temperature (m)
+#' * `MLDsal_m` - Mixed layer depth from salinity (m)
+#' * `DCM_m` - Deep chlorophyll maximum depth (m)
+#' * `CTDTemperature_degC` - Mean temperature in top 10m (°C)
+#' * `CTDSalinity_PSU` - Mean salinity in top 10m (PSU)
+#' * `CTDChlaF_mgm3` - Mean chlorophyll fluorescence in top 10m (mg/m³)
+#' 
+#' ### CPR Water:
+#' * `PCI` - Phytoplankton Colour Index
+#' 
+#' ## SOTS Data
+#' For SOTS (Southern Ocean Time Series), phytoplankton indices are calculated 
+#' from raw NRS data as they are not provided directly by AODN. Only samples 
+#' from the LM (Light Microscopy) method at depths <50m are included.
+#'
+#' @return A dataframe in long format with columns:
+#' * For NRS: `StationCode`, `StationName`, `SampleTime_Local`, `Latitude`, `Longitude`
+#' * For CPR: `BioRegion`, `SampleTime_Local`, `Latitude`, `Longitude`
+#' * Common: `Year_Local`, `Month_Local`, `Parameters` (index name), `Values` (index value)
+#' 
+#' @seealso [pr_filter_data()] to filter the output for specific parameters and stations,
+#'   [pr_plot_Trends()], [pr_plot_TimeSeries()], [pr_plot_Climatology()] for visualisation
+#' 
 #' @export
 #'
 #' @examples
+#' # Get NRS phytoplankton indices
 #' df <- pr_get_Indices("NRS", "Phytoplankton")
-#' df <- pr_get_Indices("NRS", "Zooplankton")
+#' unique(df$Parameters)
+#' 
+#' # Get CPR zooplankton indices with expanded bioregion boundaries
+#' df <- pr_get_Indices("CPR", "Zooplankton", near_dist_km = 250)
+#' 
+#' # Get water properties from NRS
 #' df <- pr_get_Indices("NRS", "Water")
-#' df <- pr_get_Indices("CPR", "Phytoplankton", near_dist_km = 250)
-#' df <- pr_get_Indices("CPR", "Zooplankton")
+#' 
+#' # Filter for specific parameter and stations
+#' df <- pr_get_Indices("NRS", "Zooplankton") %>%
+#'   pr_filter_data("Biomass_mgm3", c("MAI", "PHB"))
 pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
 
   # Input validation
@@ -162,18 +242,65 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
 
 #' Filter data for plotting functions
 #'
-#' @param df dataframe from pr_get_indices
-#' @param Parameter parameter(s) to be filtered on
-#' @param StationRegion StationCode(s) or BioRegion(s) to be filtered on
+#' Filter plankton data by parameter and location
 #'
-#' @return prefiltered data frame for pr_plot_trends, ts, climate
+#' Convenience function to filter index data to specific parameters and locations 
+#' before plotting or analysis. Automatically detects whether data uses station 
+#' codes (NRS) or bioregions (CPR) and filters accordingly.
+#'
+#' @param df A dataframe from [pr_get_Indices()], [pr_get_EOVs()], or similar 
+#'   functions
+#' @param Parameter Character string or vector of parameter names to retain. 
+#'   Common parameters include:
+#'   * **Biomass**: `"Biomass_mgm3"`, `"BiomassIndex_mgm3"`, `"PhytoBiomassCarbon_pgL"`
+#'   * **Abundance**: `"Abundance_m3"`, `"AbundanceIndex_Samplekm"`, `"TotalCopepodAbundance_m3"`
+#'   * **Diversity**: `"ShannonDiversity"`, `"TotalTaxa_Sample"`, `"Richness"`
+#' @param StationRegion Character string or vector of locations to retain:
+#'   * **For NRS data**: Station codes like `"NSI"`, `"PHB"`, `"MAI"`, `"ROT"`, 
+#'     `"YON"`, `"DAR"`, `"KAI"`, `"ESP"`, `"NIN"`
+#'   * **For CPR data**: Bioregions like `"Temperate East"`, `"South-east"`, 
+#'     `"South-west"`, `"North-west"`, `"Coral Sea"`
+#'
+#' @details
+#' This function streamlines the common workflow of filtering data before creating 
+#' plots or running analyses. It:
+#' * Detects data type automatically (NRS vs CPR)
+#' * Filters on `Parameters` column to match `Parameter` argument
+#' * Filters on `StationCode` (NRS) or `BioRegion` (CPR) to match `StationRegion` argument
+#' * Validates inputs to catch common errors
+#' 
+#' ## When to Use
+#' Use this function when:
+#' * Creating plots for specific stations or regions
+#' * Comparing multiple parameters at the same location(s)
+#' * Preparing data for statistical analysis on a subset of locations
+#' 
+#' ## Multiple Selections
+#' Both `Parameter` and `StationRegion` accept vectors, enabling:
+#' * Multiple parameters at one station: `Parameter = c("Biomass_mgm3", "Abundance_m3"), StationRegion = "NSI"`
+#' * One parameter at multiple stations: `Parameter = "Biomass_mgm3", StationRegion = c("NSI", "PHB", "MAI")`
+#' * Multiple parameters at multiple stations: vectors for both arguments
+#'
+#' @return A filtered dataframe maintaining the same structure as input
+#' 
+#' @seealso 
+#' * [pr_get_Indices()] for loading data before filtering
+#' * [pr_plot_TimeSeries()], [pr_plot_Trends()], [pr_plot_Climatology()] for plotting filtered data
+#' 
 #' @export
 #'
 #' @examples
+#' # Filter CPR data to biomass in two bioregions
 #' df <- pr_get_Indices("CPR", "Zooplankton") %>%
-#'       pr_filter_data("BiomassIndex_mgm3", c("North", "South-west"))
+#'   pr_filter_data("BiomassIndex_mgm3", c("North", "South-west"))
+#'   
+#' # Filter NRS data to phytoplankton carbon at two stations
 #' df <- pr_get_Indices("NRS", "Phytoplankton") %>%
-#'       pr_filter_data("PhytoBiomassCarbon_pgL", c("NSI", "PHB"))
+#'   pr_filter_data("PhytoBiomassCarbon_pgL", c("NSI", "PHB"))
+#'   
+#' # Multiple parameters at one station
+#' df <- pr_get_Indices("NRS", "Zooplankton") %>%
+#'   pr_filter_data(c("Biomass_mgm3", "Abundance_m3", "ShannonDiversity"), "MAI")
 pr_filter_data <- function(df, Parameter = "Biomass_mgm3", StationRegion = "NSI"){
 
   # Input validation

@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_plankton.R
 \name{pr_get_CTI}
 \alias{pr_get_CTI}
-\title{Get CTI for sample}
+\title{Calculate Community Temperature Index (CTI) for plankton samples}
 \usage{
 pr_get_CTI(Type = "Zooplankton")
 }
@@ -13,7 +13,7 @@ pr_get_CTI(Type = "Zooplankton")
 df of CTI for each sample
 }
 \description{
-Get CTI for sample
+Calculate Community Temperature Index (CTI) for plankton samples
 }
 \examples{
 df <- pr_get_CTI("Phytoplankton")

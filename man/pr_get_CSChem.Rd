@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_bgc.R
 \name{pr_get_CSChem}
 \alias{pr_get_CSChem}
-\title{Load chemistry data}
+\title{Load Coastal Seas chemistry and nutrient data}
 \usage{
 pr_get_CSChem()
 }
@@ -10,7 +10,7 @@ pr_get_CSChem()
 A dataframe with NRS chemistry data
 }
 \description{
-Load chemistry data
+Load Coastal Seas chemistry and nutrient data
 }
 \examples{
 df <- pr_get_CSChem()

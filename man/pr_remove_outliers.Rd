@@ -2,21 +2,81 @@
 % Please edit documentation in R/utils.R
 \name{pr_remove_outliers}
 \alias{pr_remove_outliers}
-\title{Removing outliers from data}
+\title{Remove statistical outliers from plankton data}
 \usage{
 pr_remove_outliers(df, x)
 }
 \arguments{
-\item{df}{data frame with Parameters, Values and StationCode or BioRegion}
+\item{df}{A dataframe from \code{\link[=pr_get_Indices]{pr_get_Indices()}}, \code{\link[=pr_get_EOVs]{pr_get_EOVs()}}, or similar
+functions containing plankton data}
 
-\item{x}{no of sd from mean to remove}
+\item{x}{Number of standard deviations from the mean to use as the threshold.
+Typical values are:
+\itemize{
+\item \code{2} - Removes extreme outliers (~5\% of data if normally distributed)
+\item \code{3} - More conservative, removes only very extreme values (~0.3\%)
+\item \code{1.5} - More aggressive, removes more data
+}}
 }
 \value{
-df
+A dataframe with outliers removed, maintaining the same structure as input
 }
 \description{
-Removing outliers from data
+Identify and remove outliers using a threshold based on standard deviations
+from the mean. Outliers are determined separately for each combination of
+parameter, location (station or bioregion), and depth.
+}
+\details{
+The function calculates outlier thresholds for each combination of:
+\itemize{
+\item Parameter (e.g., biomass, diversity)
+\item Location (station code or bioregion)
+\item Depth (if present in data)
+}
+
+Values outside the range \verb{mean ± (x × SD)} are removed. This approach:
+\itemize{
+\item Preserves natural variability while removing measurement errors
+\item Handles each parameter-location-depth combination independently
+\item Automatically converts negative values to zero (biological data should be non-negative)
+}
+\subsection{When to Use}{
+
+Use outlier removal when:
+\itemize{
+\item Data contain obvious measurement or transcription errors
+\item Preparing data for statistical modelling
+\item Creating publication figures
+}
+}
+
+\subsection{Caution}{
+\itemize{
+\item Real extreme events (e.g., blooms, upwelling) may be removed
+\item Always inspect data before and after removal
+\item Consider whether removed values represent true outliers or important biological events
+\item Document outlier removal in methods sections
+}
+
+Typically use \code{x = 2} as a reasonable balance between removing errors and
+preserving real variability.
+}
 }
 \examples{
-df <- pr_get_Indices("CPR", "Zooplankton") \%>\% pr_remove_outliers(2)
+# Remove outliers using 2 SD threshold (recommended)
+df <- pr_get_Indices("NRS", "Zooplankton") \%>\%
+  pr_remove_outliers(2)
+
+# More conservative removal (3 SD)
+df <- pr_get_Indices("CPR", "Phytoplankton") \%>\%
+  pr_remove_outliers(3)
+
+# Check how many values were removed
+df_before <- pr_get_EOVs("NRS") \%>\%
+  dplyr::filter(Parameters == "Biomass_mgm3")
+df_after <- df_before \%>\% pr_remove_outliers(2)
+nrow(df_before) - nrow(df_after)
+}
+\seealso{
+\code{\link[=pr_model_data]{pr_model_data()}} which typically follows outlier removal for trend analysis
 }

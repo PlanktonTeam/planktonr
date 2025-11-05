@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_policy.R
 \name{pr_get_PolicyInfo}
 \alias{pr_get_PolicyInfo}
-\title{Get policy information}
+\title{Load policy-relevant plankton indicators and Essential Ocean Variables}
 \usage{
 pr_get_PolicyInfo(Survey = "NRS", ...)
 }
@@ -15,7 +15,7 @@ pr_get_PolicyInfo(Survey = "NRS", ...)
 A dataframe with policy information
 }
 \description{
-Get policy information
+Load policy-relevant plankton indicators and Essential Ocean Variables
 }
 \examples{
 df <- pr_get_PolicyInfo("CPR")

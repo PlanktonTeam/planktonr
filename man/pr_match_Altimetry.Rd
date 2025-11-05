@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_sat.R
 \name{pr_match_Altimetry}
 \alias{pr_match_Altimetry}
-\title{Match data for altimetry}
+\title{Match plankton samples to satellite altimetry data (sea level, currents)}
 \usage{
 pr_match_Altimetry(df, pr, res_spat = 1)
 }
@@ -17,7 +17,7 @@ pr_match_Altimetry(df, pr, res_spat = 1)
 df with product output attached
 }
 \description{
-Match data for altimetry
+Match plankton samples to satellite altimetry data (sea level, currents)
 }
 \examples{
 df <- pr_get_DataLocs("NRS") \%>\%

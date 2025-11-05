@@ -1,16 +1,46 @@
 #' Import NRS Data
 #'
-#' Load NRS station Data
+#' Load National Reference Station (NRS) plankton data from the Integrated Marine 
+#' Observing System (IMOS). The NRS network consists of coastal monitoring stations 
+#' around Australia that collect plankton samples, typically on a monthly basis.
 #'
-#' @param Type The data of interest: Phytoplankton or Zooplankton
-#' @param Variable Variable options are: abundance or biovolume (phytoplankton only)
-#' @param Subset Data compilation. Full options are below.
+#' @param Type The data of interest: `"Phytoplankton"` or `"Zooplankton"`
+#' @param Variable Variable options are: 
+#'   * `"abundance"` - Cell or individual counts (available for both phytoplankton and zooplankton)
+#'   * `"biovolume"` - Cell biovolume in cubic micrometres (phytoplankton only)
+#' @param Subset Data compilation level: 
+#'   * `"raw"` - Raw taxonomic data as identified by analysts
+#'   * `"htg"` - Higher taxonomic groups (e.g., diatoms, dinoflagellates, copepods)
+#'   * `"genus"` - Data aggregated to genus level
+#'   * `"species"` - Data aggregated to species level
+#'   * `"copepods"` - Copepod data only (zooplankton only)
 #'
-#' @return A dataframe with requested plankton data in wide form
+#' @details
+#' NRS samples are collected from discrete depth samples using Niskin bottles 
+#' (phytoplankton) or vertical net tows (zooplankton). The data are returned in 
+#' wide format with taxa as columns and samples as rows.
+#' 
+#' Note: Biovolume data is only available for phytoplankton, as it is calculated 
+#' from cell measurements.
+#'
+#' @return A dataframe with requested plankton data in wide form. Each row represents 
+#' a sample and columns include metadata (station, date, depth) and taxon-specific 
+#' abundance or biovolume values.
+#' 
+#' @seealso [pr_get_CPRData()] for Continuous Plankton Recorder data,
+#'   [pr_get_Indices()] for derived ecological indices
+#' 
 #' @export
 #' @importFrom rlang .data
 #' @examples
+#' # Get raw phytoplankton abundance data
 #' df <- pr_get_NRSData(Type = "Phytoplankton", Variable = "abundance", Subset = "raw")
+#' 
+#' # Get zooplankton data at genus level
+#' df <- pr_get_NRSData(Type = "Zooplankton", Variable = "abundance", Subset = "genus")
+#' 
+#' # Get phytoplankton biovolume data
+#' df <- pr_get_NRSData(Type = "Phytoplankton", Variable = "biovolume", Subset = "species")
 #'
 pr_get_NRSData <- function(Type = "Phytoplankton", Variable = "abundance", Subset = "raw"){
 
@@ -96,13 +126,42 @@ pr_get_NRSData <- function(Type = "Phytoplankton", Variable = "abundance", Subse
 
 #' Import NRS Station information
 #'
-#' Load NRS station information including codes, location, and sampling interval.
+#' Load station metadata including station codes, names, geographic coordinates, 
+#' and sampling schedules for National Reference Stations and Southern Ocean 
+#' Time Series sites.
 #'
-#' @param Survey NRS is default, could be SOTS
-#' @return A dataframe with NRS Station information
+#' @param Survey Survey type:
+#'   * `"NRS"` - National Reference Stations (default) - includes all active and 
+#'     discontinued coastal monitoring stations
+#'   * `"SOTS"` - Southern Ocean Time Series mooring site south of Tasmania
+#' 
+#' @details
+#' The National Reference Stations (NRS) network consists of coastal mooring sites 
+#' around Australia. Most stations sample monthly, though Darwin samples quarterly 
+#' and some stations have discontinued sampling. The returned dataframe includes 
+#' station start dates, sampling frequencies, and geographic information.
+#' 
+#' Station codes include: DAR (Darwin), YON (Yongala), NSI (North Stradbroke Island), 
+#' PHB (Port Hacking), MAI (Maria Island), ROT (Rottnest Island), ESP (Esperance), 
+#' NIN (Ningaloo), and KAI (Kangaroo Island).
+#' 
+#' @return A dataframe with station information including:
+#'   * `StationCode` - Three-letter station code
+#'   * `StationName` - Full station name
+#'   * `Latitude`, `Longitude` - Geographic coordinates
+#'   * `StationStartDate` - Date sampling commenced
+#'   * Additional metadata about sampling schedule and location
+#' 
+#' @seealso [pr_get_NRSTrips()] for sampling trip metadata
+#' 
 #' @export
 #' @examples
+#' # Get all NRS station information
 #' df <- pr_get_Stations('NRS')
+#' 
+#' # Get SOTS station information
+#' df <- pr_get_Stations('SOTS')
+#' 
 #' @importFrom rlang .data
 pr_get_Stations <- function(Survey = 'NRS'){
   
@@ -128,13 +187,38 @@ pr_get_Stations <- function(Survey = 'NRS'){
 }
 
 
-#' Import NRS BGC information
+#' Import NRS sampling trip metadata
 #'
-#' Load NRS station BGC information
-#' @return A dataframe with NRS BGC information
+#' Load metadata for all National Reference Station sampling trips, including 
+#' dates, locations, and environmental conditions at the time of sampling.
+#' 
+#' @details
+#' Returns information about each NRS sampling trip (voyage), including the trip 
+#' code, station, date/time, and basic metadata. This is useful for understanding 
+#' sampling effort over time and for joining with other datasets.
+#' 
+#' Only NRS project trips are included (SOTS trips are excluded). Samples 
+#' designated as 'P' (plankton) samples or with no sample type designation are 
+#' included.
+#' 
+#' @return A dataframe with NRS trip information including:
+#'   * `TripCode` - Unique trip identifier
+#'   * `StationCode`, `StationName` - Station information
+#'   * `SampleTime_Local` - Local sampling date and time
+#'   * `Year_Local`, `Month_Local` - Temporal components
+#'   * `Latitude`, `Longitude` - Geographic coordinates
+#'   * Additional metadata fields
+#' 
+#' @seealso [pr_get_Stations()] for station-level metadata,
+#'   [pr_get_CPRTrips()] for CPR sampling trips
+#' 
 #' @export
 #' @examples
 #' df <- pr_get_NRSTrips()
+#' 
+#' # Examine sampling frequency by station
+#' table(df$StationName, df$Year_Local)
+#' 
 #' @importFrom rlang .data
 pr_get_NRSTrips <- function(){
 

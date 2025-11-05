@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_sat.R
 \name{pr_match_MODIS}
 \alias{pr_match_MODIS}
-\title{Match data for MODIS}
+\title{Match plankton samples to MODIS ocean colour data (chlorophyll, PAR, SST)}
 \usage{
 pr_match_MODIS(df, pr, res_spat = 1, res_temp = "1d")
 }
@@ -19,7 +19,7 @@ pr_match_MODIS(df, pr, res_spat = 1, res_temp = "1d")
 df with product output attached
 }
 \description{
-Match data for MODIS
+Match plankton samples to MODIS ocean colour data (chlorophyll, PAR, SST)
 }
 \examples{
 df <- head(pr_get_DataLocs("NRS"),5)

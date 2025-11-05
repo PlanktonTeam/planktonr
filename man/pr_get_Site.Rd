@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{pr_get_Site}
 \alias{pr_get_Site}
-\title{Get location of raw plankton data}
+\title{Get URL template for AODN GeoServer WFS plankton data access}
 \usage{
 pr_get_Site()
 }

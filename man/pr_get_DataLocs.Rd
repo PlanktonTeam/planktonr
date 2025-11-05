@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_sat.R
 \name{pr_get_DataLocs}
 \alias{pr_get_DataLocs}
-\title{Functions for matching location data to satellite products}
+\title{Extract sample locations and dates for satellite data matching}
 \usage{
 pr_get_DataLocs(Survey = "all")
 }

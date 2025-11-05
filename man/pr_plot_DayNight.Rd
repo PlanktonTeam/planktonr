@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_timeseries.R
 \name{pr_plot_DayNight}
 \alias{pr_plot_DayNight}
-\title{Plot of relative day and night abundances}
+\title{Visualise diel vertical migration patterns showing day vs night abundances}
 \usage{
 pr_plot_DayNight(df)
 }
@@ -13,7 +13,7 @@ pr_plot_DayNight(df)
 plot of relative day and night abundances
 }
 \description{
-Plot of relative day and night abundances
+Visualise diel vertical migration patterns showing day vs night abundances
 }
 \examples{
 df <- pr_get_DayNight()
