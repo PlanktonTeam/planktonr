@@ -131,7 +131,6 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
       dplyr::bind_rows(NutsSots)
 
     means <- Pol %>%
-      pr_remove_outliers(2) %>%
       dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
                        sd = stats::sd(.data$Values, na.rm = TRUE),
                        .by = tidyselect::all_of(c("StationName", "SampleDepth_m", "Parameters")))
