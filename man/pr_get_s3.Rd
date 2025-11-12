@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{pr_get_s3}
 \alias{pr_get_s3}
-\title{Download Raw Data from IMOS}
+\title{Download raw data files from IMOS internal S3 storage (advanced users)}
 \usage{
 pr_get_s3(file)
 }

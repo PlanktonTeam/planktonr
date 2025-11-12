@@ -7,21 +7,80 @@
 pr_filter_data(df, Parameter = "Biomass_mgm3", StationRegion = "NSI")
 }
 \arguments{
-\item{df}{dataframe from pr_get_indices}
+\item{df}{A dataframe from \code{\link[=pr_get_Indices]{pr_get_Indices()}}, \code{\link[=pr_get_EOVs]{pr_get_EOVs()}}, or similar
+functions}
 
-\item{Parameter}{parameter(s) to be filtered on}
+\item{Parameter}{Character string or vector of parameter names to retain.
+Common parameters include:
+\itemize{
+\item \strong{Biomass}: \code{"Biomass_mgm3"}, \code{"BiomassIndex_mgm3"}, \code{"PhytoBiomassCarbon_pgL"}
+\item \strong{Abundance}: \code{"Abundance_m3"}, \code{"AbundanceIndex_Samplekm"}, \code{"TotalCopepodAbundance_m3"}
+\item \strong{Diversity}: \code{"ShannonDiversity"}, \code{"TotalTaxa_Sample"}, \code{"Richness"}
+}}
 
-\item{StationRegion}{StationCode(s) or BioRegion(s) to be filtered on}
+\item{StationRegion}{Character string or vector of locations to retain:
+\itemize{
+\item \strong{For NRS data}: Station codes like \code{"NSI"}, \code{"PHB"}, \code{"MAI"}, \code{"ROT"},
+\code{"YON"}, \code{"DAR"}, \code{"KAI"}, \code{"ESP"}, \code{"NIN"}
+\item \strong{For CPR data}: Bioregions like \code{"Temperate East"}, \code{"South-east"},
+\code{"South-west"}, \code{"North-west"}, \code{"Coral Sea"}
+}}
 }
 \value{
-prefiltered data frame for pr_plot_trends, ts, climate
+A filtered dataframe maintaining the same structure as input
 }
 \description{
-Filter data for plotting functions
+Filter plankton data by parameter and location
+}
+\details{
+Convenience function to filter index data to specific parameters and locations
+before plotting or analysis. Automatically detects whether data uses station
+codes (NRS) or bioregions (CPR) and filters accordingly.
+
+This function streamlines the common workflow of filtering data before creating
+plots or running analyses. It:
+\itemize{
+\item Detects data type automatically (NRS vs CPR)
+\item Filters on \code{Parameters} column to match \code{Parameter} argument
+\item Filters on \code{StationCode} (NRS) or \code{BioRegion} (CPR) to match \code{StationRegion} argument
+\item Validates inputs to catch common errors
+}
+\subsection{When to Use}{
+
+Use this function when:
+\itemize{
+\item Creating plots for specific stations or regions
+\item Comparing multiple parameters at the same location(s)
+\item Preparing data for statistical analysis on a subset of locations
+}
+}
+
+\subsection{Multiple Selections}{
+
+Both \code{Parameter} and \code{StationRegion} accept vectors, enabling:
+\itemize{
+\item Multiple parameters at one station: \verb{Parameter = c("Biomass_mgm3", "Abundance_m3"), StationRegion = "NSI"}
+\item One parameter at multiple stations: \verb{Parameter = "Biomass_mgm3", StationRegion = c("NSI", "PHB", "MAI")}
+\item Multiple parameters at multiple stations: vectors for both arguments
+}
+}
 }
 \examples{
+# Filter CPR data to biomass in two bioregions
 df <- pr_get_Indices("CPR", "Zooplankton") \%>\%
-      pr_filter_data("BiomassIndex_mgm3", c("North", "South-west"))
+  pr_filter_data("BiomassIndex_mgm3", c("North", "South-west"))
+  
+# Filter NRS data to phytoplankton carbon at two stations
 df <- pr_get_Indices("NRS", "Phytoplankton") \%>\%
-      pr_filter_data("PhytoBiomassCarbon_pgL", c("NSI", "PHB"))
+  pr_filter_data("PhytoBiomassCarbon_pgL", c("NSI", "PHB"))
+  
+# Multiple parameters at one station
+df <- pr_get_Indices("NRS", "Zooplankton") \%>\%
+  pr_filter_data(c("Biomass_mgm3", "Abundance_m3", "ShannonDiversity"), "MAI")
+}
+\seealso{
+\itemize{
+\item \code{\link[=pr_get_Indices]{pr_get_Indices()}} for loading data before filtering
+\item \code{\link[=pr_plot_TimeSeries]{pr_plot_TimeSeries()}}, \code{\link[=pr_plot_Trends]{pr_plot_Trends()}}, \code{\link[=pr_plot_Climatology]{pr_plot_Climatology()}} for plotting filtered data
+}
 }

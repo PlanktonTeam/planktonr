@@ -7,18 +7,57 @@
 pr_get_CPRData(Type = "Phytoplankton", Variable = "abundance", Subset = "raw")
 }
 \arguments{
-\item{Type}{The data of interest: Phytoplankton or Zooplankton}
+\item{Type}{The data of interest: \code{"Phytoplankton"} or \code{"Zooplankton"}}
 
-\item{Variable}{Variable options are: abundance or biovolume (phytoplankton only)}
+\item{Variable}{Variable options are:
+\itemize{
+\item \code{"abundance"} - Cell or individual counts (available for both phytoplankton and zooplankton)
+\item \code{"biovolume"} - Cell biovolume in cubic micrometres (phytoplankton only)
+}}
 
-\item{Subset}{Data compilation. Full options are below.}
+\item{Subset}{Data compilation level:
+\itemize{
+\item \code{"raw"} - Raw taxonomic data as identified by analysts
+\item \code{"htg"} - Higher taxonomic groups (e.g., diatoms, dinoflagellates, copepods)
+\item \code{"genus"} - Data aggregated to genus level
+\item \code{"species"} - Data aggregated to species level
+\item \code{"copepods"} - Copepod data only (zooplankton only)
+}}
 }
 \value{
-A dataframe with requested plankton data in long form
+A dataframe with requested plankton data in long form. Each row represents
+a taxon observation in a sample, with columns for metadata (location, date, time)
+and abundance or biovolume values.
 }
 \description{
-Load CPR Data
+Load Continuous Plankton Recorder (CPR) plankton data from the Integrated Marine
+Observing System (IMOS). The CPR is a high-speed plankton sampler that is towed
+behind ships of opportunity at approximately 10 metres depth. Samples are collected
+continuously along transects, providing broad-scale spatial coverage.
+}
+\details{
+The CPR samples plankton organisms in the 200-500 micrometre size range. Unlike
+NRS data which are point samples, CPR data represent integrated samples over
+approximately 3 nautical miles. The data are returned in long format.
+
+CPR sampling occurs both day and night as ships operate continuously. Consider
+using \code{\link[=pr_get_DayNight]{pr_get_DayNight()}} to examine diel patterns in the data.
+
+Note: Biovolume data is only available for phytoplankton.
 }
 \examples{
+# Get raw phytoplankton abundance data
 df <- pr_get_CPRData(Type = "Phytoplankton", Variable = "abundance", Subset = "raw")
+
+# Get zooplankton data at species level
+df <- pr_get_CPRData(Type = "Zooplankton", Variable = "abundance", Subset = "species")
+
+# Get higher taxonomic group data
+df <- pr_get_CPRData(Type = "Phytoplankton", Variable = "abundance", Subset = "htg")
+
+}
+\seealso{
+\code{\link[=pr_get_NRSData]{pr_get_NRSData()}} for National Reference Station data,
+\code{\link[=pr_get_Indices]{pr_get_Indices()}} for derived ecological indices,
+\code{\link[=pr_add_Bioregions]{pr_add_Bioregions()}} to assign samples to bioregions
 }

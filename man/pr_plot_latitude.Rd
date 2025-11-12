@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_timeseries.R
 \name{pr_plot_latitude}
 \alias{pr_plot_latitude}
-\title{Plot for latitudinal data}
+\title{Create Hovmöller diagram showing latitudinal patterns over time}
 \usage{
 pr_plot_latitude(df, na.fill = TRUE)
 }
@@ -15,7 +15,7 @@ pr_plot_latitude(df, na.fill = TRUE)
 patchwork object
 }
 \description{
-Plot for latitudinal data
+Create Hovmöller diagram showing latitudinal patterns over time
 }
 \examples{
 df <- pr_get_NRSMicro('GO-SHIP')

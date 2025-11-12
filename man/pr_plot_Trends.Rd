@@ -2,31 +2,79 @@
 % Please edit documentation in R/plot_timeseries.R
 \name{pr_plot_Trends}
 \alias{pr_plot_Trends}
-\title{Plot temporal Trends in plankton data}
+\title{Plot temporal trends in plankton data with fitted lines}
 \usage{
 pr_plot_Trends(df, Trend = "Raw", method = "lm", trans = "identity")
 }
 \arguments{
-\item{df}{A dataframe containing the plankton timeseries data.}
+\item{df}{A dataframe from \code{\link[=pr_get_Indices]{pr_get_Indices()}} containing timeseries data}
 
-\item{Trend}{Over what timescale to fit the Trend - "Raw", "Month" or "Year"}
+\item{Trend}{The temporal scale for trend analysis:
+\itemize{
+\item \code{"Raw"} - Plot all data points over time with a trend line through the full timeseries
+\item \code{"Month"} - Monthly climatology showing seasonal patterns (averaged across years)
+\item \code{"Year"} - Annual means showing interannual variability
+}}
 
-\item{method}{Any method accepted by \code{geom_smooth()}}
+\item{method}{Smoothing method for the trend line. Options include:
+\itemize{
+\item \code{"lm"} - Linear regression (default, good for detecting long-term trends)
+\item \code{"loess"} - Local polynomial regression (good for non-linear trends)
+\item \code{"gam"} - Generalised additive model (requires mgcv package)
+\item Any other method accepted by \code{\link[ggplot2:geom_smooth]{ggplot2::geom_smooth()}}
+}}
 
-\item{trans}{transformation of y axis on plot, whatever \code{scale_y_continuous()} trans accepts
-#'}
+\item{trans}{Transformation for the y-axis scale:
+\itemize{
+\item \code{"identity"} - No transformation (default)
+\item \code{"log10"} - Log base 10 transformation (useful for abundance data)
+\item \code{"sqrt"} - Square root transformation
+\item Any other transformation accepted by \code{\link[ggplot2:scale_continuous]{ggplot2::scale_y_continuous()}}
+}}
 }
 \value{
-a timeseries plot
+A ggplot2 object showing the timeseries with fitted trend line(s)
 }
 \description{
-Plot temporal Trends in plankton data
+Create time series plots with fitted trend lines to examine long-term changes,
+seasonal patterns, or interannual variability in plankton indices. The function
+can plot raw data over time, monthly climatologies, or annual means.
+}
+\details{
+This function is designed to help identify temporal trends in plankton data:
+\itemize{
+\item \strong{Raw trends}: Shows all observations over time with a smoothed trend line.
+Useful for detecting long-term changes (e.g., increasing or decreasing abundance).
+\item \strong{Monthly trends}: Aggregates data by month across all years to show seasonal
+patterns (e.g., winter blooms, summer stratification effects).
+\item \strong{Annual trends}: Shows year-to-year variability, useful for detecting regime
+shifts or responses to climate oscillations (e.g., ENSO).
+}
+
+The shaded ribbon around trend lines represents the 95\% confidence interval.
+For NRS data, values are averaged across depths if present.
 }
 \examples{
-df <- pr_get_Indices("SOTS", "Phytoplankton") \%>\%
-  dplyr::filter(Parameters == "PhytoAbundance_CellsL") \%>\%
+# Examine long-term trends in zooplankton biomass
+df <- pr_get_Indices("NRS", "Zooplankton") \%>\%
+  dplyr::filter(Parameters == "Biomass_mgm3") \%>\%
   pr_model_data()
-pr_plot_Trends(df, method = "loess", Trend = "Month")
-pr_plot_Trends(df, Trend = "Year")
-pr_plot_Trends(df, Trend = "Raw")
+pr_plot_Trends(df, Trend = "Raw", method = "lm")
+
+# Examine seasonal patterns
+pr_plot_Trends(df, Trend = "Month", method = "loess")
+
+# Examine interannual variability
+pr_plot_Trends(df, Trend = "Year", method = "lm")
+
+# Use log transformation for abundance data
+df <- pr_get_Indices("CPR", "Phytoplankton", near_dist_km = 250) \%>\%
+  dplyr::filter(Parameters == "PhytoAbundance_Cellsm3",
+                BioRegion \%in\% c("South-east", "Temperate East"))
+pr_plot_Trends(df, Trend = "Raw", method = "lm", trans = "log10")
+}
+\seealso{
+\code{\link[=pr_plot_TimeSeries]{pr_plot_TimeSeries()}} for plots without trend lines,
+\code{\link[=pr_plot_Climatology]{pr_plot_Climatology()}} for alternative climatology visualisations,
+\code{\link[=pr_get_model]{pr_get_model()}} for extracting model coefficients
 }

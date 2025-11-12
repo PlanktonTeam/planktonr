@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_sat.R
 \name{pr_get_SatData}
 \alias{pr_get_SatData}
-\title{Get data for satellite data}
+\title{Load satellite-derived environmental data matched to plankton sampling locations}
 \usage{
 pr_get_SatData(Survey = "NRS")
 }
@@ -13,7 +13,7 @@ pr_get_SatData(Survey = "NRS")
 df with either NRS or CPR satellite data
 }
 \description{
-Get data for satellite data
+Load satellite-derived environmental data matched to plankton sampling locations
 }
 \examples{
 df <- pr_get_SatData("CPR")

@@ -2,26 +2,86 @@
 % Please edit documentation in R/utils_plankton.R
 \name{pr_get_FuncGroups}
 \alias{pr_get_FuncGroups}
-\title{Get functional group data}
+\title{Aggregate plankton data by functional groups}
 \usage{
 pr_get_FuncGroups(Survey = "NRS", Type = "Zooplankton", ...)
 }
 \arguments{
-\item{Survey}{CPR or NRS data}
+\item{Survey}{Survey type:
+\itemize{
+\item \code{"NRS"} - National Reference Stations
+\item \code{"CPR"} - Continuous Plankton Recorder
+\item \code{"SOTS"} - Southern Ocean Time Series
+}}
 
-\item{Type}{Zooplankton or phytoplankton data}
+\item{Type}{Plankton type:
+\itemize{
+\item \code{"Phytoplankton"} - Includes centric diatoms, pennate diatoms, dinoflagellates,
+cyanobacteria, and other groups
+\item \code{"Zooplankton"} - Includes copepods, appendicularians, molluscs, cladocerans,
+chaetognaths, thaliaceans, and other groups
+}}
 
-\item{...}{to allow use of join when used within another function}
+\item{...}{Additional variables passed to \code{\link[=pr_add_Bioregions]{pr_add_Bioregions()}}. For CPR data, you can use:
+\itemize{
+\item \code{near_dist_km} - Distance in kilometres to pad bioregion boundaries
+}}
 }
 \value{
-dataframe for plotting functional group time series info
+A dataframe in long format with columns for location/station, date,
+functional group (\code{Parameters}), and abundance (\code{Values}). Suitable for use
+with \code{\link[=pr_plot_tsfg]{pr_plot_tsfg()}} and other functional group visualisation functions.
 }
 \description{
-Get functional group data
+Aggregate plankton data into major functional groups for community structure
+analysis. Functional groups represent taxa with similar ecological roles or
+morphological characteristics (e.g., diatoms, dinoflagellates, copepods).
+}
+\details{
+\subsection{Phytoplankton Functional Groups}{
+
+The function aggregates phytoplankton into five major groups:
+\itemize{
+\item Centric diatoms - Radially symmetrical diatoms, typically bloom-forming
+\item Pennate diatoms - Bilaterally symmetrical diatoms
+\item Dinoflagellates - Flagellated protists, some toxic
+\item Cyanobacteria - Photosynthetic bacteria (e.g., Synechococcus, Trichodesmium)
+\item Other - All remaining groups (flagellates, ciliates, etc.)
+}
+}
+
+\subsection{Zooplankton Functional Groups}{
+
+The function aggregates zooplankton into seven major groups:
+\itemize{
+\item Copepods - Dominant group of marine zooplankton
+\item Appendicularians - Gelatinous filter feeders (larvaceans)
+\item Molluscs - Primarily pteropods (sea butterflies, sea angels)
+\item Cladocerans - Water fleas (e.g., Penilia, Evadne)
+\item Chaetognaths - Arrow worms (predatory)
+\item Thaliaceans - Gelatinous filter feeders (salps, doliolids, pyrosomes)
+\item Other - All remaining groups
+}
+
+Data are based on higher taxonomic group (htg) abundance and aggregated by
+sample. Port Hacking 4 samples are excluded from NRS data.
+}
 }
 \examples{
+# Get NRS zooplankton functional groups
 NRSfgz <- pr_get_FuncGroups(Survey = "NRS", Type = "Zooplankton")
+
+# Get NRS phytoplankton functional groups  
 NRSfgp <- pr_get_FuncGroups(Survey = "NRS", Type = "Phytoplankton")
+
+# Get CPR functional groups with expanded bioregion boundaries
 CPRfgz <- pr_get_FuncGroups(Survey = "CPR", Type = "Zooplankton", near_dist_km = 250)
 CPRfgp <- pr_get_FuncGroups(Survey = "CPR", Type = "Phytoplankton")
+
+# Examine the functional groups present
+unique(NRSfgp$Parameters)
+}
+\seealso{
+\code{\link[=pr_plot_tsfg]{pr_plot_tsfg()}} for plotting functional group time series,
+\code{\link[=pr_get_Indices]{pr_get_Indices()}} for community-level indices
 }

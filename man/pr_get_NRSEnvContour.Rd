@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_bgc.R
 \name{pr_get_NRSEnvContour}
 \alias{pr_get_NRSEnvContour}
-\title{Data for environmental contour plots}
+\title{Prepare biogeochemical data for depth-time contour plots}
 \usage{
 pr_get_NRSEnvContour(Data = "Chemistry")
 }
@@ -13,7 +13,7 @@ pr_get_NRSEnvContour(Data = "Chemistry")
 A dataframe to be used with pr_plot_NRSEnvContour
 }
 \description{
-Data for environmental contour plots
+Prepare biogeochemical data for depth-time contour plots
 }
 \examples{
 df <- pr_get_NRSEnvContour(Data = "Micro")

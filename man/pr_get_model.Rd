@@ -3,7 +3,7 @@
 \name{pr_get_model}
 \alias{pr_get_model}
 \alias{pr_get_model.planktonr_dat}
-\title{Generic function to get the Model attribute}
+\title{Extract fitted model objects from planktonr data with trend analysis}
 \usage{
 pr_get_model(x)
 
@@ -16,5 +16,5 @@ pr_get_model(x)
 The \code{Model} attribute from the object.
 }
 \description{
-Generic function to get the Model attribute
+Extract fitted model objects from planktonr data with trend analysis
 }

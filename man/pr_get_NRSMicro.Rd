@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_bgc.R
 \name{pr_get_NRSMicro}
 \alias{pr_get_NRSMicro}
-\title{Load microbial data}
+\title{Load microbial abundance data from flow cytometry}
 \usage{
 pr_get_NRSMicro(Survey = "NRS")
 }
@@ -13,7 +13,7 @@ pr_get_NRSMicro(Survey = "NRS")
 A dataframe with NRS microbial data
 }
 \description{
-Load microbial data
+Load microbial abundance data from flow cytometry
 }
 \examples{
 df <- pr_get_NRSMicro(Survey = "GO-SHIP")

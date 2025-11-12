@@ -2,20 +2,76 @@
 % Please edit documentation in R/utils_bgc.R
 \name{pr_get_NRSPigments}
 \alias{pr_get_NRSPigments}
-\title{Get pigments data}
+\title{Get photosynthetic pigments data from NRS stations}
 \usage{
 pr_get_NRSPigments(Format = "all")
 }
 \arguments{
-\item{Format}{all or binned}
+\item{Format}{Output format:
+\itemize{
+\item \code{"all"} - All individual pigment concentrations (default)
+\item \code{"binned"} - Pigments grouped into functional classes (e.g., total chlorophyll,
+photoprotective carotenoids)
+}}
 }
 \value{
-A dataframe with NRS pigment data
+A dataframe in long format with pigment data including:
+\itemize{
+\item \code{StationCode}, \code{StationName} - Station identifiers
+\item \code{SampleTime_Local} - Local sampling date and time
+\item \code{SampleDepth_m} - Sampling depth (numeric)
+\item \code{Parameters} - Pigment name or pigment class
+\item \code{Values} - Concentration (mg/m³)
+}
 }
 \description{
-Get pigments data
+Load High-Performance Liquid Chromatography (HPLC) pigment data from NRS stations.
+Pigments can be retrieved as individual compounds or grouped into functional classes.
+}
+\details{
+\subsection{Individual Pigments (Format = "all")}{
+
+Returns concentrations (mg/m³) of individual pigments including:
+\itemize{
+\item Chlorophylls: Cphl A, B, C1, C2, C3, chlorophyllide A
+\item Carotenoids: fucoxanthin, peridinin, alloxanthin, zeaxanthin, etc.
+\item Degradation products: phaeophytin A & B, phaeophorbide A, pyrophaeophorbide A
+}
+}
+
+\subsection{Binned Pigments (Format = "binned")}{
+
+Returns pigments grouped into functional classes:
+\itemize{
+\item \code{TotalChla} - Total chlorophyll a (including degradation products)
+\item \code{TotalChl} - All chlorophyll pigments combined
+\item \code{PPC} - Photoprotective carotenoids (protect from high light)
+\item \code{PSC} - Photosynthetic carotenoids (harvest light energy)
+\item \code{PSP} - Total photosynthetic pigments (PSC + Total Chl)
+\item \code{TCaro} - Total carotenoids
+\item \code{TAcc} - Total accessory pigments (everything except Chl a)
+\item \code{TPig} - Total pigments
+\item \code{TDP} - Total diagnostic pigments (used for phytoplankton community analysis)
+}
+
+Quality control flags are applied and samples with zero total chlorophyll a
+are removed. Water column (WC) samples are excluded as they represent
+integrated samples rather than discrete depths.
+}
 }
 \examples{
+# Get all individual pigments
 df <- pr_get_NRSPigments()
+
+# Get binned pigment classes
 df <- pr_get_NRSPigments(Format = "binned")
+
+# Filter for total chlorophyll a at Maria Island
+df_chla <- df \%>\%
+  dplyr::filter(Parameters == "TotalChla", StationCode == "MAI")
+}
+\seealso{
+\code{\link[=pr_get_NRSChemistry]{pr_get_NRSChemistry()}} for nutrient data,
+\code{\link[=pr_plot_Enviro]{pr_plot_Enviro()}} for visualising pigment depth profiles,
+\code{\link[=pr_remove_outliers]{pr_remove_outliers()}} for outlier removal
 }

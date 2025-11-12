@@ -1,4 +1,4 @@
-#' PCI plot for CPR data
+#' Map Phytoplankton Colour Index (PCI) from CPR samples around Australia
 #'
 #' @param df dataframe with location and seasonal PCI data
 #'
@@ -37,19 +37,75 @@ pr_plot_PCImap <- function(df) {
 
 
 
-#' Sidebar panel plot of selected NRS stations
+#' Create map showing selected NRS station locations
 #'
-#' @param sites A string vector containing site codes to plot
-#' @param Survey Which Survey to plot ("NRS", "Coastal", "LTM")
-#' @param Type Must be phytoplankton for SOTS to plot, otherwise it has no impact on the plot
+#' Plot Australian coastline with NRS sampling stations, highlighting selected 
+#' stations in red and non-selected stations in blue. Useful for showing which 
+#' stations are included in an analysis or visualisation.
 #'
-#' @return a map of the selected stations
+#' @param sites Character vector of station codes to highlight. Valid codes:
+#'   * `"DAR"` - Darwin
+#'   * `"YON"` - Yongala
+#'   * `"NSI"` - North Stradbroke Island
+#'   * `"PHB"` - Port Hacking
+#'   * `"MAI"` - Maria Island
+#'   * `"KAI"` - Kangaroo Island
+#'   * `"ESP"` - Esperance
+#'   * `"ROT"` - Rottnest Island
+#'   * `"NIN"` - Ningaloo
+#' @param Survey Which station network to display:
+#'   * `"NRS"` - All National Reference Stations (default)
+#'   * `"LTM"` - Long Term Monitoring subset (Maria Island, Port Hacking, Rottnest Island)
+#'   * `"Coastal"` - Coastal stations
+#' @param Type Plankton type, affecting which stations appear:
+#'   * `"Zooplankton"` - Standard NRS stations (default)
+#'   * `"Phytoplankton"` - Includes Southern Ocean Time Series (SOTS) station
+#'
+#' @details
+#' ## Map Extent
+#' The map shows the Australian coastline from:
+#' * Longitude: 112.8°E to 154.5°E
+#' * Latitude: -44°S to -10.5°S (or -50°S if including SOTS)
+#' 
+#' ## Visual Design
+#' * **Red points**: Selected stations (specified in `sites` argument)
+#' * **Blue points**: Non-selected stations
+#' * Grey land mass
+#' * Transparent background for easy integration into documents
+#' 
+#' ## Use Cases
+#' This function is particularly useful for:
+#' * Sidebar panels in Shiny applications
+#' * Figure panels showing study site locations
+#' * Publication maps indicating data sources
+#' * Educational materials showing NRS network coverage
+#' 
+#' ## SOTS Station
+#' The Southern Ocean Time Series (SOTS) station south of Tasmania is only 
+#' included when `Type = "Phytoplankton"` as zooplankton sampling there is 
+#' infrequent or uses different methods.
+#'
+#' @return A ggplot2 object with transparent background, suitable for overlaying 
+#'   or saving with `ggsave()`
+#' 
+#' @seealso 
+#' * [pr_get_Stations()] for station metadata
+#' * [pr_plot_CPRmap()] for CPR bioregion maps
+#' 
 #' @export
 #'
 #' @examples
+#' # Map showing Maria Island and Port Hacking
 #' sites <- c("MAI", "PHB")
-#' pmap <- pr_plot_NRSmap(sites, Type = 'Phytoplankton')
-#' pmap <- pr_plot_NRSmap(sites, Survey = "LTM")
+#' pmap <- pr_plot_NRSmap(sites, Type = "Phytoplankton")
+#' print(pmap)
+#' 
+#' # Long Term Monitoring stations with one highlighted
+#' pr_plot_NRSmap(sites = "MAI", Survey = "LTM")
+#' 
+#' # Save map to file
+#' pmap <- pr_plot_NRSmap(c("NSI", "PHB", "MAI"))
+#' ggplot2::ggsave("nrs_stations.png", pmap, width = 6, height = 8, bg = "white")
 pr_plot_NRSmap <- function(sites, Survey = "NRS", Type = 'Zooplankton'){
 
   # Input validation
@@ -179,7 +235,7 @@ pr_plot_CPRmap <-  function(sites){
   return(p1)
 }
 
-#' Sidebar panel plot of voyages
+#' Create map showing CPR voyage tracks and sampling locations
 #'
 #' @param df dataframe containing all locations to plot
 #' @param dfs dataframe of sample locations to plot
@@ -229,7 +285,7 @@ pr_plot_Voyagemap <-  function(df, dfs, Country = c("Australia")){
 
 
 
-#' Frequency plot of the selected species
+#' Map seasonal occurrence frequency for individual plankton species
 #'
 #' @param df dataframe of format similar to output of pr_get_fmap_data()
 #' @param species species to plot
@@ -376,7 +432,7 @@ pr_plot_FreqMap <- function(df, species, interactive = TRUE){
 
 
 
-#' IMOS progress plot
+#' Create interactive map showing IMOS plankton sampling coverage and progress
 #'
 #' @param df output from pr_get_ProgressMapData
 #' @param interactive Should the plot be interactive with leaflet?

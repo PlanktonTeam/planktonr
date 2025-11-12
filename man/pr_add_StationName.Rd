@@ -2,20 +2,54 @@
 % Please edit documentation in R/utils.R
 \name{pr_add_StationName}
 \alias{pr_add_StationName}
-\title{Add NRS StationName to data}
+\title{Add NRS station full names to data}
 \usage{
 pr_add_StationName(df)
 }
 \arguments{
-\item{df}{A dataframe that contains \code{StationCode} but no \code{StationName}}
+\item{df}{A dataframe containing a \code{StationCode} column with NRS station codes}
 }
 \value{
-A dataframe with StationName added
+A dataframe with a new \code{StationName} column containing full station names
 }
 \description{
-Add NRS StationName to data
+Convert three-letter station codes to full station names for labelling plots
+and tables. Useful for creating publication-ready figures with descriptive
+location names.
+}
+\details{
+\subsection{Station Code Mapping}{
+
+The function converts the following codes to full names:
+\itemize{
+\item \code{DAR} → "Darwin" (Northern Territory)
+\item \code{YON} → "Yongala" (Queensland, Great Barrier Reef)
+\item \code{NSI} → "North Stradbroke Island" (Queensland, near Brisbane)
+\item \code{PHB} → "Port Hacking" (New South Wales, Sydney)
+\item \code{MAI} → "Maria Island" (Tasmania, east coast)
+\item \code{KAI} → "Kangaroo Island" (South Australia)
+\item \code{ESP} → "Esperance" (Western Australia, south coast)
+\item \code{ROT} → "Rottnest Island" (Western Australia, Perth)
+\item \code{NIN} → "Ningaloo" (Western Australia, north coast)
+\item \code{VBM} → "Bonney Coast" (South Australia/Victoria border)
+}
+}
+
+\subsection{Column Arrangement}{
+
+The function adds a \code{StationName} column and positions it before \code{StationCode}
+for logical ordering.
+}
 }
 \examples{
+# Add station names to station metadata
 df <- pr_get_Stations() \%>\%
-    pr_add_StationName()
+  pr_add_StationName()
+
+}
+\seealso{
+\itemize{
+\item \code{\link[=pr_add_StationCode]{pr_add_StationCode()}} for the reverse conversion
+\item \code{\link[=pr_get_Stations]{pr_get_Stations()}} for station metadata
+}
 }

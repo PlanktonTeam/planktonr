@@ -1,15 +1,50 @@
 #' Import CPR Data
 #'
-#' Load CPR Data
+#' Load Continuous Plankton Recorder (CPR) plankton data from the Integrated Marine 
+#' Observing System (IMOS). The CPR is a high-speed plankton sampler that is towed 
+#' behind ships of opportunity at approximately 10 metres depth. Samples are collected 
+#' continuously along transects, providing broad-scale spatial coverage.
 #'
-#' @param Type The data of interest: Phytoplankton or Zooplankton
-#' @param Variable Variable options are: abundance or biovolume (phytoplankton only)
-#' @param Subset Data compilation. Full options are below.
+#' @param Type The data of interest: `"Phytoplankton"` or `"Zooplankton"`
+#' @param Variable Variable options are: 
+#'   * `"abundance"` - Cell or individual counts (available for both phytoplankton and zooplankton)
+#'   * `"biovolume"` - Cell biovolume in cubic micrometres (phytoplankton only)
+#' @param Subset Data compilation level: 
+#'   * `"raw"` - Raw taxonomic data as identified by analysts
+#'   * `"htg"` - Higher taxonomic groups (e.g., diatoms, dinoflagellates, copepods)
+#'   * `"genus"` - Data aggregated to genus level
+#'   * `"species"` - Data aggregated to species level
+#'   * `"copepods"` - Copepod data only (zooplankton only)
 #'
-#' @return A dataframe with requested plankton data in long form
+#' @details
+#' The CPR samples plankton organisms in the 200-500 micrometre size range. Unlike 
+#' NRS data which are point samples, CPR data represent integrated samples over 
+#' approximately 3 nautical miles. The data are returned in long format.
+#' 
+#' CPR sampling occurs both day and night as ships operate continuously. Consider 
+#' using [pr_get_DayNight()] to examine diel patterns in the data.
+#' 
+#' Note: Biovolume data is only available for phytoplankton.
+#'
+#' @return A dataframe with requested plankton data in long form. Each row represents 
+#' a taxon observation in a sample, with columns for metadata (location, date, time) 
+#' and abundance or biovolume values.
+#' 
+#' @seealso [pr_get_NRSData()] for National Reference Station data,
+#'   [pr_get_Indices()] for derived ecological indices,
+#'   [pr_add_Bioregions()] to assign samples to bioregions
+#' 
 #' @export
 #' @examples
+#' # Get raw phytoplankton abundance data
 #' df <- pr_get_CPRData(Type = "Phytoplankton", Variable = "abundance", Subset = "raw")
+#' 
+#' # Get zooplankton data at species level
+#' df <- pr_get_CPRData(Type = "Zooplankton", Variable = "abundance", Subset = "species")
+#' 
+#' # Get higher taxonomic group data
+#' df <- pr_get_CPRData(Type = "Phytoplankton", Variable = "abundance", Subset = "htg")
+#' 
 #' @importFrom rlang .data
 pr_get_CPRData <- function(Type = "Phytoplankton", Variable = "abundance", Subset = "raw"){
 
@@ -75,15 +110,48 @@ pr_get_CPRData <- function(Type = "Phytoplankton", Variable = "abundance", Subse
 }
 
 
-#' Get CPR trips
-#' @param ... ability to choose join for bioregions
+#' Get CPR sampling trip metadata
+#' 
+#' Load metadata for all Continuous Plankton Recorder sampling trips, including 
+#' dates, locations, and bioregion assignments. Each trip represents a tow 
+#' segment sampled by the CPR.
+#' 
+#' @param ... Additional variables passed to [pr_add_Bioregions()]. Currently supports:
+#'   * `near_dist_km` - Distance in kilometres to pad bioregion boundaries when 
+#'     assigning samples to regions (default behaviour uses exact boundaries)
 #'
-#' @return A dataframe with CPR Trips
+#' @details
+#' The CPR samples continuously as it is towed behind ships of opportunity. Each 
+#' "trip" in this context represents a segment of the tow, typically covering 
+#' approximately 3 nautical miles. 
+#' 
+#' Samples are automatically assigned to Australian marine bioregions using 
+#' [pr_add_Bioregions()]. Bioregions include: Temperate East, South-east, 
+#' South-west, North, and North-west.
+#' 
+#' @return A dataframe with CPR trip information including:
+#'   * `TripCode` - Unique trip identifier  
+#'   * `SampleTime_Local` - Local sampling date and time
+#'   * `Year_Local`, `Month_Local` - Temporal components
+#'   * `Latitude`, `Longitude` - Geographic coordinates
+#'   * `BioRegion` - Australian marine bioregion assignment
+#'   * Additional metadata fields
+#' 
+#' @seealso [pr_get_NRSTrips()] for NRS sampling trips,
+#'   [pr_add_Bioregions()] for bioregion assignment details
+#' 
 #' @export
 #'
 #' @examples
+#' # Get all CPR trips with default bioregion assignment
 #' df <- pr_get_CPRTrips()
+#' 
+#' # Get CPR trips with expanded bioregion boundaries (250 km padding)
 #' df <- pr_get_CPRTrips(near_dist_km = 250)
+#' 
+#' # Examine sampling effort by bioregion and year
+#' table(df$BioRegion, df$Year_Local)
+#' 
 #' @importFrom rlang .data
 pr_get_CPRTrips <- function(...){
   CPRTrips <- pr_get_s3("cpr_samp") %>%

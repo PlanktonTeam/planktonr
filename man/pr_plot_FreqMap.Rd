@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_maps.R
 \name{pr_plot_FreqMap}
 \alias{pr_plot_FreqMap}
-\title{Frequency plot of the selected species}
+\title{Map seasonal occurrence frequency for individual plankton species}
 \usage{
 pr_plot_FreqMap(df, species, interactive = TRUE)
 }
@@ -17,7 +17,7 @@ pr_plot_FreqMap(df, species, interactive = TRUE)
 a plot of frequency of occurrence of chosen species
 }
 \description{
-Frequency plot of the selected species
+Map seasonal occurrence frequency for individual plankton species
 }
 \examples{
 df <- data.frame(Longitude = c(110, 130, 155, 150), Latitude = c(-10, -35, -27, -45),

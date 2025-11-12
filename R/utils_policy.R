@@ -1,5 +1,5 @@
 
-#' Get Essential Ocean Variables
+#' Load Essential Ocean Variables (EOVs) for plankton biomass and diversity
 #' @param Survey "NRS" or "CPR" or "LTM"
 #' @param ... to allow use of join when used within another function
 #'
@@ -145,7 +145,7 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
 
 }
 
-#' Get policy information
+#' Load policy-relevant plankton indicators and Essential Ocean Variables
 #' @param ... to allow use of join when used within another function
 #' @param Survey "NRS" or "CPR"
 #'

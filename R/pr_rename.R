@@ -1,5 +1,5 @@
 
-#' Rename variables within dataframe
+#' Standardise column names in IMOS plankton dataframes
 #'
 #' @param df Dataframe with column names to renamed
 #' @export

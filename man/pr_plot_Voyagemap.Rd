@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_maps.R
 \name{pr_plot_Voyagemap}
 \alias{pr_plot_Voyagemap}
-\title{Sidebar panel plot of voyages}
+\title{Create map showing CPR voyage tracks and sampling locations}
 \usage{
 pr_plot_Voyagemap(df, dfs, Country = c("Australia"))
 }
@@ -17,7 +17,7 @@ pr_plot_Voyagemap(df, dfs, Country = c("Australia"))
 a map of the selected bioregions
 }
 \description{
-Sidebar panel plot of voyages
+Create map showing CPR voyage tracks and sampling locations
 }
 \examples{
 df <- pr_get_NRSMicro("GO-SHIP")

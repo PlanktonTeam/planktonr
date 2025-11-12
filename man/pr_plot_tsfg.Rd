@@ -2,26 +2,99 @@
 % Please edit documentation in R/plot_timeseries.R
 \name{pr_plot_tsfg}
 \alias{pr_plot_tsfg}
-\title{Time series plot of functional groups}
+\title{Time series plot of functional group composition}
 \usage{
 pr_plot_tsfg(df, Scale = "Actual", Trend = "Raw")
 }
 \arguments{
-\item{df}{dataframe in format of output from pr_get_FuncGroups}
+\item{df}{A dataframe from \code{\link[=pr_get_FuncGroups]{pr_get_FuncGroups()}} containing functional group data}
 
-\item{Scale}{y axis scale Actual or Proportion}
+\item{Scale}{Scaling of the y-axis:
+\itemize{
+\item \code{"Actual"} - Plot actual abundance values (stacked)
+\item \code{"Proportion"} - Plot as proportions summing to 1 (or 100\%)
+}}
 
-\item{Trend}{Over what timescale to fit the Trend - "Raw", "Month" or "Year"}
+\item{Trend}{The temporal scale for plotting:
+\itemize{
+\item \code{"Raw"} - Plot all data points over time (default)
+\item \code{"Month"} - Monthly climatology averaged across years
+\item \code{"Year"} - Annual means for each year
+}}
 }
 \value{
-plot of fg timseries
+A ggplot2 object showing functional group composition over time
 }
 \description{
-Time series plot of functional groups
+Create stacked area or bar plots showing the relative or absolute abundance
+of different functional groups over time. This visualisation is particularly
+useful for examining changes in community composition.
+}
+\details{
+This function creates stacked area plots (for Raw trends) or stacked bar plots
+(for Month/Year trends) showing how functional group composition changes over time.
+\subsection{Functional Groups Plotted}{
+
+\strong{Phytoplankton} (5 groups):
+\itemize{
+\item Centric diatoms (radially symmetrical, bloom-forming)
+\item Pennate diatoms (bilaterally symmetrical)
+\item Dinoflagellates (flagellated protists)
+\item Cyanobacteria (photosynthetic bacteria)
+\item Other (remaining groups)
+}
+
+\strong{Zooplankton} (7 groups):
+\itemize{
+\item Copepods (dominant marine zooplankton)
+\item Appendicularians (larvaceans, gelatinous filter feeders)
+\item Molluscs (pteropods - sea butterflies and angels)
+\item Cladocerans (water fleas, e.g., Penilia, Evadne)
+\item Chaetognaths (arrow worms, predatory)
+\item Thaliaceans (salps, doliolids, pyrosomes)
+\item Other (remaining groups)
+}
+}
+
+\subsection{Interpretation}{
+
+\strong{Actual Scale}: Shows true abundance patterns. Useful for seeing:
+\itemize{
+\item Total community biomass/abundance changes
+\item Bloom events
+\item Which groups dominate numerically
+}
+
+\strong{Proportion Scale}: Shows relative composition. Useful for seeing:
+\itemize{
+\item Community shifts (e.g., diatoms to dinoflagellates)
+\item Seasonal succession patterns
+\item Long-term regime shifts
+\item Changes that might be masked by overall abundance changes
+}
+
+Colours are assigned consistently across plots for each functional group.
+}
 }
 \examples{
-df <- pr_get_FuncGroups("SOTS", "Phytoplankton") \%>\%
-dplyr::filter(StationCode == 'SOTS')
-plot <- pr_plot_tsfg(df, "Actual", Trend = 'Year')
-plot
+# Plot actual abundances over time
+df <- pr_get_FuncGroups("NRS", "Phytoplankton") \%>\%
+  dplyr::filter(StationCode \%in\% c('MAI', 'PHB'))
+pr_plot_tsfg(df, Scale = "Actual", Trend = "Raw")
+
+# Plot as proportions to see community shifts
+pr_plot_tsfg(df, Scale = "Proportion", Trend = "Raw")
+
+# Monthly climatology showing seasonal patterns
+pr_plot_tsfg(df, Scale = "Proportion", Trend = "Month")
+
+# Zooplankton functional groups
+df_zoo <- pr_get_FuncGroups("CPR", "Zooplankton", near_dist_km = 250) \%>\%
+  dplyr::filter(BioRegion == "South-east")
+pr_plot_tsfg(df_zoo, Scale = "Actual", Trend = "Raw")
+}
+\seealso{
+\code{\link[=pr_get_FuncGroups]{pr_get_FuncGroups()}} for preparing the input data,
+\code{\link[=pr_plot_PieFG]{pr_plot_PieFG()}} for pie chart visualisation of functional groups
+
 }

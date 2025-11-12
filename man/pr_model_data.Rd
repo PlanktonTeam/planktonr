@@ -2,23 +2,76 @@
 % Please edit documentation in R/utils_analysis.R
 \name{pr_model_data}
 \alias{pr_model_data}
-\title{Run linear model on station and parameters}
+\title{Fit linear models to plankton time series data}
 \usage{
 pr_model_data(df)
 }
 \arguments{
-\item{df}{A dataframe of NR, CPR or LTM}
+\item{df}{A dataframe from \code{\link[=pr_get_EOVs]{pr_get_EOVs()}}, \code{\link[=pr_get_Indices]{pr_get_Indices()}}, or similar
+functions containing time series data. Must contain only one parameter at a time.}
 }
 \value{
-A dataframe with the model attribute added
+The input dataframe with model objects stored as a "Model" attribute
 }
 \description{
-Run linear model on station and parameters
+Fit linear models to time series data for trend analysis, accounting for both
+long-term trends and seasonal cycles. This function is typically used before
+extracting coefficients or plotting trends with model predictions.
+}
+\details{
+The function fits linear models of the form:
+
+\code{Values ~ Year + sin(Month) + cos(Month)}
+
+Where:
+\itemize{
+\item \strong{Year term} captures long-term linear trends (increasing or decreasing over time)
+\item \strong{Harmonic terms} capture seasonal cycles using Fourier basis functions (k=1,
+allowing for one complete seasonal cycle per year)
+}
+
+The model is fitted separately for each station (NRS/LTM) or bioregion (CPR).
+For LTM data, values are first averaged across depths to create a single depth-
+integrated estimate.
+\subsection{Model Interpretation}{
+\itemize{
+\item \strong{Positive Year coefficient}: Variable increasing over time
+\item \strong{Negative Year coefficient}: Variable decreasing over time
+\item \strong{Significant harmonic terms}: Strong seasonal cycle present
+}
+
+The fitted model objects are stored as an attribute of the dataframe and can be
+extracted using \code{\link[=pr_get_model]{pr_get_model()}} and analysed using \code{\link[=pr_get_coeffs]{pr_get_coeffs()}}.
+}
+
+\subsection{Limitations}{
+\itemize{
+\item Assumes linear trends (non-linear trends may be better captured with GAMs)
+\item Assumes single seasonal cycle (some variables may have sub-annual variation)
+\item Only handles one parameter at a time
+}
+}
 }
 \examples{
+# Fit models to zooplankton biomass
 df <- pr_get_EOVs(Survey = "NRS") \%>\%
-  dplyr::filter(StationCode != "VBM") \%>\%
-  dplyr::filter(Parameters == "PigmentChla_mgm3") \%>\%
+  dplyr::filter(Parameters == "Biomass_mgm3") \%>\%
   pr_remove_outliers(2) \%>\%
   pr_model_data()
+
+# Extract and view model coefficients
+models <- pr_get_model(df)
+coeffs <- pr_get_coeffs(models)
+print(coeffs)
+
+# Fit models to CPR phytoplankton diversity
+df_cpr <- pr_get_EOVs(Survey = "CPR") \%>\%
+  dplyr::filter(Parameters == "ShannonPhytoDiversity") \%>\%
+  pr_remove_outliers(2) \%>\%
+  pr_model_data()
+}
+\seealso{
+\code{\link[=pr_get_model]{pr_get_model()}} to extract model objects,
+\code{\link[=pr_get_coeffs]{pr_get_coeffs()}} to extract tidy coefficients,
+\code{\link[=pr_remove_outliers]{pr_remove_outliers()}} to remove outliers before modelling
 }

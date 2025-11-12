@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_maps.R
 \name{pr_plot_ProgressMap}
 \alias{pr_plot_ProgressMap}
-\title{IMOS progress plot}
+\title{Create interactive map showing IMOS plankton sampling coverage and progress}
 \usage{
 pr_plot_ProgressMap(df, interactive = FALSE, labels = TRUE)
 }
@@ -17,7 +17,7 @@ pr_plot_ProgressMap(df, interactive = FALSE, labels = TRUE)
 a plot of IMOS progress
 }
 \description{
-IMOS progress plot
+Create interactive map showing IMOS plankton sampling coverage and progress
 }
 \examples{
 df <- pr_get_ProgressMapData("NRS")
