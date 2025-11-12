@@ -859,7 +859,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
                                          alpha = .data$alphagroup)) +
     ggplot2::geom_area(linewidth = 0.2, colour = "white") +
     ggplot2::scale_alpha(range = c(0.4, 0.9), guide = 'none') +
-    ggplot2::facet_wrap(vars(.data$StationName), scales = "free", ncol = 1) +
+    ggplot2::facet_wrap(~.data$StationName, scales = "free", ncol = 1) +
     ggplot2::labs(y = titley) +
     ggplot2::scale_fill_brewer(palette = "Set1", drop = FALSE, name = "Functional Group") +
     theme_pr() +
