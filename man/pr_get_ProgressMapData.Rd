@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_plotting.R
 \name{pr_get_ProgressMapData}
 \alias{pr_get_ProgressMapData}
-\title{Data for IMOS progress map}
+\title{Prepare sampling coverage data for IMOS progress map visualisation}
 \usage{
 pr_get_ProgressMapData(Survey = c("NRS", "CPR"), interactive = FALSE, ...)
 }
@@ -17,7 +17,7 @@ pr_get_ProgressMapData(Survey = c("NRS", "CPR"), interactive = FALSE, ...)
 A dataframe for input into pr_plot_Progress()
 }
 \description{
-Data for IMOS progress map
+Prepare sampling coverage data for IMOS progress map visualisation
 }
 \examples{
 df <- pr_get_ProgressMapData(c("NRS", "CPR"))

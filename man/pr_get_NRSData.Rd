@@ -7,19 +7,53 @@
 pr_get_NRSData(Type = "Phytoplankton", Variable = "abundance", Subset = "raw")
 }
 \arguments{
-\item{Type}{The data of interest: Phytoplankton or Zooplankton}
+\item{Type}{The data of interest: \code{"Phytoplankton"} or \code{"Zooplankton"}}
 
-\item{Variable}{Variable options are: abundance or biovolume (phytoplankton only)}
+\item{Variable}{Variable options are:
+\itemize{
+\item \code{"abundance"} - Cell or individual counts (available for both phytoplankton and zooplankton)
+\item \code{"biovolume"} - Cell biovolume in cubic micrometres (phytoplankton only)
+}}
 
-\item{Subset}{Data compilation. Full options are below.}
+\item{Subset}{Data compilation level:
+\itemize{
+\item \code{"raw"} - Raw taxonomic data as identified by analysts
+\item \code{"htg"} - Higher taxonomic groups (e.g., diatoms, dinoflagellates, copepods)
+\item \code{"genus"} - Data aggregated to genus level
+\item \code{"species"} - Data aggregated to species level
+\item \code{"copepods"} - Copepod data only (zooplankton only)
+}}
 }
 \value{
-A dataframe with requested plankton data in wide form
+A dataframe with requested plankton data in wide form. Each row represents
+a sample and columns include metadata (station, date, depth) and taxon-specific
+abundance or biovolume values.
 }
 \description{
-Load NRS station Data
+Load National Reference Station (NRS) plankton data from the Integrated Marine
+Observing System (IMOS). The NRS network consists of coastal monitoring stations
+around Australia that collect plankton samples, typically on a monthly basis.
+}
+\details{
+NRS samples are collected from discrete depth samples using Niskin bottles
+(phytoplankton) or vertical net tows (zooplankton). The data are returned in
+wide format with taxa as columns and samples as rows.
+
+Note: Biovolume data is only available for phytoplankton, as it is calculated
+from cell measurements.
 }
 \examples{
+# Get raw phytoplankton abundance data
 df <- pr_get_NRSData(Type = "Phytoplankton", Variable = "abundance", Subset = "raw")
 
+# Get zooplankton data at genus level
+df <- pr_get_NRSData(Type = "Zooplankton", Variable = "abundance", Subset = "genus")
+
+# Get phytoplankton biovolume data
+df <- pr_get_NRSData(Type = "Phytoplankton", Variable = "biovolume", Subset = "species")
+
+}
+\seealso{
+\code{\link[=pr_get_CPRData]{pr_get_CPRData()}} for Continuous Plankton Recorder data,
+\code{\link[=pr_get_Indices]{pr_get_Indices()}} for derived ecological indices
 }

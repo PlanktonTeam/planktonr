@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_bgc.R
 \name{pr_get_NRSCTD}
 \alias{pr_get_NRSCTD}
-\title{Load NRS CTD data}
+\title{Load NRS CTD profile data (temperature, salinity, fluorescence)}
 \usage{
 pr_get_NRSCTD()
 }
@@ -10,7 +10,7 @@ pr_get_NRSCTD()
 A dataframe with NRS CTD data
 }
 \description{
-Load NRS CTD data
+Load NRS CTD profile data (temperature, salinity, fluorescence)
 }
 \examples{
 df <- pr_get_NRSCTD()

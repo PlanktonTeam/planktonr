@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{pr_apply_Flags}
 \alias{pr_apply_Flags}
-\title{Remove flagged data in df}
+\title{Remove flagged data points based on IMOS quality control flags}
 \usage{
 pr_apply_Flags(df, flag_col)
 }
@@ -15,7 +15,7 @@ pr_apply_Flags(df, flag_col)
 A dataframe with flagged data removed
 }
 \description{
-Remove flagged data in df
+Remove flagged data points based on IMOS quality control flags
 }
 \examples{
 df <- data.frame(SST = c(27.4, 28.9, 45), SST_Flag = c(1, 1, 4))

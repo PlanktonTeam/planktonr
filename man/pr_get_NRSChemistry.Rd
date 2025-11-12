@@ -2,16 +2,73 @@
 % Please edit documentation in R/utils_bgc.R
 \name{pr_get_NRSChemistry}
 \alias{pr_get_NRSChemistry}
-\title{Load chemistry data}
+\title{Load National Reference Station chemistry data}
 \usage{
 pr_get_NRSChemistry()
 }
 \value{
-A dataframe with NRS chemistry data
+A dataframe in long format with chemistry data including:
+\itemize{
+\item \code{StationCode}, \code{StationName} - Station identifiers
+\item \code{SampleTime_Local} - Local sampling date and time
+\item \code{SampleDepth_m} - Sampling depth
+\item \code{Parameters} - Chemistry parameter name
+\item \code{Values} - Measured or calculated value
+}
 }
 \description{
-Load chemistry data
+Load water chemistry measurements from NRS stations, including nutrients
+(nitrogen, phosphorus, silicate), dissolved oxygen, carbon chemistry, and
+physical properties. Data are quality controlled using IMOS flags.
+}
+\details{
+The function retrieves and processes the following parameters:
+
+\strong{Nutrients:}
+\itemize{
+\item \code{Nitrate_umolL} - Nitrate concentration (µmol/L)
+\item \code{Nitrite_umolL} - Nitrite concentration (µmol/L)
+\item \code{Ammonium_umolL} - Ammonium concentration (µmol/L)
+\item \code{Phosphate_umolL} - Phosphate concentration (µmol/L)
+\item \code{Silicate_umolL} - Silicate concentration (µmol/L)
+\item \code{NOx_umolL} - Nitrogen oxides (nitrate + nitrite, µmol/L)
+\item \code{DIN_umolL} - Dissolved inorganic nitrogen (NOx + ammonium, µmol/L)
+}
+
+\strong{Carbon Chemistry:}
+\itemize{
+\item \code{DIC_umolkg} - Dissolved inorganic carbon (µmol/kg)
+\item \code{Alkalinity_umolkg} - Total alkalinity (µmol/kg)
+}
+
+\strong{Other:}
+\itemize{
+\item \code{Oxygen_umolL} - Dissolved oxygen (µmol/L)
+\item \code{Salinity} - Salinity (unitless, PSU)
+\item \code{SecchiDepth_m} - Secchi depth, measure of water clarity (m)
+\item \code{Redfield} - N:P ratio (calculated as NOx/Phosphate)
+}
+
+Quality control flags are applied using \code{\link[=pr_apply_Flags]{pr_apply_Flags()}}. Samples are
+filtered to include only NRS stations.
+
+NOx, DIN, and Redfield ratio are calculated from the measured nutrient values.
 }
 \examples{
 df <- pr_get_NRSChemistry()
+
+# Examine available parameters
+unique(df$Parameters)
+
+# Filter for surface nitrate at specific stations
+df_nitrate <- df \%>\%
+  dplyr::filter(Parameters == "Nitrate_umolL", 
+                SampleDepth_m == 0,
+                StationCode \%in\% c("MAI", "PHB"))
+
+}
+\seealso{
+\code{\link[=pr_get_NRSPigments]{pr_get_NRSPigments()}} for photosynthetic pigment data,
+\code{\link[=pr_get_NRSCTD]{pr_get_NRSCTD()}} for CTD profile data,
+\code{\link[=pr_get_NRSEnvContour]{pr_get_NRSEnvContour()}} to format data for contour plots
 }

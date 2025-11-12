@@ -2,22 +2,65 @@
 % Please edit documentation in R/plot_timeseries.R
 \name{pr_plot_Climatology}
 \alias{pr_plot_Climatology}
-\title{Plot single climatology}
+\title{Plot climatologies showing seasonal or interannual patterns}
 \usage{
 pr_plot_Climatology(df, Trend = "Month", trans = "identity")
 }
 \arguments{
-\item{df}{dataframe with specified time period, station code and parameter}
+\item{df}{A dataframe from \code{\link[=pr_get_Indices]{pr_get_Indices()}} containing timeseries data}
 
-\item{Trend}{specified time period}
+\item{Trend}{The temporal aggregation for climatology:
+\itemize{
+\item \code{"Month"} - Monthly climatology averaged across all years (shows seasonal patterns)
+\item \code{"Year"} - Annual means for each year (shows interannual variability)
+}}
 
-\item{trans}{scale of y axis on plot, whatever scale_y_continuous trans accepts}
+\item{trans}{Transformation for the y-axis scale:
+\itemize{
+\item \code{"identity"} - No transformation (default)
+\item \code{"log10"} - Log base 10 transformation (useful for abundance data)
+\item \code{"sqrt"} - Square root transformation
+\item Any other transformation accepted by \code{\link[ggplot2:scale_continuous]{ggplot2::scale_y_continuous()}}
+}}
 }
 \value{
-a climatology plot
+A ggplot2 bar plot with error bars showing climatology patterns
 }
 \description{
-Plot single climatology
+Create bar plots showing monthly or annual climatologies (mean values with
+error bars) to examine seasonal cycles or interannual variability in plankton
+indices. Data are aggregated across years (monthly) or within years (annual)
+to show typical patterns.
+}
+\details{
+\subsection{Monthly Climatology (Trend = "Month")}{
+
+Calculates the mean value for each month across all years in the dataset.
+This shows the typical seasonal cycle, useful for identifying:
+\itemize{
+\item Spring phytoplankton blooms
+\item Summer stratification effects
+\item Winter mixing impacts
+\item Seasonal migration patterns in zooplankton
+}
+}
+
+\subsection{Annual Climatology (Trend = "Year")}{
+
+Calculates the mean value for each calendar year. This shows year-to-year
+variability, useful for identifying:
+\itemize{
+\item Long-term trends (increasing or decreasing)
+\item Regime shifts
+\item Responses to climate oscillations (e.g., ENSO, SAM)
+\item Extreme years (e.g., marine heatwaves)
+}
+
+Error bars represent standard error of the mean (±SE), calculated as
+SD/√N where N is the number of observations.
+
+For NRS data, values are averaged across depths if present.
+}
 }
 \examples{
 df <- pr_get_Indices(Survey = "NRS", Type = "Phytoplankton") \%>\%
@@ -28,4 +71,8 @@ monthly <- pr_plot_Climatology(df, Trend = "Month")
 df <- pr_get_Indices(Survey = "CPR", Type = "Zooplankton") \%>\%
         dplyr::filter(Parameters == "ZoopAbundance_m3")
 annual <- pr_plot_Climatology(df, Trend = "Year")
+}
+\seealso{
+\code{\link[=pr_plot_Trends]{pr_plot_Trends()}} for alternative climatology visualisation with trend lines,
+\code{\link[=pr_plot_TimeSeries]{pr_plot_TimeSeries()}} for raw time series plots
 }

@@ -2,16 +2,55 @@
 % Please edit documentation in R/utils_bgc.R
 \name{pr_get_NRSPico}
 \alias{pr_get_NRSPico}
-\title{Load picophytoplankton data}
+\title{Load picophytoplankton data from NRS stations}
 \usage{
 pr_get_NRSPico()
 }
 \value{
-A dataframe with NRS picophytoplankton data
+A dataframe in long format with picophytoplankton data including:
+\itemize{
+\item \code{StationCode}, \code{StationName} - Station identifiers
+\item \code{SampleTime_Local} - Local sampling date and time
+\item \code{SampleDepth_m} - Sampling depth (numeric, in metres)
+\item \code{Parameters} - Cell type (Prochlorococcus, Synechococcus, or Picoeukaryotes)
+\item \code{Values} - Cell abundance (cells/mL)
+}
 }
 \description{
-Load picophytoplankton data
+Load picophytoplankton abundance data measured by flow cytometry. Picophytoplankton
+are tiny photosynthetic cells (0.2-2 µm) that are important primary producers in
+oligotrophic (nutrient-poor) waters.
+}
+\details{
+The function retrieves abundance data for three groups of picophytoplankton:
+\itemize{
+\item \code{Prochlorococcus_cellsmL} - Prochlorococcus abundance (cells/mL).
+A tiny cyanobacterium found in warm, nutrient-poor tropical and subtropical waters.
+Typically absent or in very low numbers in temperate Australian waters.
+\item \code{Synechococcus_cellsmL} - Synechococcus abundance (cells/mL).
+A cyanobacterium found throughout Australian waters, more tolerant of cooler
+temperatures and higher nutrients than Prochlorococcus.
+\item \code{Picoeukaryotes_cellsmL} - Picoeukaryotic algae abundance (cells/mL).
+Small eukaryotic phytoplankton including prasinophytes and small diatoms.
+}
+
+Quality control flags are applied using \code{\link[=pr_apply_Flags]{pr_apply_Flags()}}. Water column (WC)
+samples are excluded. A small constant is added to zero values to allow log
+transformations in plotting.
 }
 \examples{
 df <- pr_get_NRSPico()
+
+# Examine which stations have picophytoplankton data
+table(df$StationCode, df$Parameters)
+
+# Filter for Synechococcus at North Stradbroke Island
+df_syn <- df \%>\%
+  dplyr::filter(Parameters == "Synechococcus_cellsmL", StationCode == "NSI")
+
+}
+\seealso{
+\code{\link[=pr_get_NRSMicro]{pr_get_NRSMicro()}} for broader microbial community data,
+\code{\link[=pr_get_NRSEnvContour]{pr_get_NRSEnvContour()}} to format data for contour plots,
+\code{\link[=pr_plot_NRSEnvContour]{pr_plot_NRSEnvContour()}} for visualisation
 }

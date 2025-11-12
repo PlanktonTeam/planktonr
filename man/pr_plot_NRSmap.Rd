@@ -2,25 +2,99 @@
 % Please edit documentation in R/plot_maps.R
 \name{pr_plot_NRSmap}
 \alias{pr_plot_NRSmap}
-\title{Sidebar panel plot of selected NRS stations}
+\title{Create map showing selected NRS station locations}
 \usage{
 pr_plot_NRSmap(sites, Survey = "NRS", Type = "Zooplankton")
 }
 \arguments{
-\item{sites}{A string vector containing site codes to plot}
+\item{sites}{Character vector of station codes to highlight. Valid codes:
+\itemize{
+\item \code{"DAR"} - Darwin
+\item \code{"YON"} - Yongala
+\item \code{"NSI"} - North Stradbroke Island
+\item \code{"PHB"} - Port Hacking
+\item \code{"MAI"} - Maria Island
+\item \code{"KAI"} - Kangaroo Island
+\item \code{"ESP"} - Esperance
+\item \code{"ROT"} - Rottnest Island
+\item \code{"NIN"} - Ningaloo
+}}
 
-\item{Survey}{Which Survey to plot ("NRS", "Coastal", "LTM")}
+\item{Survey}{Which station network to display:
+\itemize{
+\item \code{"NRS"} - All National Reference Stations (default)
+\item \code{"LTM"} - Long Term Monitoring subset (Maria Island, Port Hacking, Rottnest Island)
+\item \code{"Coastal"} - Coastal stations
+}}
 
-\item{Type}{Must be phytoplankton for SOTS to plot, otherwise it has no impact on the plot}
+\item{Type}{Plankton type, affecting which stations appear:
+\itemize{
+\item \code{"Zooplankton"} - Standard NRS stations (default)
+\item \code{"Phytoplankton"} - Includes Southern Ocean Time Series (SOTS) station
+}}
 }
 \value{
-a map of the selected stations
+A ggplot2 object with transparent background, suitable for overlaying
+or saving with \code{ggsave()}
 }
 \description{
-Sidebar panel plot of selected NRS stations
+Plot Australian coastline with NRS sampling stations, highlighting selected
+stations in red and non-selected stations in blue. Useful for showing which
+stations are included in an analysis or visualisation.
+}
+\details{
+\subsection{Map Extent}{
+
+The map shows the Australian coastline from:
+\itemize{
+\item Longitude: 112.8°E to 154.5°E
+\item Latitude: -44°S to -10.5°S (or -50°S if including SOTS)
+}
+}
+
+\subsection{Visual Design}{
+\itemize{
+\item \strong{Red points}: Selected stations (specified in \code{sites} argument)
+\item \strong{Blue points}: Non-selected stations
+\item Grey land mass
+\item Transparent background for easy integration into documents
+}
+}
+
+\subsection{Use Cases}{
+
+This function is particularly useful for:
+\itemize{
+\item Sidebar panels in Shiny applications
+\item Figure panels showing study site locations
+\item Publication maps indicating data sources
+\item Educational materials showing NRS network coverage
+}
+}
+
+\subsection{SOTS Station}{
+
+The Southern Ocean Time Series (SOTS) station south of Tasmania is only
+included when \code{Type = "Phytoplankton"} as zooplankton sampling there is
+infrequent or uses different methods.
+}
 }
 \examples{
+# Map showing Maria Island and Port Hacking
 sites <- c("MAI", "PHB")
-pmap <- pr_plot_NRSmap(sites, Type = 'Phytoplankton')
-pmap <- pr_plot_NRSmap(sites, Survey = "LTM")
+pmap <- pr_plot_NRSmap(sites, Type = "Phytoplankton")
+print(pmap)
+
+# Long Term Monitoring stations with one highlighted
+pr_plot_NRSmap(sites = "MAI", Survey = "LTM")
+
+# Save map to file
+pmap <- pr_plot_NRSmap(c("NSI", "PHB", "MAI"))
+ggplot2::ggsave("nrs_stations.png", pmap, width = 6, height = 8, bg = "white")
+}
+\seealso{
+\itemize{
+\item \code{\link[=pr_get_Stations]{pr_get_Stations()}} for station metadata
+\item \code{\link[=pr_plot_CPRmap]{pr_plot_CPRmap()}} for CPR bioregion maps
+}
 }

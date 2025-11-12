@@ -2,26 +2,77 @@
 % Please edit documentation in R/utils_analysis.R
 \name{pr_get_coeffs}
 \alias{pr_get_coeffs}
-\title{Extract tidy coefficients from model object}
+\title{Extract tidy model coefficients for trend analysis}
 \usage{
 pr_get_coeffs(Models, id = "Station")
 }
 \arguments{
-\item{Models}{Model object created by \code{planktonr::pr_model_data}}
+\item{Models}{A list of model objects extracted using \code{\link[=pr_get_model]{pr_get_model()}} from
+a dataframe that has been processed with \code{\link[=pr_model_data]{pr_model_data()}}}
 
-\item{id}{What to name column of model ids}
+\item{id}{Name for the column containing model identifiers (station names or
+bioregion names). Default is \code{"Station"}.}
 }
 \value{
-tibble of model coefficients
+A tibble containing model coefficients with columns:
+\itemize{
+\item Model identifier column (name specified by \code{id} parameter)
+\item \code{term} - Model term name
+\item \code{estimate} - Coefficient estimate
+\item \code{std.error} - Standard error of estimate
+\item \code{statistic} - t-statistic
+\item \code{p.value} - P-value
+\item \code{signif} - Significance indicator (*, **, ***)
+}
 }
 \description{
-Extract tidy coefficients from model object
+Extract and format model coefficients from fitted linear models, including
+significance levels and standard errors. This is useful for creating tables
+of trend statistics or identifying significant trends across multiple stations.
+}
+\details{
+The function uses \code{broom::tidy()} to extract coefficients from each model and
+adds significance indicators:
+\itemize{
+\item \verb{***} p ≤ 0.001 (highly significant)
+\item \verb{**} p ≤ 0.01 (very significant)
+\item \code{*} p ≤ 0.05 (significant)
+\item (blank) p > 0.05 (not significant)
+}
+
+For NRS/LTM data, station codes are automatically added if station names are
+used as identifiers.
+\subsection{Interpreting Coefficients}{
+\itemize{
+\item \strong{Year_Local}: The rate of change per year (slope). Positive = increasing,
+negative = decreasing
+\item \strong{pr_harmonic(Month, k = 1)1}: Sine component of seasonal cycle
+\item \strong{pr_harmonic(Month, k = 1)2}: Cosine component of seasonal cycle
+\item \strong{Intercept}: Expected value at Year = 0 (often not interpretable)
+}
+
+The Year_Local coefficient is typically of most interest for detecting long-term
+trends. Significant harmonic terms indicate a strong seasonal cycle.
+}
 }
 \examples{
+# Fit models and extract coefficients
 df <- planktonr::pr_get_EOVs(Survey = "NRS") \%>\%
-  dplyr::filter(StationCode != "VBM") \%>\%
-  dplyr::filter(Parameters == "PigmentChla_mgm3") \%>\%
+  dplyr::filter(Parameters == "Biomass_mgm3") \%>\%
   pr_remove_outliers(2) \%>\%
   pr_model_data()
-coeffs <- planktonr:::pr_get_coeffs(pr_get_model(df))
+
+models <- pr_get_model(df)
+coeffs <- pr_get_coeffs(models)
+
+# View only Year trends
+coeffs \%>\% dplyr::filter(term == "Year_Local")
+
+# Identify stations with significant trends
+coeffs \%>\% 
+  dplyr::filter(term == "Year_Local", signif != "")
+}
+\seealso{
+\code{\link[=pr_model_data]{pr_model_data()}} for fitting models,
+\code{\link[=pr_get_model]{pr_get_model()}} for extracting model objects
 }

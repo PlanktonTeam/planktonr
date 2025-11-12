@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_plotting.R
 \name{pr_get_FreqMap}
 \alias{pr_get_FreqMap}
-\title{Get data for frequency map plots}
+\title{Prepare species occurrence data for frequency mapping}
 \usage{
 pr_get_FreqMap(Type = "Zooplankton")
 }
@@ -13,7 +13,7 @@ pr_get_FreqMap(Type = "Zooplankton")
 dataframe for plotting with pr_plot_FreqMap
 }
 \description{
-Get data for frequency map plots
+Prepare species occurrence data for frequency mapping
 }
 \examples{
 df <- pr_get_FreqMap("Zooplankton")

@@ -2,16 +2,117 @@
 % Please edit documentation in R/utils_larvalfish.R
 \name{pr_get_LFData}
 \alias{pr_get_LFData}
-\title{Get Larval Fish Sample Data}
+\title{Get NRS larval fish abundance data}
 \usage{
 pr_get_LFData()
 }
 \value{
-A dataframe with Raw Larval Fish Data
+A dataframe with columns:
+\itemize{
+\item \strong{StationName}: NRS station name
+\item \strong{Latitude}, \strong{Longitude}: Sample location
+\item \strong{TripCode}: Unique voyage identifier
+\item \strong{SampleTime_UTC}, \strong{SampleTime_Local}: Sampling time
+\item \strong{Year_Local}, \strong{Month_Local}, \strong{Day_Local}: Date components
+\item \strong{SampleDepth_m}: Maximum depth of tow
+\item \strong{Temperature_degC}, \strong{Salinity_psu}: Surface environmental data
+\item \strong{Volume_m3}: Volume of water filtered (m³)
+\item \strong{Vessel}: Research vessel name
+\item \strong{TowType}: Vertical or oblique
+\item \strong{GearMesh_um}: Net mesh size (micrometres)
+\item \strong{Bathymetry_m}: Bottom depth at station
+\item \strong{Species}: Coded species name with WoRMS ID
+\item \strong{Species2}: Formatted species name for display
+\item \strong{Count}: Number of larvae in sample
+\item \strong{Abundance_1000m3}: Larvae per 1000 m³
+\item \strong{QC_flag}: Data quality flag (1-4)
+}
 }
 \description{
-Get Larval Fish Sample Data
+Load and format larval fish count data from NRS biogeochemistry sampling.
+Data includes counts and abundance (standardised to 1000 m³) of fish larvae
+identified to family or species level.
+}
+\details{
+\subsection{Data Collection}{
+
+Larval fish samples are collected at NRS stations using:
+\itemize{
+\item Vertical net tows through the water column
+\item Various mesh sizes (typically 100-500 µm)
+\item Sample volumes calculated from net dimensions and tow depth
+}
+
+Fish larvae are identified to the lowest possible taxonomic level, typically
+family but sometimes genus or species for distinctive forms.
+}
+
+\subsection{Data Format}{
+
+The function returns data in long format with:
+\itemize{
+\item One row per species per sample
+\item Raw counts and standardised abundance (per 1000 m³)
+\item Environmental data (temperature, salinity)
+\item Sampling metadata (mesh size, volume filtered, tow type)
+}
+}
+
+\subsection{Species Names}{
+
+The \code{Species} column contains coded names (e.g., "Acanthuridae_37437900")
+combining family name and WoRMS taxonomic ID. The \code{Species2} column provides
+formatted names for display purposes.
+}
+
+\subsection{Taxonomic Codes}{
+
+Family names in the data typically end with "idae" (e.g., Acanthuridae for
+surgeonfishes, Carangidae for trevallies). Codes include:
+\itemize{
+\item Family name
+\item WoRMS AphiaID (taxonomic identifier)
+\item Life stage code (3 = larval stage)
+}
+}
+
+\subsection{Data Availability}{
+
+Larval fish sampling is conducted opportunistically during NRS voyages. Not
+all stations or months have larval fish data.
+}
+
+\subsection{Quality Control}{
+
+The \code{QC_flag} column indicates data quality:
+\itemize{
+\item \code{1} = Good data
+\item \code{2} = Probably good data
+\item \code{3} = Probably bad data (use with caution)
+\item \code{4} = Bad data (do not use)
+}
+}
 }
 \examples{
+# Load larval fish data
 df <- pr_get_LFData()
+
+# Check which families are most common
+df \%>\%
+  dplyr::group_by(Species) \%>\%
+  dplyr::summarise(TotalCount = sum(Count, na.rm = TRUE)) \%>\%
+  dplyr::arrange(dplyr::desc(TotalCount))
+
+# Abundance at Maria Island
+df \%>\%
+  dplyr::filter(StationName == "Maria Island",
+                QC_flag == 1) \%>\%
+  dplyr::group_by(Year_Local, Species2) \%>\%
+  dplyr::summarise(MeanAbundance = mean(Abundance_1000m3, na.rm = TRUE),
+                   .groups = "drop")
+}
+\seealso{
+\itemize{
+\item \code{\link[=pr_get_NRSData]{pr_get_NRSData()}} for plankton data from the same stations
+}
 }

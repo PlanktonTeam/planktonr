@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_maps.R
 \name{pr_plot_PCImap}
 \alias{pr_plot_PCImap}
-\title{PCI plot for CPR data}
+\title{Map Phytoplankton Colour Index (PCI) from CPR samples around Australia}
 \usage{
 pr_plot_PCImap(df)
 }
@@ -13,7 +13,7 @@ pr_plot_PCImap(df)
 plot of PCI around Australia
 }
 \description{
-PCI plot for CPR data
+Map Phytoplankton Colour Index (PCI) from CPR samples around Australia
 }
 \examples{
 pr_get_PCIData() \%>\% pr_plot_PCImap()
