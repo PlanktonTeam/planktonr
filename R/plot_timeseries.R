@@ -128,8 +128,8 @@ pr_plot_TimeSeries <- function(df, trans = "identity"){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_Indices("NRS", "Zooplankton") %>%
-#'   dplyr::filter(Parameters == "Biomass_mgm3") %>%
+#' df <- pr_get_Indices("SOTS", "Phytoplankton") %>%
+#'   dplyr::filter(Parameters == "PhytoAbundance_CellsL") %>%
 #'   pr_model_data()
 #' pr_plot_Trends(df, method = "loess", Trend = "Month")
 #' pr_plot_Trends(df, Trend = "Year")
@@ -194,7 +194,8 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
   }
 
     # Remove deeper SOTS samples from df and make a separate model df for this data if it exists
-  if(any(grepl("Ocean Time", site))){
+  site_col <- rlang::as_string(site)
+  if (any(stringr::str_detect(df[[site_col]], "Ocean Time"), na.rm = TRUE)) {
     dfsots30 <- df %>% dplyr::filter(dplyr::between(.data$SampleDepth_m, 20, 34.5),
                                      grepl("SOTS", .data$StationCode))
     df <- df %>% dplyr::filter(.data$SampleDepth_m < 20 | is.na(.data$SampleDepth_m))
@@ -555,7 +556,7 @@ pr_plot_tsclimate <- function(df, trans = "identity"){
 #' @examples
 #' df <- pr_get_FuncGroups("SOTS", "Phytoplankton") %>%
 #' dplyr::filter(StationCode == 'SOTS')
-#' plot <- pr_plot_tsfg(df, "Actual", Trend = 'Month')
+#' plot <- pr_plot_tsfg(df, "Actual", Trend = 'Year')
 #' plot
 pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 
@@ -659,7 +660,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 
   df <- df %>%
     dplyr::mutate(Values = .data$Values + 1, # Add a small number so plot doesn't go weird
-                  alphagroup = ifelse(grepl("Southern", station) & !!rlang::sym(Trend) < 2015, 0.4, 0.9)) # distinguish SOTS deeper samples
+                  alphagroup = ifelse(grepl("Southern", !!rlang::sym(station)) & !!rlang::sym(Trend) < 2015, 0.4, 0.9)) # distinguish SOTS deeper samples
 
   if(Scale == "Proportion") {
 

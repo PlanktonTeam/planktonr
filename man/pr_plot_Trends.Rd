@@ -23,8 +23,8 @@ a timeseries plot
 Plot temporal Trends in plankton data
 }
 \examples{
-df <- pr_get_Indices("NRS", "Zooplankton") \%>\%
-  dplyr::filter(Parameters == "Biomass_mgm3") \%>\%
+df <- pr_get_Indices("SOTS", "Phytoplankton") \%>\%
+  dplyr::filter(Parameters == "PhytoAbundance_CellsL") \%>\%
   pr_model_data()
 pr_plot_Trends(df, method = "loess", Trend = "Month")
 pr_plot_Trends(df, Trend = "Year")
