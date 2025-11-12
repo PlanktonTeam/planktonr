@@ -790,7 +790,8 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 
   if("BioRegion" %in% colnames(df)){ # If CPR data
     SampleDate = rlang::sym("SampleTime_Local")
-    station = rlang::sym("BioRegion")
+    df <- df %>%
+      dplyr::rename(StationName = "BioRegion")
 
     if ("Copepod" %in% df$Parameters) {
       titley <- pr_relabel("ZoopAbund_m3", style = "ggplot")
@@ -800,7 +801,6 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 
   } else { # If NRS data
     SampleDate = rlang::sym("SampleTime_Local")
-    station = rlang::sym("StationName")
 
     if ("Copepod" %in% df$Parameters) {
       titley <- pr_relabel("ZoopAbund_m3", style = "ggplot")
@@ -830,20 +830,24 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
     Trend <- SampleDate # Rename Trend to match the column with time
   }
 
+  trend_col   <- rlang::as_string(Trend)
+
   df <- df %>%
     dplyr::mutate(Values = .data$Values + 1, # Add a small number so plot doesn't go weird
-                  alphagroup = ifelse(grepl("Southern", !!rlang::sym(station)) & !!rlang::sym(Trend) < 2015, 0.4, 0.9)) # distinguish SOTS deeper samples
+                  alphagroup = ifelse(
+                    stringr::str_detect(.data$StationName, "Ocean Time") &
+                      lubridate::year(.data[[trend_col]]) < 2015, 0.4, 0.9)) # distinguish SOTS deeper samples
 
   if(Scale == "Proportion") {
 
     df <- df %>%
       dplyr::mutate(Total = sum(.data$Values, na.rm = TRUE),
                        .by = tidyselect::all_of(c(rlang::as_string(rlang::sym(Trend)),
-                                                  rlang::as_string(station),
+                                                  "StationName",
                                                   "alphagroup"))) %>%
       dplyr::mutate(Values = .data$Values / sum(.data$Total, na.rm = TRUE),
                     .by = tidyselect::all_of(c(rlang::as_string(rlang::sym(Trend)),
-                                               rlang::as_string(station),
+                                               "StationName",
                                                "Parameters",
                                                "alphagroup")))
   }
@@ -855,7 +859,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
                                          alpha = .data$alphagroup)) +
     ggplot2::geom_area(linewidth = 0.2, colour = "white") +
     ggplot2::scale_alpha(range = c(0.4, 0.9), guide = 'none') +
-    ggplot2::facet_wrap(rlang::enexpr(station), scales = "free", ncol = 1) +
+    ggplot2::facet_wrap(vars(.data$StationName), scales = "free", ncol = 1) +
     ggplot2::labs(y = titley) +
     ggplot2::scale_fill_brewer(palette = "Set1", drop = FALSE, name = "Functional Group") +
     theme_pr() +
