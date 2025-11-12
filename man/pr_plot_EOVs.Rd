@@ -86,7 +86,7 @@ p1 / p2
 df_cpr <- pr_get_EOVs("CPR") \%>\%
   dplyr::filter(BioRegion == "South-east") \%>\%
   pr_remove_outliers(2)
-pr_plot_EOVs(df_cpr, EOV = "ShannonPhytoDiversity", 
+pr_plot_EOVs(df_cpr, EOV = "ShannonPhytoDiversity",
              trans = "identity", col = "darkgreen")
 }
 \seealso{

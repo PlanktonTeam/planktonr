@@ -96,5 +96,4 @@ pr_plot_tsfg(df_zoo, Scale = "Actual", Trend = "Raw")
 \seealso{
 \code{\link[=pr_get_FuncGroups]{pr_get_FuncGroups()}} for preparing the input data,
 \code{\link[=pr_plot_PieFG]{pr_plot_PieFG()}} for pie chart visualisation of functional groups
-
 }

@@ -823,7 +823,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
                        sd = sd(.data$Values, na.rm = TRUE),
                        se = sd / sqrt(.data$N),
                        .by = tidyselect::all_of(c(rlang::as_string(rlang::sym(Trend)),
-                                                  rlang::as_string(station),
+                                                  "StationName",
                                                   "Parameters")))
 
   } else {
@@ -836,7 +836,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
     dplyr::mutate(Values = .data$Values + 1, # Add a small number so plot doesn't go weird
                   alphagroup = ifelse(
                     stringr::str_detect(.data$StationName, "Ocean Time") &
-                      lubridate::year(.data[[trend_col]]) < 2015, 0.4, 0.9)) # distinguish SOTS deeper samples
+                      .data[[trend_col]] < 2015, 0.4, 0.9)) # distinguish SOTS deeper samples
 
   if(Scale == "Proportion") {
 
