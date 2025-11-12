@@ -13,7 +13,7 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
   # Input validation
   assertthat::assert_that(
     is.character(Survey) && length(Survey) == 1,
-    msg = "'Survey' must be a single character string. Valid options are 'NRS', 'CPR', or 'LTM'."
+    msg = "'Survey' must be a single character string. Valid options are 'NRS', 'CPR', 'SOTS', or 'LTM'."
   )
 
   assertthat::assert_that(

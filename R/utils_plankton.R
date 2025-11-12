@@ -43,9 +43,7 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Zooplankton", ...){
   } else if(Survey == 'SOTS'){
     df <- pr_get_NRSData(Type, Variable = "abundance", Subset = "htg") %>%
       dplyr::filter(grepl('SOTS', .data$StationCode),
-                    .data$Method == 'LM') %>%
-      dplyr::mutate(StationName = 'Southern Ocean Time Series', #TODO - once we get rid of SOTS_RAS we can delete this
-                    StationCode = 'SOTS')
+                    .data$Method == 'LM')
   }
 
   if(Type == "Phytoplankton"){

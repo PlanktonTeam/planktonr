@@ -39,8 +39,8 @@ library(patchwork)
 
 Explore the data and see what parameters are available for plotting at which stations. Note that Oxygen data is only available for Maria Island and Rottnest Island.
 
-```{r}
 
+```{r}
 Nuts <- pr_get_NRSEnvContour("Chemistry") 
 unique(Nuts$Parameters)
 unique(Nuts$StationName)

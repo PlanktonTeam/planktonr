@@ -20,8 +20,10 @@ pr_model_data <- function(df){
   )
 
   # Send a message if SOTS data is included that to check sample depths.
-  if(StationCode %in% c("SOTS")) {
-    cat("SOTS samples are taken at varying depths, this model does not account for depth, check your data input")
+  if("StationCode" %in% names(df)) {
+    if(any(grepl("SOTS", df$StationCode))){
+      cat("SOTS samples are taken at varying depths, this model does not account for depth, check your data input")
+    }
   }
 
   Survey <- pr_get_survey(df)

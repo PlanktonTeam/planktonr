@@ -19,22 +19,22 @@ pr_get_NRSData <- function(Type = "Phytoplankton", Variable = "abundance", Subse
     is.character(Type) && length(Type) == 1,
     msg = "'Type' must be a single character string. Valid options are 'Phytoplankton' or 'Zooplankton'."
   )
-  
+
   assertthat::assert_that(
     is.character(Variable) && length(Variable) == 1,
     msg = "'Variable' must be a single character string. Valid options are 'abundance' or 'biovolume'."
   )
-  
+
   assertthat::assert_that(
     Variable %in% c("abundance", "biovolume"),
     msg = "'Variable' must be one of 'abundance' or 'biovolume'."
   )
-  
+
   assertthat::assert_that(
     is.character(Subset) && length(Subset) == 1,
     msg = "'Subset' must be a single character string. Valid options are 'raw', 'htg', 'genus', 'species', or 'copepods'."
   )
-  
+
   assertthat::assert_that(
     Subset %in% c("raw", "htg", "genus", "species", "copepods"),
     msg = "'Subset' must be one of 'raw', 'htg', 'genus', 'species', or 'copepods'."
@@ -58,7 +58,7 @@ pr_get_NRSData <- function(Type = "Phytoplankton", Variable = "abundance", Subse
   # nrs_zooplankton_abundance_raw_data
 
   Type <- pr_check_type(Type)
-  
+
   # Check biovolume is only used with phytoplankton
   assertthat::assert_that(
     !(Variable == "biovolume" && Type == "Zooplankton"),
@@ -83,6 +83,8 @@ pr_get_NRSData <- function(Type = "Phytoplankton", Variable = "abundance", Subse
 
     file = paste("bgc", tolower(Type), Variable, Subset, "data", sep = "_")
     dat <-pr_get_Raw(file) %>%
+      dplyr::mutate(StationCode = ifelse(grepl("SOTS", .data$StationCode), "SOTS", .data$StationCode), #TODO - once we get rid of SOTS_RAS we can delete this
+                    StationName = ifelse(grepl("Remote Access Sampler", .data$StationName), "Southern Ocean Time Series", .data$StationName)) %>%
       pr_rename()
   }
 
@@ -105,13 +107,13 @@ pr_get_NRSData <- function(Type = "Phytoplankton", Variable = "abundance", Subse
 #' df <- pr_get_Stations('NRS')
 #' @importFrom rlang .data
 pr_get_Stations <- function(Survey = 'NRS'){
-  
+
   # Input validation
   assertthat::assert_that(
     is.character(Survey) && length(Survey) == 1,
     msg = "'Survey' must be a single character string. Valid options are 'NRS' or 'SOTS'."
   )
-  
+
   assertthat::assert_that(
     Survey %in% c("NRS", "SOTS"),
     msg = "'Survey' must be one of 'NRS' or 'SOTS'."
@@ -122,6 +124,8 @@ pr_get_Stations <- function(Survey = 'NRS'){
                          col_types = readr::cols(
                            StationStartDate = readr::col_date(format = "%d/%m/%Y"))) %>%
     pr_rename() %>%
+    dplyr::mutate(StationCode = ifelse(grepl("SOTS", .data$StationCode), "SOTS", .data$StationCode),
+                  StationName = ifelse(grepl("Remote Access Sampler", .data$StationName), "Southern Ocean Time Series", .data$StationName)) %>%
     dplyr::filter(.data$ProjectName == Survey)
 
   return(dat)

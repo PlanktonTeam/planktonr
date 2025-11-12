@@ -37,11 +37,13 @@ pr_plot_TimeSeries <- function(df, trans = "identity"){
   )
 
   # Check required columns
-  if ("SOTS" %in% df$StationCode) {
-    required_cols <- c("SampleTime_Local", "Values", "Parameters", "SampleDepth_m")
-  }  else {
-    required_cols <- c("SampleTime_Local", "Values", "Parameters")
-  }
+  required_cols <- c("SampleTime_Local", "Values", "Parameters")
+
+  if("StationCode" %in% names(df)) {
+    if(any(grepl("SOTS", df$StationCode))){
+      required_cols <- c("SampleTime_Local", "Values", "Parameters", "SampleDepth_m")
+      }
+    }
   assertthat::assert_that(
     all(required_cols %in% names(df)),
     msg = paste0("'df' must contain the following columns: ", paste(required_cols, collapse = ", "), ".")
@@ -58,7 +60,7 @@ pr_plot_TimeSeries <- function(df, trans = "identity"){
 
   } else if (Survey %in% c("NRS", "Coastal", "SOTS")){
     if(Survey == 'Coastal'){
-      df <- df %>% mutate(SampleTime_Local = lubridate::day(SampleTime_Local))
+      df <- df %>% mutate(SampleTime_Local = lubridate::day(.data$SampleTime_Local))
       vars <- c("SampleTime_Local", "StationName", "Parameters")
     } else {
       vars <- c("SampleTime_Local", "StationName", "Parameters", "SampleDepth_m")
@@ -72,7 +74,7 @@ pr_plot_TimeSeries <- function(df, trans = "identity"){
   }
 
   # Remove deeper SOTS samples so they can be plotted in a lighter shade
-  if(any(grepl("Southern", df$StationName))){
+  if(any(grepl("Ocean Time", df$StationName))){
     dfsots30 <- df %>% dplyr::filter(dplyr::between(.data$SampleDepth_m, 20, 34.5),
                                      grepl("Southern", .data$StationName))
     df <- df %>% dplyr::filter(.data$SampleDepth_m < 20 | is.na(.data$SampleDepth_m))
@@ -165,12 +167,13 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
     msg = "'trans' must be a single character string specifying the y-axis transformation (e.g., 'identity', 'log10', 'sqrt')."
   )
 
-  if ("SOTS" %in% df$StationCode) {
+  if("StationCode" %in% names(df)) {
+    if(any(grepl("SOTS", df$StationCode))){
     assertthat::assert_that(
       "SampleDepth_m" %in% colnames(df),
-      msg = "When using SOTS data the SampleDepth_m column is required as samples are taken at varying depths."
-    )
-  }
+      msg = "When using SOTS data the SampleDepth_m column is required as samples are taken at varying depths.")
+      }
+    }
 
   assertthat::assert_that(
     nrow(df) > 0,
@@ -183,8 +186,15 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
 
   minYear <- min(df$Year_Local, na.rm = TRUE)
 
-  # Remove deeper SOTS samples from df and make a separate model df for this data if it exists
-  if(any(grepl("SOTS", df$StationCode))){
+  # Set Correct columns/plot titles
+  if (Survey == "CPR"){
+    site <- rlang::sym("BioRegion")
+  } else if (Survey != "CPR"){
+    site <- rlang::sym("StationName")
+  }
+
+    # Remove deeper SOTS samples from df and make a separate model df for this data if it exists
+  if(any(grepl("Ocean Time", site))){
     dfsots30 <- df %>% dplyr::filter(dplyr::between(.data$SampleDepth_m, 20, 34.5),
                                      grepl("SOTS", .data$StationCode))
     df <- df %>% dplyr::filter(.data$SampleDepth_m < 20 | is.na(.data$SampleDepth_m))
@@ -210,12 +220,6 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
     Trend = paste0(Trend, "_Local") # Rename to match columns
   }
 
-  # Set Correct columns/plot titles
-  if (Survey == "CPR"){
-    site <- rlang::sym("BioRegion")
-  } else if (Survey != "CPR"){
-    site <- rlang::sym("StationName")
-  }
 
   ## Should Model data be used.
   if (Trend != 'Raw'){
@@ -385,11 +389,14 @@ pr_plot_Climatology <- function(df, Trend = "Month", trans = "identity"){
   )
 
   # Check required columns
-  if ("SOTS" %in% df$StationCode) {
-    required_cols <- c("Values", "Parameters", "SampleDepth_m")
-    }  else {
-    required_cols <- c("Values", "Parameters")
-    }
+  required_cols <- c("Values", "Parameters")
+
+  if("StationCode" %in% names(df)) {
+    if(any(grepl("SOTS", df$StationCode))){
+      required_cols <- c("Values", "Parameters", "SampleDepth_m")
+      }
+  }
+
   assertthat::assert_that(
     all(required_cols %in% names(df)),
     msg = paste0("'df' must contain the following columns: ", paste(required_cols, collapse = ", "), ".")
@@ -417,7 +424,7 @@ pr_plot_Climatology <- function(df, Trend = "Month", trans = "identity"){
     legendTitle <- "Bioregion"
     plotCols <- colCPR
   } else if (Survey != "CPR"){
-    plotCols <- planktonr:::colNRSName
+    plotCols <- colNRSName
     legendTitle <- "Station Name"
   }
 
@@ -437,25 +444,33 @@ pr_plot_Climatology <- function(df, Trend = "Month", trans = "identity"){
     df_climate <- df_climate %>%
       dplyr::mutate(!!Trend := lubridate::as_date(paste(!!Trend, 1, 1, sep = "-")), #TODO Temp fix to convert to date and fix ticks below
                     alphagroup = ifelse(grepl("Southern", .data$StationName) & lubridate::year(!!Trend) < 2015, 0.4, 0.9)) # distinguish SOTS deeper samples
-  }
 
-  p1 <- ggplot2::ggplot(df_climate, ggplot2::aes(x = !!Trend,
+    p1 <- ggplot2::ggplot(df_climate, ggplot2::aes(x = !!Trend,
                                                  y = .data$mean,
                                                  fill = .data$StationName,
                                                  group = .data$StationName,
-                                                 alpha = .data$alphagroup)) +
-    ggplot2::geom_col(width = dodge, position = ggplot2::position_dodge(width = dodge)) +
-    ggplot2::geom_errorbar(ggplot2::aes(ymin = .data$mean-.data$se, ymax = .data$mean+.data$se),
-                           width = dodge/3,                    # Width of the error bars
-                           position = ggplot2::position_dodge(width = dodge)) +
-    ggplot2::labs(y = title) +
-    ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0, 0.02))) +
-    ggplot2::scale_fill_manual(values = plotCols,
-                               limits = force,
-                               name = legendTitle,
-                               guide = ggplot2::guide_legend(byrow = TRUE)) +
-    ggplot2::scale_alpha_identity(guide = "none") +
-    theme_pr()
+                                                 alpha = .data$alphagroup))
+    }
+
+  if("Month_Local" %in% colnames(df_climate)){
+    p1 <- ggplot2::ggplot(df_climate, ggplot2::aes(x = !!Trend,
+                                                   y = .data$mean,
+                                                   fill = .data$StationName,
+                                                   group = .data$StationName))
+    }
+
+  p1 <- p1 +
+      ggplot2::geom_col(width = dodge, position = ggplot2::position_dodge(width = dodge)) +
+      ggplot2::geom_errorbar(ggplot2::aes(ymin = .data$mean-.data$se, ymax = .data$mean+.data$se),
+                             width = dodge/3,                    # Width of the error bars
+                             position = ggplot2::position_dodge(width = dodge)) +
+      ggplot2::labs(y = title) +
+      ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0, 0.02))) +
+      ggplot2::scale_fill_manual(values = plotCols,
+                                 limits = force,
+                                 name = legendTitle,
+                                 guide = ggplot2::guide_legend(byrow = TRUE)) +
+      theme_pr()
 
   if("Month_Local" %in% colnames(df_climate)){
     p1 <- p1 +
@@ -466,11 +481,13 @@ pr_plot_Climatology <- function(df, Trend = "Month", trans = "identity"){
 
   if("Year_Local" %in% colnames(df_climate) & Survey != 'Coastal'){
     p1 <- p1 +
+      ggplot2::scale_alpha_identity(guide = "none") +
       ggplot2::xlab("Year") +
       ggplot2::scale_x_date(date_breaks = "2 years", date_labels = "%Y", expand = c(0, 0))
   }
   if("Year_Local" %in% colnames(df_climate) & Survey == 'Coastal'){
     p1 <- p1 +
+      ggplot2::scale_alpha_identity(guide = "none") +
       ggplot2::xlab("Year") +
       ggplot2::scale_x_date(date_breaks = "1 year", date_labels = "%Y", expand = c(0, 0))
   }
@@ -532,7 +549,6 @@ pr_plot_tsclimate <- function(df, trans = "identity"){
 #' @param Scale y axis scale Actual or Proportion
 #' @param Trend Over what timescale to fit the Trend - "Raw", "Month" or "Year"
 #'
-#'
 #' @return plot of fg timseries
 #' @export
 #'
@@ -575,14 +591,17 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
   )
 
   # Check required columns
-  if ("SOTS" %in% df$StationCode) {
-    required_cols <- c("SampleTime_Local", "Values", "Parameters", "SampleDepth_m")
-  }  else {
-    required_cols <- c("SampleTime_Local", "Values", "Parameters")
+  required_cols <- c("SampleTime_Local", "Values", "Parameters")
+
+  if("StationCode" %in% names(df)) {
+    if(any(grepl("SOTS", df$StationCode))){
+      required_cols <- c("SampleTime_Local", "Values", "Parameters", "SampleDepth_m")
+    }
   }
+
   assertthat::assert_that(
-    all(required_cols %in% names(df)),
-    msg = paste0("'df' must contain the following columns: ", paste(required_cols, collapse = ", "), ".")
+      all(required_cols %in% names(df)),
+      msg = paste0("'df' must contain the following columns: ", paste(required_cols, collapse = ", "), ".")
   )
 
   df <- tibble::as_tibble(df)
@@ -640,7 +659,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 
   df <- df %>%
     dplyr::mutate(Values = .data$Values + 1, # Add a small number so plot doesn't go weird
-                  alphagroup = ifelse(grepl("Southern", .data$StationName) & !!rlang::sym(Trend) < 2015, 0.4, 0.9)) # distinguish SOTS deeper samples
+                  alphagroup = ifelse(grepl("Southern", station) & !!rlang::sym(Trend) < 2015, 0.4, 0.9)) # distinguish SOTS deeper samples
 
   if(Scale == "Proportion") {
 
@@ -688,8 +707,7 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
   } else if (rlang::as_string(Trend) %in% c("Year_Local")){
     yrs <- range(df[[rlang::as_string(Trend)]], na.rm = TRUE)
     p1 <- p1 +
-      ggplot2::scale_x_continuous(breaks = scales::pretty_breaks(n = 6)(yrs),
-                                  expand = ggplot2::expansion(mult = c(0, 0))) +
+      ggplot2::scale_x_continuous(expand = ggplot2::expansion(mult = c(0, 0))) +
       ggplot2::xlab("Year")
   } else if (rlang::as_string(Trend) %in% c("SampleTime_Local")){
     lims <- as.POSIXct(strptime(c(min(df$SampleTime_Local),
