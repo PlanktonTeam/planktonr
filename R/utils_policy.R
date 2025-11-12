@@ -13,12 +13,12 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
   # Input validation
   assertthat::assert_that(
     is.character(Survey) && length(Survey) == 1,
-    msg = "'Survey' must be a single character string. Valid options are 'NRS', 'CPR', or 'LTM'."
+    msg = "'Survey' must be a single character string. Valid options are 'NRS', 'CPR', 'SOTS', or 'LTM'."
   )
 
   assertthat::assert_that(
-    Survey %in% c("NRS", "CPR", "LTM"),
-    msg = "'Survey' must be one of 'NRS', 'CPR', or 'LTM'."
+    Survey %in% c("NRS", "CPR", "LTM", "SOTS"),
+    msg = "'Survey' must be one of 'NRS', 'CPR', 'SOTS' or 'LTM'."
   )
 
   if(Survey == "CPR") {
@@ -131,7 +131,6 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
       dplyr::bind_rows(NutsSots)
 
     means <- Pol %>%
-      pr_remove_outliers(2) %>%
       dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
                        sd = stats::sd(.data$Values, na.rm = TRUE),
                        .by = tidyselect::all_of(c("StationName", "SampleDepth_m", "Parameters")))

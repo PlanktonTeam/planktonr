@@ -88,13 +88,11 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Zooplankton", ...){
       pr_add_Bioregions(...)
   } else if(Survey == "NRS"){
     df <- pr_get_NRSData(Type, Variable = "abundance", Subset = "htg") %>%
-      dplyr::filter(.data$StationName != "Port Hacking 4")
+      dplyr::filter(.data$Project %in% c("NRS", "SOTS"))
   } else if(Survey == 'SOTS'){
     df <- pr_get_NRSData(Type, Variable = "abundance", Subset = "htg") %>%
       dplyr::filter(grepl('SOTS', .data$StationCode),
-                    .data$Method == 'LM') %>%
-      dplyr::mutate(StationName = 'Southern Ocean Time Series', #TODO - once we get rid of SOTS_RAS we can delete this
-                    StationCode = 'SOTS')
+                    .data$Method == 'LM')
   }
 
   if(Type == "Phytoplankton"){
@@ -304,13 +302,11 @@ pr_get_STIdata <-  function(Type = "Phytoplankton"){
     dplyr::mutate(Project = "cpr",
                   Species_m3 = .data[[parameter]] + min(.data[[parameter]][.data[[parameter]]>0], na.rm = TRUE))
 
-  # TODO THERE IS A MANY-TO-MANY JOIN ERROR HERE DUR TO MULTIPLE SOTS ENTRIES IN THE SAT DATA. RUN TESTS TO SEE ISSUE IF UNSURE
-  # TODO THERE ARE PROBLEMS WITH THE JOIN WITH LOTS OF DUPLICATE .X AND .Y COLUMNS
   nrs <- nrsdat %>%
     tidyr::pivot_longer(-tidyselect::all_of(pr_get_NonTaxaColumns(Survey = "NRS", Type = Type)),
                         names_to = "Species",
                         values_to = parameter) %>%
-    dplyr::left_join(nrssat, by = c("Latitude", "Longitude", "SampleTime_Local")) %>%
+    dplyr::left_join(nrssat, by = c("TripCode")) %>% #TripCode needed for SOTS as other parameters are repeated
     dplyr::select("Species", "SST", tidyselect::all_of(parameter)) %>%
     dplyr::filter(!is.na(.data$SST) & .data[[parameter]] > 0) %>%
     dplyr::mutate(Project = "nrs",

@@ -248,8 +248,8 @@ pr_plot_CPRmap <-  function(sites){
 #' @examples
 #' df <- pr_get_NRSMicro("GO-SHIP")
 #' dfs <- df %>% dplyr::slice(1:5000)
-#' voyagemap <- pr_plot_Voyagemap(df, dfs, Country = c("AUstralia", "New Zealand"))
-pr_plot_Voyagemap <-  function(df, dfs, Country = c("AUstralia")){
+#' voyagemap <- pr_plot_Voyagemap(df, dfs, Country = c("Australia", "New Zealand"))
+pr_plot_Voyagemap <-  function(df, dfs, Country = c("Australia")){
 
   MapOz <- rnaturalearth::ne_countries(scale = "small", returnclass = "sf", country = Country)
 

@@ -4,7 +4,7 @@
 \alias{pr_plot_Voyagemap}
 \title{Create map showing CPR voyage tracks and sampling locations}
 \usage{
-pr_plot_Voyagemap(df, dfs, Country = c("AUstralia"))
+pr_plot_Voyagemap(df, dfs, Country = c("Australia"))
 }
 \arguments{
 \item{df}{dataframe containing all locations to plot}
@@ -22,5 +22,5 @@ Create map showing CPR voyage tracks and sampling locations
 \examples{
 df <- pr_get_NRSMicro("GO-SHIP")
 dfs <- df \%>\% dplyr::slice(1:5000)
-voyagemap <- pr_plot_Voyagemap(df, dfs, Country = c("AUstralia", "New Zealand"))
+voyagemap <- pr_plot_Voyagemap(df, dfs, Country = c("Australia", "New Zealand"))
 }

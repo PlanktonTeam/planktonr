@@ -2,8 +2,8 @@
 
 #' Plot basic timeseries of plankton indices
 #'
-#' Create a time series plot showing how plankton indices vary over time at 
-#' different stations or bioregions. This is a simple line plot without trend 
+#' Create a time series plot showing how plankton indices vary over time at
+#' different stations or bioregions. This is a simple line plot without trend
 #' analysis or aggregation.
 #'
 #' @param df A dataframe from [pr_get_Indices()] containing timeseries data
@@ -15,18 +15,18 @@
 #'   * Any other transformation accepted by [ggplot2::scale_y_continuous()]
 #'
 #' @details
-#' For NRS data, values are averaged across depths if multiple depths are present 
-#' (relevant for microbial data). For CPR data, bioregions are treated as "stations" 
+#' For NRS data, values are averaged across depths if multiple depths are present
+#' (relevant for microbial data). For CPR data, bioregions are treated as "stations"
 #' for plotting purposes.
-#' 
-#' The plot uses colour and line type to distinguish between stations/bioregions. 
+#'
+#' The plot uses colour and line type to distinguish between stations/bioregions.
 #' Points show individual observations, connected by lines.
 #'
 #' @return A ggplot2 object showing the timeseries
-#' 
+#'
 #' @seealso [pr_plot_Trends()] for timeseries with trend lines,
 #'   [pr_plot_Climatology()] for seasonal patterns
-#' 
+#'
 #' @export
 #'
 #' @examples
@@ -34,7 +34,7 @@
 #' df <- pr_get_Indices("NRS", "Zooplankton") %>%
 #'   dplyr::filter(Parameters == "Biomass_mgm3", StationCode %in% c("NSI", "PHB"))
 #' pr_plot_TimeSeries(df)
-#' 
+#'
 #' # Use log scale for abundance data
 #' df <- pr_get_Indices("NRS", "Phytoplankton") %>%
 #'   dplyr::filter(Parameters == "PhytoAbundance_CellsL", StationCode %in% c("MAI", "PHB"))
@@ -65,6 +65,12 @@ pr_plot_TimeSeries <- function(df, trans = "identity"){
 
   # Check required columns
   required_cols <- c("SampleTime_Local", "Values", "Parameters")
+
+  if("StationCode" %in% names(df)) {
+    if(any(grepl("SOTS", df$StationCode))){
+      required_cols <- c("SampleTime_Local", "Values", "Parameters", "SampleDepth_m")
+      }
+    }
   assertthat::assert_that(
     all(required_cols %in% names(df)),
     msg = paste0("'df' must contain the following columns: ", paste(required_cols, collapse = ", "), ".")
@@ -79,13 +85,26 @@ pr_plot_TimeSeries <- function(df, trans = "identity"){
     ltype <- ltyCPR
     legendTitle <- "Bioregion"
 
-  } else if (Survey == "NRS" | Survey == "Coastal"){
+  } else if (Survey %in% c("NRS", "Coastal", "SOTS")){
+    if(Survey == 'Coastal'){
+      df <- df %>% mutate(SampleTime_Local = lubridate::day(.data$SampleTime_Local))
+      vars <- c("SampleTime_Local", "StationName", "Parameters")
+    } else {
+      vars <- c("SampleTime_Local", "StationName", "Parameters", "SampleDepth_m")
+    }
     df <- df %>%
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
-                       .by = tidyselect::all_of(c("SampleTime_Local", "StationName", "Parameters"))) # accounting for microbial data different depths
+                       .by = tidyselect::any_of(vars)) # accounting for microbial data different depths
     plotCols <- colNRSName
     ltype <- ltyNRSName
     legendTitle <- "Station Name"
+  }
+
+  # Remove deeper SOTS samples so they can be plotted in a lighter shade
+  if(any(grepl("Ocean Time", df$StationName))){
+    dfsots30 <- df %>% dplyr::filter(dplyr::between(.data$SampleDepth_m, 20, 34.5),
+                                     grepl("Southern", .data$StationName))
+    df <- df %>% dplyr::filter(.data$SampleDepth_m < 20 | is.na(.data$SampleDepth_m))
   }
 
   titlex <- "Sample Date (Local)"
@@ -103,6 +122,13 @@ pr_plot_TimeSeries <- function(df, trans = "identity"){
     ggplot2::scale_linetype_manual(values = ltype, limits = force, name = legendTitle) +
     theme_pr()
 
+  if(exists("dfsots30")){
+    p1 <- p1 +
+      ggplot2::geom_line(data = dfsots30, ggplot2::aes(group = .data$StationName, color = .data$StationName,
+                                                       linetype = .data$StationName), alpha = 0.2) +
+      ggplot2::geom_point(data = dfsots30, ggplot2::aes(group = .data$StationName, color = .data$StationName), alpha = 0.2)
+  }
+
   if(Survey != "Coastal") {
     p1 +
       ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", expand = c(0, 0))
@@ -117,8 +143,8 @@ pr_plot_TimeSeries <- function(df, trans = "identity"){
 
 #' Plot temporal trends in plankton data with fitted lines
 #'
-#' Create time series plots with fitted trend lines to examine long-term changes, 
-#' seasonal patterns, or interannual variability in plankton indices. The function 
+#' Create time series plots with fitted trend lines to examine long-term changes,
+#' seasonal patterns, or interannual variability in plankton indices. The function
 #' can plot raw data over time, monthly climatologies, or annual means.
 #'
 #' @param df A dataframe from [pr_get_Indices()] containing timeseries data
@@ -139,42 +165,43 @@ pr_plot_TimeSeries <- function(df, trans = "identity"){
 #'
 #' @details
 #' This function is designed to help identify temporal trends in plankton data:
-#' 
-#' * **Raw trends**: Shows all observations over time with a smoothed trend line. 
+#'
+#' * **Raw trends**: Shows all observations over time with a smoothed trend line.
 #'   Useful for detecting long-term changes (e.g., increasing or decreasing abundance).
-#' 
-#' * **Monthly trends**: Aggregates data by month across all years to show seasonal 
+#'
+#' * **Monthly trends**: Aggregates data by month across all years to show seasonal
 #'   patterns (e.g., winter blooms, summer stratification effects).
-#' 
-#' * **Annual trends**: Shows year-to-year variability, useful for detecting regime 
+#'
+#' * **Annual trends**: Shows year-to-year variability, useful for detecting regime
 #'   shifts or responses to climate oscillations (e.g., ENSO).
-#' 
+#'
 #' The shaded ribbon around trend lines represents the 95% confidence interval.
 #' For NRS data, values are averaged across depths if present.
 #'
 #' @return A ggplot2 object showing the timeseries with fitted trend line(s)
-#' 
+#'
 #' @seealso [pr_plot_TimeSeries()] for plots without trend lines,
 #'   [pr_plot_Climatology()] for alternative climatology visualisations,
 #'   [pr_get_model()] for extracting model coefficients
-#' 
+#'
 #' @importFrom rlang "!!"
 #'
 #' @export
 #'
 #' @examples
+
 #' # Examine long-term trends in zooplankton biomass
 #' df <- pr_get_Indices("NRS", "Zooplankton") %>%
 #'   dplyr::filter(Parameters == "Biomass_mgm3") %>%
 #'   pr_model_data()
 #' pr_plot_Trends(df, Trend = "Raw", method = "lm")
-#' 
+#'
 #' # Examine seasonal patterns
 #' pr_plot_Trends(df, Trend = "Month", method = "loess")
-#' 
+#'
 #' # Examine interannual variability
 #' pr_plot_Trends(df, Trend = "Year", method = "lm")
-#' 
+#'
 #' # Use log transformation for abundance data
 #' df <- pr_get_Indices("CPR", "Phytoplankton", near_dist_km = 250) %>%
 #'   dplyr::filter(Parameters == "PhytoAbundance_Cellsm3",
@@ -213,7 +240,14 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
     msg = "'trans' must be a single character string specifying the y-axis transformation (e.g., 'identity', 'log10', 'sqrt')."
   )
 
-  # Do one parameter at a time at the moment.
+  if("StationCode" %in% names(df)) {
+    if(any(grepl("SOTS", df$StationCode))){
+    assertthat::assert_that(
+      "SampleDepth_m" %in% colnames(df),
+      msg = "When using SOTS data the SampleDepth_m column is required as samples are taken at varying depths.")
+      }
+    }
+
   assertthat::assert_that(
     nrow(df) > 0,
     msg = "No data in the dataframe. Check download or filtering."
@@ -222,6 +256,31 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
   Type <- pr_get_type(df)
 
   Survey <- pr_get_survey(df)
+
+  minYear <- min(df$Year_Local, na.rm = TRUE)
+
+  # Set Correct columns/plot titles
+  if (Survey == "CPR"){
+    site <- rlang::sym("BioRegion")
+  } else if (Survey != "CPR"){
+    site <- rlang::sym("StationName")
+  }
+
+    # Remove deeper SOTS samples from df and make a separate model df for this data if it exists
+  site_col <- rlang::as_string(site)
+  if (any(stringr::str_detect(df[[site_col]], "Ocean Time"), na.rm = TRUE)) {
+    dfsots30 <- df %>% dplyr::filter(dplyr::between(.data$SampleDepth_m, 20, 34.5),
+                                     grepl("SOTS", .data$StationCode))
+    df <- df %>% dplyr::filter(.data$SampleDepth_m < 20 | is.na(.data$SampleDepth_m))
+    if(exists("dfsots30")){
+      Modelsots30 <- pr_get_model(dfsots30)
+      minYear <- min(minYear, min(dfsots30$Year_Local, na.rm = TRUE))
+      if(is.null(Modelsots30)){ # TODO Decide if we will always provide models or not. Currently we are forcing models to be run and shown.
+        dfsots30 <- pr_model_data(dfsots30)
+        Modelsots30 <- pr_get_model(dfsots30)
+        }
+      }
+    }
 
   # Extract Model data
   Models <- pr_get_model(df)
@@ -235,12 +294,6 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
     Trend = paste0(Trend, "_Local") # Rename to match columns
   }
 
-  # Set Correct columns/plot titles
-  if (Survey == "CPR"){
-    site <- rlang::sym("BioRegion")
-  } else if (Survey != "CPR"){
-    site <- rlang::sym("StationName")
-  }
 
   ## Should Model data be used.
   if (Trend != 'Raw'){
@@ -273,6 +326,12 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                        # facet_label = dplyr::first(.data$facet_label),
                        .by = c(rlang::as_string(rlang::sym(Trend)), rlang::as_string(site)))
+    if(exists("dfsots30")){
+      dfsots30 <- dfsots30 %>%
+        dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
+                         # facet_label = dplyr::first(.data$facet_label),
+                         .by = c(rlang::as_string(rlang::sym(Trend)), rlang::as_string(site)))
+    }
 
   } else if (Trend %in% c("Month_Local")){
     term_vals <- seq(0.524, 6.284, length.out = 12)
@@ -327,6 +386,14 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
     ggplot2::xlab(labx) +
     ggplot2::theme(strip.text = ggplot2::element_text(hjust = 0))
 
+  if(!rlang::as_string(Trend) %in% c("Month_Local") & exists("dfsots30") & minYear < 2015){
+
+    p1 <- p1 +
+      ggplot2::geom_point(data = dfsots30, ggplot2::aes(x = !!rlang::sym(Trend), y = .data$Values), colour = 'black', alpha = 0.2) +
+      ggplot2::geom_smooth(data = dfsots30, ggplot2::aes(x = !!rlang::sym(Trend), y = .data$Values), method = "lm", alpha = 0.2,
+                           formula = 'y ~ x')
+  }
+
   if (rlang::as_string(Trend) %in% c("Month_Local")){
     p1 <- p1 +
       ggplot2::geom_ribbon(data = df, ggplot2::aes(ymin = .data$lower, ymax = .data$upper), fill = 'grey', alpha = 0.5) +
@@ -346,9 +413,9 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
 
 #' Plot climatologies showing seasonal or interannual patterns
 #'
-#' Create bar plots showing monthly or annual climatologies (mean values with 
-#' error bars) to examine seasonal cycles or interannual variability in plankton 
-#' indices. Data are aggregated across years (monthly) or within years (annual) 
+#' Create bar plots showing monthly or annual climatologies (mean values with
+#' error bars) to examine seasonal cycles or interannual variability in plankton
+#' indices. Data are aggregated across years (monthly) or within years (annual)
 #' to show typical patterns.
 #'
 #' @param df A dataframe from [pr_get_Indices()] containing timeseries data
@@ -363,31 +430,31 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
 #'
 #' @details
 #' ## Monthly Climatology (Trend = "Month")
-#' Calculates the mean value for each month across all years in the dataset. 
+#' Calculates the mean value for each month across all years in the dataset.
 #' This shows the typical seasonal cycle, useful for identifying:
 #' * Spring phytoplankton blooms
 #' * Summer stratification effects
 #' * Winter mixing impacts
 #' * Seasonal migration patterns in zooplankton
-#' 
+#'
 #' ## Annual Climatology (Trend = "Year")
-#' Calculates the mean value for each calendar year. This shows year-to-year 
+#' Calculates the mean value for each calendar year. This shows year-to-year
 #' variability, useful for identifying:
 #' * Long-term trends (increasing or decreasing)
 #' * Regime shifts
 #' * Responses to climate oscillations (e.g., ENSO, SAM)
 #' * Extreme years (e.g., marine heatwaves)
-#' 
-#' Error bars represent standard error of the mean (±SE), calculated as 
+#'
+#' Error bars represent standard error of the mean (±SE), calculated as
 #' SD/√N where N is the number of observations.
-#' 
+#'
 #' For NRS data, values are averaged across depths if present.
 #'
 #' @return A ggplot2 bar plot with error bars showing climatology patterns
-#' 
+#'
 #' @seealso [pr_plot_Trends()] for alternative climatology visualisation with trend lines,
 #'   [pr_plot_TimeSeries()] for raw time series plots
-#' 
+#'
 #' @export
 #'
 #' @examples
@@ -434,6 +501,13 @@ pr_plot_Climatology <- function(df, Trend = "Month", trans = "identity"){
 
   # Check required columns
   required_cols <- c("Values", "Parameters")
+
+  if("StationCode" %in% names(df)) {
+    if(any(grepl("SOTS", df$StationCode))){
+      required_cols <- c("Values", "Parameters", "SampleDepth_m")
+      }
+  }
+
   assertthat::assert_that(
     all(required_cols %in% names(df)),
     msg = paste0("'df' must contain the following columns: ", paste(required_cols, collapse = ", "), ".")
@@ -479,24 +553,35 @@ pr_plot_Climatology <- function(df, Trend = "Month", trans = "identity"){
 
   if("Year_Local" %in% colnames(df_climate)){
     df_climate <- df_climate %>%
-      dplyr::mutate(!!Trend := lubridate::as_date(paste(!!Trend, 1, 1, sep = "-"))) #TODO Temp fix to convert to date and fix ticks below
-  }
+      dplyr::mutate(!!Trend := lubridate::as_date(paste(!!Trend, 1, 1, sep = "-")), #TODO Temp fix to convert to date and fix ticks below
+                    alphagroup = ifelse(grepl("Southern", .data$StationName) & lubridate::year(!!Trend) < 2015, 0.4, 0.9)) # distinguish SOTS deeper samples
 
-  p1 <- ggplot2::ggplot(df_climate, ggplot2::aes(x = !!Trend,
+    p1 <- ggplot2::ggplot(df_climate, ggplot2::aes(x = !!Trend,
                                                  y = .data$mean,
                                                  fill = .data$StationName,
-                                                 group = .data$StationName)) +
-    ggplot2::geom_col(width = dodge, position = ggplot2::position_dodge(width = dodge)) +
-    ggplot2::geom_errorbar(ggplot2::aes(ymin = .data$mean-.data$se, ymax = .data$mean+.data$se),
-                           width = dodge/3,                    # Width of the error bars
-                           position = ggplot2::position_dodge(width = dodge)) +
-    ggplot2::labs(y = title) +
-    ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0, 0.02))) +
-    ggplot2::scale_fill_manual(values = plotCols,
-                               limits = force,
-                               name = legendTitle,
-                               guide = ggplot2::guide_legend(byrow = TRUE)) +
-    theme_pr()
+                                                 group = .data$StationName,
+                                                 alpha = .data$alphagroup))
+    }
+
+  if("Month_Local" %in% colnames(df_climate)){
+    p1 <- ggplot2::ggplot(df_climate, ggplot2::aes(x = !!Trend,
+                                                   y = .data$mean,
+                                                   fill = .data$StationName,
+                                                   group = .data$StationName))
+    }
+
+  p1 <- p1 +
+      ggplot2::geom_col(width = dodge, position = ggplot2::position_dodge(width = dodge)) +
+      ggplot2::geom_errorbar(ggplot2::aes(ymin = .data$mean-.data$se, ymax = .data$mean+.data$se),
+                             width = dodge/3,                    # Width of the error bars
+                             position = ggplot2::position_dodge(width = dodge)) +
+      ggplot2::labs(y = title) +
+      ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0, 0.02))) +
+      ggplot2::scale_fill_manual(values = plotCols,
+                                 limits = force,
+                                 name = legendTitle,
+                                 guide = ggplot2::guide_legend(byrow = TRUE)) +
+      theme_pr()
 
   if("Month_Local" %in% colnames(df_climate)){
     p1 <- p1 +
@@ -507,11 +592,13 @@ pr_plot_Climatology <- function(df, Trend = "Month", trans = "identity"){
 
   if("Year_Local" %in% colnames(df_climate) & Survey != 'Coastal'){
     p1 <- p1 +
+      ggplot2::scale_alpha_identity(guide = "none") +
       ggplot2::xlab("Year") +
       ggplot2::scale_x_date(date_breaks = "2 years", date_labels = "%Y", expand = c(0, 0))
   }
   if("Year_Local" %in% colnames(df_climate) & Survey == 'Coastal'){
     p1 <- p1 +
+      ggplot2::scale_alpha_identity(guide = "none") +
       ggplot2::xlab("Year") +
       ggplot2::scale_x_date(date_breaks = "1 year", date_labels = "%Y", expand = c(0, 0))
   }
@@ -569,8 +656,8 @@ pr_plot_tsclimate <- function(df, trans = "identity"){
 
 #' Time series plot of functional group composition
 #'
-#' Create stacked area or bar plots showing the relative or absolute abundance 
-#' of different functional groups over time. This visualisation is particularly 
+#' Create stacked area or bar plots showing the relative or absolute abundance
+#' of different functional groups over time. This visualisation is particularly
 #' useful for examining changes in community composition.
 #'
 #' @param df A dataframe from [pr_get_FuncGroups()] containing functional group data
@@ -583,18 +670,18 @@ pr_plot_tsclimate <- function(df, trans = "identity"){
 #'   * `"Year"` - Annual means for each year
 #'
 #' @details
-#' This function creates stacked area plots (for Raw trends) or stacked bar plots 
+#' This function creates stacked area plots (for Raw trends) or stacked bar plots
 #' (for Month/Year trends) showing how functional group composition changes over time.
-#' 
+#'
 #' ## Functional Groups Plotted
-#' 
+#'
 #' **Phytoplankton** (5 groups):
 #' * Centric diatoms (radially symmetrical, bloom-forming)
 #' * Pennate diatoms (bilaterally symmetrical)
 #' * Dinoflagellates (flagellated protists)
 #' * Cyanobacteria (photosynthetic bacteria)
 #' * Other (remaining groups)
-#' 
+#'
 #' **Zooplankton** (7 groups):
 #' * Copepods (dominant marine zooplankton)
 #' * Appendicularians (larvaceans, gelatinous filter feeders)
@@ -603,27 +690,27 @@ pr_plot_tsclimate <- function(df, trans = "identity"){
 #' * Chaetognaths (arrow worms, predatory)
 #' * Thaliaceans (salps, doliolids, pyrosomes)
 #' * Other (remaining groups)
-#' 
+#'
 #' ## Interpretation
-#' 
+#'
 #' **Actual Scale**: Shows true abundance patterns. Useful for seeing:
 #' * Total community biomass/abundance changes
 #' * Bloom events
 #' * Which groups dominate numerically
-#' 
+#'
 #' **Proportion Scale**: Shows relative composition. Useful for seeing:
 #' * Community shifts (e.g., diatoms to dinoflagellates)
 #' * Seasonal succession patterns
 #' * Long-term regime shifts
 #' * Changes that might be masked by overall abundance changes
-#' 
+#'
 #' Colours are assigned consistently across plots for each functional group.
 #'
 #' @return A ggplot2 object showing functional group composition over time
-#' 
+#'
 #' @seealso [pr_get_FuncGroups()] for preparing the input data,
 #'   [pr_plot_PieFG()] for pie chart visualisation of functional groups
-#' 
+#'
 #' @export
 #'
 #' @examples
@@ -631,17 +718,18 @@ pr_plot_tsclimate <- function(df, trans = "identity"){
 #' df <- pr_get_FuncGroups("NRS", "Phytoplankton") %>%
 #'   dplyr::filter(StationCode %in% c('MAI', 'PHB'))
 #' pr_plot_tsfg(df, Scale = "Actual", Trend = "Raw")
-#' 
+#'
 #' # Plot as proportions to see community shifts
 #' pr_plot_tsfg(df, Scale = "Proportion", Trend = "Raw")
-#' 
+#'
 #' # Monthly climatology showing seasonal patterns
 #' pr_plot_tsfg(df, Scale = "Proportion", Trend = "Month")
-#' 
+#'
 #' # Zooplankton functional groups
 #' df_zoo <- pr_get_FuncGroups("CPR", "Zooplankton", near_dist_km = 250) %>%
 #'   dplyr::filter(BioRegion == "South-east")
 #' pr_plot_tsfg(df_zoo, Scale = "Actual", Trend = "Raw")
+
 pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 
   # Input validation
@@ -676,10 +764,17 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
   )
 
   # Check required columns
-  required_cols <- c("Values", "Parameters", "SampleTime_Local")
+  required_cols <- c("SampleTime_Local", "Values", "Parameters")
+
+  if("StationCode" %in% names(df)) {
+    if(any(grepl("SOTS", df$StationCode))){
+      required_cols <- c("SampleTime_Local", "Values", "Parameters", "SampleDepth_m")
+    }
+  }
+
   assertthat::assert_that(
-    all(required_cols %in% names(df)),
-    msg = paste0("'df' must contain the following columns: ", paste(required_cols, collapse = ", "), ".")
+      all(required_cols %in% names(df)),
+      msg = paste0("'df' must contain the following columns: ", paste(required_cols, collapse = ", "), ".")
   )
 
   df <- tibble::as_tibble(df)
@@ -695,7 +790,8 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 
   if("BioRegion" %in% colnames(df)){ # If CPR data
     SampleDate = rlang::sym("SampleTime_Local")
-    station = rlang::sym("BioRegion")
+    df <- df %>%
+      dplyr::rename(StationName = "BioRegion")
 
     if ("Copepod" %in% df$Parameters) {
       titley <- pr_relabel("ZoopAbund_m3", style = "ggplot")
@@ -705,7 +801,6 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 
   } else { # If NRS data
     SampleDate = rlang::sym("SampleTime_Local")
-    station = rlang::sym("StationName")
 
     if ("Copepod" %in% df$Parameters) {
       titley <- pr_relabel("ZoopAbund_m3", style = "ggplot")
@@ -719,7 +814,6 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
     titley <- "Proportion"
   }
 
-
   titlex <- "Sample Time (Local)"
   if (Trend %in% c("Year_Local", "Month_Local")){
 
@@ -729,33 +823,43 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
                        sd = sd(.data$Values, na.rm = TRUE),
                        se = sd / sqrt(.data$N),
                        .by = tidyselect::all_of(c(rlang::as_string(rlang::sym(Trend)),
-                                                  rlang::as_string(station),
+                                                  "StationName",
                                                   "Parameters")))
 
   } else {
     Trend <- SampleDate # Rename Trend to match the column with time
   }
 
+  trend_col   <- rlang::as_string(Trend)
+
   df <- df %>%
-    dplyr::mutate(Values = .data$Values + 1) # Add a small number so plot doesn't go weird
+    dplyr::mutate(Values = .data$Values + 1, # Add a small number so plot doesn't go weird
+                  alphagroup = ifelse(
+                    stringr::str_detect(.data$StationName, "Ocean Time") &
+                      .data[[trend_col]] < 2015, 0.4, 0.9)) # distinguish SOTS deeper samples
 
   if(Scale == "Proportion") {
 
     df <- df %>%
       dplyr::mutate(Total = sum(.data$Values, na.rm = TRUE),
                        .by = tidyselect::all_of(c(rlang::as_string(rlang::sym(Trend)),
-                                                  rlang::as_string(station)))) %>%
+                                                  "StationName",
+                                                  "alphagroup"))) %>%
       dplyr::mutate(Values = .data$Values / sum(.data$Total, na.rm = TRUE),
                     .by = tidyselect::all_of(c(rlang::as_string(rlang::sym(Trend)),
-                                               rlang::as_string(station),
-                                               "Parameters")))
+                                               "StationName",
+                                               "Parameters",
+                                               "alphagroup")))
   }
 
   p1 <- ggplot2::ggplot(df, ggplot2::aes(x = !!rlang::sym(Trend),
                                          y = .data$Values,
-                                         fill = .data$Parameters)) +
-    ggplot2::geom_area(alpha = 0.9, linewidth = 0.2, colour = "white") +
-    ggplot2::facet_wrap(rlang::enexpr(station), scales = "free", ncol = 1) +
+                                         fill = .data$Parameters,
+                                         group = interaction(.data$Parameters, .data$alphagroup),
+                                         alpha = .data$alphagroup)) +
+    ggplot2::geom_area(linewidth = 0.2, colour = "white") +
+    ggplot2::scale_alpha(range = c(0.4, 0.9), guide = 'none') +
+    ggplot2::facet_wrap(~.data$StationName, scales = "free", ncol = 1) +
     ggplot2::labs(y = titley) +
     ggplot2::scale_fill_brewer(palette = "Set1", drop = FALSE, name = "Functional Group") +
     theme_pr() +
@@ -778,9 +882,9 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
                                   labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
       ggplot2::xlab("Month")
   } else if (rlang::as_string(Trend) %in% c("Year_Local")){
+    yrs <- range(df[[rlang::as_string(Trend)]], na.rm = TRUE)
     p1 <- p1 +
-      ggplot2::scale_x_continuous(breaks = 2,
-                                  expand = ggplot2::expansion(mult = c(0, 0))) +
+      ggplot2::scale_x_continuous(expand = ggplot2::expansion(mult = c(0, 0))) +
       ggplot2::xlab("Year")
   } else if (rlang::as_string(Trend) %in% c("SampleTime_Local")){
     lims <- as.POSIXct(strptime(c(min(df$SampleTime_Local),
@@ -801,8 +905,8 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 
 #' Essential Ocean Variables (EOV) plot for reporting
 #'
-#' Create a three-panel figure showing Essential Ocean Variables over time, 
-#' including the raw time series, anomalies, and climatology. This format is 
+#' Create a three-panel figure showing Essential Ocean Variables over time,
+#' including the raw time series, anomalies, and climatology. This format is
 #' designed for scientific reporting and State of Environment assessments.
 #'
 #' @param df A dataframe from [pr_get_EOVs()] containing Essential Ocean Variable data
@@ -812,40 +916,40 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 #'   * `"log10"` - Log base 10 transformation
 #'   * `"sqrt"` - Square root transformation
 #' @param col Colour for the time series line and points (e.g., `"blue"`, `"darkred"`, `"#FF5733"`)
-#' @param labels Logical. Should x-axis labels be shown? Set to `FALSE` when combining 
+#' @param labels Logical. Should x-axis labels be shown? Set to `FALSE` when combining
 #'   multiple plots vertically to save space.
 #'
 #' @details
-#' Essential Ocean Variables (EOVs) are key measurements identified by the Global 
-#' Ocean Observing System (GOOS) as critical for understanding ocean health and 
+#' Essential Ocean Variables (EOVs) are key measurements identified by the Global
+#' Ocean Observing System (GOOS) as critical for understanding ocean health and
 #' change. For plankton, the two primary EOVs are:
 #' * **Biomass** - Total plankton biomass (proxy for ecosystem productivity)
 #' * **Diversity** - Species richness and diversity (proxy for ecosystem health)
-#' 
+#'
 #' This function creates a three-panel figure:
-#' 
+#'
 #' ## Panel 1: Time Series
-#' Shows the raw data over time with a smoothed trend line (LOESS). Useful for 
+#' Shows the raw data over time with a smoothed trend line (LOESS). Useful for
 #' identifying long-term trends and interannual variability.
-#' 
+#'
 #' ## Panel 2: Anomalies
-#' Shows deviations from the long-term mean, highlighting periods of unusually 
-#' high (positive anomalies) or low (negative anomalies) values. Anomalies are 
+#' Shows deviations from the long-term mean, highlighting periods of unusually
+#' high (positive anomalies) or low (negative anomalies) values. Anomalies are
 #' calculated by subtracting the overall mean from each observation.
-#' 
+#'
 #' ## Panel 3: Climatology
-#' Shows the monthly climatology (mean ± standard error), revealing the typical 
+#' Shows the monthly climatology (mean ± standard error), revealing the typical
 #' seasonal cycle. Useful for understanding natural seasonal variability.
-#' 
-#' The function automatically handles NRS station data and CPR bioregion data, 
+#'
+#' The function automatically handles NRS station data and CPR bioregion data,
 #' detecting which type is present in the input dataframe.
 #'
 #' @return A patchwork object containing three ggplot2 panels stacked vertically
-#' 
+#'
 #' @seealso [pr_get_EOVs()] for preparing the input data,
 #'   [pr_remove_outliers()] for outlier removal before plotting,
 #'   [pr_get_coeffs()] for extracting trend coefficients
-#' 
+#'
 #' @export
 #'
 #' @examples
@@ -854,18 +958,18 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
 #'   dplyr::filter(StationCode == "PHB") %>%
 #'   pr_remove_outliers(2)
 #' pr_plot_EOVs(df, EOV = "Biomass_mgm3", trans = "identity", col = "blue")
-#' 
+#'
 #' # Stack multiple EOVs by removing x-axis labels on upper panels
 #' library(patchwork)
 #' p1 <- pr_plot_EOVs(df, EOV = "Biomass_mgm3", col = "blue", labels = FALSE)
 #' p2 <- pr_plot_EOVs(df, EOV = "ShannonCopepodDiversity", col = "darkgreen")
 #' p1 / p2
-#' 
+#'
 #' # Plot phytoplankton diversity for CPR South-east bioregion
 #' df_cpr <- pr_get_EOVs("CPR") %>%
 #'   dplyr::filter(BioRegion == "South-east") %>%
 #'   pr_remove_outliers(2)
-#' pr_plot_EOVs(df_cpr, EOV = "ShannonPhytoDiversity", 
+#' pr_plot_EOVs(df_cpr, EOV = "ShannonPhytoDiversity",
 #'              trans = "identity", col = "darkgreen")
 pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "blue", labels = TRUE) {
 
