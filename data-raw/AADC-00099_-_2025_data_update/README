@@ -1,0 +1,61 @@
+Title: Southern Ocean Continuous Plankton Recorder Zooplankton Records
+
+    Authors:
+    - GRAHAM HOSIE (INVESTIGATOR, TECHNICAL CONTACT, DIF AUTHOR)
+  - JOHN KITCHENER (INVESTIGATOR, TECHNICAL CONTACT)
+
+    Owner: Commonwealth of Australia
+
+    Citation: Kitchener, J. and Hosie, G. (2024) Southern Ocean Continuous Plankton Recorder Zooplankton Records, Ver. 12,  <em>Australian Antarctic Data Centre</em> - <a href="http://dx.doi.org/doi:10.26179/r7sm-9y85">doi:10.26179/r7sm-9y85</a>, Accessed: 2025-09-04
+
+    Revision Date: 2025-04-08
+
+    Metadata URL: https://data.aad.gov.au/metadata/AADC-00099
+
+    Abstract: This dataset contains results from Continuous Plankton Recorder (CPR) surveys in the Southern Ocean. When the opportunity arises, zooplankton species, numbers and abundance data are recorded on a continuous basis as vessels steam through the area between Australia and Antarctica, including Heard and Macquarie Islands. Observations have been made since June 1990 and are ongoing. Obviously the observations are not continuous over the region with time.
+
+Many of the original SO-CPR logbooks from the various voyages have also been scanned, and are available via the Australian Antarctic Data Centre's Reports Register.
+
+Zooplankton have been identified to lowest possible taxon, usually species, and counted for each segment.   For copepods, copepodites and for some species nauplii (e.g. Rhincalanus gigas) have been counted separately, and for euphausiids, naupliar, calyptopis and furcilia developmental stages are identified.
+
+The fields in this dataset are:
+ Tow_number - the CPR tow number
+ Ship_name - the name of the ship on which the tow was conducted
+ Season - two-year Antarctic season based around the austral summer, e.g. '2000-01' runs from July 2000 to June 2001
+ Latitude - the decimal latitude of the segment sample
+ Longitude - the decimal longitude of the segment sample
+ Observation_date - UTC date and time of the segment sample in ISO8601 format (yyyy-mm-ddTHH:MMZ)
+ Observation_date_year - the observation date year
+ Observation_date_month - the observation date month
+ Observation_date_day - the observation date day
+ Observation_date_hour - the observation date hour
+ Observation_date_minute - the observation date minute
+ Observation_date_time_zone - the observation date time zone (0=UTC)
+ Segment_number - the individual segment number within each tow
+ Segment_length - the distance travelled by the CPR during this segment (nautical miles). This is the true segment length as used in the Geocoding program used to cut the silk, and to calculate positions and average environmental data for each segment.  In theory, all segments are 5 nautical miles long.  However, this wasn't always the case with early Aurora Australis tows, where it was assumed that each marked segment was 5 nautical miles whereas each tow had subtle variations in silk advancement, depending on the wear of the cassette or travel with or against a current.  True segment length has since been recalculated.  At other times, some silks have been incorrectly cut and the true length has again been recalculated.  The last segment of each tow may be less than 5 nautical miles. This field can be used to standardise species counts to say 5 nautical miles or to a theoretical volume filtered by multiplying the distance travelled by aperture area (12.7 x 12.7 mm): Volume Filtered = Distance (n miles) x 1852 metres x 0.0127^2. A 5 nautical mile segment theoretically represents 1.49 m^3.
+ 
+Total_abundance - total count of all zooplankton in a segment
+ 
+Phytoplankton_colour_index -  visual estimation of the green colour of the silk mesh. Values are 'No Colour', 'Very Pale Green', 'Pale Green', or 'Green'. This colouration is due to the green chlorophyll pigments derived from chloroplasts of intact and broken cells and small unarmoured flagellates. It may provide an indicator of phytoplankton standing stock, although in the Southern Ocean there are some diatoms that are quite common on the silks but as they have very low amounts of chlorophyll the colour doesn't register in the PCI analysis.
+
+Fluorescence - water fluorescence measured by the vessel, averaged for the segment (arbitrary units). See Quality notes for more information.
+
+Salinity - water salinity measured by the vessel, averaged for the segment (psu). See Quality notes for more information.
+
+Water_temperature - water temperature measured by the vessel (degrees Celsius). See Quality notes for more information.
+
+Photosynthetically_active_radiation - photosynthetically active radiation measured by the vessel (micro-Einsteins m-2 s-1). This is not available on some vessels but has been included as a useful parameter to help differentiate data from night and day.
+
+The remaining fields ('Abylidae' through to 'Vibilia_sp') are zooplankton taxon names. The entries in these columns are the counts of each taxon in the segment.
+
+    Use Constraints: This data set conforms to the CCBY Attribution License (http://creativecommons.org/licenses/by/4.0/).
+
+Please follow instructions listed in the citation reference provided at http://data.aad.gov.au/aadc/metadata/citation.cfm?entry_id=AADC-00099 when using these data.
+
+Please contact the investigators before using these data, as some explanation may be required.
+
+These data were sourced from the Scientific Committee on Antarctic Research (SCAR) sponsored Southern Ocean CPR (SO-CPR) Survey Database, hosted by the Australian Antarctic Data Centre (AADC).  The AADC is part of the Australian Antarctic Division (AAD, a division of the Department of Sustainability, Environment, Water, Population and Communities (SEWPaC)). The SO-CPR Survey and database are also funded, supported and populated by the Australian Government through the SEWPaC-AAD approved AAS project 4107 and the Integrated Marine Observing System (IMOS) funded by the Australian Government National Collaborative Research Infrastructure Strategy and the Super Science Initiative, the Japanese National Institute of Polar Research (NIPR), the NZ National Institute of Water and Atmospheric Research (NIWA), the German Alfred Wegener Institute (AWI), the United States of America - Antarctic Marine Living Resources programme (NOAA US-AMLR), the Russian Arctic and Antarctic Research Institute (AARI), the Brazilian Programa Antartico Brasileiro (PROANTAR), the Chilean Instituto Antartico Chileno (INACH), the South African Departmental of Environmental Affairs (DEA) and the French Institut polaire francais - Paul-Emile Victor (IPEV) and Universite Pierre-et-Marie-Curie (UPMC).
+
+    ID: 6120
+    Metadata ID: AADC-00099
+    UUID: 8c51dd8d-3b35-4f7d-9888-f25d2401426c

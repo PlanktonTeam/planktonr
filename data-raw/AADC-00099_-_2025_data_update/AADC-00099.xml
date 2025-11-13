@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<DIF xmlns="http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/" xmlns:dif="http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/ http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/dif_v9.9.3.xsd">
+  <Entry_ID>AADC-00099</Entry_ID>
+  <Entry_Title>Southern Ocean Continuous Plankton Recorder Zooplankton Records</Entry_Title>
+  <Data_Set_Citation>
+    <Dataset_Creator>Kitchener, J. and Hosie, G.</Dataset_Creator>
+    <Dataset_Title>Southern Ocean Continuous Plankton Recorder Zooplankton Records</Dataset_Title>
+    <Dataset_Series_Name>CAASM Metadata</Dataset_Series_Name>
+    <Dataset_Release_Date>2024-08-06</Dataset_Release_Date>
+    <Dataset_Publisher>Australian Antarctic Data Centre</Dataset_Publisher>
+    <Version>13</Version>
+    <Dataset_DOI>doi:10.26179/c6np-k367</Dataset_DOI>
+    <Online_Resource>https://data.aad.gov.au/metadata/AADC-00099</Online_Resource>
+  </Data_Set_Citation>
+  <Personnel>
+    <Role>INVESTIGATOR</Role>
+    <Role>TECHNICAL CONTACT</Role>
+    <Role>DIF AUTHOR</Role>
+    <First_Name>GRAHAM</First_Name>
+    <Last_Name>HOSIE</Last_Name>
+    <Contact_Address>
+      <Address>Australian Antarctic Division</Address>
+      <Address>203 Channel Highway</Address>
+      <City>Kingston</City>
+      <Province_or_State>Tasmania</Province_or_State>
+      <Postal_Code>7050</Postal_Code>
+      <Country>Australia</Country>
+    </Contact_Address>
+  </Personnel>
+  <Personnel>
+    <Role>INVESTIGATOR</Role>
+    <Role>TECHNICAL CONTACT</Role>
+    <First_Name>JOHN</First_Name>
+    <Last_Name>KITCHENER</Last_Name>
+    <Email>john.kitchener@aad.gov.au</Email>
+    <Contact_Address>
+      <Address>Australian Antarctic Division</Address>
+      <Address>203 Channel Highway</Address>
+      <City>Kingston</City>
+      <Province_or_State>Tasmania</Province_or_State>
+      <Postal_Code>7050</Postal_Code>
+      <Country>Australia</Country>
+    </Contact_Address>
+  </Personnel>
+  <Discipline>
+    <Discipline_Name>EARTH SCIENCE</Discipline_Name>
+  </Discipline>
+  <Parameters>
+    <Category>EARTH SCIENCE</Category>
+    <Topic>BIOLOGICAL CLASSIFICATION</Topic>
+    <Term>ANIMALS/INVERTEBRATES</Term>
+  </Parameters>
+  <Parameters>
+    <Category>EARTH SCIENCE</Category>
+    <Topic>BIOSPHERE</Topic>
+    <Term>ECOSYSTEMS</Term>
+    <Variable_Level_1>AQUATIC ECOSYSTEMS</Variable_Level_1>
+    <Variable_Level_2>PLANKTON</Variable_Level_2>
+    <Variable_Level_3>ZOOPLANKTON</Variable_Level_3>
+  </Parameters>
+  <Parameters>
+    <Category>EARTH SCIENCE</Category>
+    <Topic>BIOLOGICAL CLASSIFICATION</Topic>
+    <Term>ANIMALS/INVERTEBRATES</Term>
+    <Variable_Level_1>ARTHROPODS</Variable_Level_1>
+    <Variable_Level_2>CRUSTACEANS</Variable_Level_2>
+    <Variable_Level_3>COPEPODS</Variable_Level_3>
+  </Parameters>
+  <Parameters>
+    <Category>EARTH SCIENCE</Category>
+    <Topic>BIOLOGICAL CLASSIFICATION</Topic>
+    <Term>ANIMALS/INVERTEBRATES</Term>
+    <Variable_Level_1>ARTHROPODS</Variable_Level_1>
+    <Variable_Level_2>CRUSTACEANS</Variable_Level_2>
+    <Variable_Level_3>EUPHAUSIIDS (KRILL)</Variable_Level_3>
+  </Parameters>
+  <Parameters>
+    <Category>EARTH SCIENCE</Category>
+    <Topic>BIOLOGICAL CLASSIFICATION</Topic>
+    <Term>ANIMALS/INVERTEBRATES</Term>
+    <Variable_Level_1>ARTHROPODS</Variable_Level_1>
+  </Parameters>
+  <ISO_Topic_Category>OCEANS</ISO_Topic_Category>
+  <ISO_Topic_Category>BIOTA</ISO_Topic_Category>
+  <Keyword>LICOR</Keyword>
+  <Keyword>LATITUDE</Keyword>
+  <Keyword>DISTANCE</Keyword>
+  <Keyword>ABUNDANCE</Keyword>
+  <Keyword>Hakuho Maru</Keyword>
+  <Keyword>TEMPERATURE</Keyword>
+  <Keyword>SEGMENT LENGTH</Keyword>
+  <Keyword>SEASON</Keyword>
+  <Keyword>TIME</Keyword>
+  <Keyword>SHIP CODE</Keyword>
+  <Keyword>SA Agulhas II</Keyword>
+  <Keyword>SOUTHERN OCEAN</Keyword>
+  <Keyword>SALINITY</Keyword>
+  <Keyword>San Aotea II</Keyword>
+  <Keyword>SPECIES</Keyword>
+  <Keyword>DATE</Keyword>
+  <Keyword>SEGMENT NUMBER</Keyword>
+  <Keyword>Kaiyo Maru</Keyword>
+  <Keyword>LONGITUDE</Keyword>
+  <Keyword>YEAR</Keyword>
+  <Keyword>Shirase</Keyword>
+  <Keyword>FLUORESCENCE</Keyword>
+  <Keyword>Ary Rongel</Keyword>
+  <Keyword>Akademik Fedorov</Keyword>
+  <Keyword>Marion Dufresne II</Keyword>
+  <Keyword>Shirase II</Keyword>
+  <Keyword>MONTH</Keyword>
+  <Sensor_Name>
+    <Short_Name>CPR</Short_Name>
+    <Long_Name>Continuous Plankton Recorder</Long_Name>
+  </Sensor_Name>
+  <Source_Name>
+    <Short_Name>R/V AA</Short_Name>
+    <Long_Name>R/V Aurora Australis</Long_Name>
+  </Source_Name>
+  <Source_Name>
+    <Short_Name>R/V POLARSTERN</Short_Name>
+  </Source_Name>
+  <Source_Name>
+    <Short_Name>R/V TANGAROA</Short_Name>
+  </Source_Name>
+  <Source_Name>
+    <Short_Name>R/V UM</Short_Name>
+    <Long_Name>R/V UMITAKA MARU</Long_Name>
+  </Source_Name>
+  <Source_Name>
+    <Short_Name>SHIPS</Short_Name>
+  </Source_Name>
+  <Source_Name>
+    <Short_Name>R/V YUZ</Short_Name>
+    <Long_Name>R/V YUZHMORGEOLOGIYA</Long_Name>
+  </Source_Name>
+  <Source_Name>
+    <Short_Name>R/V Nuyina</Short_Name>
+    <Long_Name>R/V Nuyina</Long_Name>
+  </Source_Name>
+  <Temporal_Coverage>
+    <Start_Date>1990-06-01</Start_Date>
+    <Stop_Date>2023-01-31</Stop_Date>
+  </Temporal_Coverage>
+  <Data_Set_Progress>IN WORK</Data_Set_Progress>
+  <Spatial_Coverage>
+    <Southernmost_Latitude>-70</Southernmost_Latitude>
+    <Northernmost_Latitude>-40</Northernmost_Latitude>
+    <Westernmost_Longitude>-180</Westernmost_Longitude>
+    <Easternmost_Longitude>180</Easternmost_Longitude>
+  </Spatial_Coverage>
+  <Location>
+    <Location_Category>OCEAN</Location_Category>
+    <Location_Type>SOUTHERN OCEAN</Location_Type>
+  </Location>
+  <Location>
+    <Location_Category>GEOGRAPHIC REGION</Location_Category>
+    <Location_Type>POLAR</Location_Type>
+  </Location>
+  <Project>
+    <Short_Name>OBIS</Short_Name>
+    <Long_Name>OCEAN BIOGEOGRAPHIC INFORMATION SYSTEM</Long_Name>
+  </Project>
+  <Project>
+    <Short_Name>IPY</Short_Name>
+    <Long_Name>INTERNATIONAL POLAR YEAR</Long_Name>
+  </Project>
+  <Project>
+    <Short_Name>SCAR-MARBIN</Short_Name>
+    <Long_Name>SCAR Marine Biodiversity Information Network</Long_Name>
+  </Project>
+  <Project>
+    <Short_Name>CAML</Short_Name>
+    <Long_Name>CENSUS OF ANTARCTIC MARINE LIFE</Long_Name>
+  </Project>
+  <Project>
+    <Short_Name>COML</Short_Name>
+    <Long_Name>CENSUS OF MARINE LIFE</Long_Name>
+  </Project>
+  <Project>
+    <Short_Name>EBA</Short_Name>
+    <Long_Name>Evolution and Biodiversity in the Antarctic</Long_Name>
+  </Project>
+  <Quality>Caution: Fluorometry is measured differently on each vessel and are thus not directly comparable between vessels. Most values come from Turner fluorometers. The Aurora Australis has a Turner TD10, and the units are arbitrary even though the fluorometer is routinely calibrated. Further, a value of 200 on one voyage is not necessarily the same as 200 on another voyage, even with daily calibration and cleaning of the sensor. The fluorometry values are really only of value within a voyage in as much that 200 is double the fluorescence activity of 100. On Tangaroa and Kaiyo Maru, fluorometry has been expressed as a concentration of chlorophyll a. There doesn't seem to be any fluorometry data for Hakuho Maru.
+
+Notes on salinity:
+
+The salinity measurement comes from the various thermosalinograph units mounted in the underway systems of the ships. Salinity on the Aurora Australis has been calculated by thermosalinograph. Salinity values are expressed in practical salinity units.
+
+Notes on water temperature: Temperature on the Aurora Australis is measured by a high resolution thyristor near the entrance of a dedicated seawater line, to avoid the problems of heating of the water in by the ship as it passes through pipes.  Again the data may not be fully comparable with other vessels.
+
+Notes on segment length:
+
+The end of each sampling segment is geocoded with latitude and longitude calculated from the one minute time-stamped GPS data. 'Segment Length' is the distance in nautical miles for each segment, which is calculated as the cumulative distance between each 1 minute interval. In theory, all segments are 5 nautical miles long. However, this wasn't always the case with early RSV Aurora Australis tows, where it was assumed that the silks advanced at a predetermined rate of 1 cm per nautical mile, whereas each tow had subtle variations in silk advancement, depending on local condition, e.g. whether the CPR was travelling with or against a current. True segment length has since been recalculated. At other times, some silks have been incorrectly cut and the true length has again been recalculated. The last segment of each tow is rarely exactly 5 nautical miles.  It is usually less.  In this situation we apply the following rule: if the last segment is longer than 2.5 nautical miles it remains as a segment in its own right and can be between 2.5 and 4.99 nautical miles, whereas if it is less than 2.5 it is added to the penultimate segment making the last segment 5 to 7.49 nautical miles.  Users of the data can elect to dismiss the last segment.  The 'Segment Length' field can be used to standardise species counts.  Dividing abundance values by the respective segment length will produce numbers per nautical mile, which is equivalent to a volume of water filtered of 0.30 cubic metres (1 nautical mile is 1852 m, multiplied by the aperture area of 12.7 x 12.7 mm). A 5 nautical segment is equivalent to 1.49 cubic metres.</Quality>
+  <Access_Constraints>The data are available for download from the provided URL.  This is a newer copy of the data (August, 2024).  The previous copies of the data were referenced to a different DOI:
+
+doi:10.26179/r7sm-9y85 (August 2024)
+doi:10.26179/vthe-7b65 (August 2023)
+doi:10.26179/fbfd-0828 (July 2022)
+doi:10.26179/ksds-s610 (June 2021)
+doi:10.26179/5ee84f77cc4ec (June 2020)
+doi:10.26179/5c981198d70de (February 2019)
+doi:10.4225/15/5b14b686b6f6d (June, 2018)
+doi:10.4225/15/597add0eeaeab (May, 2017)
+doi:10.4225/15/5670EF76388E1 (Sep, 2016)
+
+If you require access to the previous versions of the data, please contact the Australian Antarctic Data Centre.
+
+Presence records of known species (with no abundance value) are published via the AADC Integrated Publishing Toolkit (IPT) web services to SCAR-MarBIN, OBIS and GBIF data portals.
+
+Use the download link below to a web page showing voyages, maps of tracks and species distribution maps of the area between Australia and Antarctica.
+
+Scanned copies of many SO-CPR logbooks are also available for download from the provided URL.
+
+In addition to the AADC data are held in the Global Alliance of CPR Surveys (GACS) Database and the IMOS Data Portal. Presence records of known species (with no abundance value) are published via DiGIR web services to SCAR-MarBIN, OBIS and GBIF data portals.
+
+Note, there are two versions of the dataset available in the download file - an R formatted version (denoted by a "_R" in the filename), which should be considered the primary version of the dataset, and is thoroughly described in this metadata record, and the originally provided version of the dataset from the responsible scientist.
+
+Please contact the investigators before using these data, as some explanation may be required.</Access_Constraints>
+  <Use_Constraints>This data set conforms to the CCBY Attribution License (http://creativecommons.org/licenses/by/4.0/).
+
+Please follow instructions listed in the citation reference provided at http://data.aad.gov.au/aadc/metadata/citation.cfm?entry_id=AADC-00099 when using these data.
+
+Please contact the investigators before using these data, as some explanation may be required.
+
+These data were sourced from the Scientific Committee on Antarctic Research (SCAR) sponsored Southern Ocean CPR (SO-CPR) Survey Database, hosted by the Australian Antarctic Data Centre (AADC).  The AADC is part of the Australian Antarctic Division (AAD, a division of the Department of Sustainability, Environment, Water, Population and Communities (SEWPaC)). The SO-CPR Survey and database are also funded, supported and populated by the Australian Government through the SEWPaC-AAD approved AAS project 4107 and the Integrated Marine Observing System (IMOS) funded by the Australian Government National Collaborative Research Infrastructure Strategy and the Super Science Initiative, the Japanese National Institute of Polar Research (NIPR), the NZ National Institute of Water and Atmospheric Research (NIWA), the German Alfred Wegener Institute (AWI), the United States of America - Antarctic Marine Living Resources programme (NOAA US-AMLR), the Russian Arctic and Antarctic Research Institute (AARI), the Brazilian Programa Antartico Brasileiro (PROANTAR), the Chilean Instituto Antartico Chileno (INACH), the South African Departmental of Environmental Affairs (DEA) and the French Institut polaire francais - Paul-Emile Victor (IPEV) and Universite Pierre-et-Marie-Curie (UPMC).</Use_Constraints>
+  <Data_Set_Language>English</Data_Set_Language>
+  <Originating_Center>Australian Antarctic Division</Originating_Center>
+  <Data_Center>
+    <Data_Center_Name>
+      <Short_Name>AU/AADC</Short_Name>
+      <Long_Name>Australian Antarctic Data Centre, Australia</Long_Name>
+    </Data_Center_Name>
+    <Data_Center_URL>http://data.aad.gov.au</Data_Center_URL>
+    <Personnel>
+      <Role>DATA CENTER CONTACT</Role>
+      <First_Name>DATA OFFICER</First_Name>
+      <Last_Name>AADC</Last_Name>
+      <Email>metadata@aad.gov.au</Email>
+      <Phone>+61 3 6232 3244</Phone>
+      <Contact_Address>
+        <Address>Australian Antarctic Division</Address>
+        <Address>203 Channel Highway</Address>
+        <City>Kingston</City>
+        <Province_or_State>Tasmania</Province_or_State>
+        <Postal_Code>7050</Postal_Code>
+        <Country>Australia</Country>
+      </Contact_Address>
+    </Personnel>
+  </Data_Center>
+  <Distribution>
+    <Distribution_Media>HTTP</Distribution_Media>
+    <Distribution_Size>36.89 MB</Distribution_Size>
+    <Distribution_Format>CSV</Distribution_Format>
+    <Fees>free</Fees>
+  </Distribution>
+  <Summary>
+    <Abstract>This dataset contains results from Continuous Plankton Recorder (CPR) surveys in the Southern Ocean. When the opportunity arises, zooplankton species, numbers and abundance data are recorded on a continuous basis as vessels steam through the area between Australia and Antarctica, including Heard and Macquarie Islands. Observations have been made since June 1990 and are ongoing. Obviously the observations are not continuous over the region with time.
+
+Many of the original SO-CPR logbooks from the various voyages have also been scanned, and are available via the Australian Antarctic Data Centre's Reports Register.
+
+Zooplankton have been identified to lowest possible taxon, usually species, and counted for each segment.   For copepods, copepodites and for some species nauplii (e.g. Rhincalanus gigas) have been counted separately, and for euphausiids, naupliar, calyptopis and furcilia developmental stages are identified.
+
+The fields in this dataset are:
+ Tow_number - the CPR tow number
+ Ship_name - the name of the ship on which the tow was conducted
+ Season - two-year Antarctic season based around the austral summer, e.g. '2000-01' runs from July 2000 to June 2001
+ Latitude - the decimal latitude of the segment sample
+ Longitude - the decimal longitude of the segment sample
+ Observation_date - UTC date and time of the segment sample in ISO8601 format (yyyy-mm-ddTHH:MMZ)
+ Observation_date_year - the observation date year
+ Observation_date_month - the observation date month
+ Observation_date_day - the observation date day
+ Observation_date_hour - the observation date hour
+ Observation_date_minute - the observation date minute
+ Observation_date_time_zone - the observation date time zone (0=UTC)
+ Segment_number - the individual segment number within each tow
+ Segment_length - the distance travelled by the CPR during this segment (nautical miles). This is the true segment length as used in the Geocoding program used to cut the silk, and to calculate positions and average environmental data for each segment.  In theory, all segments are 5 nautical miles long.  However, this wasn't always the case with early Aurora Australis tows, where it was assumed that each marked segment was 5 nautical miles whereas each tow had subtle variations in silk advancement, depending on the wear of the cassette or travel with or against a current.  True segment length has since been recalculated.  At other times, some silks have been incorrectly cut and the true length has again been recalculated.  The last segment of each tow may be less than 5 nautical miles. This field can be used to standardise species counts to say 5 nautical miles or to a theoretical volume filtered by multiplying the distance travelled by aperture area (12.7 x 12.7 mm): Volume Filtered = Distance (n miles) x 1852 metres x 0.0127^2. A 5 nautical mile segment theoretically represents 1.49 m^3.
+ 
+Total_abundance - total count of all zooplankton in a segment
+ 
+Phytoplankton_colour_index -  visual estimation of the green colour of the silk mesh. Values are 'No Colour', 'Very Pale Green', 'Pale Green', or 'Green'. This colouration is due to the green chlorophyll pigments derived from chloroplasts of intact and broken cells and small unarmoured flagellates. It may provide an indicator of phytoplankton standing stock, although in the Southern Ocean there are some diatoms that are quite common on the silks but as they have very low amounts of chlorophyll the colour doesn't register in the PCI analysis.
+
+Fluorescence - water fluorescence measured by the vessel, averaged for the segment (arbitrary units). See Quality notes for more information.
+
+Salinity - water salinity measured by the vessel, averaged for the segment (psu). See Quality notes for more information.
+
+Water_temperature - water temperature measured by the vessel (degrees Celsius). See Quality notes for more information.
+
+Photosynthetically_active_radiation - photosynthetically active radiation measured by the vessel (micro-Einsteins m-2 s-1). This is not available on some vessels but has been included as a useful parameter to help differentiate data from night and day.
+
+The remaining fields ('Abylidae' through to 'Vibilia_sp') are zooplankton taxon names. The entries in these columns are the counts of each taxon in the segment.</Abstract>
+  </Summary>
+  <Related_URL>
+    <URL_Content_Type>
+      <Type>GET DATA</Type>
+      <Subtype>DIRECT DOWNLOAD</Subtype>
+    </URL_Content_Type>
+    <URL>https://data.aad.gov.au/eds/6120/download</URL>
+    <Description>Download point for the dataset</Description>
+  </Related_URL>
+  <Related_URL>
+    <URL_Content_Type>
+      <Type>PROJECT HOME PAGE</Type>
+    </URL_Content_Type>
+    <URL>http://data.aad.gov.au/aadc/cpr/</URL>
+    <Description>Home page for the SO-CPR project</Description>
+  </Related_URL>
+  <Related_URL>
+    <URL_Content_Type>
+      <Type>VIEW RELATED INFORMATION</Type>
+      <Subtype>GENERAL DOCUMENTATION</Subtype>
+    </URL_Content_Type>
+    <URL>https://data.aad.gov.au/eds/3466/download</URL>
+    <Description>Download a copy of all SO-CPR voyage reports</Description>
+  </Related_URL>
+  <Related_URL>
+    <URL_Content_Type>
+      <Type>VIEW RELATED INFORMATION</Type>
+    </URL_Content_Type>
+    <URL>http://data.aad.gov.au/aadc/metadata/citation.cfm?entry_id=AADC-00099</URL>
+    <Description>Citation reference for this metadata record and dataset</Description>
+  </Related_URL>
+  <IDN_Node>
+    <Short_Name>CEOS</Short_Name>
+  </IDN_Node>
+  <IDN_Node>
+    <Short_Name>AMD/AU</Short_Name>
+  </IDN_Node>
+  <IDN_Node>
+    <Short_Name>ANTABIF</Short_Name>
+  </IDN_Node>
+  <IDN_Node>
+    <Short_Name>AMD</Short_Name>
+  </IDN_Node>
+  <IDN_Node>
+    <Short_Name>IPY</Short_Name>
+  </IDN_Node>
+  <IDN_Node>
+    <Short_Name>OBIS/AADC</Short_Name>
+  </IDN_Node>
+  <IDN_Node>
+    <Short_Name>SOOS</Short_Name>
+  </IDN_Node>
+  <Originating_Metadata_Node>AADC</Originating_Metadata_Node>
+  <Metadata_Name>CEOS IDN DIF</Metadata_Name>
+  <Metadata_Version>VERSION 9.9.3</Metadata_Version>
+  <DIF_Creation_Date>1999-10-06</DIF_Creation_Date>
+  <Last_DIF_Revision_Date>2025-09-04</Last_DIF_Revision_Date>
+  <DIF_Revision_History>2008-07-30 - record updated by Dave Watts to strengthen SCAR-MarBIN links.
+2009-01-20 - record updated by Dave Connell to fix some typos.
+2011-05-23 - record updated by Dave Connell to add a link to the reports register.
+2012-05-28 - record updated by Dave Connell after new data were provided by Graham Hosie.
+2013-01-23 - record updated by Dave Connell after new information was provided by Graham Hosie.
+2013-02-04 - record updated by Dave Connell to make some minor changes.
+2013-02-22 - record updated by Dave Connell to include IMOS information.
+2013-03-06 - record updated by Dave Connell to alter the link for the CPR logbook downloads.
+2013-06-19 - record updated by Dave Connell to correct the Use Constraints.
+2013-11-07 - record updated by Dave Connell to add some quality information.
+2014-09-09 - record updated by Dave Connell.
+2015-12-15 - record updated by Ben Raymond to reflect minor reformatting in the data file, and fix incorrect UUID; DOI added.
+2016-10-04 - record updated by Dave Connell to amend data.
+2017-07-31 - record updated by Dave Connell to replace the data and update the DOI.
+2018-06-04 - record updated by Dave Connell to replace the data and update the DOI.
+2019-03-25 - record updated by Dave Connell to replace the data and update the DOI. 
+2019-12-04 - record updated by Dave Connell after the R formatted version of the data was provided by Johnathan Kool.
+2020-04-21 - record updated by Dave Connell to alter the title.
+2020-06-16 - record updated by Dave Connell after a new version of the data was provided by John Kitchener.
+2021-06-30 - record updated by Dave Connell after a new version of the data was provided by John Kitchener. 
+2022-07-05 - record updated by Dave Connell after a new version of the data was provided by John Kitchener.
+2022-07-20 - record updated by Dave Connell to add John Kitchener to the citation.
+2023-08-24 - record updated by Dave Connell after a new version of the data was provided by John Kitchener.
+2024-08-06 - record updated by Dave Connell after a new version of the data was provided by John Kitchener.
+2025-04-08 - record updated by Dave Connell - basic updates.
+2025-09-04 - record updated by Dave Connell after a new version of the data was provided by John Kitchener.</DIF_Revision_History>
+  <Extended_Metadata>
+    <Metadata>
+      <Group>gov.nasa.gsfc.gcmd</Group>
+      <Name>metadata.uuid</Name>
+      <Value>46c810e8-40fd-4e5f-b950-b2393d862455</Value>
+    </Metadata>
+    <Metadata>
+      <Group>gov.nasa.gsfc.gcmd</Group>
+      <Name>metadata.extraction_date</Name>
+      <Value>2025-09-04 12:11:58</Value>
+    </Metadata>
+    <Metadata>
+      <Group>gov.nasa.gsfc.gcmd</Group>
+      <Name>metadata.keyword_version</Name>
+      <Value>8.6</Value>
+    </Metadata>
+  </Extended_Metadata>
+</DIF>

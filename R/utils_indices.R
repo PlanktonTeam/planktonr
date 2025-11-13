@@ -1,7 +1,7 @@
 #' Access derived ecological indices for timeseries and climatology plots
 #'
-#' Get pre-calculated ecological indices and summary statistics from IMOS plankton 
-#' data. These indices include biodiversity metrics (Shannon diversity, evenness), 
+#' Get pre-calculated ecological indices and summary statistics from IMOS plankton
+#' data. These indices include biodiversity metrics (Shannon diversity, evenness),
 #' biomass estimates, abundance measures, and community structure indicators.
 #'
 #' @param Survey Survey type:
@@ -10,15 +10,15 @@
 #'   * `"SOTS"` - Southern Ocean Time Series (calculated from NRS data for SOTS station)
 #' @param Type Data type:
 #'   * `"Phytoplankton"` - Phytoplankton community indices
-#'   * `"Zooplankton"` - Zooplankton community indices  
+#'   * `"Zooplankton"` - Zooplankton community indices
 #'   * `"Water"` - Physical and chemical water properties
 #' @param ... Additional variables passed to [pr_add_Bioregions()]. Currently supports:
-#'   * `near_dist_km` - Distance in kilometres around each bioregion boundary to pad 
+#'   * `near_dist_km` - Distance in kilometres around each bioregion boundary to pad
 #'     the allocation of CPR samples to bioregions (useful for samples near boundaries)
 #'
 #' @details
 #' ## Available Parameters by Survey and Type
-#' 
+#'
 #' ### NRS Zooplankton:
 #' * `Biomass_mgm3` - Total zooplankton biomass (mg/m³)
 #' * `AshFreeBiomass_mgm3` - Ash-free dry weight biomass (mg/m³)
@@ -29,13 +29,13 @@
 #' * `NoCopepodSpecies_Sample` - Number of copepod species per sample
 #' * `ShannonCopepodDiversity` - Shannon diversity index for copepods
 #' * `CopepodEvenness` - Pielou's evenness for copepods
-#' 
+#'
 #' ### CPR Zooplankton:
 #' * `BiomassIndex_mgm3` - Zooplankton biomass index (mg/m³)
 #' * `ZoopAbundance_m3`, `CopeAbundance_m3`, `AvgTotalLengthCopepod_mm`,
-#'   `OmnivoreCarnivoreCopepodRatio`, `NoCopepodSpecies_Sample`, 
+#'   `OmnivoreCarnivoreCopepodRatio`, `NoCopepodSpecies_Sample`,
 #'   `ShannonCopepodDiversity`, `CopepodEvenness` (as above)
-#' 
+#'
 #' ### NRS Phytoplankton:
 #' * `PhytoBiomassCarbon_pgL` - Phytoplankton carbon biomass (pg/L)
 #' * `PhytoAbundance_CellsL` - Phytoplankton abundance (cells/L)
@@ -45,13 +45,13 @@
 #' * `ShannonPhytoDiversity` - Shannon diversity index for phytoplankton
 #' * `PhytoEvenness` - Pielou's evenness for phytoplankton
 #' * Plus diversity metrics for diatoms and dinoflagellates separately
-#' 
+#'
 #' ### CPR Phytoplankton:
 #' * `PCI` - Phytoplankton Colour Index (visual estimate of phytoplankton biomass)
 #' * `PhytoBiomassCarbon_pgm3` - Carbon biomass (pg/m³)
 #' * `PhytoAbundance_Cellsm3` - Abundance (cells/m³)
 #' * Plus similar metrics as NRS phytoplankton
-#' 
+#'
 #' ### NRS Water:
 #' * `Secchi_m` - Secchi depth (m)
 #' * `MLDtemp_m` - Mixed layer depth from temperature (m)
@@ -60,36 +60,36 @@
 #' * `CTDTemperature_degC` - Mean temperature in top 10m (°C)
 #' * `CTDSalinity_PSU` - Mean salinity in top 10m (PSU)
 #' * `CTDChlaF_mgm3` - Mean chlorophyll fluorescence in top 10m (mg/m³)
-#' 
+#'
 #' ### CPR Water:
 #' * `PCI` - Phytoplankton Colour Index
-#' 
+#'
 #' ## SOTS Data
-#' For SOTS (Southern Ocean Time Series), phytoplankton indices are calculated 
-#' from raw NRS data as they are not provided directly by AODN. Only samples 
+#' For SOTS (Southern Ocean Time Series), phytoplankton indices are calculated
+#' from raw NRS data as they are not provided directly by AODN. Only samples
 #' from the LM (Light Microscopy) method at depths <50m are included.
 #'
 #' @return A dataframe in long format with columns:
 #' * For NRS: `StationCode`, `StationName`, `SampleTime_Local`, `Latitude`, `Longitude`
 #' * For CPR: `BioRegion`, `SampleTime_Local`, `Latitude`, `Longitude`
 #' * Common: `Year_Local`, `Month_Local`, `Parameters` (index name), `Values` (index value)
-#' 
+#'
 #' @seealso [pr_filter_data()] to filter the output for specific parameters and stations,
 #'   [pr_plot_Trends()], [pr_plot_TimeSeries()], [pr_plot_Climatology()] for visualisation
-#' 
+#'
 #' @export
 #'
 #' @examples
 #' # Get NRS phytoplankton indices
 #' df <- pr_get_Indices("NRS", "Phytoplankton")
 #' unique(df$Parameters)
-#' 
+#'
 #' # Get CPR zooplankton indices with expanded bioregion boundaries
 #' df <- pr_get_Indices("CPR", "Zooplankton", near_dist_km = 250)
-#' 
+#'
 #' # Get water properties from NRS
 #' df <- pr_get_Indices("NRS", "Water")
-#' 
+#'
 #' # Filter for specific parameter and stations
 #' df <- pr_get_Indices("NRS", "Zooplankton") %>%
 #'   pr_filter_data("Biomass_mgm3", c("MAI", "PHB"))
@@ -168,6 +168,55 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
       pr_reorder()
 
 
+    SpInfoZ <- planktonr::pr_get_SpeciesInfo(Type = "Zooplankton") %>%
+      dplyr::mutate(`Taxon Name` = stringr::str_remove(`Taxon Name`, " [fmji]$"),
+                    `Taxon Name` = stringr::str_remove(`Taxon Name`," megalopa"),
+                    `Taxon Name` = stringr::str_remove(`Taxon Name`," naupliius"),
+                    `Taxon Name` = stringr::str_remove(`Taxon Name`," phyllosoma"),
+                    `Taxon Name` = stringr::str_remove(`Taxon Name`," zoea")) %>%
+      dplyr::distinct(`Taxon Name`, .keep_all = TRUE) %>%
+      dplyr::select(c(TaxonName = "Taxon Name", FunctionalGroup = "Functional Group", "Genus", "Species",
+                      "Diet", AphiaID = "WoRMS AphiaID", "Length (mm)"))
+
+
+
+    main_vars <- c("TripCode", "Year_Local", "Month_Local", "SampleTime_Local", "tz",
+                   "Latitude", "Longitude", "SampleTime_UTC", "SampleVolume_m3",
+                   "BioRegion", "Sample_ID", "TotalCount", "PCI")
+
+
+    grp <- setdiff(main_vars, "PCI")
+
+    dat <- cpr_AAD %>%
+      tidyr::pivot_longer(-tidyselect::all_of(main_vars), names_to = "TaxonName", values_to = "Count") %>%
+      # dplyr::left_join(trophy, by = "TaxonName") %>%
+      dplyr::filter(.data$Count > 0) %>%
+      dplyr::left_join(SpInfoZ, by = c("TaxonName" = "TaxonName")) %>%  # join the species info.
+      dplyr::group_by(across(all_of(grp))) %>%
+      dplyr::summarise(PCI = mean(PCI, na.rm = TRUE),
+                       BiomassIndex_mgm3 = NA,
+                       ZoopAbundance_m3 = sum(Count) / (mean(SampleVolume_m3)),
+                       CopeAbundance_m3 = sum(.data$Count[.data$FunctionalGroup == "Copepod"], na.rm = TRUE) / sum(.data$SampleVolume_m3, na.rm = TRUE),
+                       AvgTotalLengthCopepod_mm = mean(.data$`Length (mm)`[.data$FunctionalGroup == "Copepod"], na.rm = TRUE),
+                       NoCopepodSpecies_Sample = length(.data$FunctionalGroup == "Copepod"),
+                       OmnivoreCarnivoreCopepodRatio =
+                         sum(.data$Count[.data$FunctionalGroup == "Copepod" & .data$Diet == "Omnivore"], na.rm = TRUE) / # Number of omnivores to
+                         sum(.data$Count[.data$FunctionalGroup == "Copepod" & .data$Diet == "Carnivore"], na.rm = TRUE), # Number of carnivores
+                       ShannonCopepodDiversity = vegan::diversity(
+                         x = .data$Count[.data$FunctionalGroup == "Copepod"] /
+                           .data$SampleVolume_m3[.data$FunctionalGroup == "Copepod"],
+                         index = "shannon"),
+                       CopepodEvenness = ShannonCopepodDiversity/log10(NoCopepodSpecies_Sample)) %>%
+      dplyr::ungroup() %>%
+      dplyr::mutate(dplyr::across(where(is.numeric), ~ dplyr::na_if(.x , y = NaN))) %>%
+      tidyr::pivot_longer(-tidyselect::any_of(grp), values_to = "Values", names_to = "Parameters") %>%
+      planktonr::planktonr_dat("Zooplankton", "CPR") %>%
+      planktonr::pr_remove_outliers(2) %>%
+      droplevels() %>%
+      dplyr::select(colnames(dat)) %>%
+      dplyr::bind_rows(dat, .)
+
+
   } else if (Survey == "NRS"){
 
     dat <- pr_get_Raw("nrs_derived_indices_data") %>%
@@ -244,37 +293,37 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
 #'
 #' Filter plankton data by parameter and location
 #'
-#' Convenience function to filter index data to specific parameters and locations 
-#' before plotting or analysis. Automatically detects whether data uses station 
+#' Convenience function to filter index data to specific parameters and locations
+#' before plotting or analysis. Automatically detects whether data uses station
 #' codes (NRS) or bioregions (CPR) and filters accordingly.
 #'
-#' @param df A dataframe from [pr_get_Indices()], [pr_get_EOVs()], or similar 
+#' @param df A dataframe from [pr_get_Indices()], [pr_get_EOVs()], or similar
 #'   functions
-#' @param Parameter Character string or vector of parameter names to retain. 
+#' @param Parameter Character string or vector of parameter names to retain.
 #'   Common parameters include:
 #'   * **Biomass**: `"Biomass_mgm3"`, `"BiomassIndex_mgm3"`, `"PhytoBiomassCarbon_pgL"`
 #'   * **Abundance**: `"Abundance_m3"`, `"AbundanceIndex_Samplekm"`, `"TotalCopepodAbundance_m3"`
 #'   * **Diversity**: `"ShannonDiversity"`, `"TotalTaxa_Sample"`, `"Richness"`
 #' @param StationRegion Character string or vector of locations to retain:
-#'   * **For NRS data**: Station codes like `"NSI"`, `"PHB"`, `"MAI"`, `"ROT"`, 
+#'   * **For NRS data**: Station codes like `"NSI"`, `"PHB"`, `"MAI"`, `"ROT"`,
 #'     `"YON"`, `"DAR"`, `"KAI"`, `"ESP"`, `"NIN"`
-#'   * **For CPR data**: Bioregions like `"Temperate East"`, `"South-east"`, 
+#'   * **For CPR data**: Bioregions like `"Temperate East"`, `"South-east"`,
 #'     `"South-west"`, `"North-west"`, `"Coral Sea"`
 #'
 #' @details
-#' This function streamlines the common workflow of filtering data before creating 
+#' This function streamlines the common workflow of filtering data before creating
 #' plots or running analyses. It:
 #' * Detects data type automatically (NRS vs CPR)
 #' * Filters on `Parameters` column to match `Parameter` argument
 #' * Filters on `StationCode` (NRS) or `BioRegion` (CPR) to match `StationRegion` argument
 #' * Validates inputs to catch common errors
-#' 
+#'
 #' ## When to Use
 #' Use this function when:
 #' * Creating plots for specific stations or regions
 #' * Comparing multiple parameters at the same location(s)
 #' * Preparing data for statistical analysis on a subset of locations
-#' 
+#'
 #' ## Multiple Selections
 #' Both `Parameter` and `StationRegion` accept vectors, enabling:
 #' * Multiple parameters at one station: `Parameter = c("Biomass_mgm3", "Abundance_m3"), StationRegion = "NSI"`
@@ -282,22 +331,22 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
 #' * Multiple parameters at multiple stations: vectors for both arguments
 #'
 #' @return A filtered dataframe maintaining the same structure as input
-#' 
-#' @seealso 
+#'
+#' @seealso
 #' * [pr_get_Indices()] for loading data before filtering
 #' * [pr_plot_TimeSeries()], [pr_plot_Trends()], [pr_plot_Climatology()] for plotting filtered data
-#' 
+#'
 #' @export
 #'
 #' @examples
 #' # Filter CPR data to biomass in two bioregions
 #' df <- pr_get_Indices("CPR", "Zooplankton") %>%
 #'   pr_filter_data("BiomassIndex_mgm3", c("North", "South-west"))
-#'   
+#'
 #' # Filter NRS data to phytoplankton carbon at two stations
 #' df <- pr_get_Indices("NRS", "Phytoplankton") %>%
 #'   pr_filter_data("PhytoBiomassCarbon_pgL", c("NSI", "PHB"))
-#'   
+#'
 #' # Multiple parameters at one station
 #' df <- pr_get_Indices("NRS", "Zooplankton") %>%
 #'   pr_filter_data(c("Biomass_mgm3", "Abundance_m3", "ShannonDiversity"), "MAI")
