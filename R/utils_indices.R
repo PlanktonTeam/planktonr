@@ -169,52 +169,54 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
 
 
     SpInfoZ <- planktonr::pr_get_SpeciesInfo(Type = "Zooplankton") %>%
-      dplyr::mutate(`Taxon Name` = stringr::str_remove(`Taxon Name`, " [fmji]$"),
-                    `Taxon Name` = stringr::str_remove(`Taxon Name`," megalopa"),
-                    `Taxon Name` = stringr::str_remove(`Taxon Name`," naupliius"),
-                    `Taxon Name` = stringr::str_remove(`Taxon Name`," phyllosoma"),
-                    `Taxon Name` = stringr::str_remove(`Taxon Name`," zoea")) %>%
-      dplyr::distinct(`Taxon Name`, .keep_all = TRUE) %>%
+      dplyr::mutate(`Taxon Name` = stringr::str_remove(.data$`Taxon Name`, " [fmji]$"),
+                    `Taxon Name` = stringr::str_remove(.data$`Taxon Name`," megalopa"),
+                    `Taxon Name` = stringr::str_remove(.data$`Taxon Name`," naupliius"),
+                    `Taxon Name` = stringr::str_remove(.data$`Taxon Name`," phyllosoma"),
+                    `Taxon Name` = stringr::str_remove(.data$`Taxon Name`," zoea")) %>%
+      dplyr::distinct(.data$`Taxon Name`, .keep_all = TRUE) %>%
       dplyr::select(c(TaxonName = "Taxon Name", FunctionalGroup = "Functional Group", "Genus", "Species",
                       "Diet", AphiaID = "WoRMS AphiaID", "Length (mm)"))
 
 
 
-    main_vars <- c("TripCode", "Year_Local", "Month_Local", "SampleTime_Local", "tz",
-                   "Latitude", "Longitude", "SampleTime_UTC", "SampleVolume_m3",
-                   "BioRegion", "Sample_ID", "TotalCount", "PCI")
+    if (Type == "Zooplankton"){
+      main_vars <- c("TripCode", "Year_Local", "Month_Local", "SampleTime_Local", "tz",
+                     "Latitude", "Longitude", "SampleTime_UTC", "SampleVolume_m3",
+                     "BioRegion", "Sample_ID", "TotalCount", "PCI")
 
 
-    grp <- setdiff(main_vars, "PCI")
+      grp <- setdiff(main_vars, "PCI")
 
-    dat <- cpr_AAD %>%
-      tidyr::pivot_longer(-tidyselect::all_of(main_vars), names_to = "TaxonName", values_to = "Count") %>%
-      # dplyr::left_join(trophy, by = "TaxonName") %>%
-      dplyr::filter(.data$Count > 0) %>%
-      dplyr::left_join(SpInfoZ, by = c("TaxonName" = "TaxonName")) %>%  # join the species info.
-      dplyr::group_by(across(all_of(grp))) %>%
-      dplyr::summarise(PCI = mean(PCI, na.rm = TRUE),
-                       BiomassIndex_mgm3 = NA,
-                       ZoopAbundance_m3 = sum(Count) / (mean(SampleVolume_m3)),
-                       CopeAbundance_m3 = sum(.data$Count[.data$FunctionalGroup == "Copepod"], na.rm = TRUE) / sum(.data$SampleVolume_m3, na.rm = TRUE),
-                       AvgTotalLengthCopepod_mm = mean(.data$`Length (mm)`[.data$FunctionalGroup == "Copepod"], na.rm = TRUE),
-                       NoCopepodSpecies_Sample = length(.data$FunctionalGroup == "Copepod"),
-                       OmnivoreCarnivoreCopepodRatio =
-                         sum(.data$Count[.data$FunctionalGroup == "Copepod" & .data$Diet == "Omnivore"], na.rm = TRUE) / # Number of omnivores to
-                         sum(.data$Count[.data$FunctionalGroup == "Copepod" & .data$Diet == "Carnivore"], na.rm = TRUE), # Number of carnivores
-                       ShannonCopepodDiversity = vegan::diversity(
-                         x = .data$Count[.data$FunctionalGroup == "Copepod"] /
-                           .data$SampleVolume_m3[.data$FunctionalGroup == "Copepod"],
-                         index = "shannon"),
-                       CopepodEvenness = ShannonCopepodDiversity/log10(NoCopepodSpecies_Sample)) %>%
-      dplyr::ungroup() %>%
-      dplyr::mutate(dplyr::across(where(is.numeric), ~ dplyr::na_if(.x , y = NaN))) %>%
-      tidyr::pivot_longer(-tidyselect::any_of(grp), values_to = "Values", names_to = "Parameters") %>%
-      planktonr::planktonr_dat("Zooplankton", "CPR") %>%
-      planktonr::pr_remove_outliers(2) %>%
-      droplevels() %>%
-      dplyr::select(colnames(dat)) %>%
-      dplyr::bind_rows(dat, .)
+      dat <- cpr_AAD %>%
+        tidyr::pivot_longer(-tidyselect::all_of(main_vars), names_to = "TaxonName", values_to = "Count") %>%
+        # dplyr::left_join(trophy, by = "TaxonName") %>%
+        dplyr::filter(.data$Count > 0) %>%
+        dplyr::left_join(SpInfoZ, by = c("TaxonName" = "TaxonName")) %>%  # join the species info.
+        dplyr::group_by(dplyr::across(tidyselect::all_of(grp))) %>%
+        dplyr::summarise(PCI = mean(.data$PCI, na.rm = TRUE),
+                         BiomassIndex_mgm3 = NA,
+                         ZoopAbundance_m3 = sum(.data$Count) / (mean(.data$SampleVolume_m3)),
+                         CopeAbundance_m3 = sum(.data$Count[.data$FunctionalGroup == "Copepod"], na.rm = TRUE) / sum(.data$SampleVolume_m3, na.rm = TRUE),
+                         AvgTotalLengthCopepod_mm = mean(.data$`Length (mm)`[.data$FunctionalGroup == "Copepod"], na.rm = TRUE),
+                         NoCopepodSpecies_Sample = length(.data$FunctionalGroup == "Copepod"),
+                         OmnivoreCarnivoreCopepodRatio =
+                           sum(.data$Count[.data$FunctionalGroup == "Copepod" & .data$Diet == "Omnivore"], na.rm = TRUE) / # Number of omnivores to
+                           sum(.data$Count[.data$FunctionalGroup == "Copepod" & .data$Diet == "Carnivore"], na.rm = TRUE), # Number of carnivores
+                         ShannonCopepodDiversity = vegan::diversity(
+                           x = .data$Count[.data$FunctionalGroup == "Copepod"] /
+                             .data$SampleVolume_m3[.data$FunctionalGroup == "Copepod"],
+                           index = "shannon"),
+                         CopepodEvenness = .data$ShannonCopepodDiversity/log10(.data$NoCopepodSpecies_Sample)) %>%
+        dplyr::ungroup() %>%
+        dplyr::mutate(dplyr::across(tidyselect::where(is.numeric), ~ dplyr::na_if(.x , y = NaN))) %>%
+        tidyr::pivot_longer(-tidyselect::any_of(grp), values_to = "Values", names_to = "Parameters") %>%
+        planktonr::planktonr_dat("Zooplankton", "CPR") %>%
+        planktonr::pr_remove_outliers(2) %>%
+        droplevels() %>%
+        dplyr::select(colnames(dat)) %>%
+        dplyr::bind_rows(dat, .)
+    }
 
 
   } else if (Survey == "NRS"){

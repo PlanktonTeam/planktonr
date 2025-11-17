@@ -69,11 +69,11 @@ Both \code{Parameter} and \code{StationRegion} accept vectors, enabling:
 # Filter CPR data to biomass in two bioregions
 df <- pr_get_Indices("CPR", "Zooplankton") \%>\%
   pr_filter_data("BiomassIndex_mgm3", c("North", "South-west"))
-  
+
 # Filter NRS data to phytoplankton carbon at two stations
 df <- pr_get_Indices("NRS", "Phytoplankton") \%>\%
   pr_filter_data("PhytoBiomassCarbon_pgL", c("NSI", "PHB"))
-  
+
 # Multiple parameters at one station
 df <- pr_get_Indices("NRS", "Zooplankton") \%>\%
   pr_filter_data(c("Biomass_mgm3", "Abundance_m3", "ShannonDiversity"), "MAI")

@@ -8,19 +8,19 @@
 #' @examples
 #' pr_get_PCIData() %>% pr_plot_PCImap()
 pr_plot_PCImap <- function(df) {
-  
+
   # Input validation
   assertthat::assert_that(
     is.data.frame(df),
     msg = "'df' must be a data frame. Use pr_get_PCIData() to create the data."
   )
-  
+
   required_cols <- c("Longitude", "Latitude", "PCI", "Season")
   assertthat::assert_that(
     all(required_cols %in% colnames(df)),
     msg = paste0("'df' must contain the following columns: ", paste(required_cols, collapse = ", "), ". Use pr_get_PCIData() to create the data.")
   )
-  
+
   cprmap <- ggplot2::ggplot() +
     ggplot2::geom_raster(data = df, ggplot2::aes(x = .data$Longitude, y = .data$Latitude, fill = .data$PCI), interpolate = TRUE) +
     ggplot2::scale_fill_gradient(low = "light green", high = "darkgreen",
@@ -39,8 +39,8 @@ pr_plot_PCImap <- function(df) {
 
 #' Create map showing selected NRS station locations
 #'
-#' Plot Australian coastline with NRS sampling stations, highlighting selected 
-#' stations in red and non-selected stations in blue. Useful for showing which 
+#' Plot Australian coastline with NRS sampling stations, highlighting selected
+#' stations in red and non-selected stations in blue. Useful for showing which
 #' stations are included in an analysis or visualisation.
 #'
 #' @param sites Character vector of station codes to highlight. Valid codes:
@@ -66,32 +66,32 @@ pr_plot_PCImap <- function(df) {
 #' The map shows the Australian coastline from:
 #' * Longitude: 112.8°E to 154.5°E
 #' * Latitude: -44°S to -10.5°S (or -50°S if including SOTS)
-#' 
+#'
 #' ## Visual Design
 #' * **Red points**: Selected stations (specified in `sites` argument)
 #' * **Blue points**: Non-selected stations
 #' * Grey land mass
 #' * Transparent background for easy integration into documents
-#' 
+#'
 #' ## Use Cases
 #' This function is particularly useful for:
 #' * Sidebar panels in Shiny applications
 #' * Figure panels showing study site locations
 #' * Publication maps indicating data sources
 #' * Educational materials showing NRS network coverage
-#' 
+#'
 #' ## SOTS Station
-#' The Southern Ocean Time Series (SOTS) station south of Tasmania is only 
-#' included when `Type = "Phytoplankton"` as zooplankton sampling there is 
+#' The Southern Ocean Time Series (SOTS) station south of Tasmania is only
+#' included when `Type = "Phytoplankton"` as zooplankton sampling there is
 #' infrequent or uses different methods.
 #'
-#' @return A ggplot2 object with transparent background, suitable for overlaying 
+#' @return A ggplot2 object with transparent background, suitable for overlaying
 #'   or saving with `ggsave()`
-#' 
-#' @seealso 
+#'
+#' @seealso
 #' * [pr_get_Stations()] for station metadata
 #' * [pr_plot_CPRmap()] for CPR bioregion maps
-#' 
+#'
 #' @export
 #'
 #' @examples
@@ -99,13 +99,10 @@ pr_plot_PCImap <- function(df) {
 #' sites <- c("MAI", "PHB")
 #' pmap <- pr_plot_NRSmap(sites, Type = "Phytoplankton")
 #' print(pmap)
-#' 
+#'
 #' # Long Term Monitoring stations with one highlighted
 #' pr_plot_NRSmap(sites = "MAI", Survey = "LTM")
-#' 
-#' # Save map to file
-#' pmap <- pr_plot_NRSmap(c("NSI", "PHB", "MAI"))
-#' ggplot2::ggsave("nrs_stations.png", pmap, width = 6, height = 8, bg = "white")
+#'
 pr_plot_NRSmap <- function(sites, Survey = "NRS", Type = 'Zooplankton'){
 
   # Input validation
@@ -113,27 +110,27 @@ pr_plot_NRSmap <- function(sites, Survey = "NRS", Type = 'Zooplankton'){
     is.character(sites) || is.factor(sites),
     msg = "'sites' must be a character vector or factor of station codes (e.g., c('MAI', 'PHB'))."
   )
-  
+
   assertthat::assert_that(
     length(sites) > 0,
     msg = "'sites' must contain at least one station code."
   )
-  
+
   assertthat::assert_that(
     is.character(Survey) && length(Survey) == 1,
     msg = "'Survey' must be a single character string. Valid options are 'NRS', 'LTM', or 'Coastal'."
   )
-  
+
   assertthat::assert_that(
     Survey %in% c("NRS", "LTM", "Coastal"),
     msg = "'Survey' must be one of 'NRS', 'LTM', or 'Coastal'."
   )
-  
+
   assertthat::assert_that(
     is.character(Type) && length(Type) == 1,
     msg = "'Type' must be a single character string. Valid options are 'Phytoplankton' or 'Zooplankton'."
   )
-  
+
   assertthat::assert_that(
     Type %in% c("Phytoplankton", "Zooplankton"),
     msg = "'Type' must be one of 'Phytoplankton' or 'Zooplankton'."
@@ -205,7 +202,7 @@ pr_plot_CPRmap <-  function(sites){
     is.character(sites) || is.factor(sites),
     msg = "'sites' must be a character vector or factor of CPR bioregion names (e.g., c('Temperate East', 'South-west'))."
   )
-  
+
   assertthat::assert_that(
     length(sites) > 0,
     msg = "'sites' must contain at least one bioregion name."
@@ -309,18 +306,18 @@ pr_plot_FreqMap <- function(df, species, interactive = TRUE){
     is.data.frame(df),
     msg = "'df' must be a data frame. Use pr_get_FreqMap() to create the data."
   )
-  
+
   required_cols <- c("Season", "Latitude", "Longitude", "Survey", "Taxon", "freqfac")
   assertthat::assert_that(
     all(required_cols %in% colnames(df)),
     msg = paste0("'df' must contain the following columns: ", paste(required_cols, collapse = ", "), ". Use pr_get_FreqMap() to create the data.")
   )
-  
+
   assertthat::assert_that(
     is.character(species) && length(species) == 1,
     msg = "'species' must be a single character string specifying the species name."
   )
-  
+
   assertthat::assert_that(
     is.logical(interactive) && length(interactive) == 1,
     msg = "'interactive' must be a single logical value (TRUE or FALSE)."
@@ -451,12 +448,12 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE, labels = TRUE){
     is.data.frame(df) || is.list(df),
     msg = "'df' must be a data frame or list. Use pr_get_ProgressMapData() to create the data."
   )
-  
+
   assertthat::assert_that(
     is.logical(interactive) && length(interactive) == 1,
     msg = "'interactive' must be a single logical value (TRUE or FALSE)."
   )
-  
+
   assertthat::assert_that(
     is.logical(labels) && length(labels) == 1,
     msg = "'labels' must be a single logical value (TRUE or FALSE)."

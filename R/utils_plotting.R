@@ -16,7 +16,7 @@ pr_get_FreqMap <- function(Type = "Zooplankton"){
     is.character(Type) && length(Type) == 1,
     msg = "'Type' must be a single character string. Valid options are 'Phytoplankton' or 'Zooplankton'."
   )
-  
+
   assertthat::assert_that(
     Type %in% c("Phytoplankton", "Zooplankton"),
     msg = "'Type' must be one of 'Phytoplankton' or 'Zooplankton'."
@@ -94,12 +94,12 @@ pr_get_ProgressMapData <- function(Survey = c("NRS", "CPR"), interactive = FALSE
     is.character(Survey),
     msg = "'Survey' must be a character vector. Valid options are 'NRS', 'CPR', or c('NRS', 'CPR')."
   )
-  
+
   assertthat::assert_that(
     all(Survey %in% c("NRS", "CPR", "Both")),
     msg = "'Survey' must be one or more of 'NRS', 'CPR', or 'Both'."
   )
-  
+
   assertthat::assert_that(
     is.logical(interactive) && length(interactive) == 1,
     msg = "'interactive' must be a single logical value (TRUE or FALSE)."
@@ -141,6 +141,7 @@ pr_get_ProgressMapData <- function(Survey = c("NRS", "CPR"), interactive = FALSE
       dplyr::rename(Name = "StationName") %>%
       dplyr::select(-"StationCode") %>%
       dplyr::mutate(Survey = "NRS")
+
 
     PMapDataCPR <- dplyr::bind_rows(planktonr::pr_get_Indices(Survey = "CPR", Type = "Zooplankton", ...),
                                     planktonr::pr_get_Indices(Survey = "CPR", Type = "Phytoplankton", ...)) %>%

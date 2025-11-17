@@ -70,11 +70,6 @@ print(plot)
 df <- pr_get_FuncGroups("NRS", "Zooplankton")
 pr_plot_PieFG(df)
 
-# Save to file
-df <- pr_get_FuncGroups("CPR", "Zooplankton")
-p <- pr_plot_PieFG(df)
-ggplot2::ggsave("functional_groups_pie.png", p, width = 8, height = 6)
-
 }
 \seealso{
 \itemize{
