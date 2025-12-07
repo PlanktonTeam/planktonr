@@ -19,17 +19,17 @@ pr_relabel <- function(s, style = "ggplot", named = FALSE){
     is.character(s),
     msg = "'s' must be a character vector containing parameter names."
   )
-  
+
   assertthat::assert_that(
     is.character(style) && length(style) == 1,
     msg = "'style' must be a single character string. Valid options are 'ggplot', 'plotly', or 'simple'."
   )
-  
+
   assertthat::assert_that(
     style %in% c("ggplot", "plotly", "simple"),
     msg = "'style' must be one of 'ggplot', 'plotly', or 'simple'."
   )
-  
+
   assertthat::assert_that(
     is.logical(named) && length(named) == 1,
     msg = "'named' must be a single logical value (TRUE or FALSE)."
@@ -42,6 +42,7 @@ pr_relabel <- function(s, style = "ggplot", named = FALSE){
     "AshFreeBiomass_mgm3", rlang::expr(paste("Ash Free Biomass (mg m"^-3,")")), "Ash Free Biomass (mg m<sup>-3</sup>)", "Zooplankton Ash Free Biomass",
     "AvgCellVol_um3", rlang::expr(paste("Average Cell Volume (mum"^3,"sample"^-1,")")), "Average Cell Volume (&#181;m<sup>3</sup> sample<sup>-1</sup>)", "Average Cell Volume",
     "AvgTotalLengthCopepod_mm", rlang::expr(paste("Avg. Copepod Length (mm)")), "Avg. Copepod Length (mm)", "Copepod Length",
+    "Bacteria_cellsmL", rlang::expr(paste("Bacteria (cells ml"^-1,")")), "Bacteria (cells ml<sup>-1</sup>)", "Bacteria Abundance",
     "Biomass_mgm3", rlang::expr(paste("Zooplankton Biomass (mg m"^-3,")")), "Zooplankton Biomass (mg m<sup>-3</sup>)", "Zooplankton Biomass",
     "BiomassIndex_mgm3", rlang::expr(paste("Biomass Index (mg m"^-3,")")), "Biomass Index (mg m<sup>-3</sup>)", "Zooplankton Biomass Index",
     "Biovolume_um3L", rlang::expr(paste("Biovolume (mum"^3," L"^-1,")")), "Biovolume (&#181;m<sup>3 L<sup>-1</sup>)", "Phytoplankton Biovolume",
