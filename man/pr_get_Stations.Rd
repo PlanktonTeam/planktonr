@@ -41,10 +41,10 @@ NIN (Ningaloo), and KAI (Kangaroo Island).
 }
 \examples{
 # Get all NRS station information
-df <- pr_get_Stations('NRS')
+dat <- pr_get_Stations('NRS')
 
 # Get SOTS station information
-df <- pr_get_Stations('SOTS')
+dat <- pr_get_Stations('SOTS')
 
 }
 \seealso{

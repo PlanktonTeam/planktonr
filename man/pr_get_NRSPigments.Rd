@@ -61,13 +61,13 @@ integrated samples rather than discrete depths.
 }
 \examples{
 # Get all individual pigments
-df <- pr_get_NRSPigments()
+dat <- pr_get_NRSPigments()
 
 # Get binned pigment classes
-df <- pr_get_NRSPigments(Format = "binned")
+dat <- pr_get_NRSPigments(Format = "binned")
 
 # Filter for total chlorophyll a at Maria Island
-df_chla <- df \%>\%
+dat_chla <- dat \%>\%
   dplyr::filter(Parameters == "TotalChla", StationCode == "MAI")
 }
 \seealso{

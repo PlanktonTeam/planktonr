@@ -13,5 +13,5 @@ A dataframe with NRS TSS data
 Load Total Suspended Solids (TSS) data
 }
 \examples{
-df <- pr_get_NRSTSS()
+dat <- pr_get_NRSTSS()
 }

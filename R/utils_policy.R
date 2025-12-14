@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-#' df <- pr_get_EOVs("NRS")
+#' dat <- pr_get_EOVs("NRS")
 pr_get_EOVs <- function(Survey = "NRS", ...){
 
   # Input validation
@@ -153,7 +153,7 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_PolicyInfo("CPR")
+#' dat <- pr_get_PolicyInfo("CPR")
 pr_get_PolicyInfo <- function(Survey = "NRS", ...){
 
   # Input validation

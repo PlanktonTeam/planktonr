@@ -4,24 +4,24 @@
 \alias{pr_match_Altimetry}
 \title{Match plankton samples to satellite altimetry data (sea level, currents)}
 \usage{
-pr_match_Altimetry(df, pr, res_spat = 1)
+pr_match_Altimetry(dat, pr, res_spat = 1)
 }
 \arguments{
-\item{df}{dataframe containing Latitude, Longitude and Date}
+\item{dat}{dataframe containing Latitude, Longitude and Date}
 
 \item{pr}{products from GSLA, GSL, UCUR, UCUR, VCUR, UCUR_MEAN, VCUR_MEAN, single or as a list}
 
 \item{res_spat}{Number of spatial pixels to average over}
 }
 \value{
-df with product output attached
+dat with product output attached
 }
 \description{
 Match plankton samples to satellite altimetry data (sea level, currents)
 }
 \examples{
-df <- pr_get_DataLocs("NRS") \%>\%
+dat <- pr_get_DataLocs("NRS") \%>\%
   dplyr::filter(Date < lubridate::ymd("2019-12-31")) \%>\%
   head(5)
-altout <- pr_match_Altimetry(df, pr = "GSLA", res_spat = 10)
+altout <- pr_match_Altimetry(dat, pr = "GSLA", res_spat = 10)
 }

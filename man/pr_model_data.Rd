@@ -4,10 +4,10 @@
 \alias{pr_model_data}
 \title{Fit linear models to plankton time series data}
 \usage{
-pr_model_data(df)
+pr_model_data(dat)
 }
 \arguments{
-\item{df}{A dataframe from \code{\link[=pr_get_EOVs]{pr_get_EOVs()}}, \code{\link[=pr_get_Indices]{pr_get_Indices()}}, or similar
+\item{dat}{A dataframe from \code{\link[=pr_get_EOVs]{pr_get_EOVs()}}, \code{\link[=pr_get_Indices]{pr_get_Indices()}}, or similar
 functions containing time series data. Must contain only one parameter at a time.}
 }
 \value{
@@ -54,18 +54,18 @@ extracted using \code{\link[=pr_get_model]{pr_get_model()}} and analysed using \
 }
 \examples{
 # Fit models to zooplankton biomass
-df <- pr_get_EOVs(Survey = "NRS") \%>\%
+dat <- pr_get_EOVs(Survey = "NRS") \%>\%
   dplyr::filter(Parameters == "Biomass_mgm3") \%>\%
   pr_remove_outliers(2) \%>\%
   pr_model_data()
 
 # Extract and view model coefficients
-models <- pr_get_model(df)
+models <- pr_get_model(dat)
 coeffs <- pr_get_coeffs(models)
 print(coeffs)
 
 # Fit models to CPR phytoplankton diversity
-df_cpr <- pr_get_EOVs(Survey = "CPR") \%>\%
+dat_cpr <- pr_get_EOVs(Survey = "CPR") \%>\%
   dplyr::filter(Parameters == "ShannonPhytoDiversity") \%>\%
   pr_remove_outliers(2) \%>\%
   pr_model_data()

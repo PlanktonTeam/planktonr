@@ -13,5 +13,5 @@ A dataframe with NRS CTD data
 Load NRS CTD profile data (temperature, salinity, fluorescence)
 }
 \examples{
-df <- pr_get_NRSCTD()
+dat <- pr_get_NRSCTD()
 }

@@ -1,14 +1,14 @@
 
 #' Standardise column names in IMOS plankton dataframes
 #'
-#' @param df Dataframe with column names to renamed
+#' @param dat Dataframe with column names to renamed
 #' @export
 #'
 #' @return Dataframe with new column names
 #' @examples
-#' df <- data.frame(LATITUDE = -32, LONGITUDE = 160) %>%
+#' dat <- data.frame(LATITUDE = -32, LONGITUDE = 160) %>%
 #'             pr_rename()
-pr_rename <- function(df){
+pr_rename <- function(dat){
 
   ##TODO - Check and remvoe any uneeded renames - note the capitals are needed for files grabbed from S3
   rename_df <- tibble::as_tibble(matrix(c(
@@ -63,7 +63,7 @@ pr_rename <- function(df){
     "ZSampleDepth_m", "ZOOPSAMPLEDEPTH_M"),
     ncol = 2, byrow = TRUE, dimnames = list(NULL, c("New", "Old"))))
 
-  df <- data.table::setnames(df, old = rename_df$Old, new = rename_df$New, skip_absent = TRUE)
+  dat <- data.table::setnames(dat, old = rename_df$Old, new = rename_df$New, skip_absent = TRUE)
 
-  return(df)
+  return(dat)
 }

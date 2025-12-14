@@ -55,14 +55,14 @@ filtered to include only NRS stations.
 NOx, DIN, and Redfield ratio are calculated from the measured nutrient values.
 }
 \examples{
-df <- pr_get_NRSChemistry()
+dat <- pr_get_NRSChemistry()
 
 # Examine available parameters
-unique(df$Parameters)
+unique(dat$Parameters)
 
 # Filter for surface nitrate at specific stations
-df_nitrate <- df \%>\%
-  dplyr::filter(Parameters == "Nitrate_umolL", 
+dat_nitrate <- dat \%>\%
+  dplyr::filter(Parameters == "Nitrate_umolL",
                 SampleDepth_m == 0,
                 StationCode \%in\% c("MAI", "PHB"))
 

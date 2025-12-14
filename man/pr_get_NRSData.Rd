@@ -44,13 +44,13 @@ from cell measurements.
 }
 \examples{
 # Get raw phytoplankton abundance data
-df <- pr_get_NRSData(Type = "Phytoplankton", Variable = "abundance", Subset = "raw")
+dat <- pr_get_NRSData(Type = "Phytoplankton", Variable = "abundance", Subset = "raw")
 
 # Get zooplankton data at genus level
-df <- pr_get_NRSData(Type = "Zooplankton", Variable = "abundance", Subset = "genus")
+dat <- pr_get_NRSData(Type = "Zooplankton", Variable = "abundance", Subset = "genus")
 
 # Get phytoplankton biovolume data
-df <- pr_get_NRSData(Type = "Phytoplankton", Variable = "biovolume", Subset = "species")
+dat <- pr_get_NRSData(Type = "Phytoplankton", Variable = "biovolume", Subset = "species")
 
 }
 \seealso{

@@ -116,17 +116,17 @@ from the LM (Light Microscopy) method at depths <50m are included.
 }
 \examples{
 # Get NRS phytoplankton indices
-df <- pr_get_Indices("NRS", "Phytoplankton")
-unique(df$Parameters)
+dat <- pr_get_Indices("NRS", "Phytoplankton")
+unique(dat$Parameters)
 
 # Get CPR zooplankton indices with expanded bioregion boundaries
-df <- pr_get_Indices("CPR", "Zooplankton", near_dist_km = 250)
+dat <- pr_get_Indices("CPR", "Zooplankton", near_dist_km = 250)
 
 # Get water properties from NRS
-df <- pr_get_Indices("NRS", "Water")
+dat <- pr_get_Indices("NRS", "Water")
 
 # Filter for specific parameter and stations
-df <- pr_get_Indices("NRS", "Zooplankton") \%>\%
+dat <- pr_get_Indices("NRS", "Zooplankton") \%>\%
   pr_filter_data("Biomass_mgm3", c("MAI", "PHB"))
 }
 \seealso{

@@ -18,5 +18,5 @@ A dataframe with policy information
 Load policy-relevant plankton indicators and Essential Ocean Variables
 }
 \examples{
-df <- pr_get_PolicyInfo("CPR")
+dat <- pr_get_PolicyInfo("CPR")
 }

@@ -4,10 +4,10 @@
 \alias{pr_filter_NRSStations}
 \title{Filter dataframe on \code{StationCode} to return only NRS stations}
 \usage{
-pr_filter_NRSStations(df)
+pr_filter_NRSStations(dat)
 }
 \arguments{
-\item{df}{Dataframe to filter}
+\item{dat}{Dataframe to filter}
 }
 \value{
 Dataframe with only NRS Stations
@@ -16,5 +16,5 @@ Dataframe with only NRS Stations
 Filter dataframe on \code{StationCode} to return only NRS stations
 }
 \examples{
-\dontrun{df <- pr_filter_NRSStations(df)}
+\dontrun{dat <- pr_filter_NRSStations(dat)}
 }

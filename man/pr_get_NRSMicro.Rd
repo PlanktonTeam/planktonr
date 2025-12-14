@@ -16,5 +16,5 @@ A dataframe with NRS microbial data
 Load microbial abundance data from flow cytometry
 }
 \examples{
-df <- pr_get_NRSMicro(Survey = "GO-SHIP")
+dat <- pr_get_NRSMicro(Survey = "GO-SHIP")
 }

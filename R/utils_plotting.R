@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-#' df <- pr_get_FreqMap("Zooplankton")
+#' dat <- pr_get_FreqMap("Zooplankton")
 
 pr_get_FreqMap <- function(Type = "Zooplankton"){
 
@@ -85,8 +85,8 @@ pr_get_FreqMap <- function(Type = "Zooplankton"){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_ProgressMapData(c("NRS", "CPR"))
-#' df <- pr_get_ProgressMapData(c("NRS", "CPR"), interactive = TRUE)
+#' dat <- pr_get_ProgressMapData(c("NRS", "CPR"))
+#' dat <- pr_get_ProgressMapData(c("NRS", "CPR"), interactive = TRUE)
 pr_get_ProgressMapData <- function(Survey = c("NRS", "CPR"), interactive = FALSE, ...){
 
   # Input validation

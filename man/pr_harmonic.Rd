@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{pr_harmonic}
 \alias{pr_harmonic}
-\title{For use in models to create a circular predictor}
+\title{Create harmonic functions for circular predictors}
 \usage{
 pr_harmonic(theta, k = 4)
 }
@@ -15,6 +15,9 @@ pr_harmonic(theta, k = 4)
 A harmonic function
 }
 \description{
+For use in models to create a circular predictor
+}
+\details{
 This function is for use in models to create a circular predictor
 }
 \examples{

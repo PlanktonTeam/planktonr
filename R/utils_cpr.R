@@ -37,13 +37,13 @@
 #' @export
 #' @examples
 #' # Get raw phytoplankton abundance data
-#' df <- pr_get_CPRData(Type = "Phytoplankton", Variable = "abundance", Subset = "raw")
-#' 
+#' dat <- pr_get_CPRData(Type = "Phytoplankton", Variable = "abundance", Subset = "raw")
+#'
 #' # Get zooplankton data at species level
-#' df <- pr_get_CPRData(Type = "Zooplankton", Variable = "abundance", Subset = "species")
-#' 
+#' dat <- pr_get_CPRData(Type = "Zooplankton", Variable = "abundance", Subset = "species")
+#'
 #' # Get higher taxonomic group data
-#' df <- pr_get_CPRData(Type = "Phytoplankton", Variable = "abundance", Subset = "htg")
+#' dat <- pr_get_CPRData(Type = "Phytoplankton", Variable = "abundance", Subset = "htg")
 #' 
 #' @importFrom rlang .data
 pr_get_CPRData <- function(Type = "Phytoplankton", Variable = "abundance", Subset = "raw"){
@@ -144,19 +144,21 @@ pr_get_CPRData <- function(Type = "Phytoplankton", Variable = "abundance", Subse
 #'
 #' @examples
 #' # Get all CPR trips with default bioregion assignment
-#' df <- pr_get_CPRTrips()
-#' 
+#' dat <- pr_get_CPRTrips()
+#'
 #' # Get CPR trips with expanded bioregion boundaries (250 km padding)
-#' df <- pr_get_CPRTrips(near_dist_km = 250)
-#' 
+#' dat <- pr_get_CPRTrips(near_dist_km = 250)
+#'
 #' # Examine sampling effort by bioregion and year
-#' table(df$BioRegion, df$Year_Local)
+#' table(dat$BioRegion, dat$Year_Local)
 #' 
 #' @importFrom rlang .data
 pr_get_CPRTrips <- function(...){
   CPRTrips <- pr_get_s3("cpr_samp") %>%
     planktonr_dat(Type = NULL, Survey = "CPR", Variable = NULL) %>%
     pr_rename() %>%
-    pr_add_Bioregions() %>%
+    pr_add_Bioregions(...) %>%
     pr_apply_Time()
+  
+  return(CPRTrips)
 }

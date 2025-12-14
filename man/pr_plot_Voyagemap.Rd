@@ -4,12 +4,12 @@
 \alias{pr_plot_Voyagemap}
 \title{Create map showing CPR voyage tracks and sampling locations}
 \usage{
-pr_plot_Voyagemap(df, dfs, Country = c("Australia"))
+pr_plot_Voyagemap(dat, dats, Country = c("Australia"))
 }
 \arguments{
-\item{df}{dataframe containing all locations to plot}
+\item{dat}{dataframe containing all locations to plot}
 
-\item{dfs}{dataframe of sample locations to plot}
+\item{dats}{dataframe of sample locations to plot}
 
 \item{Country}{countries to plot on map}
 }
@@ -20,7 +20,7 @@ a map of the selected bioregions
 Create map showing CPR voyage tracks and sampling locations
 }
 \examples{
-df <- pr_get_NRSMicro("GO-SHIP")
-dfs <- df \%>\% dplyr::slice(1:5000)
-voyagemap <- pr_plot_Voyagemap(df, dfs, Country = c("Australia", "New Zealand"))
+dat <- pr_get_NRSMicro("GO-SHIP")
+dats <- dat \%>\% dplyr::slice(1:5000)
+voyagemap <- pr_plot_Voyagemap(dat, dats, Country = c("Australia", "New Zealand"))
 }

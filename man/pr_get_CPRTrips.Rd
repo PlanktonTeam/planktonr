@@ -40,13 +40,13 @@ South-west, North, and North-west.
 }
 \examples{
 # Get all CPR trips with default bioregion assignment
-df <- pr_get_CPRTrips()
+dat <- pr_get_CPRTrips()
 
 # Get CPR trips with expanded bioregion boundaries (250 km padding)
-df <- pr_get_CPRTrips(near_dist_km = 250)
+dat <- pr_get_CPRTrips(near_dist_km = 250)
 
 # Examine sampling effort by bioregion and year
-table(df$BioRegion, df$Year_Local)
+table(dat$BioRegion, dat$Year_Local)
 
 }
 \seealso{

@@ -47,13 +47,13 @@ Note: Biovolume data is only available for phytoplankton.
 }
 \examples{
 # Get raw phytoplankton abundance data
-df <- pr_get_CPRData(Type = "Phytoplankton", Variable = "abundance", Subset = "raw")
+dat <- pr_get_CPRData(Type = "Phytoplankton", Variable = "abundance", Subset = "raw")
 
 # Get zooplankton data at species level
-df <- pr_get_CPRData(Type = "Zooplankton", Variable = "abundance", Subset = "species")
+dat <- pr_get_CPRData(Type = "Zooplankton", Variable = "abundance", Subset = "species")
 
 # Get higher taxonomic group data
-df <- pr_get_CPRData(Type = "Phytoplankton", Variable = "abundance", Subset = "htg")
+dat <- pr_get_CPRData(Type = "Phytoplankton", Variable = "abundance", Subset = "htg")
 
 }
 \seealso{

@@ -1,28 +1,28 @@
 #' Map Phytoplankton Colour Index (PCI) from CPR samples around Australia
 #'
-#' @param df dataframe with location and seasonal PCI data
+#' @param dat dataframe with location and seasonal PCI data
 #'
 #' @return plot of PCI around Australia
 #' @export
 #'
 #' @examples
 #' pr_get_PCIData() %>% pr_plot_PCImap()
-pr_plot_PCImap <- function(df) {
+pr_plot_PCImap <- function(dat) {
 
   # Input validation
   assertthat::assert_that(
-    is.data.frame(df),
-    msg = "'df' must be a data frame. Use pr_get_PCIData() to create the data."
+    is.data.frame(dat),
+    msg = "'dat' must be a data frame. Use pr_get_PCIData() to create the data."
   )
 
   required_cols <- c("Longitude", "Latitude", "PCI", "Season")
   assertthat::assert_that(
-    all(required_cols %in% colnames(df)),
-    msg = paste0("'df' must contain the following columns: ", paste(required_cols, collapse = ", "), ". Use pr_get_PCIData() to create the data.")
+    all(required_cols %in% colnames(dat)),
+    msg = paste0("'dat' must contain the following columns: ", paste(required_cols, collapse = ", "), ". Use pr_get_PCIData() to create the data.")
   )
 
   cprmap <- ggplot2::ggplot() +
-    ggplot2::geom_raster(data = df, ggplot2::aes(x = .data$Longitude, y = .data$Latitude, fill = .data$PCI), interpolate = TRUE) +
+    ggplot2::geom_raster(data = dat, ggplot2::aes(x = .data$Longitude, y = .data$Latitude, fill = .data$PCI), interpolate = TRUE) +
     ggplot2::scale_fill_gradient(low = "light green", high = "darkgreen",
                                  breaks = c(0,1,2,3),
                                  labels = c("No Colour", "Very Pale Green", "Pale Green", "Green")) +
@@ -234,8 +234,8 @@ pr_plot_CPRmap <-  function(sites){
 
 #' Create map showing CPR voyage tracks and sampling locations
 #'
-#' @param df dataframe containing all locations to plot
-#' @param dfs dataframe of sample locations to plot
+#' @param dat dataframe containing all locations to plot
+#' @param dats dataframe of sample locations to plot
 #' @param Country countries to plot on map
 #'
 #' @return a map of the selected bioregions
@@ -243,19 +243,19 @@ pr_plot_CPRmap <-  function(sites){
 #'
 #'
 #' @examples
-#' df <- pr_get_NRSMicro("GO-SHIP")
-#' dfs <- df %>% dplyr::slice(1:5000)
-#' voyagemap <- pr_plot_Voyagemap(df, dfs, Country = c("Australia", "New Zealand"))
-pr_plot_Voyagemap <-  function(df, dfs, Country = c("Australia")){
+#' dat <- pr_get_NRSMicro("GO-SHIP")
+#' dats <- dat %>% dplyr::slice(1:5000)
+#' voyagemap <- pr_plot_Voyagemap(dat, dats, Country = c("Australia", "New Zealand"))
+pr_plot_Voyagemap <-  function(dat, dats, Country = c("Australia")){
 
   MapOz <- rnaturalearth::ne_countries(scale = "small", returnclass = "sf", country = Country)
 
-  voy_sf <- df %>%
+  voy_sf <- dat %>%
     dplyr::select(tidyselect::all_of(c("Longitude", "Latitude"))) %>%
     dplyr::distinct() %>%
     dplyr::arrange(dplyr::desc(.data$Latitude)) %>%
     dplyr::mutate(Lat = as.factor(.data$Latitude),
-                  Colour = dplyr::if_else(.data$Latitude %in% dfs$Latitude, "Red", "Blue")) %>%
+                  Colour = dplyr::if_else(.data$Latitude %in% dats$Latitude, "Red", "Blue")) %>%
     sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326) %>%
     sf::st_as_sf() %>%
     sf::st_shift_longitude()
@@ -284,7 +284,7 @@ pr_plot_Voyagemap <-  function(df, dfs, Country = c("Australia")){
 
 #' Map seasonal occurrence frequency for individual plankton species
 #'
-#' @param df dataframe of format similar to output of pr_get_fmap_data()
+#' @param dat dataframe of format similar to output of pr_get_fmap_data()
 #' @param species species to plot
 #' @param interactive ggplot if false, plotlist of leaflets if true
 #'
@@ -292,25 +292,25 @@ pr_plot_Voyagemap <-  function(df, dfs, Country = c("Australia")){
 #' @export
 #'
 #' @examples
-#' df <- data.frame(Longitude = c(110, 130, 155, 150), Latitude = c(-10, -35, -27, -45),
+#' dat <- data.frame(Longitude = c(110, 130, 155, 150), Latitude = c(-10, -35, -27, -45),
 #'                  freqfac = as.factor(c("Absent", "Seen in 25%",'50%', '75%')),
 #'                  Season = c("December - February","March - May",
 #'                  "June - August","September - November"),
 #'                  Taxon = 'Acartia danae',
 #'                  Survey = 'CPR')
-#' plot <- pr_plot_FreqMap(df, species = 'Acartia danae', interactive = TRUE)
-pr_plot_FreqMap <- function(df, species, interactive = TRUE){
+#' plot <- pr_plot_FreqMap(dat, species = 'Acartia danae', interactive = TRUE)
+pr_plot_FreqMap <- function(dat, species, interactive = TRUE){
 
   # Input validation
   assertthat::assert_that(
-    is.data.frame(df),
-    msg = "'df' must be a data frame. Use pr_get_FreqMap() to create the data."
+    is.data.frame(dat),
+    msg = "'dat' must be a data frame. Use pr_get_FreqMap() to create the data."
   )
 
   required_cols <- c("Season", "Latitude", "Longitude", "Survey", "Taxon", "freqfac")
   assertthat::assert_that(
-    all(required_cols %in% colnames(df)),
-    msg = paste0("'df' must contain the following columns: ", paste(required_cols, collapse = ", "), ". Use pr_get_FreqMap() to create the data.")
+    all(required_cols %in% colnames(dat)),
+    msg = paste0("'dat' must contain the following columns: ", paste(required_cols, collapse = ", "), ". Use pr_get_FreqMap() to create the data.")
   )
 
   assertthat::assert_that(
@@ -323,11 +323,11 @@ pr_plot_FreqMap <- function(df, species, interactive = TRUE){
     msg = "'interactive' must be a single logical value (TRUE or FALSE)."
   )
 
-  dfa <- df %>%
+  dfa <- dat %>%
     dplyr::select(tidyselect::all_of(c("Season", "Latitude", "Longitude", "Survey"))) %>%
     dplyr::distinct()
 
-  dff <- df %>%
+  dff <- dat %>%
     dplyr::filter(.data$Taxon %in% species) %>%
     dplyr::mutate(freqfac = factor(.data$freqfac, levels = c("Seen in 25%",'50%', '75%', '100% of Samples'))) %>%
     dplyr::arrange(.data$freqfac)
@@ -335,7 +335,7 @@ pr_plot_FreqMap <- function(df, species, interactive = TRUE){
   if(interactive == FALSE){
     cols <- c("lightblue1", "skyblue3", "blue1", "navyblue")
 
-    Species <- unique(df$Taxon)
+    Species <- unique(dat$Taxon)
 
     p <- ggplot2::ggplot() +
       ggplot2::geom_sf(data = MapOz) +
@@ -356,15 +356,15 @@ pr_plot_FreqMap <- function(df, species, interactive = TRUE){
 
   } else {
 
-    df <- dff %>% dplyr::group_split(.data$Season)
+    dat <- dff %>% dplyr::group_split(.data$Season)
 
-    plotlist <- function(dflist){
+    plotlist <- function(datlist){
 
-      CPRpal <- leaflet::colorFactor(c("lightblue1", "skyblue3", "dodgerblue", "blue1", "navyblue"), domain = dflist$freqfac)
-      NRSpal <- leaflet::colorFactor(c("#CCFFCC", "#99FF99", "#669933", "#009900", "#006600"), domain = dflist$freqfac)
+      CPRpal <- leaflet::colorFactor(c("lightblue1", "skyblue3", "dodgerblue", "blue1", "navyblue"), domain = datlist$freqfac)
+      NRSpal <- leaflet::colorFactor(c("#CCFFCC", "#99FF99", "#669933", "#009900", "#006600"), domain = datlist$freqfac)
 
-      dfCPR <- dflist %>% dplyr::filter(.data$Survey == 'CPR')
-      dfNRS <- dflist %>% dplyr::filter(.data$Survey == 'NRS')
+      dfCPR <- datlist %>% dplyr::filter(.data$Survey == 'CPR')
+      dfNRS <- datlist %>% dplyr::filter(.data$Survey == 'NRS')
 
       title1 <- htmltools::div(
         htmltools::tags$style(htmltools::HTML(".leaflet-control.map-title1 {
@@ -374,10 +374,10 @@ pr_plot_FreqMap <- function(df, species, interactive = TRUE){
                                                 font-size: 16px;
                                                 margin: 0;
                                                 margin-right: 6px}")),
-        unique(dflist$Season))
+       unique(datlist$Season))
 
-      title2 <- htmltools::div(
-        htmltools::tags$style(htmltools::HTML(".leaflet-control.map-title2 {
+     title2 <- htmltools::div(
+       htmltools::tags$style(htmltools::HTML(".leaflet-control.map-title2 {
                                                 text-align: center;
                                                 background: rgba(255,255,255,0);
                                                 # font-weight: bold;
@@ -385,7 +385,7 @@ pr_plot_FreqMap <- function(df, species, interactive = TRUE){
                                                 font-size: 16px;
                                                 margin: 0;
                                                 margin-right: 6px}")),
-        unique(dflist$Taxon))
+       unique(datlist$Taxon))
 
       fmap <- leaflet::leaflet() %>%
         leaflet::addProviderTiles(provider = "Esri", layerId = "OceanBasemap") %>%
@@ -420,7 +420,7 @@ pr_plot_FreqMap <- function(df, species, interactive = TRUE){
           options = leaflet::layersControlOptions(collapsed = FALSE, fill = NA))
     }
 
-    plotlist <- purrr::map(df, plotlist)
+    plotlist <- purrr::map(dat, plotlist)
 
     return(plotlist)
   }
@@ -431,7 +431,7 @@ pr_plot_FreqMap <- function(df, species, interactive = TRUE){
 
 #' Create interactive map showing IMOS plankton sampling coverage and progress
 #'
-#' @param df output from pr_get_ProgressMapData
+#' @param dat output from pr_get_ProgressMapData
 #' @param interactive Should the plot be interactive with leaflet?
 #' @param labels TRUE/FALSE Should labels be added to leaflet plot? Adding labels adds more information but slows down the rendering.
 #'
@@ -439,14 +439,14 @@ pr_plot_FreqMap <- function(df, species, interactive = TRUE){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_ProgressMapData("NRS")
-#' plot <- pr_plot_ProgressMap(df)
-pr_plot_ProgressMap <- function(df, interactive = FALSE, labels = TRUE){
+#' dat <- pr_get_ProgressMapData("NRS")
+#' plot <- pr_plot_ProgressMap(dat)
+pr_plot_ProgressMap <- function(dat, interactive = FALSE, labels = TRUE){
 
   # Input validation
   assertthat::assert_that(
-    is.data.frame(df) || is.list(df),
-    msg = "'df' must be a data frame or list. Use pr_get_ProgressMapData() to create the data."
+    is.data.frame(dat) || is.list(dat),
+    msg = "'dat' must be a data frame or list. Use pr_get_ProgressMapData() to create the data."
   )
 
   assertthat::assert_that(
@@ -461,23 +461,23 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE, labels = TRUE){
 
   if (interactive == TRUE){
 
-    if (is.data.frame(df) == TRUE){ # planktonr will likely return a df
-      df_CPR <- df %>%
+    if (is.data.frame(dat) == TRUE){ # planktonr will likely return a dat
+      df_CPR <- dat %>%
         dplyr::filter(.data$Survey == "CPR" & (!is.na(.data$ZoopAbundance_m3) | !is.na(.data$PhytoAbundance_CellsL)))
 
-      df_PCI <- df %>%
+      df_PCI <- dat %>%
         dplyr::filter(.data$Survey == "CPR" & is.na(.data$ZoopAbundance_m3) & is.na(.data$PhytoAbundance_CellsL))
 
-      df_NRS <- df %>% dplyr::filter(.data$Survey == "NRS")
-    } else if (is.data.frame(df) == FALSE){ # boo will return a list to shrink size
+      df_NRS <- dat %>% dplyr::filter(.data$Survey == "NRS")
+    } else if (is.data.frame(dat) == FALSE){ # boo will return a list to shrink size
 
-      df_CPR <- df$CPR %>%
+      df_CPR <- dat$CPR %>%
         dplyr::filter((!is.na(.data$ZoopAbundance_m3) | !is.na(.data$PhytoAbundance_CellsL)))
 
-      df_PCI <- df$CPR %>%
+      df_PCI <- dat$CPR %>%
         dplyr::filter(is.na(.data$ZoopAbundance_m3) & is.na(.data$PhytoAbundance_CellsL))
 
-      df_NRS <- df$NRS
+      df_NRS <- dat$NRS
 
     }
 
@@ -520,7 +520,7 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE, labels = TRUE){
       labs_pci <- NULL
     }
 
-    if (is.data.frame(df) == FALSE){
+    if (is.data.frame(dat) == FALSE){
       labs_nrs <- lapply(seq(nrow(df_NRS)), function(i) {
 
         if (lubridate::year(df_NRS$End_Date[i]) < 2020){
@@ -536,7 +536,7 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE, labels = TRUE){
               "<strong>Longitude:</strong>", df_NRS$Longitude[i], "<br>",
               "<strong>Number of Sampling Trips:</strong>", df_NRS$Samples[i], "<br>")})
       labs_nrs <- lapply(labs_nrs, htmltools::HTML)
-    } else if (is.data.frame(df) == TRUE){
+    } else if (is.data.frame(dat) == TRUE){
       labs_nrs <- NULL
     }
 
@@ -636,14 +636,14 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE, labels = TRUE){
     MapOz <- rnaturalearth::ne_countries(scale = "medium", country = "Australia",
                                          returnclass = "sf")
 
-    PMapData2 <- df %>%
+    PMapData2 <- dat %>%
       sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326)
 
-    PMapSum <- merge(df %>%
+    PMapSum <- merge(dat %>%
                        dplyr::summarise(Sums = dplyr::n(),
                                         .by = tidyselect::all_of(c("Region", "Survey"))) %>%
                        dplyr::mutate(label = paste0(.data$Region, ' = ', .data$Sums)),
-                     df %>%
+                     dat %>%
                        dplyr::summarise(Lats = mean(.data$Latitude),
                                         Lons = mean(.data$Longitude),
                                         .by = tidyselect::all_of(c("Region", "Survey")))) %>%
@@ -653,7 +653,7 @@ pr_plot_ProgressMap <- function(df, interactive = FALSE, labels = TRUE){
     nudgey = c(-3,0,1,0,0,7,-2,10)
     # GAB, GBR, NA, NEAC, SEAC, SO, Tas, WA
 
-    Survey <- df %>%
+    Survey <- dat %>%
       dplyr::select(tidyselect::all_of("Survey")) %>%
       dplyr::distinct()
 

@@ -18,5 +18,5 @@ A dataframe with policy data
 Load Essential Ocean Variables (EOVs) for plankton biomass and diversity
 }
 \examples{
-df <- pr_get_EOVs("NRS")
+dat <- pr_get_EOVs("NRS")
 }

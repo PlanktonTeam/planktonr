@@ -45,6 +45,12 @@ pr_get_s3site <- function(){
 #'
 pr_get_Raw <- function(file){
 
+  # Input validation
+  assertthat::assert_that(
+    is.character(file) && length(file) == 1,
+    msg = "'file' must be a single character string specifying the data file to retrieve."
+  )
+
   if (file == "bgc_chemistry_data"){ # additional probs possible in chemistry. No WC.
     col_types <- list(Project = readr::col_character(),
                       TripCode = readr::col_character(),
@@ -137,6 +143,12 @@ pr_get_Raw <- function(file){
 #' dat <- pr_get_s3("cpr_zoop_raw")
 pr_get_s3 <- function(file){
 
+  # Input validation
+  assertthat::assert_that(
+    is.character(file) && length(file) == 1,
+    msg = "'file' must be a single character string specifying the S3 file to retrieve."
+  )
+
   col_types = list()
 
   # The file extension is not needed here.
@@ -214,6 +226,17 @@ pr_get_s3 <- function(file){
 #'
 pr_get_PlanktonInfo <- function(Type = "Zooplankton"){
 
+  # Input validation
+  assertthat::assert_that(
+    is.character(Type) && length(Type) == 1,
+    msg = "'Type' must be a single character string. Valid options are 'Phytoplankton' or 'Zooplankton'."
+  )
+
+  assertthat::assert_that(
+    Type %in% c("Phytoplankton", "Zooplankton"),
+    msg = "'Type' must be one of 'Phytoplankton' or 'Zooplankton'."
+  )
+
   if (Type == "Zooplankton"){
     df <- pr_get_s3("zoopinfo") %>%
       pr_rename()
@@ -221,8 +244,6 @@ pr_get_PlanktonInfo <- function(Type = "Zooplankton"){
     df <- pr_get_s3("phytoinfo") %>%
       pr_rename()
   }
-
-  # df <- planktonr_dat(df, type = Type, survey = NULL, variable = NULL)
 
   return(df)
 }
@@ -269,6 +290,18 @@ pr_get_PlanktonInfo <- function(Type = "Zooplankton"){
 #'   pr_add_StationName()
 #'
 pr_add_StationName <- function(df){
+
+  # Input validation
+  assertthat::assert_that(
+    is.data.frame(df),
+    msg = "'df' must be a data frame."
+  )
+
+  assertthat::assert_that(
+    "StationCode" %in% colnames(df),
+    msg = "'df' must contain a 'StationCode' column."
+  )
+
   df <- df %>%
     dplyr::mutate(StationName = dplyr::case_when(
       StationCode == "DAR" ~ "Darwin",
@@ -338,6 +371,17 @@ pr_add_StationName <- function(df){
 #'
 pr_add_StationCode <- function(df){
 
+  # Input validation
+  assertthat::assert_that(
+    is.data.frame(df),
+    msg = "'df' must be a data frame."
+  )
+
+  assertthat::assert_that(
+    "StationName" %in% colnames(df) || "TripCode" %in% colnames(df),
+    msg = "'df' must contain either a 'StationName' or 'TripCode' column."
+  )
+
   if("StationName" %in% colnames(df)){
     df <- df %>%
       dplyr::mutate(StationCode = dplyr::case_when(
@@ -378,6 +422,12 @@ pr_add_StationCode <- function(df){
 #' planktonr_dat(Survey = "NRS")
 #' df <- pr_reorder(df)
 pr_reorder <- function(df){
+
+  # Input validation
+  assertthat::assert_that(
+    inherits(df, "planktonr_dat"),
+    msg = "'df' must be a planktonr_dat object."
+  )
 
   if (pr_get_survey(df) == "NRS"){
 
@@ -464,6 +514,24 @@ pr_reorder <- function(df){
 
 pr_apply_Flags <- function(df, flag_col){
 
+  # Input validation
+  assertthat::assert_that(
+    is.data.frame(df),
+    msg = "'df' must be a data frame."
+  )
+
+  if (!missing(flag_col)) {
+    assertthat::assert_that(
+      is.character(flag_col) && length(flag_col) == 1,
+      msg = "'flag_col' must be a single character string specifying the flag column name."
+    )
+
+    assertthat::assert_that(
+      flag_col %in% colnames(df),
+      msg = paste0("'flag_col' ('", flag_col, "') must be a column in 'df'.")
+    )
+  }
+
   # qc_scheme_short_name,flag_value,flag_meaning,flag_description
   # IMOS IODE,0,No QC performed,The level at which all data enter the working archive. They have not yet been quality controlled
   # IMOS IODE,1,Good data,Top quality data in which no malfunctions have been identified and all real features have been verified during the quality control process
@@ -515,6 +583,17 @@ pr_apply_Flags <- function(df, flag_col){
 #' df <- pr_get_Indices("NRS", "Phytoplankton") %>%
 #'   pr_apply_Time()
 pr_apply_Time <- function(df){
+
+  # Input validation
+  assertthat::assert_that(
+    is.data.frame(df),
+    msg = "'df' must be a data frame."
+  )
+
+  assertthat::assert_that(
+    all(c("SampleTime_Local", "Latitude", "Longitude") %in% colnames(df)),
+    msg = "'df' must contain 'SampleTime_Local', 'Latitude', and 'Longitude' columns."
+  )
 
   df <- df %>%
     dplyr::mutate(Year_Local = lubridate::year(.data$SampleTime_Local),
@@ -586,6 +665,17 @@ pr_apply_Time <- function(df){
 #' nrow(df_before) - nrow(df_after)
 pr_remove_outliers <- function(df, x){
 
+  # Input validation
+  assertthat::assert_that(
+    inherits(df, "planktonr_dat"),
+    msg = "'df' must be a planktonr_dat object."
+  )
+
+  assertthat::assert_that(
+    is.numeric(x) && length(x) == 1 && x > 0,
+    msg = "'x' must be a single positive number specifying standard deviations from the mean."
+  )
+
   Survey <- pr_get_survey(df)
   Type <- pr_get_type(df)
   Variable <- pr_get_variable(df)
@@ -644,29 +734,26 @@ pr_remove_outliers <- function(df, x){
 #'               "CorrectSpecies2", "Incorrect spp., Incorrect/Species"))
 #' df <- pr_filter_Species(df)
 pr_filter_Species <- function(df){
+
+  # Input validation
+  assertthat::assert_that(
+    is.data.frame(df),
+    msg = "'df' must be a data frame."
+  )
+
+  assertthat::assert_that(
+    "Species" %in% colnames(df),
+    msg = "'df' must contain a 'Species' column."
+  )
+
   pat <- c("spp.", "cf.", "/", "grp", "complex", "type")
   df <- df %>%
     dplyr::filter(stringr::str_detect(.data$Species, paste(pat, collapse = "|"), negate = TRUE))
 }
 
 
-
-# Add local Time
-#
-# This function adds the local time based on timezone.
-# @param df Dataframe with UTC Time
-#
-# @return A datafrane with local time added
-# @export
-#
-# @examples
-# df <- data.frame(tz = c("Australia/Perth", "Australia/Brisbane"),
-#                SampleTime_UTC = c(lubridate::now(), lubridate::now()))
-# df <- pr_add_LocalTime(df)
-# pr_add_LocalTime <- function(df){
-#   df <- purrr::map2(df$SampleTime_UTC, df$tz, function(x,y) lubridate::with_tz(x, tzone = y))
-# }
-
+#' Create harmonic functions for circular predictors
+#'
 #' For use in models to create a circular predictor
 #'
 #' This function is for use in models to create a circular predictor
@@ -682,6 +769,18 @@ pr_filter_Species <- function(df){
 #' df <- pr_harmonic(theta = 2, k = 1)
 
 pr_harmonic <- function (theta, k = 4) {
+
+  # Input validation
+  assertthat::assert_that(
+    is.numeric(theta),
+    msg = "'theta' must be a numeric vector specifying angles in radians."
+  )
+
+  assertthat::assert_that(
+    is.numeric(k) && length(k) == 1 && k > 0 && k == floor(k),
+    msg = "'k' must be a single positive integer specifying degrees of freedom."
+  )
+
   X <- matrix(0, length(theta), 2 * k)
   nam <- as.vector(outer(c("c", "s"), 1:k, paste, sep = ""))
   dimnames(X) <- list(names(theta), nam)
@@ -706,6 +805,22 @@ pr_harmonic <- function (theta, k = 4) {
 #' @examples
 #' str <- pr_get_NonTaxaColumns(Survey = "NRS", Type = "Zooplankton")
 pr_get_NonTaxaColumns <- function(Survey = "NRS", Type = "Zooplankton"){
+
+  # Input validation
+  assertthat::assert_that(
+    is.character(Survey) && length(Survey) == 1,
+    msg = "'Survey' must be a single character string. Valid options are 'NRS' or 'CPR'."
+  )
+
+  assertthat::assert_that(
+    Survey %in% c("NRS", "CPR"),
+    msg = "'Survey' must be one of 'NRS' or 'CPR'."
+  )
+
+  assertthat::assert_that(
+    is.character(Type) && length(Type) == 1,
+    msg = "'Type' must be a single character string. Valid options are 'Phytoplankton' or 'Zooplankton'."
+  )
 
   Type <- pr_check_type(Type)
 
@@ -747,6 +862,12 @@ pr_get_NonTaxaColumns <- function(Survey = "NRS", Type = "Zooplankton"){
 #' dat <- pr_get_SpeciesInfo(Type = "Zooplankton")
 pr_get_SpeciesInfo <- function(Type = "Zooplankton"){
 
+  # Input validation
+  assertthat::assert_that(
+    is.character(Type) && length(Type) == 1,
+    msg = "'Type' must be a single character string. Valid options are 'Phytoplankton' or 'Zooplankton'."
+  )
+
   Type <- pr_check_type(Type)
 
   if (Type == "Phytoplankton"){file = "phytoinfo"}
@@ -759,30 +880,6 @@ pr_get_SpeciesInfo <- function(Type = "Zooplankton"){
 
 
 
-
-# Internal function to check Type
-#
-# @param Type Character string
-#
-# @return "Zooplankton" or "Phytoplankton"
-#
-# @examples
-# pr_get_Type("phytoplankton")
-# pr_get_Type("z")
-# pr_get_Type <- function(Type){
-#
-#   zoop_type <- c("Zooplankton", "z", "Zooplankton", "Zooplankton")
-#   phyto_type <- c("Phytoplankton", "p", "phytoplankton", "Phytoplankton")
-#
-#   if(Type %in% zoop_type){
-#     Type = "Zooplankton"
-#   } else if (Type %in% phyto_type){
-#     Type = "Phytoplankton"
-#   }
-#
-# }
-
-
 #' Helper function to reformat Titles
 #'
 #' @param tit String to reformat.
@@ -793,6 +890,12 @@ pr_get_SpeciesInfo <- function(Type = "Zooplankton"){
 #' @examples
 #' new_tit = pr_title("Phytoplankton")
 pr_title <- function(tit){
+
+  # Input validation
+  assertthat::assert_that(
+    is.character(tit) && length(tit) == 1,
+    msg = "'tit' must be a single character string."
+  )
 
   if (tit == "Zooplankton"){
     tit = "Zooplankton"

@@ -39,13 +39,13 @@ samples are excluded. A small constant is added to zero values to allow log
 transformations in plotting.
 }
 \examples{
-df <- pr_get_NRSPico()
+dat <- pr_get_NRSPico()
 
 # Examine which stations have picophytoplankton data
-table(df$StationCode, df$Parameters)
+table(dat$StationCode, dat$Parameters)
 
 # Filter for Synechococcus at North Stradbroke Island
-df_syn <- df \%>\%
+dat_syn <- dat \%>\%
   dplyr::filter(Parameters == "Synechococcus_cellsmL", StationCode == "NSI")
 
 }

@@ -5,7 +5,7 @@
 \title{Match plankton sample locations to GHRSST sea surface temperature data}
 \usage{
 pr_match_GHRSST(
-  df,
+  dat,
   pr,
   res_spat = 1,
   res_temp = "1d",
@@ -14,7 +14,7 @@ pr_match_GHRSST(
 )
 }
 \arguments{
-\item{df}{dataframe containing latitude, longitude and Date}
+\item{dat}{dataframe containing latitude, longitude and Date}
 
 \item{pr}{products from list above, single or as a list}
 
@@ -27,7 +27,7 @@ pr_match_GHRSST(
 \item{ncore}{If \code{parallel = TRUE} package will use all available cores, apart from 2 which will be left for system processes and multitasking. If you wish to specify how many cores the package should use, set \code{ncore}. Otherwise, leave it as NULL.}
 }
 \value{
-df with product output attached
+dat with product output attached
 }
 \description{
 Optional Inputs:
@@ -40,9 +40,9 @@ sea_surface_temperature, sses_bias, sses_count, sses_standard_deviation,
 sst_count, sst_dtime, sst_mean, sst_standard_deviation, wind_speed, wind_speed_dtime_from_sst
 }
 \examples{
-df <- tail(pr_get_DataLocs("CPR") \%>\%
+dat <- tail(pr_get_DataLocs("CPR") \%>\%
         dplyr::arrange(Date), 5)
 pr = c("sea_surface_temperature", "quality_level", "sst_mean", "sst_standard_deviation")
-sstout <- pr_match_GHRSST(df, pr, res_spat = 10, res_temp = "6d")
+sstout <- pr_match_GHRSST(dat, pr, res_spat = 10, res_temp = "6d")
 
 }

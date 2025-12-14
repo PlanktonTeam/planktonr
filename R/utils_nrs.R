@@ -34,13 +34,13 @@
 #' @importFrom rlang .data
 #' @examples
 #' # Get raw phytoplankton abundance data
-#' df <- pr_get_NRSData(Type = "Phytoplankton", Variable = "abundance", Subset = "raw")
-#' 
+#' dat <- pr_get_NRSData(Type = "Phytoplankton", Variable = "abundance", Subset = "raw")
+#'
 #' # Get zooplankton data at genus level
-#' df <- pr_get_NRSData(Type = "Zooplankton", Variable = "abundance", Subset = "genus")
-#' 
+#' dat <- pr_get_NRSData(Type = "Zooplankton", Variable = "abundance", Subset = "genus")
+#'
 #' # Get phytoplankton biovolume data
-#' df <- pr_get_NRSData(Type = "Phytoplankton", Variable = "biovolume", Subset = "species")
+#' dat <- pr_get_NRSData(Type = "Phytoplankton", Variable = "biovolume", Subset = "species")
 #'
 pr_get_NRSData <- function(Type = "Phytoplankton", Variable = "abundance", Subset = "raw"){
 
@@ -102,7 +102,7 @@ pr_get_NRSData <- function(Type = "Phytoplankton", Variable = "abundance", Subse
     datc <- pr_get_Raw("bgc_zooplankton_abundance_copepods_data") %>%
       pr_rename()
 
-    datnc <-pr_get_Raw("bgc_zooplankton_abundance_non_copepods_data") %>%
+    datnc <- pr_get_Raw("bgc_zooplankton_abundance_non_copepods_data") %>%
       pr_rename() %>%
       dplyr::select(-tidyselect::all_of(str[!str %in% "TripCode"]))
 
@@ -117,9 +117,6 @@ pr_get_NRSData <- function(Type = "Phytoplankton", Variable = "abundance", Subse
                     StationName = ifelse(grepl("Remote Access Sampler", .data$StationName), "Southern Ocean Time Series", .data$StationName)) %>%
       pr_rename()
   }
-
-  # Convert to planktonr class
-  # # dat <- planktonr_dat(dat, type = Type, survey = "NRS", variable = Variable, subset = Subset)
 
   return(dat)
 
@@ -159,10 +156,10 @@ pr_get_NRSData <- function(Type = "Phytoplankton", Variable = "abundance", Subse
 #' @export
 #' @examples
 #' # Get all NRS station information
-#' df <- pr_get_Stations('NRS')
-#' 
+#' dat <- pr_get_Stations('NRS')
+#'
 #' # Get SOTS station information
-#' df <- pr_get_Stations('SOTS')
+#' dat <- pr_get_Stations('SOTS')
 #' 
 #' @importFrom rlang .data
 pr_get_Stations <- function(Survey = 'NRS'){
@@ -218,10 +215,10 @@ pr_get_Stations <- function(Survey = 'NRS'){
 #' 
 #' @export
 #' @examples
-#' df <- pr_get_NRSTrips()
-#' 
+#' dat <- pr_get_NRSTrips()
+#'
 #' # Examine sampling frequency by station
-#' table(df$StationName, df$Year_Local)
+#' table(dat$StationName, dat$Year_Local)
 #' 
 #' @importFrom rlang .data
 pr_get_NRSTrips <- function(){
@@ -241,33 +238,30 @@ pr_get_NRSTrips <- function(){
 }
 
 
-# Load zooplankton abundance data
-# @return A dataframe with zooplankton abundance data
-# @export
-#
-# @examples
-# df <- pr_get_NRSZooData()
-# @importFrom rlang .data
-# pr_get_NRSZooData <- function(){
-#   dat <- readr::read_csv(system.file("extdata", "BGC_Zoop_Raw.csv", package = "planktonr", mustWork = TRUE), na = "", show_col_types = FALSE) %>%
-#     pr_rename()
-# }
-
-
-
 #' Filter dataframe on `StationCode` to return only NRS stations
 #'
 #'
-#' @param df Dataframe to filter
+#' @param dat Dataframe to filter
 #'
 #' @return Dataframe with only NRS Stations
 #' @export
 #'
 #' @examples
-#' \dontrun{df <- pr_filter_NRSStations(df)}
-pr_filter_NRSStations <- function(df){
+#' \dontrun{dat <- pr_filter_NRSStations(dat)}
+pr_filter_NRSStations <- function(dat){
+  
+  # Input validation
+  assertthat::assert_that(
+    is.data.frame(dat),
+    msg = "'dat' must be a data frame."
+  )
+  
+  assertthat::assert_that(
+    "StationCode" %in% colnames(dat),
+    msg = "'dat' must contain a 'StationCode' column."
+  )
 
-  df <- df %>%
+  dat <- dat %>%
     dplyr::filter(.data$StationCode %in% c("DAR", "ESP", "KAI", "MAI", "NIN", "NSI", "PHB", "ROT", "VBM", "YON"))
 }
 

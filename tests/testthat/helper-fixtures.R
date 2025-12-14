@@ -69,7 +69,7 @@ create_test_cpr_data <- function() {
 create_test_nrs_indices <- function() {
   dates <- seq.Date(as.Date("2020-01-01"), as.Date("2023-12-31"), by = "month")
   n_samples <- length(dates)
-  
+
   df <- data.frame(
     StationCode = rep(c("NSI", "PHB", "MAI"), each = n_samples),
     SampleTime_Local = rep(dates, 3),
@@ -82,7 +82,7 @@ create_test_nrs_indices <- function() {
     BioRegion = rep(c("NSI", "PHB", "MAI"), each = n_samples),
     stringsAsFactors = FALSE
   )
-  
+
   planktonr_dat(df, Type = "Phytoplankton", Survey = "NRS", Variable = "abundance")
 }
 
@@ -90,7 +90,7 @@ create_test_nrs_indices <- function() {
 create_test_cpr_indices <- function() {
   dates <- seq.Date(as.Date("2020-01-01"), as.Date("2023-12-31"), by = "month")
   n_samples <- length(dates)
-  
+
   df <- data.frame(
     BioRegion = rep(c("North", "South-east", "South-west", "Temperate East"), each = n_samples),
     SampleTime_Local = rep(dates, 4),
@@ -102,7 +102,7 @@ create_test_cpr_indices <- function() {
     Longitude = runif(n_samples * 4, 110, 160),
     stringsAsFactors = FALSE
   )
-  
+
   planktonr_dat(df, Type = "Zooplankton", Survey = "CPR", Variable = "biomass")
 }
 
@@ -110,7 +110,7 @@ create_test_cpr_indices <- function() {
 create_test_chemistry <- function() {
   data.frame(
     StationCode = rep(c("NSI", "PHB", "MAI"), each = 10),
-    Parameters = rep(c("SecchiDepth_m", "Nitrate_umolL", "Phosphate_umolL", 
+    Parameters = rep(c("SecchiDepth_m", "Nitrate_umolL", "Phosphate_umolL",
                        "Silicate_umolL", "Ammonium_umolL"), 6),
     Values = c(runif(6, 10, 30), runif(6, 0.1, 5), runif(6, 0.01, 1),
                runif(6, 0.5, 10), runif(6, 0.05, 2)),
@@ -124,7 +124,7 @@ create_test_chemistry <- function() {
 create_test_eov_data <- function() {
   dates <- seq.Date(as.Date("2020-01-01"), as.Date("2023-12-31"), by = "month")
   n_samples <- length(dates)
-  
+
   data.frame(
     StationCode = rep(c("NSI", "PHB", "MAI"), each = n_samples * 3),
     Parameters = rep(rep(c("Biomass_mgm3", "Temperature_degC", "Salinity_psu"), each = n_samples), 3),
@@ -150,9 +150,9 @@ create_test_eov_data <- function() {
 create_test_funcgroups <- function() {
   dates <- seq.Date(as.Date("2020-01-01"), as.Date("2023-12-31"), by = "month")
   n_samples <- length(dates)
-  
+
   groups <- c("Diatoms", "Dinoflagellates", "Cryptophytes", "Cyanobacteria", "Other")
-  
+
   data.frame(
     StationCode = rep(c("NSI", "PHB"), each = n_samples * length(groups)),
     FunctionalGroup = rep(rep(groups, each = n_samples), 2),
@@ -253,20 +253,20 @@ create_test_satellite_locs <- function() {
 }
 
 # Create planktonr_dat object
-create_test_planktonr_dat <- function(type = "phytoplankton") {
-  if (type == "phytoplankton") {
+create_test_planktonr_dat <- function(Type = "phytoplankton") {
+  if (Type == "phytoplankton") {
     data <- create_test_phyto_data()
-  } else if (type == "zooplankton") {
+  } else if (Type == "zooplankton") {
     data <- create_test_zoo_data()
   } else {
     data <- create_test_stations()
   }
-  
+
   structure(
     data,
     class = c("planktonr_dat", "data.frame"),
-    survey = "NRS",
-    type = type,
+    Survey = "NRS",
+    Type = type,
     variable = "abundance"
   )
 }

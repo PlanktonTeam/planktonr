@@ -129,8 +129,8 @@ planktonr_dat <- function(.data,
 #' @examples
 #' # Assuming planktonr_dat constructor exists:
 #' my_data <- planktonr_dat(tibble::tibble(a = 1:3, b = 4:6),
-#'                          type = "Phytoplankton",
-#'                          survey = "NRS")
+#'                          Type = "Phytoplankton",
+#'                          Survey = "NRS")
 #'
 #' # Check if it's a planktonr_dat object
 #' is_planktonr_dat(my_data) # Returns TRUE

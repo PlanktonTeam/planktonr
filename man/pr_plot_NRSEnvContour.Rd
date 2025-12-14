@@ -4,10 +4,10 @@
 \alias{pr_plot_NRSEnvContour}
 \title{Plot environmental contours showing depth-time patterns}
 \usage{
-pr_plot_NRSEnvContour(df, na.fill = TRUE)
+pr_plot_NRSEnvContour(dat, na.fill = TRUE)
 }
 \arguments{
-\item{df}{A dataframe from \code{\link[=pr_get_NRSEnvContour]{pr_get_NRSEnvContour()}} containing environmental
+\item{dat}{A dataframe from \code{\link[=pr_get_NRSEnvContour]{pr_get_NRSEnvContour()}} containing environmental
 data formatted for contour plotting}
 
 \item{na.fill}{How to handle missing data (gaps) in the contour:
@@ -58,9 +58,9 @@ Contours are filled with a colour scale, and contour lines are overlaid in grey.
 }
 }
 \examples{
-df <- pr_get_NRSEnvContour("Chemistry") \%>\% dplyr::filter(Parameters == "Nitrate_umolL",
+dat <- pr_get_NRSEnvContour("Chemistry") \%>\% dplyr::filter(Parameters == "Nitrate_umolL",
 StationCode \%in\% c('YON', 'MAI', 'PHB', 'NSI'))
-plot <- pr_plot_NRSEnvContour(df, na.fill = TRUE)
+plot <- pr_plot_NRSEnvContour(dat, na.fill = TRUE)
 }
 \seealso{
 \code{\link[=pr_get_NRSEnvContour]{pr_get_NRSEnvContour()}} for preparing the input data,

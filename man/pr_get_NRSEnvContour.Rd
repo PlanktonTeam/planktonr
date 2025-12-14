@@ -16,5 +16,5 @@ A dataframe to be used with pr_plot_NRSEnvContour
 Prepare biogeochemical data for depth-time contour plots
 }
 \examples{
-df <- pr_get_NRSEnvContour(Data = "Micro")
+dat <- pr_get_NRSEnvContour(Data = "Micro")
 }

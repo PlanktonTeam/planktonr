@@ -1,12 +1,12 @@
 #' Load National Reference Station chemistry data
 #'
-#' Load water chemistry measurements from NRS stations, including nutrients 
-#' (nitrogen, phosphorus, silicate), dissolved oxygen, carbon chemistry, and 
+#' Load water chemistry measurements from NRS stations, including nutrients
+#' (nitrogen, phosphorus, silicate), dissolved oxygen, carbon chemistry, and
 #' physical properties. Data are quality controlled using IMOS flags.
-#' 
+#'
 #' @details
 #' The function retrieves and processes the following parameters:
-#' 
+#'
 #' **Nutrients:**
 #' * `Nitrate_umolL` - Nitrate concentration (µmol/L)
 #' * `Nitrite_umolL` - Nitrite concentration (µmol/L)
@@ -15,20 +15,20 @@
 #' * `Silicate_umolL` - Silicate concentration (µmol/L)
 #' * `NOx_umolL` - Nitrogen oxides (nitrate + nitrite, µmol/L)
 #' * `DIN_umolL` - Dissolved inorganic nitrogen (NOx + ammonium, µmol/L)
-#' 
+#'
 #' **Carbon Chemistry:**
 #' * `DIC_umolkg` - Dissolved inorganic carbon (µmol/kg)
 #' * `Alkalinity_umolkg` - Total alkalinity (µmol/kg)
-#' 
+#'
 #' **Other:**
 #' * `Oxygen_umolL` - Dissolved oxygen (µmol/L)
 #' * `Salinity` - Salinity (unitless, PSU)
 #' * `SecchiDepth_m` - Secchi depth, measure of water clarity (m)
 #' * `Redfield` - N:P ratio (calculated as NOx/Phosphate)
-#' 
-#' Quality control flags are applied using [pr_apply_Flags()]. Samples are 
+#'
+#' Quality control flags are applied using [pr_apply_Flags()]. Samples are
 #' filtered to include only NRS stations.
-#' 
+#'
 #' NOx, DIN, and Redfield ratio are calculated from the measured nutrient values.
 #'
 #' @return A dataframe in long format with chemistry data including:
@@ -37,25 +37,25 @@
 #'   * `SampleDepth_m` - Sampling depth
 #'   * `Parameters` - Chemistry parameter name
 #'   * `Values` - Measured or calculated value
-#' 
+#'
 #' @seealso [pr_get_NRSPigments()] for photosynthetic pigment data,
 #'   [pr_get_NRSCTD()] for CTD profile data,
 #'   [pr_get_NRSEnvContour()] to format data for contour plots
-#' 
+#'
 #' @export
 #'
 #' @examples
-#' df <- pr_get_NRSChemistry()
-#' 
+#' dat <- pr_get_NRSChemistry()
+#'
 #' # Examine available parameters
-#' unique(df$Parameters)
-#' 
+#' unique(dat$Parameters)
+#'
 #' # Filter for surface nitrate at specific stations
-#' df_nitrate <- df %>%
-#'   dplyr::filter(Parameters == "Nitrate_umolL", 
+#' dat_nitrate <- dat %>%
+#'   dplyr::filter(Parameters == "Nitrate_umolL",
 #'                 SampleDepth_m == 0,
 #'                 StationCode %in% c("MAI", "PHB"))
-#' 
+#'
 #' @importFrom rlang .data
 pr_get_NRSChemistry <- function(){
 
@@ -87,13 +87,13 @@ pr_get_NRSChemistry <- function(){
 }
 
 #' Get photosynthetic pigments data from NRS stations
-#' 
-#' Load High-Performance Liquid Chromatography (HPLC) pigment data from NRS stations. 
+#'
+#' Load High-Performance Liquid Chromatography (HPLC) pigment data from NRS stations.
 #' Pigments can be retrieved as individual compounds or grouped into functional classes.
-#' 
+#'
 #' @param Format Output format:
 #'   * `"all"` - All individual pigment concentrations (default)
-#'   * `"binned"` - Pigments grouped into functional classes (e.g., total chlorophyll, 
+#'   * `"binned"` - Pigments grouped into functional classes (e.g., total chlorophyll,
 #'     photoprotective carotenoids)
 #'
 #' @details
@@ -102,7 +102,7 @@ pr_get_NRSChemistry <- function(){
 #' * Chlorophylls: Cphl A, B, C1, C2, C3, chlorophyllide A
 #' * Carotenoids: fucoxanthin, peridinin, alloxanthin, zeaxanthin, etc.
 #' * Degradation products: phaeophytin A & B, phaeophorbide A, pyrophaeophorbide A
-#' 
+#'
 #' ## Binned Pigments (Format = "binned")
 #' Returns pigments grouped into functional classes:
 #' * `TotalChla` - Total chlorophyll a (including degradation products)
@@ -114,9 +114,9 @@ pr_get_NRSChemistry <- function(){
 #' * `TAcc` - Total accessory pigments (everything except Chl a)
 #' * `TPig` - Total pigments
 #' * `TDP` - Total diagnostic pigments (used for phytoplankton community analysis)
-#' 
-#' Quality control flags are applied and samples with zero total chlorophyll a 
-#' are removed. Water column (WC) samples are excluded as they represent 
+#'
+#' Quality control flags are applied and samples with zero total chlorophyll a
+#' are removed. Water column (WC) samples are excluded as they represent
 #' integrated samples rather than discrete depths.
 #'
 #' @return A dataframe in long format with pigment data including:
@@ -125,22 +125,22 @@ pr_get_NRSChemistry <- function(){
 #'   * `SampleDepth_m` - Sampling depth (numeric)
 #'   * `Parameters` - Pigment name or pigment class
 #'   * `Values` - Concentration (mg/m³)
-#' 
+#'
 #' @seealso [pr_get_NRSChemistry()] for nutrient data,
 #'   [pr_plot_Enviro()] for visualising pigment depth profiles,
 #'   [pr_remove_outliers()] for outlier removal
-#' 
+#'
 #' @export
 #'
 #' @examples
 #' # Get all individual pigments
-#' df <- pr_get_NRSPigments()
-#' 
+#' dat <- pr_get_NRSPigments()
+#'
 #' # Get binned pigment classes
-#' df <- pr_get_NRSPigments(Format = "binned")
-#' 
+#' dat <- pr_get_NRSPigments(Format = "binned")
+#'
 #' # Filter for total chlorophyll a at Maria Island
-#' df_chla <- df %>%
+#' dat_chla <- dat %>%
 #'   dplyr::filter(Parameters == "TotalChla", StationCode == "MAI")
 pr_get_NRSPigments <- function(Format = "all"){
 
@@ -202,26 +202,26 @@ pr_get_NRSPigments <- function(Format = "all"){
 
 #' Load picophytoplankton data from NRS stations
 #'
-#' Load picophytoplankton abundance data measured by flow cytometry. Picophytoplankton 
-#' are tiny photosynthetic cells (0.2-2 µm) that are important primary producers in 
+#' Load picophytoplankton abundance data measured by flow cytometry. Picophytoplankton
+#' are tiny photosynthetic cells (0.2-2 µm) that are important primary producers in
 #' oligotrophic (nutrient-poor) waters.
-#' 
+#'
 #' @details
 #' The function retrieves abundance data for three groups of picophytoplankton:
-#' 
-#' * `Prochlorococcus_cellsmL` - Prochlorococcus abundance (cells/mL). 
-#'   A tiny cyanobacterium found in warm, nutrient-poor tropical and subtropical waters. 
+#'
+#' * `Prochlorococcus_cellsmL` - Prochlorococcus abundance (cells/mL).
+#'   A tiny cyanobacterium found in warm, nutrient-poor tropical and subtropical waters.
 #'   Typically absent or in very low numbers in temperate Australian waters.
-#' 
-#' * `Synechococcus_cellsmL` - Synechococcus abundance (cells/mL). 
-#'   A cyanobacterium found throughout Australian waters, more tolerant of cooler 
+#'
+#' * `Synechococcus_cellsmL` - Synechococcus abundance (cells/mL).
+#'   A cyanobacterium found throughout Australian waters, more tolerant of cooler
 #'   temperatures and higher nutrients than Prochlorococcus.
-#' 
-#' * `Picoeukaryotes_cellsmL` - Picoeukaryotic algae abundance (cells/mL). 
+#'
+#' * `Picoeukaryotes_cellsmL` - Picoeukaryotic algae abundance (cells/mL).
 #'   Small eukaryotic phytoplankton including prasinophytes and small diatoms.
-#' 
-#' Quality control flags are applied using [pr_apply_Flags()]. Water column (WC) 
-#' samples are excluded. A small constant is added to zero values to allow log 
+#'
+#' Quality control flags are applied using [pr_apply_Flags()]. Water column (WC)
+#' samples are excluded. A small constant is added to zero values to allow log
 #' transformations in plotting.
 #'
 #' @return A dataframe in long format with picophytoplankton data including:
@@ -230,23 +230,23 @@ pr_get_NRSPigments <- function(Format = "all"){
 #'   * `SampleDepth_m` - Sampling depth (numeric, in metres)
 #'   * `Parameters` - Cell type (Prochlorococcus, Synechococcus, or Picoeukaryotes)
 #'   * `Values` - Cell abundance (cells/mL)
-#' 
+#'
 #' @seealso [pr_get_NRSMicro()] for broader microbial community data,
 #'   [pr_get_NRSEnvContour()] to format data for contour plots,
 #'   [pr_plot_NRSEnvContour()] for visualisation
-#' 
+#'
 #' @export
 #'
 #' @examples
-#' df <- pr_get_NRSPico()
-#' 
+#' dat <- pr_get_NRSPico()
+#'
 #' # Examine which stations have picophytoplankton data
-#' table(df$StationCode, df$Parameters)
-#' 
+#' table(dat$StationCode, dat$Parameters)
+#'
 #' # Filter for Synechococcus at North Stradbroke Island
-#' df_syn <- df %>%
+#' dat_syn <- dat %>%
 #'   dplyr::filter(Parameters == "Synechococcus_cellsmL", StationCode == "NSI")
-#' 
+#'
 #' @importFrom rlang .data
 pr_get_NRSPico <- function(){
 
@@ -267,8 +267,6 @@ pr_get_NRSPico <- function(){
     dplyr::mutate(Values = .data$Values + min(.data$Values[.data$Values>0], na.rm = TRUE)) %>%
     pr_reorder()
 
-  # dat <- planktonr_dat(dat, type = NULL, survey = "NRS", variable = NULL)
-
   return(dat)
 }
 
@@ -280,7 +278,7 @@ pr_get_NRSPico <- function(){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_NRSEnvContour(Data = "Micro")
+#' dat <- pr_get_NRSEnvContour(Data = "Micro")
 pr_get_NRSEnvContour <- function(Data = "Chemistry") {
 
   # Input validation
@@ -314,7 +312,7 @@ pr_get_NRSEnvContour <- function(Data = "Chemistry") {
 #' @export
 #'
 #' @examples
-#' df <- pr_get_NRSMicro(Survey = "GO-SHIP")
+#' dat <- pr_get_NRSMicro(Survey = "GO-SHIP")
 #' @importFrom rlang .data
 #'
 pr_get_NRSMicro <- function(Survey = "NRS"){
@@ -452,7 +450,7 @@ pr_get_NRSMicro <- function(Survey = "NRS"){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_CSChem()
+#' dat <- pr_get_CSChem()
 #' @importFrom rlang .data
 pr_get_CSChem <- function(){
 
@@ -478,8 +476,6 @@ pr_get_CSChem <- function(){
     dplyr::arrange(.data$State, .data$Latitude) %>%
     dplyr::select(-c("SampleDateUTC", "tz"))
 
-  # dat <- planktonr_dat(dat, type = NULL, survey = "NRS", variable = NULL)
-
   return(dat)
 
 }
@@ -491,7 +487,7 @@ pr_get_CSChem <- function(){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_NRSTSS()
+#' dat <- pr_get_NRSTSS()
 pr_get_NRSTSS <- function(){
   file <- "bgc_tss_data"
 
@@ -510,7 +506,7 @@ pr_get_NRSTSS <- function(){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_NRSCTD()
+#' dat <- pr_get_NRSCTD()
 #' @importFrom rlang .data
 pr_get_NRSCTD <- function(){
 
@@ -526,7 +522,6 @@ pr_get_NRSCTD <- function(){
     pr_rename() %>%
     pr_add_StationCode() %>%
     dplyr::rename(ChlF_mgm3 = "Chla_mgm3") %>%
-    #pr_apply_Flags() %>%  # TODO flags are small f, make function work with both
     dplyr::filter(!.data$file_id %in% c(2117, 2184, 2186, 2187)) %>% #TODO Check with Claire
     dplyr::select(tidyselect::all_of(ctd_vars)) %>%
     pr_apply_Time()
@@ -541,7 +536,7 @@ pr_get_NRSCTD <- function(){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_LTnuts()
+#' dat <- pr_get_LTnuts()
 pr_get_LTnuts <-  function(){
 
   var_names <- c("Silicate_umolL", "Phosphate_umolL", "Ammonium_umolL", "Nitrate_umolL", "Nitrite_umolL",

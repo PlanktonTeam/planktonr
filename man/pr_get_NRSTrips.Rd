@@ -31,10 +31,10 @@ designated as 'P' (plankton) samples or with no sample type designation are
 included.
 }
 \examples{
-df <- pr_get_NRSTrips()
+dat <- pr_get_NRSTrips()
 
 # Examine sampling frequency by station
-table(df$StationName, df$Year_Local)
+table(dat$StationName, dat$Year_Local)
 
 }
 \seealso{

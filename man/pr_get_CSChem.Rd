@@ -13,5 +13,5 @@ A dataframe with NRS chemistry data
 Load Coastal Seas chemistry and nutrient data
 }
 \examples{
-df <- pr_get_CSChem()
+dat <- pr_get_CSChem()
 }

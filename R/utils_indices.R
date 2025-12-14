@@ -81,17 +81,17 @@
 #'
 #' @examples
 #' # Get NRS phytoplankton indices
-#' df <- pr_get_Indices("NRS", "Phytoplankton")
-#' unique(df$Parameters)
+#' dat <- pr_get_Indices("NRS", "Phytoplankton")
+#' unique(dat$Parameters)
 #'
 #' # Get CPR zooplankton indices with expanded bioregion boundaries
-#' df <- pr_get_Indices("CPR", "Zooplankton", near_dist_km = 250)
+#' dat <- pr_get_Indices("CPR", "Zooplankton", near_dist_km = 250)
 #'
 #' # Get water properties from NRS
-#' df <- pr_get_Indices("NRS", "Water")
+#' dat <- pr_get_Indices("NRS", "Water")
 #'
 #' # Filter for specific parameter and stations
-#' df <- pr_get_Indices("NRS", "Zooplankton") %>%
+#' dat <- pr_get_Indices("NRS", "Zooplankton") %>%
 #'   pr_filter_data("Biomass_mgm3", c("MAI", "PHB"))
 pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
 
@@ -299,7 +299,7 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
 #' before plotting or analysis. Automatically detects whether data uses station
 #' codes (NRS) or bioregions (CPR) and filters accordingly.
 #'
-#' @param df A dataframe from [pr_get_Indices()], [pr_get_EOVs()], or similar
+#' @param dat A dataframe from [pr_get_Indices()], [pr_get_EOVs()], or similar
 #'   functions
 #' @param Parameter Character string or vector of parameter names to retain.
 #'   Common parameters include:
@@ -342,32 +342,32 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
 #'
 #' @examples
 #' # Filter CPR data to biomass in two bioregions
-#' df <- pr_get_Indices("CPR", "Zooplankton") %>%
+#' dat <- pr_get_Indices("CPR", "Zooplankton") %>%
 #'   pr_filter_data("BiomassIndex_mgm3", c("North", "South-west"))
 #'
 #' # Filter NRS data to phytoplankton carbon at two stations
-#' df <- pr_get_Indices("NRS", "Phytoplankton") %>%
+#' dat <- pr_get_Indices("NRS", "Phytoplankton") %>%
 #'   pr_filter_data("PhytoBiomassCarbon_pgL", c("NSI", "PHB"))
 #'
 #' # Multiple parameters at one station
-#' df <- pr_get_Indices("NRS", "Zooplankton") %>%
+#' dat <- pr_get_Indices("NRS", "Zooplankton") %>%
 #'   pr_filter_data(c("Biomass_mgm3", "Abundance_m3", "ShannonDiversity"), "MAI")
-pr_filter_data <- function(df, Parameter = "Biomass_mgm3", StationRegion = "NSI"){
+pr_filter_data <- function(dat, Parameter = "Biomass_mgm3", StationRegion = "NSI"){
 
   # Input validation
   assertthat::assert_that(
-    is.data.frame(df),
-    msg = "'df' must be a data frame."
+    is.data.frame(dat),
+    msg = "'dat' must be a data frame."
   )
 
   assertthat::assert_that(
-    inherits(df, "planktonr_dat"),
-    msg = "'df' must be a planktonr_dat object. Use pr_get_Indices() or similar functions to create the data."
+    inherits(dat, "planktonr_dat"),
+    msg = "'dat' must be a planktonr_dat object. Use pr_get_Indices() or similar functions to create the data."
   )
 
   assertthat::assert_that(
-    nrow(df) > 0,
-    msg = "The data frame 'df' is empty. Check your data source or filtering criteria."
+    nrow(dat) > 0,
+    msg = "The data frame 'dat' is empty. Check your data source or filtering criteria."
   )
 
   assertthat::assert_that(
@@ -380,12 +380,12 @@ pr_filter_data <- function(df, Parameter = "Biomass_mgm3", StationRegion = "NSI"
     msg = "'StationRegion' must be a character string or character vector specifying which station(s) or region(s) to filter."
   )
 
-  if("StationName" %in% colnames(df)) {
-    df <- df %>%
+  if("StationName" %in% colnames(dat)) {
+    dat <- dat %>%
       dplyr::filter(.data$Parameters %in% Parameter,
                     .data$StationCode %in% StationRegion)
   } else {
-    df <- df %>%
+    dat <- dat %>%
       dplyr::filter(.data$Parameters %in% Parameter,
                     .data$BioRegion %in% StationRegion)
   }
@@ -394,24 +394,24 @@ pr_filter_data <- function(df, Parameter = "Biomass_mgm3", StationRegion = "NSI"
 
 #' To produce the climatology for plotting
 #'
-#' @param df output of pr_get_Indices
+#' @param dat output of pr_get_Indices
 #' @param x A string of Year, Month, Day, time period of climatology
 #'
 #' @return dataframe to use in pr_plot_Climatology functions
 #' @export
 #'
 #' @examples
-#' df <- data.frame(Month = rep(1:12,10), StationCode = "NSI", Values = runif(120, min=0, max=10))
-#' pr_make_climatology(df, "Month")
+#' dat <- data.frame(Month = rep(1:12,10), StationCode = "NSI", Values = runif(120, min=0, max=10))
+#' pr_make_climatology(dat, "Month")
 #' @importFrom stats sd
 #' @importFrom rlang .data
-pr_make_climatology <- function(df, x){
+pr_make_climatology <- function(dat, x){
 
-  df_climate <- df %>%
+  dat_climate <- dat %>%
     dplyr::summarise(mean = mean(.data$Values, na.rm = TRUE),
                      N = length(.data$Values),
                      sd = stats::sd(.data$Values, na.rm = TRUE),
                      se = sd / sqrt(.data$N),
                      .by = tidyselect::all_of(c(x, "StationCode")))
-  return(df_climate)
+  return(dat_climate)
 }
