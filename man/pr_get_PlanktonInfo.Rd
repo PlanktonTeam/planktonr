@@ -7,77 +7,29 @@
 pr_get_PlanktonInfo(Type = "Zooplankton")
 }
 \arguments{
-\item{Type}{Which plankton group to retrieve:
-\itemize{
-\item \code{"Zooplankton"} - Information on copepods, appendicularians, salps, etc. (default)
-\item \code{"Phytoplankton"} - Information on diatoms, dinoflagellates, ciliates, etc.
-}}
+\item{Type}{The type of plankton: "Phytoplankton" or "Zooplankton"
+(also accepts "P", "Z", "Phyto", "Zoop")}
 }
 \value{
-A dataframe with taxonomic and trait information. Columns vary by
-plankton type but typically include TaxonName, Classification, Size_um,
-CarbonContent_ugC, FunctionalGroup, and WoRMS_AphiaID.
+A dataframe with taxonomic and trait information.
 }
 \description{
-Retrieve reference tables containing taxonomic classification, size ranges,
-carbon content, and other trait information for phytoplankton or zooplankton
-taxa observed in IMOS surveys.
-}
-\details{
-\subsection{Data Contents}{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
-The information tables typically include:
-\itemize{
-\item \strong{Taxonomic classification}: Phylum, class, order, family, genus, species
-\item \strong{Size information}: Length and/or width ranges (micrometres)
-\item \strong{Biovolume}: Estimated cell/organism volume (µm³)
-\item \strong{Carbon content}: Biomass conversion factors (µg C per individual or per cell)
-\item \strong{Functional groups}: Ecological groupings used in \code{\link[=pr_get_FuncGroups]{pr_get_FuncGroups()}}
-\item \strong{WoRMS identifiers}: AphiaID for linking to World Register of Marine Species
-}
-}
-
-\subsection{Use Cases}{
-
-These reference tables are useful for:
-\itemize{
-\item Converting abundance to biomass or carbon
-\item Understanding size distributions of plankton communities
-\item Linking taxa to functional roles
-\item Checking taxonomic classification and nomenclature
-\item Quality control - identifying potentially misidentified taxa
-}
-}
-
-\subsection{Size-Based Carbon Conversions}{
-
-Many analyses require converting abundance counts to biomass or carbon. The
-trait data in these tables enable such conversions using established
-allometric relationships between organism size and carbon content.
-}
-
-\subsection{Updates}{
-
-These tables are curated alongside IMOS data and updated as:
-\itemize{
-\item New taxa are identified in samples
-\item Taxonomic classifications change
-\item Improved trait measurements become available
-}
-}
+\code{pr_get_PlanktonInfo()} was deprecated in planktonr 0.7.0 in favour of
+\code{\link[=pr_get_info]{pr_get_info()}} which provides a unified interface for both plankton
+taxonomic information and survey policy information.
 }
 \examples{
-# Get zooplankton trait information
+\dontrun{
+# Instead of:
 zoo_info <- pr_get_PlanktonInfo(Type = "Zooplankton")
 
-# Get phytoplankton trait information
-phyto_info <- pr_get_PlanktonInfo(Type = "Phytoplankton")
-
+# Use:
+zoo_info <- pr_get_info(Source = "Zooplankton")
+}
 }
 \seealso{
-\itemize{
-\item \code{\link[=pr_get_NRSData]{pr_get_NRSData()}}, \code{\link[=pr_get_CPRData]{pr_get_CPRData()}} for abundance data that can be
-linked to these traits
-\item \code{\link[=pr_get_FuncGroups]{pr_get_FuncGroups()}} which uses functional group assignments from these tables
+\code{\link[=pr_get_info]{pr_get_info()}} for the preferred interface
 }
-}
+\keyword{internal}

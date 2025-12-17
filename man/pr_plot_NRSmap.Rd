@@ -91,7 +91,7 @@ pr_plot_NRSmap(sites = "MAI", Survey = "LTM")
 }
 \seealso{
 \itemize{
-\item \code{\link[=pr_get_Stations]{pr_get_Stations()}} for station metadata
+\item \code{\link[=pr_get_info]{pr_get_info()}} for station metadata
 \item \code{\link[=pr_plot_CPRmap]{pr_plot_CPRmap()}} for CPR bioregion maps
 }
 }

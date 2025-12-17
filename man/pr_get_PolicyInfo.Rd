@@ -7,16 +7,30 @@
 pr_get_PolicyInfo(Survey = "NRS", ...)
 }
 \arguments{
-\item{Survey}{"NRS" or "CPR"}
+\item{Survey}{"NRS", "CPR", or "SOTS"}
 
-\item{...}{to allow use of join when used within another function}
+\item{...}{Additional arguments (unused, for backward compatibility)}
 }
 \value{
 A dataframe with policy information
 }
 \description{
-Load policy-relevant plankton indicators and Essential Ocean Variables
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+\code{pr_get_PolicyInfo()} was deprecated in planktonr 0.7.0 in favour of
+\code{\link[=pr_get_info]{pr_get_info()}} which provides a unified interface for both plankton
+taxonomic information and survey policy information.
 }
 \examples{
+\dontrun{
+# Instead of:
 dat <- pr_get_PolicyInfo("CPR")
+
+# Use:
+dat <- pr_get_info(Source = "CPR")
 }
+}
+\seealso{
+\code{\link[=pr_get_info]{pr_get_info()}} for the preferred interface
+}
+\keyword{internal}

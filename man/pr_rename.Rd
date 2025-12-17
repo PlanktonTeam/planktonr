@@ -15,7 +15,4 @@ Dataframe with new column names
 \description{
 Standardise column names in IMOS plankton dataframes
 }
-\examples{
-dat <- data.frame(LATITUDE = -32, LONGITUDE = 160) \%>\%
-            pr_rename()
-}
+\keyword{internal}

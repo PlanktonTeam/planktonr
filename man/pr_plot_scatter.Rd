@@ -22,7 +22,7 @@ ggplot object
 Note that this function assumes wide data with the data to plot as columns.
 }
 \examples{
-dat <- planktonr::pr_get_NRSMicro() \%>\%
+dat <- pr_get_data(Survey = "NRS", Type = "Micro") \%>\%
 tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) \%>\%
 dplyr::filter(StationCode \%in\% c("NSI", "PHB")) \%>\%
 tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = mean)

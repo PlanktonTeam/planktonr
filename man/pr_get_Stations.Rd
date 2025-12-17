@@ -7,46 +7,29 @@
 pr_get_Stations(Survey = "NRS")
 }
 \arguments{
-\item{Survey}{Survey type:
-\itemize{
-\item \code{"NRS"} - National Reference Stations (default) - includes all active and
-discontinued coastal monitoring stations
-\item \code{"SOTS"} - Southern Ocean Time Series mooring site south of Tasmania
-}}
+\item{Survey}{Survey type: "NRS" or "SOTS"}
 }
 \value{
-A dataframe with station information including:
-\itemize{
-\item \code{StationCode} - Three-letter station code
-\item \code{StationName} - Full station name
-\item \code{Latitude}, \code{Longitude} - Geographic coordinates
-\item \code{StationStartDate} - Date sampling commenced
-\item Additional metadata about sampling schedule and location
-}
+A dataframe with station information
 }
 \description{
-Load station metadata including station codes, names, geographic coordinates,
-and sampling schedules for National Reference Stations and Southern Ocean
-Time Series sites.
-}
-\details{
-The National Reference Stations (NRS) network consists of coastal mooring sites
-around Australia. Most stations sample monthly, though Darwin samples quarterly
-and some stations have discontinued sampling. The returned dataframe includes
-station start dates, sampling frequencies, and geographic information.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
-Station codes include: DAR (Darwin), YON (Yongala), NSI (North Stradbroke Island),
-PHB (Port Hacking), MAI (Maria Island), ROT (Rottnest Island), ESP (Esperance),
-NIN (Ningaloo), and KAI (Kangaroo Island).
+\code{pr_get_Stations()} was deprecated in planktonr 0.7.0. Station information
+is now available through \code{\link[=pr_get_info]{pr_get_info()}} with \code{Source = "NRS"} or
+\code{Source = "SOTS"}.
 }
 \examples{
-# Get all NRS station information
+\dontrun{
+# Instead of:
 dat <- pr_get_Stations('NRS')
 
-# Get SOTS station information
-dat <- pr_get_Stations('SOTS')
+# Use:
+dat <- pr_get_info(Source = "NRS")
+}
 
 }
 \seealso{
-\code{\link[=pr_get_NRSTrips]{pr_get_NRSTrips()}} for sampling trip metadata
+\code{\link[=pr_get_info]{pr_get_info()}} for the preferred interface
 }
+\keyword{internal}

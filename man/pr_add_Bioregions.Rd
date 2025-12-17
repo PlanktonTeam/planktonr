@@ -79,12 +79,10 @@ handles coordinate transformations automatically.
 \examples{
 # Add bioregions with exact matching (no buffer)
 dat <- pr_get_Raw("cpr_derived_indices_data") \%>\%
-  pr_rename() \%>\%
   pr_add_Bioregions()
 
 # Add bioregions with 250 km buffer for offshore samples
 dat <- pr_get_Raw("cpr_derived_indices_data") \%>\%
-  pr_rename() \%>\%
   pr_add_Bioregions(near_dist_km = 250)
 
 # Check bioregion assignments

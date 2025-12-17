@@ -55,18 +55,18 @@ The function adds a \code{StationCode} column and positions it after \code{Stati
 }
 \examples{
 # Add station codes from station names
-df <- pr_get_Stations() \%>\%
+df <- data.frame(StationName = c("Port Hacking", "Maria Island")) \%>\%
   pr_add_StationCode()
 
 # Extract station codes from trip codes
-df <- pr_get_NRSTrips() \%>\%
+df <- data.frame(TripCode = c("PHB20220101", "MAI20220115")) \%>\%
   pr_add_StationCode()
 
 }
 \seealso{
 \itemize{
 \item \code{\link[=pr_add_StationName]{pr_add_StationName()}} for the reverse conversion
-\item \code{\link[=pr_get_Stations]{pr_get_Stations()}} for station metadata
-\item \code{\link[=pr_get_NRSTrips]{pr_get_NRSTrips()}} which returns data with trip codes
+\item \code{\link[=pr_get_info]{pr_get_info()}} for station metadata
+\item \code{\link[=pr_get_trips]{pr_get_trips()}} which returns data with trip codes
 }
 }

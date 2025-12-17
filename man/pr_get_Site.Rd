@@ -12,6 +12,4 @@ A string with location of raw plankton data
 \description{
 Internal function to load the location of the raw plankton data files.
 }
-\examples{
-file_loc <- pr_get_Site()
-}
+\keyword{internal}

@@ -15,6 +15,4 @@ A reformatted string
 \description{
 Helper function to reformat Titles
 }
-\examples{
-new_tit = pr_title("Phytoplankton")
-}
+\keyword{internal}

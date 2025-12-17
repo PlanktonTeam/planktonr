@@ -13,9 +13,21 @@ pr_get_SpeciesInfo(Type = "Zooplankton")
 A dataframe of species information
 }
 \description{
-Get species information table for Phytoplankton and Zooplankton
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+\code{pr_get_SpeciesInfo()} was deprecated in planktonr 0.7.0 in favour of
+\code{\link[=pr_get_info]{pr_get_info()}} which provides a unified interface.
 }
 \examples{
+\dontrun{
+# Instead of:
 dat <- pr_get_SpeciesInfo(Type = "Phytoplankton")
-dat <- pr_get_SpeciesInfo(Type = "Zooplankton")
+
+# Use:
+dat <- pr_get_info(Source = "Phytoplankton")
 }
+}
+\seealso{
+\code{\link[=pr_get_info]{pr_get_info()}} for the preferred interface
+}
+\keyword{internal}
