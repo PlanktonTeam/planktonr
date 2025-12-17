@@ -75,10 +75,13 @@
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_SpeciesInfo.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_Stations.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_TaxaAccum.html</loc></url>
+<url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_data.html</loc></url>
+<url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_info.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_model.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_s3.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_s3site.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_survey.html</loc></url>
+<url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_trips.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_type.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_get_variable.html</loc></url>
 <url><loc>https://planktonteam.github.io/planktonr/reference/pr_harmonic.html</loc></url>

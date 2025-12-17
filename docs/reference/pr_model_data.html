@@ -19,7 +19,7 @@ extracting coefficients or plotting trends with model predictions."><!-- mathjax
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.6.7</span>
+        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
       </span>
     </div>
 
@@ -82,14 +82,14 @@ extracting coefficients or plotting trends with model predictions.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pr_model_data</span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pr_model_data</span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
 
 
-<dl><dt id="arg-df">df<a class="anchor" aria-label="anchor" href="#arg-df"></a></dt>
+<dl><dt id="arg-dat">dat<a class="anchor" aria-label="anchor" href="#arg-dat"></a></dt>
 <dd><p>A dataframe from <code><a href="pr_get_EOVs.html">pr_get_EOVs()</a></code>, <code><a href="pr_get_Indices.html">pr_get_Indices()</a></code>, or similar
 functions containing time series data. Must contain only one parameter at a time.</p></dd>
 
@@ -136,13 +136,13 @@ extracted using <code><a href="pr_get_model.html">pr_get_model()</a></code> and 
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Fit models to zooplankton biomass</span></span></span>
-<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr_get_EOVs.html">pr_get_EOVs</a></span><span class="op">(</span>Survey <span class="op">=</span> <span class="st">"NRS"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr_get_EOVs.html">pr_get_EOVs</a></span><span class="op">(</span>Survey <span class="op">=</span> <span class="st">"NRS"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Parameters</span> <span class="op">==</span> <span class="st">"Biomass_mgm3"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="pr_remove_outliers.html">pr_remove_outliers</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">pr_model_data</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Extract and view model coefficients</span></span></span>
-<span class="r-in"><span><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr_get_model.html">pr_get_model</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr_get_model.html">pr_get_model</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">coeffs</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr_get_coeffs.html">pr_get_coeffs</a></span><span class="op">(</span><span class="va">models</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">coeffs</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 40 × 7</span></span>
@@ -161,7 +161,7 @@ extracted using <code><a href="pr_get_model.html">pr_get_model()</a></code> and 
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 30 more rows</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Fit models to CPR phytoplankton diversity</span></span></span>
-<span class="r-in"><span><span class="va">df_cpr</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr_get_EOVs.html">pr_get_EOVs</a></span><span class="op">(</span>Survey <span class="op">=</span> <span class="st">"CPR"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span><span class="va">dat_cpr</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr_get_EOVs.html">pr_get_EOVs</a></span><span class="op">(</span>Survey <span class="op">=</span> <span class="st">"CPR"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Parameters</span> <span class="op">==</span> <span class="st">"ShannonPhytoDiversity"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="pr_remove_outliers.html">pr_remove_outliers</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">pr_model_data</span><span class="op">(</span><span class="op">)</span></span></span>

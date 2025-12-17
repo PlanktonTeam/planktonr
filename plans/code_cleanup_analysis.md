@@ -258,7 +258,7 @@ dplyr::filter(!.data$file_id %in% c(2117, 2184, 2186, 2187))
 - Mix of `#` and `##` for comments
 - Inconsistent roxygen2 formatting
 - Some inline comments too verbose, others too terse
-
+ 
 **Recommendation**: Establish and enforce commenting guidelines
 
 ### 4.3 Variable Naming Inconsistency

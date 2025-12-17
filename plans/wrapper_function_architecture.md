@@ -14,7 +14,7 @@ The planktonr package currently exports **67 functions** (36 data retrieval + 22
 - **SOTS Survey:** `pr_get_SOTSMoorData()`, `pr_get_SOTSvariables()`
 - **Coastal Seas:** `pr_get_CSChem()`
 - **Indices & Metrics:** `pr_get_Indices()`, `pr_get_EOVs()`, `pr_get_CTI()`, `pr_get_STI()`, `pr_get_STIdata()`, `pr_get_FuncGroups()`, `pr_get_TaxaAccum()`, `pr_get_DayNight()`
-- **Info Functions:** `pr_get_PlanktonInfo()`, `pr_get_PolicyInfo()`, `pr_get_SpeciesInfo()`, `pr_get_Stations()`
+# - **Info Functions:** `pr_get_PlanktonInfo()`, `pr_get_PolicyInfo()`, `pr_get_SpeciesInfo()`, `pr_get_Stations()`
 - **Map Data:** `pr_get_PCIData()`, `pr_get_FreqMap()`, `pr_get_ProgressMapData()`, `pr_get_DataLocs()`
 - **Specialized:** `pr_get_LFData()`, `pr_get_LTnuts()`, `pr_get_SatData()`
 - **Low-level:** `pr_get_Raw()`, `pr_get_Site()`, `pr_get_NonTaxaColumns()`
@@ -104,12 +104,13 @@ pr_plot_map(map_type = "bioregions", survey = "CPR",
 ```
 
 **Consolidates:**
-- `pr_plot_NRSmap()` → `pr_plot_map(map_type = "stations", survey = "NRS")`
-- `pr_plot_CPRmap()` → `pr_plot_map(map_type = "bioregions", survey = "CPR")`
-- `pr_plot_Voyagemap()` → `pr_plot_map(map_type = "voyage")`
-- `pr_plot_PCImap()` → `pr_plot_map(map_type = "PCI")`
-- `pr_plot_FreqMap()` → `pr_plot_map(map_type = "frequency")`
-- `pr_plot_ProgressMap()` → `pr_plot_map(map_type = "progress")`
+- `pr_plot_NRSmap()` → `pr_plot_map(Type = "NRS", sites, )`
+- `pr_plot_CPRmap()` → `pr_plot_map(Type = "CPR")`
+- `pr_plot_PCImap()` → `pr_plot_map(Type = "PCI")`
+
+- `pr_plot_Voyagemap()` → `pr_plot_map(Type = "Voyage")`
+- `pr_plot_FreqMap()` → `pr_plot_map(Type = "frequency")`
+- `pr_plot_ProgressMap()` → `pr_plot_map(Type = "progress")`
 
 ### 3. Information Wrapper: `pr_get_info()`
 
@@ -154,8 +155,8 @@ pr_get_trips(survey = c("NRS", "CPR", "SOTS"), ...)
 ```
 
 **Consolidates:**
-- `pr_get_NRSTrips()` → `pr_get_trips(survey = "NRS")`
-- `pr_get_CPRTrips()` → `pr_get_trips(survey = "CPR")`
+- `pr_get_NRSTrips()` → `pr_get_trips(Survey = "NRS")`
+- `pr_get_CPRTrips()` → `pr_get_trips(Survey = "CPR")`
 
 #### 4b. Satellite Data: Keep as is
 `pr_get_SatData()` - already well-designed with survey parameter

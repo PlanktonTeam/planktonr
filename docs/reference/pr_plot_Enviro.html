@@ -20,7 +20,7 @@ and temporal patterns in water column properties."><!-- mathjax --><script src="
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.6.7</span>
+        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
       </span>
     </div>
 
@@ -84,14 +84,14 @@ and temporal patterns in water column properties.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pr_plot_Enviro</span><span class="op">(</span><span class="va">df</span>, Trend <span class="op">=</span> <span class="st">"None"</span>, trans <span class="op">=</span> <span class="st">"identity"</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pr_plot_Enviro</span><span class="op">(</span><span class="va">dat</span>, Trend <span class="op">=</span> <span class="st">"None"</span>, trans <span class="op">=</span> <span class="st">"identity"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
 
 
-<dl><dt id="arg-df">df<a class="anchor" aria-label="anchor" href="#arg-df"></a></dt>
+<dl><dt id="arg-dat">dat<a class="anchor" aria-label="anchor" href="#arg-dat"></a></dt>
 <dd><p>A dataframe from <code><a href="pr_get_NRSChemistry.html">pr_get_NRSChemistry()</a></code>, <code><a href="pr_get_NRSPigments.html">pr_get_NRSPigments()</a></code>,
 or <code><a href="pr_get_NRSPico.html">pr_get_NRSPico()</a></code> containing environmental data with depth information</p></dd>
 
@@ -151,36 +151,41 @@ Use <code><a href="pr_remove_outliers.html">pr_remove_outliers()</a></code> befo
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Plot total chlorophyll a with depth</span></span></span>
-<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr_get_NRSPigments.html">pr_get_NRSPigments</a></span><span class="op">(</span>Format <span class="op">=</span> <span class="st">"binned"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr_get_NRSPigments.html">pr_get_NRSPigments</a></span><span class="op">(</span>Format <span class="op">=</span> <span class="st">"binned"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="pr_remove_outliers.html">pr_remove_outliers</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Parameters</span> <span class="op">==</span> <span class="st">"TotalChla"</span>,</span></span>
 <span class="r-in"><span>                <span class="va">StationCode</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NSI"</span>, <span class="st">"MAI"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">pr_plot_Enviro</span><span class="op">(</span><span class="va">df</span>, Trend <span class="op">=</span> <span class="st">"Smoother"</span>, trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`pr_get_NRSPigments()` was deprecated in planktonr 0.7.0.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Please use `pr_get_data()` instead.</span>
+<span class="r-in"><span><span class="fu">pr_plot_Enviro</span><span class="op">(</span><span class="va">dat</span>, Trend <span class="op">=</span> <span class="st">"Smoother"</span>, trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="pr_plot_Enviro-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Plot nitrate concentrations</span></span></span>
-<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr_get_NRSChemistry.html">pr_get_NRSChemistry</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr_get_NRSChemistry.html">pr_get_NRSChemistry</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Parameters</span> <span class="op">==</span> <span class="st">"Nitrate_umolL"</span>,</span></span>
 <span class="r-in"><span>                <span class="va">StationCode</span> <span class="op">==</span> <span class="st">"PHB"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">pr_plot_Enviro</span><span class="op">(</span><span class="va">df</span>, Trend <span class="op">=</span> <span class="st">"Linear"</span>, trans <span class="op">=</span> <span class="st">"identity"</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`pr_get_NRSChemistry()` was deprecated in planktonr 0.7.0.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Please use `pr_get_data()` instead.</span>
+<span class="r-in"><span><span class="fu">pr_plot_Enviro</span><span class="op">(</span><span class="va">dat</span>, Trend <span class="op">=</span> <span class="st">"Linear"</span>, trans <span class="op">=</span> <span class="st">"identity"</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 42 rows containing non-finite outside the scale range</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> (`stat_smooth()`).</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 1 row containing missing values or values outside the scale range</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 10 rows containing missing values or values outside the scale range</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_line()`).</span>
 <span class="r-plt img"><img src="pr_plot_Enviro-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Plot Prochlorococcus abundance</span></span></span>
-<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr_get_NRSPico.html">pr_get_NRSPico</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr_get_NRSPico.html">pr_get_NRSPico</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Parameters</span> <span class="op">==</span> <span class="st">"Prochlorococcus_cellsmL"</span>,</span></span>
 <span class="r-in"><span>                <span class="va">StationCode</span> <span class="op">==</span> <span class="st">"NSI"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">pr_plot_Enviro</span><span class="op">(</span><span class="va">df</span>, Trend <span class="op">=</span> <span class="st">"Smoother"</span>, trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`pr_get_NRSPico()` was deprecated in planktonr 0.7.0.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Please use `pr_get_data()` instead.</span>
+<span class="r-in"><span><span class="fu">pr_plot_Enviro</span><span class="op">(</span><span class="va">dat</span>, Trend <span class="op">=</span> <span class="st">"Smoother"</span>, trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 1 row containing non-finite outside the scale range (`stat_smooth()`).</span>
 <span class="r-plt img"><img src="pr_plot_Enviro-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr_get_NRSChemistry.html">pr_get_NRSChemistry</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Parameters</span> <span class="op">==</span> <span class="st">"SecchiDepth_m"</span>,</span></span>
+<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr_get_NRSChemistry.html">pr_get_NRSChemistry</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Parameters</span> <span class="op">==</span> <span class="st">"SecchiDepth_m"</span>,</span></span>
 <span class="r-in"><span><span class="va">StationCode</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'PHB'</span>, <span class="st">'NSI'</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">pr_plot_Enviro</span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">pr_plot_Enviro</span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="pr_plot_Enviro-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

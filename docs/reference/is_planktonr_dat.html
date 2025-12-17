@@ -18,7 +18,7 @@ It's a standard way to verify if an object is of your custom data type."><!-- ma
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.6.7</span>
+        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
       </span>
     </div>
 
@@ -100,8 +100,8 @@ It's a standard way to verify if an object is of your custom data type.</p>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Assuming planktonr_dat constructor exists:</span></span></span>
 <span class="r-in"><span><span class="va">my_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="planktonr_dat.html">planktonr_dat</a></span><span class="op">(</span><span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, b <span class="op">=</span> <span class="fl">4</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                         type <span class="op">=</span> <span class="st">"Phytoplankton"</span>,</span></span>
-<span class="r-in"><span>                         survey <span class="op">=</span> <span class="st">"NRS"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                         Type <span class="op">=</span> <span class="st">"Phytoplankton"</span>,</span></span>
+<span class="r-in"><span>                         Survey <span class="op">=</span> <span class="st">"NRS"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Check if it's a planktonr_dat object</span></span></span>
 <span class="r-in"><span><span class="fu">is_planktonr_dat</span><span class="op">(</span><span class="va">my_data</span><span class="op">)</span> <span class="co"># Returns TRUE</span></span></span>

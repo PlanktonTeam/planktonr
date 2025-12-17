@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.6.7</span>
+        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
       </span>
     </div>
 
@@ -175,8 +175,8 @@ areas of interest (the Great Barrier Reef and the East Australian
 Current) and on a more ad-hoc basis in other regions, depending on ship
 availability.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">datCPR</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_get_CPRTrips.html">pr_get_CPRTrips</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">datNRS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_get_NRSTrips.html">pr_get_NRSTrips</a></span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">datCPR</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_get_trips.html">pr_get_trips</a></span><span class="op">(</span>Survey <span class="op">=</span> <span class="st">"CPR"</span><span class="op">)</span></span>
+<span><span class="va">datNRS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr_get_trips.html">pr_get_trips</a></span><span class="op">(</span>Survey <span class="op">=</span> <span class="st">"NRS"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">ggCPR</span> <span class="op">&lt;-</span> <span class="fu">planktonr</span><span class="fu">::</span><span class="fu"><a href="../reference/pr_plot_Gantt.html">pr_plot_Gantt</a></span><span class="op">(</span><span class="va">datCPR</span><span class="op">)</span></span>
 <span><span class="va">ggNRS</span> <span class="op">&lt;-</span> <span class="fu">planktonr</span><span class="fu">::</span><span class="fu"><a href="../reference/pr_plot_Gantt.html">pr_plot_Gantt</a></span><span class="op">(</span><span class="va">datNRS</span><span class="op">)</span></span>

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.6.7</span>
+        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
       </span>
     </div>
 
@@ -76,121 +76,25 @@
           <p class="section-desc"></p><p>Functions to access data from the AODN.</p>
         </th>
       </tr></tbody><tbody><tr><td>
-          <p><code><a href="pr_get_CPRData.html">pr_get_CPRData()</a></code> </p>
+          <p><code><a href="pr_get_data.html">pr_get_data()</a></code> </p>
         </td>
-        <td><p>Import CPR Data</p></td>
+        <td><p>Get plankton and biogeochemical data from IMOS surveys</p></td>
       </tr><tr><td>
-          <p><code><a href="pr_get_CPRTrips.html">pr_get_CPRTrips()</a></code> </p>
+          <p><code><a href="pr_get_trips.html">pr_get_trips()</a></code> </p>
         </td>
-        <td><p>Get CPR sampling trip metadata</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_CSChem.html">pr_get_CSChem()</a></code> </p>
-        </td>
-        <td><p>Load Coastal Seas chemistry and nutrient data</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_CTI.html">pr_get_CTI()</a></code> </p>
-        </td>
-        <td><p>Calculate Community Temperature Index (CTI) for plankton samples</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_DataLocs.html">pr_get_DataLocs()</a></code> </p>
-        </td>
-        <td><p>Extract sample locations and dates for satellite data matching</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_DayNight.html">pr_get_DayNight()</a></code> </p>
-        </td>
-        <td><p>Get data for plots of species abundance by day and night using CPR data</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_EOVs.html">pr_get_EOVs()</a></code> </p>
-        </td>
-        <td><p>Load Essential Ocean Variables (EOVs) for plankton biomass and diversity</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_FreqMap.html">pr_get_FreqMap()</a></code> </p>
-        </td>
-        <td><p>Prepare species occurrence data for frequency mapping</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_FuncGroups.html">pr_get_FuncGroups()</a></code> </p>
-        </td>
-        <td><p>Aggregate plankton data by functional groups</p></td>
+        <td><p>Get sampling trip metadata</p></td>
       </tr><tr><td>
           <p><code><a href="pr_get_Indices.html">pr_get_Indices()</a></code> </p>
         </td>
         <td><p>Access derived ecological indices for timeseries and climatology plots</p></td>
       </tr><tr><td>
-          <p><code><a href="pr_get_LFData.html">pr_get_LFData()</a></code> </p>
+          <p><code><a href="pr_get_EOVs.html">pr_get_EOVs()</a></code> </p>
         </td>
-        <td><p>Get NRS larval fish abundance data</p></td>
+        <td><p>Load Essential Ocean Variables (EOVs) for plankton biomass and diversity</p></td>
       </tr><tr><td>
-          <p><code><a href="pr_get_LTnuts.html">pr_get_LTnuts()</a></code> </p>
+          <p><code><a href="pr_get_CTI.html">pr_get_CTI()</a></code> </p>
         </td>
-        <td><p>Get NRS long term nutrient timeseries data</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_NRSCTD.html">pr_get_NRSCTD()</a></code> </p>
-        </td>
-        <td><p>Load NRS CTD profile data (temperature, salinity, fluorescence)</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_NRSChemistry.html">pr_get_NRSChemistry()</a></code> </p>
-        </td>
-        <td><p>Load National Reference Station chemistry data</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_NRSData.html">pr_get_NRSData()</a></code> </p>
-        </td>
-        <td><p>Import NRS Data</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_NRSEnvContour.html">pr_get_NRSEnvContour()</a></code> </p>
-        </td>
-        <td><p>Prepare biogeochemical data for depth-time contour plots</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_NRSMicro.html">pr_get_NRSMicro()</a></code> </p>
-        </td>
-        <td><p>Load microbial abundance data from flow cytometry</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_NRSPico.html">pr_get_NRSPico()</a></code> </p>
-        </td>
-        <td><p>Load picophytoplankton data from NRS stations</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_NRSPigments.html">pr_get_NRSPigments()</a></code> </p>
-        </td>
-        <td><p>Get photosynthetic pigments data from NRS stations</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_NRSTSS.html">pr_get_NRSTSS()</a></code> </p>
-        </td>
-        <td><p>Load Total Suspended Solids (TSS) data</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_NRSTrips.html">pr_get_NRSTrips()</a></code> </p>
-        </td>
-        <td><p>Import NRS sampling trip metadata</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_NonTaxaColumns.html">pr_get_NonTaxaColumns()</a></code> </p>
-        </td>
-        <td><p>Return columns that are not taxonomic</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_PCIData.html">pr_get_PCIData()</a></code> </p>
-        </td>
-        <td><p>Generate Phytoplankton Colour Index (PCI) data from CPR samples</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_PlanktonInfo.html">pr_get_PlanktonInfo()</a></code> </p>
-        </td>
-        <td><p>Load taxonomic information and trait data for plankton species</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_PolicyInfo.html">pr_get_PolicyInfo()</a></code> </p>
-        </td>
-        <td><p>Load policy-relevant plankton indicators and Essential Ocean Variables</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_ProgressMapData.html">pr_get_ProgressMapData()</a></code> </p>
-        </td>
-        <td><p>Prepare sampling coverage data for IMOS progress map visualisation</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_Raw.html">pr_get_Raw()</a></code> </p>
-        </td>
-        <td><p>Download raw unprocessed data files directly from IMOS S3 storage</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_SOTSMoorData.html">pr_get_SOTSMoorData()</a></code> </p>
-        </td>
-        <td><p>Get data available from SOTS moorings (limited to use in BOO atm, other variables could be added, select from pr_get_SOTSvariables)</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_SOTSvariables.html">pr_get_SOTSvariables()</a></code> </p>
-        </td>
-        <td><p>Get data files available from SOTS moorings</p></td>
+        <td><p>Calculate Community Temperature Index (CTI) for plankton samples</p></td>
       </tr><tr><td>
           <p><code><a href="pr_get_STI.html">pr_get_STI()</a></code> </p>
         </td>
@@ -200,37 +104,69 @@
         </td>
         <td><p>Get data for STI plots of species abundance</p></td>
       </tr><tr><td>
-          <p><code><a href="pr_get_SatData.html">pr_get_SatData()</a></code> </p>
+          <p><code><a href="pr_get_FuncGroups.html">pr_get_FuncGroups()</a></code> </p>
         </td>
-        <td><p>Load satellite-derived environmental data matched to plankton sampling locations</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_Site.html">pr_get_Site()</a></code> </p>
-        </td>
-        <td><p>Get URL template for AODN GeoServer WFS plankton data access</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_SpeciesInfo.html">pr_get_SpeciesInfo()</a></code> </p>
-        </td>
-        <td><p>Get species information table for Phytoplankton and Zooplankton</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_get_Stations.html">pr_get_Stations()</a></code> </p>
-        </td>
-        <td><p>Import NRS Station information</p></td>
+        <td><p>Aggregate plankton data by functional groups</p></td>
       </tr><tr><td>
           <p><code><a href="pr_get_TaxaAccum.html">pr_get_TaxaAccum()</a></code> </p>
         </td>
         <td><p>Get taxa accumulation data for plotting</p></td>
       </tr><tr><td>
-          <p><code><a href="pr_get_coeffs.html">pr_get_coeffs()</a></code> </p>
+          <p><code><a href="pr_get_FreqMap.html">pr_get_FreqMap()</a></code> </p>
         </td>
-        <td><p>Extract tidy model coefficients for trend analysis</p></td>
+        <td><p>Prepare species occurrence data for frequency mapping</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_LFData.html">pr_get_LFData()</a></code> </p>
+        </td>
+        <td><p>Get NRS larval fish abundance data</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_LTnuts.html">pr_get_LTnuts()</a></code> </p>
+        </td>
+        <td><p>Get NRS long term nutrient timeseries data</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_NRSEnvContour.html">pr_get_NRSEnvContour()</a></code> </p>
+        </td>
+        <td><p>Prepare biogeochemical data for depth-time contour plots</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_info.html">pr_get_info()</a></code> </p>
+        </td>
+        <td><p>Load plankton taxonomic or survey policy information</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_ProgressMapData.html">pr_get_ProgressMapData()</a></code> </p>
+        </td>
+        <td><p>Prepare sampling coverage data for IMOS progress map visualisation</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_DataLocs.html">pr_get_DataLocs()</a></code> </p>
+        </td>
+        <td><p>Extract sample locations and dates for satellite data matching</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_Raw.html">pr_get_Raw()</a></code> </p>
+        </td>
+        <td><p>Download raw unprocessed data files directly from IMOS S3 storage</p></td>
       </tr><tr><td>
           <p><code><a href="pr_get_s3.html">pr_get_s3()</a></code> </p>
         </td>
         <td><p>Download raw data files from IMOS internal S3 storage (advanced users)</p></td>
       </tr><tr><td>
-          <p><code><a href="pr_get_s3site.html">pr_get_s3site()</a></code> </p>
+          <p><code><a href="pr_get_DayNight.html">pr_get_DayNight()</a></code> </p>
         </td>
-        <td><p>Get IMOS S3 bucket URL for internal plankton data storage</p></td>
+        <td><p>Get data for plots of species abundance by day and night using CPR data</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_SOTSMoorData.html">pr_get_SOTSMoorData()</a></code> </p>
+        </td>
+        <td><p>Get data available from SOTS moorings (limited to use in BOO atm, other variables could be added, select from pr_get_SOTSvariables)</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_SOTSvariables.html">pr_get_SOTSvariables()</a></code> </p>
+        </td>
+        <td><p>Get data files available from SOTS moorings</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_PCIData.html">pr_get_PCIData()</a></code> </p>
+        </td>
+        <td><p>Get Phytoplankton Colour Index (PCI) data from CPR samples</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_SatData.html">pr_get_SatData()</a></code> </p>
+        </td>
+        <td><p>Load satellite-derived environmental data matched to plankton sampling locations</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="plotting">Plotting <a href="#plotting" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>Functions for plotting.</p>
@@ -348,10 +284,6 @@
         </td>
         <td><p>Remove flagged data points based on IMOS quality control flags</p></td>
       </tr><tr><td>
-          <p><code><a href="pr_apply_Time.html">pr_apply_Time()</a></code> </p>
-        </td>
-        <td><p>Add Month &amp; year columns to df</p></td>
-      </tr><tr><td>
           <p><code><a href="pr_filter_data.html">pr_filter_data()</a></code> </p>
         </td>
         <td><p>Filter data for plotting functions</p></td>
@@ -366,7 +298,7 @@
       </tr><tr><td>
           <p><code><a href="pr_harmonic.html">pr_harmonic()</a></code> </p>
         </td>
-        <td><p>For use in models to create a circular predictor</p></td>
+        <td><p>Create harmonic functions for circular predictors</p></td>
       </tr><tr><td>
           <p><code><a href="pr_make_climatology.html">pr_make_climatology()</a></code> </p>
         </td>
@@ -376,25 +308,9 @@
         </td>
         <td><p>Fit linear models to plankton time series data</p></td>
       </tr><tr><td>
-          <p><code><a href="pr_relabel.html">pr_relabel()</a></code> </p>
-        </td>
-        <td><p>Format a parameter string for plotting</p></td>
-      </tr><tr><td>
           <p><code><a href="pr_remove_outliers.html">pr_remove_outliers()</a></code> </p>
         </td>
         <td><p>Remove statistical outliers from plankton data</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_rename.html">pr_rename()</a></code> </p>
-        </td>
-        <td><p>Standardise column names in IMOS plankton dataframes</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_reorder.html">pr_reorder()</a></code> </p>
-        </td>
-        <td><p>Order the Station or region in the df by latitude for consistent plotting</p></td>
-      </tr><tr><td>
-          <p><code><a href="pr_title.html">pr_title()</a></code> </p>
-        </td>
-        <td><p>Helper function to reformat Titles</p></td>
       </tr><tr><td>
           <p><code><a href="pr_get_coeffs.html">pr_get_coeffs()</a></code> </p>
         </td>
@@ -431,6 +347,70 @@
           <p><code><a href="mbr.html">mbr</a></code> </p>
         </td>
         <td><p>Marine bioregions (polygons and colours)</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="deprecated">Deprecated <a href="#deprecated" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>These functions are deprecated and will be removed in a future version. Please use [pr_get_data()], [pr_get_trips()], or [pr_get_info()] instead.</p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="pr_get_NRSTrips.html">pr_get_NRSTrips()</a></code> </p>
+        </td>
+        <td><p>Import NRS sampling trip metadata</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_CPRTrips.html">pr_get_CPRTrips()</a></code> </p>
+        </td>
+        <td><p>Get CPR sampling trip metadata</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_NRSData.html">pr_get_NRSData()</a></code> </p>
+        </td>
+        <td><p>Import NRS plankton data</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_CPRData.html">pr_get_CPRData()</a></code> </p>
+        </td>
+        <td><p>Import CPR plankton data</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_NRSChemistry.html">pr_get_NRSChemistry()</a></code> </p>
+        </td>
+        <td><p>Load NRS chemistry data</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_NRSPigments.html">pr_get_NRSPigments()</a></code> </p>
+        </td>
+        <td><p>Load NRS pigments data</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_NRSPico.html">pr_get_NRSPico()</a></code> </p>
+        </td>
+        <td><p>Load NRS picophytoplankton data</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_NRSMicro.html">pr_get_NRSMicro()</a></code> </p>
+        </td>
+        <td><p>Load microbial data</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_NRSTSS.html">pr_get_NRSTSS()</a></code> </p>
+        </td>
+        <td><p>Load NRS Total Suspended Solids data</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_NRSCTD.html">pr_get_NRSCTD()</a></code> </p>
+        </td>
+        <td><p>Load NRS CTD profile data</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_CSChem.html">pr_get_CSChem()</a></code> </p>
+        </td>
+        <td><p>Load Coastal Seas chemistry and nutrient data</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_SpeciesInfo.html">pr_get_SpeciesInfo()</a></code> </p>
+        </td>
+        <td><p>Get species information table for Phytoplankton and Zooplankton</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_PlanktonInfo.html">pr_get_PlanktonInfo()</a></code> </p>
+        </td>
+        <td><p>Load taxonomic information and trait data for plankton species</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_PolicyInfo.html">pr_get_PolicyInfo()</a></code> </p>
+        </td>
+        <td><p>Load policy-relevant plankton indicators and Essential Ocean Variables</p></td>
+      </tr><tr><td>
+          <p><code><a href="pr_get_Stations.html">pr_get_Stations()</a></code> </p>
+        </td>
+        <td><p>Import NRS Station information</p></td>
       </tr></tbody></table></div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

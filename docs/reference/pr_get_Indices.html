@@ -19,7 +19,7 @@ biomass estimates, abundance measures, and community structure indicators."><!--
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.6.7</span>
+        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
       </span>
     </div>
 
@@ -206,8 +206,8 @@ from the LM (Light Microscopy) method at depths &lt;50m are included.</p>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Get NRS phytoplankton indices</span></span></span>
-<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">pr_get_Indices</span><span class="op">(</span><span class="st">"NRS"</span>, <span class="st">"Phytoplankton"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">Parameters</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">pr_get_Indices</span><span class="op">(</span><span class="st">"NRS"</span>, <span class="st">"Phytoplankton"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">Parameters</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "PhytoBiomassCarbon_pgL"    "PhytoAbundance_CellsL"    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [3] "DiatomDinoflagellateRatio" "AvgCellVol_um3"           </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [5] "NoPhytoSpecies_Sample"     "ShannonPhytoDiversity"    </span>
@@ -217,13 +217,13 @@ from the LM (Light Microscopy) method at depths &lt;50m are included.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [13] "DinoflagellateEvenness"   </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get CPR zooplankton indices with expanded bioregion boundaries</span></span></span>
-<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">pr_get_Indices</span><span class="op">(</span><span class="st">"CPR"</span>, <span class="st">"Zooplankton"</span>, near_dist_km <span class="op">=</span> <span class="fl">250</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">pr_get_Indices</span><span class="op">(</span><span class="st">"CPR"</span>, <span class="st">"Zooplankton"</span>, near_dist_km <span class="op">=</span> <span class="fl">250</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get water properties from NRS</span></span></span>
-<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">pr_get_Indices</span><span class="op">(</span><span class="st">"NRS"</span>, <span class="st">"Water"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">pr_get_Indices</span><span class="op">(</span><span class="st">"NRS"</span>, <span class="st">"Water"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Filter for specific parameter and stations</span></span></span>
-<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">pr_get_Indices</span><span class="op">(</span><span class="st">"NRS"</span>, <span class="st">"Zooplankton"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">pr_get_Indices</span><span class="op">(</span><span class="st">"NRS"</span>, <span class="st">"Zooplankton"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="pr_filter_data.html">pr_filter_data</a></span><span class="op">(</span><span class="st">"Biomass_mgm3"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"MAI"</span>, <span class="st">"PHB"</span><span class="op">)</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
