@@ -470,12 +470,12 @@ testthat::test_that("pr_get_Indices rejects SOTS Zooplankton combination", {
 testthat::test_that("pr_filter_data validates df parameter", {
   testthat::expect_error(
     pr_filter_data("not_a_dataframe", "Param", "Station"),
-    regexp = "'df' must be a data frame"
+    regexp = "'dat' must be a data frame"
   )
   
   testthat::expect_error(
     pr_filter_data(list(a = 1, b = 2), "Param", "Station"),
-    regexp = "'df' must be a data frame"
+    regexp = "'dat' must be a data frame"
   )
 })
 
@@ -484,7 +484,7 @@ testthat::test_that("pr_filter_data validates planktonr_dat class", {
   
   testthat::expect_error(
     pr_filter_data(df, "Test", "NSI"),
-    regexp = "'df' must be a planktonr_dat object"
+    regexp = "'dat' must be a planktonr_dat object"
   )
 })
 
@@ -494,7 +494,7 @@ testthat::test_that("pr_filter_data validates empty data frame", {
   
   testthat::expect_error(
     pr_filter_data(empty_df, "Param", "NSI"),
-    regexp = "data frame 'df' is empty"
+    regexp = "data frame 'dat' is empty"
   )
 })
 

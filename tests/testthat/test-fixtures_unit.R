@@ -120,21 +120,21 @@ testthat::test_that("pr_apply_Flags handles multiple flag columns", {
 
 testthat::test_that("pr_apply_Time adds Month_Local column", {
   test_data <- create_test_nrs_indices()
-  result <- pr_apply_Time(test_data)
+  result <- planktonr:::pr_apply_Time(test_data)
   
   testthat::expect_true("Month_Local" %in% names(result))
 })
 
 testthat::test_that("pr_apply_Time adds Year_Local column", {
   test_data <- create_test_nrs_indices()
-  result <- pr_apply_Time(test_data)
+  result <- planktonr:::pr_apply_Time(test_data)
   
   testthat::expect_true("Year_Local" %in% names(result))
 })
 
 testthat::test_that("pr_apply_Time preserves original number of rows", {
   test_data <- create_test_nrs_indices()
-  result <- pr_apply_Time(test_data)
+  result <- planktonr:::pr_apply_Time(test_data)
   
   testthat::expect_equal(nrow(result), nrow(test_data))
 })
@@ -350,8 +350,8 @@ testthat::test_that("planktonr_dat class is preserved through summarise", {
 testthat::test_that("planktonr_dat attributes are accessible", {
   test_data <- create_test_planktonr_dat("phytoplankton")
   
-  testthat::expect_equal(attr(test_data, "survey"), "NRS")
-  testthat::expect_equal(attr(test_data, "type"), "phytoplankton")
+  testthat::expect_equal(attr(test_data, "Survey"), "NRS")
+  testthat::expect_equal(attr(test_data, "Type"), "phytoplankton")
   testthat::expect_equal(attr(test_data, "variable"), "abundance")
 })
 

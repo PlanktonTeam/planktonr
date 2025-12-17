@@ -41,9 +41,10 @@ testthat::test_that("pr_plot_Trends creates ggplot with Year trend for NRS Zoopl
 testthat::test_that("pr_plot_Trends creates ggplot with Month trend for CPR Zooplankton", {
   skip_if_offline()
   testthat::skip_on_cran()
-  testthat::expect_equal(class(pr_get_Indices(Survey = "CPR", Type = "Zooplankton") %>%
+  # suppressWarnings for rank-deficient fit warning from predict() - expected with some real-world data
+  testthat::expect_equal(class(suppressWarnings(pr_get_Indices(Survey = "CPR", Type = "Zooplankton") %>%
                                  dplyr::filter(Parameters == "BiomassIndex_mgm3") %>%
-                                 pr_plot_Trends(Trend = "Month"))[1], "ggplot2::ggplot")
+                                 pr_plot_Trends(Trend = "Month")))[1], "ggplot2::ggplot")
 })
 
 testthat::test_that("pr_plot_Trends creates ggplot with Raw trend for CPR Zooplankton", {
@@ -121,7 +122,7 @@ testthat::test_that("pr_plot_EOVs creates patchwork plot for LTM temperature", {
 testthat::test_that("pr_plot_Enviro creates patchwork plot with no trend for Secchi depth", {
   skip_if_offline()
   testthat::skip_on_cran()
-  testthat::expect_equal(class(pr_get_NRSChemistry() %>%
+  testthat::expect_equal(class(pr_get_data(Survey = "NRS", Type = "Chemistry") %>%
                                  dplyr::filter(Parameters == "SecchiDepth_m") %>%
                                  pr_plot_Enviro(Trend = "None", trans = "identity"))[1], "patchwork")
 })
@@ -129,7 +130,7 @@ testthat::test_that("pr_plot_Enviro creates patchwork plot with no trend for Sec
 testthat::test_that("pr_plot_Enviro creates patchwork plot with smoother trend for Secchi depth", {
   skip_if_offline()
   testthat::skip_on_cran()
-  testthat::expect_equal(class(pr_get_NRSChemistry() %>%
+  testthat::expect_equal(class(pr_get_data(Survey = "NRS", Type = "Chemistry") %>%
                                  dplyr::filter(Parameters == "SecchiDepth_m") %>%
                                  pr_plot_Enviro(Trend = "Smoother", trans = "identity"))[1], "patchwork")
 })
@@ -137,7 +138,7 @@ testthat::test_that("pr_plot_Enviro creates patchwork plot with smoother trend f
 testthat::test_that("pr_plot_Enviro creates patchwork plot with linear trend for Secchi depth", {
   skip_if_offline()
   testthat::skip_on_cran()
-  testthat::expect_equal(class(pr_get_NRSChemistry() %>%
+  testthat::expect_equal(class(pr_get_data(Survey = "NRS", Type = "Chemistry") %>%
                                  dplyr::filter(Parameters == "SecchiDepth_m") %>%
                                  pr_plot_Enviro(Trend = "Linear", trans = "identity"))[1], "patchwork")
 })
@@ -166,13 +167,13 @@ testthat::test_that("pr_plot_ProgressMap creates interactive leaflet map with la
 testthat::test_that("pr_plot_Gantt creates ggplot for CPR trip timeline", {
   skip_if_offline()
   testthat::skip_on_cran()
-  testthat::expect_equal(class(pr_plot_Gantt(pr_get_CPRTrips()))[1], "ggplot2::ggplot")
+  testthat::expect_equal(class(pr_plot_Gantt(pr_get_trips(Survey = "CPR")))[1], "ggplot2::ggplot")
 })
 
 testthat::test_that("pr_plot_Gantt creates ggplot for NRS trip timeline", {
   skip_if_offline()
   testthat::skip_on_cran()
-  testthat::expect_equal(class(pr_plot_Gantt(pr_get_NRSTrips()))[1], "ggplot2::ggplot")
+  testthat::expect_equal(class(pr_plot_Gantt(pr_get_trips(Survey = "NRS")))[1], "ggplot2::ggplot")
 })
 
 testthat::test_that("pr_plot_TaxaAccum creates ggplot for NRS Zooplankton taxa accumulation", {
@@ -221,8 +222,8 @@ testthat::test_that("pr_plot_PCImap creates ggplot for PCI data", {
 testthat::test_that("pr_plot_Voyagemap creates ggplot for GO-SHIP voyage tracks", {
   skip_if_offline()
   testthat::skip_on_cran()
-  testthat::expect_equal(class(pr_plot_Voyagemap(pr_get_NRSMicro(Survey = "GO-SHIP"),
-                                                 pr_get_NRSMicro(Survey = "GO-SHIP") %>% dplyr::slice(1:5000),
+  testthat::expect_equal(class(pr_plot_Voyagemap(pr_get_data(Survey = "GO-SHIP", Type = "Micro"),
+                                                 pr_get_data(Survey = "GO-SHIP", Type = "Micro") %>% dplyr::slice(1:5000),
                                                  Country = c("Australia", "New Zealand")))[1], "ggplot2::ggplot")
 })
 
@@ -230,7 +231,7 @@ testthat::test_that("pr_plot_scatter creates ggplot for microbial data scatter p
   skip_if_offline()
   testthat::skip_on_cran()
   testthat::expect_equal(class(
-    planktonr::pr_get_NRSMicro() %>%
+    planktonr::pr_get_data(Survey = "NRS", Type = "Micro") %>%
       tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
       dplyr::filter(StationCode %in% c("NSI", "PHB")) %>%
       tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = mean) %>%
@@ -241,7 +242,7 @@ testthat::test_that("pr_plot_box creates ggplot for Coastal microbial data boxpl
   skip_if_offline()
   testthat::skip_on_cran()
   testthat::expect_equal(class(
-    planktonr::pr_get_NRSMicro(Survey = "Coastal") %>%
+    planktonr::pr_get_data(Survey = "Coastal", Type = "Micro") %>%
       tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
       dplyr::filter(StationCode %in% c("DEE", "DEB")) %>%
       tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = mean) %>%
@@ -252,7 +253,7 @@ testthat::test_that("pr_plot_latitude creates patchwork plot for GO-SHIP Archaea
   skip_if_offline()
   testthat::skip_on_cran()
   testthat::expect_equal(class(
-    pr_get_NRSMicro(Survey = "GO-SHIP") %>%
+    pr_get_data(Survey = "GO-SHIP", Type = "Micro") %>%
       dplyr::filter(Parameters == 'Archaea_unique_ASVs', SampleDepth_m < 101) %>%
       pr_plot_latitude(na.fill = TRUE))[1], "patchwork")
 })

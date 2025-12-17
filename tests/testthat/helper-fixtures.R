@@ -266,7 +266,7 @@ create_test_planktonr_dat <- function(Type = "phytoplankton") {
     data,
     class = c("planktonr_dat", "data.frame"),
     Survey = "NRS",
-    Type = type,
+    Type = Type,
     variable = "abundance"
   )
 }

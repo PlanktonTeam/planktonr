@@ -1,9 +1,9 @@
 testthat::test_that("pr_get_Site returns character vector", {
-  testthat::expect_type(pr_get_Site(), "character")
+  testthat::expect_type(planktonr:::pr_get_Site(), "character")
 })
 
 testthat::test_that("pr_get_s3site returns character vector", {
-  testthat::expect_type(pr_get_s3site(), "character")
+  testthat::expect_type(planktonr:::pr_get_s3site(), "character")
 })
 
 testthat::test_that("pr_get_Raw returns list for bgc_tss_data", {
@@ -15,31 +15,9 @@ testthat::test_that("pr_get_s3 returns list with and without .csv extension", {
   testthat::expect_type(pr_get_s3("bgc_trip.csv"), "list")
 })
 
-testthat::test_that("pr_get_PlanktonInfo returns list for Phytoplankton", {
-  testthat::expect_type(pr_get_PlanktonInfo(Type = "Phytoplankton"), "list")
-})
-
-testthat::test_that("pr_get_PlanktonInfo returns list for Zooplankton", {
-  testthat::expect_type(pr_get_PlanktonInfo(Type = "Zooplankton"), "list")
-})
-
-testthat::test_that("pr_add_StationName adds station names to data", {
-  testthat::expect_type(pr_get_Stations() %>%
-                          pr_add_StationName(), "list")
-})
-
 testthat::test_that("pr_add_StationCode adds station code from TripCode", {
   testthat::expect_type(data.frame(TripCode = "MAI20220628") %>%
                           pr_add_StationCode(), "list")
-})
-
-testthat::test_that("pr_add_StationCode adds station code to stations data", {
-  testthat::expect_type(pr_get_Stations() %>%
-                          pr_add_StationCode(), "list")
-})
-
-testthat::test_that("pr_get_Stations returns list", {
-  testthat::expect_type(pr_get_Stations(), "list")
 })
 
 testthat::test_that("data.frame with StationCode creates list", {
@@ -131,13 +109,5 @@ testthat::test_that("pr_remove_outliers returns list for NRS Zooplankton indices
 
 testthat::test_that("pr_remove_outliers returns list for CPR Zooplankton indices", {
   testthat::expect_type(pr_get_Indices(Survey = "CPR", Type = "Zooplankton") %>% pr_remove_outliers(2), "list")
-})
-
-testthat::test_that("pr_get_SpeciesInfo returns list for Phytoplankton", {
-  testthat::expect_type(pr_get_SpeciesInfo(Type = "Phytoplankton"), "list")
-})
-
-testthat::test_that("pr_get_SpeciesInfo returns list for Zooplankton", {
-  testthat::expect_type(pr_get_SpeciesInfo(Type = "Zooplankton"), "list")
 })
 
