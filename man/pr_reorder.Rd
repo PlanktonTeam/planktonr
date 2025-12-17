@@ -15,10 +15,4 @@ An ordered dataframe
 \description{
 Order the Station or region in the df by latitude for consistent plotting
 }
-\examples{
-df <- data.frame(StationName = c('Port Hacking', 'Maria Island', 'Southern Ocean Time Series',
-'North Stradbroke Island','Esperance', 'Ningaloo', "Darwin",
-'Rottnest Island',  'Kangaroo Island', "Yongala")) \%>\%
-planktonr_dat(Survey = "NRS")
-df <- pr_reorder(df)
-}
+\keyword{internal}

@@ -4,7 +4,7 @@
 #' long-term trends and seasonal cycles. This function is typically used before 
 #' extracting coefficients or plotting trends with model predictions.
 #'
-#' @param df A dataframe from [pr_get_EOVs()], [pr_get_Indices()], or similar 
+#' @param dat A dataframe from [pr_get_EOVs()], [pr_get_Indices()], or similar
 #'   functions containing time series data. Must contain only one parameter at a time.
 #'
 #' @details
@@ -44,47 +44,47 @@
 #'
 #' @examples
 #' # Fit models to zooplankton biomass
-#' df <- pr_get_EOVs(Survey = "NRS") %>%
+#' dat <- pr_get_EOVs(Survey = "NRS") %>%
 #'   dplyr::filter(Parameters == "Biomass_mgm3") %>%
 #'   pr_remove_outliers(2) %>%
 #'   pr_model_data()
-#' 
+#'
 #' # Extract and view model coefficients
-#' models <- pr_get_model(df)
+#' models <- pr_get_model(dat)
 #' coeffs <- pr_get_coeffs(models)
 #' print(coeffs)
-#' 
+#'
 #' # Fit models to CPR phytoplankton diversity
-#' df_cpr <- pr_get_EOVs(Survey = "CPR") %>%
+#' dat_cpr <- pr_get_EOVs(Survey = "CPR") %>%
 #'   dplyr::filter(Parameters == "ShannonPhytoDiversity") %>%
 #'   pr_remove_outliers(2) %>%
 #'   pr_model_data()
-pr_model_data <- function(df){
+pr_model_data <- function(dat){
 
   # Do one parameter at a time at the moment.
   assertthat::assert_that(
-    length(unique(df$Parameters)) == 1,
+    length(unique(dat$Parameters)) == 1,
     msg = "Only one parameter at a time can be run."
   )
 
   # Send a message if SOTS data is included that to check sample depths.
-  if("StationCode" %in% names(df)) {
-    if(any(grepl("SOTS", df$StationCode))){
+  if("StationCode" %in% names(dat)) {
+    if(any(grepl("SOTS", dat$StationCode))){
       cat("SOTS samples are taken at varying depths, this model does not account for depth, check your data input")
     }
   }
 
-  Survey <- pr_get_survey(df)
+  Survey <- pr_get_survey(dat)
 
   if(Survey == "LTM") {
-    df <- df %>%
+    dat <- dat %>%
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                        .by = tidyselect::all_of(c("StationCode", "StationName", "SampleTime_Local",
                                                   "anomaly", "Year_Local", "Month_Local", "Parameters")))
   }
 
   # Prepare the data
-  lmdat <- df %>%
+  lmdat <- dat %>%
     dplyr::rename(SampleDate = "SampleTime_Local") %>%
     dplyr::mutate(Month = .data$Month_Local * 2 * 3.142 / 12) %>%
     droplevels() %>%
@@ -97,7 +97,7 @@ pr_model_data <- function(df){
     site = rlang::sym("StationName")
   }
 
-  site_names <- df %>%
+  site_names <- dat %>%
     dplyr::pull(!!site) %>%
     unique() %>%
     as.character()
@@ -108,9 +108,9 @@ pr_model_data <- function(df){
                            data = lmdat %>% dplyr::filter(!!site == .x)))
 
   # Store the model object as a Model attribute with the name of the station
-  attr(df, "Model") <- model_list
+  attr(dat, "Model") <- model_list
 
-  return(df)
+  return(dat)
 
 } # End function
 
@@ -163,12 +163,12 @@ pr_model_data <- function(df){
 #'
 #' @examples
 #' # Fit models and extract coefficients
-#' df <- planktonr::pr_get_EOVs(Survey = "NRS") %>%
+#' dat <- planktonr::pr_get_EOVs(Survey = "NRS") %>%
 #'   dplyr::filter(Parameters == "Biomass_mgm3") %>%
 #'   pr_remove_outliers(2) %>%
 #'   pr_model_data()
-#' 
-#' models <- pr_get_model(df)
+#'
+#' models <- pr_get_model(dat)
 #' coeffs <- pr_get_coeffs(models)
 #' 
 #' # View only Year trends

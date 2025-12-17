@@ -81,21 +81,23 @@ testthat::test_that("pr_filter_data errors when parameter column missing", {
 
 # ------------------------------------------------------------------------------
 # Data retrieval functions
+# Note: Tests for deprecated functions (pr_get_NRSData, pr_get_CPRData)
+# have been moved to test-utils_data.R using pr_get_data()
 # ------------------------------------------------------------------------------
 
-testthat::test_that("pr_get_NRSData errors on invalid Type parameter", {
+testthat::test_that("pr_get_data errors on invalid Survey parameter", {
   skip_if_offline()
-  testthat::expect_error(pr_get_NRSData(Type = "invalid_type", Variable = "abundance"))
+  testthat::expect_error(pr_get_data(Survey = "InvalidSurvey", Type = "Phytoplankton"))
 })
 
-testthat::test_that("pr_get_NRSData errors on invalid Variable parameter", {
+testthat::test_that("pr_get_data errors on invalid Type parameter", {
   skip_if_offline()
-  testthat::expect_error(pr_get_NRSData(Type = "Phytoplankton", Variable = "invalid_var"))
+  testthat::expect_error(pr_get_data(Survey = "NRS", Type = "invalid_type"))
 })
 
-testthat::test_that("pr_get_CPRData errors on invalid Type parameter", {
+testthat::test_that("pr_get_data errors on invalid Variable parameter", {
   skip_if_offline()
-  testthat::expect_error(pr_get_CPRData(Type = "invalid_type", Variable = "abundance"))
+  testthat::expect_error(pr_get_data(Survey = "NRS", Type = "Phytoplankton", Variable = "invalid_var"))
 })
 
 testthat::test_that("pr_get_Indices errors on invalid Survey parameter", {

@@ -4,10 +4,10 @@
 \alias{pr_plot_ProgressMap}
 \title{Create interactive map showing IMOS plankton sampling coverage and progress}
 \usage{
-pr_plot_ProgressMap(df, interactive = FALSE, labels = TRUE)
+pr_plot_ProgressMap(dat, interactive = FALSE, labels = TRUE)
 }
 \arguments{
-\item{df}{output from pr_get_ProgressMapData}
+\item{dat}{output from pr_get_ProgressMapData}
 
 \item{interactive}{Should the plot be interactive with leaflet?}
 
@@ -20,6 +20,6 @@ a plot of IMOS progress
 Create interactive map showing IMOS plankton sampling coverage and progress
 }
 \examples{
-df <- pr_get_ProgressMapData("NRS")
-plot <- pr_plot_ProgressMap(df)
+dat <- pr_get_ProgressMapData("NRS")
+plot <- pr_plot_ProgressMap(dat)
 }

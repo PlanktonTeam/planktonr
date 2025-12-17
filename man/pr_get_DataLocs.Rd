@@ -10,11 +10,11 @@ pr_get_DataLocs(Survey = "all")
 \item{Survey}{NRS, CPR or all}
 }
 \value{
-df with latitude, longitude and Date
+dat with latitude, longitude and Date
 }
 \description{
 Get data for satellite matching
 }
 \examples{
-df <- pr_get_DataLocs("NRS")
+dat <- pr_get_DataLocs("NRS")
 }

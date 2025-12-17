@@ -3,10 +3,7 @@
 #'
 #' Internal function to load the location of the raw plankton data files.
 #' @return A string with location of raw plankton data
-#' @export
-#' @examples
-#' file_loc <- pr_get_Site()
-
+#' @keywords internal
 pr_get_Site <- function(){
   raw <-"http://geoserver-123.aodn.org.au/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=imos:LAYER_NAME&outputFormat=csv-with-metadata-header"
   # raw = "https://geoserver-portal.aodn.org.au/geoserver/ows?typeName=LAYER_NAME&SERVICE=WFS&outputFormat=csv&REQUEST=GetFeature&VERSION=1.0.0&userId=Guest"
@@ -18,10 +15,7 @@ pr_get_Site <- function(){
 #' Internal function to load the location of the s3 plankton data files. Browse files here:
 #' http://imos-data.s3-website-ap-southeast-2.amazonaws.com/?prefix=IMOS/BGC_DB/harvested_from_CSIRO/
 #' @return A string with location of s3 plankton data
-#' @export
-#' @examples
-#' file_loc <- pr_get_s3site()
-
+#' @keywords internal
 pr_get_s3site <- function(){
   raw <-"https://s3-ap-southeast-2.amazonaws.com/imos-data/IMOS/BGC_DB/harvested_from_CSIRO/"
 }
@@ -44,6 +38,12 @@ pr_get_s3site <- function(){
 #' dat <- pr_get_Raw("bgc_tss_data")
 #'
 pr_get_Raw <- function(file){
+
+  # Input validation
+  assertthat::assert_that(
+    is.character(file) && length(file) == 1,
+    msg = "'file' must be a single character string specifying the data file to retrieve."
+  )
 
   if (file == "bgc_chemistry_data"){ # additional probs possible in chemistry. No WC.
     col_types <- list(Project = readr::col_character(),
@@ -137,6 +137,12 @@ pr_get_Raw <- function(file){
 #' dat <- pr_get_s3("cpr_zoop_raw")
 pr_get_s3 <- function(file){
 
+  # Input validation
+  assertthat::assert_that(
+    is.character(file) && length(file) == 1,
+    msg = "'file' must be a single character string specifying the S3 file to retrieve."
+  )
+
   col_types = list()
 
   # The file extension is not needed here.
@@ -157,74 +163,38 @@ pr_get_s3 <- function(file){
 
 #' Load taxonomic information and trait data for plankton species
 #'
-#' Retrieve reference tables containing taxonomic classification, size ranges,
-#' carbon content, and other trait information for phytoplankton or zooplankton
-#' taxa observed in IMOS surveys.
+#' @description
+#' `r lifecycle::badge("deprecated")`
 #'
-#' @param Type Which plankton group to retrieve:
-#'   * `"Zooplankton"` - Information on copepods, appendicularians, salps, etc. (default)
-#'   * `"Phytoplankton"` - Information on diatoms, dinoflagellates, ciliates, etc.
+#' `pr_get_PlanktonInfo()` was deprecated in planktonr 0.7.0 in favour of
+#' [pr_get_info()] which provides a unified interface for both plankton
+#' taxonomic information and survey policy information.
 #'
-#' @details
-#' ## Data Contents
-#' The information tables typically include:
-#' * **Taxonomic classification**: Phylum, class, order, family, genus, species
-#' * **Size information**: Length and/or width ranges (micrometres)
-#' * **Biovolume**: Estimated cell/organism volume (µm³)
-#' * **Carbon content**: Biomass conversion factors (µg C per individual or per cell)
-#' * **Functional groups**: Ecological groupings used in [pr_get_FuncGroups()]
-#' * **WoRMS identifiers**: AphiaID for linking to World Register of Marine Species
+#' @param Type The type of plankton: "Phytoplankton" or "Zooplankton"
+#'   (also accepts "P", "Z", "Phyto", "Zoop")
 #'
-#' ## Use Cases
-#' These reference tables are useful for:
-#' * Converting abundance to biomass or carbon
-#' * Understanding size distributions of plankton communities
-#' * Linking taxa to functional roles
-#' * Checking taxonomic classification and nomenclature
-#' * Quality control - identifying potentially misidentified taxa
+#' @return A dataframe with taxonomic and trait information.
 #'
-#' ## Size-Based Carbon Conversions
-#' Many analyses require converting abundance counts to biomass or carbon. The
-#' trait data in these tables enable such conversions using established
-#' allometric relationships between organism size and carbon content.
-#'
-#' ## Updates
-#' These tables are curated alongside IMOS data and updated as:
-#' * New taxa are identified in samples
-#' * Taxonomic classifications change
-#' * Improved trait measurements become available
-#'
-#' @return A dataframe with taxonomic and trait information. Columns vary by
-#'   plankton type but typically include TaxonName, Classification, Size_um,
-#'   CarbonContent_ugC, FunctionalGroup, and WoRMS_AphiaID.
-#'
-#' @seealso
-#' * [pr_get_NRSData()], [pr_get_CPRData()] for abundance data that can be
-#'   linked to these traits
-#' * [pr_get_FuncGroups()] which uses functional group assignments from these tables
+#' @seealso [pr_get_info()] for the preferred interface
 #'
 #' @export
+#' @keywords internal
 #'
 #' @examples
-#' # Get zooplankton trait information
+#' \dontrun{
+#' # Instead of:
 #' zoo_info <- pr_get_PlanktonInfo(Type = "Zooplankton")
 #'
-#' # Get phytoplankton trait information
-#' phyto_info <- pr_get_PlanktonInfo(Type = "Phytoplankton")
-#'
-pr_get_PlanktonInfo <- function(Type = "Zooplankton"){
-
-  if (Type == "Zooplankton"){
-    df <- pr_get_s3("zoopinfo") %>%
-      pr_rename()
-  } else if (Type == "Phytoplankton"){
-    df <- pr_get_s3("phytoinfo") %>%
-      pr_rename()
-  }
-
-  # df <- planktonr_dat(df, type = Type, survey = NULL, variable = NULL)
-
-  return(df)
+#' # Use:
+#' zoo_info <- pr_get_info(Source = "Zooplankton")
+#' }
+pr_get_PlanktonInfo <- function(Type = "Zooplankton") {
+  lifecycle::deprecate_warn(
+    when = "0.7.0",
+    what = "pr_get_PlanktonInfo()",
+    with = "pr_get_info()"
+  )
+  pr_get_info(Source = Type)
 }
 
 
@@ -259,16 +229,28 @@ pr_get_PlanktonInfo <- function(Type = "Zooplankton"){
 #'
 #' @seealso
 #' * [pr_add_StationCode()] for the reverse conversion
-#' * [pr_get_Stations()] for station metadata
+#' * [pr_get_info()] for station metadata
 #'
 #' @export
 #'
 #' @examples
-#' # Add station names to station metadata
-#' df <- pr_get_Stations() %>%
+#' # Add station names to data with StationCode
+#' df <- data.frame(StationCode = c("PHB", "MAI", "NSI")) %>%
 #'   pr_add_StationName()
 #'
 pr_add_StationName <- function(df){
+
+  # Input validation
+  assertthat::assert_that(
+    is.data.frame(df),
+    msg = "'df' must be a data frame."
+  )
+
+  assertthat::assert_that(
+    "StationCode" %in% colnames(df),
+    msg = "'df' must contain a 'StationCode' column."
+  )
+
   df <- df %>%
     dplyr::mutate(StationName = dplyr::case_when(
       StationCode == "DAR" ~ "Darwin",
@@ -322,21 +304,32 @@ pr_add_StationName <- function(df){
 #'
 #' @seealso
 #' * [pr_add_StationName()] for the reverse conversion
-#' * [pr_get_Stations()] for station metadata
-#' * [pr_get_NRSTrips()] which returns data with trip codes
+#' * [pr_get_info()] for station metadata
+#' * [pr_get_trips()] which returns data with trip codes
 #'
 #' @export
 #'
 #' @examples
 #' # Add station codes from station names
-#' df <- pr_get_Stations() %>%
+#' df <- data.frame(StationName = c("Port Hacking", "Maria Island")) %>%
 #'   pr_add_StationCode()
 #'
 #' # Extract station codes from trip codes
-#' df <- pr_get_NRSTrips() %>%
+#' df <- data.frame(TripCode = c("PHB20220101", "MAI20220115")) %>%
 #'   pr_add_StationCode()
 #'
 pr_add_StationCode <- function(df){
+
+  # Input validation
+  assertthat::assert_that(
+    is.data.frame(df),
+    msg = "'df' must be a data frame."
+  )
+
+  assertthat::assert_that(
+    "StationName" %in% colnames(df) || "TripCode" %in% colnames(df),
+    msg = "'df' must contain either a 'StationName' or 'TripCode' column."
+  )
 
   if("StationName" %in% colnames(df)){
     df <- df %>%
@@ -369,15 +362,14 @@ pr_add_StationCode <- function(df){
 #' @param df A dataframe that contains StationName, StationCode or BioRegion
 #'
 #' @return An ordered dataframe
-#' @export
-#'
-#' @examples
-#' df <- data.frame(StationName = c('Port Hacking', 'Maria Island', 'Southern Ocean Time Series',
-#' 'North Stradbroke Island','Esperance', 'Ningaloo', "Darwin",
-#' 'Rottnest Island',  'Kangaroo Island', "Yongala")) %>%
-#' planktonr_dat(Survey = "NRS")
-#' df <- pr_reorder(df)
+#' @keywords internal
 pr_reorder <- function(df){
+
+  # Input validation
+  assertthat::assert_that(
+    inherits(df, "planktonr_dat"),
+    msg = "'df' must be a planktonr_dat object."
+  )
 
   if (pr_get_survey(df) == "NRS"){
 
@@ -464,6 +456,24 @@ pr_reorder <- function(df){
 
 pr_apply_Flags <- function(df, flag_col){
 
+  # Input validation
+  assertthat::assert_that(
+    is.data.frame(df),
+    msg = "'df' must be a data frame."
+  )
+
+  if (!missing(flag_col)) {
+    assertthat::assert_that(
+      is.character(flag_col) && length(flag_col) == 1,
+      msg = "'flag_col' must be a single character string specifying the flag column name."
+    )
+
+    assertthat::assert_that(
+      flag_col %in% colnames(df),
+      msg = paste0("'flag_col' ('", flag_col, "') must be a column in 'df'.")
+    )
+  }
+
   # qc_scheme_short_name,flag_value,flag_meaning,flag_description
   # IMOS IODE,0,No QC performed,The level at which all data enter the working archive. They have not yet been quality controlled
   # IMOS IODE,1,Good data,Top quality data in which no malfunctions have been identified and all real features have been verified during the quality control process
@@ -507,14 +517,19 @@ pr_apply_Flags <- function(df, flag_col){
 #'
 #' @param df A dataframe containing time column
 #' @return A dataframe with extra date columns
-#' @export
-#'
-
-#'
-#' @examples
-#' df <- pr_get_Indices("NRS", "Phytoplankton") %>%
-#'   pr_apply_Time()
+#' @keywords internal
 pr_apply_Time <- function(df){
+
+  # Input validation
+  assertthat::assert_that(
+    is.data.frame(df),
+    msg = "'df' must be a data frame."
+  )
+
+  assertthat::assert_that(
+    all(c("SampleTime_Local", "Latitude", "Longitude") %in% colnames(df)),
+    msg = "'df' must contain 'SampleTime_Local', 'Latitude', and 'Longitude' columns."
+  )
 
   df <- df %>%
     dplyr::mutate(Year_Local = lubridate::year(.data$SampleTime_Local),
@@ -586,6 +601,17 @@ pr_apply_Time <- function(df){
 #' nrow(df_before) - nrow(df_after)
 pr_remove_outliers <- function(df, x){
 
+  # Input validation
+  assertthat::assert_that(
+    inherits(df, "planktonr_dat"),
+    msg = "'df' must be a planktonr_dat object."
+  )
+
+  assertthat::assert_that(
+    is.numeric(x) && length(x) == 1 && x > 0,
+    msg = "'x' must be a single positive number specifying standard deviations from the mean."
+  )
+
   Survey <- pr_get_survey(df)
   Type <- pr_get_type(df)
   Variable <- pr_get_variable(df)
@@ -644,29 +670,26 @@ pr_remove_outliers <- function(df, x){
 #'               "CorrectSpecies2", "Incorrect spp., Incorrect/Species"))
 #' df <- pr_filter_Species(df)
 pr_filter_Species <- function(df){
+
+  # Input validation
+  assertthat::assert_that(
+    is.data.frame(df),
+    msg = "'df' must be a data frame."
+  )
+
+  assertthat::assert_that(
+    "Species" %in% colnames(df),
+    msg = "'df' must contain a 'Species' column."
+  )
+
   pat <- c("spp.", "cf.", "/", "grp", "complex", "type")
   df <- df %>%
     dplyr::filter(stringr::str_detect(.data$Species, paste(pat, collapse = "|"), negate = TRUE))
 }
 
 
-
-# Add local Time
-#
-# This function adds the local time based on timezone.
-# @param df Dataframe with UTC Time
-#
-# @return A datafrane with local time added
-# @export
-#
-# @examples
-# df <- data.frame(tz = c("Australia/Perth", "Australia/Brisbane"),
-#                SampleTime_UTC = c(lubridate::now(), lubridate::now()))
-# df <- pr_add_LocalTime(df)
-# pr_add_LocalTime <- function(df){
-#   df <- purrr::map2(df$SampleTime_UTC, df$tz, function(x,y) lubridate::with_tz(x, tzone = y))
-# }
-
+#' Create harmonic functions for circular predictors
+#'
 #' For use in models to create a circular predictor
 #'
 #' This function is for use in models to create a circular predictor
@@ -682,6 +705,18 @@ pr_filter_Species <- function(df){
 #' df <- pr_harmonic(theta = 2, k = 1)
 
 pr_harmonic <- function (theta, k = 4) {
+
+  # Input validation
+  assertthat::assert_that(
+    is.numeric(theta),
+    msg = "'theta' must be a numeric vector specifying angles in radians."
+  )
+
+  assertthat::assert_that(
+    is.numeric(k) && length(k) == 1 && k > 0 && k == floor(k),
+    msg = "'k' must be a single positive integer specifying degrees of freedom."
+  )
+
   X <- matrix(0, length(theta), 2 * k)
   nam <- as.vector(outer(c("c", "s"), 1:k, paste, sep = ""))
   dimnames(X) <- list(names(theta), nam)
@@ -701,11 +736,24 @@ pr_harmonic <- function (theta, k = 4) {
 #' @param Type `zooplankton` or `phytoplankton`
 #'
 #' @return a string vector of column name
-#' @export
-#'
-#' @examples
-#' str <- pr_get_NonTaxaColumns(Survey = "NRS", Type = "Zooplankton")
+#' @keywords internal
 pr_get_NonTaxaColumns <- function(Survey = "NRS", Type = "Zooplankton"){
+
+  # Input validation
+  assertthat::assert_that(
+    is.character(Survey) && length(Survey) == 1,
+    msg = "'Survey' must be a single character string. Valid options are 'NRS' or 'CPR'."
+  )
+
+  assertthat::assert_that(
+    Survey %in% c("NRS", "CPR"),
+    msg = "'Survey' must be one of 'NRS' or 'CPR'."
+  )
+
+  assertthat::assert_that(
+    is.character(Type) && length(Type) == 1,
+    msg = "'Type' must be a single character string. Valid options are 'Phytoplankton' or 'Zooplankton'."
+  )
 
   Type <- pr_check_type(Type)
 
@@ -737,50 +785,37 @@ pr_get_NonTaxaColumns <- function(Survey = "NRS", Type = "Zooplankton"){
 
 #' Get species information table for Phytoplankton and Zooplankton
 #'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' `pr_get_SpeciesInfo()` was deprecated in planktonr 0.7.0 in favour of
+#' [pr_get_info()] which provides a unified interface.
+#'
 #' @param Type Phytoplankton (P) or Zooplankton (Z)
 #'
 #' @return A dataframe of species information
 #' @export
+#' @keywords internal
+#'
+#' @seealso [pr_get_info()] for the preferred interface
 #'
 #' @examples
+#' \dontrun{
+#' # Instead of:
 #' dat <- pr_get_SpeciesInfo(Type = "Phytoplankton")
-#' dat <- pr_get_SpeciesInfo(Type = "Zooplankton")
+#'
+#' # Use:
+#' dat <- pr_get_info(Source = "Phytoplankton")
+#' }
 pr_get_SpeciesInfo <- function(Type = "Zooplankton"){
-
-  Type <- pr_check_type(Type)
-
-  if (Type == "Phytoplankton"){file = "phytoinfo"}
-  if (Type == "Zooplankton"){file = "zoopinfo"}
-
-  dat <- pr_get_s3(file) %>%
-    pr_rename()
-
+  lifecycle::deprecate_warn(
+    when = "0.7.0",
+    what = "pr_get_SpeciesInfo()",
+    with = "pr_get_info()"
+  )
+  pr_get_info(Source = Type)
 }
 
-
-
-
-# Internal function to check Type
-#
-# @param Type Character string
-#
-# @return "Zooplankton" or "Phytoplankton"
-#
-# @examples
-# pr_get_Type("phytoplankton")
-# pr_get_Type("z")
-# pr_get_Type <- function(Type){
-#
-#   zoop_type <- c("Zooplankton", "z", "Zooplankton", "Zooplankton")
-#   phyto_type <- c("Phytoplankton", "p", "phytoplankton", "Phytoplankton")
-#
-#   if(Type %in% zoop_type){
-#     Type = "Zooplankton"
-#   } else if (Type %in% phyto_type){
-#     Type = "Phytoplankton"
-#   }
-#
-# }
 
 
 #' Helper function to reformat Titles
@@ -788,11 +823,14 @@ pr_get_SpeciesInfo <- function(Type = "Zooplankton"){
 #' @param tit String to reformat.
 #'
 #' @return A reformatted string
-#' @export
-#'
-#' @examples
-#' new_tit = pr_title("Phytoplankton")
+#' @keywords internal
 pr_title <- function(tit){
+
+  # Input validation
+  assertthat::assert_that(
+    is.character(tit) && length(tit) == 1,
+    msg = "'tit' must be a single character string."
+  )
 
   if (tit == "Zooplankton"){
     tit = "Zooplankton"

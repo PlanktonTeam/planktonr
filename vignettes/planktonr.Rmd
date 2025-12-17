@@ -76,8 +76,8 @@ The sampling at the National Reference Stations is predominantly monthly. Darwin
 The Continuous Plankton Recorder samples quarterly through our main areas of interest (the Great Barrier Reef and the East Australian Current) and on a more ad-hoc basis in other regions, depending on ship availability.
 
 ```{r}
-datCPR <- pr_get_CPRTrips()
-datNRS <- pr_get_NRSTrips()
+datCPR <- pr_get_trips(Survey = "CPR")
+datNRS <- pr_get_trips(Survey = "NRS")
 
 ggCPR <- planktonr::pr_plot_Gantt(datCPR)
 ggNRS <- planktonr::pr_plot_Gantt(datNRS)

@@ -4,7 +4,7 @@
 \alias{pr_relabel}
 \title{Format a parameter string for plotting}
 \usage{
-pr_relabel(s, style = "ggplot", named = FALSE)
+pr_relabel(s, style = "ggplot", named = FALSE, quiet = FALSE)
 }
 \arguments{
 \item{s}{A string for reformatting}
@@ -12,6 +12,8 @@ pr_relabel(s, style = "ggplot", named = FALSE)
 \item{style}{The style of plotting the string will be used for}
 
 \item{named}{Should the output be an \code{unnamed} (FALSE) or \code{named} (TRUE) vector? Only available for \code{style = "simple"} and \code{style = "plotly"}}
+
+\item{quiet}{Logical. If \code{TRUE}, suppresses warnings about missing replacements. Default is \code{FALSE}.}
 }
 \value{
 A reformatted expression call (ggplot)
@@ -19,7 +21,4 @@ A reformatted expression call (ggplot)
 \description{
 Format a parameter string for plotting
 }
-\examples{
-pr_relabel("Chla_mgm3", style = "ggplot")
-
-}
+\keyword{internal}

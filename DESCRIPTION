@@ -1,6 +1,6 @@
 Package: planktonr
 Title: Analysis and Visualisation of Plankton Data
-Version: 0.6.6
+Version: 0.7.0
 Authors@R: c(
     person("Jason D.", "Everett", , "jase.everett@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-6681-8054")),
@@ -28,6 +28,7 @@ Imports:
     htmltools,
     leaflegend,
     leaflet,
+    lifecycle,
     lubridate,
     lutz,
     magrittr,

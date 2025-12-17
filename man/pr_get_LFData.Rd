@@ -95,16 +95,16 @@ The \code{QC_flag} column indicates data quality:
 }
 \examples{
 # Load larval fish data
-df <- pr_get_LFData()
+dat <- pr_get_LFData()
 
 # Check which families are most common
-df \%>\%
+dat \%>\%
   dplyr::group_by(Species) \%>\%
   dplyr::summarise(TotalCount = sum(Count, na.rm = TRUE)) \%>\%
   dplyr::arrange(dplyr::desc(TotalCount))
 
 # Abundance at Maria Island
-df \%>\%
+dat \%>\%
   dplyr::filter(StationName == "Maria Island",
                 QC_flag == 1) \%>\%
   dplyr::group_by(Year_Local, Species2) \%>\%

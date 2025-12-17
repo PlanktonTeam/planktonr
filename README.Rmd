@@ -13,7 +13,8 @@ knitr::opts_chunk$set(
 )
 ```
 
-# planktonr <a href='https://github.com/PlanktonTeam/planktonr'><img src='man/figures/planktonr.png' align="right" width="139px" /></a>
+# planktonr <a href="https://github.com/PlanktonTeam/planktonr"><img src="man/figures/planktonr.png" align="right" width="139px" /></a>
+
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![Windows](https://github.com/PlanktonTeam/planktonr/actions/workflows/Windows.yaml/badge.svg)](https://github.com/PlanktonTeam/planktonr/actions/workflows/Windows.yaml)

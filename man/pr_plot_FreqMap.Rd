@@ -4,10 +4,10 @@
 \alias{pr_plot_FreqMap}
 \title{Map seasonal occurrence frequency for individual plankton species}
 \usage{
-pr_plot_FreqMap(df, species, interactive = TRUE)
+pr_plot_FreqMap(dat, species, interactive = TRUE)
 }
 \arguments{
-\item{df}{dataframe of format similar to output of pr_get_fmap_data()}
+\item{dat}{dataframe of format similar to output of pr_get_fmap_data()}
 
 \item{species}{species to plot}
 
@@ -20,11 +20,11 @@ a plot of frequency of occurrence of chosen species
 Map seasonal occurrence frequency for individual plankton species
 }
 \examples{
-df <- data.frame(Longitude = c(110, 130, 155, 150), Latitude = c(-10, -35, -27, -45),
+dat <- data.frame(Longitude = c(110, 130, 155, 150), Latitude = c(-10, -35, -27, -45),
                  freqfac = as.factor(c("Absent", "Seen in 25\%",'50\%', '75\%')),
                  Season = c("December - February","March - May",
                  "June - August","September - November"),
                  Taxon = 'Acartia danae',
                  Survey = 'CPR')
-plot <- pr_plot_FreqMap(df, species = 'Acartia danae', interactive = TRUE)
+plot <- pr_plot_FreqMap(dat, species = 'Acartia danae', interactive = TRUE)
 }

@@ -16,5 +16,5 @@ dataframe for plotting with pr_plot_FreqMap
 Prepare species occurrence data for frequency mapping
 }
 \examples{
-df <- pr_get_FreqMap("Zooplankton")
+dat <- pr_get_FreqMap("Zooplankton")
 }

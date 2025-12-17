@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-#' df <- pr_get_FreqMap("Zooplankton")
+#' dat <- pr_get_FreqMap("Zooplankton")
 
 pr_get_FreqMap <- function(Type = "Zooplankton"){
 
@@ -16,13 +16,13 @@ pr_get_FreqMap <- function(Type = "Zooplankton"){
     is.character(Type) && length(Type) == 1,
     msg = "'Type' must be a single character string. Valid options are 'Phytoplankton' or 'Zooplankton'."
   )
-  
+
   assertthat::assert_that(
     Type %in% c("Phytoplankton", "Zooplankton"),
     msg = "'Type' must be one of 'Phytoplankton' or 'Zooplankton'."
   )
 
-  NRS <- pr_get_NRSData(Type = Type, Variable = "abundance", Subset = "species") %>%
+  NRS <- pr_get_data(Survey = "NRS", Type = Type, Variable = "abundance", Subset = "species") %>%
     tidyr::pivot_longer(cols = !dplyr::all_of(pr_get_NonTaxaColumns(Survey = "NRS", Type = Type)),
                         names_to = "Species", values_to = "Counts")
 
@@ -31,7 +31,7 @@ pr_get_FreqMap <- function(Type = "Zooplankton"){
     dplyr::mutate(Survey = 'NRS') %>%
     dplyr::select("Sample", "Survey", "Species", "Counts", "SampleTime_Local", "Month_Local", "Latitude", "Longitude")
 
-  CPR <- pr_get_CPRData(Type = Type, Variable = "abundance", Subset = "species") %>%
+  CPR <- pr_get_data(Survey = "CPR", Type = Type, Variable = "abundance", Subset = "species") %>%
     tidyr::pivot_longer(cols = !dplyr::all_of(pr_get_NonTaxaColumns(Survey = "CPR", Type = Type)),
                         names_to = "Species", values_to = "Counts")
 
@@ -85,8 +85,8 @@ pr_get_FreqMap <- function(Type = "Zooplankton"){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_ProgressMapData(c("NRS", "CPR"))
-#' df <- pr_get_ProgressMapData(c("NRS", "CPR"), interactive = TRUE)
+#' dat <- pr_get_ProgressMapData(c("NRS", "CPR"))
+#' dat <- pr_get_ProgressMapData(c("NRS", "CPR"), interactive = TRUE)
 pr_get_ProgressMapData <- function(Survey = c("NRS", "CPR"), interactive = FALSE, ...){
 
   # Input validation
@@ -94,12 +94,12 @@ pr_get_ProgressMapData <- function(Survey = c("NRS", "CPR"), interactive = FALSE
     is.character(Survey),
     msg = "'Survey' must be a character vector. Valid options are 'NRS', 'CPR', or c('NRS', 'CPR')."
   )
-  
+
   assertthat::assert_that(
     all(Survey %in% c("NRS", "CPR", "Both")),
     msg = "'Survey' must be one or more of 'NRS', 'CPR', or 'Both'."
   )
-  
+
   assertthat::assert_that(
     is.logical(interactive) && length(interactive) == 1,
     msg = "'interactive' must be a single logical value (TRUE or FALSE)."
@@ -107,7 +107,7 @@ pr_get_ProgressMapData <- function(Survey = c("NRS", "CPR"), interactive = FALSE
 
   if (interactive == FALSE){
     if("NRS" %in% Survey) {
-      PMapDataNRS <- planktonr::pr_get_NRSTrips() %>%
+      PMapDataNRS <- pr_get_trips(Survey = "NRS") %>%
         dplyr::select("StationCode", "Longitude", "Latitude") %>%
         dplyr::rename(Region = "StationCode") %>%
         dplyr::mutate(Survey = "NRS") %>%
@@ -142,6 +142,7 @@ pr_get_ProgressMapData <- function(Survey = c("NRS", "CPR"), interactive = FALSE
       dplyr::select(-"StationCode") %>%
       dplyr::mutate(Survey = "NRS")
 
+
     PMapDataCPR <- dplyr::bind_rows(planktonr::pr_get_Indices(Survey = "CPR", Type = "Zooplankton", ...),
                                     planktonr::pr_get_Indices(Survey = "CPR", Type = "Phytoplankton", ...)) %>%
       dplyr::filter(.data$Parameters == "ZoopAbundance_m3" |
@@ -159,7 +160,8 @@ pr_get_ProgressMapData <- function(Survey = c("NRS", "CPR"), interactive = FALSE
     # Map colours for easy plotting
     PMapData <- PMapData %>%
       dplyr::left_join(mbr %>%
-                         sf::st_drop_geometry(),
+                         sf::st_drop_geometry() %>%
+                         unique(),
                        by = c("Name" = "REGION"))
 
     return(PMapData)

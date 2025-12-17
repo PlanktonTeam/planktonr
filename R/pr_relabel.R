@@ -4,15 +4,12 @@
 #' @param s A string for reformatting
 #' @param style The style of plotting the string will be used for
 #' @param named Should the output be an `unnamed` (FALSE) or `named` (TRUE) vector? Only available for `style = "simple"` and `style = "plotly"`
+#' @param quiet Logical. If `TRUE`, suppresses warnings about missing replacements. Default is `FALSE`.
 #'
 #'
 #' @return A reformatted expression call (ggplot)
-#' @export
-#'
-#' @examples
-#' pr_relabel("Chla_mgm3", style = "ggplot")
-#'
-pr_relabel <- function(s, style = "ggplot", named = FALSE){
+#' @keywords internal
+pr_relabel <- function(s, style = "ggplot", named = FALSE, quiet = FALSE){
 
   # Input validation
   assertthat::assert_that(
@@ -33,6 +30,11 @@ pr_relabel <- function(s, style = "ggplot", named = FALSE){
   assertthat::assert_that(
     is.logical(named) && length(named) == 1,
     msg = "'named' must be a single logical value (TRUE or FALSE)."
+  )
+
+  assertthat::assert_that(
+    is.logical(quiet) && length(quiet) == 1,
+    msg = "'quiet' must be a single logical value (TRUE or FALSE)."
   )
 
   relabel_df <- tibble::as_tibble(matrix(c(
@@ -280,8 +282,8 @@ pr_relabel <- function(s, style = "ggplot", named = FALSE){
 
   i <- which(relabel_df$Variable %in% s)
 
-  if (length(i) != length(unique(s))){
-    warning("Missing replacements in planktonr::pr_relabel()")
+  if (length(i) != length(unique(s)) && !quiet){
+    warning("Missing replacements in planktonr:::pr_relabel()")
     print(unlist(relabel_df$Variable[i]))
     print(unique(s))
   }

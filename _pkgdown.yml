@@ -18,11 +18,29 @@ reference:
 - title: Load Data
   desc: Functions to access data from the AODN.
   contents:
-  - starts_with("pr_get_")
-  - -pr_get_survey
-  - -pr_get_type
-  - -pr_get_variable
-  - -pr_get_model
+  - pr_get_data
+  - pr_get_trips
+  - pr_get_Indices
+  - pr_get_EOVs
+  - pr_get_CTI
+  - pr_get_STI
+  - pr_get_STIdata
+  - pr_get_FuncGroups
+  - pr_get_TaxaAccum
+  - pr_get_FreqMap
+  - pr_get_LFData
+  - pr_get_LTnuts
+  - pr_get_NRSEnvContour
+  - pr_get_info
+  - pr_get_ProgressMapData
+  - pr_get_DataLocs
+  - pr_get_Raw
+  - pr_get_s3
+  - pr_get_DayNight
+  - pr_get_SOTSMoorData
+  - pr_get_SOTSvariables
+  - pr_get_PCIData
+  - pr_get_SatData
 - title: Plotting
   desc: Functions for plotting.
   contents:
@@ -35,18 +53,13 @@ reference:
   - pr_add_StationCode
   - pr_add_StationName
   - pr_apply_Flags
-  - pr_apply_Time
   - pr_filter_data
   - pr_filter_NRSStations
   - pr_filter_Species
   - pr_harmonic
   - pr_make_climatology
   - pr_model_data
-  - pr_relabel
   - pr_remove_outliers
-  - pr_rename
-  - pr_reorder
-  - pr_title
   - pr_get_coeffs
   - theme_pr
 - title: Satellite Matching
@@ -83,3 +96,31 @@ reference:
   - pr_get_model
   - "`%>%`"
   - "`%m+%`"
+  - pr_get_Site
+  - pr_get_s3site
+  - pr_reorder
+  - pr_apply_Time
+  - pr_get_NonTaxaColumns
+  - pr_title
+  - pr_rename
+  - pr_relabel
+- title: Deprecated
+  desc: >
+    These functions are deprecated and will be removed in a future version.
+    Please use [pr_get_data()], [pr_get_trips()], or [pr_get_info()] instead.
+  contents:
+  - pr_get_NRSTrips
+  - pr_get_CPRTrips
+  - pr_get_NRSData
+  - pr_get_CPRData
+  - pr_get_NRSChemistry
+  - pr_get_NRSPigments
+  - pr_get_NRSPico
+  - pr_get_NRSMicro
+  - pr_get_NRSTSS
+  - pr_get_NRSCTD
+  - pr_get_CSChem
+  - pr_get_SpeciesInfo
+  - pr_get_PlanktonInfo
+  - pr_get_PolicyInfo
+  - pr_get_Stations

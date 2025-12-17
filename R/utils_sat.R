@@ -1,11 +1,11 @@
 #' Load satellite-derived environmental data matched to plankton sampling locations
 #' @param Survey either NRS or CPR
 #'
-#' @return df with either NRS or CPR satellite data
+#' @return dat with either NRS or CPR satellite data
 #' @export
 #'
 #' @examples
-#' df <- pr_get_SatData("CPR")
+#' dat <- pr_get_SatData("CPR")
 ## These will be replace with proper satellite data from extractions in time
 
 pr_get_SatData <- function(Survey = 'NRS'){
@@ -40,11 +40,11 @@ pr_get_SatData <- function(Survey = 'NRS'){
 #'
 #' @param Survey NRS, CPR or all
 #'
-#' @return df with latitude, longitude and Date
+#' @return dat with latitude, longitude and Date
 #' @export
 #'
 #' @examples
-#' df <- pr_get_DataLocs("NRS")
+#' dat <- pr_get_DataLocs("NRS")
 
 pr_get_DataLocs <- function(Survey = "all"){
 
@@ -62,20 +62,20 @@ pr_get_DataLocs <- function(Survey = "all"){
   vars <- c("Longitude", "Latitude", "SampleTime_UTC")
 
   if(Survey == "NRS"){
-    df <- pr_get_NRSTrips() %>%
+    dat <- pr_get_trips(Survey = "NRS") %>%
       dplyr::select(tidyselect::all_of(vars)) %>%
       dplyr::distinct(.data$Longitude, .data$Latitude, Date = as.Date(.data$SampleTime_UTC, 'UTC'))
   } else
     if(Survey == "CPR"){
-      df <- pr_get_CPRTrips() %>%
+      dat <- pr_get_trips(Survey = "CPR") %>%
         dplyr::filter(grepl("P|Z", .data$SampleType)) %>%
         dplyr::select(tidyselect::all_of(vars)) %>%
         dplyr::distinct(.data$Longitude, .data$Latitude, Date = as.Date(.data$SampleTime_UTC, 'UTC'))
     } else {
-      df <- dplyr::bind_rows(
-        pr_get_NRSTrips() %>%
+      dat <- dplyr::bind_rows(
+        pr_get_trips(Survey = "NRS") %>%
           dplyr::select(tidyselect::all_of(vars)),
-        pr_get_CPRTrips() %>%
+        pr_get_trips(Survey = "CPR") %>%
           dplyr::filter(grepl("P|Z", .data$SampleType)) %>%
           dplyr::select(tidyselect::all_of(vars))) %>%
         dplyr::distinct(.data$Longitude, .data$Latitude, Date = as.Date(.data$SampleTime_UTC, 'UTC'))
@@ -96,33 +96,33 @@ pr_get_DataLocs <- function(Survey = "all"){
 #' sea_surface_temperature, sses_bias, sses_count, sses_standard_deviation,
 #' sst_count, sst_dtime, sst_mean, sst_standard_deviation, wind_speed, wind_speed_dtime_from_sst
 #'
-#' @param df dataframe containing latitude, longitude and Date
+#' @param dat dataframe containing latitude, longitude and Date
 #' @param pr products from list above, single or as a list
 #' @param res_spat Number of spatial pixels to average over
 #' @param res_temp Temporal resolution of satellite data to use
 #' @param parallel Should the analysis run using parallel processing
 #' @param ncore If `parallel = TRUE` package will use all available cores, apart from 2 which will be left for system processes and multitasking. If you wish to specify how many cores the package should use, set `ncore`. Otherwise, leave it as NULL.
 #'
-#' @return df with product output attached
+#' @return dat with product output attached
 #' @export
 #'
 #' @examples
-#' df <- tail(pr_get_DataLocs("CPR") %>%
+#' dat <- tail(pr_get_DataLocs("CPR") %>%
 #'         dplyr::arrange(Date), 5)
 #' pr = c("sea_surface_temperature", "quality_level", "sst_mean", "sst_standard_deviation")
-#' sstout <- pr_match_GHRSST(df, pr, res_spat = 10, res_temp = "6d")
+#' sstout <- pr_match_GHRSST(dat, pr, res_spat = 10, res_temp = "6d")
 #'
-pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d", parallel = FALSE, ncore = NULL) {
+pr_match_GHRSST <- function(dat, pr, res_spat = 1, res_temp = "1d", parallel = FALSE, ncore = NULL) {
 
   # Input validation
   assertthat::assert_that(
-    is.data.frame(df),
-    msg = "'df' must be a data frame."
+    is.data.frame(dat),
+    msg = "'dat' must be a data frame."
   )
   
   assertthat::assert_that(
-    all(c("Latitude", "Longitude") %in% colnames(df)),
-    msg = "'df' must contain 'Latitude' and 'Longitude' columns."
+    all(c("Latitude", "Longitude") %in% colnames(dat)),
+    msg = "'dat' must contain 'Latitude' and 'Longitude' columns."
   )
   
   assertthat::assert_that(
@@ -154,31 +154,31 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d", parallel = FA
 
   rlang::check_installed("progressr", reason = "to run this function")
 
-  if (("Date" %in% colnames(df))==FALSE) {
+  if (("Date" %in% colnames(dat))==FALSE) {
     stop("No Date column found in data. Please include a Date column in POSIXct format")
   }
 
   # If Day, Month, Year doesn't exist we create them
-  if (sum(c("Day","Month","Year") %in% colnames(df)) != 3) {
-    df_dmy <- df %>%
+  if (sum(c("Day","Month","Year") %in% colnames(dat)) != 3) {
+    dat_dmy <- dat %>%
       dplyr::mutate(Day = lubridate::day(.data$Date),
                     Month = lubridate::month(.data$Date),
                     Year = lubridate::year(.data$Date))
   } else {
-    df_dmy <- df
+    dat_dmy <- dat
   }
 
-  df_dmy <- df_dmy %>%
+  dat_dmy <- dat_dmy %>%
     dplyr::select("Latitude", "Longitude", "Year", "Month", "Day") %>%
     dplyr::group_split(.data$Latitude, .data$Longitude, .data$Year, .data$Month, .data$Day)
 
-  pr_get_SSTData <- function(df, p){
+  pr_get_SSTData <- function(dat, p){
 
     p()
 
     # Make sure month and day have a leading zero if less than 10
-    mth <- stringr::str_pad(df$Month, 2, "left", pad = "0")
-    dy <- stringr::str_pad(df$Day, 2, "left", pad = "0")
+    mth <- stringr::str_pad(dat$Month, 2, "left", pad = "0")
+    dy <- stringr::str_pad(dat$Day, 2, "left", pad = "0")
 
     if(res_temp == '6d'){
       string = "212000"
@@ -187,7 +187,7 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d", parallel = FA
     }
 
     url_base <- paste0("https://thredds.aodn.org.au/thredds/dodsC/IMOS/SRS/SST/ghrsst/L3S-",res_temp,"/dn/") # Base URL
-    imos_url <- paste0(url_base, df$Year,"/",df$Year,mth,dy,string,"-ABOM-L3S_GHRSST-SSTfnd-AVHRR_D-", res_temp, "_dn.nc")
+    imos_url <- paste0(url_base, dat$Year,"/",dat$Year,mth,dy,string,"-ABOM-L3S_GHRSST-SSTfnd-AVHRR_D-", res_temp, "_dn.nc")
 
     url_exists <- function(url){
       nc <- NULL
@@ -221,8 +221,8 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d", parallel = FA
       maxlon <- max(lon)
 
       # Approximate nearest neighbour
-      idx_lon <- yaImpute::ann(as.matrix(seq(minlon, maxlon, length.out = lengthlon)), as.matrix(df$Longitude), k = 1, verbose = FALSE)$knnIndexDist[,1]
-      idx_lat <- yaImpute::ann(as.matrix(seq(maxlat, minlat, length.out = lengthlat)), as.matrix(df$Latitude), k = 1, verbose = FALSE)$knnIndexDist[,1]
+      idx_lon <- yaImpute::ann(as.matrix(seq(minlon, maxlon, length.out = lengthlon)), as.matrix(dat$Longitude), k = 1, verbose = FALSE)$knnIndexDist[,1]
+      idx_lat <- yaImpute::ann(as.matrix(seq(maxlat, minlat, length.out = lengthlat)), as.matrix(dat$Latitude), k = 1, verbose = FALSE)$knnIndexDist[,1]
       cnt <- c(1,1,1)
 
       if (res_spat > 1) { # If more than 1x1 pixel is requested we adjust the idx by res_spat/2 and count by res_spa
@@ -245,11 +245,11 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d", parallel = FA
 
   }
 
-  p <- progressr::progressor(steps = length(df_dmy))
+  p <- progressr::progressor(steps = length(dat_dmy))
 
   if (isFALSE(parallel)){
 
-    sstout <- purrr::map(df_dmy, pr_get_SSTData, p) %>%
+    sstout <- purrr::map(dat_dmy, pr_get_SSTData, p) %>%
       data.table::rbindlist()
 
   } else {
@@ -269,7 +269,7 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d", parallel = FA
 
     future::plan(future::multisession(), workers = ncore)
 
-    sstout <- furrr::future_map(df_dmy, pr_get_SSTData, p) %>%
+    sstout <- furrr::future_map(dat_dmy, pr_get_SSTData, p) %>%
       data.table::rbindlist()
 
     ## Explicitly close multisession workers by switching plan
@@ -283,42 +283,42 @@ pr_match_GHRSST <- function(df, pr, res_spat = 1, res_temp = "1d", parallel = FA
   to_change <- c("sea_surface_temperature", "sst_mean")
   pr2 <- to_change[to_change %in% pr]
 
-  df <- dplyr::bind_rows(df_dmy) %>%
+  dat <- dplyr::bind_rows(dat_dmy) %>%
     dplyr::bind_cols(sstout) %>%
     dplyr::mutate(dplyr::across(
       tidyselect::any_of(pr2), ~ .x - 273.15)) # Convert temp from kelvin
 
 
-  return(df)
+  return(dat)
 
 }
 
 
 #' Match plankton samples to satellite altimetry data (sea level, currents)
 #'
-#' @param df dataframe containing Latitude, Longitude and Date
+#' @param dat dataframe containing Latitude, Longitude and Date
 #' @param pr products from GSLA, GSL, UCUR, UCUR, VCUR, UCUR_MEAN, VCUR_MEAN, single or as a list
 #' @param res_spat Number of spatial pixels to average over
 #'
-#' @return df with product output attached
+#' @return dat with product output attached
 #' @export
 #'
 #' @examples
-#' df <- pr_get_DataLocs("NRS") %>%
+#' dat <- pr_get_DataLocs("NRS") %>%
 #'   dplyr::filter(Date < lubridate::ymd("2019-12-31")) %>%
 #'   head(5)
-#' altout <- pr_match_Altimetry(df, pr = "GSLA", res_spat = 10)
-pr_match_Altimetry <- function(df, pr, res_spat = 1) {
+#' altout <- pr_match_Altimetry(dat, pr = "GSLA", res_spat = 10)
+pr_match_Altimetry <- function(dat, pr, res_spat = 1) {
 
   # Input validation
   assertthat::assert_that(
-    is.data.frame(df),
-    msg = "'df' must be a data frame."
+    is.data.frame(dat),
+    msg = "'dat' must be a data frame."
   )
   
   assertthat::assert_that(
-    all(c("Latitude", "Longitude") %in% colnames(df)),
-    msg = "'df' must contain 'Latitude' and 'Longitude' columns."
+    all(c("Latitude", "Longitude") %in% colnames(dat)),
+    msg = "'dat' must contain 'Latitude' and 'Longitude' columns."
   )
   
   assertthat::assert_that(
@@ -336,9 +336,9 @@ pr_match_Altimetry <- function(df, pr, res_spat = 1) {
   #   res_spat <-  1
   # }
 
-  if (sum(c("Day","Month","Year") %in% colnames(df)) != 3) { # Check that Day, Month, Year exists
-    if (sum(stringr::str_detect(colnames(df),"Date")) == 1) { # Otherwise check that Date exists
-      df <- df %>%
+  if (sum(c("Day","Month","Year") %in% colnames(dat)) != 3) { # Check that Day, Month, Year exists
+    if (sum(stringr::str_detect(colnames(dat),"Date")) == 1) { # Otherwise check that Date exists
+      dat <- dat %>%
         dplyr::mutate(Day = lubridate::day(.data$Date),
                       Month = lubridate::month(.data$Date),
                       Year = lubridate::year(.data$Date))
@@ -347,31 +347,31 @@ pr_match_Altimetry <- function(df, pr, res_spat = 1) {
     }
   }
 
-  if (max(df$Year > 2019)){
+  if (max(dat$Year > 2019)){
     print("Only data before 2020 is available via this product and will be returned from this function")
   }
 
 
-  df <- df %>%
+  dat <- dat %>%
     dplyr::select(tidyselect::all_of(c("Latitude", "Longitude", "Year", "Month", "Day"))) %>% # Select relevant columns
     dplyr::group_split(.data$Latitude, .data$Longitude, .data$Year, .data$Month, .data$Day)
 
 
-  pr_get_SatData <- function(df){
+  pr_get_SatData <- function(dat){
 
     # Make sure month and day have a leading zero if less than 10
-    mth <- stringr::str_pad(df$Month, 2, "left", pad = "0")
-    dy <- stringr::str_pad(df$Day, 2 , "left", pad = "0")
+    mth <- stringr::str_pad(dat$Month, 2, "left", pad = "0")
+    dy <- stringr::str_pad(dat$Day, 2 , "left", pad = "0")
 
     tryCatch({
-      thredd_url <- paste0("https://thredds.aodn.org.au/thredds/catalog/IMOS/OceanCurrent/GSLA/DM/",df$Year,"/catalog.xml")
+      thredd_url <- paste0("https://thredds.aodn.org.au/thredds/catalog/IMOS/OceanCurrent/GSLA/DM/",dat$Year,"/catalog.xml")
       f <- thredds::CatalogNode$new(thredd_url)
       files <- data.frame(files = f$get_dataset_names())
-      pattern <- paste0(df$Year,mth,dy,"T000000Z")
+      pattern <- paste0(dat$Year,mth,dy,"T000000Z")
       fileName <- files %>% dplyr::filter(grepl(pattern, files))
       filename <- fileName$files
       url_base <- paste0("https://thredds.aodn.org.au/thredds/dodsC/IMOS/OceanCurrent/GSLA/DM/") # Base URL
-      imos_url <- paste0(url_base,df$Year,"/",filename)
+      imos_url <- paste0(url_base,dat$Year,"/",filename)
     },
     error = function(cond) {
       x <- NA
@@ -393,9 +393,9 @@ pr_match_Altimetry <- function(df, pr, res_spat = 1) {
 
       # Approximate nearest neighbour
       idx_lon <- (yaImpute::ann(as.matrix(seq(minlon, maxlon, length.out = lengthlon)),
-                                as.matrix(df$Longitude), k = 1, verbose = FALSE)$knnIndexDist[,1])[1]
+                                as.matrix(dat$Longitude), k = 1, verbose = FALSE)$knnIndexDist[,1])[1]
       idx_lat <- (yaImpute::ann(as.matrix(seq(maxlat, minlat, length.out = lengthlat)),
-                                as.matrix(df$Latitude), k = 1, verbose = FALSE)$knnIndexDist[,1])[1]
+                                as.matrix(dat$Latitude), k = 1, verbose = FALSE)$knnIndexDist[,1])[1]
       cnt <- c(1,1,1)
 
       if (res_spat > 1) { # If more than 1x1 pixel is requested we adjust the idx by res_spat/2 and count by res_spa
@@ -421,37 +421,37 @@ pr_match_Altimetry <- function(df, pr, res_spat = 1) {
     }
   }
 
-  altout <- purrr::map(df, pr_get_SatData) %>%
+  altout <- purrr::map(dat, pr_get_SatData) %>%
     data.table::rbindlist()
 
-  df <- dplyr::bind_rows(df) %>%
+  dat <- dplyr::bind_rows(dat) %>%
     dplyr::bind_cols(altout)
 }
 
 #' Match plankton samples to MODIS ocean colour data (chlorophyll, PAR, SST)
 #'
-#' @param df dataframe containing latitude, longitude and Date
+#' @param dat dataframe containing latitude, longitude and Date
 #' @param pr products from K_490, chl_carder, chl_gsm, chl_oc3, chl_oci, dt, ipar, l2_flags, owtd, par, sst, sst_quality single or as a list
 #' @param res_spat Number of spatial pixels to average over
 #' @param res_temp Temporal resolution of satellite data to use
 #'
-#' @return df with product output attached
+#' @return dat with product output attached
 #' @export
 #'
 #' @examples
-#' df <- head(pr_get_DataLocs("NRS"),5)
-#' MODISout <- pr_match_MODIS(df, pr <- c("chl_gsm", "chl_oc3"), res_spat = 10)
-pr_match_MODIS <- function(df, pr, res_spat = 1, res_temp = "1d") {
+#' dat <- head(pr_get_DataLocs("NRS"),5)
+#' MODISout <- pr_match_MODIS(dat, pr <- c("chl_gsm", "chl_oc3"), res_spat = 10)
+pr_match_MODIS <- function(dat, pr, res_spat = 1, res_temp = "1d") {
 
   # Input validation
   assertthat::assert_that(
-    is.data.frame(df),
-    msg = "'df' must be a data frame."
+    is.data.frame(dat),
+    msg = "'dat' must be a data frame."
   )
   
   assertthat::assert_that(
-    all(c("Latitude", "Longitude") %in% colnames(df)),
-    msg = "'df' must contain 'Latitude' and 'Longitude' columns."
+    all(c("Latitude", "Longitude") %in% colnames(dat)),
+    msg = "'dat' must contain 'Latitude' and 'Longitude' columns."
   )
   
   assertthat::assert_that(
@@ -483,38 +483,38 @@ pr_match_MODIS <- function(df, pr, res_spat = 1, res_temp = "1d") {
   res_spat <- res_spat
   res_temp <- res_temp
 
-  if (("Date" %in% colnames(df))==FALSE) {
+  if (("Date" %in% colnames(dat))==FALSE) {
     stop("No Date column found in data. Please include a Date column in POSIXct format")
   }
 
   # If Day, Month, Year doesn't exist we create them
-  if (sum(c("Day","Month","Year") %in% colnames(df)) != 3) {
-    df <- df %>%
+  if (sum(c("Day","Month","Year") %in% colnames(dat)) != 3) {
+    dat <- dat %>%
       dplyr::mutate(Day = lubridate::day(.data$Date),
                     Month = lubridate::month(.data$Date),
                     Year = lubridate::year(.data$Date))
   }
 
-  if (min(df$Date) < as.Date("2002-07-01")){
+  if (min(dat$Date) < as.Date("2002-07-01")){
     print("Only data after 2002-07-01 is available via this product and will be returned from this function")
   }
 
-  df <- df  %>%
+  dat <- dat  %>%
     dplyr::select("Latitude", "Longitude", "Year", "Month", "Day")
 
-  df <- dplyr::bind_cols(purrr::map_dfr(seq_len(length(pr)), ~ df),
-                         purrr::map_dfr(seq_len(nrow(df)), ~ data.frame(pr)) %>%
+  dat <- dplyr::bind_cols(purrr::map_dfr(seq_len(length(pr)), ~ dat),
+                         purrr::map_dfr(seq_len(nrow(dat)), ~ data.frame(pr)) %>%
                            dplyr::arrange(pr)) %>%
     dplyr::group_split(.data$Latitude, .data$Longitude, .data$Year, .data$Month, .data$Day, .data$pr)
 
-  pr_get_SatData <- function(df){
+  pr_get_SatData <- function(dat){
     # Make sure month and day have a leading zero if less than 10
-    mth <- stringr::str_pad(df$Month,2,"left",pad="0")
-    dy <- stringr::str_pad(df$Day,2,"left",pad="0")
+    mth <- stringr::str_pad(dat$Month,2,"left",pad="0")
+    dy <- stringr::str_pad(dat$Day,2,"left",pad="0")
 
     tryCatch({ # Not all dates will exist
       url_base <- paste0("http://thredds.aodn.org.au/thredds/dodsC/IMOS/SRS/OC/gridded/aqua/P1D/") # Base URL
-      imos_url <- paste0(url_base, df$Year,"/",mth,"/A.P1D.",df$Year,mth,dy,"T053000Z.aust.",df$pr,".nc")
+      imos_url <- paste0(url_base, dat$Year,"/",mth,"/A.P1D.",dat$Year,mth,dy,"T053000Z.aust.",dat$pr,".nc")
       nc <- ncdf4::nc_open(imos_url)
     },
     error = function(cond) {
@@ -535,8 +535,8 @@ pr_match_MODIS <- function(df, pr, res_spat = 1, res_temp = "1d") {
       maxlon <- max(lon)
 
       # Approximate nearest neighbour
-      idx_lon <- yaImpute::ann(as.matrix(seq(minlon, maxlon, length.out = lengthlon)), as.matrix(df$Longitude), k = 1, verbose = FALSE)$knnIndexDist[,1]
-      idx_lat <- yaImpute::ann(as.matrix(seq(maxlat, minlat, length.out = lengthlat)), as.matrix(df$Latitude), k = 1, verbose = FALSE)$knnIndexDist[,1]
+      idx_lon <- yaImpute::ann(as.matrix(seq(minlon, maxlon, length.out = lengthlon)), as.matrix(dat$Longitude), k = 1, verbose = FALSE)$knnIndexDist[,1]
+      idx_lat <- yaImpute::ann(as.matrix(seq(maxlat, minlat, length.out = lengthlat)), as.matrix(dat$Latitude), k = 1, verbose = FALSE)$knnIndexDist[,1]
       cnt <- c(1,1,1)
 
       if (res_spat > 1) { # If more than 1x1 pixel is requested we adjust the idx by res_spat/2 and count by res_spa
@@ -544,7 +544,7 @@ pr_match_MODIS <- function(df, pr, res_spat = 1, res_temp = "1d") {
         idx_lat <- idx_lat - floor(res_spat/2)
         cnt <- c(res_spat, res_spat, 1)
       }
-      out <- ncdf4::ncvar_get(nc, df$pr, start=c(idx_lon, idx_lat, 1), count = cnt)
+      out <- ncdf4::ncvar_get(nc, dat$pr, start=c(idx_lon, idx_lat, 1), count = cnt)
 
       out <- mean(out, na.rm = TRUE)
       return(out)
@@ -553,8 +553,8 @@ pr_match_MODIS <- function(df, pr, res_spat = 1, res_temp = "1d") {
       out <- NaN
     }
   }
-  modisout <- purrr::map(df, pr_get_SatData)
-  df <- dplyr::bind_rows(df) %>%
+  modisout <- purrr::map(dat, pr_get_SatData)
+  dat <- dplyr::bind_rows(dat) %>%
     dplyr::bind_cols(value = unlist(modisout)) %>%
     tidyr::pivot_wider(names_from = "pr", values_from = "value")
 }

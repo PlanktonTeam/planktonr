@@ -18,7 +18,7 @@ patchwork object
 Create Hovmöller diagram showing latitudinal patterns over time
 }
 \examples{
-df <- pr_get_NRSMicro('GO-SHIP')
+df <- pr_get_data(Survey = 'GO-SHIP', Type = 'Micro')
 df <- df \%>\% dplyr::filter(Parameters == 'Bacteria_unique_ASVs',
 SampleDepth_m < 101)
 pr_plot_latitude(df, na.fill = mean)

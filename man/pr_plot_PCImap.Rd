@@ -4,10 +4,10 @@
 \alias{pr_plot_PCImap}
 \title{Map Phytoplankton Colour Index (PCI) from CPR samples around Australia}
 \usage{
-pr_plot_PCImap(df)
+pr_plot_PCImap(dat)
 }
 \arguments{
-\item{df}{dataframe with location and seasonal PCI data}
+\item{dat}{dataframe with location and seasonal PCI data}
 }
 \value{
 plot of PCI around Australia

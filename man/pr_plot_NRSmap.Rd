@@ -88,13 +88,10 @@ print(pmap)
 # Long Term Monitoring stations with one highlighted
 pr_plot_NRSmap(sites = "MAI", Survey = "LTM")
 
-# Save map to file
-pmap <- pr_plot_NRSmap(c("NSI", "PHB", "MAI"))
-ggplot2::ggsave("nrs_stations.png", pmap, width = 6, height = 8, bg = "white")
 }
 \seealso{
 \itemize{
-\item \code{\link[=pr_get_Stations]{pr_get_Stations()}} for station metadata
+\item \code{\link[=pr_get_info]{pr_get_info()}} for station metadata
 \item \code{\link[=pr_plot_CPRmap]{pr_plot_CPRmap()}} for CPR bioregion maps
 }
 }

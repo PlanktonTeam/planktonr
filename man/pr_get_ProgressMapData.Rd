@@ -20,6 +20,6 @@ A dataframe for input into pr_plot_Progress()
 Prepare sampling coverage data for IMOS progress map visualisation
 }
 \examples{
-df <- pr_get_ProgressMapData(c("NRS", "CPR"))
-df <- pr_get_ProgressMapData(c("NRS", "CPR"), interactive = TRUE)
+dat <- pr_get_ProgressMapData(c("NRS", "CPR"))
+dat <- pr_get_ProgressMapData(c("NRS", "CPR"), interactive = TRUE)
 }

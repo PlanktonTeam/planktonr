@@ -4,10 +4,10 @@
 \alias{pr_match_MODIS}
 \title{Match plankton samples to MODIS ocean colour data (chlorophyll, PAR, SST)}
 \usage{
-pr_match_MODIS(df, pr, res_spat = 1, res_temp = "1d")
+pr_match_MODIS(dat, pr, res_spat = 1, res_temp = "1d")
 }
 \arguments{
-\item{df}{dataframe containing latitude, longitude and Date}
+\item{dat}{dataframe containing latitude, longitude and Date}
 
 \item{pr}{products from K_490, chl_carder, chl_gsm, chl_oc3, chl_oci, dt, ipar, l2_flags, owtd, par, sst, sst_quality single or as a list}
 
@@ -16,12 +16,12 @@ pr_match_MODIS(df, pr, res_spat = 1, res_temp = "1d")
 \item{res_temp}{Temporal resolution of satellite data to use}
 }
 \value{
-df with product output attached
+dat with product output attached
 }
 \description{
 Match plankton samples to MODIS ocean colour data (chlorophyll, PAR, SST)
 }
 \examples{
-df <- head(pr_get_DataLocs("NRS"),5)
-MODISout <- pr_match_MODIS(df, pr <- c("chl_gsm", "chl_oc3"), res_spat = 10)
+dat <- head(pr_get_DataLocs("NRS"),5)
+MODISout <- pr_match_MODIS(dat, pr <- c("chl_gsm", "chl_oc3"), res_spat = 10)
 }

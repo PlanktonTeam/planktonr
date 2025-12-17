@@ -6,7 +6,7 @@ testthat::test_that("Complete NRS phytoplankton analysis workflow with fixtures"
   indices_data <- create_test_nrs_indices()
   
   # Apply time columns
-  indices_with_time <- pr_apply_Time(indices_data)
+  indices_with_time <- planktonr:::pr_apply_Time(indices_data)
   testthat::expect_true("Month_Local" %in% names(indices_with_time))
   testthat::expect_true("Year_Local" %in% names(indices_with_time))
   
@@ -26,7 +26,7 @@ testthat::test_that("Complete CPR data processing workflow with fixtures", {
   testthat::expect_true("BioRegion" %in% names(cpr_data))
   
   # Apply time processing
-  cpr_with_time <- pr_apply_Time(cpr_data)
+  cpr_with_time <- planktonr:::pr_apply_Time(cpr_data)
   testthat::expect_true("Month_Local" %in% names(cpr_with_time))
   
   # Filter to specific bioregions
@@ -103,7 +103,7 @@ testthat::test_that("Multi-step data transformation preserves structure", {
   
   # Apply multiple transformations
   result <- test_data %>%
-    pr_apply_Time() %>%
+    planktonr:::pr_apply_Time() %>%
     pr_filter_data("PhytoAbundance_CellsL", c("NSI", "PHB"))
   
   # Check that original columns are preserved
@@ -167,7 +167,7 @@ testthat::test_that("Large dataset simulation works efficiently", {
   # Time the operation
   start_time <- Sys.time()
   result <- large_data %>%
-    pr_apply_Time() %>%
+    planktonr:::pr_apply_Time() %>%
     pr_filter_data("PhytoAbundance_CellsL", c("NSI", "PHB", "MAI"))
   elapsed <- as.numeric(difftime(Sys.time(), start_time, units = "secs"))
   
@@ -223,7 +223,7 @@ testthat::test_that("Coordinate renaming workflow with fixtures", {
   testthat::expect_true("LONGITUDE" %in% names(coord_data))
   
   # After renaming should have lowercase
-  renamed_data <- pr_rename(coord_data)
+  renamed_data <- planktonr:::pr_rename(coord_data)
   
   testthat::expect_true("Latitude" %in% names(renamed_data) | "latitude" %in% names(renamed_data))
   testthat::expect_true("Longitude" %in% names(renamed_data) | "longitude" %in% names(renamed_data))

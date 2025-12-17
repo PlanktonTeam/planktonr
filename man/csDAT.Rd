@@ -17,7 +17,7 @@ contains one row per station and columns including at least:
 }
 }
 \source{
-Constructed from NRS microbial station data via \code{pr_get_NRSMicro()} in
+Constructed from Coastal microbial station data via \code{pr_get_data(Survey = "Coastal", Type = "Micro")} in
 \code{data-raw/DATASET.R}.
 }
 \usage{

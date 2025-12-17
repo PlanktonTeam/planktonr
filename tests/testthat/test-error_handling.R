@@ -50,55 +50,9 @@ testthat::test_that("pr_get_Indices throws error for NULL Type", {
   )
 })
 
-# Test pr_get_NRSData error handling ----
-
-testthat::test_that("pr_get_NRSData throws error for invalid Type parameter", {
-  skip_if_offline()
-  testthat::expect_error(
-    pr_get_NRSData(Type = "InvalidType", Variable = "abundance", Subset = "htg")
-  )
-})
-
-testthat::test_that("pr_get_NRSData throws error for invalid Variable parameter", {
-  testthat::expect_error(
-    pr_get_NRSData(Type = "Phytoplankton", Variable = "invalid", Subset = "htg")
-  )
-})
-
-testthat::test_that("pr_get_NRSData throws error for invalid Subset parameter", {
-  testthat::expect_error(
-    pr_get_NRSData(Type = "Phytoplankton", Variable = "abundance", Subset = "invalid"),
-    "'Subset' must be one of"
-  )
-})
-
-testthat::test_that("pr_get_NRSData throws error for NULL parameters", {
-  testthat::expect_error(
-    pr_get_NRSData(Type = NULL, Variable = "abundance", Subset = "htg")
-  )
-})
-
-# Test pr_get_CPRData error handling ----
-
-testthat::test_that("pr_get_CPRData throws error for invalid Type parameter", {
-  skip_if_offline()
-  testthat::expect_error(
-    pr_get_CPRData(Type = "InvalidType", Variable = "abundance", Subset = "htg")
-  )
-})
-
-testthat::test_that("pr_get_CPRData throws error for invalid Variable parameter", {
-  testthat::expect_error(
-    pr_get_CPRData(Type = "Phytoplankton", Variable = "invalid", Subset = "htg")
-  )
-})
-
-testthat::test_that("pr_get_CPRData throws error for invalid Subset parameter", {
-  testthat::expect_error(
-    pr_get_CPRData(Type = "Phytoplankton", Variable = "abundance", Subset = "invalid"),
-    "'Subset' must be one of"
-  )
-})
+# Note: pr_get_NRSData and pr_get_CPRData error handling tests have been removed
+# as these functions are deprecated. Error handling for data retrieval is now
+# tested in test-utils_data.R via pr_get_data()
 
 # Test pr_filter_Species error handling ----
 
@@ -229,7 +183,8 @@ testthat::test_that("pr_filter_data handles empty filter values", {
 
 testthat::test_that("pr_relabel handles unrecognized variable name", {
   # Function may print message or warning for unknown variables
-  result <- pr_relabel("UnknownVariable_units", style = "simple")
+  # Use quiet = TRUE to suppress warning since we're testing with unknown variable
+  result <- pr_relabel("UnknownVariable_units", style = "simple", quiet = TRUE)
   testthat::expect_type(result, "character")
 })
 
@@ -421,10 +376,11 @@ testthat::test_that("pr_harmonic throws error for non-numeric inputs", {
 })
 
 testthat::test_that("pr_harmonic handles NULL inputs", {
-  # pr_harmonic returns a matrix with 0 rows for NULL input
-  result <- pr_harmonic(NULL, 2)
-  testthat::expect_true(is.matrix(result))
-  testthat::expect_equal(nrow(result), 0)
+  # pr_harmonic now validates input and throws error for NULL
+  testthat::expect_error(
+    pr_harmonic(NULL, 2),
+    regexp = "'theta' must be a numeric"
+  )
 })
 
 testthat::test_that("pr_harmonic handles negative numbers", {

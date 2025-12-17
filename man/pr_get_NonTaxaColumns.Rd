@@ -17,6 +17,4 @@ a string vector of column name
 \description{
 Return columns that are not taxonomic
 }
-\examples{
-str <- pr_get_NonTaxaColumns(Survey = "NRS", Type = "Zooplankton")
-}
+\keyword{internal}

@@ -6,7 +6,7 @@ testthat::test_that("pr_plot_scatter creates ggplot for NRS microbial data with 
   skip_if_offline()
   testthat::skip_on_cran()
   
-  result <- planktonr::pr_get_NRSMicro() %>%
+  result <- planktonr::pr_get_data(Survey = "NRS", Type = "Micro") %>%
     tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
     dplyr::filter(StationCode %in% c("NSI", "PHB")) %>%
     tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = mean) %>%
@@ -26,7 +26,7 @@ testthat::test_that("pr_plot_scatter creates ggplot for NRS with Linear trend", 
   skip_if_offline()
   testthat::skip_on_cran()
   
-  result <- planktonr::pr_get_NRSMicro() %>%
+  result <- planktonr::pr_get_data(Survey = "NRS", Type = "Micro") %>%
     tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
     dplyr::filter(StationCode %in% c("NSI", "PHB")) %>%
     tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = mean) %>%
@@ -43,7 +43,7 @@ testthat::test_that("pr_plot_scatter creates ggplot for NRS with Smoother trend"
   skip_if_offline()
   testthat::skip_on_cran()
   
-  result <- planktonr::pr_get_NRSMicro() %>%
+  result <- planktonr::pr_get_data(Survey = "NRS", Type = "Micro") %>%
     tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
     dplyr::filter(StationCode %in% c("NSI", "PHB")) %>%
     tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = mean) %>%
@@ -62,7 +62,7 @@ testthat::test_that("pr_plot_scatter handles CPR data with BioRegion", {
   
   # Get CPR data (requires bioregion processing)
   cpr_data <- planktonr::pr_get_Raw("cpr_derived_indices_data") %>%
-    pr_rename() %>%
+    planktonr:::pr_rename() %>%
     pr_add_Bioregions() %>%
     dplyr::filter(!is.na(BioRegion)) %>%
     dplyr::select(BioRegion, BiomassIndex_mgm3, ZoopAbundance_m3) %>%
@@ -82,7 +82,7 @@ testthat::test_that("pr_plot_scatter handles data with SampleDepth_m for facetin
   skip_if_offline()
   testthat::skip_on_cran()
   
-  result <- planktonr::pr_get_NRSMicro() %>%
+  result <- planktonr::pr_get_data(Survey = "NRS", Type = "Micro") %>%
     tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
     dplyr::filter(StationCode %in% c("NSI", "PHB"), 
                   SampleDepth_m %in% c(0, 10, 50)) %>%
@@ -101,7 +101,7 @@ testthat::test_that("pr_plot_box creates ggplot for NRS data", {
   skip_if_offline()
   testthat::skip_on_cran()
   
-  result <- planktonr::pr_get_NRSMicro() %>%
+  result <- planktonr::pr_get_data(Survey = "NRS", Type = "Micro") %>%
     tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
     dplyr::filter(StationCode %in% c("NSI", "PHB", "MAI")) %>%
     tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = mean) %>%
@@ -122,7 +122,7 @@ testthat::test_that("pr_plot_box creates ggplot for Coastal survey data", {
   skip_if_offline()
   testthat::skip_on_cran()
   
-  result <- planktonr::pr_get_NRSMicro(Survey = "Coastal") %>%
+  result <- planktonr::pr_get_data(Survey = "Coastal", Type = "Micro") %>%
     tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
     dplyr::filter(StationCode %in% c("DEE", "DEB")) %>%
     tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = mean) %>%
@@ -141,7 +141,7 @@ testthat::test_that("pr_plot_box handles CPR data with BioRegion", {
   
   # Get CPR data with BioRegion
   cpr_data <- planktonr::pr_get_Raw("cpr_derived_indices_data") %>%
-    pr_rename() %>%
+    planktonr:::pr_rename() %>%
     pr_add_Bioregions() %>%
     dplyr::filter(!is.na(BioRegion)) %>%
     dplyr::select(BioRegion, BiomassIndex_mgm3, ZoopAbundance_m3) %>%
@@ -380,8 +380,9 @@ testthat::test_that("pr_plot_scatter creates plot even with missing column (ggpl
   )
   
   # ggplot will create plot but may error on render - we just check it creates a ggplot object
+  # suppressWarnings for pr_relabel warning about unknown parameter names
   testthat::expect_s3_class(
-    pr_plot_scatter(mock_data, "Param1", "NonExistentParam", Trend = "none"),
+    suppressWarnings(pr_plot_scatter(mock_data, "Param1", "NonExistentParam", Trend = "none")),
     "ggplot"
   )
 })
@@ -393,8 +394,9 @@ testthat::test_that("pr_plot_box creates plot even with missing column (ggplot h
   )
   
   # ggplot will create plot but may error on render - we just check it creates a ggplot object
+  # suppressWarnings for pr_relabel warning about unknown parameter names
   testthat::expect_s3_class(
-    pr_plot_box(mock_data, "NonExistentParam"),
+    suppressWarnings(pr_plot_box(mock_data, "NonExistentParam")),
     "ggplot"
   )
 })
@@ -407,7 +409,8 @@ testthat::test_that("pr_plot_scatter handles empty data frame", {
   )
   
   # Should create plot but with no data
-  result <- pr_plot_scatter(mock_data, "Param1", "Param2", Trend = "none")
+  # suppressWarnings for pr_relabel warning about unknown parameter names
+  result <- suppressWarnings(pr_plot_scatter(mock_data, "Param1", "Param2", Trend = "none"))
   testthat::expect_s3_class(result, "ggplot")
 })
 
@@ -418,7 +421,8 @@ testthat::test_that("pr_plot_box handles empty data frame", {
   )
   
   # Should create plot but with no data
-  result <- pr_plot_box(mock_data, "Value")
+  # suppressWarnings for pr_relabel warning about unknown parameter names
+  result <- suppressWarnings(pr_plot_box(mock_data, "Value"))
   testthat::expect_s3_class(result, "ggplot")
 })
 
@@ -429,7 +433,8 @@ testthat::test_that("pr_plot_scatter creates plot even without StationName or Bi
   )
   
   # Should create plot even without grouping variable (uses defaults)
-  result <- pr_plot_scatter(mock_data, "Param1", "Param2", Trend = "none")
+  # suppressWarnings for pr_relabel warning about unknown parameter names
+  result <- suppressWarnings(pr_plot_scatter(mock_data, "Param1", "Param2", Trend = "none"))
   testthat::expect_s3_class(result, "ggplot")
   testthat::expect_true(length(result$layers) > 0)
 })
@@ -440,7 +445,8 @@ testthat::test_that("pr_plot_box creates plot even without StationName or BioReg
   )
   
   # Should create plot even without grouping variable (uses defaults)
-  result <- pr_plot_box(mock_data, "Value")
+  # suppressWarnings for pr_relabel warning about unknown parameter names
+  result <- suppressWarnings(pr_plot_box(mock_data, "Value"))
   testthat::expect_s3_class(result, "ggplot")
   testthat::expect_true(length(result$layers) > 0)
 })
@@ -453,9 +459,10 @@ testthat::test_that("pr_plot_scatter accepts valid Trend values", {
   )
   
   # All valid Trend values should work
-  testthat::expect_no_error(pr_plot_scatter(mock_data, "Param1", "Param2", Trend = "none"))
-  testthat::expect_no_error(pr_plot_scatter(mock_data, "Param1", "Param2", Trend = "Linear"))
-  testthat::expect_no_error(pr_plot_scatter(mock_data, "Param1", "Param2", Trend = "Smoother"))
+  # suppressWarnings for pr_relabel warning about unknown parameter names
+  testthat::expect_no_error(suppressWarnings(pr_plot_scatter(mock_data, "Param1", "Param2", Trend = "none")))
+  testthat::expect_no_error(suppressWarnings(pr_plot_scatter(mock_data, "Param1", "Param2", Trend = "Linear")))
+  testthat::expect_no_error(suppressWarnings(pr_plot_scatter(mock_data, "Param1", "Param2", Trend = "Smoother")))
 })
 
 testthat::test_that("pr_plot_scatter handles case-sensitive Trend parameter", {

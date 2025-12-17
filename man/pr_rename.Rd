@@ -4,10 +4,10 @@
 \alias{pr_rename}
 \title{Standardise column names in IMOS plankton dataframes}
 \usage{
-pr_rename(df)
+pr_rename(dat)
 }
 \arguments{
-\item{df}{Dataframe with column names to renamed}
+\item{dat}{Dataframe with column names to renamed}
 }
 \value{
 Dataframe with new column names
@@ -15,7 +15,4 @@ Dataframe with new column names
 \description{
 Standardise column names in IMOS plankton dataframes
 }
-\examples{
-df <- data.frame(LATITUDE = -32, LONGITUDE = 160) \%>\%
-            pr_rename()
-}
+\keyword{internal}

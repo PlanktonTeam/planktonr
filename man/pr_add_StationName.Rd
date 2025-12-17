@@ -42,14 +42,14 @@ for logical ordering.
 }
 }
 \examples{
-# Add station names to station metadata
-df <- pr_get_Stations() \%>\%
+# Add station names to data with StationCode
+df <- data.frame(StationCode = c("PHB", "MAI", "NSI")) \%>\%
   pr_add_StationName()
 
 }
 \seealso{
 \itemize{
 \item \code{\link[=pr_add_StationCode]{pr_add_StationCode()}} for the reverse conversion
-\item \code{\link[=pr_get_Stations]{pr_get_Stations()}} for station metadata
+\item \code{\link[=pr_get_info]{pr_get_info()}} for station metadata
 }
 }

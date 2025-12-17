@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_plankton.R
 \name{pr_get_PCIData}
 \alias{pr_get_PCIData}
-\title{Generate Phytoplankton Colour Index (PCI) data from CPR samples}
+\title{Get Phytoplankton Colour Index (PCI) data from CPR samples}
 \usage{
 pr_get_PCIData()
 }
@@ -10,7 +10,7 @@ pr_get_PCIData()
 dataframe of PCI data
 }
 \description{
-Generate Phytoplankton Colour Index (PCI) data from CPR samples
+Get Phytoplankton Colour Index (PCI) data from CPR samples
 }
 \examples{
 head(pr_get_PCIData(),5)

@@ -4,10 +4,10 @@
 \alias{pr_filter_data}
 \title{Filter data for plotting functions}
 \usage{
-pr_filter_data(df, Parameter = "Biomass_mgm3", StationRegion = "NSI")
+pr_filter_data(dat, Parameter = "Biomass_mgm3", StationRegion = "NSI")
 }
 \arguments{
-\item{df}{A dataframe from \code{\link[=pr_get_Indices]{pr_get_Indices()}}, \code{\link[=pr_get_EOVs]{pr_get_EOVs()}}, or similar
+\item{dat}{A dataframe from \code{\link[=pr_get_Indices]{pr_get_Indices()}}, \code{\link[=pr_get_EOVs]{pr_get_EOVs()}}, or similar
 functions}
 
 \item{Parameter}{Character string or vector of parameter names to retain.
@@ -67,15 +67,15 @@ Both \code{Parameter} and \code{StationRegion} accept vectors, enabling:
 }
 \examples{
 # Filter CPR data to biomass in two bioregions
-df <- pr_get_Indices("CPR", "Zooplankton") \%>\%
+dat <- pr_get_Indices("CPR", "Zooplankton") \%>\%
   pr_filter_data("BiomassIndex_mgm3", c("North", "South-west"))
-  
+
 # Filter NRS data to phytoplankton carbon at two stations
-df <- pr_get_Indices("NRS", "Phytoplankton") \%>\%
+dat <- pr_get_Indices("NRS", "Phytoplankton") \%>\%
   pr_filter_data("PhytoBiomassCarbon_pgL", c("NSI", "PHB"))
-  
+
 # Multiple parameters at one station
-df <- pr_get_Indices("NRS", "Zooplankton") \%>\%
+dat <- pr_get_Indices("NRS", "Zooplankton") \%>\%
   pr_filter_data(c("Biomass_mgm3", "Abundance_m3", "ShannonDiversity"), "MAI")
 }
 \seealso{

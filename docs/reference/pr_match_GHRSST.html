@@ -24,7 +24,7 @@ sst_count, sst_dtime, sst_mean, sst_standard_deviation, wind_speed, wind_speed_d
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">planktonr</a>
-        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.6.6</span>
+        <span class="version label label-info" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
       </span>
     </div>
 
@@ -93,7 +93,7 @@ sst_count, sst_dtime, sst_mean, sst_standard_deviation, wind_speed, wind_speed_d
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pr_match_GHRSST</span><span class="op">(</span></span>
-<span>  <span class="va">df</span>,</span>
+<span>  <span class="va">dat</span>,</span>
 <span>  <span class="va">pr</span>,</span>
 <span>  res_spat <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  res_temp <span class="op">=</span> <span class="st">"1d"</span>,</span>
@@ -106,7 +106,7 @@ sst_count, sst_dtime, sst_mean, sst_standard_deviation, wind_speed, wind_speed_d
     <h2>Arguments</h2>
 
 
-<dl><dt id="arg-df">df<a class="anchor" aria-label="anchor" href="#arg-df"></a></dt>
+<dl><dt id="arg-dat">dat<a class="anchor" aria-label="anchor" href="#arg-dat"></a></dt>
 <dd><p>dataframe containing latitude, longitude and Date</p></dd>
 
 
@@ -132,15 +132,15 @@ sst_count, sst_dtime, sst_mean, sst_standard_deviation, wind_speed, wind_speed_d
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>df with product output attached</p>
+    <p>dat with product output attached</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="fu"><a href="pr_get_DataLocs.html">pr_get_DataLocs</a></span><span class="op">(</span><span class="st">"CPR"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="fu"><a href="pr_get_DataLocs.html">pr_get_DataLocs</a></span><span class="op">(</span><span class="st">"CPR"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>        <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">Date</span><span class="op">)</span>, <span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">pr</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sea_surface_temperature"</span>, <span class="st">"quality_level"</span>, <span class="st">"sst_mean"</span>, <span class="st">"sst_standard_deviation"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">sstout</span> <span class="op">&lt;-</span> <span class="fu">pr_match_GHRSST</span><span class="op">(</span><span class="va">df</span>, <span class="va">pr</span>, res_spat <span class="op">=</span> <span class="fl">10</span>, res_temp <span class="op">=</span> <span class="st">"6d"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sstout</span> <span class="op">&lt;-</span> <span class="fu">pr_match_GHRSST</span><span class="op">(</span><span class="va">dat</span>, <span class="va">pr</span>, res_spat <span class="op">=</span> <span class="fl">10</span>, res_temp <span class="op">=</span> <span class="st">"6d"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -156,7 +156,7 @@ sst_count, sst_dtime, sst_mean, sst_standard_deviation, wind_speed, wind_speed_d
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer></div>

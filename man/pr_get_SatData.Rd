@@ -10,11 +10,11 @@ pr_get_SatData(Survey = "NRS")
 \item{Survey}{either NRS or CPR}
 }
 \value{
-df with either NRS or CPR satellite data
+dat with either NRS or CPR satellite data
 }
 \description{
 Load satellite-derived environmental data matched to plankton sampling locations
 }
 \examples{
-df <- pr_get_SatData("CPR")
+dat <- pr_get_SatData("CPR")
 }

@@ -84,13 +84,13 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Zooplankton", ...){
   )
 
   if(Survey == "CPR"){
-    df <- pr_get_CPRData(Type, Variable = "abundance", Subset = "htg") %>%
+    df <- pr_get_data(Survey = "CPR", Type = Type, Variable = "abundance", Subset = "htg") %>%
       pr_add_Bioregions(...)
   } else if(Survey == "NRS"){
-    df <- pr_get_NRSData(Type, Variable = "abundance", Subset = "htg") %>%
+    df <- pr_get_data(Survey = "NRS", Type = Type, Variable = "abundance", Subset = "htg") %>%
       dplyr::filter(.data$Project %in% c("NRS", "SOTS"))
   } else if(Survey == 'SOTS'){
-    df <- pr_get_NRSData(Type, Variable = "abundance", Subset = "htg") %>%
+    df <- pr_get_data(Survey = "NRS", Type = Type, Variable = "abundance", Subset = "htg") %>%
       dplyr::filter(grepl('SOTS', .data$StationCode),
                     .data$Method == 'LM')
   }
@@ -139,44 +139,14 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Zooplankton", ...){
   df <- df %>%
     dplyr::group_by(dplyr::across(-"Values")) %>%
     dplyr::summarise(Values = sum(.data$Values, na.rm = TRUE),
-                     .groups = "drop") #%>%
-  #dplyr::mutate(Values = dplyr::if_else(.data$Values < 1, 1, .data$Values))
-
-  # df <- planktonr_dat(df, type = Type, survey = Survey, variable = NULL)
+                     .groups = "drop")
 
   return(df)
 }
 
 
 
-# Get the summary plankton observations
-#
-# Get the summary plankton observations from the NRS and CPR.
-# @return a dataframe with a species summary
-#
-# @param Type The group of plankton requested. Either "Zooplankton" or "Phytoplankton"
-#
-# @export
-#
-# @examples
-# df <- pr_get_SppCount("Phytoplankton")
-# df <- pr_get_SppCount("Zooplankton")
-# pr_get_SppCount <- function(Type = "Zooplankton"){
-#
-#   if (Type == "Phytoplankton"){
-#     gp <- "Phytoplankton"
-#   } else if (Type == "Zooplankton"){
-#     gp <- "Zooplankton"
-#   }
-#
-# out <- sppSummary %>%
-#   dplyr::filter(.data$Group == gp)
-#
-# }
-
-
-
-#' Generate Phytoplankton Colour Index (PCI) data from CPR samples
+#' Get Phytoplankton Colour Index (PCI) data from CPR samples
 #'
 #' @return dataframe of PCI data
 #' @export
@@ -234,9 +204,9 @@ pr_get_TaxaAccum <- function(Survey = "NRS", Type = "Zooplankton"){
   )
 
   if (Survey == "NRS"){
-    dat <- pr_get_NRSData(Type = Type, Variable = "abundance", Subset = "raw")
+    dat <- pr_get_data(Survey = "NRS", Type = Type, Variable = "abundance", Subset = "raw")
   } else if (Survey == "CPR"){
-    dat <- pr_get_CPRData(Type = Type, Variable = "abundance", Subset = "raw")
+    dat <- pr_get_data(Survey = "CPR", Type = Type, Variable = "abundance", Subset = "raw")
   }
 
   dat %>%
@@ -277,15 +247,15 @@ pr_get_STIdata <-  function(Type = "Phytoplankton"){
   )
 
   if(Type == "Zooplankton"){
-    cprdat <- pr_get_CPRData(Type, Variable = "abundance", Subset = "copepods")
+    cprdat <- pr_get_data(Survey = "CPR", Type = Type, Variable = "abundance", Subset = "copepods")
 
-    nrsdat <- pr_get_NRSData(Type, Variable = "abundance", Subset = "copepods")
+    nrsdat <- pr_get_data(Survey = "NRS", Type = Type, Variable = "abundance", Subset = "copepods")
     parameter <- "CopeAbundance_m3"
 
   } else if(Type == "Phytoplankton"){
-    cprdat <- pr_get_CPRData(Type, Variable = "abundance", Subset = "species")
+    cprdat <- pr_get_data(Survey = "CPR", Type = Type, Variable = "abundance", Subset = "species")
 
-    nrsdat <- pr_get_NRSData(Type, Variable = "abundance", Subset = "species")
+    nrsdat <- pr_get_data(Survey = "NRS", Type = Type, Variable = "abundance", Subset = "species")
     parameter <- "PhytoAbundance_m3"
   }
 
@@ -420,10 +390,10 @@ pr_get_CTI <-  function(Type = "Zooplankton"){
   df <- pr_get_STI(Type)
 
   if(Type == "Zooplankton"){
-    dat <- pr_get_NRSData("Zooplankton", "abundance", "species")
+    dat <- pr_get_data(Survey = "NRS", Type = "Zooplankton", Variable = "abundance", Subset = "species")
     vars <- pr_get_NonTaxaColumns(Survey = "NRS", Type)
   } else {
-    dat <- pr_get_NRSData("phytoplankton", "abundance", "species")
+    dat <- pr_get_data(Survey = "NRS", Type = "Phytoplankton", Variable = "abundance", Subset = "species")
     vars <- pr_get_NonTaxaColumns(Survey = "NRS", Type)
   }
 
@@ -465,10 +435,10 @@ pr_get_DayNight <- function(Type = "Zooplankton"){
   Type <- pr_check_type(Type)
 
   if(Type == "Zooplankton"){
-    dat <- pr_get_CPRData(Type = "Zooplankton", Variable = "abundance", Subset = "copepods")
+    dat <- pr_get_data(Survey = "CPR", Type = "Zooplankton", Variable = "abundance", Subset = "copepods")
 
   } else if (Type == "Phytoplankton"){
-    dat <- pr_get_CPRData(Type = "Phytoplankton", Variable = "abundance", Subset = "species")
+    dat <- pr_get_data(Survey = "CPR", Type = "Phytoplankton", Variable = "abundance", Subset = "species")
 
   }
 
@@ -513,6 +483,35 @@ pr_get_DayNight <- function(Type = "Zooplankton"){
 #'                           BioVolume_um3m3 = c(100, 150), PhytoAbund_m3 = c(10, 8))
 #' df <- pr_add_Carbon(df, "CPR")
 pr_add_Carbon <- function(df, meth){
+  
+  # Input validation
+  assertthat::assert_that(
+    is.data.frame(df),
+    msg = "'df' must be a data frame."
+  )
+  
+  assertthat::assert_that(
+    is.character(meth) && length(meth) == 1,
+    msg = "'meth' must be a single character string. Valid options are 'CPR' or 'NRS'."
+  )
+  
+  assertthat::assert_that(
+    meth %in% c("CPR", "NRS"),
+    msg = "'meth' must be one of 'CPR' or 'NRS'."
+  )
+  
+  # Validate required columns based on method
+  if (meth == "CPR") {
+    assertthat::assert_that(
+      all(c("BioVolume_um3m3", "PhytoAbund_m3", "TaxonGroup") %in% colnames(df)),
+      msg = "For CPR data, 'df' must contain 'BioVolume_um3m3', 'PhytoAbund_m3', and 'TaxonGroup' columns."
+    )
+  } else if (meth == "NRS") {
+    assertthat::assert_that(
+      all(c("Biovolume_um3L", "Cells_L", "TaxonGroup") %in% colnames(df)),
+      msg = "For NRS data, 'df' must contain 'Biovolume_um3L', 'Cells_L', and 'TaxonGroup' columns."
+    )
+  }
 
   if (meth %in% "CPR"){
     df <- df %>%

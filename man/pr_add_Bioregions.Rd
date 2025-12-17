@@ -4,10 +4,10 @@
 \alias{pr_add_Bioregions}
 \title{Assign Australian Marine Bioregions to sample locations}
 \usage{
-pr_add_Bioregions(df, near_dist_km = 0)
+pr_add_Bioregions(dat, near_dist_km = 0)
 }
 \arguments{
-\item{df}{A dataframe containing columns \code{Longitude} and \code{Latitude} with
+\item{dat}{A dataframe containing columns \code{Longitude} and \code{Latitude} with
 geographic coordinates in decimal degrees (WGS84)}
 
 \item{near_dist_km}{Buffer distance (in kilometres) to use when assigning
@@ -78,17 +78,15 @@ handles coordinate transformations automatically.
 }
 \examples{
 # Add bioregions with exact matching (no buffer)
-df <- pr_get_Raw("cpr_derived_indices_data") \%>\%
-  pr_rename() \%>\%
+dat <- pr_get_Raw("cpr_derived_indices_data") \%>\%
   pr_add_Bioregions()
 
 # Add bioregions with 250 km buffer for offshore samples
-df <- pr_get_Raw("cpr_derived_indices_data") \%>\%
-  pr_rename() \%>\%
+dat <- pr_get_Raw("cpr_derived_indices_data") \%>\%
   pr_add_Bioregions(near_dist_km = 250)
-  
+
 # Check bioregion assignments
-table(df$BioRegion)
+table(dat$BioRegion)
 
 }
 \seealso{

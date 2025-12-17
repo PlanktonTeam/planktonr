@@ -57,12 +57,12 @@ trends. Significant harmonic terms indicate a strong seasonal cycle.
 }
 \examples{
 # Fit models and extract coefficients
-df <- planktonr::pr_get_EOVs(Survey = "NRS") \%>\%
+dat <- planktonr::pr_get_EOVs(Survey = "NRS") \%>\%
   dplyr::filter(Parameters == "Biomass_mgm3") \%>\%
   pr_remove_outliers(2) \%>\%
   pr_model_data()
 
-models <- pr_get_model(df)
+models <- pr_get_model(dat)
 coeffs <- pr_get_coeffs(models)
 
 # View only Year trends

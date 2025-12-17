@@ -7,7 +7,7 @@ utils::globalVariables(".")
 #' @export
 #'
 #' @examples
-#' df <- pr_get_SOTSvariables(Type = "Physical")
+#' dat <- pr_get_SOTSvariables(Type = "Physical")
 
 pr_get_SOTSvariables <- function(Type = "Physical"){
 
@@ -69,7 +69,7 @@ pr_get_SOTSvariables <- function(Type = "Physical"){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_SOTSMoorData(Type = "Nutrients")
+#' dat <- pr_get_SOTSMoorData(Type = "Nutrients")
 
 pr_get_SOTSMoorData <- function(Type = "Physical"){
 
@@ -158,12 +158,12 @@ pr_get_SOTSMoorData <- function(Type = "Physical"){
       }
     }
 
-    df <- purrr::map(variablesAvailable, vardat) %>%
+    dat <- purrr::map(variablesAvailable, vardat) %>%
       purrr::list_rbind()
 
     ncdf4::nc_close(nc)
 
-    df <- df %>%
+    dat <- dat %>%
       dplyr::mutate(StationName = "Southern Ocean Time Series",
                     StationCode = "SOTS",
                     Month_Local = lubridate::month(.data$SampleTime_Local),
@@ -190,7 +190,7 @@ pr_get_SOTSMoorData <- function(Type = "Physical"){
 
   }
 
-  df <- purrr::map(file_list, SOTSdata) %>%
+  dat <- purrr::map(file_list, SOTSdata) %>%
     purrr::list_rbind() %>%
     planktonr::planktonr_dat("Water", "SOTS")
 

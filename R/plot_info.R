@@ -82,7 +82,7 @@ pr_plot_TaxaAccum <- function(dat){
     is.data.frame(dat),
     msg = "'dat' must be a data frame. Use pr_get_TaxaAccum() to create the data."
   )
-  
+
   required_cols <- c("First", "RowN")
   assertthat::assert_that(
     all(required_cols %in% colnames(dat)),
@@ -98,7 +98,7 @@ pr_plot_TaxaAccum <- function(dat){
     ggplot2::ylab("Taxa Identified") +
     theme_pr() +
     ggplot2::scale_y_continuous(expand = c(0, 0)) +
-    ggplot2::ggtitle(paste(Survey, "-", planktonr::pr_title(Type)))
+    ggplot2::ggtitle(paste(Survey, "-", pr_title(Type)))
 
   return(gg)
 
@@ -109,11 +109,11 @@ pr_plot_TaxaAccum <- function(dat){
 
 #' Create pie charts showing functional group composition
 #'
-#' Visualise the relative proportion of plankton functional groups averaged 
-#' across all samples. Useful for summarising community composition in a simple, 
+#' Visualise the relative proportion of plankton functional groups averaged
+#' across all samples. Useful for summarising community composition in a simple,
 #' accessible format.
 #'
-#' @param df A dataframe from [pr_get_FuncGroups()] containing functional group 
+#' @param dat A dataframe from [pr_get_FuncGroups()] containing functional group
 #'   abundance or biomass data
 #'
 #' @details
@@ -123,79 +123,74 @@ pr_plot_TaxaAccum <- function(dat){
 #' * Wedge size proportional to mean abundance/biomass across all samples
 #' * Colours from the "Set1" palette for clear distinction
 #' * Legend below plot listing all functional groups
-#' 
+#'
 #' ## Interpretation
-#' This plot provides a quick overview of which functional groups dominate the 
+#' This plot provides a quick overview of which functional groups dominate the
 #' plankton community on average. Use this for:
 #' * Initial data exploration
 #' * Comparing overall community structure between surveys or regions
 #' * Educational presentations requiring simple visualisations
-#' 
+#'
 #' ## Limitations
 #' * Shows average composition only, hiding temporal variability
 #' * Cannot show changes over time (use [pr_plot_tsfg()] for that)
 #' * Works best with 5-10 functional groups; too many makes wedges hard to distinguish
-#' 
+#'
 #' ## Functional Groups
 #' The plot automatically detects whether data are:
 #' * **Phytoplankton**: Diatoms, dinoflagellates, ciliates, etc.
 #' * **Zooplankton**: Copepods, appendicularians, fish larvae, etc.
-#' 
+#'
 #' And labels the legend accordingly.
 #'
 #' @return A ggplot2 object that can be further customised or saved with `ggsave()`
-#' 
-#' @seealso 
+#'
+#' @seealso
 #' * [pr_get_FuncGroups()] to generate input data
 #' * [pr_plot_tsfg()] for time series of functional group composition
-#' 
+#'
 #' @export
 #'
 #' @examples
 #' # Phytoplankton functional groups from CPR
-#' df <- pr_get_FuncGroups("CPR", "Phytoplankton")
-#' plot <- pr_plot_PieFG(df)
+#' dat <- pr_get_FuncGroups("CPR", "Phytoplankton")
+#' plot <- pr_plot_PieFG(dat)
 #' print(plot)
-#' 
-#' # Zooplankton functional groups from NRS
-#' df <- pr_get_FuncGroups("NRS", "Zooplankton")
-#' pr_plot_PieFG(df)
-#' 
-#' # Save to file
-#' df <- pr_get_FuncGroups("CPR", "Zooplankton")
-#' p <- pr_plot_PieFG(df)
-#' ggplot2::ggsave("functional_groups_pie.png", p, width = 8, height = 6)
 #'
-pr_plot_PieFG <- function(df){
+#' # Zooplankton functional groups from NRS
+#' dat <- pr_get_FuncGroups("NRS", "Zooplankton")
+#' pr_plot_PieFG(dat)
+#'
+pr_plot_PieFG <- function(dat){
 
   # Input validation
   assertthat::assert_that(
-    inherits(df, "planktonr_dat"),
-    msg = "'df' must be a planktonr_dat object. Use pr_get_FuncGroups() to create the data."
-  )
-  
-  assertthat::assert_that(
-    "Parameters" %in% colnames(df) && "Values" %in% colnames(df),
-    msg = "'df' must contain 'Parameters' and 'Values' columns. Use pr_get_FuncGroups() to create the data."
+    inherits(dat, "planktonr_dat"),
+    msg = "'dat' must be a planktonr_dat object. Use pr_get_FuncGroups() to create the data."
   )
 
-  if('BioRegion' %in% colnames(df)){
+  assertthat::assert_that(
+    "Parameters" %in% colnames(dat) && "Values" %in% colnames(dat),
+    msg = "'dat' must contain 'Parameters' and 'Values' columns. Use pr_get_FuncGroups() to create the data."
+  )
+
+  if('BioRegion' %in% colnames(dat)){
     Survey = 'CPR'
-  } else if ('StationCode' %in% colnames(df)){
+  } else if ('StationCode' %in% colnames(dat)){
     Survey = 'NRS'
   } else {
     Survey = ''
   }
 
-  if(nrow(df %>% dplyr::filter(grepl('iatom', df$Parameters))) > 0){
+  if(nrow(dat %>% dplyr::filter(grepl('iatom', dat$Parameters))) > 0){
     plotTitle = 'Phytoplankton'
-  } else if (nrow(df %>% dplyr::filter(grepl('opepod', df$Parameters))) > 0){
+  } else if (nrow(dat %>% dplyr::filter(grepl('opepod', dat$Parameters))) > 0){
     plotTitle = 'Zooplankton'
   } else {
     plotTitle = ''
   }
 
-  p <- ggplot2::ggplot(data = df %>%
+  p <- ggplot2::ggplot(data = dat %>%
                          dplyr::group_by(.data$Parameters) %>%
                          dplyr::summarise(mean = mean(.data$Values, na.rm = TRUE)),
                        ggplot2::aes(x = "", y = mean, fill = .data$Parameters)) +

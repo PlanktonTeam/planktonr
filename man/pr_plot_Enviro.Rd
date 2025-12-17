@@ -4,10 +4,10 @@
 \alias{pr_plot_Enviro}
 \title{Plot environmental data with depth profiles}
 \usage{
-pr_plot_Enviro(df, Trend = "None", trans = "identity")
+pr_plot_Enviro(dat, Trend = "None", trans = "identity")
 }
 \arguments{
-\item{df}{A dataframe from \code{\link[=pr_get_NRSChemistry]{pr_get_NRSChemistry()}}, \code{\link[=pr_get_NRSPigments]{pr_get_NRSPigments()}},
+\item{dat}{A dataframe from \code{\link[=pr_get_NRSChemistry]{pr_get_NRSChemistry()}}, \code{\link[=pr_get_NRSPigments]{pr_get_NRSPigments()}},
 or \code{\link[=pr_get_NRSPico]{pr_get_NRSPico()}} containing environmental data with depth information}
 
 \item{Trend}{Type of trend line to add:
@@ -63,27 +63,27 @@ Use \code{\link[=pr_remove_outliers]{pr_remove_outliers()}} before plotting if e
 }
 \examples{
 # Plot total chlorophyll a with depth
-df <- pr_get_NRSPigments(Format = "binned") \%>\%
+dat <- pr_get_NRSPigments(Format = "binned") \%>\%
   pr_remove_outliers(2) \%>\%
   dplyr::filter(Parameters == "TotalChla",
                 StationCode \%in\% c("NSI", "MAI"))
-pr_plot_Enviro(df, Trend = "Smoother", trans = "log10")
+pr_plot_Enviro(dat, Trend = "Smoother", trans = "log10")
 
 # Plot nitrate concentrations
-df <- pr_get_NRSChemistry() \%>\%
+dat <- pr_get_NRSChemistry() \%>\%
   dplyr::filter(Parameters == "Nitrate_umolL",
                 StationCode == "PHB")
-pr_plot_Enviro(df, Trend = "Linear", trans = "identity")
+pr_plot_Enviro(dat, Trend = "Linear", trans = "identity")
 
 # Plot Prochlorococcus abundance
-df <- pr_get_NRSPico() \%>\%
+dat <- pr_get_NRSPico() \%>\%
   dplyr::filter(Parameters == "Prochlorococcus_cellsmL",
                 StationCode == "NSI")
-pr_plot_Enviro(df, Trend = "Smoother", trans = "log10")
+pr_plot_Enviro(dat, Trend = "Smoother", trans = "log10")
 
-df <- pr_get_NRSChemistry() \%>\% dplyr::filter(Parameters == "SecchiDepth_m",
+dat <- pr_get_NRSChemistry() \%>\% dplyr::filter(Parameters == "SecchiDepth_m",
 StationCode \%in\% c('PHB', 'NSI'))
-pr_plot_Enviro(df)
+pr_plot_Enviro(dat)
 
 }
 \seealso{

@@ -4,10 +4,10 @@
 \alias{pr_plot_scatter}
 \title{Simple function to scatter 2 data columns using common NRS colouring}
 \usage{
-pr_plot_scatter(df, x, y, Trend = "none")
+pr_plot_scatter(dat, x, y, Trend = "none")
 }
 \arguments{
-\item{df}{Dataframe}
+\item{dat}{Dataframe}
 
 \item{x}{Column name for the x axis}
 
@@ -22,10 +22,10 @@ ggplot object
 Note that this function assumes wide data with the data to plot as columns.
 }
 \examples{
-df <- planktonr::pr_get_NRSMicro() \%>\%
+dat <- pr_get_data(Survey = "NRS", Type = "Micro") \%>\%
 tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) \%>\%
 dplyr::filter(StationCode \%in\% c("NSI", "PHB")) \%>\%
 tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = mean)
-gg <- pr_plot_scatter(df, "Bacterial_Temperature_Index_KD",
+gg <- pr_plot_scatter(dat, "Bacterial_Temperature_Index_KD",
 "nitrogen_fixation_organisms", Trend = 'none')
 }

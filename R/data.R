@@ -18,7 +18,7 @@
 #'   \item{geometry}{point geometry (sfc_POINT)}
 #' }
 #'
-#' @source Constructed from NRS microbial station data via \code{pr_get_NRSMicro()} in
+#' @source Constructed from Coastal microbial station data via \code{pr_get_data(Survey = "Coastal", Type = "Micro")} in
 #' \code{data-raw/DATASET.R}.
 #' @docType data
 #' @keywords datasets

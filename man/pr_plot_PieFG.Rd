@@ -4,10 +4,10 @@
 \alias{pr_plot_PieFG}
 \title{Create pie charts showing functional group composition}
 \usage{
-pr_plot_PieFG(df)
+pr_plot_PieFG(dat)
 }
 \arguments{
-\item{df}{A dataframe from \code{\link[=pr_get_FuncGroups]{pr_get_FuncGroups()}} containing functional group
+\item{dat}{A dataframe from \code{\link[=pr_get_FuncGroups]{pr_get_FuncGroups()}} containing functional group
 abundance or biomass data}
 }
 \value{
@@ -62,18 +62,13 @@ And labels the legend accordingly.
 }
 \examples{
 # Phytoplankton functional groups from CPR
-df <- pr_get_FuncGroups("CPR", "Phytoplankton")
-plot <- pr_plot_PieFG(df)
+dat <- pr_get_FuncGroups("CPR", "Phytoplankton")
+plot <- pr_plot_PieFG(dat)
 print(plot)
 
 # Zooplankton functional groups from NRS
-df <- pr_get_FuncGroups("NRS", "Zooplankton")
-pr_plot_PieFG(df)
-
-# Save to file
-df <- pr_get_FuncGroups("CPR", "Zooplankton")
-p <- pr_plot_PieFG(df)
-ggplot2::ggsave("functional_groups_pie.png", p, width = 8, height = 6)
+dat <- pr_get_FuncGroups("NRS", "Zooplankton")
+pr_plot_PieFG(dat)
 
 }
 \seealso{

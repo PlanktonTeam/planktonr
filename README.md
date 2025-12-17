@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# planktonr <a href='https://github.com/PlanktonTeam/planktonr'><img src='man/figures/planktonr.png' align="right" width="139px" /></a>
+# planktonr <a href="https://github.com/PlanktonTeam/planktonr"><img src="man/figures/planktonr.png" align="right" width="139px" /></a>
 
 <!-- badges: start -->
 

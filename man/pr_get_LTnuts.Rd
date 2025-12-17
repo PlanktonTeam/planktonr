@@ -13,5 +13,5 @@ dataframe for plotting long term nutrient time series info
 Get NRS long term nutrient timeseries data
 }
 \examples{
-df <- pr_get_LTnuts()
+dat <- pr_get_LTnuts()
 }
