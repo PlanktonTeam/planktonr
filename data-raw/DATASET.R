@@ -12,7 +12,7 @@ MapOz <- rnaturalearth::ne_countries(scale = "small", country = "Australia",
 # Continuous Plankton Recorder (CPR) --------------------------------------
 
 # CPR policy info
-CPRinfo <- planktonr::pr_get_PolicyInfo("CPR")
+CPRinfo <- planktonr::pr_get_info(Source = "CPR")
 
 mbr <- sf::st_read(file.path("data-raw","marine_regions")) %>% # Load marine regions as sf
   sf::st_transform(crs = "+proj=longlat +datum=WGS84") %>%
@@ -105,7 +105,7 @@ cpr_AAD <- read_csv("data-raw/AADC-00099_-_2025_data_update/AADC-00099_29August2
                                      "PCI" = "Phytoplankton_Colour_Index")),
                 tidyselect::everything())
 
-SpInfoZ <- planktonr::pr_get_SpeciesInfo(Type = "Zooplankton") %>%
+SpInfoZ <- planktonr::pr_get_info(Source = "Zooplankton") %>%
   dplyr::mutate(`Taxon Name` = stringr::str_remove(`Taxon Name`, " [fmji]$"),
                 `Taxon Name` = stringr::str_remove(`Taxon Name`," megalopa"),
                 `Taxon Name` = stringr::str_remove(`Taxon Name`," naupliius"),
@@ -205,7 +205,7 @@ CSCodes <- tibble::tibble(StationName = c("Balls Head", "Salmon Haul", "Bare Isl
 
 
 # Microbial Coastal station input into pl_plot_NRSmap()
-csDAT <- planktonr::pr_get_NRSMicro("Coastal") %>%
+csDAT <- planktonr::pr_get_data(Survey = "Coastal", Type = "Micro") %>%
   dplyr::select("StationName", "StationCode", "Longitude", "Latitude", "State") %>%
   # dplyr::rename(Code = "StationCode",
   # Station = "StationName") %>%
@@ -256,7 +256,7 @@ ltyCSName <- data.frame(Code = CSCodes$StationName,
 
 
 # NRS input into pl_plot_NRSmap()
-meta_sf <- planktonr::pr_get_NRSTrips() %>%
+meta_sf <- planktonr::pr_get_trips(Survey = "NRS") %>%
   dplyr::select("StationName", "StationCode", "Longitude", "Latitude") %>%
   dplyr::distinct() %>%
   dplyr::rename(Code = "StationCode",

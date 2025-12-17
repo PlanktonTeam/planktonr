@@ -12,7 +12,7 @@
 #' @export
 
 #' @examples
-#' dat <- planktonr::pr_get_NRSMicro() %>%
+#' dat <- pr_get_data(Survey = "NRS", Type = "Micro") %>%
 #' tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
 #' dplyr::filter(StationCode %in% c("NSI", "PHB")) %>%
 #' tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = mean)
@@ -33,8 +33,8 @@ pr_plot_scatter <- function(dat, x, y, Trend = 'none'){
     aesSN <- ggplot2::aes(fill = .data$StationName)
   }
 
-  titlex <- planktonr::pr_relabel(x, style = "ggplot")
-  titley <- planktonr::pr_relabel(y, style = "ggplot")
+  titlex <- pr_relabel(x, style = "ggplot")
+  titley <- pr_relabel(y, style = "ggplot")
 
   gg <-  gg +
     ggplot2::geom_point() +
@@ -74,7 +74,7 @@ pr_plot_scatter <- function(dat, x, y, Trend = 'none'){
 #' @export
 
 #' @examples
-#' dat <- planktonr::pr_get_NRSMicro('Coastal') %>%
+#' dat <- pr_get_data(Survey = "Coastal", Type = "Micro") %>%
 #' tidyr::drop_na(tidyselect::all_of(c("Values", "Parameters"))) %>%
 #' dplyr::filter(StationCode %in% c("TOP", "BAI")) %>%
 #' tidyr::pivot_wider(names_from = "Parameters", values_from = "Values", values_fn = mean)
@@ -96,7 +96,7 @@ pr_plot_box <- function(dat, y){
                           ggplot2::aes(.data$StationName, !!rlang::sym(y), color = .data$StationName, linetype = .data$StationName))
   }
 
-  titley <- planktonr::pr_relabel(y, style = "ggplot")
+  titley <- pr_relabel(y, style = "ggplot")
 
   gg <- gg +
     ggplot2::geom_point() +

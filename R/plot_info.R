@@ -98,7 +98,7 @@ pr_plot_TaxaAccum <- function(dat){
     ggplot2::ylab("Taxa Identified") +
     theme_pr() +
     ggplot2::scale_y_continuous(expand = c(0, 0)) +
-    ggplot2::ggtitle(paste(Survey, "-", planktonr::pr_title(Type)))
+    ggplot2::ggtitle(paste(Survey, "-", pr_title(Type)))
 
   return(gg)
 

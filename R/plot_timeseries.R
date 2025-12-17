@@ -1307,7 +1307,7 @@ pr_plot_STI <-  function(df){
 #' @export
 #'
 #' @examples
-#' df <- pr_get_NRSMicro('GO-SHIP')
+#' df <- pr_get_data(Survey = 'GO-SHIP', Type = 'Micro')
 #' df <- df %>% dplyr::filter(Parameters == 'Bacteria_unique_ASVs',
 #' SampleDepth_m < 101)
 #' pr_plot_latitude(df, na.fill = mean)
@@ -1317,7 +1317,7 @@ pr_plot_latitude <- function(df, na.fill = TRUE){
   # Input validation
   assertthat::assert_that(
     inherits(df, "planktonr_dat"),
-    msg = "'df' must be a planktonr_dat object. Use pr_get_NRSMicro() or similar functions to create the data."
+    msg = "'df' must be a planktonr_dat object. Use pr_get_data() or similar functions to create the data."
   )
 
   required_cols <- c("Parameters", "Values", "Latitude", "SampleDepth_m")
@@ -1333,8 +1333,8 @@ pr_plot_latitude <- function(df, na.fill = TRUE){
 
   df <- df %>% tidyr::drop_na()
 
-  param <- planktonr::pr_relabel(unique(df$Parameters), "ggplot")
-  xlabel <- planktonr::pr_relabel('Latitude', "ggplot")
+  param <- pr_relabel(unique(df$Parameters), "ggplot")
+  xlabel <- pr_relabel('Latitude', "ggplot")
   Lab <- seq(round(min(df$Values), 0), round(max(df$Values), 0), length.out = 5)
   Breaks <- seq(round(min(df$Values), 0), round(max(df$Values), 0), length.out = 5)
 

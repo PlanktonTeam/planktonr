@@ -84,13 +84,13 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Zooplankton", ...){
   )
 
   if(Survey == "CPR"){
-    df <- pr_get_CPRData(Type, Variable = "abundance", Subset = "htg") %>%
+    df <- pr_get_data(Survey = "CPR", Type = Type, Variable = "abundance", Subset = "htg") %>%
       pr_add_Bioregions(...)
   } else if(Survey == "NRS"){
-    df <- pr_get_NRSData(Type, Variable = "abundance", Subset = "htg") %>%
+    df <- pr_get_data(Survey = "NRS", Type = Type, Variable = "abundance", Subset = "htg") %>%
       dplyr::filter(.data$Project %in% c("NRS", "SOTS"))
   } else if(Survey == 'SOTS'){
-    df <- pr_get_NRSData(Type, Variable = "abundance", Subset = "htg") %>%
+    df <- pr_get_data(Survey = "NRS", Type = Type, Variable = "abundance", Subset = "htg") %>%
       dplyr::filter(grepl('SOTS', .data$StationCode),
                     .data$Method == 'LM')
   }
@@ -204,9 +204,9 @@ pr_get_TaxaAccum <- function(Survey = "NRS", Type = "Zooplankton"){
   )
 
   if (Survey == "NRS"){
-    dat <- pr_get_NRSData(Type = Type, Variable = "abundance", Subset = "raw")
+    dat <- pr_get_data(Survey = "NRS", Type = Type, Variable = "abundance", Subset = "raw")
   } else if (Survey == "CPR"){
-    dat <- pr_get_CPRData(Type = Type, Variable = "abundance", Subset = "raw")
+    dat <- pr_get_data(Survey = "CPR", Type = Type, Variable = "abundance", Subset = "raw")
   }
 
   dat %>%
@@ -247,15 +247,15 @@ pr_get_STIdata <-  function(Type = "Phytoplankton"){
   )
 
   if(Type == "Zooplankton"){
-    cprdat <- pr_get_CPRData(Type, Variable = "abundance", Subset = "copepods")
+    cprdat <- pr_get_data(Survey = "CPR", Type = Type, Variable = "abundance", Subset = "copepods")
 
-    nrsdat <- pr_get_NRSData(Type, Variable = "abundance", Subset = "copepods")
+    nrsdat <- pr_get_data(Survey = "NRS", Type = Type, Variable = "abundance", Subset = "copepods")
     parameter <- "CopeAbundance_m3"
 
   } else if(Type == "Phytoplankton"){
-    cprdat <- pr_get_CPRData(Type, Variable = "abundance", Subset = "species")
+    cprdat <- pr_get_data(Survey = "CPR", Type = Type, Variable = "abundance", Subset = "species")
 
-    nrsdat <- pr_get_NRSData(Type, Variable = "abundance", Subset = "species")
+    nrsdat <- pr_get_data(Survey = "NRS", Type = Type, Variable = "abundance", Subset = "species")
     parameter <- "PhytoAbundance_m3"
   }
 
@@ -390,10 +390,10 @@ pr_get_CTI <-  function(Type = "Zooplankton"){
   df <- pr_get_STI(Type)
 
   if(Type == "Zooplankton"){
-    dat <- pr_get_NRSData("Zooplankton", "abundance", "species")
+    dat <- pr_get_data(Survey = "NRS", Type = "Zooplankton", Variable = "abundance", Subset = "species")
     vars <- pr_get_NonTaxaColumns(Survey = "NRS", Type)
   } else {
-    dat <- pr_get_NRSData("phytoplankton", "abundance", "species")
+    dat <- pr_get_data(Survey = "NRS", Type = "Phytoplankton", Variable = "abundance", Subset = "species")
     vars <- pr_get_NonTaxaColumns(Survey = "NRS", Type)
   }
 
@@ -435,10 +435,10 @@ pr_get_DayNight <- function(Type = "Zooplankton"){
   Type <- pr_check_type(Type)
 
   if(Type == "Zooplankton"){
-    dat <- pr_get_CPRData(Type = "Zooplankton", Variable = "abundance", Subset = "copepods")
+    dat <- pr_get_data(Survey = "CPR", Type = "Zooplankton", Variable = "abundance", Subset = "copepods")
 
   } else if (Type == "Phytoplankton"){
-    dat <- pr_get_CPRData(Type = "Phytoplankton", Variable = "abundance", Subset = "species")
+    dat <- pr_get_data(Survey = "CPR", Type = "Phytoplankton", Variable = "abundance", Subset = "species")
 
   }
 

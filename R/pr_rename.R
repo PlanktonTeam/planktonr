@@ -2,12 +2,9 @@
 #' Standardise column names in IMOS plankton dataframes
 #'
 #' @param dat Dataframe with column names to renamed
-#' @export
 #'
 #' @return Dataframe with new column names
-#' @examples
-#' dat <- data.frame(LATITUDE = -32, LONGITUDE = 160) %>%
-#'             pr_rename()
+#' @keywords internal
 pr_rename <- function(dat){
 
   ##TODO - Check and remvoe any uneeded renames - note the capitals are needed for files grabbed from S3

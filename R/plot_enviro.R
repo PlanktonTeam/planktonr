@@ -253,7 +253,7 @@ pr_plot_NRSEnvContour <- function(dat, na.fill = TRUE) {
 
   # breaks and legend titles for timeseries and climatology
 
-  titleg <- planktonr::pr_relabel(unique(dat$Parameters), style = "ggplot")
+  titleg <- pr_relabel(unique(dat$Parameters), style = "ggplot")
   limitMin <- min(dat$Values, na.rm = TRUE)
   limitMax <- max(dat$Values, na.rm = TRUE)
 

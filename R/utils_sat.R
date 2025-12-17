@@ -62,20 +62,20 @@ pr_get_DataLocs <- function(Survey = "all"){
   vars <- c("Longitude", "Latitude", "SampleTime_UTC")
 
   if(Survey == "NRS"){
-    dat <- pr_get_NRSTrips() %>%
+    dat <- pr_get_trips(Survey = "NRS") %>%
       dplyr::select(tidyselect::all_of(vars)) %>%
       dplyr::distinct(.data$Longitude, .data$Latitude, Date = as.Date(.data$SampleTime_UTC, 'UTC'))
   } else
     if(Survey == "CPR"){
-      dat <- pr_get_CPRTrips() %>%
+      dat <- pr_get_trips(Survey = "CPR") %>%
         dplyr::filter(grepl("P|Z", .data$SampleType)) %>%
         dplyr::select(tidyselect::all_of(vars)) %>%
         dplyr::distinct(.data$Longitude, .data$Latitude, Date = as.Date(.data$SampleTime_UTC, 'UTC'))
     } else {
       dat <- dplyr::bind_rows(
-        pr_get_NRSTrips() %>%
+        pr_get_trips(Survey = "NRS") %>%
           dplyr::select(tidyselect::all_of(vars)),
-        pr_get_CPRTrips() %>%
+        pr_get_trips(Survey = "CPR") %>%
           dplyr::filter(grepl("P|Z", .data$SampleType)) %>%
           dplyr::select(tidyselect::all_of(vars))) %>%
         dplyr::distinct(.data$Longitude, .data$Latitude, Date = as.Date(.data$SampleTime_UTC, 'UTC'))

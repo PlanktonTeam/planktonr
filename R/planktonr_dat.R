@@ -92,7 +92,8 @@ planktonr_dat <- function(.data,
 
   if (!is.null(Type)) {
     Type <- pr_check_type(Type) # Use your helper to standardize
-    Type <- rlang::arg_match0(Type, values = c("Microbes", "Phytoplankton", "Zooplankton", "Fish", "Water", "EOV"),
+    Type <- rlang::arg_match0(Type, values = c("Microbes", "Phytoplankton", "Zooplankton", "Fish", "Water", "EOV",
+                                                "Chemistry", "Pigments", "Pico", "TSS", "CTD", "Micro"),
                               arg_nm = "Type")
   }
   if (!is.null(Survey)) {
@@ -160,20 +161,36 @@ planktonr_data <- function(...) {
 
 #' Check and update Type as required
 #'
+#' Standardises Type strings for plankton data. Handles case-insensitive 
+#' matching for Phytoplankton and Zooplankton. Other types are returned unchanged.
+#'
 #' @param Type Data type
 #'
 #' @returns Type as a standardised string
 #' @noRd
 pr_check_type <- function(Type){
 
-  Type = stringr::str_to_lower(Type)
+  # Return unchanged if not a single string (validation happens elsewhere)
+  if (!is.character(Type) || length(Type) != 1) {
+    return(Type)
+  }
 
-  if (Type %in% c("p", "phyto", "phytoplankton")){Type = "Phytoplankton"}
-  if (Type %in% c("z", "zoop", "zooplankton")){Type = "Zooplankton"}
-  if (Type %in% c("w", "water")){Type = "Water"}
-  if (Type %in% c("eov")){Type = "EOV"} # Added EOV based on your constructor comment
-  if (Type %in% c("m", "microbes")){Type = "Microbes"} # Added Microbes
-  if (Type %in% c("f", "fish")){Type = "Fish"}
+  Type_lower <- stringr::str_to_lower(Type)
+
+  if (Type_lower %in% c("p", "phyto", "phytoplankton")){
+    Type <- "Phytoplankton"
+  } else if (Type_lower %in% c("z", "zoop", "zooplankton")){
+    Type <- "Zooplankton"
+  } else if (Type_lower %in% c("w", "water")){
+    Type <- "Water"
+  } else if (Type_lower %in% c("eov")){
+    Type <- "EOV"
+  } else if (Type_lower %in% c("m", "microbes")){
+    Type <- "Microbes"
+  } else if (Type_lower %in% c("f", "fish")){
+    Type <- "Fish"
+  }
+  # Otherwise return Type unchanged (e.g., Chemistry, Pigments, Pico, TSS, CTD, Micro)
 
   return(Type)
 }

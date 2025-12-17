@@ -1,13 +1,13 @@
 #' Assign Australian Marine Bioregions to sample locations
 #'
-#' Add bioregion classification to samples based on their geographic coordinates. 
-#' Uses Australian marine bioregion boundaries (IMCRA 4.0) from the Integrated 
+#' Add bioregion classification to samples based on their geographic coordinates.
+#' Uses Australian marine bioregion boundaries (IMCRA 4.0) from the Integrated
 #' Marine and Coastal Regionalisation of Australia.
 #'
 #' @param dat A dataframe containing columns `Longitude` and `Latitude` with
 #'   geographic coordinates in decimal degrees (WGS84)
-#' @param near_dist_km Buffer distance (in kilometres) to use when assigning 
-#'   bioregions to samples that fall outside boundaries. Default is `0` (no 
+#' @param near_dist_km Buffer distance (in kilometres) to use when assigning
+#'   bioregions to samples that fall outside boundaries. Default is `0` (no
 #'   buffer). Typical values:
 #'   * `0` - Exact match only, samples outside boundaries are labelled "None"
 #'   * `50` - Assigns samples within 50 km of a bioregion
@@ -22,7 +22,7 @@
 #' * **North-west**: Waters off northwest Western Australia
 #' * **Coral Sea**: Offshore waters northeast of Queensland
 #' * **None**: Samples that don't fall within any bioregion
-#' 
+#'
 #' ## Assignment Method
 #' The function uses spatial operations to:
 #' 1. Convert coordinates to spatial features (sf objects)
@@ -30,14 +30,14 @@
 #' 3. For samples outside boundaries, find the nearest bioregion within `near_dist_km`
 #' 4. Prioritise Coral Sea assignments to handle boundary overlaps
 #' 5. Add a colour column for plotting consistency
-#' 
+#'
 #' ## Buffer Distance
 #' The `near_dist_km` parameter is particularly useful for:
 #' * CPR samples collected near bioregion boundaries
 #' * Offshore samples that may fall just outside defined regions
 #' * Creating continuous coverage for transect data
-#' 
-#' Use larger buffers (e.g., 250 km) for offshore CPR data, smaller or no buffer 
+#'
+#' Use larger buffers (e.g., 250 km) for offshore CPR data, smaller or no buffer
 #' for coastal NRS data.
 #'
 #' ## Data Requirements
@@ -57,12 +57,10 @@
 #' @examples
 #' # Add bioregions with exact matching (no buffer)
 #' dat <- pr_get_Raw("cpr_derived_indices_data") %>%
-#'   pr_rename() %>%
 #'   pr_add_Bioregions()
 #'
 #' # Add bioregions with 250 km buffer for offshore samples
 #' dat <- pr_get_Raw("cpr_derived_indices_data") %>%
-#'   pr_rename() %>%
 #'   pr_add_Bioregions(near_dist_km = 250)
 #'
 #' # Check bioregion assignments
@@ -76,12 +74,12 @@ pr_add_Bioregions <- function(dat, near_dist_km = 0){
     is.data.frame(dat),
     msg = "'dat' must be a data frame."
   )
-  
+
   assertthat::assert_that(
     all(c("Longitude", "Latitude") %in% colnames(dat)),
     msg = "'dat' must contain 'Longitude' and 'Latitude' columns."
   )
-  
+
   assertthat::assert_that(
     is.numeric(near_dist_km) && length(near_dist_km) == 1 && near_dist_km >= 0,
     msg = "'near_dist_km' must be a single non-negative numeric value (distance in km)."

@@ -89,7 +89,7 @@ pr_plot_PCImap <- function(dat) {
 #'   or saving with `ggsave()`
 #'
 #' @seealso
-#' * [pr_get_Stations()] for station metadata
+#' * [pr_get_info()] for station metadata
 #' * [pr_plot_CPRmap()] for CPR bioregion maps
 #'
 #' @export
@@ -146,8 +146,7 @@ pr_plot_NRSmap <- function(sites, Survey = "NRS", Type = 'Zooplankton'){
   }
 
   if (Type == 'Phytoplankton'){
-    meta_sf <- pr_get_Stations() %>%
-      pr_rename() %>%
+    meta_sf <- pr_get_info(Source = "SOTS") %>%
       dplyr::filter(.data$StationCode == "SOTS") %>%
       dplyr::select(Station = .data$StationName,
                     Code = .data$StationCode,
@@ -235,7 +234,7 @@ pr_plot_CPRmap <-  function(sites){
 #' Create map showing CPR voyage tracks and sampling locations
 #'
 #' @param dat dataframe containing all locations to plot
-#' @param dats dataframe of sample locations to plot
+#' @param dat_select dataframe of sample locations to highlight
 #' @param Country countries to plot on map
 #'
 #' @return a map of the selected bioregions
@@ -243,11 +242,12 @@ pr_plot_CPRmap <-  function(sites){
 #'
 #'
 #' @examples
-#' dat <- pr_get_NRSMicro("GO-SHIP")
-#' dats <- dat %>% dplyr::slice(1:5000)
-#' voyagemap <- pr_plot_Voyagemap(dat, dats, Country = c("Australia", "New Zealand"))
-pr_plot_Voyagemap <-  function(dat, dats, Country = c("Australia")){
+#' dat <- pr_get_data(Survey = "GO-SHIP", Type = "Micro")
+#' dat_select <- dat %>% dplyr::slice(1:5000)
+#' voyagemap <- pr_plot_Voyagemap(dat, dat_select, Country = c("Australia", "New Zealand"))
+pr_plot_Voyagemap <-  function(dat, dat_select, Country = c("Australia")){
 
+  #TODO Replace this with the built in map data but we will need to add NZ too
   MapOz <- rnaturalearth::ne_countries(scale = "small", returnclass = "sf", country = Country)
 
   voy_sf <- dat %>%
@@ -255,7 +255,7 @@ pr_plot_Voyagemap <-  function(dat, dats, Country = c("Australia")){
     dplyr::distinct() %>%
     dplyr::arrange(dplyr::desc(.data$Latitude)) %>%
     dplyr::mutate(Lat = as.factor(.data$Latitude),
-                  Colour = dplyr::if_else(.data$Latitude %in% dats$Latitude, "Red", "Blue")) %>%
+                  Colour = dplyr::if_else(.data$Latitude %in% dat_select$Latitude, "Red", "Blue")) %>%
     sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326) %>%
     sf::st_as_sf() %>%
     sf::st_shift_longitude()

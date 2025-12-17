@@ -168,7 +168,7 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
       pr_reorder()
 
 
-    SpInfoZ <- planktonr::pr_get_SpeciesInfo(Type = "Zooplankton") %>%
+    SpInfoZ <- planktonr::pr_get_info(Source = "Zooplankton") %>%
       dplyr::mutate(`Taxon Name` = stringr::str_remove(.data$`Taxon Name`, " [fmji]$"),
                     `Taxon Name` = stringr::str_remove(.data$`Taxon Name`," megalopa"),
                     `Taxon Name` = stringr::str_remove(.data$`Taxon Name`," naupliius"),
@@ -235,7 +235,7 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
   } else if (Survey == "SOTS"){
     # SOTS Indices not available from AODN so calculated here
 
-    trophy <- planktonr::pr_get_PlanktonInfo(Type = "Phytoplankton") %>% # for information used in estimating Indices as per NRS data
+    trophy <- planktonr::pr_get_info(Source = "Phytoplankton") %>% # for information used in estimating Indices as per NRS data
       dplyr::select(TaxonName = "Taxon Name",
                     Trophy = "Functional Type",
                     Carbon = "Cell Carbon (pgN cell-1)",
@@ -250,7 +250,7 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
 
     main_vars <- c("TripCode", "Year_Local", "Month_Local", "SampleTime_Local", "tz", "Latitude", "Longitude", "StationName", "StationCode", "Method", "SampleDepth_m")
 
-    dat <- planktonr::pr_get_NRSData(Type = "phytoplankton", Variable = "abundance", Subset = "raw") %>%
+    dat <- pr_get_data(Survey = "NRS", Type = "Phytoplankton", Variable = "abundance", Subset = "raw") %>%
       dplyr::filter(grepl("SOTS", .data$StationCode),
                     .data$Method == "LM", # only use LM at this stage
                     .data$SampleDepth_m < 50) %>% # remove deep samples taken at CTD depths
