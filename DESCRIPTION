@@ -46,7 +46,8 @@ Imports:
     tidyr,
     tidyselect,
     units,
-    vctrs
+    vctrs,
+    vegan
 Suggests: 
     curl,
     future,
@@ -61,7 +62,6 @@ Suggests:
     rvest,
     testthat (>= 3.0.0),
     thredds,
-    vegan,
     yaImpute
 VignetteBuilder: 
     knitr
