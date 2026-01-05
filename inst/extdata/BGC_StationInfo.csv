@@ -13,7 +13,7 @@ NRS,VBM,Bonney Coast,VIC IMOS,VIC,141.271,-38.4086,7/04/2024,100,Quarterly,OTW,W
 NWS,NWS,North West Shelf,PT,WA,120.6191,-18.1717,18/01/2015,82,Annual,NWS,Northwest Shelf Province,North-west
 NRS Ichthyoplankton,PHA,Port Hacking A,NSW IMOS,NSW,151.21667,-34.08333,11/09/2014,,Monthly,HAW,Central Eastern Shelf Province,Temperate East
 NRS Ichthyoplankton,ROF,Rottnest Island Ichthyo 34m,WAIMOS,WA,115.48333,-31.96666,15/12/2015,44.6421,Monthly,LNE,Southwest Shelf Province,South-west
-SOTS,SOTS_RAS,Southern Ocean Time Series - Remote Access Sampler,IMOS,SO,142.25826,-46.93473,9/09/2010,,Weekly,,Tasmania Province,South-east
+SOTS,SOTS_RAS,Southern Ocean Time Series - Remote Access Sampler,IMOS,SO,142.25826,-46.93473,9/09/2010,5000,Weekly,,Tasmania Province,South-east
 IIOE,IIOE,International Indian Ocean Expedition,X,WA,,,15/05/2019,,One off,,,
 NRS Ichthyoplankton,NSF,North Stradbroke Ichthyo 30m,QIMOS,QLD,153.5802,-27.3889,15/12/2015,,Monthly,TM,Central Eastern Shelf Transition,Temperate East
 Coastal Stations,BAI,Bare Island - Botany Bay,X,NSW,151.23193,-33.99101,18/06/2020,,Monthly,,,
