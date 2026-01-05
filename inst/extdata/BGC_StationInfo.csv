@@ -1,20 +1,19 @@
 ProjectName,StationCode,StationName,Node,StateCode,Longitude,Latitude,StationStartDate,StationDepth_m,SamplingEffort,IMCRA,IMCRA_PB,ManagementRegion
-NRS,MAI,Maria Island,TASIMOS,TAS,148.23333,-42.59667,01/10/1944,88,Monthly,FRT,Tasmanian Shelf Province,South-east
+NRS,MAI,Maria Island,TASIMOS,TAS,148.23333,-42.59667,1/10/1944,88,Monthly,FRT,Tasmanian Shelf Province,South-east
 NRS,KAI,Kangaroo Island,SAIMOS,SA,136.44733,-35.83217,16/11/2009,108.088,Monthly,EYR,Spencer Gulf Shelf Province,South-west
 NRS,ESP,Esperance,WAIMOS,WA,121.85,-33.93333,12/05/2009,49.3207,Quarterly,WSC,Southwest Shelf Province,South-west
-NRS,ROT,Rottnest Island,WAIMOS,WA,115.41667,-32,01/04/1951,44.6421,Monthly,LNE,Southwest Shelf Province,South-west
-NRS,NIN,Ningaloo,WAIMOS,WA,113.779,-21.99,01/11/2010,595.598,Quarterly,CWT,Northwest Province,North-west
+NRS,ROT,Rottnest Island,WAIMOS,WA,115.41667,-32,1/04/1951,44.6421,Monthly,LNE,Southwest Shelf Province,South-west
+NRS,NIN,Ningaloo,WAIMOS,WA,113.779,-21.99,1/11/2010,595.598,Quarterly,CWT,Northwest Province,North-west
 NRS,DAR,Darwin,AIMS,NT,130.76805,-12.4,27/06/2011,16.6025,Quarterly,ANB,Northwest Shelf Transition,North
-NRS,YON,Yongala,QIMOS,QLD,147.61842,-19.30847,09/09/2009,24.149,Monthly,LMC,Northeast Shelf Province,GBR / Coral Sea
-NRS,PH4,Port Hacking 4,NSW IMOS,NSW,151.21815,-34.11758,01/05/1953,104.6,Monthly,HAW,Central Eastern Shelf Province,Temperate East
+NRS,YON,Yongala,QIMOS,QLD,147.61842,-19.30847,9/09/2009,24.149,Monthly,LMC,Northeast Shelf Province,GBR / Coral Sea
+NRS,PH4,Port Hacking 4,NSW IMOS,NSW,151.21815,-34.11758,1/05/1953,104.6,Monthly,HAW,Central Eastern Shelf Province,Temperate East
 NRS,NSI,North Stradbroke Island,QIMOS,QLD,153.562,-27.345,29/09/2008,63.8002,Monthly,TM,Central Eastern Shelf Transition,Temperate East
 NRS,PHB,Port Hacking,NSW IMOS,NSW,151.22667,-34.11923,24/02/2009,111.042,Monthly,HAW,Central Eastern Shelf Province,Temperate East
-NRS,VBM,Bonney Coast,VIC IMOS,VIC,141.271,-38.4086,07/04/2024,100,Quarterly,OTW,Western Bass Strait Shelf Transition,South-east
-SOTS,SOTS,Southern Ocean Time Series,IMOS,SO,142.25826,-46.93473,14/07/2012,,Adhoc,,Tasmania Province,South-east
+NRS,VBM,Bonney Coast,VIC IMOS,VIC,141.271,-38.4086,7/04/2024,100,Quarterly,OTW,Western Bass Strait Shelf Transition,South-east
 NWS,NWS,North West Shelf,PT,WA,120.6191,-18.1717,18/01/2015,82,Annual,NWS,Northwest Shelf Province,North-west
 NRS Ichthyoplankton,PHA,Port Hacking A,NSW IMOS,NSW,151.21667,-34.08333,11/09/2014,,Monthly,HAW,Central Eastern Shelf Province,Temperate East
 NRS Ichthyoplankton,ROF,Rottnest Island Ichthyo 34m,WAIMOS,WA,115.48333,-31.96666,15/12/2015,44.6421,Monthly,LNE,Southwest Shelf Province,South-west
-SOTS,SOTS_RAS,Southern Ocean Time Series - Remote Access Sampler,IMOS,SO,142.25826,-46.93473,09/09/2010,,Weekly,,Tasmania Province,South-east
+SOTS,SOTS_RAS,Southern Ocean Time Series - Remote Access Sampler,IMOS,SO,142.25826,-46.93473,9/09/2010,,Weekly,,Tasmania Province,South-east
 IIOE,IIOE,International Indian Ocean Expedition,X,WA,,,15/05/2019,,One off,,,
 NRS Ichthyoplankton,NSF,North Stradbroke Ichthyo 30m,QIMOS,QLD,153.5802,-27.3889,15/12/2015,,Monthly,TM,Central Eastern Shelf Transition,Temperate East
 Coastal Stations,BAI,Bare Island - Botany Bay,X,NSW,151.23193,-33.99101,18/06/2020,,Monthly,,,
