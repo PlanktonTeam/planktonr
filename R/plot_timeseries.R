@@ -830,13 +830,17 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
     Trend <- SampleDate # Rename Trend to match the column with time
   }
 
-  trend_col   <- rlang::as_string(Trend)
-
-  df <- df %>%
-    dplyr::mutate(Values = .data$Values + 1, # Add a small number so plot doesn't go weird
-                  alphagroup = ifelse(
-                    stringr::str_detect(.data$StationName, "Ocean Time") &
-                      .data[[trend_col]] < 2015, 0.4, 0.9)) # distinguish SOTS deeper samples
+  if("Year_Local" %in% colnames(df)){
+    df <- df %>%
+      dplyr::mutate(Values = .data$Values + 1, # Add a small number so plot doesn't go weird
+                    alphagroup = ifelse(
+                      stringr::str_detect(.data$StationName, "Ocean Time") &
+                        .data$Year_Local < 2015, 0.4, 0.9)) # distinguish SOTS deeper samples
+  } else {
+    df <- df %>%
+      dplyr::mutate(Values = .data$Values + 1,
+                    alphagroup = 0.9) # Add a small number so plot doesn't go weird
+  }
 
   if(Scale == "Proportion") {
 
