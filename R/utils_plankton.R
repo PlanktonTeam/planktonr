@@ -88,12 +88,14 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Zooplankton", ...){
       pr_add_Bioregions(...)
   } else if(Survey == "NRS"){
     df <- pr_get_data(Survey = "NRS", Type = Type, Variable = "abundance", Subset = "htg") %>%
-      dplyr::filter(.data$Project %in% c("NRS", "SOTS"),
-                    .data$Method == 'LM')
+      dplyr::filter(.data$Project %in% c("NRS", "SOTS"))
   } else if(Survey == 'SOTS'){
     df <- pr_get_data(Survey = "NRS", Type = Type, Variable = "abundance", Subset = "htg") %>%
-      dplyr::filter(grepl('SOTS', .data$StationCode),
-                    .data$Method == 'LM')
+      dplyr::filter(grepl('SOTS', .data$StationCode))
+  }
+
+  if("Method" %in% colnames(df)){
+    df <- df %>% dplyr::filter(Method == 'LM')
   }
 
   if(Type == "Phytoplankton"){
