@@ -95,7 +95,7 @@ pr_get_FuncGroups <- function(Survey = "NRS", Type = "Zooplankton", ...){
   }
 
   if("Method" %in% colnames(df)){
-    df <- df %>% dplyr::filter(Method == 'LM')
+    df <- df %>% dplyr::filter(.data$Method == "LM")
   }
 
   if(Type == "Phytoplankton"){
