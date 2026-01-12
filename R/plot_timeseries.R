@@ -835,11 +835,11 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
       dplyr::mutate(Values = .data$Values + 1, # Add a small number so plot doesn't go weird
                     alphagroup = ifelse(
                       stringr::str_detect(.data$StationName, "Ocean Time") &
-                        .data$Year_Local < 2015, 0.4, 0.9)) # distinguish SOTS deeper samples
+                        .data$Year_Local < 2015, 0.4, 1)) # distinguish SOTS deeper samples
   } else {
     df <- df %>%
-      dplyr::mutate(Values = .data$Values + 1,
-                    alphagroup = 0.9) # Add a small number so plot doesn't go weird
+      dplyr::mutate(Values = .data$Values + 1, # Add a small number so plot doesn't go weird
+                    alphagroup = 1)
   }
 
   if(Scale == "Proportion") {
@@ -856,13 +856,16 @@ pr_plot_tsfg <- function(df, Scale = "Actual", Trend = "Raw"){
                                                "alphagroup")))
   }
 
+  maxa <- max(df$alphagroup)
+  mina <- min(df$alphagroup)
+
   p1 <- ggplot2::ggplot(df, ggplot2::aes(x = !!rlang::sym(Trend),
                                          y = .data$Values,
                                          fill = .data$Parameters,
                                          group = interaction(.data$Parameters, .data$alphagroup),
                                          alpha = .data$alphagroup)) +
     ggplot2::geom_area(linewidth = 0.2, colour = "white") +
-    ggplot2::scale_alpha(range = c(0.4, 0.9), guide = 'none') +
+    ggplot2::scale_alpha(range = c(mina, maxa), guide = 'none') +
     ggplot2::facet_wrap(~.data$StationName, scales = "free", ncol = 1) +
     ggplot2::labs(y = titley) +
     ggplot2::scale_fill_brewer(palette = "Set1", drop = FALSE, name = "Functional Group") +
