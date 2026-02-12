@@ -2,7 +2,7 @@
 
 ## Shrink data-file and save as internal data file
 library(tidyverse)
-
+devtools::load_all()
 
 MapOz <- rnaturalearth::ne_countries(scale = "small", country = "Australia",
                                      returnclass = "sf")
@@ -77,8 +77,6 @@ ltyCPR <- data.frame(Code = mbr$REGION,
 
 
 ## Load Southern Ocean CPR -----
-
-library(planktonr)
 
 # dat <- planktonr::pr_get_Raw("cpr_derived_indices_data")
 

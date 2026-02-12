@@ -215,7 +215,8 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
         planktonr::pr_remove_outliers(2) %>%
         droplevels() %>%
         dplyr::select(colnames(dat)) %>%
-        dplyr::bind_rows(dat, .)
+        dplyr::bind_rows(dat, .) %>%
+        pr_reorder()
     }
 
 
