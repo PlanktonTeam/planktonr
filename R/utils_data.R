@@ -13,6 +13,7 @@
 #'     Tasmania for monitoring Southern Ocean ecosystems.
 #'   * `"Coastal"` - Coastal Seas microbial monitoring sites.
 #'   * `"GO-SHIP"` - Global Ocean Ship-based Hydrographic Investigations Program.
+#'   * `"HAB"` - Phytoplankton monitoring data from state based and seafood industry monitoring programs
 #'
 #' @param Type Data type to retrieve (case-insensitive for Phytoplankton/Zooplankton):
 #'   * `"Phytoplankton"` - Phytoplankton abundance or biovolume (NRS, CPR, SOTS)
@@ -47,6 +48,7 @@
 #' | NRS | Phytoplankton, Zooplankton, Chemistry, Pigments, Pico, Micro, TSS, CTD |
 #' | CPR | Phytoplankton, Zooplankton |
 #' | SOTS | Phytoplankton, Zooplankton |
+#' | HAB | Phytoplankton |
 #' | Coastal | Micro, Chemistry |
 #' | GO-SHIP | Micro |
 #'
@@ -103,6 +105,10 @@
 #' # Get Coastal Seas chemistry data
 #' dat <- pr_get_data(Survey = "Coastal", Type = "Chemistry")
 #'
+#' # Get HAB phytoplankton data
+#' dat <- pr_get_data(Survey = "HAB", Type = "Phytoplankton",
+#'                    Variable = "abundance", Subset = "genus")
+#'
 #' @importFrom rlang .data
 pr_get_data <- function(Survey = "NRS",
                         Type = "Phytoplankton",
@@ -120,7 +126,8 @@ pr_get_data <- function(Survey = "NRS",
     "CPR" = c("Phytoplankton", "Zooplankton"),
     "SOTS" = c("Phytoplankton", "Zooplankton"),
     "Coastal" = c("Micro", "Chemistry"),
-    "GO-SHIP" = c("Micro")
+    "GO-SHIP" = c("Micro"),
+    "HAB" = c("Phytoplankton")
   )
 
   # Types that require Variable and Subset
@@ -134,7 +141,7 @@ pr_get_data <- function(Survey = "NRS",
   # Validate Survey
   assertthat::assert_that(
     is.character(Survey) && length(Survey) == 1,
-    msg = "'Survey' must be a single character string. Valid options are 'NRS', 'CPR', 'SOTS', 'Coastal', or 'GO-SHIP'."
+    msg = "'Survey' must be a single character string. Valid options are 'NRS', 'CPR', 'SOTS', 'Coastal', 'HAB' or 'GO-SHIP'."
   )
 
   assertthat::assert_that(
@@ -327,7 +334,49 @@ pr_get_data <- function(Survey = "NRS",
         pr_rename() %>%
         planktonr_dat(Type = Type, Survey = "CPR")
     }
-  }
+  } else if (Survey == "HAB"){ #TODO - update this if clause when the data is available through AODN
+    Sites <- readr::read_csv("data-raw/HAB_data_temp/HAB_Sites.csv")
+    Samples <- readr::read_csv("data-raw/HAB_data_temp/HAB_Samples.csv")
+    Dat <- readr::read_csv("data-raw/HAB_data_temp/HAB_data.csv", col_types = readr::cols(Comments = readr::col_character())) %>%
+      dplyr::mutate(TaxonName = stringr::str_replace(TaxonName, "A\\?", "µ"),
+                    TaxonName = stringr::str_replace(TaxonName, "\\?", "µ"),
+                    TaxonName = stringr::str_remove(TaxonName, " \\(unaccepted\\)"))
+    PInfo <- pr_get_info(Source = "Phytoplankton") %>%
+      janitor::clean_names("upper_camel")
+
+    dat <- Dat %>%
+      dplyr::left_join(PInfo %>% dplyr::select(TaxonName, FunctionalGroup, Hab, contains("Cell")), by = "TaxonName") %>%
+      dplyr::filter(CellsL > 0) %>%
+      dplyr::left_join(Samples %>% dplyr::select(SampleCode, SampleDate, SiteCode), by = "SampleCode") %>%
+      dplyr::left_join(Sites %>% dplyr::select(SiteCode, Name, SiteId), by = "SiteCode") %>%
+      dplyr::select(-c(AphiaId, Presence, Comments, DataCode), PhytoAbundance_CellsL = CellsL)
+
+    if(Subset == 'raw' & Variable == 'abundance'){
+      dat <- dat %>%
+        dplyr::select(SampleDate, Name, SiteId, TaxonName, PhytoAbundance_CellsL) %>%
+        tidyr::pivot_wider(names_from = "TaxonName", values_from = "PhytoAbundance_CellsL", values_fill = 0)
+    } else if (Subset == 'genus' & Variable == 'abundance'){
+      dat <- dat %>%
+        dplyr::select(SampleDate, Name, SiteId, TaxonName, PhytoAbundance_CellsL) %>%
+        dplyr::mutate(Genus = stringr::word(TaxonName, 1, 1)) %>%
+        dplyr::filter(!stringr::str_detect(TaxonName, "cf")) %>%
+        dplyr::summarise(PhytoAbundance_CellsL = sum(PhytoAbundance_CellsL, na.rm = TRUE), .by = c(SampleDate, Name, SiteId, Genus)) %>%
+        tidyr::pivot_wider(names_from = "Genus", values_from = "PhytoAbundance_CellsL", values_fill = 0)
+    } else if (Subset == 'species' & Variable == 'abundance'){
+      dat <- dat %>%
+        dplyr::select(SampleDate, Name, SiteId, TaxonName, PhytoAbundance_CellsL) %>%
+        dplyr::filter(!stringr::str_detect(TaxonName, "spp|group|cf")) %>%
+        tidyr::pivot_wider(names_from = "TaxonName", values_from = "PhytoAbundance_CellsL", values_fill = 0)
+    } else if (Subset == 'htg' & Variable == 'abundance'){
+      dat <- dat %>%
+        dplyr::select(SampleDate, Name, SiteId, FunctionalGroup, PhytoAbundance_CellsL) %>%
+        dplyr::summarise(PhytoAbundance_CellsL = sum(PhytoAbundance_CellsL, na.rm = TRUE), .by = c(SampleDate, Name, SiteId, FunctionalGroup)) %>%
+        tidyr::pivot_wider(names_from = "FunctionalGroup", values_from = "PhytoAbundance_CellsL", values_fill = 0) %>%
+        dplyr::select(where(~ !(is.numeric(.x) && all(.x == 0, na.rm = TRUE))), -`NA`)
+    }
+    dat <- dat %>%
+      planktonr_dat(Type = Type, Survey = "HAB")
+    }
 
   return(dat)
 }

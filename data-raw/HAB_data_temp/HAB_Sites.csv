@@ -1,0 +1,215 @@
+SiteCode,SiteId,Name,Location,Latitude,Longitude,DataOwner,AnalysedBy,State
+564cd6391f3bb07654286aeca3e27974,151,Bar Island,NA,-33.52909333,151.14368333,Hornsby Council,Microalgal solutions,NSW
+388ccc868a5485fe254158f573f65fa9,152,Courangra Point,NA,-33.47255,151.13343,Hornsby Council,Microalgal solutions,NSW
+4506129cb5c4919a52553a1a5dcfdf23,153,Laughtondale,NA,-33.40256333,151.01783833,Hornsby Council,Microalgal solutions,NSW
+084666dd472b1acd535b464e7a748532,16,Pambula Lake,Confluence of Towaka and Pambula Rivers,-36.9749,149.8982,NSW Food Authority,Microalgal Solutions,NSW
+acb074737bd8b94d7df3a0815dfabe97,17,Bellinger River,NA,-30.4574,153.033,NSW Food Authority,Microalgal Solutions,NSW
+f1c5e526f93276929d48301c171169c9,17,Pambula Lake,Confluence of Towaka and Pambula Rivers,-36.9713,149.8915,NSW Food Authority,Microalgal Solutions,NSW
+28e5ffab82a3e522a2ce5d80b50fdbf4,17,Wapengo Lagoon,NA,-36.6234,150.017,NSW Food Authority,Microalgal Solutions,NSW
+20272300f07f6f6c6bcf29dc93a38eee,174,Mullet Creek,NA,-33.52747333,151.2361,Hornsby Council,Microalgal solutions,NSW
+e6aab341fe2e0e7256af2ca4c821e257,18,Kalang River,NA,-30.499,153.01,NSW Food Authority,Microalgal Solutions,NSW
+49e989b84c97ec6753a8c27eaeedd593,18,Macleay River,NA,-30.8515,153.003,NSW Food Authority,Microalgal Solutions,NSW
+02c649fc6ba8e4f9ca3d1ac206f0734e,18,Wapengo Lagoon,NA,-36.6015,150.013,NSW Food Authority,Microalgal Solutions,NSW
+3c035780d9bd1f237b88ef5ed4f595b2,19,Macleay River,NA,-30.9144,152.993,NSW Food Authority,Microalgal Solutions,NSW
+a4094575a0e58f777640abdbccf41734,1P,Jervis Bay,Callala,-35.0741,150.704,NSW Food Authority,Microalgal Solutions,NSW
+e2667cf152bc005186b4a548684eeba2,1P,Nelson Lagoon,same as Nelson Lake,-36.6689,149.9895,NSW Food Authority,Microalgal Solutions,NSW
+26e2853ce432a0176b15e3027c4a6024,1P,Twofold Bay,NA,-37.0763,149.892,NSW Food Authority,Microalgal Solutions,NSW
+87f54045c08c6e592f3224bdc44d8da7,1P,Wallis Lake,NA,-32.178,152.5038,NSW Food Authority,Microalgal Solutions,NSW
+94f3e7651172f2236fa8b4ea385b9ded,1P,Wapengo Lake,NA,-36.6234,150.017,NSW Food Authority,Microalgal Solutions,NSW
+9ec92660e8976b16507837fca00d00ad,2,Clyde River,NA,-35.7051,150.141,NSW Food Authority,Microalgal Solutions,NSW
+701db48c89e7ee43b0f68e199b1a2377,2,Jervis Bay,Callala,-35.0647,150.6906,NSW Food Authority,Microalgal Solutions,NSW
+964f28c1ea2aa93ab2394d420b337c37,2,Merimbula Lake,NA,-36.8985,149.887,NSW Food Authority,Microalgal Solutions,NSW
+f8e32225a8a13daffa222076b60e19dc,2,Tuross Lake,NA,-36.0683,150.131,NSW Food Authority,Microalgal Solutions,NSW
+16666e51a5daf18a53f7626ed6a24069,2,Wagonga Inlet,NA,-36.2265,150.077,NSW Food Authority,Microalgal Solutions,NSW
+1415d23c5cb34f570b695739d4f98116,2,Wonboyn Lake,NA,-37.2408,149.926,NSW Food Authority,Microalgal Solutions,NSW
+a49d025524e9d03c6369da1a01c924fe,20,Macleay River,NA,-30.8911,153.013,NSW Food Authority,Microalgal Solutions,NSW
+60147f7e7deb1cc8a574f38d279a9086,20A,Macleay River,NA,-30.8724,153.0151,NSW Food Authority,Microalgal Solutions,NSW
+e01d2adce4a3dbaa9c5720e958acda93,21,Camden Haven,NA,-31.6433,152.826,NSW Food Authority,Microalgal Solutions,NSW
+404756c3fd7104c19269f63799a4eb29,22,Camden Haven,NA,-31.6818,152.781,NSW Food Authority,Microalgal Solutions,NSW
+f34cbe2ee768f37b624880933500faf6,224,Wisemans ferry,NA,-33.3818,150.989389,Hornsby Council,Microalgal solutions,NSW
+af40395b69ef58aa321f8e138e7fe400,23,Camden Haven,NA,-31.6276,152.791,NSW Food Authority,Microalgal Solutions,NSW
+7122bfa29e15f3e94505347835f4f4a1,25,Port Stephens,NA,-32.6706,152.123,NSW Food Authority,Microalgal Solutions,NSW
+fa974bb4308d3b2fa611fc7a5010dd7e,26,Hastings River,NA,-31.3983,152.891,NSW Food Authority,Microalgal Solutions,NSW
+0408fb5e2cad3db5989b1ae2f020bbb9,26,Port Stephens,NA,-32.692,152.126,NSW Food Authority,Microalgal Solutions,NSW
+8871ce405b004418778ee7a3c4ac91b6,27,Hastings River,NA,-31.4142,152.892,NSW Food Authority,Microalgal Solutions,NSW
+70a8c9a94bf150f4246753cd7edbe699,27,Port Stephens,NA,-32.6698,152.168,NSW Food Authority,Microalgal Solutions,NSW
+952ace30f0c44910064427f133fc448a,28,Hastings River,NA,-31.4166,152.809,NSW Food Authority,Microalgal Solutions,NSW
+6e00445a335871d790ac8a2780684a5e,2P,Jervis Bay,Callala,-35.0647,150.6906,NSW Food Authority,Microalgal Solutions,NSW
+d9f859c0607b25e498d2f0c4ee19bc67,2P,Nelson Lagoon,same as Nelson Lake,-36.6836,149.9932,NSW Food Authority,Microalgal Solutions,NSW
+71bb2695013c7fd3ace4af2d32822c4f,2P,Twofold Bay,NA,-37.0749,149.9011,NSW Food Authority,Microalgal Solutions,NSW
+55f1ad9597536e253d326b1762278173,2P,Wallis Lake,NA,-32.1867,152.5008,NSW Food Authority,Microalgal Solutions,NSW
+39dc39575991048ca1450f178fc010e4,2P,Wapengo Lake,NA,-36.6015,150.013,NSW Food Authority,Microalgal Solutions,NSW
+db0933230859ef462148ad0bcce28109,3,Clyde River,NA,-35.6729,150.129,NSW Food Authority,Microalgal Solutions,NSW
+8b5ab039a2e920cd8583d876ef37e769,3,Jervis Bay,Callala,-35.0276,150.7105,NSW Food Authority,Microalgal Solutions,NSW
+113e08260be2063f3b7281004faf951b,3,Merimbula Lake,NA,-36.892,149.8892,NSW Food Authority,Microalgal Solutions,NSW
+a9616e6b9bbba388b66ca99e00f272f1,31,Hawkesbury River,NA,-33.5604,151.151,NSW Food Authority,Microalgal Solutions,NSW
+5f7501e0cbe925b9de9655e105ad5a47,32,Hawkesbury River,NA,-33.5397,151.145,NSW Food Authority,Microalgal Solutions,NSW
+05268425e872a4aad89956f16aa0f5ab,33,Hawkesbury River,NA,-33.5401,151.201,NSW Food Authority,Microalgal Solutions,NSW
+aeb85b8e1106b1ac80f16371df0f641a,33,Port Stephens,NA,-32.6648,152.052,NSW Food Authority,Microalgal Solutions,NSW
+e5fdc37dd27409b2812211586a0aaf76,34,Hawkesbury River,NA,-33.5552,151.233,NSW Food Authority,Microalgal Solutions,NSW
+c73215d0142f70351697d8be584748e5,35,Crookhaven River,NA,-34.9185,150.739,NSW Food Authority,Microalgal Solutions,NSW
+02293824076decc73971ac60ba2462f7,35,Hawkesbury River,NA,-33.5196,151.202,NSW Food Authority,Microalgal Solutions,NSW
+d3c0a65da41f9ccec3b8e9e209c8c902,35,Shoalhaven Crookhaven,NA,-34.9076,150.7368,NSW Food Authority,Microalgal Solutions,NSW
+ab8eb824505d4dd725e3ae02cdf68f3c,35,Shoalhaven River,NA,-34.9076,150.7368,NSW Food Authority,Microalgal Solutions,NSW
+9bbc962ce4754ec86f7587955a8a8e2b,36,Crookhaven River,NA,-34.8935,150.724,NSW Food Authority,Microalgal Solutions,NSW
+5b2781e4acafe5512746525833cc7b99,36,Shoalhaven Crookhaven,NA,-34.8984,150.744,NSW Food Authority,Microalgal Solutions,NSW
+0042b9a09fef64c0f0b2023ff6dbece8,36,Shoalhaven River,NA,-34.8984,150.744,NSW Food Authority,Microalgal Solutions,NSW
+439980e05fc7f380eb62fc6cea430c1d,37,Shoalhaven Crookhaven,NA,-34.8628,150.732,NSW Food Authority,Microalgal Solutions,NSW
+9e859b9b02081ec4186c10ead5f84d50,37,Shoalhaven River,NA,-34.8628,150.732,NSW Food Authority,Microalgal Solutions,NSW
+e3f7105f909163dca5f87d1b7fb541c3,38,Manning River,NA,-31.8899,152.655,NSW Food Authority,Microalgal Solutions,NSW
+11ffbeca51f87145df1a3d555056b3d6,38,Sandbrook Inlet,NA,-33.544595,151.21774,Hornsby Council,Microalgal solutions,NSW
+4a24407a3749277a863b96e7fbb58cad,38,Shoalhaven Crookhaven,NA,-34.8984,150.744,NSW Food Authority,Microalgal Solutions,NSW
+c8c27c4591661d57770db8cbac323733,38,Shoalhaven River,NA,-34.8984,150.744,NSW Food Authority,Microalgal Solutions,NSW
+81005ad2b6fb424cd3de93d3da16d192,39,Manning River,NA,-31.8805,152.594,NSW Food Authority,Microalgal Solutions,NSW
+dd8c5975b75de8e93ecb8e6ca3efe49b,3P,Jervis Bay,Callala,-35.0276,150.7105,NSW Food Authority,Microalgal Solutions,NSW
+8fd4a8b0ef6e9810c9c3d6c8edcb1ff6,3P,Nelson Lagoon,same as Nelson Lake,-36.6747,149.986,NSW Food Authority,Microalgal Solutions,NSW
+723ce77266e0de41468b7222e67cdbe3,3P,Twofold Bay,NA,-37.0912,149.914,NSW Food Authority,Microalgal Solutions,NSW
+b21cf65deb891e0784221a709cc6d0de,3P,Wallis Lake,NA,-32.187,152.4699,NSW Food Authority,Microalgal Solutions,NSW
+3ab85ad4a8719ca3bdafbe6b01564966,4,Jervis Bay,Callala,-35.0425,150.7083,NSW Food Authority,Microalgal Solutions,NSW
+9032db1221aee80a536adc316753f9d5,40,Manning River,NA,-31.9417,152.603,NSW Food Authority,Microalgal Solutions,NSW
+9418c04de2dc9958a09694411523d186,41,Manning River,NA,-31.9421,152.6025,NSW Food Authority,Microalgal Solutions,NSW
+8a211c138a1731680d9c2d8fdc25740d,44,Hawkesbury River,NA,-33.5228,151.233,NSW Food Authority,Microalgal Solutions,NSW
+e2d569c92baf2e9ed7f55525f60da36e,45,Fishponds,NA,-33.69222,151.08466667,Hornsby Council,Microalgal solutions,NSW
+43a136692c124e586916ede86ee909c2,46,Brisbane Water,NA,-33.5203,151.351,NSW Food Authority,Microalgal Solutions,NSW
+835fab594867d63920bae3bb16d60f5c,47,Brisbane Water,NA,-33.4737,151.377,NSW Food Authority,Microalgal Solutions,NSW
+f6142da4ae930cdb3f79aaf877bd16d7,48,Brisbane Water,NA,-33.4632,151.326,NSW Food Authority,Microalgal Solutions,NSW
+fd2939282754b8b071af91082336cc5e,48,Marramarra Creek,NA,-33.52246,151.10367833,Hornsby Council,Microalgal solutions,NSW
+e7400c0412009efb377663bd15f6664f,49,Brisbane Water,NA,-33.49,151.351,NSW Food Authority,Microalgal Solutions,NSW
+3a2b969b29faa2f97f10bf45c2490831,4P,Jervis Bay,Callala,-35.0425,150.7083,NSW Food Authority,Microalgal Solutions,NSW
+1755fe12f2e7f8c33f8cf277788e3933,4P,Twofold Bay,NA,-37.098,149.8871,NSW Food Authority,Microalgal Solutions,NSW
+c661f025a89854712556d3aaf93c7e73,4P,Wallis Lake,NA,-32.2025,152.4576,NSW Food Authority,Microalgal Solutions,NSW
+b8b25835fba31050f5f52c7e809b6d9b,52,Brisbane Water,same as 48,-33.4632,151.326,NSW Food Authority,Microalgal Solutions,NSW
+7afc2602a622f9d64eed7c80dd319d99,52,Port Stephens,NA,-32.6843,151.997,NSW Food Authority,Microalgal Solutions,NSW
+195a0af5cfa1ae20ba03da04aa3ee631,53,Brisbane Water,Same as 46,-33.5203,151.351,NSW Food Authority,Microalgal Solutions,NSW
+dfccc33b4986eb3f68a04b37790796a0,54,Brisbane Water,NA,-33.4937,151.373,NSW Food Authority,Microalgal Solutions,NSW
+c05b5c26b09574569f4d160fd7790bd4,54,Port Stephens,Same as 52,-32.6843,151.997,NSW Food Authority,Microalgal Solutions,NSW
+c325ed4af3a2f90d2805a634e5a9759b,55,Brooklyn Baths,NA,-33.546255,151.23186833,Hornsby Council,Microalgal solutions,NSW
+54965eb2a13fda4d58b32dce156e5513,6,Conjola Lake,NA,-35.2628,150.493,NSW Food Authority,Microalgal Solutions,NSW
+e4e150d973e2f756b3bcdd2ca91a6f73,60,Berowra Creek Ferry,NA,-33.59869667,151.12327333,Hornsby Council,Microalgal solutions,NSW
+74c47100583570f809a92ed6ac943bde,61,Calabash bay,NA,-33.58666167,151.12044167,Hornsby Council,Microalgal solutions,NSW
+0f38956cccb3420a461cdf5d91c184ae,7,Georges River,NA,-34.0166,151.186,NSW Food Authority,Microalgal Solutions,NSW
+0405ef04224d9c987df7a3be14ed9930,7,Patonga Creek,NA,-33.5326,151.265,NSW Food Authority,Microalgal Solutions,NSW
+27781091b78655565c9d769e41ebaec7,7,Wooli River,NA,-29.8773,153.264,NSW Food Authority,Microalgal Solutions,NSW
+f5e28e418746edfd349a311ddb31f919,75,Port Stephens,NA,-32.7614,151.986,NSW Food Authority,Microalgal Solutions,NSW
+9c623c0902a49e8966ee61a220cd64ce,76,Port Stephens,NA,-32.733,152.053,NSW Food Authority,Microalgal Solutions,NSW
+66c75dfdf346587c9249f05a1da8f3ae,7mile,Crookhaven Bight,NA,-34.9185,150.739,NSW Food Authority,Microalgal Solutions,NSW
+019e7495021423cc0d33674555642026,8,Jervis Bay,Callala,-35.0693,150.695,NSW Food Authority,Microalgal Solutions,NSW
+ccd9ffedf5d8e86b2dae55278e168ce5,88,Calabash bay,NA,-33.58666167,151.12044167,Hornsby Council,Microalgal solutions,NSW
+2cc1ed1a688d1e994b284ebd06818eb9,89,Port Stephens,NA,-32.6989,152.06,NSW Food Authority,Microalgal Solutions,NSW
+4231ab0dca8ccd043557a45ef1e327dd,8A,Conjola Lake,Lake Conjola/Berringer Lake,-35.2671,150.4817,NSW Food Authority,Microalgal Solutions,NSW
+bcd57a3412efc74f8022d04938d1a240,9,Bermagui River,NA,-36.4238,150.054,NSW Food Authority,Microalgal Solutions,NSW
+f825c2241a4391fedb5adee3258e40fa,9,Jervis Bay,Callala,-35.0644,150.6839,NSW Food Authority,Microalgal Solutions,NSW
+1dcbc6339a4d5cfc9500aca2d463794c,90,Port Stephens,NA,-32.7226,152.065,NSW Food Authority,Microalgal Solutions,NSW
+ef742e55a71f1d0fa5ab24e2da029451,9278,D'Entrecasteaux Channel [EPA-SB10],Northern Boundary (M1),-43.0635001,147.3400001,TAS EPA,AST LAB,TAS
+f004f201c529364749386f0614728c8a,9574,Storm Bay [IMAS-SB1],SW of Iron Pot,-43.066597,147.395,TAS EPA,AST LAB,TAS
+b248507968bc7428ed4ba232282da51f,9575,Storm Bay [IMAS-SB2],Mid Storm Bay,-43.170002,147.554997,TAS EPA,AST LAB,TAS
+09b010db952a55768b236c30e6066526,9576,Storm Bay [IMAS-SB3],Site 3,-43.32,147.63,TAS EPA,AST LAB,TAS
+3b9a3a8ada3ef60e1f10397c6864e844,9578,Storm Bay [IMAS-SB5],North of Wedge Island,-43.116601,147.666702,TAS EPA,AST LAB,TAS
+23e0bf3d9d213379c0f3dda08beb0db0,9579,Storm Bay [IMAS-SB6],East of Variety Bay,-43.2,147.433302,TAS EPA,AST LAB,TAS
+27068e090c50f64a99525657bfba8460,9580,Storm Bay [IMAS-SB9],SW of North West Head,-43.026603,147.58143,TAS EPA,AST LAB,TAS
+f3b6fc444e9415d2745cb0c530601fb2,9786,Mercury Passage [EPA-MP2],Okehampton Bay,-42.523277,147.977842,TAS EPA,AST LAB,TAS
+87bbe57528159f5ead752a46bfc931e6,9787,Mercury Passage [EPA-MP3],North Mercury Passage,-42.531842,148.02718,TAS EPA,AST LAB,TAS
+fc2e6e670eb185c8c32d90ab6be6e11e,9788,Mercury Passage [EPA-MP8],South of Lords Point,-42.540798,147.991925,TAS EPA,AST LAB,TAS
+da84ff6c60109fbe3e06043603dcc5c8,9788_MP4,Mercury Passage [EPA-MP4],South of Lords Point,-42.540798,147.991925,TAS EPA,AST LAB,TAS
+590d708e538157595a806dd8b7afd21c,9789,Mercury Passage [EPA-MP9],Mid Mercury Passage,-42.567732,148.001489,TAS EPA,AST LAB,TAS
+84a3e931fefe33dbd7e23b59fe82b755,9789_MP5,Mercury Passage [EPA-MP5],Mid Mercury Passage,-42.567732,148.001489,TAS EPA,AST LAB,TAS
+4d6f250d9333a5408ca610d3135d2aeb,9790,Mercury Passage [EPA-MP10],Off Point Home,-42.559998,147.958059,TAS EPA,AST LAB,TAS
+bc8edc314f01481f6665f890ec882dd9,9790_MP6,Mercury Passage [EPA-MP6],Off Point Home,-42.559998,147.958059,TAS EPA,AST LAB,TAS
+3091083c50098355c41687b19fadd45d,9791,Mercury Passage [EPA-MP7],South of Lease Area,-42.538035,147.966515,TAS EPA,AST LAB,TAS
+a502d23f1aa076e8a69ad313bd82d3fa,9888,Storm Bay [EPA-SB1],SW of Iron Pot,-43.066597,147.395,TAS EPA,AST LAB,TAS
+9947ed544623302718f1f0c05b8771ad,9889,Storm Bay [EPA-SB2],Mid Storm Bay,-43.170002,147.554997,TAS EPA,AST LAB,TAS
+d2c1adf79aa045bc1b82b1f8da4c520b,9890,Storm Bay [EPA-SB3],Near Yellow Bluff,-43.124315,147.4063,TAS EPA,AST LAB,TAS
+65de1fe8f68e668b14439b1353800fc1,9891,Storm Bay [EPA-SB4],SE of Cape Queen Elizabeth,-43.258316,147.451543,TAS EPA,AST LAB,TAS
+850bb921ab1ad5dfc133b954c2546e2e,9892,Storm Bay [EPA-SB5],North of Wedge Island,-43.116601,147.666702,TAS EPA,AST LAB,TAS
+85548a6881976393831d6078a2a235bd,9893,Storm Bay [EPA-SB6],East of Variety Bay,-43.2,147.433302,TAS EPA,AST LAB,TAS
+67630a796912012fc74b68473463f1c9,9894,Storm Bay [EPA-SB7],Dart Bank,-43.211094,147.693103,TAS EPA,AST LAB,TAS
+2606cc6f9ce96d2f0deb504f29e42c77,9895,Storm Bay [EPA-SB8],SE of Betsey Island,-43.071175,147.520179,TAS EPA,AST LAB,TAS
+f2832d81f6086b7feac31473dd76d23c,9896,Storm Bay [EPA-SB9],SW of North West Head,-43.026603,147.58143,TAS EPA,AST LAB,TAS
+f6b19f91568a6576fafbd40f9261973b,9897,D'Entrecasteaux Channel [EPA-HEDC1],Northern Boundary (M1),-43.0635001,147.3400001,TAS EPA,AST LAB,TAS
+87e4fe5a51198f949863223356b88a32,9898,Derwent Estuary [EPA-DE3],Derwent Estuary [B3],-43.02348,147.376669,TAS EPA,AST LAB,TAS
+c0d0a92286133cea0083b6e76e266842,9920,Norfolk Bay [EPA-NB1],Eaglehawk Bay,-43.0137,147.8247,TAS EPA,AST LAB,TAS
+bb8427c8f2a6a5715fc9aae1aa91bc3a,9921,Norfolk Bay [EPA-NB2],MF117 (North),-42.930293,147.70198,TAS EPA,AST LAB,TAS
+429da745d3ce3c735c2093dae48c9386,9922,Norfolk Bay [EPA-NB3],MF117 (East),-42.939261,147.705097,TAS EPA,AST LAB,TAS
+8a7c004046b93ba17644b4c86964d982,9923,Norfolk Bay [EPA-NB4],North of Green Head,-42.928514,147.678897,TAS EPA,AST LAB,TAS
+3b9a04df8aa2ff01ac970150ef1b37a6,9924,Norfolk Bay [EPA-NB5],Norfolk Bay,-42.930262,147.745276,TAS EPA,AST LAB,TAS
+25ae3c70724c484cc48e63f3e70b1910,9925,Norfolk Bay [EPA-NB6],Frederick Henry Bay,-42.936115,147.610041,TAS EPA,AST LAB,TAS
+ddb1c7b31c9610ce7befc2c3a49cadd5,9926,Norfolk Bay [EPA-NB7],North of White house point,-42.942174,147.727463,TAS EPA,AST LAB,TAS
+21b5f706c0bc5b379d7f349a85299886,9927,Norfolk Bay [EPA-NB8],South West of Smooth Island,-42.9396,147.7656,TAS EPA,AST LAB,TAS
+ccac7305ee2c26202529c0f621e6e4d7,9928,Norfolk Bay [EPA-NB10],Denison Canal,-42.899415,147.798734,TAS EPA,AST LAB,TAS
+6b2a57865610793b9384f8b99b63b4ce,9A,Conjola Lake,Lake Conjola/Berringer Lake,-35.2587,150.4961,NSW Food Authority,Microalgal Solutions,NSW
+0d9fe1a24a20fb3117799b183c525314,BB1,Hawkesbury River,NA,-33.5771,151.2593,NSW Food Authority,Microalgal Solutions,NSW
+e81f0b2a0692c76b93a9bd88fc659213,BB2,Hawkesbury River,NA,-33.5648,151.3186,NSW Food Authority,Microalgal Solutions,NSW
+a1c5b65e5485af182dec2da4d98d0240,Bherwerre,Crookhaven Bherwerre,NA,-34.9185,150.739,NSW Food Authority,Microalgal Solutions,NSW
+f6ab0daec738564c3c0d7bc9304462ca,CC1,Hawkesbury River,NA,-33.5907,151.2433,NSW Food Authority,Microalgal Solutions,NSW
+a4749922561d7df576d6477d105f2f8d,CC2,Hawkesbury River,NA,-33.5968,151.2194,NSW Food Authority,Microalgal Solutions,NSW
+55d87a30a15189387cf6323ca8c94e0e,PAT7,Hawkesbury River,Same as Patonga Creek 7,-33.5326,151.265,NSW Food Authority,Microalgal Solutions,NSW
+946dedbd8967eb4e3225f853088a2183,PIT1,Hawkesbury River,NA,-33.5964,151.3119,NSW Food Authority,Microalgal Solutions,NSW
+8ddf58fe1ac776ea5bc6c29b385869db,Site 1,Georges River,NA,-34.0726,151.1683,NSW Food Authority,Microalgal Solutions,NSW
+cf8eecc302484466163984ab21ef5cd5,Site 10,Georges River,NA,-34.0001,151.102,NSW Food Authority,Microalgal Solutions,NSW
+bd8328cae43523a5da90f07b2604a359,Site 2,Georges River,NA,-34.0741,151.1482,NSW Food Authority,Microalgal Solutions,NSW
+ca695828ec222d3fe95c13f7dad7b274,Site 3,Georges River,NA,-34.0688,151.1311,NSW Food Authority,Microalgal Solutions,NSW
+c355ddd196e50de61a178cba165d132a,Site 4,Georges River,NA,-33.9793,151.2532,NSW Food Authority,Microalgal Solutions,NSW
+d36bea932822b56ed967482e0dd0014c,Site 5,Georges River,NA,-33.9694,151.2589,NSW Food Authority,Microalgal Solutions,NSW
+aae0a5e290740981805ef4be80f0609d,Site 6,Georges River,NA,-33.9932,151.2312,NSW Food Authority,Microalgal Solutions,NSW
+a23de08f39dd1eef5f44c1c1ae19b745,Site 7,Georges River,NA,-33.9686,151.1831,NSW Food Authority,Microalgal Solutions,NSW
+969d5a2e6f80491bb06dc789b6cbf17a,Site 8,Georges River,NA,-34.0072,151.1833,NSW Food Authority,Microalgal Solutions,NSW
+a6844c3f37d3d82366519cfa85f8c20b,Site 9,Georges River,NA,-34.0088,151.133,NSW Food Authority,Microalgal Solutions,NSW
+a29a071472364c52e4ab491b06fc1555,WS 9,Pambula Lake,Confluence of Towaka and Pambula Rivers,-36.9749,149.8982,NSW Food Authority,Microalgal Solutions,NSW
+c6edc40cdacbbc001b237fa07c2e4d28,1,Clyde River,NA,-35.7046,150.18,NSW Food Authority,Microalgal Solutions,NSW
+6009255a338416ba879edfc07e6c5f86,1,Jervis Bay,Callala,-35.0741,150.704,NSW Food Authority,Microalgal Solutions,NSW
+1169bc914f65ec418102c58e5dbc7168,1,Merimbula Lake,NA,-36.8926,149.92,NSW Food Authority,Microalgal Solutions,NSW
+2ddfc704e486e9fb511f211b5a68ab09,1,Tuross Lake,NA,-36.0389,150.108,NSW Food Authority,Microalgal Solutions,NSW
+7fb5821bfa7bf7fd1857c4e53d98f681,1,Twofold Bay,NA,-37.0763,149.892,NSW Food Authority,Microalgal Solutions,NSW
+f99488816658df226fc5381178d6436c,1,Wagonga Inlet,NA,-36.2126,150.117,NSW Food Authority,Microalgal Solutions,NSW
+2004ff522b799f0bf8ca254e1bb0dfd2,1,Wonboyn Lake,NA,-37.2483,149.955,NSW Food Authority,Microalgal Solutions,NSW
+f705a2734c2c1752f2232e9c1f9a495d,10,Richmond River,NA,-28.8763,153.569,NSW Food Authority,Microalgal Solutions,NSW
+ef41d9d4ad94246703e3e8db9b6df070,100,Crosslands Reserve,NA,-33.62550333,151.11396333,Hornsby Council,Microalgal solutions,NSW
+ea3423864359a230c3ff5e4d29962ed4,100,Port Stephens,NA,-32.5857,151.97,NSW Food Authority,Microalgal Solutions,NSW
+ec02389c705f99a33ec996625f5b3f1a,10040,Port Arthur (EPA-PA1),Southern Lease Boundary (North of Garden Point),-43.132704,147.866623,TAS EPA,AST LAB,TAS
+1ce251ab3600a77d155f0cc9d9f320a3,10041,Port Arthur (EPA-PA2),Carnarvon Bay (East of Fryingpan Point),-43.142951,147.864333,TAS EPA,AST LAB,TAS
+361d470f232059866fa926334d596713,10042,Port Arthur (EPA-PA3),Central Mid Channel (South East of Suicide Point),-43.15673,147.875966,TAS EPA,AST LAB,TAS
+32455af715f8ab630a4e667c614cea17,10043,Port Arthur (EPA-PA4),Southern Mid Channel (East of Dog Bark),-43.185223,147.878035,TAS EPA,AST LAB,TAS
+ebddd53519d4c009ee6b211cf0757048,10044,Port Arthur (EPA-PA5),Long Bay 300m off Garden Point Boat Ramp,-43.128014,147.860434,TAS EPA,AST LAB,TAS
+15c6c9c91934dbd715b6169d7121a26f,10045,Port Arthur (EPA-PA6),Long Bay West of shellfish lease,-43.120732,147.858833,TAS EPA,AST LAB,TAS
+3730e7f3d79252e09014e6947d58bf61,10046,Port Arthur (EPA-PA7),Long Bay North East of shellfish lease,-43.117051,147.863391,TAS EPA,AST LAB,TAS
+7a620d19fee9a081c298e5a8c69296e8,10047,Port Arthur (EPA-PA8),Stingaree Bay,-43.125434,147.856317,TAS EPA,AST LAB,TAS
+4b6ae401362924764003ae7d463ccc9e,10049,Port Arthur (EPA-PA9),Carnarvon Bay,-43.158637,147.859609,TAS EPA,AST LAB,TAS
+64d952e3fd50ee5d51dcd5aba7de22ad,10057,D'Entrecasteaux Channel [EPA-HEDC3],Upper Mid Channel (M3),-43.12500036,147.2920007,TAS EPA,AST LAB,TAS
+5a4ae95a98c19b1f9b637f308c6da306,10058,D'Entrecasteaux Channel [EPA-HEDC4],Barnes Bay (M4),-43.13520022,147.326,TAS EPA,AST LAB,TAS
+3f1667f54eb1b4ef49adda1d058875e4,10059,D'Entrecasteaux Channel [EPA-HEDC5],Green Island (M5),-43.2116679,147.297,TAS EPA,AST LAB,TAS
+fe20f7c3174909f66b2d853d6dc6f2fb,10063,Storm Bay [PET-SB25],800m NW of proposed Petuna lease (282),-43.09845,147.52836,TAS EPA,AST LAB,TAS
+7afd298018279ed7afd1f841c9e80615,10064,Storm Bay [PET-SB26],within proposed Petuna lease (282),-43.108361,147.55557,TAS EPA,AST LAB,TAS
+0287d18ef8db16e316afe37d959e3c94,10065,D'Entrecasteaux Channel [EPA-HEDC6],Central Mid Channel (M6),-43.3158002,147.1880005,TAS EPA,AST LAB,TAS
+bda1748c29f8077c2ff858931c587656,103,Milsons Passage,NA,-33.52036833,151.17958833,Hornsby Council,Microalgal solutions,NSW
+805ff7091d19122c2fceb1ab340168a5,10524,Storm Bay [EPA-SB11],East of Variety Point,-43.206056,147.459774,TAS EPA,AST LAB,TAS
+14fdef1c3b96a6e4253d23d16dd0e062,10525,Storm Bay [EPA-SB16],SE cnr West of Wedge Zone,-43.1439,147.64377,TAS EPA,AST LAB,TAS
+ce9920900cf7a141f94830c59e37ed08,10526,Storm Bay [EPA-SB12],SW of Betsey Island,-43.078481,147.453906,TAS EPA,AST LAB,TAS
+bda3dd4d1ea5f855d2532d867dc2c932,10527,Nubeena  [EPA-NUB3],White Beach,-43.114713,147.715491,TAS EPA,AST LAB,TAS
+9687365b5ba70f60cce14cf80fa7082b,10528,D'Entrecasteaux Channel [EPA-HEDC16],Lease 94,-43.089014,147.306419,TAS EPA,AST LAB,TAS
+3856066eccb8939c71b36f949d60701a,10529,D'Entrecasteaux Channel [EPA-HEDC17],Lease 141-N,-43.334262,147.156158,TAS EPA,AST LAB,TAS
+340ef2561c7d1d277ac0eb611584e50a,10530,D'Entrecasteaux Channel [EPA-HEDC18],Lease 141-S,-43.363287,147.111588,TAS EPA,AST LAB,TAS
+a3abf8a2146a4cfd953aeb457db3664c,10531,D'Entrecasteaux Channel [EPA-HEDC19],Lease 203,-43.400515,147.12929,TAS EPA,AST LAB,TAS
+61060a97e52b31f850a8c1a4fa01d7b4,10532,D'Entrecasteaux Channel [EPA-HEDC9],Southern Boundary (M9),-43.404199504,147.068,TAS EPA,AST LAB,TAS
+f2c7ed034a9f36005bbe79f3126a2038,10533,D'Entrecasteaux Channel [EPA-HEDC20],2Km east of Burnett Point,-43.438293,147.052321,TAS EPA,AST LAB,TAS
+932d1f1b222f278c8eac651a116fb18d,10534,D'Entrecasteaux Channel [EPA-HEDC21],Lease 78,-43.387719,147.067412,TAS EPA,AST LAB,TAS
+64492a69fbe7e044657680ae2a8237ca,10535,Huon Estuary [EPA-HEDC22],Lease 87,-43.283991,147.107272,TAS EPA,AST LAB,TAS
+a994268ba114884dfc9b1ce1f5791ede,10536,Huon Estuary [EPA-HEDC10],Lower Huon (M10),-43.25609957,147.0829996,TAS EPA,AST LAB,TAS
+c1a2d1cb22491f8dfe3c84ecb421aac6,10538,Mercury Passage [EPA-MP11],135m east of Lease boundary,-42.533526,147.985125,TAS EPA,AST LAB,TAS
+af3b81ec26ff5935dd7edff5e9949247,10539,Storm Bay [EPA-SB27],Site 135m from Lease 281 (yellow Bluff),-43.10822,147.422048,TAS EPA,AST LAB,TAS
+65b23632ce61a5e104d11abac9da2a07,10540,Storm Bay [EPA-SB28],Site 135m from Lease 261 (Trumpeter Bay),-43.181356,147.443839,TAS EPA,AST LAB,TAS
+5dc7d17012fca2721a7ad26ef0f7bb94,10541,Storm Bay [EPA-SB29],Site 135m from Lease (Petuna Smolt),-43.0441,147.6041,TAS EPA,AST LAB,TAS
+719871b103e8d1c17b0b430f4d63e8a4,10542,Storm Bay [EPA-SB30],Site 135m from Lease (Petuna Grow out),-43.11013,147.56375,TAS EPA,AST LAB,TAS
+f5ef54706c8c5058f449b18cfe6de8f8,10543,Storm Bay [EPA-SB31],Site 135m from Lease 279 (west of Wedge),-43.134275,147.6419,TAS EPA,AST LAB,TAS
+452ae849598a72fa5b426b8cb86e926f,10544,Storm Bay [EPA-SB32],Site 135m from Lease 190 (Creeses),-43.106995,147.699559,TAS EPA,AST LAB,TAS
+939adb1e47fbbd68adaaa94a91d7a0a1,10545,Frederick Henry Bay [EPA-SB22],Frederick Henry Bay,-42.936115,147.610041,TAS EPA,AST LAB,TAS
+570fa65cc68a23463e7e926e676ddce8,108,Dangar Island Beach,NA,-33.54054333,151.24108,Hornsby Council,Microalgal solutions,NSW
+a1eaa3c25cde9e0a4b797af7b85b92b8,11,Clarence River,NA,-29.4324,153.348,NSW Food Authority,Microalgal Solutions,NSW
+195eed3d3197d4ac2c2d2514d966d6ce,11,Richmond River,NA,-28.8722,153.5348,NSW Food Authority,Microalgal Solutions,NSW
+303b1dd0d1d92059dfcbcdae06f97e9b,116,Port Stephens,Same as 117,-32.7211,151.9691,NSW Food Authority,Microalgal Solutions,NSW
+1637b3b58cbec644ee57a4bc918627ff,117,Port Stephens,NA,-32.7211,151.9691,NSW Food Authority,Microalgal Solutions,NSW
+e856326af58c623523f5ff6a8d224f31,12,Tweed River,NA,-28.2137,153.504,NSW Food Authority,Microalgal Solutions,NSW
+b282468968f1f4904a06c977c76e11b3,13,Hunter River,NA,-32.8781,151.791,NSW Food Authority,Microalgal Solutions,NSW
+f17557a6773f6fa4680c1629c6b0100c,13,Nambucca River,NA,-30.7084,152.95,NSW Food Authority,Microalgal Solutions,NSW
+8165a5edc2d11d4877d08e3b4c222f50,13,Tweed River,NA,-28.1942,153.514,NSW Food Authority,Microalgal Solutions,NSW
+fdf8ebfb847da46ac1c7f6b8327b4cfb,14,Nambucca River,NA,-30.6701,152.987,NSW Food Authority,Microalgal Solutions,NSW
+78ff1c7c16ab6baef95e8faca2a761f7,150,Gunyah Point,NA,-33.56866833,151.24104667,Hornsby Council,Microalgal solutions,NSW
