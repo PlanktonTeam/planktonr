@@ -169,7 +169,7 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
   } else if(Type == "Water" & Survey == "CPR"){
     var_names <- c("PCI")
   } else if(Type == "Phytoplankton" & Survey == "HAB"){
-    var_names <- c( "PhytoBiomassCarbon_pgL", "PhytoAbundance_CellsL", "AvgCellVol_um3")
+    var_names <- c( "PhytoBiomassCarbon_pgL", "PhytoAbundance_CellsL", "Biovolume_um3L")
   }
 
   if(Survey == "CPR"){
@@ -321,8 +321,7 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
           dplyr::summarise(abund = sum(.data$abund, na.rm = TRUE), ## add up all occurrences of spp. within one sample
                            .groups = "drop") %>%
           dplyr::group_by(dplyr::across(tidyselect::any_of(main_vars, .data[[colname]]))) %>%
-          dplyr::summarise(AvgCellVol_um3 = mean(.data$CellBioV*.data$abund/sum(.data$abund), na.rm = TRUE),
-                           NoPhytoSpecies_Sample = length(.data$abund[!grepl("NA|spp", .data$TaxonName)]),
+          dplyr::summarise(NoPhytoSpecies_Sample = length(.data$abund[!grepl("NA|spp", .data$TaxonName)]),
                            PhytoAbundance_CellsL = sum(.data$abund, na.rm = TRUE),
                            Biovolume_um3L = sum(.data$abund*.data$CellBioV, na.rm = TRUE),
                            PhytoBiomassCarbon_pgL = sum(.data$abund * .data$Carbon, na.rm = TRUE),

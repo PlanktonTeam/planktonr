@@ -336,20 +336,14 @@ pr_get_data <- function(Survey = "NRS",
         planktonr_dat(Type = Type, Survey = "CPR")
     }
   } else if (Survey == "HAB"){ #TODO - update this if clause when the data is available through AODN
-    Sites <- readr::read_csv("data-raw/HAB_data_temp/HAB_Sites.csv")
-    Samples <- readr::read_csv("data-raw/HAB_data_temp/HAB_Samples.csv")
-    Dat <- readr::read_csv("data-raw/HAB_data_temp/HAB_data.csv", col_types = readr::cols(Comments = readr::col_character())) %>%
-      dplyr::mutate(TaxonName = stringr::str_replace(.data$TaxonName, "A\\?", "µ"),
-                    TaxonName = stringr::str_replace(.data$TaxonName, "\\?", "µ"),
-                    TaxonName = stringr::str_remove(.data$TaxonName, " \\(unaccepted\\)"))
     PInfo <- pr_get_info(Source = "Phytoplankton") %>%
       janitor::clean_names("upper_camel")
 
-    dat <- Dat %>%
+    dat <- HABDat %>%
       dplyr::left_join(PInfo %>% dplyr::select(.data$TaxonName, .data$FunctionalGroup, .data$Hab, contains("Cell")), by = "TaxonName") %>%
       dplyr::filter(.data$CellsL > 0) %>%
-      dplyr::left_join(Samples %>% dplyr::select(.data$SampleCode, SampleTime_Local = .data$SampleDate, .data$SiteCode), by = "SampleCode") %>%
-      dplyr::left_join(Sites %>% dplyr::select(.data$SiteCode, .data$Name, .data$SiteId), by = "SiteCode") %>%
+      dplyr::left_join(HABSamples %>% dplyr::select(.data$SampleCode, SampleTime_Local = .data$SampleDate, .data$SiteCode), by = "SampleCode") %>%
+      dplyr::left_join(HABSites %>% dplyr::select(.data$SiteCode, .data$Name, .data$SiteId), by = "SiteCode") %>%
       dplyr::select(-c(.data$AphiaId, .data$Presence, .data$Comments, .data$DataCode), PhytoAbundance_CellsL = .data$CellsL)
 
     if(Subset == 'raw' & Variable == 'abundance'){

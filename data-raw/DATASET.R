@@ -304,14 +304,18 @@ pchNRSName <- c(pchNRSName, pchCSName)
 ltyNRSCode <- c(ltyNRSCode, ltyCSCode)
 ltyNRSName <- c(ltyNRSName, ltyCSName)
 
-
-
-
 rm(colCSCode, colCSName, pchCSCode, pchCSName, ltyCSCode, ltyCSName, stateCol, stateLTY, statePCH)
 
-
+## HAB Coastal phyto data (until can be read from AODN)
+HABSites <- readr::read_csv("data-raw/HAB_data_temp/HAB_Sites.csv")
+HABSamples <- readr::read_csv("data-raw/HAB_data_temp/HAB_Samples.csv")
+HABDat <- readr::read_csv("data-raw/HAB_data_temp/HAB_data.csv", col_types = readr::cols(Comments = readr::col_character())) %>%
+  dplyr::mutate(TaxonName = stringr::str_replace(.data$TaxonName, "A\\?", "µ"),
+                TaxonName = stringr::str_replace(.data$TaxonName, "\\?", "µ"),
+                TaxonName = stringr::str_remove(.data$TaxonName, " \\(unaccepted\\)"))
 
 usethis::use_data(mbr, MapOz, meta_sf, csDAT, cpr_AAD,
+                  HABSites, HABSamples, HABDat,
                   colCPR, pchCPR, ltyCPR, CPRinfo, CSCodes,
                   colNRSCode, colNRSName, pchNRSName, pchNRSCode, ltyNRSCode, ltyNRSName,
                   overwrite = TRUE, internal = TRUE, compress = "bzip2")
