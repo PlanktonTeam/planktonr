@@ -7,7 +7,7 @@
 #' @keywords internal
 pr_rename <- function(dat){
 
-  ##TODO - Check and remvoe any uneeded renames - note the capitals are needed for files grabbed from S3
+  ##TODO - Check and remove any unneeded renames - note the capitals are needed for files grabbed from S3
   rename_df <- tibble::as_tibble(matrix(c(
     "Sample", "SAMPLE",
     "Region", "REGION",

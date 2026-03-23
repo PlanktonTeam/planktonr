@@ -12,6 +12,7 @@ pr_get_Indices(Survey = "CPR", Type = "Phytoplankton", ...)
 \item \code{"NRS"} - National Reference Stations (coastal fixed-point stations)
 \item \code{"CPR"} - Continuous Plankton Recorder (ship-based transects)
 \item \code{"SOTS"} - Southern Ocean Time Series (calculated from NRS data for SOTS station)
+\item \code{"HAB"} - Phytoplankton monitoring data from state based and seafood industry monitoring programs
 }}
 
 \item{Type}{Data type:
@@ -30,7 +31,7 @@ the allocation of CPR samples to bioregions (useful for samples near boundaries)
 \value{
 A dataframe in long format with columns:
 \itemize{
-\item For NRS: \code{StationCode}, \code{StationName}, \code{SampleTime_Local}, \code{Latitude}, \code{Longitude}
+\item For NRS, SOTS & HAB: \code{StationCode}, \code{StationName}, \code{SampleTime_Local}, \code{Latitude}, \code{Longitude}
 \item For CPR: \code{BioRegion}, \code{SampleTime_Local}, \code{Latitude}, \code{Longitude}
 \item Common: \code{Year_Local}, \code{Month_Local}, \code{Parameters} (index name), \code{Values} (index value)
 }
@@ -107,10 +108,11 @@ biomass estimates, abundance measures, and community structure indicators.
 
 }
 
-\subsection{SOTS Data}{
+\subsection{SOTS & HAB Data}{
 
-For SOTS (Southern Ocean Time Series), phytoplankton indices are calculated
-from raw NRS data as they are not provided directly by AODN. Only samples
+For SOTS (Southern Ocean Time Series) and HAB (Coastal Phytoplankton),
+phytoplankton indices are calculated from raw NRS data as they are not
+provided directly by AODN. For SOTS only samples
 from the LM (Light Microscopy) method at depths <50m are included.
 }
 }
@@ -124,6 +126,9 @@ dat <- pr_get_Indices("CPR", "Zooplankton", near_dist_km = 250)
 
 # Get water properties from NRS
 dat <- pr_get_Indices("NRS", "Water")
+
+# Get HAB phytoplankton indices
+dat <- pr_get_Indices("HAB", "Phytoplankton", Subset = 'genus')
 
 # Filter for specific parameter and stations
 dat <- pr_get_Indices("NRS", "Zooplankton") \%>\%

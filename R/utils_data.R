@@ -278,6 +278,7 @@ pr_get_data <- function(Survey = "NRS",
 # =============================================================================
 
 #' @noRd
+#'
 .get_plankton_data <- function(Survey, Type, Variable, Subset) {
 
   Type <- pr_check_type(Type)
@@ -338,43 +339,44 @@ pr_get_data <- function(Survey = "NRS",
     Sites <- readr::read_csv("data-raw/HAB_data_temp/HAB_Sites.csv")
     Samples <- readr::read_csv("data-raw/HAB_data_temp/HAB_Samples.csv")
     Dat <- readr::read_csv("data-raw/HAB_data_temp/HAB_data.csv", col_types = readr::cols(Comments = readr::col_character())) %>%
-      dplyr::mutate(TaxonName = stringr::str_replace(TaxonName, "A\\?", "µ"),
-                    TaxonName = stringr::str_replace(TaxonName, "\\?", "µ"),
-                    TaxonName = stringr::str_remove(TaxonName, " \\(unaccepted\\)"))
+      dplyr::mutate(TaxonName = stringr::str_replace(.data$TaxonName, "A\\?", "µ"),
+                    TaxonName = stringr::str_replace(.data$TaxonName, "\\?", "µ"),
+                    TaxonName = stringr::str_remove(.data$TaxonName, " \\(unaccepted\\)"))
     PInfo <- pr_get_info(Source = "Phytoplankton") %>%
       janitor::clean_names("upper_camel")
 
     dat <- Dat %>%
-      dplyr::left_join(PInfo %>% dplyr::select(TaxonName, FunctionalGroup, Hab, contains("Cell")), by = "TaxonName") %>%
-      dplyr::filter(CellsL > 0) %>%
-      dplyr::left_join(Samples %>% dplyr::select(SampleCode, SampleDate, SiteCode), by = "SampleCode") %>%
-      dplyr::left_join(Sites %>% dplyr::select(SiteCode, Name, SiteId), by = "SiteCode") %>%
-      dplyr::select(-c(AphiaId, Presence, Comments, DataCode), PhytoAbundance_CellsL = CellsL)
+      dplyr::left_join(PInfo %>% dplyr::select(.data$TaxonName, .data$FunctionalGroup, .data$Hab, contains("Cell")), by = "TaxonName") %>%
+      dplyr::filter(.data$CellsL > 0) %>%
+      dplyr::left_join(Samples %>% dplyr::select(.data$SampleCode, SampleTime_Local = .data$SampleDate, .data$SiteCode), by = "SampleCode") %>%
+      dplyr::left_join(Sites %>% dplyr::select(.data$SiteCode, .data$Name, .data$SiteId), by = "SiteCode") %>%
+      dplyr::select(-c(.data$AphiaId, .data$Presence, .data$Comments, .data$DataCode), PhytoAbundance_CellsL = .data$CellsL)
 
     if(Subset == 'raw' & Variable == 'abundance'){
       dat <- dat %>%
-        dplyr::select(SampleDate, Name, SiteId, TaxonName, PhytoAbundance_CellsL) %>%
+        dplyr::select(TripCode = .data$SampleCode, .data$SampleTime_Local, .data$Name, .data$SiteId, .data$TaxonName, .data$PhytoAbundance_CellsL) %>%
         tidyr::pivot_wider(names_from = "TaxonName", values_from = "PhytoAbundance_CellsL", values_fill = 0)
     } else if (Subset == 'genus' & Variable == 'abundance'){
       dat <- dat %>%
-        dplyr::select(SampleDate, Name, SiteId, TaxonName, PhytoAbundance_CellsL) %>%
-        dplyr::mutate(Genus = stringr::word(TaxonName, 1, 1)) %>%
-        dplyr::filter(!stringr::str_detect(TaxonName, "cf")) %>%
-        dplyr::summarise(PhytoAbundance_CellsL = sum(PhytoAbundance_CellsL, na.rm = TRUE), .by = c(SampleDate, Name, SiteId, Genus)) %>%
+        dplyr::select(TripCode = .data$SampleCode, .data$SampleTime_Local, .data$Name, .data$SiteId, .data$TaxonName, .data$PhytoAbundance_CellsL) %>%
+        dplyr::mutate(Genus = stringr::word(.data$TaxonName, 1, 1)) %>%
+        dplyr::filter(!stringr::str_detect(.data$TaxonName, "cf")) %>%
+        dplyr::summarise(PhytoAbundance_CellsL = sum(.data$PhytoAbundance_CellsL, na.rm = TRUE),
+                         .by = c(.data$TripCode, .data$SampleTime_Local, .data$Name, .data$SiteId, .data$Genus)) %>%
         tidyr::pivot_wider(names_from = "Genus", values_from = "PhytoAbundance_CellsL", values_fill = 0)
     } else if (Subset == 'species' & Variable == 'abundance'){
       dat <- dat %>%
-        dplyr::select(SampleDate, Name, SiteId, TaxonName, PhytoAbundance_CellsL) %>%
-        dplyr::filter(!stringr::str_detect(TaxonName, "spp|group|cf")) %>%
+        dplyr::select(TripCode = .data$SampleCode, .data$SampleTime_Local, .data$Name, .data$SiteId, .data$TaxonName, .data$PhytoAbundance_CellsL) %>%
+        dplyr::filter(!stringr::str_detect(.data$TaxonName, "spp|group|cf")) %>%
         tidyr::pivot_wider(names_from = "TaxonName", values_from = "PhytoAbundance_CellsL", values_fill = 0)
-    } else if (Subset == 'htg' & Variable == 'abundance'){
-      dat <- dat %>%
-        dplyr::select(SampleDate, Name, SiteId, FunctionalGroup, PhytoAbundance_CellsL) %>%
-        dplyr::summarise(PhytoAbundance_CellsL = sum(PhytoAbundance_CellsL, na.rm = TRUE), .by = c(SampleDate, Name, SiteId, FunctionalGroup)) %>%
-        tidyr::pivot_wider(names_from = "FunctionalGroup", values_from = "PhytoAbundance_CellsL", values_fill = 0) %>%
-        dplyr::select(where(~ !(is.numeric(.x) && all(.x == 0, na.rm = TRUE))), -`NA`)
     }
     dat <- dat %>%
+      dplyr::mutate(Project = "HAB",
+                    StationCode = paste0(stringr::str_sub(stringr::word(.data$Name, 1), 1, 3),stringr::str_sub(stringr::word(.data$Name, 2), 1, 3)),
+                    Year_Local = lubridate::year(.data$SampleTime_Local),
+                    Month_Local = lubridate::month(.data$SampleTime_Local)) %>%
+      dplyr::select(.data$Project, TripCode, StationName = .data$Name, .data$StationCode, .data$SiteId, .data$SampleTime_Local, .data$Year_Local,
+                    .data$Month_Local, tidyr::everything()) %>%
       planktonr_dat(Type = Type, Survey = "HAB")
     }
 

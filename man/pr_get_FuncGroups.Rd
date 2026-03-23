@@ -71,7 +71,7 @@ sample. Port Hacking 4 samples are excluded from NRS data.
 # Get NRS zooplankton functional groups
 NRSfgz <- pr_get_FuncGroups(Survey = "NRS", Type = "Zooplankton")
 
-# Get NRS phytoplankton functional groups  
+# Get NRS phytoplankton functional groups
 NRSfgp <- pr_get_FuncGroups(Survey = "NRS", Type = "Phytoplankton")
 
 # Get CPR functional groups with expanded bioregion boundaries

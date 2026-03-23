@@ -259,7 +259,19 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
 
   minYear <- min(df$Year_Local, na.rm = TRUE)
 
-  # Set Correct columns/plot titles
+  # add subtitle for genera and species names for HAB data set
+  if(Survey == "HAB"){
+    if("genus" %in% names(df)){
+      subtit <- unique(df$genus)
+    } else {
+      subtit <- unique(df$TaxonName)
+    }
+    subtit <- bquote("*italic(.(tit))*")
+  }
+
+  titley <- pr_relabel(unique(df$Parameters), style = 'ggplot')
+
+    # Set Correct columns/plot titles
   if (Survey == "CPR"){
     site <- rlang::sym("BioRegion")
   } else if (Survey != "CPR"){
@@ -316,8 +328,6 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
       tibble::deframe()
 
   }
-
-  titley <- pr_relabel(unique(df$Parameters), style = 'ggplot')
 
   # Averaging based on `Trend` or taking climatology from model for month
 

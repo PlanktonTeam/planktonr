@@ -23,6 +23,7 @@ broad-scale spatial coverage along shipping routes.
 Tasmania for monitoring Southern Ocean ecosystems.
 \item \code{"Coastal"} - Coastal Seas microbial monitoring sites.
 \item \code{"GO-SHIP"} - Global Ocean Ship-based Hydrographic Investigations Program.
+\item \code{"HAB"} - Phytoplankton monitoring data from state based and seafood industry monitoring programs
 }}
 
 \item{Type}{Data type to retrieve (case-insensitive for Phytoplankton/Zooplankton):
@@ -73,6 +74,7 @@ consolidates multiple survey-specific functions into a single entry point.
    NRS \tab Phytoplankton, Zooplankton, Chemistry, Pigments, Pico, Micro, TSS, CTD \cr
    CPR \tab Phytoplankton, Zooplankton \cr
    SOTS \tab Phytoplankton, Zooplankton \cr
+   HAB \tab Phytoplankton \cr
    Coastal \tab Micro, Chemistry \cr
    GO-SHIP \tab Micro \cr
 }
@@ -128,6 +130,10 @@ dat <- pr_get_data(Survey = "GO-SHIP", Type = "Micro")
 
 # Get Coastal Seas chemistry data
 dat <- pr_get_data(Survey = "Coastal", Type = "Chemistry")
+
+# Get HAB phytoplankton data
+dat <- pr_get_data(Survey = "HAB", Type = "Phytoplankton",
+                   Variable = "abundance", Subset = "genus")
 
 }
 \seealso{
