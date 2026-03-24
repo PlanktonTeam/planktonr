@@ -320,7 +320,7 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
           dplyr::group_by(dplyr::across(tidyselect::any_of(main_vars)), .data$TaxonName, .data$genus, .data$FunctionalGroup, .data$CellBioV, .data$Carbon) %>%
           dplyr::summarise(abund = sum(.data$abund, na.rm = TRUE), ## add up all occurrences of spp. within one sample
                            .groups = "drop") %>%
-          dplyr::group_by(dplyr::across(tidyselect::any_of(main_vars, .data[[colname]]))) %>%
+          dplyr::group_by(dplyr::across(tidyselect::any_of(c(main_vars, colname)))) %>%
           dplyr::summarise(NoPhytoSpecies_Sample = length(.data$abund[!grepl("NA|spp", .data$TaxonName)]),
                            PhytoAbundance_CellsL = sum(.data$abund, na.rm = TRUE),
                            Biovolume_um3L = sum(.data$abund*.data$CellBioV, na.rm = TRUE),
