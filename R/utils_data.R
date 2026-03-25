@@ -344,27 +344,23 @@ pr_get_data <- function(Survey = "NRS",
       dplyr::filter(.data$CellsL > 0) %>%
       dplyr::left_join(HABSamples %>% dplyr::select(.data$SampleCode, SampleTime_Local = .data$SampleDate, .data$SiteCode), by = "SampleCode") %>%
       dplyr::left_join(HABSites %>% dplyr::select(.data$SiteCode, .data$Name, .data$SiteId), by = "SiteCode") %>%
-      dplyr::select(-c(.data$AphiaId, .data$Presence, .data$Comments, .data$DataCode), PhytoAbundance_CellsL = .data$CellsL)
+      dplyr::select(-c(.data$AphiaId, .data$Presence, .data$Comments, .data$DataCode), PhytoAbundance_CellsL = .data$CellsL) %>%
+      dplyr::select(TripCode = .data$SampleCode, .data$SampleTime_Local, .data$Name, .data$SiteId, .data$TaxonName, .data$PhytoAbundance_CellsL)
 
     if(Subset == 'raw' & Variable == 'abundance'){
-      dat <- dat %>%
-        dplyr::select(TripCode = .data$SampleCode, .data$SampleTime_Local, .data$Name, .data$SiteId, .data$TaxonName, .data$PhytoAbundance_CellsL) %>%
-        tidyr::pivot_wider(names_from = "TaxonName", values_from = "PhytoAbundance_CellsL", values_fill = 0)
+      dat <- dat
     } else if (Subset == 'genus' & Variable == 'abundance'){
       dat <- dat %>%
-        dplyr::select(TripCode = .data$SampleCode, .data$SampleTime_Local, .data$Name, .data$SiteId, .data$TaxonName, .data$PhytoAbundance_CellsL) %>%
-        dplyr::mutate(Genus = stringr::word(.data$TaxonName, 1, 1)) %>%
         dplyr::filter(!stringr::str_detect(.data$TaxonName, "cf")) %>%
+        dplyr::mutate(TaxonName = stringr::word(.data$TaxonName, 1, 1)) %>%
         dplyr::summarise(PhytoAbundance_CellsL = sum(.data$PhytoAbundance_CellsL, na.rm = TRUE),
-                         .by = c(.data$TripCode, .data$SampleTime_Local, .data$Name, .data$SiteId, .data$Genus)) %>%
-        tidyr::pivot_wider(names_from = "Genus", values_from = "PhytoAbundance_CellsL", values_fill = 0)
+                         .by = c(.data$TripCode, .data$SampleTime_Local, .data$Name, .data$SiteId, .data$TaxonName))
     } else if (Subset == 'species' & Variable == 'abundance'){
       dat <- dat %>%
-        dplyr::select(TripCode = .data$SampleCode, .data$SampleTime_Local, .data$Name, .data$SiteId, .data$TaxonName, .data$PhytoAbundance_CellsL) %>%
-        dplyr::filter(!stringr::str_detect(.data$TaxonName, "spp|group|cf")) %>%
-        tidyr::pivot_wider(names_from = "TaxonName", values_from = "PhytoAbundance_CellsL", values_fill = 0)
+        dplyr::filter(!stringr::str_detect(.data$TaxonName, "spp|group|cf"))
     }
     dat <- dat %>%
+      tidyr::pivot_wider(names_from = "TaxonName", values_from = "PhytoAbundance_CellsL", values_fill = 0) %>%
       dplyr::mutate(Project = "HAB",
                     StationCode = paste0(stringr::str_sub(stringr::word(.data$Name, 1), 1, 3),stringr::str_sub(stringr::word(.data$Name, 2), 1, 3)),
                     Year_Local = lubridate::year(.data$SampleTime_Local),
