@@ -77,6 +77,7 @@ pr_plot_TimeSeries <- function(df, trans = "identity"){
   )
 
   Survey <- pr_get_survey(df)
+  Type <- pr_get_type(df)
 
   if (Survey == "CPR"){
     df <- df %>%
@@ -94,7 +95,9 @@ pr_plot_TimeSeries <- function(df, trans = "identity"){
     }
     df <- df %>%
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
-                       .by = tidyselect::any_of(vars)) # accounting for microbial data different depths
+                       .by = tidyselect::any_of(vars)) %>% # accounting for microbial data different depths
+      planktonr_dat(Survey = Survey, Type = Type) %>%
+      pr_reorder()
     plotCols <- colNRSName
     ltype <- ltyNRSName
     legendTitle <- "Station Name"
@@ -259,7 +262,19 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
 
   minYear <- min(df$Year_Local, na.rm = TRUE)
 
-  # Set Correct columns/plot titles
+  # add subtitle for genera and species names for HAB data set
+  if(Survey == "HAB"){
+    if("genus" %in% names(df)){
+      subtit <- unique(df$genus)
+    } else {
+      subtit <- unique(df$TaxonName)
+    }
+    subtit <- bquote("*italic(.(tit))*")
+  }
+
+  titley <- pr_relabel(unique(df$Parameters), style = 'ggplot')
+
+    # Set Correct columns/plot titles
   if (Survey == "CPR"){
     site <- rlang::sym("BioRegion")
   } else if (Survey != "CPR"){
@@ -316,8 +331,6 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
       tibble::deframe()
 
   }
-
-  titley <- pr_relabel(unique(df$Parameters), style = 'ggplot')
 
   # Averaging based on `Trend` or taking climatology from model for month
 
@@ -549,7 +562,16 @@ pr_plot_Climatology <- function(df, Trend = "Month", trans = "identity"){
                      se = sd / sqrt(.data$N),
                      .by = tidyselect::all_of(c(rlang::as_string(Trend), "StationName"))) %>%
     dplyr::mutate(StationName = as.character(.data$StationName)) %>%
-    tidyr::complete(!!Trend, .data$StationName)
+    tidyr::complete(!!Trend, .data$StationName) %>%
+    planktonr_dat(Survey = Survey, Type = Type) %>%
+    pr_reorder()
+
+  if(Survey == "CPR"){ #TODO - is there a better fix to ensure pr_reorder works for this function
+    df_climate <- df_climate %>%
+      dplyr::rename(BioRegion = "StationName") %>%
+      pr_reorder() %>%
+      dplyr::rename(StationName = "BioRegion")
+  }
 
   if("Year_Local" %in% colnames(df_climate)){
     df_climate <- df_climate %>%
