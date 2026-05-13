@@ -118,7 +118,7 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
 
   assertthat::assert_that(
     !(Survey %in% c("SOTS", "HAB")) || Type != "Zooplankton",
-    msg = "There is no zooplankton data for SOTS or HAB, do you mean phytoplankton?"
+    msg = "There is no zooplankton data for SOTS or HAB"
   )
 
   dots <- list(...) # allows us to access the Subset argument when added

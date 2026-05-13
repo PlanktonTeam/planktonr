@@ -432,12 +432,12 @@ testthat::test_that("pr_get_Indices validates Survey parameter type", {
 testthat::test_that("pr_get_Indices validates Survey parameter value", {
   testthat::expect_error(
     pr_get_Indices(Survey = "INVALID", Type = "Phytoplankton"),
-    regexp = "must be one of 'NRS', 'CPR', 'HAB' or 'SOTS'"
+    regexp = "'Survey' must be one of 'NRS', 'CPR', 'HAB' or 'SOTS'."
   )
 
   testthat::expect_error(
     pr_get_Indices(Survey = "nrs", Type = "Phytoplankton"),
-    regexp = "must be one of 'NRS', 'CPR', or 'SOTS'"
+    regexp = "'Survey' must be one of 'NRS', 'CPR', 'HAB' or 'SOTS'."
   )
 })
 
@@ -463,7 +463,7 @@ testthat::test_that("pr_get_Indices validates Type parameter value", {
 testthat::test_that("pr_get_Indices rejects SOTS Zooplankton combination", {
   testthat::expect_error(
     pr_get_Indices(Survey = "SOTS", Type = "Zooplankton"),
-    regexp = "There is no zooplankton data for SOTS"
+    regexp = "There is no zooplankton data for SOTS or HAB"
   )
 })
 
