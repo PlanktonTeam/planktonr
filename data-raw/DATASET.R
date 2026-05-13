@@ -104,12 +104,12 @@ cpr_AAD <- read_csv("data-raw/AADC-00099_-_2025_data_update/AADC-00099_29August2
                 tidyselect::everything())
 
 SpInfoZ <- planktonr::pr_get_info(Source = "Zooplankton") %>%
-  dplyr::mutate(`Taxon Name` = stringr::str_remove(`Taxon Name`, " [fmji]$"),
-                `Taxon Name` = stringr::str_remove(`Taxon Name`," megalopa"),
-                `Taxon Name` = stringr::str_remove(`Taxon Name`," naupliius"),
-                `Taxon Name` = stringr::str_remove(`Taxon Name`," phyllosoma"),
-                `Taxon Name` = stringr::str_remove(`Taxon Name`," zoea")) %>%
-  distinct(`Taxon Name`, .keep_all = TRUE)
+  dplyr::mutate(TaxonName = stringr::str_remove(TaxonName, " [fmji]$"),
+                TaxonName = stringr::str_remove(TaxonName," megalopa"),
+                TaxonName = stringr::str_remove(TaxonName," naupliius"),
+                TaxonName = stringr::str_remove(TaxonName," phyllosoma"),
+                TaxonName = stringr::str_remove(TaxonName," zoea")) %>%
+  distinct(TaxonName, .keep_all = TRUE)
 
 
 AAD_cols <- c("SampleTime_Local", "Year_Local", "Month_Local", "SampleTime_UTC",
@@ -175,7 +175,7 @@ colnames(cpr_AAD[(length(AAD_cols)+1):length(colnames(cpr_AAD))]) <- spp # Renam
 # spp <- tibble(Name = spp)
 #
 # spp2 <- spp %>%
-#   left_join(SpInfoZ, by = c("Name" = "Taxon Name")) %>%
+#   left_join(SpInfoZ, by = c("Name" = "TaxonName")) %>%
 #   group_split(by = is.na(`WoRMS AphiaID`))
 #
 # sum(is.na(spp2[[2]]$`WoRMS AphiaID`))

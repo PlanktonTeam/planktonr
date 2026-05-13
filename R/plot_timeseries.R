@@ -259,16 +259,6 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
 
   minYear <- min(df$Year_Local, na.rm = TRUE)
 
-  # add subtitle for genera and species names for HAB data set
-  if(Survey == "HAB"){
-    if("genus" %in% names(df)){
-      subtit <- unique(df$genus)
-    } else {
-      subtit <- unique(df$TaxonName)
-    }
-    subtit <- bquote("*italic(.(tit))*")
-  }
-
   titley <- pr_relabel(unique(df$Parameters), style = 'ggplot')
 
     # Set Correct columns/plot titles
@@ -367,7 +357,8 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
     Trend <- "SampleTime_Local"
   }
 
-  # Remove smooth from VBM
+  # Remove smooth from VBM and some HAB data
+
   if (Survey == "NRS"){
     df <- df %>%
       dplyr::mutate(do_smooth = !!site != "Bonney Coast")

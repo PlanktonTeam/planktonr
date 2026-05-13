@@ -50,6 +50,9 @@
 #' # Get CPR trips with expanded bioregion boundaries (250 km padding)
 #' dat <- pr_get_trips(Survey = "CPR", near_dist_km = 250)
 #'
+#' # Get HAB trip metadata
+#' dat <- pr_get_trips(Survey = "HAB")
+#'
 #' # Examine sampling frequency by station (NRS)
 #' dat <- pr_get_trips(Survey = "NRS")
 #' table(dat$StationName, dat$Year_Local)
@@ -100,8 +103,10 @@ pr_get_trips <- function(Survey = "NRS", ...) {
       pr_apply_Time()
   } else if (Survey == "HAB"){ #TODO - grab data from AODN sources when available
     dat <- HABSamples %>%
-      dplyr::left_join(HABSites %>% dplyr::select(SiteCode, SiteId, StationName = Name, Latitude, Longitude, State), by = "SiteCode") %>%
-      dplyr::select(TripCode = SampleCode, everything(), -c(SiteCode, CountMethod, Comments))
+      dplyr::left_join(HABSites %>% dplyr::select(.data$SiteCode, .data$SiteId,
+                                                  StationName = .data$Name, .data$Latitude,
+                                                  .data$Longitude, .data$State), by = "SiteCode") %>%
+      dplyr::select(TripCode = .data$SampleCode, dplyr::everything(), -c(.data$SiteCode, .data$CountMethod, .data$Comments))
   }
 
   return(dat)

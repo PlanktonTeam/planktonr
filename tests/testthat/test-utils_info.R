@@ -12,7 +12,7 @@ testthat::test_that("pr_get_info returns data frame for Zooplankton", {
 
   testthat::expect_s3_class(result, "data.frame")
   testthat::expect_true(nrow(result) > 0)
-  testthat::expect_true("Taxon Name" %in% names(result))
+  testthat::expect_true("TaxonName" %in% names(result))
 })
 
 testthat::test_that("pr_get_info returns data frame for Phytoplankton", {
@@ -23,7 +23,7 @@ testthat::test_that("pr_get_info returns data frame for Phytoplankton", {
 
   testthat::expect_s3_class(result, "data.frame")
   testthat::expect_true(nrow(result) > 0)
-  testthat::expect_true("Taxon Name" %in% names(result))
+  testthat::expect_true("TaxonName" %in% names(result))
 })
 
 testthat::test_that("pr_get_info accepts shorthand 'Z' for Zooplankton", {

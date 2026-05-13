@@ -116,13 +116,19 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
     msg = "'Type' must be a single character string. Valid options are 'Phytoplankton', 'Zooplankton', or 'Water'."
   )
 
-  if ((Type == "Zooplankton") == TRUE && (Survey %in% c("SOTS", 'HAB')) == TRUE) {
-    stop("Error: There is no zooplankton data for SOTS or HAB, do you mean phytoplankton?")
-  }
+  assertthat::assert_that(
+    !(Survey %in% c("SOTS", "HAB")) || Type != "Zooplankton",
+    msg = "There is no zooplankton data for SOTS or HAB, do you mean phytoplankton?"
+  )
 
   dots <- list(...) # allows us to access the Subset argument when added
   Subset <- dots$Subset %||% NA
-  if(Subset == 'genus'){colname <- 'genus'} else {colname <- 'TaxonName'}
+  if (identical(Subset, 'genus')) {
+    colname <- 'genus'
+  } else {
+    colname <- 'TaxonName'
+  }
+
   Type <- pr_check_type(Type)
 
   # Validate Type based on Survey
@@ -188,28 +194,24 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
 
 
     SpInfoZ <- planktonr::pr_get_info(Source = "Zooplankton") %>%
-      dplyr::mutate(`Taxon Name` = stringr::str_remove(.data$`Taxon Name`, " [fmji]$"),
-                    `Taxon Name` = stringr::str_remove(.data$`Taxon Name`," megalopa"),
-                    `Taxon Name` = stringr::str_remove(.data$`Taxon Name`," naupliius"),
-                    `Taxon Name` = stringr::str_remove(.data$`Taxon Name`," phyllosoma"),
-                    `Taxon Name` = stringr::str_remove(.data$`Taxon Name`," zoea")) %>%
-      dplyr::distinct(.data$`Taxon Name`, .keep_all = TRUE) %>%
-      dplyr::select(c(TaxonName = "Taxon Name", FunctionalGroup = "Functional Group", "Genus", "Species",
+      dplyr::mutate(TaxonName = stringr::str_remove(.data$TaxonName, " [fmji]$"),
+                    TaxonName = stringr::str_remove(.data$TaxonName," megalopa"),
+                    TaxonName = stringr::str_remove(.data$TaxonName," naupliius"),
+                    TaxonName = stringr::str_remove(.data$TaxonName," phyllosoma"),
+                    TaxonName = stringr::str_remove(.data$TaxonName," zoea")) %>%
+      dplyr::distinct(.data$TaxonName, .keep_all = TRUE) %>%
+      dplyr::select(c("TaxonName", "FunctionalGroup", "Genus", "Species",
                       "Diet", AphiaID = "WoRMS AphiaID", "Length (mm)"))
-
-
 
     if (Type == "Zooplankton"){
       main_vars <- c("TripCode", "Year_Local", "Month_Local", "SampleTime_Local", "tz",
                      "Latitude", "Longitude", "SampleTime_UTC", "SampleVolume_m3",
                      "BioRegion", "Sample_ID", "TotalCount", "PCI")
 
-
       grp <- setdiff(main_vars, "PCI")
 
       dat <- cpr_AAD %>%
         tidyr::pivot_longer(-tidyselect::all_of(main_vars), names_to = "TaxonName", values_to = "Count") %>%
-        # dplyr::left_join(trophy, by = "TaxonName") %>%
         dplyr::filter(.data$Count > 0) %>%
         dplyr::left_join(SpInfoZ, by = c("TaxonName" = "TaxonName")) %>%  # join the species info.
         dplyr::group_by(dplyr::across(tidyselect::all_of(grp))) %>%
@@ -258,11 +260,11 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
     main_vars <- c("TripCode", "Year_Local", "Month_Local", "SampleTime_Local", "tz", "Latitude", "Longitude", "StationName", "StationCode", "Method", "SampleDepth_m")
 
     trophy <- planktonr::pr_get_info(Source = "Phytoplankton") %>% # for information used in estimating Indices as per NRS data
-      dplyr::select(TaxonName = "Taxon Name",
-                    Trophy = "Functional Type",
+      dplyr::select("TaxonName",
+                    Trophy = "FunctionalType",
                     Carbon = "Cell Carbon (pgN cell-1)",
                     CellBioV = "Cell BioVolume (um3)",
-                    FunctionalGroup = "Functional Group") %>%
+                    "FunctionalGroup") %>%
       dplyr::mutate(genus = dplyr::case_when(stringr::word(.data$TaxonName, 1) == "cf." ~ stringr::word(.data$TaxonName, 2),
                                              TRUE ~ stringr::word(.data$TaxonName, 1)),
                     species = dplyr::case_when(stringr::word(.data$TaxonName, 2) == "cf." ~ "spp.",
@@ -314,14 +316,17 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
           dplyr::filter(.data$abund > 0)
         if(Subset == 'species'){
           dat <- dat %>%
-            dplyr::filter(!stringr::str_detect(.data$TaxonName, "spp|group|cf"))
+            dplyr::filter(!stringr::str_detect(.data$TaxonName, "spp|group|cf|idae|unid"))
+        } else {
+          dat <- dat %>%
+            dplyr::filter(!stringr::str_detect(.data$TaxonName, "idae|unid"))
         }
         dat <- dat %>%
           dplyr::group_by(dplyr::across(tidyselect::any_of(main_vars)), .data$TaxonName, .data$genus, .data$FunctionalGroup, .data$CellBioV, .data$Carbon) %>%
           dplyr::summarise(abund = sum(.data$abund, na.rm = TRUE), ## add up all occurrences of spp. within one sample
                            .groups = "drop") %>%
           dplyr::group_by(dplyr::across(tidyselect::any_of(c(main_vars, colname)))) %>%
-          dplyr::summarise(NoPhytoSpecies_Sample = length(.data$abund[!grepl("NA|spp", .data$TaxonName)]),
+          dplyr::summarise(NoPhytoSpecies_Sample = length(.data$abund[!grepl("NA|spp|idae|unid", .data$TaxonName)]),
                            PhytoAbundance_CellsL = sum(.data$abund, na.rm = TRUE),
                            Biovolume_um3L = sum(.data$abund*.data$CellBioV, na.rm = TRUE),
                            PhytoBiomassCarbon_pgL = sum(.data$abund * .data$Carbon, na.rm = TRUE),

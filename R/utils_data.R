@@ -336,11 +336,10 @@ pr_get_data <- function(Survey = "NRS",
         planktonr_dat(Type = Type, Survey = "CPR")
     }
   } else if (Survey == "HAB"){ #TODO - update this if clause when the data is available through AODN
-    PInfo <- pr_get_info(Source = "Phytoplankton") %>%
-      janitor::clean_names("upper_camel")
+    PInfo <- pr_get_info(Source = "Phytoplankton")
 
     dat <- HABDat %>%
-      dplyr::left_join(PInfo %>% dplyr::select(.data$TaxonName, .data$FunctionalGroup, .data$Hab, contains("Cell")), by = "TaxonName") %>%
+      dplyr::left_join(PInfo %>% dplyr::select(.data$TaxonName, .data$FunctionalGroup, .data$HAB, dplyr::contains("Cell")), by = "TaxonName") %>%
       dplyr::filter(.data$CellsL > 0) %>%
       dplyr::left_join(HABSamples %>% dplyr::select(.data$SampleCode, SampleTime_Local = .data$SampleDate, .data$SiteCode), by = "SampleCode") %>%
       dplyr::left_join(HABSites %>% dplyr::select(.data$SiteCode, .data$Name, .data$SiteId), by = "SiteCode") %>%
@@ -365,7 +364,7 @@ pr_get_data <- function(Survey = "NRS",
                     StationCode = paste0(stringr::str_sub(stringr::word(.data$Name, 1), 1, 3),stringr::str_sub(stringr::word(.data$Name, 2), 1, 3)),
                     Year_Local = lubridate::year(.data$SampleTime_Local),
                     Month_Local = lubridate::month(.data$SampleTime_Local)) %>%
-      dplyr::select(.data$Project, TripCode, StationName = .data$Name, .data$StationCode, .data$SiteId, .data$SampleTime_Local, .data$Year_Local,
+      dplyr::select(.data$Project, .data$TripCode, StationName = .data$Name, .data$StationCode, .data$SiteId, .data$SampleTime_Local, .data$Year_Local,
                     .data$Month_Local, tidyr::everything()) %>%
       planktonr_dat(Type = Type, Survey = "HAB")
     }
