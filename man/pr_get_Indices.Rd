@@ -128,7 +128,7 @@ dat <- pr_get_Indices("CPR", "Zooplankton", near_dist_km = 250)
 dat <- pr_get_Indices("NRS", "Water")
 
 # Get HAB phytoplankton indices
-dat <- pr_get_Indices("HAB", "Phytoplankton", Subset = 'genus')
+dat <- pr_get_Indices("HAB", "Phytoplankton", Subset = 'Genus')
 
 # Filter for specific parameter and stations
 dat <- pr_get_Indices("NRS", "Zooplankton") \%>\%

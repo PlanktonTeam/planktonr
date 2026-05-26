@@ -93,7 +93,7 @@
 #' dat <- pr_get_Indices("NRS", "Water")
 #'
 #' # Get HAB phytoplankton indices
-#' dat <- pr_get_Indices("HAB", "Phytoplankton", Subset = 'genus')
+#' dat <- pr_get_Indices("HAB", "Phytoplankton", Subset = 'Genus')
 #'
 #' # Filter for specific parameter and stations
 #' dat <- pr_get_Indices("NRS", "Zooplankton") %>%
@@ -123,8 +123,8 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
 
   dots <- list(...) # allows us to access the Subset argument when added
   Subset <- dots$Subset %||% NA
-  if (identical(Subset, 'genus')) {
-    colname <- 'genus'
+  if (identical(Subset, 'Genus')) {
+    colname <- 'Genus'
   } else {
     colname <- 'TaxonName'
   }
@@ -148,8 +148,8 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
       msg = "For HAB survey, 'Type' must be 'Phytoplankton'."
     )
     assertthat::assert_that(
-      Subset %in% c("genus", "species"),
-      msg = "For HAB survey, 'Subset' is required as this analysis is not a full community count, must be 'genus' or 'species'."
+      Subset %in% c("Genus", "Species"),
+      msg = "For HAB survey, 'Subset' is required as this analysis is not a full community count, must be 'Genus' or 'Species'."
     )
   }
 
@@ -265,11 +265,12 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
                     Carbon = "Cell Carbon (pgN cell-1)",
                     CellBioV = "Cell BioVolume (um3)",
                     "FunctionalGroup") %>%
-      dplyr::mutate(genus = dplyr::case_when(stringr::word(.data$TaxonName, 1) == "cf." ~ stringr::word(.data$TaxonName, 2),
+      dplyr::mutate(Genus = dplyr::case_when(stringr::word(.data$TaxonName, 1) == "cf." ~ stringr::word(.data$TaxonName, 2),
                                              TRUE ~ stringr::word(.data$TaxonName, 1)),
-                    species = dplyr::case_when(stringr::word(.data$TaxonName, 2) == "cf." ~ "spp.",
+                    Species = dplyr::case_when(stringr::word(.data$TaxonName, 2) == "cf." ~ "spp.",
                                                stringr::word(.data$TaxonName, 1) == "cf." ~ "spp.",
-                                               grepl("\\(|\\/|diatom|dino|\\-|group", .data$TaxonName) ~ "spp.",
+                                               stringr::str_detect(stringr::word(.data$TaxonName, 2), "^\\d+$") ~ "spp.",
+                                               grepl("\\(|diatom|dino|group", .data$TaxonName) ~ "spp.",
                                                TRUE ~ stringr::word(.data$TaxonName, 2)))
 
     if (Survey == "SOTS"){
@@ -281,7 +282,7 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
         dplyr::select(tidyselect::any_of(main_vars), "TaxonName", "abund") %>%
         dplyr::left_join(trophy, by = "TaxonName") %>%
         dplyr::filter(.data$abund > 0) %>%
-        dplyr::mutate(TaxonName = paste0(.data$genus, " ", .data$species),
+        dplyr::mutate(TaxonName = paste0(.data$Genus, " ", .data$Species),
                       tz = "Australia/Hobart",
                       StationName = "Southern Ocean Time Series",
                       StationCode = "SOTS") %>%
@@ -314,15 +315,15 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
           dplyr::select(tidyselect::any_of(main_vars), "TaxonName", "abund") %>%
           dplyr::left_join(trophy, by = "TaxonName") %>%
           dplyr::filter(.data$abund > 0)
-        if(Subset == 'species'){
+        if(Subset == 'Species'){
           dat <- dat %>%
             dplyr::filter(!stringr::str_detect(.data$TaxonName, "spp|group|cf|idae|unid"))
         } else {
           dat <- dat %>%
             dplyr::filter(!stringr::str_detect(.data$TaxonName, "idae|unid"))
         }
-        dat <- dat %>%
-          dplyr::group_by(dplyr::across(tidyselect::any_of(main_vars)), .data$TaxonName, .data$genus, .data$FunctionalGroup, .data$CellBioV, .data$Carbon) %>%
+        dat1 <- dat %>%
+          dplyr::group_by(dplyr::across(tidyselect::any_of(main_vars)), .data$TaxonName, .data$Genus, .data$FunctionalGroup, .data$CellBioV, .data$Carbon) %>%
           dplyr::summarise(abund = sum(.data$abund, na.rm = TRUE), ## add up all occurrences of spp. within one sample
                            .groups = "drop") %>%
           dplyr::group_by(dplyr::across(tidyselect::any_of(c(main_vars, colname)))) %>%
@@ -331,7 +332,7 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
                            Biovolume_um3L = sum(.data$abund*.data$CellBioV, na.rm = TRUE),
                            PhytoBiomassCarbon_pgL = sum(.data$abund * .data$Carbon, na.rm = TRUE),
                            .groups = "drop") %>%
-          tidyr::pivot_longer(-c(tidyselect::any_of(main_vars), colname), values_to = "Values", names_to = "Parameters") %>%
+          tidyr::pivot_longer(-c(tidyselect::any_of(main_vars), tidyselect::any_of(colname)), values_to = "Values", names_to = "Parameters") %>%
           planktonr::pr_remove_outliers(2) %>%
           droplevels() %>%
           planktonr_dat("Phytoplankton", "HAB")
