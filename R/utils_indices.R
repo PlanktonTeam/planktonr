@@ -322,7 +322,7 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
           dat <- dat %>%
             dplyr::filter(!stringr::str_detect(.data$TaxonName, "idae|unid"))
         }
-        dat1 <- dat %>%
+        dat <- dat %>%
           dplyr::group_by(dplyr::across(tidyselect::any_of(main_vars)), .data$TaxonName, .data$Genus, .data$FunctionalGroup, .data$CellBioV, .data$Carbon) %>%
           dplyr::summarise(abund = sum(.data$abund, na.rm = TRUE), ## add up all occurrences of spp. within one sample
                            .groups = "drop") %>%
