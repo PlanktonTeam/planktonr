@@ -62,6 +62,9 @@ dat <- pr_get_trips(Survey = "CPR")
 # Get CPR trips with expanded bioregion boundaries (250 km padding)
 dat <- pr_get_trips(Survey = "CPR", near_dist_km = 250)
 
+# Get HAB trip metadata
+dat <- pr_get_trips(Survey = "HAB")
+
 # Examine sampling frequency by station (NRS)
 dat <- pr_get_trips(Survey = "NRS")
 table(dat$StationName, dat$Year_Local)

@@ -19,7 +19,7 @@ planktonr_dat(
 \item{Type}{The data type. Must be one of "Microbes", "Phytoplankton",
 "Zooplankton", "Water", or "EOV".}
 
-\item{Survey}{The survey of the data. E.g., "NRS", "CPR", "LTM", "GO-SHIP", "Coastal".}
+\item{Survey}{The survey of the data. E.g., "NRS", "CPR", "LTM", "GO-SHIP", "Coastal", "HAB".}
 
 \item{Variable}{What variable is being described or subsetted by this data.}
 

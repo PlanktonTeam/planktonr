@@ -104,12 +104,12 @@ cpr_AAD <- read_csv("data-raw/AADC-00099_-_2025_data_update/AADC-00099_29August2
                 tidyselect::everything())
 
 SpInfoZ <- planktonr::pr_get_info(Source = "Zooplankton") %>%
-  dplyr::mutate(`Taxon Name` = stringr::str_remove(`Taxon Name`, " [fmji]$"),
-                `Taxon Name` = stringr::str_remove(`Taxon Name`," megalopa"),
-                `Taxon Name` = stringr::str_remove(`Taxon Name`," naupliius"),
-                `Taxon Name` = stringr::str_remove(`Taxon Name`," phyllosoma"),
-                `Taxon Name` = stringr::str_remove(`Taxon Name`," zoea")) %>%
-  distinct(`Taxon Name`, .keep_all = TRUE)
+  dplyr::mutate(TaxonName = stringr::str_remove(TaxonName, " [fmji]$"),
+                TaxonName = stringr::str_remove(TaxonName," megalopa"),
+                TaxonName = stringr::str_remove(TaxonName," naupliius"),
+                TaxonName = stringr::str_remove(TaxonName," phyllosoma"),
+                TaxonName = stringr::str_remove(TaxonName," zoea")) %>%
+  distinct(TaxonName, .keep_all = TRUE)
 
 
 AAD_cols <- c("SampleTime_Local", "Year_Local", "Month_Local", "SampleTime_UTC",
@@ -175,7 +175,7 @@ colnames(cpr_AAD[(length(AAD_cols)+1):length(colnames(cpr_AAD))]) <- spp # Renam
 # spp <- tibble(Name = spp)
 #
 # spp2 <- spp %>%
-#   left_join(SpInfoZ, by = c("Name" = "Taxon Name")) %>%
+#   left_join(SpInfoZ, by = c("Name" = "TaxonName")) %>%
 #   group_split(by = is.na(`WoRMS AphiaID`))
 #
 # sum(is.na(spp2[[2]]$`WoRMS AphiaID`))
@@ -304,14 +304,18 @@ pchNRSName <- c(pchNRSName, pchCSName)
 ltyNRSCode <- c(ltyNRSCode, ltyCSCode)
 ltyNRSName <- c(ltyNRSName, ltyCSName)
 
-
-
-
 rm(colCSCode, colCSName, pchCSCode, pchCSName, ltyCSCode, ltyCSName, stateCol, stateLTY, statePCH)
 
-
+## HAB Coastal phyto data (until can be read from AODN)
+HABSites <- readr::read_csv("data-raw/HAB_data_temp/HAB_Sites.csv")
+HABSamples <- readr::read_csv("data-raw/HAB_data_temp/HAB_Samples.csv")
+HABDat <- readr::read_csv("data-raw/HAB_data_temp/HAB_data.csv", col_types = readr::cols(Comments = readr::col_character())) %>%
+  dplyr::mutate(TaxonName = stringr::str_replace(.data$TaxonName, "A\\?", "µ"),
+                TaxonName = stringr::str_replace(.data$TaxonName, "\\?", "µ"),
+                TaxonName = stringr::str_remove(.data$TaxonName, " \\(unaccepted\\)"))
 
 usethis::use_data(mbr, MapOz, meta_sf, csDAT, cpr_AAD,
+                  HABSites, HABSamples, HABDat,
                   colCPR, pchCPR, ltyCPR, CPRinfo, CSCodes,
                   colNRSCode, colNRSName, pchNRSName, pchNRSCode, ltyNRSCode, ltyNRSName,
                   overwrite = TRUE, internal = TRUE, compress = "bzip2")

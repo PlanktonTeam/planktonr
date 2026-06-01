@@ -7,7 +7,7 @@
 #' @param Survey Survey type to retrieve trips for:
 #'   * `"NRS"` - National Reference Station trips (default)
 #'   * `"CPR"` - Continuous Plankton Recorder trips
-#' @param ... Additional arguments passed to [pr_add_Bioregions()] when 
+#' @param ... Additional arguments passed to [pr_add_Bioregions()] when
 #'   `Survey = "CPR"`. Currently supports:
 #'   * `near_dist_km` - Distance in kilometres to pad bioregion boundaries when
 #'     assigning samples to regions (default behaviour uses exact boundaries)
@@ -34,7 +34,7 @@
 #'   * **NRS:** `StationCode`, `StationName`
 #'   * **CPR:** `BioRegion` - Australian marine bioregion assignment
 #'
-#' @seealso 
+#' @seealso
 #'   [pr_get_info()] for station-level metadata,
 #'   [pr_add_Bioregions()] for bioregion assignment details
 #'
@@ -50,6 +50,9 @@
 #' # Get CPR trips with expanded bioregion boundaries (250 km padding)
 #' dat <- pr_get_trips(Survey = "CPR", near_dist_km = 250)
 #'
+#' # Get HAB trip metadata
+#' dat <- pr_get_trips(Survey = "HAB")
+#'
 #' # Examine sampling frequency by station (NRS)
 #' dat <- pr_get_trips(Survey = "NRS")
 #' table(dat$StationName, dat$Year_Local)
@@ -60,19 +63,19 @@
 #'
 #' @importFrom rlang .data
 pr_get_trips <- function(Survey = "NRS", ...) {
-  
+
 
   # Input validation
   assertthat::assert_that(
     is.character(Survey) && length(Survey) == 1,
     msg = "'Survey' must be a single character string. Valid options are 'NRS' or 'CPR'."
   )
-  
+
   assertthat::assert_that(
-    Survey %in% c("NRS", "CPR"),
-    msg = "'Survey' must be one of 'NRS' or 'CPR'."
+    Survey %in% c("NRS", "CPR", "HAB"),
+    msg = "'Survey' must be one of 'NRS', 'CPR' or 'HAB'."
   )
-  
+
   if (Survey == "NRS") {
     # Check for unexpected arguments
     dots <- list(...)
@@ -81,7 +84,7 @@ pr_get_trips <- function(Survey = "NRS", ...) {
               "Arguments like 'near_dist_km' are only used for CPR trips.",
               call. = FALSE)
     }
-    
+
     dat <- pr_get_s3("bgc_trip") %>%
       pr_rename() %>%
       dplyr::filter(.data$ProjectName == "NRS" &
@@ -91,14 +94,20 @@ pr_get_trips <- function(Survey = "NRS", ...) {
       dplyr::select(-"ProjectName") %>%
       dplyr::select(-tidyselect::any_of(c("PSampleDepth_m", "ZSampleDepth_m"))) %>%
       planktonr_dat(Type = NULL, Survey = "NRS", Variable = NULL)
-    
+
   } else if (Survey == "CPR") {
     dat <- pr_get_s3("cpr_samp") %>%
       planktonr_dat(Type = NULL, Survey = "CPR", Variable = NULL) %>%
       pr_rename() %>%
       pr_add_Bioregions(...) %>%
       pr_apply_Time()
+  } else if (Survey == "HAB"){ #TODO - grab data from AODN sources when available
+    dat <- HABSamples %>%
+      dplyr::left_join(HABSites %>% dplyr::select(.data$SiteCode, .data$SiteId,
+                                                  StationName = .data$Name, .data$Latitude,
+                                                  .data$Longitude, .data$State), by = "SiteCode") %>%
+      dplyr::select(TripCode = .data$SampleCode, dplyr::everything(), -c(.data$SiteCode, .data$CountMethod, .data$Comments))
   }
-  
+
   return(dat)
 }

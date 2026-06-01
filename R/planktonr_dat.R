@@ -16,7 +16,7 @@ new_planktonr_dat <- function(x, ...) {
 #' @param .data The data `data.frame` or `tibble` to be converted to the `planktonr_dat` class.
 #' @param Type The data type. Must be one of "Microbes", "Phytoplankton",
 #'   "Zooplankton", "Water", or "EOV".
-#' @param Survey The survey of the data. E.g., "NRS", "CPR", "LTM", "GO-SHIP", "Coastal".
+#' @param Survey The survey of the data. E.g., "NRS", "CPR", "LTM", "GO-SHIP", "Coastal", "HAB".
 #' @param Variable What variable is being described or subsetted by this data.
 #' @param Model Optional model associated with the data.
 #' @param ... Additional attributes to be stored with the `planktonr_dat` object.
@@ -97,7 +97,7 @@ planktonr_dat <- function(.data,
                               arg_nm = "Type")
   }
   if (!is.null(Survey)) {
-    Survey <- rlang::arg_match0(Survey, values = c("NRS", "CPR", "LTM", "GO-SHIP", "Coastal", "SOTS"),
+    Survey <- rlang::arg_match0(Survey, values = c("NRS", "CPR", "LTM", "GO-SHIP", "Coastal", "SOTS", "HAB"),
                                 # Assuming NRS may include SOTS where that matches, but SOTS is for SOTS data where it is different from NRS
                                 arg_nm = "Survey")
   }
@@ -161,7 +161,7 @@ planktonr_data <- function(...) {
 
 #' Check and update Type as required
 #'
-#' Standardises Type strings for plankton data. Handles case-insensitive 
+#' Standardises Type strings for plankton data. Handles case-insensitive
 #' matching for Phytoplankton and Zooplankton. Other types are returned unchanged.
 #'
 #' @param Type Data type

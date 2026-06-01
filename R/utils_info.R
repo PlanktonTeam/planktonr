@@ -89,7 +89,7 @@ pr_get_info <- function(Source = "Zooplankton") {
 #' @noRd
 .get_plankton_info <- function(Type) {
   if (Type == "Zooplankton") {
-    df <- pr_get_s3("zoopinfo") %>%
+    df <- planktonr::pr_get_s3("zoopinfo") %>%
       pr_rename()
   } else if (Type == "Phytoplankton") {
     df <- pr_get_s3("phytoinfo") %>%

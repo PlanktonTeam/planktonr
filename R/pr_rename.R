@@ -7,8 +7,9 @@
 #' @keywords internal
 pr_rename <- function(dat){
 
-  ##TODO - Check and remvoe any uneeded renames - note the capitals are needed for files grabbed from S3
+  ##TODO - Check and remove any unneeded renames - note the capitals are needed for files grabbed from S3
   rename_df <- tibble::as_tibble(matrix(c(
+    "AphiaID", "VALID_APHIA_ID",
     "Sample", "SAMPLE",
     "Region", "REGION",
     "AshFreeBiomass_mgm3", "ASHFREEBIOMASS_MGM3",
@@ -17,8 +18,8 @@ pr_rename <- function(dat){
     "Cell Carbon (pgN cell-1)", "PGC_CELL",
     "Cell Nitrogen (pgN cell-1)", "MONT2001PGN_CELL",
     "Diet", "DIET",
-    "Functional Type", "TROPHY",
-    "Functional Group", "FUNCTIONALGROUP",
+    "FunctionalType", "TROPHY",
+    "FunctionalGroup", "FUNCTIONALGROUP",
     "Genus", "GENUS",
     "Latitude", "LATITUDE",
     "Longitude", "LONGITUDE",
@@ -39,6 +40,7 @@ pr_rename <- function(dat){
     "SampleTime_Local", "SAMPLEDATELOCAL",
     "Salinity", "SALINITY_VALUE",
     "Salinity_Flag", "SALINITY_QC_FLAG",
+    "ScientificName", "VALID_SCIENTIFIC_NAME",
     "Silicate_umolL", "SILICATE_VALUE",
     "Silicate_Flag", "SILICATE_QC_FLAG",
     "Species", "SPECIES",
@@ -53,8 +55,8 @@ pr_rename <- function(dat){
     "Secchi_m", "SECCHI_M",
     "StationName", "STATIONNAME",
     "StationCode", "STATIONCODE",
-    "Sub Genera", "SUBGENERA",
-    "Taxon Name", "TAXON_NAME",
+    "SubGenera", "SUBGENERA",
+    "TaxonName", "TAXON_NAME",
     "TripCode", "TRIP_CODE",
     "WoRMS AphiaID", "SPCODE",
     "ZSampleDepth_m", "ZOOPSAMPLEDEPTH_M"),

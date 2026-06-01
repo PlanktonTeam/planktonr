@@ -5,19 +5,19 @@
 testthat::test_that("pr_get_trips returns valid NRS trip data with temporal information", {
   skip_if_offline()
   testthat::skip_on_cran()
-  
+
   result <- pr_get_trips(Survey = "NRS")
-  
+
   # Check structure
   testthat::expect_s3_class(result, "data.frame")
   testthat::expect_true(nrow(result) > 0)
-  
+
   # Check required columns
   expected_cols <- c("TripCode", "StationCode")
   testthat::expect_true(all(expected_cols %in% names(result)),
-                        info = paste("Missing columns:", 
+                        info = paste("Missing columns:",
                                      paste(setdiff(expected_cols, names(result)), collapse = ", ")))
-  
+
   # Check date/time columns if present
   date_cols <- grep("Date|Time|date|time", names(result), value = TRUE)
   if (length(date_cols) > 0) {
@@ -26,7 +26,7 @@ testthat::test_that("pr_get_trips returns valid NRS trip data with temporal info
         # Check dates are reasonable (after program start, not in future)
         min_date <- as.Date("1990-01-01")
         max_date <- Sys.Date() + 30  # Allow 30 days for scheduled trips
-        
+
         valid_dates <- result[[col]][!is.na(result[[col]])]
         if (length(valid_dates) > 0) {
           testthat::expect_true(all(as.Date(valid_dates) >= min_date),
@@ -42,22 +42,22 @@ testthat::test_that("pr_get_trips returns valid NRS trip data with temporal info
 testthat::test_that("pr_get_trips returns valid CPR trip data with bioregions", {
   skip_if_offline()
   testthat::skip_on_cran()
-  
+
   result <- pr_get_trips(Survey = "CPR")
-  
+
   # Check structure
   testthat::expect_s3_class(result, "data.frame")
   testthat::expect_true(nrow(result) > 0)
-  
+
   # Check required columns for CPR
   expected_cols <- c("TripCode", "BioRegion")
   testthat::expect_true(all(expected_cols %in% names(result)),
-                        info = paste("Missing columns:", 
+                        info = paste("Missing columns:",
                                      paste(setdiff(expected_cols, names(result)), collapse = ", ")))
-  
+
   # Check that BioRegion has reasonable values
   if ("BioRegion" %in% names(result)) {
-    valid_bioregions <- c("North", "North-west", "South-east", "South-west", 
+    valid_bioregions <- c("North", "North-west", "South-east", "South-west",
                           "Temperate East", "Coral Sea", "Southern Ocean Region",
                           "None", NA_character_)
     testthat::expect_true(all(result$BioRegion %in% valid_bioregions | is.na(result$BioRegion)),
@@ -68,10 +68,10 @@ testthat::test_that("pr_get_trips returns valid CPR trip data with bioregions", 
 testthat::test_that("pr_get_trips with CPR accepts near_dist_km argument", {
   skip_if_offline()
   testthat::skip_on_cran()
-  
+
   # This should not error
   result <- pr_get_trips(Survey = "CPR", near_dist_km = 250)
-  
+
   testthat::expect_s3_class(result, "data.frame")
   testthat::expect_true(nrow(result) > 0)
 })
@@ -79,7 +79,7 @@ testthat::test_that("pr_get_trips with CPR accepts near_dist_km argument", {
 testthat::test_that("pr_get_trips with NRS warns about unused arguments", {
   skip_if_offline()
   testthat::skip_on_cran()
-  
+
   # Should produce a warning when passing arguments to NRS
   testthat::expect_warning(
     pr_get_trips(Survey = "NRS", near_dist_km = 250),
@@ -94,7 +94,7 @@ testthat::test_that("pr_get_trips with NRS warns about unused arguments", {
 testthat::test_that("pr_get_trips errors on invalid Survey parameter", {
   testthat::expect_error(
     pr_get_trips(Survey = "InvalidSurvey"),
-    "'Survey' must be one of 'NRS' or 'CPR'"
+    "'Survey' must be one of 'NRS', 'CPR' or 'HAB'."
   )
 })
 

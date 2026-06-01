@@ -6,7 +6,7 @@
 testthat::test_that("pr_get_Indices throws error for invalid Survey parameter", {
   testthat::expect_error(
     pr_get_Indices(Survey = "INVALID", Type = "Phytoplankton"),
-    "'Survey' must be one of 'NRS', 'CPR', or 'SOTS'"
+    "'Survey' must be one of 'NRS', 'CPR', 'HAB' or 'SOTS'"
   )
 })
 
@@ -34,7 +34,14 @@ testthat::test_that("pr_get_Indices throws error for invalid Type parameter", {
 testthat::test_that("pr_get_Indices throws error for Zooplankton with SOTS", {
   testthat::expect_error(
     pr_get_Indices(Survey = "SOTS", Type = "Zooplankton"),
-    "There is no zooplankton data for SOTS"
+    "There is no zooplankton data for SOTS or HAB"
+  )
+})
+
+testthat::test_that("pr_get_Indices throws error for Zooplankton with HAB", {
+  testthat::expect_error(
+    pr_get_Indices(Survey = "HAB", Type = "Zooplankton"),
+    "There is no zooplankton data for SOTS or HAB"
   )
 })
 

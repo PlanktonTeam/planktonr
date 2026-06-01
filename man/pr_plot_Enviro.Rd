@@ -22,7 +22,7 @@ or \code{\link[=pr_get_NRSPico]{pr_get_NRSPico()}} containing environmental data
 \item \code{"identity"} - No transformation (default)
 \item \code{"log10"} - Log base 10 transformation (useful for pigments, nutrients)
 \item \code{"sqrt"} - Square root transformation
-\item Any other transformation accepted by \code{\link[ggplot2:scale_continuous]{ggplot2::scale_y_continuous()}}
+\item Any other transformation accepted by \code{\link[ggplot2:scale_y_continuous]{ggplot2::scale_y_continuous()}}
 }}
 }
 \value{

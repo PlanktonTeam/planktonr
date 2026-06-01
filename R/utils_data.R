@@ -13,6 +13,7 @@
 #'     Tasmania for monitoring Southern Ocean ecosystems.
 #'   * `"Coastal"` - Coastal Seas microbial monitoring sites.
 #'   * `"GO-SHIP"` - Global Ocean Ship-based Hydrographic Investigations Program.
+#'   * `"HAB"` - Phytoplankton monitoring data from state based and seafood industry monitoring programs
 #'
 #' @param Type Data type to retrieve (case-insensitive for Phytoplankton/Zooplankton):
 #'   * `"Phytoplankton"` - Phytoplankton abundance or biovolume (NRS, CPR, SOTS)
@@ -47,6 +48,7 @@
 #' | NRS | Phytoplankton, Zooplankton, Chemistry, Pigments, Pico, Micro, TSS, CTD |
 #' | CPR | Phytoplankton, Zooplankton |
 #' | SOTS | Phytoplankton, Zooplankton |
+#' | HAB | Phytoplankton |
 #' | Coastal | Micro, Chemistry |
 #' | GO-SHIP | Micro |
 #'
@@ -103,6 +105,10 @@
 #' # Get Coastal Seas chemistry data
 #' dat <- pr_get_data(Survey = "Coastal", Type = "Chemistry")
 #'
+#' # Get HAB phytoplankton data
+#' dat <- pr_get_data(Survey = "HAB", Type = "Phytoplankton",
+#'                    Variable = "abundance", Subset = "genus")
+#'
 #' @importFrom rlang .data
 pr_get_data <- function(Survey = "NRS",
                         Type = "Phytoplankton",
@@ -120,7 +126,8 @@ pr_get_data <- function(Survey = "NRS",
     "CPR" = c("Phytoplankton", "Zooplankton"),
     "SOTS" = c("Phytoplankton", "Zooplankton"),
     "Coastal" = c("Micro", "Chemistry"),
-    "GO-SHIP" = c("Micro")
+    "GO-SHIP" = c("Micro"),
+    "HAB" = c("Phytoplankton")
   )
 
   # Types that require Variable and Subset
@@ -134,7 +141,7 @@ pr_get_data <- function(Survey = "NRS",
   # Validate Survey
   assertthat::assert_that(
     is.character(Survey) && length(Survey) == 1,
-    msg = "'Survey' must be a single character string. Valid options are 'NRS', 'CPR', 'SOTS', 'Coastal', or 'GO-SHIP'."
+    msg = "'Survey' must be a single character string. Valid options are 'NRS', 'CPR', 'SOTS', 'Coastal', 'HAB' or 'GO-SHIP'."
   )
 
   assertthat::assert_that(
@@ -271,6 +278,7 @@ pr_get_data <- function(Survey = "NRS",
 # =============================================================================
 
 #' @noRd
+#'
 .get_plankton_data <- function(Survey, Type, Variable, Subset) {
 
   Type <- pr_check_type(Type)
@@ -327,7 +335,39 @@ pr_get_data <- function(Survey = "NRS",
         pr_rename() %>%
         planktonr_dat(Type = Type, Survey = "CPR")
     }
-  }
+  } else if (Survey == "HAB"){ #TODO - update this if clause when the data is available through AODN
+    PInfo <- pr_get_info(Source = "Phytoplankton")
+
+    dat <- HABDat %>%
+      dplyr::left_join(PInfo %>% dplyr::select(.data$TaxonName, .data$FunctionalGroup, .data$HAB, dplyr::contains("Cell")), by = "TaxonName") %>%
+      dplyr::filter(.data$CellsL > 0) %>%
+      dplyr::left_join(HABSamples %>% dplyr::select(.data$SampleCode, SampleTime_Local = .data$SampleDate, .data$SiteCode), by = "SampleCode") %>%
+      dplyr::left_join(HABSites %>% dplyr::select(.data$SiteCode, .data$Name, .data$SiteId), by = "SiteCode") %>%
+      dplyr::select(-c(.data$AphiaId, .data$Presence, .data$Comments, .data$DataCode), PhytoAbundance_CellsL = .data$CellsL) %>%
+      dplyr::select(TripCode = .data$SampleCode, .data$SampleTime_Local, .data$Name, .data$SiteId, .data$TaxonName, .data$PhytoAbundance_CellsL)
+
+    if(Subset == 'raw' & Variable == 'abundance'){
+      dat <- dat
+    } else if (Subset == 'genus' & Variable == 'abundance'){
+      dat <- dat %>%
+        dplyr::filter(!stringr::str_detect(.data$TaxonName, "cf")) %>%
+        dplyr::mutate(TaxonName = stringr::word(.data$TaxonName, 1, 1)) %>%
+        dplyr::summarise(PhytoAbundance_CellsL = sum(.data$PhytoAbundance_CellsL, na.rm = TRUE),
+                         .by = c(.data$TripCode, .data$SampleTime_Local, .data$Name, .data$SiteId, .data$TaxonName))
+    } else if (Subset == 'species' & Variable == 'abundance'){
+      dat <- dat %>%
+        dplyr::filter(!stringr::str_detect(.data$TaxonName, "spp|group|cf"))
+    }
+    dat <- dat %>%
+      tidyr::pivot_wider(names_from = "TaxonName", values_from = "PhytoAbundance_CellsL", values_fill = 0) %>%
+      dplyr::mutate(Project = "HAB",
+                    StationCode = paste0(stringr::str_sub(stringr::word(.data$Name, 1), 1, 3),stringr::str_sub(stringr::word(.data$Name, 2), 1, 3)),
+                    Year_Local = lubridate::year(.data$SampleTime_Local),
+                    Month_Local = lubridate::month(.data$SampleTime_Local)) %>%
+      dplyr::select(.data$Project, .data$TripCode, StationName = .data$Name, .data$StationCode, .data$SiteId, .data$SampleTime_Local, .data$Year_Local,
+                    .data$Month_Local, tidyr::everything()) %>%
+      planktonr_dat(Type = Type, Survey = "HAB")
+    }
 
   return(dat)
 }

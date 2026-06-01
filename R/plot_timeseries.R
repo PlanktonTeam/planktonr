@@ -370,7 +370,8 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
     Trend <- "SampleTime_Local"
   }
 
-  # Remove smooth from VBM
+  # Remove smooth from VBM and some HAB data
+
   if (Survey == "NRS"){
     df <- df %>%
       dplyr::mutate(do_smooth = !!site != "Bonney Coast")
