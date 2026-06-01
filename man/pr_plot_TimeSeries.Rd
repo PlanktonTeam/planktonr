@@ -15,7 +15,7 @@ pr_plot_TimeSeries(df, trans = "identity")
 \item \code{"log10"} - Log base 10 transformation (useful for abundance data)
 \item \code{"sqrt"} - Square root transformation
 \item \code{"log"} - Natural log transformation
-\item Any other transformation accepted by \code{\link[ggplot2:scale_continuous]{ggplot2::scale_y_continuous()}}
+\item Any other transformation accepted by \code{\link[ggplot2:scale_y_continuous]{ggplot2::scale_y_continuous()}}
 }}
 }
 \value{
