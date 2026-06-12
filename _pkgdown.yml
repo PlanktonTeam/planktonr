@@ -1,4 +1,6 @@
 url: https://planktonteam.github.io/planktonr
+template:
+  bootstrap: 5
 articles:
 - title: Articles
   navbar: ~

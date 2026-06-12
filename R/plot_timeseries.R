@@ -332,7 +332,7 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                        # facet_label = dplyr::first(.data$facet_label),
                        .by = c(rlang::as_string(rlang::sym(Trend)), rlang::as_string(site)))
-    if(exists("dfsots30")){
+    if(!is.null(dfsots30)){
       dfsots30 <- dfsots30 %>%
         dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                          # facet_label = dplyr::first(.data$facet_label),

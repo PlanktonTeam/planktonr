@@ -100,6 +100,7 @@ pr_plot_Trends(df, Trend = "Month", method = "loess", trans = "log10")
 ## Learn More
 
 See the package vignettes for detailed examples:
+
 * `vignette("planktonr")` - Overview and sampling frequency maps
 * `vignette("EssentialOceanVariables")` - EOV analysis and reporting
 * `vignette("Phytoplankton")` - Phytoplankton data analysis examples

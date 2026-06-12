@@ -83,7 +83,7 @@ pr_get_LTnuts <-  function(){
     dplyr::select("Project", "StationCode", "StationName", "Month_Local", "Year_Local",
                   "SampleTime_Local", "SampleDepth_m", "Temperature_degC") %>%
     dplyr::filter(.data$StationCode %in% c("MAI", "ROT", "PHB")) %>%
-    tidyr::pivot_longer(-c(Project:SampleDepth_m), values_to = "Values", names_to = "Parameters") %>%
+    tidyr::pivot_longer(-c("Project":"SampleDepth_m"), values_to = "Values", names_to = "Parameters") %>%
     dplyr::select(tidyselect::all_of(colnames(NutsLT)))
 
   dat <- dplyr::bind_rows(NutsLT, Nuts, CTD)

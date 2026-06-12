@@ -15,7 +15,7 @@ Description: Facilitates access, analysis, and visualisation of phytoplankton,
     the National Reference Stations (NRS) network, Continuous Plankton Recorder 
     (CPR) survey, and Southern Ocean Time Series (SOTS).
 License: MIT + file LICENSE
-URL: https://github.com/PlanktonTeam/planktonr
+URL: https://planktonteam.github.io/planktonr
 BugReports: https://github.com/PlanktonTeam/planktonr/issues
 Depends: 
     R (>= 4.1)
