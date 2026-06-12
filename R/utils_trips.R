@@ -68,7 +68,7 @@ pr_get_trips <- function(Survey = "NRS", ...) {
   # Input validation
   assertthat::assert_that(
     is.character(Survey) && length(Survey) == 1,
-    msg = "'Survey' must be a single character string. Valid options are 'NRS' or 'CPR'."
+    msg = "'Survey' must be a single character string. Valid options are 'NRS', 'CPR' or 'HAB'."
   )
 
   assertthat::assert_that(

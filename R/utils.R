@@ -146,8 +146,8 @@ pr_get_s3 <- function(file){
   col_types = list()
 
   # The file extension is not needed here.
-  if(stringr::str_detect(file, ".csv")){
-    file = stringr::str_remove(file, ".csv")
+  if(stringr::str_ends(file, "\\.csv")){
+    file = stringr::str_remove(file, "\\.csv$")
   }
 
   dat <- readr::read_csv(paste0(pr_get_s3site(), file, ".csv"),
@@ -635,7 +635,7 @@ pr_remove_outliers <- function(df, x){
 
   outliers <- df %>%
     dplyr::summarise(means = mean(.data$Values, na.rm = TRUE),
-                     sd2 = 2*sd(.data$Values, na.rm = TRUE),
+                     sd2 = x*sd(.data$Values, na.rm = TRUE),
                      meanplus = .data$means + .data$sd2,
                      meanminus = .data$means - .data$sd2,
                      .by = tidyselect::all_of(c("Parameters", rlang::as_string(location), "SampleDepth_m"))) %>%
@@ -646,7 +646,7 @@ pr_remove_outliers <- function(df, x){
     dplyr::filter(.data$Values < .data$meanplus & .data$Values > .data$meanminus) %>%
     dplyr::select(-c("meanplus", "meanminus"))
 
-  if(unique(added$SampleDepth_m == "integrated")){
+  if(all(added$SampleDepth_m == "integrated")){
     added <- added %>%
       dplyr::select(-"SampleDepth_m")
   } else {
@@ -831,14 +831,6 @@ pr_title <- function(tit){
     is.character(tit) && length(tit) == 1,
     msg = "'tit' must be a single character string."
   )
-
-  if (tit == "Zooplankton"){
-    tit = "Zooplankton"
-  }
-
-  if (tit == "Phytoplankton"){
-    tit = "Phytoplankton"
-  }
 
   if (tit == "NRS"){
     tit = "National Reference Station"

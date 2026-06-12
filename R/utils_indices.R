@@ -220,7 +220,7 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
                          ZoopAbundance_m3 = sum(.data$Count) / (mean(.data$SampleVolume_m3)),
                          CopeAbundance_m3 = sum(.data$Count[.data$FunctionalGroup == "Copepod"], na.rm = TRUE) / sum(.data$SampleVolume_m3, na.rm = TRUE),
                          AvgTotalLengthCopepod_mm = mean(.data$`Length (mm)`[.data$FunctionalGroup == "Copepod"], na.rm = TRUE),
-                         NoCopepodSpecies_Sample = length(.data$FunctionalGroup == "Copepod"),
+                         NoCopepodSpecies_Sample = sum(.data$FunctionalGroup == "Copepod", na.rm = TRUE),
                          OmnivoreCarnivoreCopepodRatio =
                            sum(.data$Count[.data$FunctionalGroup == "Copepod" & .data$Diet == "Omnivore"], na.rm = TRUE) / # Number of omnivores to
                            sum(.data$Count[.data$FunctionalGroup == "Copepod" & .data$Diet == "Carnivore"], na.rm = TRUE), # Number of carnivores
@@ -228,7 +228,7 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
                            x = .data$Count[.data$FunctionalGroup == "Copepod"] /
                              .data$SampleVolume_m3[.data$FunctionalGroup == "Copepod"],
                            index = "shannon"),
-                         CopepodEvenness = .data$ShannonCopepodDiversity/log10(.data$NoCopepodSpecies_Sample)) %>%
+                         CopepodEvenness = .data$ShannonCopepodDiversity/log(.data$NoCopepodSpecies_Sample)) %>%
         dplyr::ungroup() %>%
         dplyr::mutate(dplyr::across(tidyselect::where(is.numeric), ~ dplyr::na_if(.x , y = NaN))) %>%
         tidyr::pivot_longer(-tidyselect::any_of(grp), values_to = "Values", names_to = "Parameters") %>%
@@ -300,9 +300,9 @@ pr_get_Indices <- function(Survey = "CPR", Type = "Phytoplankton", ...){
                          ShannonPhytoDiversity = vegan::diversity(.data$abund[!grepl("NA|spp", .data$TaxonName)], index = "shannon"),
                          ShannonDiatomDiversity = vegan::diversity(.data$abund[grepl("iatom", .data$FunctionalGroup) & !grepl("NA|spp", .data$TaxonName)], index = "shannon"),
                          ShannonDinoDiversity = vegan::diversity(.data$abund[grepl("Dinof", .data$FunctionalGroup) & !grepl("NA|spp", .data$TaxonName)], index = "shannon"),
-                         PhytoEvenness = .data$ShannonPhytoDiversity/log10(.data$NoPhytoSpecies_Sample),
-                         DiatomEvenness = .data$ShannonDiatomDiversity/log10(.data$NoDiatomSpecies_Sample),
-                         DinoflagellateEvenness = .data$ShannonDinoDiversity/log10(.data$NoDinoSpecies_Sample),
+                         PhytoEvenness = .data$ShannonPhytoDiversity/log(.data$NoPhytoSpecies_Sample),
+                         DiatomEvenness = .data$ShannonDiatomDiversity/log(.data$NoDiatomSpecies_Sample),
+                         DinoflagellateEvenness = .data$ShannonDinoDiversity/log(.data$NoDinoSpecies_Sample),
                          .groups = "drop") %>%
         tidyr::pivot_longer(-tidyselect::any_of(main_vars), values_to = "Values", names_to = "Parameters") %>%
         planktonr::pr_remove_outliers(2) %>%
