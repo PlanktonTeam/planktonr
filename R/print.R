@@ -21,8 +21,6 @@
 #' @export
 #' @importFrom utils capture.output str
 print.planktonr_dat <- function(x, ..., n = NULL, width = NULL) {
-  # ... (function body remains exactly the same as previously provided) ...
-  # (Copy the full function body from the previous response here)
 
   # 1. Extract and prepare custom attributes for printing
   standard_attrs_to_exclude <- c(

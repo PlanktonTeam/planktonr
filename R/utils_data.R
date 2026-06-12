@@ -122,11 +122,11 @@ pr_get_data <- function(Survey = "NRS",
   # Define valid combinations
 
   valid_types <- list(
-    "NRS" = c("Phytoplankton", "Zooplankton", "Chemistry", "Pigments", "Pico", "Micro", "TSS", "CTD"),
+    "NRS" = c("Phytoplankton", "Zooplankton", "Chemistry", "Pigments", "Pico", "Microbes", "TSS", "CTD"),
     "CPR" = c("Phytoplankton", "Zooplankton"),
     "SOTS" = c("Phytoplankton", "Zooplankton"),
-    "Coastal" = c("Micro", "Chemistry"),
-    "GO-SHIP" = c("Micro"),
+    "Coastal" = c("Microbes", "Chemistry"),
+    "GO-SHIP" = c("Microbes"),
     "HAB" = c("Phytoplankton")
   )
 
@@ -259,7 +259,7 @@ pr_get_data <- function(Survey = "NRS",
   } else if (Type == "Pico") {
     dat <- .get_pico_data()
 
-  } else if (Type == "Micro") {
+  } else if (Type == "Microbes") {
     dat <- .get_micro_data(Survey = Survey)
 
   } else if (Type == "TSS") {
@@ -387,7 +387,6 @@ pr_get_data <- function(Survey = "NRS",
     pr_apply_Flags() %>%
     pr_add_StationCode() %>%
     pr_filter_NRSStations() %>%
-    dplyr::mutate_all(~ replace(., is.na(.), NA)) %>%
     dplyr::rowwise() %>%
     dplyr::mutate(Month_Local = lubridate::month(.data$SampleTime_Local),
                   NOx_umolL = sum(.data$Nitrate_umolL, .data$Nitrite_umolL, na.rm = TRUE),
@@ -576,7 +575,7 @@ pr_get_data <- function(Survey = "NRS",
       dplyr::filter(is.na(.data$TripCode), .data$StationName %in% CSCodes$StationName) %>%
       dplyr::select("StationName", "SampleDateUTC", "Latitude", "Longitude", SampleDepth_m = "depth_m",
                     tidyselect::any_of(var_names)) %>%
-      dplyr::mutate(dplyr::across(tidyselect::all_of(var_names), as.numeric),
+      dplyr::mutate(dplyr::across(tidyselect::any_of(var_names), as.numeric),
                     tz = lutz::tz_lookup_coords(.data$Latitude, .data$Longitude, method = "fast", warn = FALSE))
 
     times <- purrr::map2_vec(dat$SampleDateUTC, dat$tz, function(x, y) lubridate::with_tz(x, tzone = y))

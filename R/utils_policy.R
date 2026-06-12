@@ -111,7 +111,7 @@ pr_get_EOVs <- function(Survey = "NRS", ...){
       pr_reorder()
 
   } else if (Survey == "SOTS"){
-    cat("This may take a few minutes as none of the SOTS data is pre-processed")
+    message("This may take a few minutes as none of the SOTS data is pre-processed")
 
     var_names <- c("PhytoBiomassCarbon_pgL","ShannonPhytoDiversity",
                    "Temperature_degC", "Salinity", "ChlF_mgm3",

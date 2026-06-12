@@ -93,7 +93,7 @@ planktonr_dat <- function(.data,
   if (!is.null(Type)) {
     Type <- pr_check_type(Type) # Use your helper to standardize
     Type <- rlang::arg_match0(Type, values = c("Microbes", "Phytoplankton", "Zooplankton", "Fish", "Water", "EOV",
-                                                "Chemistry", "Pigments", "Pico", "TSS", "CTD", "Micro"),
+                                                "Chemistry", "Pigments", "Pico", "TSS", "CTD"),
                               arg_nm = "Type")
   }
   if (!is.null(Survey)) {
@@ -185,7 +185,7 @@ pr_check_type <- function(Type){
     Type <- "Water"
   } else if (Type_lower %in% c("eov")){
     Type <- "EOV"
-  } else if (Type_lower %in% c("m", "microbes")){
+  } else if (Type_lower %in% c("m", "micro", "microbes")){
     Type <- "Microbes"
   } else if (Type_lower %in% c("f", "fish")){
     Type <- "Fish"

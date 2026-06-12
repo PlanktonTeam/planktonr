@@ -104,6 +104,7 @@ pr_plot_TimeSeries <- function(df, trans = "identity"){
   }
 
   # Remove deeper SOTS samples so they can be plotted in a lighter shade
+  dfsots30 <- NULL
   if(any(grepl("Ocean Time", df$StationName))){
     dfsots30 <- df %>% dplyr::filter(dplyr::between(.data$SampleDepth_m, 20, 34.5),
                                      grepl("Southern", .data$StationName))
@@ -125,7 +126,7 @@ pr_plot_TimeSeries <- function(df, trans = "identity"){
     ggplot2::scale_linetype_manual(values = ltype, limits = force, name = legendTitle) +
     theme_pr()
 
-  if(exists("dfsots30")){
+  if(!is.null(dfsots30)){
     p1 <- p1 +
       ggplot2::geom_line(data = dfsots30, ggplot2::aes(group = .data$StationName, color = .data$StationName,
                                                        linetype = .data$StationName), alpha = 0.2) +
@@ -133,10 +134,10 @@ pr_plot_TimeSeries <- function(df, trans = "identity"){
   }
 
   if(Survey != "Coastal") {
-    p1 +
+    p1 <- p1 +
       ggplot2::scale_x_datetime(date_breaks = "2 years", date_labels = "%Y", expand = c(0, 0))
   } else {
-    p1 +
+    p1 <- p1 +
       ggplot2::scale_x_datetime(date_breaks = "1 year", date_labels = "%Y", expand = c(0, 0))
   }
 
@@ -262,32 +263,24 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
 
   minYear <- min(df$Year_Local, na.rm = TRUE)
 
-  # add subtitle for genera and species names for HAB data set
-  if(Survey == "HAB"){
-    if("genus" %in% names(df)){
-      subtit <- unique(df$genus)
-    } else {
-      subtit <- unique(df$TaxonName)
-    }
-    subtit <- bquote("*italic(.(tit))*")
-  }
 
   titley <- pr_relabel(unique(df$Parameters), style = 'ggplot')
 
     # Set Correct columns/plot titles
   if (Survey == "CPR"){
     site <- rlang::sym("BioRegion")
-  } else if (Survey != "CPR"){
+  } else {
     site <- rlang::sym("StationName")
   }
 
     # Remove deeper SOTS samples from df and make a separate model df for this data if it exists
   site_col <- rlang::as_string(site)
+  dfsots30 <- NULL
   if (any(stringr::str_detect(df[[site_col]], "Ocean Time"), na.rm = TRUE)) {
     dfsots30 <- df %>% dplyr::filter(dplyr::between(.data$SampleDepth_m, 20, 34.5),
                                      grepl("SOTS", .data$StationCode))
     df <- df %>% dplyr::filter(.data$SampleDepth_m < 20 | is.na(.data$SampleDepth_m))
-    if(exists("dfsots30")){
+    if(!is.null(dfsots30)){
       Modelsots30 <- pr_get_model(dfsots30)
       minYear <- min(minYear, min(dfsots30$Year_Local, na.rm = TRUE))
       if(is.null(Modelsots30)){ # TODO Decide if we will always provide models or not. Currently we are forcing models to be run and shown.
@@ -339,7 +332,7 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
       dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                        # facet_label = dplyr::first(.data$facet_label),
                        .by = c(rlang::as_string(rlang::sym(Trend)), rlang::as_string(site)))
-    if(exists("dfsots30")){
+    if(!is.null(dfsots30)){
       dfsots30 <- dfsots30 %>%
         dplyr::summarise(Values = mean(.data$Values, na.rm = TRUE),
                          # facet_label = dplyr::first(.data$facet_label),
@@ -394,13 +387,13 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
     ggplot2::geom_smooth(data = df %>% dplyr::filter(.data$do_smooth), ggplot2::aes(x = !!rlang::sym(Trend), y = !!rlang::sym(yvals)),
                          method = method, formula = y ~ x) +
     ggplot2::facet_wrap(site, scales = "free_y", ncol = 1, labeller = ggplot2::labeller(!!site := labels)) +
-    ggplot2::ylab(rlang::enexpr(titley)) +
+    ggplot2::ylab(titley) +
     ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
     theme_pr() +
     ggplot2::xlab(labx) +
     ggplot2::theme(strip.text = ggplot2::element_text(hjust = 0))
 
-  if(!rlang::as_string(Trend) %in% c("Month_Local") & exists("dfsots30") & minYear < 2015){
+  if(!rlang::as_string(Trend) %in% c("Month_Local") & !is.null(dfsots30) & minYear < 2015){
 
     p1 <- p1 +
       ggplot2::geom_point(data = dfsots30, ggplot2::aes(x = !!rlang::sym(Trend), y = .data$Values), colour = 'black', alpha = 0.2) +
@@ -1050,7 +1043,7 @@ pr_plot_EOVs <- function(df, EOV = "Biomass_mgm3", trans = "identity", col = "bl
 
     if (Survey == "CPR"){
       site = rlang::sym("BioRegion")
-    } else if (Survey != "CPR"){
+    } else {
       site = rlang::sym("StationName")
     }
 

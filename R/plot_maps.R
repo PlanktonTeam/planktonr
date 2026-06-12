@@ -155,7 +155,6 @@ pr_plot_NRSmap <- function(sites, Survey = "NRS", Type = 'Zooplankton'){
       dplyr::bind_rows(meta_sf)
     limlatmin <- -50
   } else {
-    meta_sf
     limlatmin <- -44
   }
 
@@ -491,12 +490,12 @@ pr_plot_ProgressMap <- function(dat, interactive = FALSE, labels = TRUE){
               "<strong>Zooplankton Abundance (m\u207B\u00B3)</strong>: ", round(df_CPR$ZoopAbundance_m3[i],2), "<br>",
               "<strong>Phytoplankton Colour Index:</strong>", df_CPR$PCI[i], "<br>")})
 
-      labs_pci <- lapply(seq(nrow(df_CPR)), function(i) {
-        paste("<strong>Sample Date:</strong>", df_CPR$SampleTime_Local[i], "<br>",
-              "<strong>Bioregion:</strong>", df_CPR$Name[i], "<br>",
-              "<strong>Latitude:</strong>", df_CPR$Latitude[i], "<br>",
-              "<strong>Longitude:</strong>", df_CPR$Longitude[i], "<br>",
-              "<strong>Phytoplankton Colour Index:</strong>", df_CPR$PCI[i], "<br>")})
+      labs_pci <- lapply(seq(nrow(df_PCI)), function(i) {
+        paste("<strong>Sample Date:</strong>", df_PCI$SampleTime_Local[i], "<br>",
+              "<strong>Bioregion:</strong>", df_PCI$Name[i], "<br>",
+              "<strong>Latitude:</strong>", df_PCI$Latitude[i], "<br>",
+              "<strong>Longitude:</strong>", df_PCI$Longitude[i], "<br>",
+              "<strong>Phytoplankton Colour Index:</strong>", df_PCI$PCI[i], "<br>")})
 
       labs_mbr <- lapply(seq(nrow(mbr)), function(i) {
         if (mbr$REGION[i] != "Southern Ocean Region"){

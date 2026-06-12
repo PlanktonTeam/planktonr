@@ -70,7 +70,7 @@ pr_model_data <- function(dat){
   # Send a message if SOTS data is included that to check sample depths.
   if("StationCode" %in% names(dat)) {
     if(any(grepl("SOTS", dat$StationCode))){
-      cat("SOTS samples are taken at varying depths, this model does not account for depth, check your data input")
+      message("SOTS samples are taken at varying depths, this model does not account for depth, check your data input")
     }
   }
 
@@ -93,7 +93,7 @@ pr_model_data <- function(dat){
   # Set Correct columns/plot titles
   if (Survey == "CPR"){
     site = rlang::sym("BioRegion")
-  } else if (Survey != "CPR"){
+  } else {
     site = rlang::sym("StationName")
   }
 
@@ -191,7 +191,8 @@ pr_get_coeffs <- function(Models, id = "Station"){
   )
 
   coefficients <- Models %>%
-    purrr::map_dfr(broom::tidy, .id = id) %>%
+    purrr::map(broom::tidy) %>%
+    purrr::list_rbind(names_to = id) %>%
     dplyr::mutate(signif = dplyr::case_when(p.value <= 0.001 ~ "***",
                                             p.value <= 0.01 ~ "**",
                                             p.value <= 0.05 ~ "*",

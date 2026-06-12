@@ -26,10 +26,12 @@ pr_get_SatData <- function(Survey = 'NRS'){
                                    show_col_types = FALSE,
                                    na = c("NA", "")) %>%
       pr_rename()
+    return(NRS_SatData)
   } else {
     CPR_SatData <- readr::read_csv(system.file("extdata", "CPR_SatData.csv", package = "planktonr", mustWork = TRUE),
                                    show_col_types = FALSE) %>%
       pr_rename()
+    return(CPR_SatData)
   }
 }
 
@@ -547,8 +549,8 @@ pr_match_MODIS <- function(dat, pr, res_spat = 1, res_temp = "1d") {
       out <- ncdf4::ncvar_get(nc, dat$pr, start=c(idx_lon, idx_lat, 1), count = cnt)
 
       out <- mean(out, na.rm = TRUE)
-      return(out)
       ncdf4::nc_close(nc)
+      return(out)
     } else {
       out <- NaN
     }

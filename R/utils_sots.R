@@ -31,11 +31,12 @@ pr_get_SOTSvariables <- function(Type = "Physical"){
       catalog_parsed <- rvest::read_html(catalog_html)
       file_nodes <- rvest::html_nodes(catalog_parsed, "a[href]")
       file_list <- rvest::html_attr(file_nodes, "href")
-      file_list[grepl("*RAS*", file_list)]  # Assuming you are looking for .nc files
+      file_list[grepl("RAS", file_list)]  # Assuming you are looking for .nc files
     }
 
     file_list <- (purrr::compact(purrr::map(years, nutsFiles)) %>%
-                         purrr::map_df(tibble::as_tibble))$value
+                         purrr::map(tibble::as_tibble) %>%
+                         purrr::list_rbind())$value
 
   } else {
     thredds_url <- "https://thredds.aodn.org.au/thredds/catalog/IMOS/DWM/SOTS/derived_products/gridded/catalog.html"
@@ -93,11 +94,12 @@ pr_get_SOTSMoorData <- function(Type = "Physical"){
       catalog_parsed <- rvest::read_html(catalog_html)
       file_nodes <- rvest::html_nodes(catalog_parsed, "a[href]")
       file_list <- rvest::html_attr(file_nodes, "href")
-      file_list[grepl("*RAS*", file_list)]  # Assuming you are looking for .nc files
+      file_list[grepl("RAS", file_list)]  # Assuming you are looking for .nc files
     }
 
     file_list <- (purrr::compact(purrr::map(years, nutsFiles)) %>%
-                    purrr::map_df(tibble::as_tibble))$value
+                    purrr::map(tibble::as_tibble) %>%
+                    purrr::list_rbind())$value
 
   } else {
     thredds_url <- "https://thredds.aodn.org.au/thredds/catalog/IMOS/DWM/SOTS/derived_products/gridded/catalog.html"

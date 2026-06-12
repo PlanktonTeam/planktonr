@@ -1,6 +1,6 @@
 Package: planktonr
 Title: Analysis and Visualisation of Plankton Data
-Version: 0.7.2
+Version: 0.7.3
 Authors@R: c(
     person("Jason D.", "Everett", , "jase.everett@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-6681-8054")),
@@ -15,7 +15,7 @@ Description: Facilitates access, analysis, and visualisation of phytoplankton,
     the National Reference Stations (NRS) network, Continuous Plankton Recorder 
     (CPR) survey, and Southern Ocean Time Series (SOTS).
 License: MIT + file LICENSE
-URL: https://github.com/PlanktonTeam/planktonr
+URL: https://planktonteam.github.io/planktonr
 BugReports: https://github.com/PlanktonTeam/planktonr/issues
 Depends: 
     R (>= 4.1)
