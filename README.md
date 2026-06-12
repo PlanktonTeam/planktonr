@@ -25,7 +25,7 @@ Marine Observing System ([IMOS](https://www.imos.org.au)), including:
 - **National Reference Stations (NRS)** - Coastal monitoring stations
   with monthly sampling
 - **Continuous Plankton Recorder (CPR)** - Ship-based transect sampling
-  across ocean basins\
+  across ocean basins  
 - **Southern Ocean Time Series (SOTS)** - Deep ocean mooring south of
   Tasmania
 
