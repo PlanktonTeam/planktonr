@@ -102,7 +102,7 @@ pr_relabel <- function(s, style = "ggplot", named = FALSE, quiet = FALSE){
     "PhytoEvenness", rlang::expr(paste("Phytoplankton Evenness")), "Phytoplankton Evenness", "Phytoplankton Evenness",
     "Picoeukaryotes_cellsmL", rlang::expr(paste("Picoeukaryotes (cells ml"^-1,")")), "Picoeukaryotes (cells ml<sup>-1</sup>)", "Picoeukaryote Abundance",
     "Picoplankton_Cellsml", rlang::expr(paste("Picoplankton (cells ml"^-1,")")), "Picoplankton (cells ml<sup>-1</sup>)", "Picoplankton Abundance",
-    "PigmentChla_mgm3", rlang::expr("Chlorophyll "*italic("a")*" (mg m"^-3*")"), "Chlorophyll <i>a</i> (mg m<sup>-3</sup>)", "Chlorophyll a",
+    "PigmentChla_mgm3", rlang::expr(paste("Chlorophyll "*italic("a")*" (mg m"^-3*")")), "Chlorophyll <i>a</i> (mg m<sup>-3</sup>)", "Chlorophyll a",
     "PPC", rlang::expr(paste("Photoprotective Carotenoids (mg m"^-3,")")), "Photoprotective Carotenoids (mg m<sup>-3</sup>)", "Photoprotective Carotenoid Abundance",
     "Pressure_dbar", rlang::expr(paste("Pressure (dbar)")), "Pressure (dbar)", "Pressure",
     "Prochlorococcus_cellsmL", rlang::expr(paste("Prochlorococcus (cells ml"^-1,")")), "Prochlorococcus (cells ml<sup>-1</sup>)", "Prochlorococcus Abundance",
