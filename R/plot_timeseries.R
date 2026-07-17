@@ -382,10 +382,16 @@ pr_plot_Trends <- function(df, Trend = "Raw", method = "lm",  trans = "identity"
     yvals <- 'Values'
   }
 
+  # For the Month_Local trend, uncertainty is shown explicitly by geom_ribbon()
+  # (model 95% CI: fit ± 1.96 * se.fit). Setting se = FALSE here prevents
+  # geom_smooth() from drawing a second, redundant SE band on the already-smoothed
+  # fit values, which would produce a double-shading artefact.
+  smooth_se <- !rlang::as_string(Trend) %in% c("Month_Local")
+
   p1 <- ggplot2::ggplot(data = df, ggplot2::aes(x = !!rlang::sym(Trend), y = .data$Values)) +
     ggplot2::geom_point() +
     ggplot2::geom_smooth(data = df %>% dplyr::filter(.data$do_smooth), ggplot2::aes(x = !!rlang::sym(Trend), y = !!rlang::sym(yvals)),
-                         method = method, formula = y ~ x) +
+                         method = method, formula = y ~ x, se = smooth_se) +
     ggplot2::facet_wrap(site, scales = "free_y", ncol = 1, labeller = ggplot2::labeller(!!site := labels)) +
     ggplot2::ylab(titley) +
     ggplot2::scale_y_continuous(trans = trans, expand = ggplot2::expansion(mult = c(0.02, 0.02))) +
