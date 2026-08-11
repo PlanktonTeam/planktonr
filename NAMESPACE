@@ -102,23 +102,31 @@ export(pr_plot_tsfg)
 export(pr_remove_outliers)
 export(theme_pr)
 importFrom(data.table,":=")
-importFrom(dplyr,arrange)
-importFrom(dplyr,filter)
-importFrom(dplyr,group_by)
-importFrom(dplyr,group_by_drop_default)
-importFrom(dplyr,mutate)
-importFrom(dplyr,relocate)
-importFrom(dplyr,rowwise)
-importFrom(dplyr,select)
-importFrom(dplyr,summarise)
+importFrom(dplyr,
+  arrange,
+  filter,
+  group_by,
+  group_by_drop_default,
+  mutate,
+  relocate,
+  rowwise,
+  select,
+  summarise
+)
 importFrom(ggplot2,'%+replace%')
 importFrom(lubridate,"%m+%")
 importFrom(magrittr,"%>%")
-importFrom(rlang,"!!")
-importFrom(rlang,.data)
+importFrom(rlang,
+  "!!",
+  .data
+)
 importFrom(stats,sd)
-importFrom(tidyr,drop_na)
-importFrom(tidyr,pivot_longer)
-importFrom(tidyr,pivot_wider)
-importFrom(utils,capture.output)
-importFrom(utils,str)
+importFrom(tidyr,
+  drop_na,
+  pivot_longer,
+  pivot_wider
+)
+importFrom(utils,
+  capture.output,
+  str
+)

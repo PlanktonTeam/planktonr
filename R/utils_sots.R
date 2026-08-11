@@ -25,40 +25,43 @@ pr_get_SOTSvariables <- function(Type = "Physical"){
   if(Type == "Nutrients"){
     years <- seq(1997, lubridate::year(Sys.Date()), 1)
 
-    nutsFiles <- function(years){
-      thredds_url_nuts <- paste0("https://thredds.aodn.org.au/thredds/catalog/IMOS/DWM/SOTS/", years, "/catalog.html")
-      catalog_html <- RCurl::getURL(thredds_url_nuts)
-      catalog_parsed <- rvest::read_html(catalog_html)
-      file_nodes <- rvest::html_nodes(catalog_parsed, "a[href]")
-      file_list <- rvest::html_attr(file_nodes, "href")
-      file_list[grepl("RAS", file_list)]  # Assuming you are looking for .nc files
+    nutsFiles <- function(year){
+      thredds_url_nuts <- paste0("https://thredds.aodn.org.au/thredds/catalog/IMOS/DWM/SOTS/", year, "/catalog.xml")
+      tryCatch({
+        catalog_xml <- xml2::read_xml(thredds_url_nuts)
+        paths <- xml2::xml_attr(xml2::xml_find_all(catalog_xml, "//*[@urlPath]"), "urlPath")
+        paths[grepl("RAS", paths)]
+      }, error = function(e) NULL)
     }
 
-    file_list <- (purrr::compact(purrr::map(years, nutsFiles)) %>%
-                         purrr::map(tibble::as_tibble) %>%
-                         purrr::list_rbind())$value
+    file_list <- purrr::map(years, nutsFiles) %>%
+      purrr::compact() %>%
+      unlist()
 
   } else {
-    thredds_url <- "https://thredds.aodn.org.au/thredds/catalog/IMOS/DWM/SOTS/derived_products/gridded/catalog.html"
-    catalog_html <- RCurl::getURL(thredds_url)
-    catalog_parsed <- rvest::read_html(catalog_html)
-    file_nodes <- rvest::html_nodes(catalog_parsed, "a[href]")
-    file_list <- rvest::html_attr(file_nodes, "href")
-    file_list <- file_list[grepl("\\.nc$", file_list)]
+    thredds_url <- "https://thredds.aodn.org.au/thredds/catalog/IMOS/DWM/SOTS/derived_products/gridded/catalog.xml"
+    catalog_xml <- xml2::read_xml(thredds_url)
+    file_list <- xml2::xml_attr(xml2::xml_find_all(catalog_xml, "//*[@urlPath]"), "urlPath")
 
   }
 
   varlist <- function(file_list){
-    # Construct the full URL if needed
-    full_url <- paste0("https://thredds.aodn.org.au/thredds/dodsC/", sub(".*=", "", file_list))
-    # Open the NetCDF file
-    nc <- ncdf4::nc_open(full_url)
-    dimensions <- data.frame(names(nc$var))
-    ncdf4::nc_close(nc)
-    dimensions
+    # Construct the full OPeNDAP URL directly from the urlPath attribute
+    full_url <- paste0("https://thredds.aodn.org.au/thredds/dodsC/", file_list)
+    # Open the NetCDF file, skipping files that are inaccessible (e.g. CloudFront 403)
+    tryCatch({
+      nc <- ncdf4::nc_open(full_url)
+      dimensions <- data.frame(names(nc$var))
+      ncdf4::nc_close(nc)
+      dimensions
+    }, error = function(e) {
+      warning("Skipping ", basename(file_list), ": ", conditionMessage(e), call. = FALSE)
+      NULL
+    })
   }
 
   SOTSvariables <- purrr::map(file_list, varlist) %>%
+    purrr::compact() %>%
     purrr::list_rbind() %>% dplyr::distinct()
 
 }
@@ -88,34 +91,35 @@ pr_get_SOTSMoorData <- function(Type = "Physical"){
   if(Type == "Nutrients"){
     years <- seq(1997, lubridate::year(Sys.Date()), 1)
 
-    nutsFiles <- function(years){
-      thredds_url_nuts <- paste0("https://thredds.aodn.org.au/thredds/catalog/IMOS/DWM/SOTS/", years, "/catalog.html")
-      catalog_html <- RCurl::getURL(thredds_url_nuts)
-      catalog_parsed <- rvest::read_html(catalog_html)
-      file_nodes <- rvest::html_nodes(catalog_parsed, "a[href]")
-      file_list <- rvest::html_attr(file_nodes, "href")
-      file_list[grepl("RAS", file_list)]  # Assuming you are looking for .nc files
+    nutsFiles <- function(year){
+      thredds_url_nuts <- paste0("https://thredds.aodn.org.au/thredds/catalog/IMOS/DWM/SOTS/", year, "/catalog.xml")
+      tryCatch({
+        catalog_xml <- xml2::read_xml(thredds_url_nuts)
+        paths <- xml2::xml_attr(xml2::xml_find_all(catalog_xml, "//*[@urlPath]"), "urlPath")
+        paths[grepl("RAS", paths)]
+      }, error = function(e) NULL)
     }
 
-    file_list <- (purrr::compact(purrr::map(years, nutsFiles)) %>%
-                    purrr::map(tibble::as_tibble) %>%
-                    purrr::list_rbind())$value
+    file_list <- purrr::map(years, nutsFiles) %>%
+      purrr::compact() %>%
+      unlist()
 
   } else {
-    thredds_url <- "https://thredds.aodn.org.au/thredds/catalog/IMOS/DWM/SOTS/derived_products/gridded/catalog.html"
-    catalog_html <- RCurl::getURL(thredds_url)
-    catalog_parsed <- rvest::read_html(catalog_html)
-    file_nodes <- rvest::html_nodes(catalog_parsed, "a[href]")
-    file_list <- rvest::html_attr(file_nodes, "href")
-    file_list <- file_list[grepl("\\.nc$", file_list)]
+    thredds_url <- "https://thredds.aodn.org.au/thredds/catalog/IMOS/DWM/SOTS/derived_products/gridded/catalog.xml"
+    catalog_xml <- xml2::read_xml(thredds_url)
+    file_list <- xml2::xml_attr(xml2::xml_find_all(catalog_xml, "//*[@urlPath]"), "urlPath")
 
   }
 
   SOTSdata <- function(file_list){
-    # Construct the full URL if needed
-    full_url <- paste0("https://thredds.aodn.org.au/thredds/dodsC/", sub(".*=", "", file_list))
-    # Open the NetCDF file
-    nc <- ncdf4::nc_open(full_url)
+    # Construct the full OPeNDAP URL directly from the urlPath attribute
+    full_url <- paste0("https://thredds.aodn.org.au/thredds/dodsC/", file_list)
+    # Open the NetCDF file, skipping files that are inaccessible (e.g. CloudFront 403)
+    nc <- tryCatch(ncdf4::nc_open(full_url), error = function(e) {
+      warning("Skipping ", basename(file_list), ": ", conditionMessage(e), call. = FALSE)
+      NULL
+    })
+    if (is.null(nc)) return(NULL)
 
     dimensions <- names(nc$var)
 
@@ -193,6 +197,7 @@ pr_get_SOTSMoorData <- function(Type = "Physical"){
   }
 
   dat <- purrr::map(file_list, SOTSdata) %>%
+    purrr::compact() %>%
     purrr::list_rbind() %>%
     planktonr::planktonr_dat("Water", "SOTS")
 

@@ -8,7 +8,7 @@ options(
 )
 
 # Check for optional test dependencies
-optional_packages <- c("vegan", "ncdf4", "RCurl", "thredds")
+optional_packages <- c("vegan", "ncdf4", "thredds")
 available_packages <- sapply(optional_packages, requireNamespace, quietly = TRUE)
 
 if (!all(available_packages)) {

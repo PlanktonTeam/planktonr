@@ -2,11 +2,44 @@
 # Integration tests for SOTS utilities (network-dependent)
 # ==============================================================================
 
+# Fetch data once and cache for reuse across tests to avoid server throttling
+sots_physical_data <- NULL
+sots_nutrients_data <- NULL
+sots_variables_physical <- NULL
+sots_variables_nutrients <- NULL
+
+get_sots_physical <- function() {
+  if (is.null(sots_physical_data)) {
+    sots_physical_data <<- pr_get_SOTSMoorData(Type = "Physical")
+  }
+  sots_physical_data
+}
+
+get_sots_nutrients <- function() {
+  if (is.null(sots_nutrients_data)) {
+    sots_nutrients_data <<- pr_get_SOTSMoorData(Type = "Nutrients")
+  }
+  sots_nutrients_data
+}
+
+get_sots_variables_physical <- function() {
+  if (is.null(sots_variables_physical)) {
+    sots_variables_physical <<- pr_get_SOTSvariables(Type = "Physical")
+  }
+  sots_variables_physical
+}
+
+get_sots_variables_nutrients <- function() {
+  if (is.null(sots_variables_nutrients)) {
+    sots_variables_nutrients <<- pr_get_SOTSvariables(Type = "Nutrients")
+  }
+  sots_variables_nutrients
+}
+
 testthat::test_that("pr_get_SOTSvariables returns Physical variables with expected structure", {
   skip_if_offline()
-  testthat::skip_on_cran()
   
-  result <- pr_get_SOTSvariables(Type = "Physical")
+  result <- get_sots_variables_physical()
   
   # Check structure
   testthat::expect_s3_class(result, "data.frame")
@@ -25,9 +58,8 @@ testthat::test_that("pr_get_SOTSvariables returns Physical variables with expect
 
 testthat::test_that("pr_get_SOTSvariables returns Nutrients variables with expected structure", {
   skip_if_offline()
-  testthat::skip_on_cran()
   
-  result <- pr_get_SOTSvariables(Type = "Nutrients")
+  result <- get_sots_variables_nutrients()
   
   # Check structure
   testthat::expect_s3_class(result, "data.frame")
@@ -46,9 +78,8 @@ testthat::test_that("pr_get_SOTSvariables returns Nutrients variables with expec
 
 testthat::test_that("pr_get_SOTSMoorData returns Physical data with expected columns and structure", {
   skip_if_offline()
-  testthat::skip_on_cran()
   
-  result <- pr_get_SOTSMoorData(Type = "Physical")
+  result <- get_sots_physical()
   
   # Check structure
   testthat::expect_s3_class(result, "data.frame")
@@ -100,9 +131,8 @@ testthat::test_that("pr_get_SOTSMoorData returns Physical data with expected col
 
 testthat::test_that("pr_get_SOTSMoorData returns Nutrients data with expected columns and structure", {
   skip_if_offline()
-  testthat::skip_on_cran()
   
-  result <- pr_get_SOTSMoorData(Type = "Nutrients")
+  result <- get_sots_nutrients()
   
   # Check structure
   testthat::expect_s3_class(result, "data.frame")
@@ -131,9 +161,8 @@ testthat::test_that("pr_get_SOTSMoorData returns Nutrients data with expected co
 
 testthat::test_that("pr_get_SOTSMoorData filters out NA Parameters and Values", {
   skip_if_offline()
-  testthat::skip_on_cran()
   
-  result <- pr_get_SOTSMoorData(Type = "Physical")
+  result <- get_sots_physical()
   
   # The function should drop NA Parameters and Values
   testthat::expect_false(any(is.na(result$Parameters)))
@@ -142,9 +171,8 @@ testthat::test_that("pr_get_SOTSMoorData filters out NA Parameters and Values", 
 
 testthat::test_that("pr_get_SOTSMoorData rounds depths correctly", {
   skip_if_offline()
-  testthat::skip_on_cran()
   
-  result <- pr_get_SOTSMoorData(Type = "Physical")
+  result <- get_sots_physical()
   
   # Depths should be rounded to nearest 10m and filtered to specific depths
   expected_depths <- c(0, 30, 50, 100, 200, 500)
@@ -156,9 +184,8 @@ testthat::test_that("pr_get_SOTSMoorData rounds depths correctly", {
 
 testthat::test_that("pr_get_SOTSMoorData has correct planktonr_dat attributes", {
   skip_if_offline()
-  testthat::skip_on_cran()
   
-  result <- pr_get_SOTSMoorData(Type = "Physical")
+  result <- get_sots_physical()
   
   # Check planktonr_dat attributes
   testthat::expect_equal(attr(result, "Type"), "Water")
@@ -219,27 +246,24 @@ testthat::test_that("pr_get_SOTSMoorData validates Type parameter", {
 
 testthat::test_that("pr_get_SOTSvariables accepts valid Type values", {
   skip_if_offline()
-  testthat::skip_on_cran()
   
   # Both valid values should work without error
-  testthat::expect_no_error(pr_get_SOTSvariables(Type = "Physical"))
-  testthat::expect_no_error(pr_get_SOTSvariables(Type = "Nutrients"))
+  testthat::expect_no_error(get_sots_variables_physical())
+  testthat::expect_no_error(get_sots_variables_nutrients())
 })
 
 testthat::test_that("pr_get_SOTSMoorData accepts valid Type values", {
   skip_if_offline()
-  testthat::skip_on_cran()
   
   # Both valid values should work without error
-  testthat::expect_no_error(pr_get_SOTSMoorData(Type = "Physical"))
-  testthat::expect_no_error(pr_get_SOTSMoorData(Type = "Nutrients"))
+  testthat::expect_no_error(get_sots_physical())
+  testthat::expect_no_error(get_sots_nutrients())
 })
 
 testthat::test_that("pr_get_SOTSvariables returns distinct variables", {
   skip_if_offline()
-  testthat::skip_on_cran()
   
-  result <- pr_get_SOTSvariables(Type = "Physical")
+  result <- get_sots_variables_physical()
   
   # Should have no duplicate variable names
   testthat::expect_equal(nrow(result), nrow(dplyr::distinct(result)))
@@ -247,9 +271,8 @@ testthat::test_that("pr_get_SOTSvariables returns distinct variables", {
 
 testthat::test_that("pr_get_SOTSMoorData parameter names are standardized", {
   skip_if_offline()
-  testthat::skip_on_cran()
   
-  result <- pr_get_SOTSMoorData(Type = "Physical")
+  result <- get_sots_physical()
   
   # Check that parameter names follow expected patterns
   params <- unique(result$Parameters)
@@ -266,9 +289,8 @@ testthat::test_that("pr_get_SOTSMoorData parameter names are standardized", {
 
 testthat::test_that("pr_get_SOTSMoorData averages daily values correctly", {
   skip_if_offline()
-  testthat::skip_on_cran()
   
-  result <- pr_get_SOTSMoorData(Type = "Physical")
+  result <- get_sots_physical()
   
   # SampleTime_Local should be floored to day
   # Check that time component is midnight (00:00:00)
